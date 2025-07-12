@@ -1,0 +1,126 @@
+/**
+ * SmartPlaybook.css – Mobile-optimized styles
+ * - Touch-friendly button sizes
+ * - Responsive layouts
+ * - Mobile-specific interactions
+ */
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  .smart-playbook-app {
+    padding: 0;
+  }
+  
+  .smart-playbook-app .max-w-7xl {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .smart-playbook-app .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Larger touch targets on mobile */
+  .smart-playbook-app button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile-optimized canvas */
+  .smart-playbook-app canvas {
+    max-width: 100vw;
+    height: auto;
+    touch-action: none; /* Prevent browser touch gestures */
+  }
+  
+  /* Mobile sidebar layout */
+  .smart-playbook-app .lg\\:col-span-1 {
+    order: 2;
+  }
+  
+  .smart-playbook-app .lg\\:col-span-2 {
+    order: 1;
+  }
+}
+
+/* Touch-friendly interactions */
+.smart-playbook-app button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.smart-playbook-app button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Canvas interaction improvements */
+.smart-playbook-app canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Loading states */
+.smart-playbook-app .loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Animation for route drawing */
+@keyframes routeDrawing {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.smart-playbook-app .drawing-route {
+  animation: routeDrawing 1.5s ease-in-out infinite;
+}
+
+/* Mobile-specific button groups */
+@media (max-width: 640px) {
+  .smart-playbook-app .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  
+  .smart-playbook-app .button-group button {
+    width: 100%;
+  }
+}
+
+/* Improved accessibility */
+.smart-playbook-app [role="button"] {
+  cursor: pointer;
+}
+
+.smart-playbook-app [role="button"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .smart-playbook-app {
+    --border-color: #000;
+    --text-color: #000;
+    --background-color: #fff;
+  }
+  
+  .smart-playbook-app button {
+    border: 2px solid var(--border-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .smart-playbook-app * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+} 
