@@ -1,0 +1,182 @@
+import React, { useState } from "react";
+import { initialTemplates } from "./planUtils";
+
+const periodsDefault = [
+  { name: "Warm-Up", minutes: 10 },
+  { name: "Position Drills", minutes: 20 },
+  { name: "Team Period", minutes: 20 },
+  { name: "Special Teams", minutes: 10 },
+  { name: "Cool Down", minutes: 10 }
+];
+
+const PracticePlanGenerator = ({ userRole = "coach" }) => {
+  const [plan, setPlan] = useState(periodsDefault);
+  const [template, setTemplate] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  // Save/Load logic (localStorage)
+  const savePlan = () => {
+    const name = prompt("Save this plan as:");
+    if (name && name.trim()) {
+      const saved = JSON.parse(localStorage.getItem("practicePlans") || "[]");
+      localStorage.setItem(
+        "practicePlans",
+        JSON.stringify([...saved, { name, periods: plan }])
+      );
+      alert("Practice plan saved!");
+    }
+  };
+
+  const loadPlan = () => {
+    const saved = JSON.parse(localStorage.getItem("practicePlans") || "[]");
+    if (!saved.length) {
+      alert("No saved plans.");
+      return;
+    }
+    setShowModal(true);
+  };
+
+  const applyTemplate = (templateName) => {
+    const tmpl = initialTemplates.find((t) => t.name === templateName);
+    if (tmpl) setPlan(tmpl.periods);
+    setTemplate(templateName);
+  };
+
+  const handlePeriodChange = (i, field, value) => {
+    setPlan((prev) =>
+      prev.map((period, idx) =>
+        idx === i ? { ...period, [field]: value } : period
+      )
+    );
+  };
+
+  const addPeriod = () => setPlan([...plan, { name: "", minutes: 5 }]);
+
+  const removePeriod = (i) => setPlan(plan.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="p-4 max-w-2xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Practice Plan Generator</h2>
+
+      {/* Templates */}
+      <div className="mb-4">
+        <label className="font-medium mb-1 block">Templates:</label>
+        <select
+          className="w-full rounded border px-3 py-2"
+          value={template}
+          onChange={(e) => applyTemplate(e.target.value)}
+        >
+          <option value="">— Choose a template —</option>
+          {initialTemplates.map((tmpl) => (
+            <option key={tmpl.name} value={tmpl.name}>
+              {tmpl.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Plan Periods */}
+      <div className="space-y-3">
+        {plan.map((period, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-2 bg-blue-50 rounded p-2"
+          >
+            <input
+              value={period.name}
+              onChange={(e) => handlePeriodChange(i, "name", e.target.value)}
+              className="flex-1 px-2 py-1 rounded border"
+              placeholder={`Period ${i + 1} name`}
+            />
+            <input
+              type="number"
+              min={1}
+              value={period.minutes}
+              onChange={(e) => handlePeriodChange(i, "minutes", Number(e.target.value))}
+              className="w-20 px-2 py-1 rounded border"
+              placeholder="Min"
+            />
+            <button
+              className="text-red-600 px-2"
+              onClick={() => removePeriod(i)}
+              disabled={plan.length <= 1}
+              title="Remove Period"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+        <button
+          className="bg-green-600 text-white px-3 py-2 rounded-xl mt-2"
+          onClick={addPeriod}
+        >
+          + Add Period
+        </button>
+      </div>
+
+      {/* Save/Load Controls */}
+      <div className="flex gap-3 mt-6">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+          onClick={savePlan}
+        >
+          Save Plan
+        </button>
+        <button
+          className="bg-gray-100 border px-4 py-2 rounded-xl"
+          onClick={loadPlan}
+        >
+          Load Plan
+        </button>
+      </div>
+
+      {/* Load Modal */}
+      {showModal && (
+        <SavedPlansModal
+          onClose={() => setShowModal(false)}
+          onLoadPlan={(periods) => {
+            setPlan(periods);
+            setShowModal(false);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+export default PracticePlanGenerator;
+
+// Modal for loading plans
+function SavedPlansModal({ onClose, onLoadPlan }) {
+  const saved = JSON.parse(localStorage.getItem("practicePlans") || "[]");
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+        <h3 className="text-xl font-semibold mb-4">Saved Practice Plans</h3>
+        {saved.length ? (
+          <ul className="mb-4">
+            {saved.map((plan, i) => (
+              <li key={i} className="mb-2 flex items-center gap-2">
+                <span className="flex-1 font-medium">{plan.name}</span>
+                <button
+                  className="bg-blue-600 text-white px-3 py-1 rounded"
+                  onClick={() => onLoadPlan(plan.periods)}
+                >
+                  Load
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No saved plans.</p>
+        )}
+        <button
+          className="mt-2 px-4 py-2 rounded bg-gray-200"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
