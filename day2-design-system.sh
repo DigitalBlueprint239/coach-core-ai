@@ -941,11 +941,11 @@ export const Dashboard: React.FC = () => {
 };
 EOF
 
-    # Other feature placeholders
-    const features = ['Team', 'Schedule', 'Analytics', 'Settings'];
-    
-    features.forEach(feature => {
-      cat > src/features/${feature.toLowerCase()}/${feature}.tsx << EOF
+    # Other feature placeholders (Bash loop)
+    for feature in Team Schedule Analytics Settings; do
+      feature_lower=$(echo $feature | tr '[:upper:]' '[:lower:]')
+      mkdir -p src/features/$feature_lower
+      cat > src/features/$feature_lower/${feature}.tsx << EOF
 import React from 'react';
 
 export const ${feature}: React.FC = () => {
@@ -959,7 +959,7 @@ export const ${feature}: React.FC = () => {
   );
 };
 EOF
-    });
+    done
 
     print_success "Feature placeholders created"
 }
