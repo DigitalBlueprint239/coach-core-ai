@@ -9,7 +9,7 @@ import { TeamProvider } from './contexts/TeamContext';
 import { TeamSelector } from './components/TeamManagement';
 import { MigrationBanner } from './components/MigrationBanner';
 import { OnboardingModal } from './components/OnboardingModal';
-import { PWAInstallPrompt, registerServiceWorker } from './components/PWAInstallPrompt';
+import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 import { requestNotificationPermission, subscribeUserToPush } from './services/push-notifications';
 import SmartPlaybook from './components/SmartPlaybook/SmartPlaybook';
 
@@ -24,7 +24,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // Register service worker for PWA
-    registerServiceWorker();
+    // registerServiceWorker(); // TEMPORARILY DISABLED - causing app to hang
     // Show onboarding for new users (or if not completed)
     const onboardingDone = localStorage.getItem('onboardingComplete');
     if (!onboardingDone) {
@@ -99,7 +99,7 @@ const App: React.FC = () => {
                   <MigrationBanner />
                   {renderContent()}
                 </div>
-                <PWAInstallPrompt showOnLoad={true} />
+                {/* <PWAInstallPrompt showOnLoad={true} /> TEMPORARILY DISABLED */}
                 <OnboardingModal
                   open={showOnboarding}
                   onClose={handleOnboardingClose}
@@ -114,5 +114,5 @@ const App: React.FC = () => {
     } />
   );
 };
-
 export default App;
+

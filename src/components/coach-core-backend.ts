@@ -136,7 +136,7 @@ class DatabaseService {
     if (this.provider === 'firebase') {
       const { getDocs, collection: fbCollection, query, where } = await import('firebase/firestore');
       
-      let q = fbCollection(this.db, collection);
+      let q: any = fbCollection(this.db, collection);
       if (filters) {
         Object.entries(filters).forEach(([field, value]) => {
           q = query(q, where(field, '==', value));
@@ -144,7 +144,7 @@ class DatabaseService {
       }
       
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) }));
     } else {
       let query = this.db.from(collection).select('*');
       if (filters) {

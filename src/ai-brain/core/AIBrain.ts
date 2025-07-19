@@ -17,6 +17,12 @@ export class CoachCoreAIBrain {
     return { plan: {}, insights: [], confidence: 0.8, alternatives: [] };
   }
 
+  // === Practice History Retrieval ===
+  async getRecentPractices(teamId: string): Promise<any[]> {
+    // TODO: Implement actual retrieval logic
+    return [];
+  }
+
   // === Real-Time Play/Strategy Insights ===
   getRealtimeInsight(context: any): any {
     // TODO: Implement real-time tactical suggestions

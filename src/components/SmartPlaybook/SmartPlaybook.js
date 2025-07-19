@@ -1,53 +1,35 @@
 /**
- * SmartPlaybook.js – Main application component
- * - Orchestrates all Smart Playbook functionality
- * - Manages state and user interactions
- * - Provides complete touch-friendly UI
+ * SmartPlaybook.js – Level-aware football playbook with progressive complexity
+ * - Supports youth to professional levels with appropriate feature sets
+ * - Progressive disclosure based on team level
+ * - Safety validation for youth levels
  */
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import Field from './Field';
-import DebugPanel from './DebugPanel';
-import PlayLibrary from './PlayLibrary';
-import {
-  createPlayer,
-  createRoute,
-  addPlayer,
-  removePlayer,
-  selectPlayer,
-  deselectAll,
-  updatePlayerPosition,
-  addRoute,
-  removeRoute,
-  savePlay,
-  undo,
-  redo,
-  shotgunFormation,
-  fourThreeFormation,
-  findPlayerAtPosition,
-  calculateDistance
-} from './PlayController';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useFeatureGating } from '../../utils/featureGating';
+import { FootballLevel } from '../../types/football';
+import Field from './Field.js';
+import Toolbar from './components/Toolbar.js';
+import FormationTemplates from './components/FormationTemplates.js';
+import PlayerControls from './components/PlayerControls.js';
+import RouteControls from './components/RouteControls.js';
+import RouteEditor from './components/RouteEditor.js';
+import SaveLoadPanel from './components/SaveLoadPanel.js';
+import PlayLibrary from './PlayLibrary.js';
+import DebugPanel from './DebugPanel.js';
+import Notification from './components/Notification.js';
+import Onboarding from './components/Onboarding.js';
 
-// UI Components
-import PlayerControls from './components/PlayerControls';
-import RouteControls from './components/RouteControls';
-import RouteEditor from './components/RouteEditor';
-import FormationTemplates from './components/FormationTemplates';
-import SaveLoadPanel from './components/SaveLoadPanel';
-import Toolbar from './components/Toolbar';
-import Notification from './components/Notification';
-import Onboarding from './components/Onboarding';
-import { AIProvider } from '../../../ai-brain/AIContext';
-
-// Constants
-const FIELD_DIMENSIONS = {
-  width: 600,
-  height: 300
+// Position constants for better maintainability
+export const PLAYER_POSITIONS = {
+  OFFENSE: ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT'],
+  DEFENSE: ['DE', 'DT', 'NT', 'MLB', 'OLB', 'CB', 'FS', 'SS', 'NB', 'LB']
 };
 
-const TOUCH_THRESHOLD = 20; // pixels for touch detection
+const SmartPlaybook = ({ teamLevel = FootballLevel.VARSITY }) => {
+  // Feature gating for level-aware functionality
+  const { canAccess, isYouth, isAdvanced, constraints } = useFeatureGating(teamLevel);
 
-const SmartPlaybook = () => {
   // Core state
   const [players, setPlayers] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -77,16 +59,24 @@ const SmartPlaybook = () => {
   const [notifications, setNotifications] = useState([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
+  // Level-specific state
+  const [safetyWarnings, setSafetyWarnings] = useState([]);
+  const [complexityLevel, setComplexityLevel] = useState(isYouth ? 'basic' : 'advanced');
+
   // Refs
   const canvasRef = useRef(null);
-  const lastTouchRef = useRef(null);
 
   // Load saved plays from localStorage on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem('smartPlaybook_plays');
       if (saved) {
-        setSavedPlays(JSON.parse(saved));
+        const parsedPlays = JSON.parse(saved);
+        // Filter plays based on level if needed
+        const levelAppropriatePlays = isYouth 
+          ? parsedPlays.filter(play => play.complexity !== 'advanced')
+          : parsedPlays;
+        setSavedPlays(levelAppropriatePlays);
       }
     } catch (error) {
       console.error('Error loading saved plays:', error);
@@ -97,7 +87,7 @@ const SmartPlaybook = () => {
     if (!onboardingComplete) {
       setShowOnboarding(true);
     }
-  }, []);
+  }, [isYouth]);
 
   // Handle window resize
   useEffect(() => {
@@ -158,400 +148,314 @@ const SmartPlaybook = () => {
     }
   }, [savedPlays]);
 
-  // Save current state to undo stack
-  const saveToUndoStack = useCallback((action) => {
-    const currentState = {
-      players: [...players],
-      routes: [...routes],
-      action,
-      timestamp: Date.now()
-    };
-    setUndoStack(prev => [...prev, currentState]);
-    setRedoStack([]); // Clear redo stack when new action is performed
-  }, [players, routes]);
-
-  // Handle undo
-  const handleUndo = useCallback(() => {
-    if (undoStack.length === 0) return;
+  // Level-specific safety validation
+  useEffect(() => {
+    const warnings = [];
     
-    const [newState, newUndoStack, newRedoStack] = undo(
-      undoStack, 
-      redoStack, 
-      { players, routes }
-    );
-    
-    setPlayers(newState.players);
-    setRoutes(newState.routes);
-    setUndoStack(newUndoStack);
-    setRedoStack(newRedoStack);
-  }, [undoStack, redoStack, players, routes]);
-
-  // Handle redo
-  const handleRedo = useCallback(() => {
-    if (redoStack.length === 0) return;
-    
-    const [newState, newUndoStack, newRedoStack] = redo(
-      undoStack, 
-      redoStack, 
-      { players, routes }
-    );
-    
-    setPlayers(newState.players);
-    setRoutes(newState.routes);
-    setUndoStack(newUndoStack);
-    setRedoStack(newRedoStack);
-  }, [undoStack, redoStack, players, routes]);
-
-  // Get canvas coordinates from event
-  const getCanvasCoordinates = useCallback((event) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return null;
-
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    let clientX, clientY;
-    
-    if (event.touches && event.touches[0]) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    } else {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    }
-
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY
-    };
-  }, []);
-
-  // Handle canvas click/touch
-  const handleCanvasEvent = useCallback((event) => {
-    event.preventDefault();
-    
-    const coords = getCanvasCoordinates(event);
-    if (!coords) return;
-
-    // Handle route drawing
-    if (mode === 'route' && isDrawingRoute) {
-      setRoutePoints(prev => [...prev, coords]);
-      return;
-    }
-
-    // Handle player selection
-    if (mode === 'view' || mode === 'player') {
-      const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
+    if (isYouth) {
+      // Check for youth-specific safety concerns
+      if (players.length > constraints.maxPlayers) {
+        warnings.push(`Too many players for youth level (max: ${constraints.maxPlayers})`);
+      }
       
-      if (clickedPlayer) {
-        if (mode === 'delete') {
-          // Delete player
-          saveToUndoStack('delete_player');
-          setPlayers(prev => removePlayer(prev, clickedPlayer.id));
-          setRoutes(prev => prev.filter(route => route.playerId !== clickedPlayer.id));
-          setSelectedPlayerId(null);
-        } else {
-          // Select player
-          setSelectedPlayerId(clickedPlayer.id);
-          setPlayers(prev => selectPlayer(prev, clickedPlayer.id));
-        }
-      } else {
-        // Deselect if clicking empty space
-        setSelectedPlayerId(null);
-        setPlayers(prev => deselectAll(prev));
+      if (routes.length > 5) {
+        warnings.push('Too many routes for youth level - keep it simple');
+      }
+      
+      // Check for prohibited formations
+      const currentFormation = getCurrentFormation();
+      if (!constraints.allowedFormations.includes(currentFormation)) {
+        warnings.push(`Formation "${currentFormation}" not recommended for youth level`);
       }
     }
-
-    // Handle player placement
-    if (mode === 'player' && !findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD)) {
-      const newPlayer = createPlayer(coords.x, coords.y, 'WR', Math.floor(Math.random() * 99) + 1);
-      saveToUndoStack('add_player');
-      setPlayers(prev => addPlayer(prev, newPlayer));
-    }
-  }, [mode, isDrawingRoute, players, getCanvasCoordinates, saveToUndoStack]);
-
-  // Handle player drag
-  const handlePlayerDrag = useCallback((playerId, newX, newY) => {
-    // Constrain to field boundaries
-    const constrainedX = Math.max(20, Math.min(FIELD_DIMENSIONS.width - 20, newX));
-    const constrainedY = Math.max(20, Math.min(FIELD_DIMENSIONS.height - 20, newY));
     
-    setPlayers(prev => updatePlayerPosition(prev, playerId, constrainedX, constrainedY));
-  }, [FIELD_DIMENSIONS.width, FIELD_DIMENSIONS.height]);
+    setSafetyWarnings(warnings);
+  }, [players, routes, isYouth, constraints]);
 
-  // Handle player drag end (save to undo stack)
-  const handlePlayerDragEnd = useCallback((playerId) => {
-    saveToUndoStack('move_player');
-    addNotification('success', 'Player moved successfully');
-  }, [saveToUndoStack]);
-
-  // Add notification helper
-  const addNotification = useCallback((type, message, duration = 3000) => {
-    const id = Date.now() + Math.random();
-    setNotifications(prev => [...prev, { id, type, message, duration }]);
-  }, []);
-
-  // Remove notification helper
-  const removeNotification = useCallback((id) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
-  }, []);
-
-  // Handle route selection
-  const handleRouteSelect = useCallback((routeId) => {
-    setSelectedRouteId(routeId);
-    setSelectedPlayerId(null); // Deselect player when selecting route
-  }, []);
-
-  // Handle route update
-  const handleRouteUpdate = useCallback((routeId, updates) => {
-    saveToUndoStack('update_route');
-    setRoutes(prev => prev.map(route => 
-      route.id === routeId ? { ...route, ...updates } : route
-    ));
-  }, [saveToUndoStack]);
-
-  // Handle route deletion
-  const handleRouteDelete = useCallback((routeId) => {
-    saveToUndoStack('delete_route');
-    setRoutes(prev => removeRoute(prev, routeId));
-    setSelectedRouteId(null);
-  }, [saveToUndoStack]);
-
-  // Handle preset route application
-  const handleApplyPreset = useCallback((routeId, preset) => {
-    saveToUndoStack('apply_preset_route');
-    const route = routes.find(r => r.id === routeId);
-    if (!route) return;
-
-    // Convert preset points to actual coordinates based on player position
-    const player = players.find(p => p.id === route.playerId);
-    if (!player) return;
-
-    const newPoints = preset.points.map(point => ({
-      x: player.x + point.x,
-      y: player.y + point.y
-    }));
-
-    setRoutes(prev => prev.map(r => 
-      r.id === routeId ? { ...r, points: newPoints, type: preset.id } : r
-    ));
-  }, [routes, players, saveToUndoStack]);
-
-  // Start route drawing
-  const startRouteDrawing = useCallback((playerId) => {
-    const player = players.find(p => p.id === playerId);
-    if (!player) return;
-
-    setSelectedPlayerId(playerId);
-    setPlayers(prev => selectPlayer(prev, playerId));
-    setIsDrawingRoute(true);
-    setRoutePoints([{ x: player.x, y: player.y }]);
-    setMode('route');
-  }, [players]);
-
-  // Finish route drawing
-  const finishRouteDrawing = useCallback(() => {
-    if (routePoints.length < 2) {
-      setIsDrawingRoute(false);
-      setRoutePoints([]);
-      return;
-    }
-
-    const newRoute = createRoute(selectedPlayerId, routePoints, routeType, routeColor);
-    saveToUndoStack('add_route');
-    setRoutes(prev => addRoute(prev, newRoute));
+  // Helper functions
+  const getCurrentFormation = () => {
+    // Simple formation detection based on player positions
+    const qbCount = players.filter(p => p.position === 'QB').length;
+    const rbCount = players.filter(p => p.position === 'RB').length;
     
-    setIsDrawingRoute(false);
-    setRoutePoints([]);
-    setMode('view');
-  }, [routePoints, selectedPlayerId, routeType, routeColor, saveToUndoStack]);
+    if (qbCount === 1 && rbCount === 1) return 'i_formation';
+    if (qbCount === 1 && rbCount === 0) return 'shotgun';
+    return 'custom';
+  };
 
-  // Cancel route drawing
-  const cancelRouteDrawing = useCallback(() => {
-    setIsDrawingRoute(false);
-    setRoutePoints([]);
-    setMode('view');
-  }, []);
+  const saveToUndoStack = (action) => {
+    setUndoStack(prev => [...prev, { action, players: [...players], routes: [...routes] }]);
+    setRedoStack([]); // Clear redo stack when new action is performed
+  };
 
-  // Load formation
-  const loadFormation = useCallback((formationType) => {
-    const centerX = FIELD_DIMENSIONS.width / 2;
-    const centerY = FIELD_DIMENSIONS.height / 2;
-    
-    let newPlayers;
-    switch (formationType) {
-      case 'shotgun':
-        newPlayers = shotgunFormation(centerX, centerY);
-        break;
-      case '4-3':
-        newPlayers = fourThreeFormation(centerX, centerY);
-        break;
-      default:
-        return;
+  const handleUndo = () => {
+    if (undoStack.length > 0) {
+      const lastState = undoStack[undoStack.length - 1];
+      setRedoStack(prev => [...prev, { action: 'undo', players: [...players], routes: [...routes] }]);
+      setPlayers(lastState.players);
+      setRoutes(lastState.routes);
+      setUndoStack(prev => prev.slice(0, -1));
     }
+  };
 
-    saveToUndoStack('load_formation');
-    setPlayers(newPlayers);
+  const handleRedo = () => {
+    if (redoStack.length > 0) {
+      const nextState = redoStack[redoStack.length - 1];
+      setUndoStack(prev => [...prev, { action: 'redo', players: [...players], routes: [...routes] }]);
+      setPlayers(nextState.players);
+      setRoutes(nextState.routes);
+      setRedoStack(prev => prev.slice(0, -1));
+    }
+  };
+
+  const clearField = () => {
+    saveToUndoStack('clear');
+    setPlayers([]);
     setRoutes([]);
     setSelectedPlayerId(null);
-  }, [saveToUndoStack]);
+    setSelectedRouteId(null);
+  };
 
-  // Save current play
-  const saveCurrentPlay = useCallback((name, phase, type) => {
-    if (!name.trim() || players.length === 0) {
-      addNotification('error', 'Please enter a play name and add at least one player.');
+  const loadFormation = (formation) => {
+    saveToUndoStack('load_formation');
+    
+    // Level-appropriate formation loading
+    const formationData = getFormationData(formation, isYouth);
+    setPlayers(formationData.players);
+    setRoutes([]);
+    setSelectedPlayerId(null);
+    setSelectedRouteId(null);
+  };
+
+  const getFormationData = (formation, isYouth) => {
+    // Simplified formations for youth, complex for advanced
+    const formations = {
+      shotgun: {
+        players: isYouth ? [
+          { id: 1, x: 50, y: 50, position: 'QB', number: 12 },
+          { id: 2, x: 30, y: 30, position: 'RB', number: 21 },
+          { id: 3, x: 70, y: 30, position: 'WR', number: 81 },
+          { id: 4, x: 70, y: 70, position: 'WR', number: 80 }
+        ] : [
+          { id: 1, x: 50, y: 50, position: 'QB', number: 12 },
+          { id: 2, x: 30, y: 30, position: 'RB', number: 21 },
+          { id: 3, x: 70, y: 30, position: 'WR', number: 81 },
+          { id: 4, x: 70, y: 70, position: 'WR', number: 80 },
+          { id: 5, x: 50, y: 20, position: 'TE', number: 88 },
+          { id: 6, x: 20, y: 40, position: 'LT', number: 74 },
+          { id: 7, x: 25, y: 50, position: 'LG', number: 73 },
+          { id: 8, x: 30, y: 60, position: 'C', number: 72 },
+          { id: 9, x: 35, y: 50, position: 'RG', number: 71 },
+          { id: 10, x: 40, y: 40, position: 'RT', number: 70 },
+          { id: 11, x: 80, y: 50, position: 'FB', number: 44 }
+        ]
+      },
+      i_formation: {
+        players: isYouth ? [
+          { id: 1, x: 50, y: 50, position: 'QB', number: 12 },
+          { id: 2, x: 50, y: 30, position: 'RB', number: 21 },
+          { id: 3, x: 50, y: 20, position: 'FB', number: 44 },
+          { id: 4, x: 70, y: 30, position: 'WR', number: 81 }
+        ] : [
+          { id: 1, x: 50, y: 50, position: 'QB', number: 12 },
+          { id: 2, x: 50, y: 30, position: 'RB', number: 21 },
+          { id: 3, x: 50, y: 20, position: 'FB', number: 44 },
+          { id: 4, x: 70, y: 30, position: 'WR', number: 81 },
+          { id: 5, x: 70, y: 70, position: 'WR', number: 80 },
+          { id: 6, x: 50, y: 80, position: 'TE', number: 88 },
+          { id: 7, x: 20, y: 40, position: 'LT', number: 74 },
+          { id: 8, x: 25, y: 50, position: 'LG', number: 73 },
+          { id: 9, x: 30, y: 60, position: 'C', number: 72 },
+          { id: 10, x: 35, y: 50, position: 'RG', number: 71 },
+          { id: 11, x: 40, y: 40, position: 'RT', number: 70 }
+        ]
+      }
+    };
+    
+    return formations[formation] || formations.shotgun;
+  };
+
+  const startRouteDrawing = () => {
+    if (!canAccess('advanced_plays') && isYouth) {
+      addNotification('Route drawing not available for youth level', 'warning');
       return;
     }
+    setIsDrawingRoute(true);
+    setRoutePoints([]);
+  };
 
-    const play = savePlay({
-      name: name.trim(),
-      phase: phase || currentPlayPhase,
-      type: type || currentPlayType,
-      players,
-      routes
-    });
+  const finishRouteDrawing = () => {
+    if (routePoints.length > 0) {
+      const newRoute = {
+        id: Date.now(),
+        playerId: selectedPlayerId,
+        points: [...routePoints],
+        type: routeType,
+        color: routeColor
+      };
+      setRoutes(prev => [...prev, newRoute]);
+    }
+    setIsDrawingRoute(false);
+    setRoutePoints([]);
+  };
 
-    setSavedPlays(prev => [...prev, play]);
-    setShowSaveDialog(false);
+  const cancelRouteDrawing = () => {
+    setIsDrawingRoute(false);
+    setRoutePoints([]);
+  };
+
+  const addNotification = (message, type = 'info') => {
+    const notification = {
+      id: Date.now(),
+      message,
+      type,
+      timestamp: new Date()
+    };
+    setNotifications(prev => [...prev, notification]);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== notification.id));
+    }, 5000);
+  };
+
+  const savePlay = () => {
+    if (!currentPlayName.trim()) {
+      addNotification('Please enter a play name', 'error');
+      return;
+    }
+    
+    // Level-specific validation
+    if (isYouth && complexityLevel === 'advanced') {
+      addNotification('Advanced complexity not recommended for youth level', 'warning');
+    }
+    
+    const newPlay = {
+      id: Date.now(),
+      name: currentPlayName.trim(),
+      type: currentPlayType,
+      phase: currentPlayPhase,
+      players: [...players],
+      routes: [...routes],
+      complexity: complexityLevel,
+      level: teamLevel,
+      timestamp: Date.now()
+    };
+    
+    setSavedPlays(prev => [...prev, newPlay]);
     setCurrentPlayName('');
-    addNotification('success', `Play "${name}" saved successfully`);
-  }, [players, routes, currentPlayPhase, currentPlayType, addNotification]);
+    addNotification(`Play "${newPlay.name}" saved successfully!`, 'success');
+  };
 
-  // Load play
-  const loadPlay = useCallback((play) => {
-    saveToUndoStack('load_play');
-    setPlayers([...play.players]);
-    setRoutes([...play.routes]);
+  const loadPlay = (play) => {
+    // Check if play is appropriate for current level
+    if (isYouth && play.complexity === 'advanced') {
+      addNotification('This play is too complex for youth level', 'warning');
+      return;
+    }
+    
+    setPlayers(play.players || []);
+    setRoutes(play.routes || []);
+    setCurrentPlayType(play.type || 'pass');
+    setCurrentPlayPhase(play.phase || 'offense');
     setCurrentPlayName(play.name);
-    setCurrentPlayPhase(play.phase);
-    setCurrentPlayType(play.type);
+    setComplexityLevel(play.complexity || 'basic');
     setSelectedPlayerId(null);
-    setShowLibrary(false);
-    addNotification('success', `Play "${play.name}" loaded successfully`);
-  }, [saveToUndoStack, addNotification]);
+    setSelectedRouteId(null);
+    addNotification(`Play "${play.name}" loaded`, 'success');
+  };
 
-  // Delete play
-  const deletePlay = useCallback((playId) => {
-    if (window.confirm('Are you sure you want to delete this play?')) {
-      setSavedPlays(prev => prev.filter(play => play.id !== playId));
-      addNotification('success', 'Play deleted successfully');
-    }
-  }, [addNotification]);
-
-  // Clear field
-  const clearField = useCallback(() => {
-    if (window.confirm('Are you sure you want to clear the field?')) {
-      saveToUndoStack('clear_field');
-      setPlayers([]);
-      setRoutes([]);
-      setSelectedPlayerId(null);
-      setSelectedRouteId(null);
-    }
-  }, [saveToUndoStack]);
-
-  // Run debug tests
-  const runDebugTests = useCallback(() => {
-    const tests = [
-      {
-        name: 'Canvas Rendering',
-        category: 'Performance',
-        passed: true,
-        duration: 15
-      },
-      {
-        name: 'Player Management',
-        category: 'Functionality',
-        passed: players.length >= 0,
-        duration: 8
-      },
-      {
-        name: 'Route System',
-        category: 'Functionality',
-        passed: routes.length >= 0,
-        duration: 12
-      },
-      {
-        name: 'Undo/Redo',
-        category: 'Features',
-        passed: undoStack.length >= 0,
-        duration: 5
-      },
-      {
-        name: 'Touch Support',
-        category: 'Mobile',
-        passed: 'ontouchstart' in window,
-        duration: 3
-      }
-    ];
-    setDebugResults(tests);
-  }, [players.length, routes.length, undoStack.length]);
-
-  // Toggle debug mode
-  const toggleDebugMode = useCallback(() => {
-    setDebugMode(prev => !prev);
-  }, []);
+  const removePlayer = (players, playerId) => {
+    return players.filter(p => p.id !== playerId);
+  };
 
   return (
-    <div className="smart-playbook-app min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900">Smart Playbook</h1>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleDebugMode}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-              >
-                {debugMode ? 'Hide Debug' : 'Show Debug'}
-              </button>
-            </div>
-          </div>
+    <div className="smart-playbook-container">
+      {/* Level indicator */}
+      <div className="level-indicator bg-blue-100 text-blue-800 px-4 py-2 rounded-lg mb-4">
+        <strong>Level:</strong> {teamLevel} 
+        {isYouth && <span className="ml-2 text-sm">(Youth Mode - Simplified Features)</span>}
+        {isAdvanced && <span className="ml-2 text-sm">(Advanced Mode - Full Features)</span>}
+      </div>
+
+      {/* Safety warnings */}
+      {safetyWarnings.length > 0 && (
+        <div className="safety-warnings bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-4">
+          <h3 className="font-medium text-yellow-800 mb-2">Safety Warnings</h3>
+          <ul className="text-yellow-700 text-sm">
+            {safetyWarnings.map((warning, index) => (
+              <li key={index}>• {warning}</li>
+            ))}
+          </ul>
         </div>
-      </header>
+      )}
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Sidebar - Controls */}
-          <div className="lg:col-span-1 space-y-4">
-            {/* Toolbar */}
-            <Toolbar
-              mode={mode}
-              onModeChange={setMode}
-              onUndo={handleUndo}
-              onRedo={handleRedo}
-              canUndo={undoStack.length > 0}
-              canRedo={redoStack.length > 0}
-              undoStack={undoStack}
-              onClear={clearField}
-              onShowHelp={() => setShowOnboarding(true)}
-            />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Main canvas area */}
+        <div className="lg:col-span-3">
+          <Field
+            ref={canvasRef}
+            players={players}
+            routes={routes}
+            selectedPlayerId={selectedPlayerId}
+            selectedRouteId={selectedRouteId}
+            onPlayerSelect={setSelectedPlayerId}
+            onRouteSelect={setSelectedRouteId}
+            isDrawingRoute={isDrawingRoute}
+            routePoints={routePoints}
+            onRoutePointAdd={(point) => setRoutePoints(prev => [...prev, point])}
+            mode={mode}
+            teamLevel={teamLevel}
+          />
+        </div>
 
-            {/* Formation Templates */}
-            <FormationTemplates onLoadFormation={loadFormation} />
+        <div className="lg:col-span-1 space-y-4">
+          {/* Toolbar */}
+          <Toolbar
+            mode={mode}
+            onModeChange={setMode}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            canUndo={undoStack.length > 0}
+            canRedo={redoStack.length > 0}
+            undoStack={undoStack}
+            onClear={clearField}
+            onShowHelp={() => setShowOnboarding(true)}
+            teamLevel={teamLevel}
+            canAccessAdvanced={canAccess('advanced_plays')}
+          />
 
-            {/* Player Controls */}
-            <PlayerControls
-              selectedPlayer={players.find(p => p.id === selectedPlayerId)}
-              players={players}
-              onUpdatePlayer={(updates) => {
-                saveToUndoStack('update_player');
-                setPlayers(prev => prev.map(p => 
-                  p.id === selectedPlayerId ? { ...p, ...updates } : p
-                ));
-              }}
-              onDeletePlayer={() => {
-                if (selectedPlayerId) {
-                  saveToUndoStack('delete_player');
-                  setPlayers(prev => removePlayer(prev, selectedPlayerId));
-                  setRoutes(prev => prev.filter(route => route.playerId !== selectedPlayerId));
-                  setSelectedPlayerId(null);
-                }
-              }}
-            />
+          {/* Formation Templates */}
+          <FormationTemplates 
+            onLoadFormation={loadFormation} 
+            allowedFormations={constraints.allowedFormations}
+            teamLevel={teamLevel}
+          />
 
-            {/* Route Controls */}
+          {/* Player Controls */}
+          <PlayerControls
+            selectedPlayer={players.find(p => p.id === selectedPlayerId)}
+            players={players}
+            onUpdatePlayer={(updates) => {
+              saveToUndoStack('update_player');
+              setPlayers(prev => prev.map(p => 
+                p.id === selectedPlayerId ? { ...p, ...updates } : p
+              ));
+            }}
+            onDeletePlayer={() => {
+              if (selectedPlayerId) {
+                saveToUndoStack('delete_player');
+                setPlayers(prev => removePlayer(prev, selectedPlayerId));
+                setRoutes(prev => prev.filter(route => route.playerId !== selectedPlayerId));
+                setSelectedPlayerId(null);
+              }
+            }}
+            teamLevel={teamLevel}
+            maxPlayers={constraints.maxPlayers}
+          />
+
+          {/* Route Controls - Only show for appropriate levels */}
+          {canAccess('advanced_plays') && (
             <RouteControls
               selectedPlayer={players.find(p => p.id === selectedPlayerId)}
               isDrawingRoute={isDrawingRoute}
@@ -562,194 +466,97 @@ const SmartPlaybook = () => {
               onCancelDrawing={cancelRouteDrawing}
               onRouteTypeChange={setRouteType}
               onRouteColorChange={setRouteColor}
+              teamLevel={teamLevel}
             />
+          )}
 
-            {/* Route Editor */}
+          {/* Route Editor */}
+          {canAccess('advanced_plays') && (
             <RouteEditor
-              selectedRoute={routes.find(r => r.id === selectedRouteId)}
-              players={players}
-              onUpdateRoute={handleRouteUpdate}
-              onDeleteRoute={handleRouteDelete}
-              onApplyPreset={handleApplyPreset}
-              onClearSelection={() => setSelectedRouteId(null)}
+              routes={routes}
+              selectedRouteId={selectedRouteId}
+              onRouteSelect={setSelectedRouteId}
+              onRouteUpdate={(routeId, updates) => {
+                saveToUndoStack('update_route');
+                setRoutes(prev => prev.map(r => 
+                  r.id === routeId ? { ...r, ...updates } : r
+                ));
+              }}
+              onRouteDelete={(routeId) => {
+                saveToUndoStack('delete_route');
+                setRoutes(prev => prev.filter(r => r.id !== routeId));
+                setSelectedRouteId(null);
+              }}
+              teamLevel={teamLevel}
             />
+          )}
 
-            {/* Save/Load Panel */}
-            <SaveLoadPanel
-              currentPlayName={currentPlayName}
-              currentPlayPhase={currentPlayPhase}
-              currentPlayType={currentPlayType}
-              onPlayNameChange={setCurrentPlayName}
-              onPlayPhaseChange={setCurrentPlayPhase}
-              onPlayTypeChange={setCurrentPlayType}
-              onSave={() => setShowSaveDialog(true)}
-              onLoad={() => setShowLibrary(true)}
-              canSave={players.length > 0}
-            />
-          </div>
-
-          {/* Main Canvas Area */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <Field
-                ref={canvasRef}
-                players={players}
-                routes={routes}
-                onCanvasEvent={handleCanvasEvent}
-                onPlayerDrag={handlePlayerDrag}
-                onRouteSelect={handleRouteSelect}
-                selectedRouteId={selectedRouteId}
-                width={FIELD_DIMENSIONS.width}
-                height={FIELD_DIMENSIONS.height}
-                mode={mode}
-                debug={debugMode}
-                className="w-full"
-              />
-              
-              {/* Route Drawing Overlay */}
-              {isDrawingRoute && routePoints.length > 0 && (
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    Drawing route... Click to add points, double-click to finish
-                  </p>
-                  <div className="mt-2 flex gap-2">
-                    <button
-                      onClick={finishRouteDrawing}
-                      className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                    >
-                      Finish Route
-                    </button>
-                    <button
-                      onClick={cancelRouteDrawing}
-                      className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
-            {showLibrary && (
-              <PlayLibrary
-                savedPlays={savedPlays}
-                onLoadPlay={loadPlay}
-                onDeletePlay={deletePlay}
-                onClose={() => setShowLibrary(false)}
-              />
-            )}
-          </div>
+          {/* Save/Load Panel */}
+          <SaveLoadPanel
+            currentPlayName={currentPlayName}
+            onPlayNameChange={setCurrentPlayName}
+            currentPlayType={currentPlayType}
+            onPlayTypeChange={setCurrentPlayType}
+            currentPlayPhase={currentPlayPhase}
+            onPlayPhaseChange={setCurrentPlayPhase}
+            onSave={savePlay}
+            onLoad={() => setShowLibrary(true)}
+            complexityLevel={complexityLevel}
+            onComplexityChange={setComplexityLevel}
+            teamLevel={teamLevel}
+            isYouth={isYouth}
+          />
         </div>
       </div>
 
-      {/* Save Dialog */}
-      {showSaveDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-4">Save Play</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Play Name
-                </label>
-                <input
-                  type="text"
-                  value={currentPlayName}
-                  onChange={(e) => setCurrentPlayName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter play name..."
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phase
-                  </label>
-                  <select
-                    value={currentPlayPhase}
-                    onChange={(e) => setCurrentPlayPhase(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="offense">Offense</option>
-                    <option value="defense">Defense</option>
-                    <option value="special">Special Teams</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Type
-                  </label>
-                  <select
-                    value={currentPlayType}
-                    onChange={(e) => setCurrentPlayType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="pass">Pass</option>
-                    <option value="run">Run</option>
-                    <option value="kick">Kick</option>
-                    <option value="punt">Punt</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)}
-                disabled={!currentPlayName.trim() || players.length === 0}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Save Play
-              </button>
-              <button
-                onClick={() => setShowSaveDialog(false)}
-                className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Play Library Modal */}
+      {showLibrary && (
+        <PlayLibrary
+          plays={savedPlays}
+          onLoadPlay={loadPlay}
+          onClose={() => setShowLibrary(false)}
+          teamLevel={teamLevel}
+          isYouth={isYouth}
+        />
       )}
 
-      {/* Debug Panel */}
-      {debugMode && (
+      {/* Debug Panel - Only for advanced levels */}
+      {debugMode && canAccess('advanced_analytics') && (
         <DebugPanel
-          results={debugResults}
-          onRunAll={runDebugTests}
-          onTogglePassed={() => {}}
-          showPassed={true}
+          players={players}
+          routes={routes}
+          debugResults={debugResults}
+          onClose={() => setDebugMode(false)}
         />
       )}
 
       {/* Notifications */}
-      {notifications.map(notification => (
-        <Notification
-          key={notification.id}
-          id={notification.id}
-          type={notification.type}
-          message={notification.message}
-          duration={notification.duration}
-          onDismiss={removeNotification}
-        />
-      ))}
+      <div className="notifications-container fixed top-4 right-4 z-50">
+        {notifications.map(notification => (
+          <Notification
+            key={notification.id}
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotifications(prev => 
+              prev.filter(n => n.id !== notification.id)
+            )}
+          />
+        ))}
+      </div>
 
       {/* Onboarding */}
-      <Onboarding
-        isVisible={showOnboarding}
-        onComplete={() => setShowOnboarding(false)}
-        onSkip={() => setShowOnboarding(false)}
-      />
+      {showOnboarding && (
+        <Onboarding
+          onClose={() => {
+            setShowOnboarding(false);
+            localStorage.setItem('smartPlaybook_onboarding_complete', 'true');
+          }}
+          teamLevel={teamLevel}
+          isYouth={isYouth}
+        />
+      )}
     </div>
   );
 };
 
-const WrappedSmartPlaybook = () => (
-  <AIProvider>
-    <SmartPlaybook />
-  </AIProvider>
-);
-
-export default WrappedSmartPlaybook; 
+export default SmartPlaybook;

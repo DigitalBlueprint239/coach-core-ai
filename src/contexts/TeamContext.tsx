@@ -13,6 +13,7 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db, auth } from '../services/firebase';
+import { FootballLevel } from '../types/football';
 
 // Types
 export interface Team {
@@ -24,6 +25,7 @@ export interface Team {
   memberDetails: TeamMember[];
   createdAt: Date;
   updatedAt: Date;
+  level: FootballLevel; // ADDED for type compatibility
 }
 
 export interface TeamMember {
@@ -286,7 +288,12 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       (snapshot) => {
         const teams: Team[] = [];
         snapshot.forEach((doc) => {
-          teams.push({ id: doc.id, ...doc.data() } as Team);
+          const data = doc.data();
+          teams.push({
+            id: doc.id,
+            ...data,
+            level: data.level || FootballLevel.VARSITY // Ensure level is always set
+          } as Team);
         });
         setUserTeams(teams);
 

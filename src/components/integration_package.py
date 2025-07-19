@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 import logging
 from pathlib import Path
+from enum import Enum
 
 # Import the AI brain components
 from coach_core_ai_brain import (
@@ -21,6 +22,19 @@ from coach_core_ai_brain import (
     GameContext,
     CoachingInsight
 )
+
+class FootballLevel(str, Enum):
+    YOUTH_6U = "youth_6u"
+    YOUTH_8U = "youth_8u"
+    YOUTH_10U = "youth_10u"
+    YOUTH_12U = "youth_12u"
+    YOUTH_14U = "youth_14u"
+    MIDDLE_SCHOOL = "middle_school"
+    JV = "jv"
+    VARSITY = "varsity"
+    COLLEGE = "college"
+    SEMI_PRO = "semi_pro"
+    PROFESSIONAL = "professional"
 
 class SmartPlaybookIntegrator:
     """
@@ -201,6 +215,8 @@ class SmartPlaybookIntegrator:
         # Handle different play data formats
         if 'plays' in raw_data:
             for play in raw_data['plays']:
+                level = play.get('age_group', 'high_school')
+                level = FootballLevel[level.upper()] if level.upper() in FootballLevel.__members__ else FootballLevel.VARSITY
                 standardized_play = {
                     'id': play.get('id', f"play_{len(standardized['plays'])}"),
                     'name': play.get('name', 'Unnamed Play'),
@@ -208,6 +224,9 @@ class SmartPlaybookIntegrator:
                     'success_rate': float(play.get('success_rate', 0.5)),
                     'usage_count': int(play.get('usage_count', 1)),
                     'complexity': play.get('complexity', 'intermediate'),
+                    'level': level,
+                    'constraints': play.get('constraints', {}),
+                    'level_extensions': play.get('level_extensions', {}),
                     'age_appropriateness': play.get('age_appropriateness', ['high_school']),
                     'positions_involved': play.get('positions_involved', ['QB', 'WR']),
                     'risk_level': play.get('risk_level', 'medium')
@@ -217,12 +236,16 @@ class SmartPlaybookIntegrator:
         # Handle different player data formats
         if 'players' in raw_data:
             for player in raw_data['players']:
+                level = player.get('age_group', 'high_school')
+                level = FootballLevel[level.upper()] if level.upper() in FootballLevel.__members__ else FootballLevel.VARSITY
                 standardized_player = {
                     'id': player.get('id', f"player_{len(standardized['players'])}"),
                     'name': player.get('name', 'Unknown Player'),
                     'position': player.get('position', 'WR'),
                     'number': int(player.get('number', 99)),
-                    'age_group': player.get('age_group', 'high_school'),
+                    'level': level,
+                    'constraints': player.get('constraints', {}),
+                    'level_extensions': player.get('level_extensions', {}),
                     'skill_level': player.get('skill_level', 'intermediate'),
                     'attendance_rate': float(player.get('attendance_rate', 0.85)),
                     'injury_history': player.get('injury_history', []),
@@ -235,6 +258,12 @@ class SmartPlaybookIntegrator:
         # Copy other data as-is
         for key in ['practice_sessions', 'teams', 'feedback']:
             if key in raw_data:
+                for team in raw_data.get('teams', []):
+                    level = team.get('age_group', 'high_school')
+                    level = FootballLevel[level.upper()] if level.upper() in FootballLevel.__members__ else FootballLevel.VARSITY
+                    team['level'] = level
+                    team['constraints'] = team.get('constraints', {})
+                    team['level_extensions'] = team.get('level_extensions', {})
                 standardized[key] = raw_data[key]
         
         return standardized
@@ -250,6 +279,9 @@ class SmartPlaybookIntegrator:
                     'success_rate': 0.78,
                     'usage_count': 45,
                     'complexity': 'beginner',
+                    'level': FootballLevel.YOUTH_10U,
+                    'constraints': {},
+                    'level_extensions': {},
                     'age_appropriateness': ['youth', 'middle_school', 'high_school'],
                     'positions_involved': ['QB', 'WR'],
                     'risk_level': 'low'
@@ -261,6 +293,9 @@ class SmartPlaybookIntegrator:
                     'success_rate': 0.65,
                     'usage_count': 32,
                     'complexity': 'intermediate',
+                    'level': FootballLevel.HIGH_SCHOOL,
+                    'constraints': {},
+                    'level_extensions': {},
                     'age_appropriateness': ['middle_school', 'high_school'],
                     'positions_involved': ['QB', 'RB', 'FB', 'OL'],
                     'risk_level': 'medium'
@@ -272,6 +307,9 @@ class SmartPlaybookIntegrator:
                     'success_rate': 0.71,
                     'usage_count': 28,
                     'complexity': 'advanced',
+                    'level': FootballLevel.COLLEGE,
+                    'constraints': {},
+                    'level_extensions': {},
                     'age_appropriateness': ['high_school'],
                     'positions_involved': ['QB', 'WR', 'WR', 'WR', 'TE'],
                     'risk_level': 'low'
@@ -283,7 +321,9 @@ class SmartPlaybookIntegrator:
                     'name': 'Marcus Johnson',
                     'position': 'QB',
                     'number': 12,
-                    'age_group': 'high_school',
+                    'level': FootballLevel.HIGH_SCHOOL,
+                    'constraints': {},
+                    'level_extensions': {},
                     'skill_level': 'advanced',
                     'attendance_rate': 0.95,
                     'injury_history': [],
@@ -294,7 +334,9 @@ class SmartPlaybookIntegrator:
                     'name': 'Tyler Davis',
                     'position': 'RB',
                     'number': 23,
-                    'age_group': 'high_school',
+                    'level': FootballLevel.HIGH_SCHOOL,
+                    'constraints': {},
+                    'level_extensions': {},
                     'skill_level': 'intermediate',
                     'attendance_rate': 0.88,
                     'injury_history': ['ankle_sprain'],
@@ -306,7 +348,9 @@ class SmartPlaybookIntegrator:
                     'id': 'team_001',
                     'name': 'Demo Eagles',
                     'sport': 'football',
-                    'age_group': 'high_school',
+                    'level': FootballLevel.HIGH_SCHOOL,
+                    'constraints': {},
+                    'level_extensions': {},
                     'season': '2024'
                 }
             ]
@@ -860,6 +904,9 @@ class SmartPlaybookExporter:
                 'success_rate': success_rate,
                 'usage_count': 1,
                 'complexity': complexity,
+                'level': FootballLevel.HIGH_SCHOOL,
+                'constraints': {},
+                'level_extensions': {},
                 'age_appropriateness': ['high_school'],
                 'positions_involved': ['QB', 'WR'],
                 'risk_level': 'medium'
@@ -882,7 +929,9 @@ class SmartPlaybookExporter:
                 'name': name,
                 'position': position,
                 'number': number,
-                'age_group': 'high_school',
+                'level': FootballLevel.HIGH_SCHOOL,
+                'constraints': {},
+                'level_extensions': {},
                 'skill_level': 'intermediate',
                 'attendance_rate': 0.9,
                 'injury_history': [],

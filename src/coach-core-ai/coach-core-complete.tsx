@@ -16,7 +16,50 @@ import {
 // CONTEXT & STATE MANAGEMENT
 // ============================================
 
-const AppContext = createContext();
+interface AppContextType {
+  user: {
+    id: string;
+    email: string;
+    role: string;
+    teamId: string;
+    persona: string;
+    preferences: {
+      notifications: {
+        email: boolean;
+        sms: boolean;
+        push: boolean;
+        inApp: boolean;
+      };
+      ai: {
+        autoSuggest: boolean;
+        onDemandOnly: boolean;
+        confidenceThreshold: number;
+      };
+      privacy: {
+        sharePlays: boolean;
+        allowAnalytics: boolean;
+      };
+    };
+  };
+  setUser: React.Dispatch<React.SetStateAction<AppContextType['user']>>;
+  team: {
+    id: string;
+    name: string;
+    sport: string;
+    ageGroup: string;
+    season: string;
+    players: number;
+    coaches: number;
+    subscription: string;
+  };
+  setTeam: React.Dispatch<React.SetStateAction<AppContextType['team']>>;
+  notifications: any[];
+  setNotifications: React.Dispatch<React.SetStateAction<any[]>>;
+  offline: boolean;
+  setOffline: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AppContext = createContext<AppContextType | null>(null);
 
 const useAppContext = () => {
   const context = useContext(AppContext);
@@ -26,7 +69,7 @@ const useAppContext = () => {
   return context;
 };
 
-const AppProvider = ({ children }) => {
+const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState({
     id: 'demo-user',
     email: 'coach@demo.com',
@@ -63,7 +106,7 @@ const AppProvider = ({ children }) => {
     subscription: 'pro'
   });
 
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [offline, setOffline] = useState(false);
 
   return (
@@ -82,8 +125,23 @@ const AppProvider = ({ children }) => {
 // PERSONA-BASED ONBOARDING SYSTEM
 // ============================================
 
-const PersonaPicker = ({ onPersonaSelect }) => {
-  const personas = [
+interface PersonaPickerProps {
+  onPersonaSelect: (persona: string) => void;
+}
+
+type PersonaColor = 'blue' | 'green' | 'purple' | 'orange';
+
+interface Persona {
+  id: string;
+  title: string;
+  description: string;
+  icon: any;
+  color: PersonaColor;
+  features: string[];
+}
+
+const PersonaPicker = ({ onPersonaSelect }: PersonaPickerProps) => {
+  const personas: Persona[] = [
     {
       id: 'first_time_coach',
       title: 'First-Time Coach',
@@ -118,6 +176,13 @@ const PersonaPicker = ({ onPersonaSelect }) => {
     }
   ];
 
+  const colorClasses: Record<PersonaColor, string> = {
+    blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-900',
+    green: 'bg-green-50 border-green-200 hover:bg-green-100 text-green-900',
+    purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100 text-purple-900',
+    orange: 'bg-orange-50 border-orange-200 hover:bg-orange-100 text-orange-900'
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
@@ -128,13 +193,6 @@ const PersonaPicker = ({ onPersonaSelect }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {personas.map(persona => {
           const Icon = persona.icon;
-          const colorClasses = {
-            blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-900',
-            green: 'bg-green-50 border-green-200 hover:bg-green-100 text-green-900',
-            purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100 text-purple-900',
-            orange: 'bg-orange-50 border-orange-200 hover:bg-orange-100 text-orange-900'
-          };
-
           return (
             <button
               key={persona.id}
@@ -966,7 +1024,7 @@ const PlayerDashboard = () => {
 // ============================================
 
 const NotificationCenter = () => {
-  const [notifications, setNotifications] = useState([
+  const [notifications, setNotifications] = useState<any[]>([
     {
       id: 1,
       type: 'practice_reminder',

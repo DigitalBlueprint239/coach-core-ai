@@ -1,26 +1,22 @@
 // src/utils/data-validation.ts
-import { Timestamp } from 'firebase/firestore';
-import { 
-  User, Team, Player, PracticePlan, Play, 
-  ValidationSchemas, UserRole, Sport, AgeGroup,
-  PlayerPosition, PracticeStatus, PlayCategory
-} from '../types/firestore-schema';
+import { Team, Player, PracticePlan, Play } from '../types/firestore-schema';
 
 // ============================================
 // VALIDATION TYPES
 // ============================================
 
+export type ValidationType = 'string' | 'number' | 'boolean' | 'object' | 'email' | 'array' | 'timestamp' | 'enum';
+
 export interface ValidationRule {
   required?: boolean;
-  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'timestamp' | 'email';
+  type?: ValidationType;
   minLength?: number;
   maxLength?: number;
   min?: number;
   max?: number;
   pattern?: RegExp;
   enum?: string[];
-  custom?: (value: any) => boolean;
-  message?: string;
+  custom?: (value: any) => boolean | string;
 }
 
 export interface ValidationError {
@@ -35,36 +31,119 @@ export interface ValidationResult {
 }
 
 // ============================================
-// CORE VALIDATION FUNCTIONS
+// VALIDATION SCHEMAS
+// ============================================
+
+export const TeamValidationSchema: Record<keyof Team, ValidationRule> = {
+  id: { required: true, type: 'string' },
+  name: { required: true, type: 'string', minLength: 2, maxLength: 100 },
+  sport: { required: true, type: 'enum', enum: ['football', 'basketball', 'soccer', 'baseball', 'volleyball', 'hockey', 'lacrosse', 'track', 'swimming', 'tennis'] },
+  level: { required: true, type: 'string' },
+  season: { required: true, type: 'string' },
+  coachIds: { required: true, type: 'array' },
+  playerIds: { required: true, type: 'array' },
+  settings: { required: true, type: 'object' },
+  stats: { required: true, type: 'object' },
+  location: { required: true, type: 'object' },
+  schedule: { required: true, type: 'object' },
+  constraints: { required: false, type: 'object' },
+  level_extensions: { required: false, type: 'object' },
+  createdAt: { required: true, type: 'timestamp' },
+  updatedAt: { required: true, type: 'timestamp' }
+};
+
+export const PlayerValidationSchema: Record<keyof Player, ValidationRule> = {
+  id: { required: true, type: 'string' },
+  teamId: { required: true, type: 'string' },
+  firstName: { required: true, type: 'string', minLength: 1, maxLength: 50 },
+  lastName: { required: true, type: 'string', minLength: 1, maxLength: 50 },
+  jerseyNumber: { required: true, type: 'number', min: 0, max: 99 },
+  position: { required: true, type: 'string' },
+  grade: { required: true, type: 'number', min: 1, max: 12 },
+  email: { required: false, type: 'email' },
+  phone: { required: false, type: 'string' },
+  parentEmail: { required: false, type: 'email' },
+  parentPhone: { required: false, type: 'string' },
+  height: { required: false, type: 'number', min: 30, max: 90 },
+  weight: { required: false, type: 'number', min: 50, max: 400 },
+  medicalInfo: { required: false, type: 'object' },
+  stats: { required: false, type: 'object' },
+  level: { required: true, type: 'string' },
+  constraints: { required: false, type: 'object' },
+  level_extensions: { required: false, type: 'object' },
+  createdAt: { required: true, type: 'timestamp' },
+  updatedAt: { required: true, type: 'timestamp' }
+};
+
+export const PracticePlanValidationSchema: Record<keyof PracticePlan, ValidationRule> = {
+  id: { required: false, type: 'string' },
+  teamId: { required: true, type: 'string' },
+  name: { required: true, type: 'string', minLength: 3, maxLength: 100 },
+  date: { required: true, type: 'string' },
+  duration: { required: true, type: 'number', min: 15, max: 480 },
+  periods: { required: true, type: 'array' },
+  goals: { required: true, type: 'array' },
+  notes: { required: false, type: 'string', maxLength: 100 },
+  createdBy: { required: true, type: 'string' },
+  createdAt: { required: true, type: 'timestamp' },
+  updatedAt: { required: true, type: 'timestamp' }
+};
+
+export const PlayValidationSchema: Record<keyof Play, ValidationRule> = {
+  id: { required: false, type: 'string' },
+  teamId: { required: true, type: 'string' },
+  authorId: { required: true, type: 'string' },
+  name: { required: true, type: 'string', minLength: 3, maxLength: 100 },
+  description: { required: false, type: 'string', maxLength: 500 },
+  category: { required: true, type: 'enum', enum: ['offense', 'defense', 'special_teams', 'situational', 'red_zone', 'two_minute'] },
+  formation: { required: true, type: 'string' },
+  difficulty: { required: true, type: 'enum', enum: ['beginner', 'intermediate', 'advanced'] },
+  level: { required: true, type: 'string' },
+  players: { required: true, type: 'array' },
+  routes: { required: false, type: 'array' },
+  tags: { required: false, type: 'array' },
+  isPublic: { required: false, type: 'boolean' },
+  status: { required: true, type: 'enum', enum: ['draft', 'published', 'archived'] },
+  stats: { required: false, type: 'object' },
+  source: { required: true, type: 'enum', enum: ['manual', 'hudl', 'community'] },
+  constraints: { required: false, type: 'object' },
+  level_extensions: { required: false, type: 'object' },
+  createdAt: { required: true, type: 'timestamp' },
+  updatedAt: { required: true, type: 'timestamp' }
+};
+
+// ============================================
+// VALIDATION SERVICE
 // ============================================
 
 export class DataValidator {
-  private static validateField(
-    value: any, 
-    fieldName: string, 
-    rules: ValidationRule
-  ): ValidationError[] {
+  /**
+   * Validate a single field against its rules
+   */
+  private validateField(value: any, fieldName: string, rules: ValidationRule): ValidationError[] {
     const errors: ValidationError[] = [];
 
-    // Check if required
+    // Check required
     if (rules.required && (value === undefined || value === null || value === '')) {
       errors.push({
         field: fieldName,
-        message: rules.message || `${fieldName} is required`,
+        message: `${fieldName} is required`,
         value
       });
-      return errors;
+      return errors; // Don't check other rules if required field is missing
     }
 
-    // Skip further validation if value is empty and not required
-    if (value === undefined || value === null || value === '') {
+    // Skip validation if value is not provided and not required
+    if (value === undefined || value === null) {
       return errors;
     }
 
     // Type validation
     if (rules.type) {
-      const typeError = this.validateType(value, fieldName, rules.type);
-      if (typeError) errors.push(typeError);
+      const typeError = this.validateType(value, rules.type, fieldName);
+      if (typeError) {
+        errors.push(typeError);
+      }
     }
 
     // String validations
@@ -72,7 +151,7 @@ export class DataValidator {
       if (rules.minLength && value.length < rules.minLength) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} must be at least ${rules.minLength} characters`,
+          message: `${fieldName} must be at least ${rules.minLength} characters`,
           value
         });
       }
@@ -80,7 +159,7 @@ export class DataValidator {
       if (rules.maxLength && value.length > rules.maxLength) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} must be no more than ${rules.maxLength} characters`,
+          message: `${fieldName} must be no more than ${rules.maxLength} characters`,
           value
         });
       }
@@ -88,7 +167,15 @@ export class DataValidator {
       if (rules.pattern && !rules.pattern.test(value)) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} format is invalid`,
+          message: `${fieldName} format is invalid`,
+          value
+        });
+      }
+
+      if (rules.type === 'email' && !this.isValidEmail(value)) {
+        errors.push({
+          field: fieldName,
+          message: `${fieldName} must be a valid email address`,
           value
         });
       }
@@ -99,7 +186,7 @@ export class DataValidator {
       if (rules.min !== undefined && value < rules.min) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} must be at least ${rules.min}`,
+          message: `${fieldName} must be at least ${rules.min}`,
           value
         });
       }
@@ -107,7 +194,7 @@ export class DataValidator {
       if (rules.max !== undefined && value > rules.max) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} must be no more than ${rules.max}`,
+          message: `${fieldName} must be no more than ${rules.max}`,
           value
         });
       }
@@ -118,7 +205,7 @@ export class DataValidator {
       if (rules.minLength && value.length < rules.minLength) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} must have at least ${rules.minLength} items`,
+          message: `${fieldName} must have at least ${rules.minLength} items`,
           value
         });
       }
@@ -126,7 +213,7 @@ export class DataValidator {
       if (rules.maxLength && value.length > rules.maxLength) {
         errors.push({
           field: fieldName,
-          message: rules.message || `${fieldName} must have no more than ${rules.maxLength} items`,
+          message: `${fieldName} must have no more than ${rules.maxLength} items`,
           value
         });
       }
@@ -136,24 +223,95 @@ export class DataValidator {
     if (rules.enum && !rules.enum.includes(value)) {
       errors.push({
         field: fieldName,
-        message: rules.message || `${fieldName} must be one of: ${rules.enum.join(', ')}`,
+        message: `${fieldName} must be one of: ${rules.enum.join(', ')}`,
         value
       });
     }
 
     // Custom validation
-    if (rules.custom && !rules.custom(value)) {
-      errors.push({
-        field: fieldName,
-        message: rules.message || `${fieldName} failed custom validation`,
-        value
-      });
+    if (rules.custom) {
+      const customResult = rules.custom(value);
+      if (customResult !== true) {
+        errors.push({
+          field: fieldName,
+          message: typeof customResult === 'string' ? customResult : `${fieldName} validation failed`,
+          value
+        });
+      }
     }
 
     return errors;
   }
 
-  private static validateType(value: any, fieldName: string, expectedType: string): ValidationError | null {
+  /**
+   * Validate data against a schema
+   */
+  validateData<T>(data: T, schema: Record<string, ValidationRule>): ValidationError[] {
+    const errors: ValidationError[] = [];
+
+    // Validate required fields
+    Object.entries(schema).forEach(([field, rules]) => {
+      const fieldErrors = this.validateField(data[field as keyof T], field, rules);
+      errors.push(...fieldErrors);
+    });
+
+    return errors;
+  }
+
+  /**
+   * Validate a team
+   */
+  validateTeam(team: Team): ValidationError[] {
+    return this.validateData(team, TeamValidationSchema);
+  }
+
+  /**
+   * Validate a player
+   */
+  validatePlayer(player: Player): ValidationError[] {
+    return this.validateData(player, PlayerValidationSchema);
+  }
+
+  /**
+   * Validate a practice plan
+   */
+  validatePracticePlan(practicePlan: PracticePlan): ValidationError[] {
+    return this.validateData(practicePlan, PracticePlanValidationSchema);
+  }
+
+  /**
+   * Validate a play
+   */
+  validatePlay(play: Play): ValidationError[] {
+    return this.validateData(play, PlayValidationSchema);
+  }
+
+  /**
+   * Check if validation errors exist
+   */
+  hasErrors(errors: ValidationError[]): boolean {
+    return errors.length > 0;
+  }
+
+  /**
+   * Get error messages as a single string
+   */
+  getErrorMessage(errors: ValidationError[]): string {
+    return errors.map(error => error.message).join(', ');
+  }
+
+  /**
+   * Validate email format
+   */
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  /**
+   * Validate type
+   */
+  private validateType(value: any, expectedType: ValidationType, fieldName: string): ValidationError | null {
     switch (expectedType) {
       case 'string':
         if (typeof value !== 'string') {
@@ -164,7 +322,6 @@ export class DataValidator {
           };
         }
         break;
-
       case 'number':
         if (typeof value !== 'number' || isNaN(value)) {
           return {
@@ -174,7 +331,6 @@ export class DataValidator {
           };
         }
         break;
-
       case 'boolean':
         if (typeof value !== 'boolean') {
           return {
@@ -184,17 +340,6 @@ export class DataValidator {
           };
         }
         break;
-
-      case 'array':
-        if (!Array.isArray(value)) {
-          return {
-            field: fieldName,
-            message: `${fieldName} must be an array`,
-            value
-          };
-        }
-        break;
-
       case 'object':
         if (typeof value !== 'object' || value === null || Array.isArray(value)) {
           return {
@@ -204,347 +349,31 @@ export class DataValidator {
           };
         }
         break;
-
-      case 'timestamp':
-        if (!(value instanceof Timestamp) && !(value instanceof Date)) {
+      case 'array':
+        if (!Array.isArray(value)) {
           return {
             field: fieldName,
-            message: `${fieldName} must be a timestamp`,
+            message: `${fieldName} must be an array`,
             value
           };
         }
         break;
-
-      case 'email':
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (typeof value !== 'string' || !emailPattern.test(value)) {
+      case 'timestamp':
+        if (!(value instanceof Date) && typeof value !== 'string') {
           return {
             field: fieldName,
-            message: `${fieldName} must be a valid email address`,
+            message: `${fieldName} must be a valid date/timestamp`,
             value
           };
         }
         break;
     }
-
     return null;
   }
-
-  // ============================================
-  // DOCUMENT VALIDATION METHODS
-  // ============================================
-
-  static validateUser(data: Partial<User>): ValidationResult {
-    const errors: ValidationError[] = [];
-    const schema = ValidationSchemas.user;
-
-    // Validate required fields
-    Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof User], field, rules);
-      errors.push(...fieldErrors);
-    });
-
-    // Custom validations
-    if (data.email && !this.isValidEmail(data.email)) {
-      errors.push({
-        field: 'email',
-        message: 'Invalid email format',
-        value: data.email
-      });
-    }
-
-    if (data.roles && !this.validateRoles(data.roles)) {
-      errors.push({
-        field: 'roles',
-        message: 'Invalid roles provided',
-        value: data.roles
-      });
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors
-    };
-  }
-
-  static validateTeam(data: Partial<Team>): ValidationResult {
-    const errors: ValidationError[] = [];
-    const schema = ValidationSchemas.team;
-
-    // Validate required fields
-    Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof Team], field, rules);
-      errors.push(...fieldErrors);
-    });
-
-    // Custom validations
-    if (data.sport && !this.isValidSport(data.sport)) {
-      errors.push({
-        field: 'sport',
-        message: 'Invalid sport type',
-        value: data.sport
-      });
-    }
-
-    if (data.ageGroup && !this.isValidAgeGroup(data.ageGroup)) {
-      errors.push({
-        field: 'ageGroup',
-        message: 'Invalid age group',
-        value: data.ageGroup
-      });
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors
-    };
-  }
-
-  static validatePlayer(data: Partial<Player>): ValidationResult {
-    const errors: ValidationError[] = [];
-    const schema = ValidationSchemas.player;
-
-    // Validate required fields
-    Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof Player], field, rules);
-      errors.push(...fieldErrors);
-    });
-
-    // Custom validations
-    if (data.position && !this.isValidPlayerPosition(data.position)) {
-      errors.push({
-        field: 'position',
-        message: 'Invalid player position',
-        value: data.position
-      });
-    }
-
-    if (data.jerseyNumber && (data.jerseyNumber < 0 || data.jerseyNumber > 99)) {
-      errors.push({
-        field: 'jerseyNumber',
-        message: 'Jersey number must be between 0 and 99',
-        value: data.jerseyNumber
-      });
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors
-    };
-  }
-
-  static validatePracticePlan(data: Partial<PracticePlan>): ValidationResult {
-    const errors: ValidationError[] = [];
-    const schema = ValidationSchemas.practicePlan;
-
-    // Validate required fields
-    Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof PracticePlan], field, rules);
-      errors.push(...fieldErrors);
-    });
-
-    // Custom validations
-    if (data.duration && (data.duration < 15 || data.duration > 480)) {
-      errors.push({
-        field: 'duration',
-        message: 'Practice duration must be between 15 and 480 minutes',
-        value: data.duration
-      });
-    }
-
-    if (data.periods && data.periods.length > 0) {
-      data.periods.forEach((period, index) => {
-        if (!period.name || period.name.trim() === '') {
-          errors.push({
-            field: `periods[${index}].name`,
-            message: 'Period name is required',
-            value: period.name
-          });
-        }
-      });
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors
-    };
-  }
-
-  static validatePlay(data: Partial<Play>): ValidationResult {
-    const errors: ValidationError[] = [];
-    const schema = ValidationSchemas.play;
-
-    // Validate required fields
-    Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof Play], field, rules);
-      errors.push(...fieldErrors);
-    });
-
-    // Custom validations
-    if (data.category && !this.isValidPlayCategory(data.category)) {
-      errors.push({
-        field: 'category',
-        message: 'Invalid play category',
-        value: data.category
-      });
-    }
-
-    if (data.routes && data.routes.length > 0) {
-      data.routes.forEach((route, index) => {
-        if (!route.playerId) {
-          errors.push({
-            field: `routes[${index}].playerId`,
-            message: 'Route player ID is required',
-            value: route.playerId
-          });
-        }
-      });
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors
-    };
-  }
-
-  // ============================================
-  // HELPER VALIDATION METHODS
-  // ============================================
-
-  private static isValidEmail(email: string): boolean {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  }
-
-  private static validateRoles(roles: UserRole[]): boolean {
-    const validRoles: UserRole[] = ['head_coach', 'assistant_coach', 'player', 'parent', 'admin'];
-    return roles.every(role => validRoles.includes(role));
-  }
-
-  private static isValidSport(sport: string): boolean {
-    const validSports: Sport[] = ['football', 'basketball', 'soccer', 'baseball', 'volleyball', 'hockey', 'lacrosse', 'track', 'swimming', 'tennis'];
-    return validSports.includes(sport as Sport);
-  }
-
-  private static isValidAgeGroup(ageGroup: string): boolean {
-    const validAgeGroups: AgeGroup[] = ['youth', 'middle_school', 'high_school', 'college', 'adult', 'senior'];
-    return validAgeGroups.includes(ageGroup as AgeGroup);
-  }
-
-  private static isValidPlayerPosition(position: string): boolean {
-    const validPositions: PlayerPosition[] = [
-      'quarterback', 'running_back', 'wide_receiver', 'tight_end', 'offensive_line',
-      'defensive_line', 'linebacker', 'cornerback', 'safety', 'kicker', 'punter',
-      'point_guard', 'shooting_guard', 'small_forward', 'power_forward', 'center',
-      'forward', 'midfielder', 'defender', 'goalkeeper', 'pitcher', 'catcher',
-      'infielder', 'outfielder', 'utility'
-    ];
-    return validPositions.includes(position as PlayerPosition);
-  }
-
-  private static isValidPlayCategory(category: string): boolean {
-    const validCategories: PlayCategory[] = ['offense', 'defense', 'special_teams', 'situational', 'red_zone', 'two_minute'];
-    return validCategories.includes(category as PlayCategory);
-  }
-
-  // ============================================
-  // BATCH VALIDATION
-  // ============================================
-
-  static validateBatch<T>(items: Partial<T>[], validator: (item: Partial<T>) => ValidationResult): ValidationResult[] {
-    return items.map(item => validator(item));
-  }
-
-  static hasValidationErrors(results: ValidationResult[]): boolean {
-    return results.some(result => !result.isValid);
-  }
-
-  static getAllErrors(results: ValidationResult[]): ValidationError[] {
-    return results.flatMap(result => result.errors);
-  }
-
-  // ============================================
-  // SANITIZATION METHODS
-  // ============================================
-
-  static sanitizeString(value: string): string {
-    return value.trim().replace(/\s+/g, ' ');
-  }
-
-  static sanitizeEmail(email: string): string {
-    return email.toLowerCase().trim();
-  }
-
-  static sanitizePhone(phone: string): string {
-    return phone.replace(/\D/g, '');
-  }
-
-  static sanitizeUserData(data: Partial<User>): Partial<User> {
-    const sanitized = { ...data };
-
-    if (sanitized.email) {
-      sanitized.email = this.sanitizeEmail(sanitized.email);
-    }
-
-    if (sanitized.displayName) {
-      sanitized.displayName = this.sanitizeString(sanitized.displayName);
-    }
-
-    if (sanitized.phoneNumber) {
-      sanitized.phoneNumber = this.sanitizePhone(sanitized.phoneNumber);
-    }
-
-    return sanitized;
-  }
-
-  static sanitizeTeamData(data: Partial<Team>): Partial<Team> {
-    const sanitized = { ...data };
-
-    if (sanitized.name) {
-      sanitized.name = this.sanitizeString(sanitized.name);
-    }
-
-    if (sanitized.location?.city) {
-      sanitized.location.city = this.sanitizeString(sanitized.location.city);
-    }
-
-    if (sanitized.location?.state) {
-      sanitized.location.state = this.sanitizeString(sanitized.location.state);
-    }
-
-    return sanitized;
-  }
-
-  static sanitizePlayerData(data: Partial<Player>): Partial<Player> {
-    const sanitized = { ...data };
-
-    if (sanitized.firstName) {
-      sanitized.firstName = this.sanitizeString(sanitized.firstName);
-    }
-
-    if (sanitized.lastName) {
-      sanitized.lastName = this.sanitizeString(sanitized.lastName);
-    }
-
-    if (sanitized.email) {
-      sanitized.email = this.sanitizeEmail(sanitized.email);
-    }
-
-    if (sanitized.phone) {
-      sanitized.phone = this.sanitizePhone(sanitized.phone);
-    }
-
-    if (sanitized.parentEmail) {
-      sanitized.parentEmail = this.sanitizeEmail(sanitized.parentEmail);
-    }
-
-    if (sanitized.parentPhone) {
-      sanitized.parentPhone = this.sanitizePhone(sanitized.parentPhone);
-    }
-
-    return sanitized;
-  }
 }
+
+// Export a singleton instance
+export const dataValidator = new DataValidator();
 
 // ============================================
 // VALIDATION HOOKS
@@ -568,8 +397,8 @@ export const useValidation = () => {
   return {
     validate,
     validateAndSanitize,
-    DataValidator
+    DataValidator: dataValidator
   };
 };
 
-export default DataValidator; 
+export default dataValidator; 

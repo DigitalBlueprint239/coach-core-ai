@@ -248,6 +248,9 @@ if __name__ == "__main__":
                     "success_rate": 0.78,
                     "usage_count": 45,
                     "complexity": "beginner",
+                    "level": "youth_10u",
+                    "constraints": {},
+                    "level_extensions": {},
                     "age_appropriateness": ["youth", "middle_school", "high_school"],
                     "positions_involved": ["QB", "WR"],
                     "risk_level": "low"
@@ -259,6 +262,9 @@ if __name__ == "__main__":
                     "success_rate": 0.65,
                     "usage_count": 32,
                     "complexity": "intermediate",
+                    "level": "high_school",
+                    "constraints": {},
+                    "level_extensions": {},
                     "age_appropriateness": ["middle_school", "high_school"],
                     "positions_involved": ["QB", "RB", "FB", "OL"],
                     "risk_level": "medium"
@@ -270,6 +276,9 @@ if __name__ == "__main__":
                     "success_rate": 0.71,
                     "usage_count": 28,
                     "complexity": "intermediate",
+                    "level": "college",
+                    "constraints": {},
+                    "level_extensions": {},
                     "age_appropriateness": ["high_school"],
                     "positions_involved": ["QB", "WR", "OL"],
                     "risk_level": "low"
@@ -281,7 +290,9 @@ if __name__ == "__main__":
                     "name": "Marcus Johnson",
                     "position": "QB",
                     "number": 12,
-                    "age_group": "high_school",
+                    "level": "high_school",
+                    "constraints": {},
+                    "level_extensions": {},
                     "skill_level": "advanced",
                     "attendance_rate": 0.95,
                     "injury_history": [],
@@ -292,7 +303,9 @@ if __name__ == "__main__":
                     "name": "Tyler Davis",
                     "position": "RB",
                     "number": 23,
-                    "age_group": "high_school",
+                    "level": "high_school",
+                    "constraints": {},
+                    "level_extensions": {},
                     "skill_level": "intermediate", 
                     "attendance_rate": 0.88,
                     "injury_history": ["ankle_sprain"],
@@ -304,7 +317,9 @@ if __name__ == "__main__":
                     "id": "team_001",
                     "name": "Demo Eagles",
                     "sport": "football",
-                    "age_group": "high_school",
+                    "level": "high_school",
+                    "constraints": {},
+                    "level_extensions": {},
                     "season": "2024"
                 }
             ]

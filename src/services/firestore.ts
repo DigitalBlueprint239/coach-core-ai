@@ -18,6 +18,7 @@ import {
   disableNetwork
 } from 'firebase/firestore';
 import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
+import { FootballLevel } from '../types/football';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -97,6 +98,7 @@ export interface Play {
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
+  level?: FootballLevel; // Added level field
 }
 
 export interface Route {
@@ -368,13 +370,14 @@ export async function deletePracticePlan(teamId: string, planId: string): Promis
   }
 }
 
-// SMART PLAYBOOK API
-export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+// SMART PLAYBOOK API - Updated for level awareness
+export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>, level?: FootballLevel): Promise<string> {
   const user = getCurrentUser();
   
   const play = {
     ...playData,
     teamId,
+    level: level || FootballLevel.VARSITY, // Default to varsity if not specified
     createdBy: user.uid,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -398,15 +401,21 @@ export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'team
   }
 }
 
-export async function getPlays(teamId: string): Promise<Play[]> {
+export async function getPlays(teamId: string, level?: FootballLevel): Promise<Play[]> {
   getCurrentUser(); // Ensure authenticated
   
   try {
-    const q = query(
-      collection(db, 'plays'),
+    const constraints = [
       where('teamId', '==', teamId),
       orderBy('createdAt', 'desc')
-    );
+    ];
+    
+    // Add level filter if specified
+    if (level) {
+      constraints.push(where('level', '==', level));
+    }
+    
+    const q = query(collection(db, 'plays'), ...constraints);
     
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
@@ -419,11 +428,12 @@ export async function getPlays(teamId: string): Promise<Play[]> {
   }
 }
 
-export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>): Promise<void> {
+export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>, level?: FootballLevel): Promise<void> {
   getCurrentUser(); // Ensure authenticated
   
   const data = {
     ...updates,
+    ...(level && { level }), // Update level if provided
     updatedAt: new Date()
   };
 
@@ -478,12 +488,18 @@ export function subscribeToPracticePlans(teamId: string, callback: (plans: Pract
   });
 }
 
-export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => void) {
-  const q = query(
-    collection(db, 'plays'),
+export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => void, level?: FootballLevel) {
+  const constraints = [
     where('teamId', '==', teamId),
     orderBy('createdAt', 'desc')
-  );
+  ];
+  
+  // Add level filter if specified
+  if (level) {
+    constraints.push(where('level', '==', level));
+  }
+  
+  const q = query(collection(db, 'plays'), ...constraints);
 
   return onSnapshot(q, (snapshot) => {
     const plays = snapshot.docs.map(doc => ({

@@ -133,7 +133,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         </div>
         <button className="onboarding-close" onClick={onClose} aria-label="Close onboarding">×</button>
       </div>
-      <style jsx>{`
+      <style>{`
         .onboarding-modal-overlay {
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;

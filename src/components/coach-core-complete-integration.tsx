@@ -903,6 +903,7 @@ const CoachCoreAIComplete = () => {
             <div>
               <PlayerFeedback
                 playId="demo-play"
+                drillId="demo-drill" // ADDED to fix missing prop error
                 playerId={mockUser.uid}
                 onSubmit={(feedback) => console.log('Feedback submitted:', feedback)}
               />

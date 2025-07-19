@@ -1,5 +1,6 @@
 // src/types/firestore-schema.ts
 import { Timestamp, FieldValue } from 'firebase/firestore';
+import { FootballLevel, BaseFootballEntity, LevelConstraints } from './football';
 
 // ============================================
 // CORE DATA TYPES
@@ -81,10 +82,10 @@ export type SubscriptionStatus = 'active' | 'cancelled' | 'past_due' | 'trial';
 // TEAM MANAGEMENT
 // ============================================
 
-export interface Team extends BaseDocument {
+export interface Team extends BaseDocument, BaseFootballEntity {
   name: string;
   sport: Sport;
-  ageGroup: AgeGroup;
+  level: FootballLevel;
   season: string;
   coachIds: string[];
   playerIds: string[];
@@ -92,6 +93,8 @@ export interface Team extends BaseDocument {
   stats: TeamStats;
   location: TeamLocation;
   schedule: TeamSchedule;
+  constraints?: LevelConstraints;
+  level_extensions?: Record<string, any>;
 }
 
 export type Sport = 'football' | 'basketball' | 'soccer' | 'baseball' | 'volleyball' | 'hockey' | 'lacrosse' | 'track' | 'swimming' | 'tennis';
@@ -157,7 +160,7 @@ export interface GameResult {
 // PLAYER MANAGEMENT
 // ============================================
 
-export interface Player extends BaseDocument {
+export interface Player extends BaseDocument, BaseFootballEntity {
   teamId: string;
   userId?: string; // Link to users collection if registered
   firstName: string;
@@ -174,6 +177,9 @@ export interface Player extends BaseDocument {
   stats: PlayerStats;
   achievements: PlayerAchievement[];
   notes: string;
+  level: FootballLevel;
+  constraints?: LevelConstraints;
+  level_extensions?: Record<string, any>;
 }
 
 export type PlayerPosition = 'quarterback' | 'running_back' | 'wide_receiver' | 'tight_end' | 'offensive_line' | 
@@ -328,7 +334,7 @@ export interface PracticeFeedback {
 // PLAYS AND PLAYBOOK
 // ============================================
 
-export interface Play extends BaseDocument {
+export interface Play extends BaseDocument, BaseFootballEntity {
   teamId: string;
   name: string;
   formation: string;
@@ -344,6 +350,9 @@ export interface Play extends BaseDocument {
   lastUsed?: Timestamp;
   diagram?: string; // URL to diagram image
   video?: string; // URL to video
+  level: FootballLevel;
+  constraints?: LevelConstraints;
+  level_extensions?: Record<string, any>;
 }
 
 export type PlayCategory = 'offense' | 'defense' | 'special_teams' | 'situational' | 'red_zone' | 'two_minute';
@@ -492,8 +501,10 @@ export const ValidationSchemas = {
   team: {
     name: { required: true, minLength: 2, maxLength: 100 },
     sport: { required: true, type: 'enum', values: ['football', 'basketball', 'soccer', 'baseball', 'volleyball', 'hockey', 'lacrosse', 'track', 'swimming', 'tennis'] },
-    ageGroup: { required: true, type: 'enum', values: ['youth', 'middle_school', 'high_school', 'college', 'adult', 'senior'] },
-    coachIds: { required: true, type: 'array', minLength: 1 }
+    level: { required: true, type: 'enum', values: Object.values(FootballLevel) },
+    coachIds: { required: true, type: 'array', minLength: 1 },
+    constraints: { required: false, type: 'object' },
+    level_extensions: { required: false, type: 'object' }
   },
   
   player: {
@@ -501,7 +512,10 @@ export const ValidationSchemas = {
     lastName: { required: true, minLength: 1, maxLength: 50 },
     jerseyNumber: { required: true, type: 'number', min: 0, max: 99 },
     position: { required: true, minLength: 1, maxLength: 50 },
-    teamId: { required: true, type: 'string' }
+    teamId: { required: true, type: 'string' },
+    level: { required: true, type: 'enum', values: Object.values(FootballLevel) },
+    constraints: { required: false, type: 'object' },
+    level_extensions: { required: false, type: 'object' }
   },
   
   practicePlan: {
@@ -518,7 +532,10 @@ export const ValidationSchemas = {
     formation: { required: true, minLength: 1, maxLength: 50 },
     description: { required: true, minLength: 10, maxLength: 1000 },
     routes: { required: true, type: 'array', minLength: 1 },
-    players: { required: true, type: 'array', minLength: 1 }
+    players: { required: true, type: 'array', minLength: 1 },
+    level: { required: true, type: 'enum', values: Object.values(FootballLevel) },
+    constraints: { required: false, type: 'object' },
+    level_extensions: { required: false, type: 'object' }
   }
 };
 

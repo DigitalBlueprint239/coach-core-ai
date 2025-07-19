@@ -15,7 +15,7 @@ import { db } from '../services/firebase';
 import { 
   User, Team, Player, PracticePlan, Play, 
   Sport, AgeGroup, PlayerPosition, UserRole,
-  COLLECTIONS, NotificationType
+  COLLECTIONS, NotificationType, FootballLevel, FeatureGating
 } from '../types/firestore-schema';
 
 // ============================================
@@ -351,6 +351,7 @@ export class DataSeeder {
         user.roles.includes('head_coach') || user.roles.includes('assistant_coach')
       ).slice(0, 2);
 
+      const level = this.config.teams.ageGroups.includes('youth') ? FootballLevel.YOUTH_10U : FootballLevel.VARSITY;
       const team: Team = {
         id: `team_${i + 1}`,
         name: `${city} ${name}`,
@@ -388,6 +389,9 @@ export class DataSeeder {
           practiceTime: '18:00',
           gameSchedule: []
         },
+        level,
+        constraints: {},
+        level_extensions: {},
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
         createdBy: coaches[0]?.id || 'system'
@@ -492,6 +496,7 @@ export class DataSeeder {
         const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
         const position = this.config.players.positions[Math.floor(Math.random() * this.config.players.positions.length)];
 
+        const level = team.level;
         const player: Player = {
           id: `player_${playerId}`,
           teamId: team.id!,
@@ -534,6 +539,9 @@ export class DataSeeder {
               goals: []
             }
           },
+          level,
+          constraints: {},
+          level_extensions: {},
           achievements: [],
           notes: '',
           createdAt: Timestamp.now(),
@@ -774,6 +782,9 @@ export class DataSeeder {
           lastUsed: Math.random() > 0.5 ? Timestamp.now() : undefined,
           diagram: this.config.plays.includeDiagrams ? `https://example.com/diagrams/${team.id}_${i + 1}.png` : undefined,
           video: this.config.plays.includeDiagrams ? `https://example.com/videos/${team.id}_${i + 1}.mp4` : undefined,
+          level,
+          constraints: {},
+          level_extensions: {},
           createdAt: Timestamp.now(),
           updatedAt: Timestamp.now(),
           createdBy: team.coachIds[0] || 'system'
@@ -896,3 +907,286 @@ export const useDataSeeding = (config: SeedingConfig) => {
 };
 
 export default DataSeeder; 
+
+// Add level-specific test data generation
+export const generateLevelSpecificTestData = () => {
+  const testData = {
+    teams: [],
+    players: [],
+    plays: []
+  };
+
+  // Generate teams for each level
+  Object.values(FootballLevel).forEach(level => {
+    const teamCount = level.includes('youth') ? 2 : 1; // More youth teams for testing
+    
+    for (let i = 0; i < teamCount; i++) {
+      const team: Team = {
+        id: `team_${level}_${i + 1}`,
+        name: `${level.replace('_', ' ').toUpperCase()} Team ${i + 1}`,
+        sport: 'football',
+        level,
+        season: '2024',
+        coachIds: [`coach_${level}_${i + 1}`],
+        playerIds: [],
+        settings: {
+          practiceSchedule: ['Monday', 'Wednesday', 'Friday'],
+          gameSchedule: ['Saturday'],
+          notifications: true
+        },
+        stats: {
+          wins: Math.floor(Math.random() * 10),
+          losses: Math.floor(Math.random() * 5),
+          ties: Math.floor(Math.random() * 2),
+          pointsFor: Math.floor(Math.random() * 200) + 50,
+          pointsAgainst: Math.floor(Math.random() * 150) + 30
+        },
+        location: {
+          city: 'Demo City',
+          state: 'CA',
+          zipCode: '90210'
+        },
+        schedule: {
+          practices: [],
+          games: []
+        },
+        constraints: FeatureGating.getLevelConstraints(level),
+        level_extensions: {}
+      };
+      
+      testData.teams.push(team);
+      
+      // Generate players for this team
+      const playerCount = FeatureGating.getLevelConstraints(level).maxPlayers;
+      for (let j = 0; j < playerCount; j++) {
+        const player: Player = {
+          id: `player_${level}_${i + 1}_${j + 1}`,
+          teamId: team.id,
+          firstName: `Player${j + 1}`,
+          lastName: `${level}${i + 1}`,
+          jerseyNumber: j + 1,
+          position: getRandomPosition(level),
+          grade: getGradeForLevel(level),
+          email: `player${j + 1}@${level}team${i + 1}.com`,
+          phone: `555-${String(j + 1).padStart(3, '0')}-${String(i + 1).padStart(4, '0')}`,
+          parentEmail: level.includes('youth') ? `parent${j + 1}@${level}team${i + 1}.com` : '',
+          parentPhone: level.includes('youth') ? `555-${String(j + 1).padStart(3, '0')}-${String(i + 1).padStart(4, '0')}` : '',
+          height: getRandomHeight(level),
+          weight: getRandomWeight(level),
+          medicalInfo: {
+            allergies: [],
+            medications: [],
+            emergencyContact: {
+              name: `Emergency Contact ${j + 1}`,
+              phone: `555-EMER-${String(j + 1).padStart(3, '0')}`,
+              relationship: 'Parent'
+            }
+          },
+          stats: {
+            attendance: Math.random() * 0.3 + 0.7, // 70-100%
+            skillRating: Math.floor(Math.random() * 3) + 2, // 2-5
+            badges: getRandomBadges(level),
+            performance: Math.random() * 0.4 + 0.6, // 60-100%
+            improvement: Math.random() * 0.5 + 0.5 // 50-100%
+          },
+          level: level as FootballLevel,
+          constraints: FeatureGating.getLevelConstraints(level as FootballLevel),
+          level_extensions: {},
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now()
+        };
+        
+        testData.players.push(player);
+        team.playerIds.push(player.id);
+      }
+      
+      // Generate plays for this team
+      const playCount = FeatureGating.isYouthLevel(level as FootballLevel) ? 3 : 5; // Fewer plays for youth
+      for (let k = 0; k < playCount; k++) {
+        const play: Play = {
+          id: `play_${level}_${i + 1}_${k + 1}`,
+          teamId: team.id,
+          authorId: team.coachIds[0],
+          name: getPlayName(level as FootballLevel, k + 1),
+          description: getPlayDescription(level as FootballLevel, k + 1),
+          sport: 'football',
+          category: k % 2 === 0 ? 'offense' : 'defense',
+          formation: getFormationForLevel(level as FootballLevel),
+          difficulty: getDifficultyForLevel(level as FootballLevel) as 'beginner' | 'intermediate' | 'advanced',
+          level: level as FootballLevel,
+          players: generatePlayPlayers(level as FootballLevel),
+          routes: generatePlayRoutes(level as FootballLevel),
+          tags: getPlayTags(level as FootballLevel),
+          isPublic: false,
+          status: 'published',
+          stats: {
+            views: Math.floor(Math.random() * 100),
+            uses: Math.floor(Math.random() * 50),
+            rating: Math.random() * 2 + 3, // 3-5 stars
+            ratingCount: Math.floor(Math.random() * 20)
+          },
+          source: 'manual',
+          constraints: FeatureGating.getLevelConstraints(level as FootballLevel),
+          level_extensions: {},
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now()
+        };
+        
+        testData.plays.push(play);
+      }
+    }
+  });
+
+  return testData;
+};
+
+// Helper functions for generating level-specific data
+const getRandomPosition = (level: FootballLevel): string => {
+  const positions = FeatureGating.isYouthLevel(level) 
+    ? ['QB', 'RB', 'WR', 'TE', 'C', 'G', 'T'] // Simplified positions for youth
+    : ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT', 'DE', 'DT', 'MLB', 'OLB', 'CB', 'FS', 'SS'];
+  
+  return positions[Math.floor(Math.random() * positions.length)];
+};
+
+const getGradeForLevel = (level: FootballLevel): number => {
+  const gradeMap = {
+    [FootballLevel.YOUTH_6U]: 1,
+    [FootballLevel.YOUTH_8U]: 3,
+    [FootballLevel.YOUTH_10U]: 5,
+    [FootballLevel.YOUTH_12U]: 7,
+    [FootballLevel.YOUTH_14U]: 9,
+    [FootballLevel.MIDDLE_SCHOOL]: 8,
+    [FootballLevel.JV]: 10,
+    [FootballLevel.VARSITY]: 12,
+    [FootballLevel.COLLEGE]: 14,
+    [FootballLevel.SEMI_PRO]: 16,
+    [FootballLevel.PROFESSIONAL]: 18
+  };
+  
+  return gradeMap[level] || 12;
+};
+
+const getRandomHeight = (level: FootballLevel): number => {
+  const baseHeight = FeatureGating.isYouthLevel(level) ? 48 : 70; // inches
+  const variance = FeatureGating.isYouthLevel(level) ? 8 : 12;
+  return baseHeight + Math.floor(Math.random() * variance);
+};
+
+const getRandomWeight = (level: FootballLevel): number => {
+  const baseWeight = FeatureGating.isYouthLevel(level) ? 80 : 180; // pounds
+  const variance = FeatureGating.isYouthLevel(level) ? 30 : 60;
+  return baseWeight + Math.floor(Math.random() * variance);
+};
+
+const getRandomBadges = (level: FootballLevel): string[] => {
+  const allBadges = ['attendance', 'leadership', 'sportsmanship', 'improvement', 'team_player'];
+  const youthBadges = ['safety', 'fun', 'learning', 'teamwork'];
+  
+  const availableBadges = FeatureGating.isYouthLevel(level) ? youthBadges : allBadges;
+  const badgeCount = Math.floor(Math.random() * 3) + 1;
+  
+  const selectedBadges = [];
+  for (let i = 0; i < badgeCount; i++) {
+    const badge = availableBadges[Math.floor(Math.random() * availableBadges.length)];
+    if (!selectedBadges.includes(badge)) {
+      selectedBadges.push(badge);
+    }
+  }
+  
+  return selectedBadges;
+};
+
+const getPlayName = (level: FootballLevel, index: number): string => {
+  const youthNames = [
+    'Simple Run Right',
+    'Easy Pass Left',
+    'Basic Handoff',
+    'Quick Toss',
+    'Simple Screen'
+  ];
+  
+  const advancedNames = [
+    'Shotgun Spread Right',
+    'I-Formation Power Run',
+    'Play Action Deep Post',
+    'Trips Formation Slant',
+    'Wildcat Option Left',
+    'Pistol Formation Read',
+    'Empty Set Quick Slant',
+    'Pro Formation Counter'
+  ];
+  
+  const names = FeatureGating.isYouthLevel(level) ? youthNames : advancedNames;
+  return names[index % names.length];
+};
+
+const getPlayDescription = (level: FootballLevel, index: number): string => {
+  if (FeatureGating.isYouthLevel(level)) {
+    return `A simple, safe play designed for youth players. Easy to understand and execute.`;
+  } else {
+    return `An advanced play with multiple options and complex route combinations.`;
+  }
+};
+
+const getFormationForLevel = (level: FootballLevel): string => {
+  const youthFormations = ['shotgun', 'i_formation'];
+  const advancedFormations = ['shotgun', 'i_formation', 'spread', 'wildcat', 'pistol'];
+  
+  const formations = FeatureGating.isYouthLevel(level) ? youthFormations : advancedFormations;
+  return formations[Math.floor(Math.random() * formations.length)];
+};
+
+const getDifficultyForLevel = (level: FootballLevel): string => {
+  if (FeatureGating.isYouthLevel(level)) {
+    return 'beginner';
+  } else if (FeatureGating.isAdvancedLevel(level)) {
+    return 'advanced';
+  } else {
+    return 'intermediate';
+  }
+};
+
+const generatePlayPlayers = (level: FootballLevel): any[] => {
+  const playerCount = FeatureGating.isYouthLevel(level) ? 7 : 11;
+  const players = [];
+  
+  for (let i = 0; i < playerCount; i++) {
+    players.push({
+      id: `play_player_${i + 1}`,
+      position: getRandomPosition(level),
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      number: i + 1
+    });
+  }
+  
+  return players;
+};
+
+const generatePlayRoutes = (level: FootballLevel): any[] => {
+  const routeCount = FeatureGating.isYouthLevel(level) ? 2 : 5;
+  const routes = [];
+  
+  for (let i = 0; i < routeCount; i++) {
+    routes.push({
+      id: `route_${i + 1}`,
+      playerId: `play_player_${i + 1}`,
+      points: [
+        { x: Math.random() * 100, y: Math.random() * 100 },
+        { x: Math.random() * 100, y: Math.random() * 100 }
+      ],
+      type: 'custom',
+      color: `#${Math.floor(Math.random()*16777215).toString(16)}`
+    });
+  }
+  
+  return routes;
+};
+
+const getPlayTags = (level: FootballLevel): string[] => {
+  const youthTags = ['youth', 'simple', 'safe', 'beginner'];
+  const advancedTags = ['advanced', 'complex', 'professional', 'strategic'];
+  
+  return FeatureGating.isYouthLevel(level) ? youthTags : advancedTags;
+}; 
