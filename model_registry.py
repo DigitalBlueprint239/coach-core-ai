@@ -133,7 +133,7 @@ class ModelRegistry:
         self.checkpoints_dir = self.registry_dir / "checkpoints"
         self.reports_dir = self.registry_dir / "reports"
         
-        for dir in [self.models_dir, self.configs_dir, 
+        for dir in [self.models_dir, self.configs_dir,
                    self.checkpoints_dir, self.reports_dir]:
             dir.mkdir(exist_ok=True)
         
@@ -151,6 +151,12 @@ class ModelRegistry:
         }
         
         logger.info(f"Model Registry initialized at {self.registry_dir}")
+
+    def _metadata_to_dict(self, metadata: ModelMetadata) -> Dict[str, Any]:
+        """Convert metadata to a JSON-serializable dictionary."""
+        data = asdict(metadata)
+        data["status"] = metadata.status.value
+        return data
     
     def register_model(self, model_path: str, model_name: str,
                       model_type: str = "coaching") -> str:
@@ -213,7 +219,7 @@ class ModelRegistry:
         shutil.copy2(model_path, metadata.original_path)
         
         # Save metadata
-        self.registry_db[model_id] = asdict(metadata)
+        self.registry_db[model_id] = self._metadata_to_dict(metadata)
         self._save_registry()
         
         # Generate initial config
@@ -259,7 +265,7 @@ class ModelRegistry:
                 'model': optimized_model,
                 'state_dict': optimized_model.state_dict(),
                 'optimizer_state': None,
-                'metadata': asdict(metadata)
+                'metadata': self._metadata_to_dict(metadata)
             }, metadata.optimized_path)
             
             # Measure improvements
@@ -327,7 +333,7 @@ class ModelRegistry:
             deployment_package = {
                 'model_path': metadata.optimized_path,
                 'config': self._load_config(model_id),
-                'metadata': asdict(metadata),
+                'metadata': self._metadata_to_dict(metadata),
                 'optimization_params': self.optimal_params
             }
             
@@ -593,7 +599,12 @@ class ModelRegistry:
     def _save_registry(self):
         """Save registry database"""
         with open(self.registry_file, 'w') as f:
-            json.dump(self.registry_db, f, indent=2)
+            json.dump(
+                self.registry_db,
+                f,
+                indent=2,
+                default=lambda o: o.value if isinstance(o, Enum) else str(o),
+            )
     
     def _load_metadata(self, model_id: str) -> ModelMetadata:
         """Load model metadata"""
@@ -603,7 +614,7 @@ class ModelRegistry:
     
     def _update_metadata(self, model_id: str, metadata: ModelMetadata):
         """Update model metadata"""
-        self.registry_db[model_id] = asdict(metadata)
+        self.registry_db[model_id] = self._metadata_to_dict(metadata)
         self._save_registry()
     
     def _generate_config(self, model_id: str, metadata: ModelMetadata):
