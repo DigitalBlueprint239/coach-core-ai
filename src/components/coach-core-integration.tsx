@@ -581,7 +581,7 @@ services:
       - "3443:443"
     environment:
       - NODE_ENV=production
-      - REACT_APP_ENVIRONMENT=production
+      - VITE_ENVIRONMENT=production
     volumes:
       - ./ssl:/etc/nginx/ssl:ro
     restart: unless-stopped
@@ -639,7 +639,7 @@ spec:
         env:
         - name: NODE_ENV
           value: "production"
-        - name: REACT_APP_ENVIRONMENT
+        - name: VITE_ENVIRONMENT
           value: "production"
         envFrom:
         - secretRef:

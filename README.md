@@ -82,10 +82,10 @@ src/
    
    Edit `.env.local` with your configuration:
    ```env
-   REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
-   REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-   REACT_APP_FIREBASE_PROJECT_ID=your_project_id
-   REACT_APP_OPENAI_API_KEY=your_openai_api_key
+   VITE_FIREBASE_API_KEY=your_firebase_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_OPENAI_API_KEY=your_openai_api_key
    ```
 
 4. **Set up Firebase**

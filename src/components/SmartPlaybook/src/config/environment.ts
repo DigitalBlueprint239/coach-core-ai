@@ -39,15 +39,17 @@ interface EnvironmentConfig {
 
 const validateEnvironment = (): EnvironmentConfig => {
   const requiredVars = [
-    'REACT_APP_FIREBASE_API_KEY',
-    'REACT_APP_FIREBASE_AUTH_DOMAIN',
-    'REACT_APP_FIREBASE_PROJECT_ID',
-    'REACT_APP_FIREBASE_STORAGE_BUCKET',
-    'REACT_APP_FIREBASE_MESSAGING_SENDER_ID',
-    'REACT_APP_FIREBASE_APP_ID',
+    'VITE_FIREBASE_API_KEY',
+    'VITE_FIREBASE_AUTH_DOMAIN',
+    'VITE_FIREBASE_PROJECT_ID',
+    'VITE_FIREBASE_STORAGE_BUCKET',
+    'VITE_FIREBASE_MESSAGING_SENDER_ID',
+    'VITE_FIREBASE_APP_ID',
   ];
 
-  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+  const missingVars = requiredVars.filter(
+    (varName) => import.meta.env[varName] === undefined
+  );
   
   if (missingVars.length > 0) {
     throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
