@@ -58,7 +58,7 @@ class CoachCoreApplication {
 
     // Initialize database service
     this.database = new DatabaseService({
-      provider: process.env.REACT_APP_DATABASE_PROVIDER as 'firebase' | 'supabase' || 'firebase',
+      provider: import.meta.env.VITE_DATABASE_PROVIDER as 'firebase' | 'supabase' || 'firebase',
       config: this.getDatabaseConfig(),
       offlineEnabled: true
     });
@@ -69,7 +69,7 @@ class CoachCoreApplication {
     // Initialize AI brain
     this.aiBrain = new AIBrainService({
       model: 'gpt-4',
-      apiKey: process.env.REACT_APP_OPENAI_API_KEY || '',
+      apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
       maxTokens: 2000,
       temperature: 0.7,
       safetyLevel: 'strict'
@@ -95,11 +95,11 @@ class CoachCoreApplication {
     this.feedback = new FeedbackService();
 
     // Initialize Hudl integration (if enabled)
-    if (process.env.REACT_APP_ENABLE_HUDL_INTEGRATION === 'true') {
+    if (import.meta.env.VITE_ENABLE_HUDL_INTEGRATION === 'true') {
       this.hudl = new HudlIntegrationService({
-        clientId: process.env.REACT_APP_HUDL_CLIENT_ID || '',
-        clientSecret: process.env.REACT_APP_HUDL_CLIENT_SECRET || '',
-        redirectUri: process.env.REACT_APP_HUDL_REDIRECT_URI || '',
+        clientId: import.meta.env.VITE_HUDL_CLIENT_ID || '',
+        clientSecret: import.meta.env.VITE_HUDL_CLIENT_SECRET || '',
+        redirectUri: import.meta.env.VITE_HUDL_REDIRECT_URI || '',
         scope: ['read', 'write']
       });
     }
@@ -111,22 +111,22 @@ class CoachCoreApplication {
   }
 
   private getDatabaseConfig() {
-    const provider = process.env.REACT_APP_DATABASE_PROVIDER || 'firebase';
+    const provider = import.meta.env.VITE_DATABASE_PROVIDER || 'firebase';
     
     if (provider === 'firebase') {
       return {
-        apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-        authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-        storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.REACT_APP_FIREBASE_APP_ID,
-        measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID,
+        measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
       };
     } else {
       return {
-        url: process.env.REACT_APP_SUPABASE_URL,
-        anonKey: process.env.REACT_APP_SUPABASE_ANON_KEY
+        url: import.meta.env.VITE_SUPABASE_URL,
+        anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY
       };
     }
   }
@@ -171,17 +171,17 @@ class CoachCoreApplication {
 
   private startApplication() {
     console.log('🏈 Coach Core AI Application Started');
-    console.log('Environment:', process.env.REACT_APP_ENVIRONMENT);
+    console.log('Environment:', import.meta.env.VITE_ENVIRONMENT);
     console.log('Features enabled:', this.getEnabledFeatures());
   }
 
   private getEnabledFeatures() {
     return {
-      ai: process.env.REACT_APP_ENABLE_AI_FEATURES === 'true',
-      hudl: process.env.REACT_APP_ENABLE_HUDL_INTEGRATION === 'true',
-      analytics: process.env.REACT_APP_ENABLE_ANALYTICS === 'true',
-      twoFactor: process.env.REACT_APP_ENABLE_2FA === 'true',
-      offline: process.env.REACT_APP_ENABLE_OFFLINE_MODE === 'true'
+      ai: import.meta.env.VITE_ENABLE_AI_FEATURES === 'true',
+      hudl: import.meta.env.VITE_ENABLE_HUDL_INTEGRATION === 'true',
+      analytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+      twoFactor: import.meta.env.VITE_ENABLE_2FA === 'true',
+      offline: import.meta.env.VITE_ENABLE_OFFLINE_MODE === 'true'
     };
   }
 
