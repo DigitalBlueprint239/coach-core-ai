@@ -7,75 +7,70 @@ service cloud.firestore {
       return request.auth != null;
     }
     
-    // Helper function to check if user is a member of a team
-    function isTeamMember(teamId) {
-      return isAuthenticated() && 
-        request.auth.uid in get(/databases/$(database)/documents/teams/$(teamId)).data.memberIds;
+    // Helper function to check if current user matches a given ownerId
+    function isOwner(ownerId) {
+      return isAuthenticated() && request.auth.uid == ownerId;
     }
-    
+
     // Helper function to check if user is the team owner
     function isTeamOwner(teamId) {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/teams/$(teamId)).data.ownerId == request.auth.uid;
+      return isOwner(get(/databases/$(database)/documents/teams/$(teamId)).data.ownerId);
     }
 
     // Teams collection
     match /teams/{teamId} {
-      // Users can read teams they are members of
-      allow read: if isTeamMember(teamId);
-      
+      // Only the team owner can read the team document
+      allow read: if isTeamOwner(teamId);
+
       // Users can create teams (they become the owner)
-      allow create: if isAuthenticated() && 
-        request.resource.data.ownerId == request.auth.uid &&
-        request.auth.uid in request.resource.data.memberIds;
-      
+      allow create: if isAuthenticated() &&
+        isOwner(request.resource.data.ownerId);
+
       // Only team owners can update team data
       allow update: if isTeamOwner(teamId);
-      
+
       // Only team owners can delete teams
       allow delete: if isTeamOwner(teamId);
+
+      // Players subcollection
+      match /players/{playerId} {
+        allow read, write: if isTeamOwner(teamId);
+      }
+
+      // Practices subcollection
+      match /practices/{practiceId} {
+        allow read, write: if isTeamOwner(teamId);
+      }
     }
 
     // Practice Plans collection
     match /practicePlans/{planId} {
-      // Users can read practice plans for teams they are members of
-      allow read: if isTeamMember(resource.data.teamId);
-      
-      // Users can create practice plans for teams they are members of
-      allow create: if isAuthenticated() && 
-        isTeamMember(request.resource.data.teamId) &&
-        request.resource.data.createdBy == request.auth.uid;
-      
-      // Users can update practice plans they created or if they are team owners
-      allow update: if isAuthenticated() && 
-        (resource.data.createdBy == request.auth.uid || 
-         isTeamOwner(resource.data.teamId));
-      
-      // Users can delete practice plans they created or if they are team owners
-      allow delete: if isAuthenticated() && 
-        (resource.data.createdBy == request.auth.uid || 
-         isTeamOwner(resource.data.teamId));
+      // Only the team owner can read a practice plan
+      allow read: if isTeamOwner(resource.data.teamId);
+
+      // Only the team owner can create a practice plan
+      allow create: if isTeamOwner(request.resource.data.teamId);
+
+      // Only the team owner can update a practice plan
+      allow update: if isTeamOwner(resource.data.teamId);
+
+      // Only the team owner can delete a practice plan
+      allow delete: if isTeamOwner(resource.data.teamId);
     }
 
     // Plays collection
     match /plays/{playId} {
-      // Users can read plays for teams they are members of
-      allow read: if isTeamMember(resource.data.teamId);
-      
-      // Users can create plays for teams they are members of
-      allow create: if isAuthenticated() && 
-        isTeamMember(request.resource.data.teamId) &&
-        request.resource.data.createdBy == request.auth.uid;
-      
-      // Users can update plays they created or if they are team owners
-      allow update: if isAuthenticated() && 
-        (resource.data.createdBy == request.auth.uid || 
-         isTeamOwner(resource.data.teamId));
-      
-      // Users can delete plays they created or if they are team owners
-      allow delete: if isAuthenticated() && 
-        (resource.data.createdBy == request.auth.uid || 
-         isTeamOwner(resource.data.teamId));
+      // Only the team owner can read a play
+      allow read: if isTeamOwner(resource.data.teamId);
+
+      // Only the team owner can create a play
+      allow create: if isTeamOwner(request.resource.data.teamId);
+
+      // Only the team owner can update a play
+      allow update: if isTeamOwner(resource.data.teamId);
+
+      // Only the team owner can delete a play
+      allow delete: if isTeamOwner(resource.data.teamId);
     }
   }
 }
