@@ -70,7 +70,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 }) => {
   // Initialize AI service configuration
   const defaultConfig: AIServiceConfig = {
-    apiKey: process.env.REACT_APP_OPENAI_API_KEY || '',
+    apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
     model: 'gpt-4',
     maxTokens: 2000,
     temperature: 0.7,
@@ -79,7 +79,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 
   // Initialize proxy configuration
   const proxyConfig: AIProxyConfig = {
-    endpoint: process.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
+    endpoint: import.meta.env.VITE_AI_PROXY_ENDPOINT || '/api/ai',
     timeout: 30000,
     retries: 3
   };

@@ -50,7 +50,7 @@ export class AIProxyService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_AI_PROXY_TOKEN || ''}`
+            'Authorization': `Bearer ${import.meta.env.VITE_AI_PROXY_TOKEN || ''}`
           },
           body: JSON.stringify(request),
           signal: AbortSignal.timeout(this.config.timeout!)

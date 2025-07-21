@@ -145,7 +145,7 @@ export const trackFeatureUsage = (featureName: string) => {
 import * as Sentry from '@sentry/react';
 
 Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
+  dsn: import.meta.env.VITE_SENTRY_DSN,
   environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
 });
