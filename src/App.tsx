@@ -11,7 +11,7 @@ import { MigrationBanner } from './components/MigrationBanner';
 import { OnboardingModal } from './components/OnboardingModal';
 import { PWAInstallPrompt, registerServiceWorker } from './components/PWAInstallPrompt';
 import { requestNotificationPermission, subscribeUserToPush } from './services/push-notifications';
-import SmartPlaybook from './components/SmartPlaybook/SmartPlaybook';
+const SmartPlaybook = React.lazy(() => import('./components/SmartPlaybook/SmartPlaybook'));
 
 const FirebaseTest = React.lazy(() => import('./components/FirebaseTest'));
 
@@ -60,7 +60,11 @@ const App: React.FC = () => {
       case 'dashboard':
         return <Dashboard />;
       case 'playbook':
-        return <SmartPlaybook />;
+        return (
+          <React.Suspense fallback={<LoadingSpinner text="Loading Smart Playbook..." />}>
+            <SmartPlaybook />
+          </React.Suspense>
+        );
       case 'test':
         return (
           <React.Suspense fallback={<LoadingSpinner text="Loading Firebase Test..." />}>

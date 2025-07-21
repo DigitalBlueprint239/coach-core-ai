@@ -274,18 +274,18 @@ const { createLazyComponent } = useCodeSplitting();
 ### Environment Variables
 ```bash
 # Firebase Configuration
-REACT_APP_FIREBASE_API_KEY=your_api_key
-REACT_APP_FIREBASE_PROJECT_ID=coach-core-ai
-REACT_APP_FIREBASE_AUTH_DOMAIN=coach-core-ai.firebaseapp.com
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_PROJECT_ID=coach-core-ai
+VITE_FIREBASE_AUTH_DOMAIN=coach-core-ai.firebaseapp.com
 
 # Performance Configuration
-REACT_APP_ENABLE_OFFLINE=true
-REACT_APP_CACHE_TTL=300000
-REACT_APP_MAX_RETRIES=3
+VITE_ENABLE_OFFLINE=true
+VITE_CACHE_TTL=300000
+VITE_MAX_RETRIES=3
 
 # Error Reporting
-REACT_APP_ERROR_REPORTING_ENDPOINT=/api/errors
-REACT_APP_ENABLE_ERROR_REPORTING=true
+VITE_ERROR_REPORTING_ENDPOINT=/api/errors
+VITE_ENABLE_ERROR_REPORTING=true
 ```
 
 ### Build Configuration

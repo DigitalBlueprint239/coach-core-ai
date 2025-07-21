@@ -34,21 +34,21 @@
 ### **Environment Variables**
 ```bash
 # Firebase Configuration
-REACT_APP_FIREBASE_API_KEY=your_api_key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=your_project_id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-REACT_APP_FIREBASE_APP_ID=your_app_id
-REACT_APP_FIREBASE_MEASUREMENT_ID=your_measurement_id
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 
 # Analytics
-REACT_APP_GA_TRACKING_ID=your_ga_id
+VITE_GA_TRACKING_ID=your_ga_id
 
 # Feature Flags
-REACT_APP_ENABLE_ANALYTICS=true
-REACT_APP_ENABLE_NOTIFICATIONS=true
-REACT_APP_ENABLE_SOCIAL_LOGIN=true
+VITE_ENABLE_ANALYTICS=true
+VITE_ENABLE_NOTIFICATIONS=true
+VITE_ENABLE_SOCIAL_LOGIN=true
 ```
 
 ### **Build Optimization**
@@ -145,7 +145,7 @@ export const trackFeatureUsage = (featureName: string) => {
 import * as Sentry from '@sentry/react';
 
 Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
+  dsn: import.meta.env.VITE_SENTRY_DSN,
   environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
 });
@@ -247,8 +247,8 @@ vercel --prod
 ### **Environment Management**
 ```bash
 # Set production environment variables
-vercel env add REACT_APP_FIREBASE_API_KEY
-vercel env add REACT_APP_FIREBASE_AUTH_DOMAIN
+vercel env add VITE_FIREBASE_API_KEY
+vercel env add VITE_FIREBASE_AUTH_DOMAIN
 # ... add all other variables
 
 # Pull environment variables

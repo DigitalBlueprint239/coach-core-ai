@@ -307,49 +307,49 @@ setup_environment() {
     # Create .env.local
     cat > .env.local << 'EOF'
 # Firebase Configuration
-REACT_APP_FIREBASE_API_KEY=your_api_key_here
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=your_project_id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=123456789
-REACT_APP_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=your_app_id
 
 # API Configuration
-REACT_APP_API_BASE_URL=http://localhost:5000
-REACT_APP_AI_SERVICE_URL=http://localhost:8000
+VITE_API_BASE_URL=http://localhost:5000
+VITE_AI_SERVICE_URL=http://localhost:8000
 
 # Feature Flags
-REACT_APP_ENABLE_AI_FEATURES=true
-REACT_APP_ENABLE_OFFLINE_MODE=true
-REACT_APP_ENABLE_PUSH_NOTIFICATIONS=true
+VITE_ENABLE_AI_FEATURES=true
+VITE_ENABLE_OFFLINE_MODE=true
+VITE_ENABLE_PUSH_NOTIFICATIONS=true
 
 # Analytics
-REACT_APP_GOOGLE_ANALYTICS_ID=your_ga_id
-REACT_APP_SENTRY_DSN=your_sentry_dsn
+VITE_GOOGLE_ANALYTICS_ID=your_ga_id
+VITE_SENTRY_DSN=your_sentry_dsn
 EOF
 
     # Create .env.production
     cat > .env.production << 'EOF'
 # Production Firebase Configuration
-REACT_APP_FIREBASE_API_KEY=your_production_api_key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_production_project.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=your_production_project_id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your_production_project.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=123456789
-REACT_APP_FIREBASE_APP_ID=your_production_app_id
+VITE_FIREBASE_API_KEY=your_production_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_production_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_production_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_production_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=your_production_app_id
 
 # Production API Configuration
-REACT_APP_API_BASE_URL=https://api.coachcore.ai
-REACT_APP_AI_SERVICE_URL=https://ai.coachcore.ai
+VITE_API_BASE_URL=https://api.coachcore.ai
+VITE_AI_SERVICE_URL=https://ai.coachcore.ai
 
 # Feature Flags
-REACT_APP_ENABLE_AI_FEATURES=true
-REACT_APP_ENABLE_OFFLINE_MODE=true
-REACT_APP_ENABLE_PUSH_NOTIFICATIONS=true
+VITE_ENABLE_AI_FEATURES=true
+VITE_ENABLE_OFFLINE_MODE=true
+VITE_ENABLE_PUSH_NOTIFICATIONS=true
 
 # Analytics
-REACT_APP_GOOGLE_ANALYTICS_ID=your_production_ga_id
-REACT_APP_SENTRY_DSN=your_production_sentry_dsn
+VITE_GOOGLE_ANALYTICS_ID=your_production_ga_id
+VITE_SENTRY_DSN=your_production_sentry_dsn
 EOF
 
     print_success "Environment variables configured"
@@ -421,9 +421,9 @@ jobs:
     - name: Build project
       run: npm run build
       env:
-        REACT_APP_FIREBASE_API_KEY: ${{ secrets.STAGING_FIREBASE_API_KEY }}
-        REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.STAGING_FIREBASE_AUTH_DOMAIN }}
-        REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.STAGING_FIREBASE_PROJECT_ID }}
+        VITE_FIREBASE_API_KEY: ${{ secrets.STAGING_FIREBASE_API_KEY }}
+        VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.STAGING_FIREBASE_AUTH_DOMAIN }}
+        VITE_FIREBASE_PROJECT_ID: ${{ secrets.STAGING_FIREBASE_PROJECT_ID }}
     
     - name: Deploy to Firebase Hosting (Staging)
       uses: FirebaseExtended/action-hosting-deploy@v0
@@ -453,9 +453,9 @@ jobs:
     - name: Build project
       run: npm run build
       env:
-        REACT_APP_FIREBASE_API_KEY: ${{ secrets.PRODUCTION_FIREBASE_API_KEY }}
-        REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.PRODUCTION_FIREBASE_AUTH_DOMAIN }}
-        REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.PRODUCTION_FIREBASE_PROJECT_ID }}
+        VITE_FIREBASE_API_KEY: ${{ secrets.PRODUCTION_FIREBASE_API_KEY }}
+        VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.PRODUCTION_FIREBASE_AUTH_DOMAIN }}
+        VITE_FIREBASE_PROJECT_ID: ${{ secrets.PRODUCTION_FIREBASE_PROJECT_ID }}
     
     - name: Deploy to Firebase Hosting (Production)
       uses: FirebaseExtended/action-hosting-deploy@v0
@@ -609,12 +609,12 @@ import { getStorage } from 'firebase/storage';
 import { getMessaging } from 'firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -635,7 +635,7 @@ class ApiService {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.REACT_APP_API_BASE_URL || '';
+    this.baseURL = import.meta.env.VITE_API_BASE_URL || '';
   }
 
   private async request<T>(
