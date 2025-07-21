@@ -9,6 +9,9 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Field from './Field';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
+import CanvasArea from './components/CanvasArea';
+import SavePlayDialog from './components/SavePlayDialog';
+import { ErrorBoundary } from '../ErrorBoundary';
 import {
   createPlayer,
   createRoute,
@@ -78,8 +81,8 @@ const SmartPlaybook = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Refs
-  const canvasRef = useRef(null);
-  const lastTouchRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const lastTouchRef = useRef<TouchEvent | null>(null);
 
   // Load saved plays from localStorage on mount
   useEffect(() => {
@@ -230,6 +233,8 @@ const SmartPlaybook = () => {
   // Handle canvas click/touch
   const handleCanvasEvent = useCallback((event) => {
     event.preventDefault();
+
+    if (!canvasRef.current) return;
     
     const coords = getCanvasCoordinates(event);
     if (!coords) return;
@@ -493,7 +498,8 @@ const SmartPlaybook = () => {
   }, []);
 
   return (
-    <div className="smart-playbook-app min-h-screen bg-gray-50">
+    <ErrorBoundary>
+      <div className="smart-playbook-app min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -590,45 +596,36 @@ const SmartPlaybook = () => {
 
           {/* Main Canvas Area */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <Field
-                ref={canvasRef}
-                players={players}
-                routes={routes}
-                onCanvasEvent={handleCanvasEvent}
-                onPlayerDrag={handlePlayerDrag}
-                onRouteSelect={handleRouteSelect}
-                selectedRouteId={selectedRouteId}
-                width={FIELD_DIMENSIONS.width}
-                height={FIELD_DIMENSIONS.height}
-                mode={mode}
-                debug={debugMode}
-                className="w-full"
-              />
-              
-              {/* Route Drawing Overlay */}
-              {isDrawingRoute && routePoints.length > 0 && (
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    Drawing route... Click to add points, double-click to finish
-                  </p>
-                  <div className="mt-2 flex gap-2">
-                    <button
-                      onClick={finishRouteDrawing}
-                      className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                    >
-                      Finish Route
-                    </button>
-                    <button
-                      onClick={cancelRouteDrawing}
-                      className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+            <CanvasArea
+              canvasRef={canvasRef}
+              players={players}
+              routes={routes}
+              onCanvasEvent={handleCanvasEvent}
+              onPlayerDrag={handlePlayerDrag}
+            />
+
+            {/* Route Drawing Overlay */}
+            {isDrawingRoute && routePoints.length > 0 && (
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  Drawing route... Click to add points, double-click to finish
+                </p>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    onClick={finishRouteDrawing}
+                    className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  >
+                    Finish Route
+                  </button>
+                  <button
+                    onClick={cancelRouteDrawing}
+                    className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
+                  >
+                    Cancel
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Right Sidebar - Library */}
@@ -645,74 +642,20 @@ const SmartPlaybook = () => {
         </div>
       </div>
 
-      {/* Save Dialog */}
-      {showSaveDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-4">Save Play</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Play Name
-                </label>
-                <input
-                  type="text"
-                  value={currentPlayName}
-                  onChange={(e) => setCurrentPlayName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter play name..."
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phase
-                  </label>
-                  <select
-                    value={currentPlayPhase}
-                    onChange={(e) => setCurrentPlayPhase(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="offense">Offense</option>
-                    <option value="defense">Defense</option>
-                    <option value="special">Special Teams</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Type
-                  </label>
-                  <select
-                    value={currentPlayType}
-                    onChange={(e) => setCurrentPlayType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="pass">Pass</option>
-                    <option value="run">Run</option>
-                    <option value="kick">Kick</option>
-                    <option value="punt">Punt</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)}
-                disabled={!currentPlayName.trim() || players.length === 0}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Save Play
-              </button>
-              <button
-                onClick={() => setShowSaveDialog(false)}
-                className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <SavePlayDialog
+        show={showSaveDialog}
+        playName={currentPlayName}
+        playPhase={currentPlayPhase}
+        playType={currentPlayType}
+        onPlayNameChange={setCurrentPlayName}
+        onPlayPhaseChange={setCurrentPlayPhase}
+        onPlayTypeChange={setCurrentPlayType}
+        onSave={() =>
+          saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)
+        }
+        onCancel={() => setShowSaveDialog(false)}
+        canSave={!!currentPlayName.trim() && players.length > 0}
+      />
 
       {/* Debug Panel */}
       {debugMode && (
@@ -743,6 +686,7 @@ const SmartPlaybook = () => {
         onSkip={() => setShowOnboarding(false)}
       />
     </div>
+    </ErrorBoundary>
   );
 };
 
