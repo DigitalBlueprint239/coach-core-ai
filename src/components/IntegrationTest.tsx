@@ -136,7 +136,7 @@ const IntegrationTest: React.FC = () => {
           <h3 className="text-lg font-semibold mb-4">Connection Status</h3>
           <div className="space-y-2">
             <p><strong>Online:</strong> {navigator.onLine ? 'Yes' : 'No'}</p>
-            <p><strong>Environment:</strong> {process.env.NODE_ENV}</p>
+            <p><strong>Environment:</strong> {import.meta.env.MODE}</p>
             <p><strong>Firebase Project:</strong> {import.meta.env.VITE_FIREBASE_PROJECT_ID}</p>
           </div>
         </div>

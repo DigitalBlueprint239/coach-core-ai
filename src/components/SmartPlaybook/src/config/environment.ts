@@ -69,7 +69,7 @@ const validateEnvironment = (): EnvironmentConfig => {
     app: {
       name: 'Coach Core',
       version: import.meta.env.VITE_VERSION || '1.0.0',
-      environment: (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development',
+      environment: (import.meta.env.MODE as 'development' | 'staging' | 'production') || 'development',
       apiUrl: import.meta.env.VITE_API_URL || 'https://api.coachcore.ai',
       enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
       enableNotifications: import.meta.env.VITE_ENABLE_NOTIFICATIONS === 'true',

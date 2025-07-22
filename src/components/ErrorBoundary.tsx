@@ -97,7 +97,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.error('Error caught by boundary:', error, errorInfo);
     }
   }
@@ -126,7 +126,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         },
         appInfo: {
           version: import.meta.env.VITE_VERSION || '1.0.0',
-          environment: process.env.NODE_ENV || 'development',
+          environment: import.meta.env.MODE || 'development',
           buildNumber: import.meta.env.VITE_BUILD_NUMBER
         },
         context: {

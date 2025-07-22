@@ -720,7 +720,7 @@ export const MONITORING_CONFIG = {
   },
 
   logging: {
-    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+          level: import.meta.env.PROD ? 'info' : 'debug',
     format: 'json',
     destinations: ['console', 'file', 'elasticsearch']
   },
@@ -758,7 +758,7 @@ export const MONITORING_CONFIG = {
 
 export const SECURITY_CONFIG = {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
+          origin: import.meta.env.PROD 
       ? ['https://coachcore.ai', 'https://www.coachcore.ai']
       : ['http://localhost:3000', 'http://localhost:3001'],
     credentials: true,
