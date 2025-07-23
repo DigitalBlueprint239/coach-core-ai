@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
+import { useTeam } from '../../contexts/TeamContext';
 
 const defaultGoals = [
   { label: 'Game Prep', value: 'game_prep' },
@@ -10,6 +11,7 @@ const defaultGoals = [
 
 const PracticePlanner: React.FC = () => {
   const ai = useAI();
+  const { currentTeam } = useTeam();
   const [duration, setDuration] = useState(90);
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -29,11 +31,15 @@ const PracticePlanner: React.FC = () => {
     setAIResult(null);
     setFeedback(null);
     try {
-      const result = await ai.generateSmartPractice({
-        duration,
-        goals,
-        teamId: 'demo-team', // Replace with real teamId if available
-      });
+      const teamContext = currentTeam
+        ? {
+            teamId: currentTeam.id,
+            teamName: currentTeam.name,
+            sport: (currentTeam as any).sport || 'football',
+            ageGroup: (currentTeam.level as any),
+          }
+        : { teamId: 'demo-team', teamName: 'Demo Team', sport: 'football', ageGroup: 'youth' };
+      const result = await ai.generatePracticePlan(teamContext, goals, duration);
       setAIResult(result);
     } catch (err: any) {
       setError('AI generation failed. Please try again.');

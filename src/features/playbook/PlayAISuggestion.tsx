@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
+import { useTeam } from '../../contexts/TeamContext';
 
 interface PlayAISuggestionProps {
   playContext: any;
@@ -7,16 +8,29 @@ interface PlayAISuggestionProps {
 
 const PlayAISuggestion: React.FC<PlayAISuggestionProps> = ({ playContext }) => {
   const ai = useAI();
+  const { currentTeam } = useTeam();
+  const teamContext = currentTeam
+    ? {
+        teamId: currentTeam.id,
+        teamName: currentTeam.name,
+        sport: (currentTeam as any).sport || 'football', // fallback
+        ageGroup: (currentTeam.level as any), // fallback
+      }
+    : null;
   const [suggestion, setSuggestion] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleGetSuggestion = async () => {
+    if (!teamContext) {
+      setError('No team context available.');
+      return;
+    }
     setLoading(true);
     setError(null);
     setSuggestion(null);
     try {
-      const result = await ai.getRealtimeInsight(playContext);
+      const result = await ai.generatePlaySuggestion(playContext, teamContext);
       setSuggestion(result);
     } catch (err: any) {
       setError('Failed to get AI suggestion.');

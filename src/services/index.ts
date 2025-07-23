@@ -1,7 +1,7 @@
 // Core Services
 export * from './ai/ai-brain-mvp-setup';
-export * from './firebase/firebaseConfig';
-export * from './auth/authService';
+export * from './firebase/config';
+// export * from './auth/authService'; // File does not exist
 
 // Integration Services  
 export * from '../integration/coach-core-integration';

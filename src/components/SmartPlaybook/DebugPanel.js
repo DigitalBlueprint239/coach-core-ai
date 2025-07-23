@@ -49,6 +49,27 @@ const validateResult = (result) => {
          typeof result.category === 'string';
 };
 
+// Helper function for prop validation
+function isValidDebugPanelProps(props) {
+  if (!Array.isArray(props.results)) {
+    console.error('DebugPanel: results must be an array');
+    return false;
+  }
+  if (typeof props.onRunAll !== 'function') {
+    console.error('DebugPanel: onRunAll must be a function');
+    return false;
+  }
+  if (typeof props.onTogglePassed !== 'function') {
+    console.error('DebugPanel: onTogglePassed must be a function');
+    return false;
+  }
+  if (typeof props.showPassed !== 'boolean') {
+    console.error('DebugPanel: showPassed must be a boolean');
+    return false;
+  }
+  return true;
+}
+
 /**
  * DebugPanel component for displaying test results and debug information
  * @param {Object} props - Component props
@@ -59,15 +80,18 @@ const validateResult = (result) => {
  * @param {string} props.className - Additional CSS classes
  * @param {Object} props.style - Additional inline styles
  */
-const DebugPanel = memo(({ 
-  results = [], 
-  onRunAll, 
-  onTogglePassed, 
-  showPassed = false,
-  className = '',
-  style = {},
-  'data-testid': testId = 'debug-panel'
-}) => {
+const DebugPanel = memo((props) => {
+  if (!isValidDebugPanelProps(props)) return null;
+  const {
+    results = [],
+    onRunAll,
+    onTogglePassed,
+    showPassed = false,
+    className = '',
+    style = {},
+    'data-testid': testId = 'debug-panel',
+  } = props;
+
   // Memoized event handlers for better performance
   const handleRunAll = useCallback((event) => {
     try {
@@ -106,27 +130,6 @@ const DebugPanel = memo(({
     ...PANEL_STYLES,
     ...style
   }), [style]);
-
-  // Validate props
-  if (!Array.isArray(results)) {
-    console.error('DebugPanel: results must be an array');
-    return null;
-  }
-
-  if (typeof onRunAll !== 'function') {
-    console.error('DebugPanel: onRunAll must be a function');
-    return null;
-  }
-
-  if (typeof onTogglePassed !== 'function') {
-    console.error('DebugPanel: onTogglePassed must be a function');
-    return null;
-  }
-
-  if (typeof showPassed !== 'boolean') {
-    console.error('DebugPanel: showPassed must be a boolean');
-    return null;
-  }
 
   return (
     <div 

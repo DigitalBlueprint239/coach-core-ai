@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
-import axios, { AxiosInstance } from 'axios';
-import { firebase } from '@/services/firebase/config';
-import { appConfig } from '@/config/app.config';
+import axios, { AxiosInstance, AxiosHeaders } from 'axios';
+import { firebase } from '../firebase/config';
+import { appConfig } from '../../config/app.config';
 
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({
@@ -13,7 +13,7 @@ export const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(async (config) => {
   const token = await firebase.auth.currentUser?.getIdToken();
   if (token) {
-    config.headers = config.headers || {};
+    config.headers = config.headers ?? new AxiosHeaders();
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -24,7 +24,6 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
       refetchOnWindowFocus: false,
       retry: (failureCount, error: any) => {
         if (error?.response?.status === 404) return false;

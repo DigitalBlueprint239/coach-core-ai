@@ -7,7 +7,7 @@ import {
   deletePracticePlan,
   savePlay,
   getPlays,
-  updatePlay,
+  updatePlay as updatePlayService,
   deletePlay,
   subscribeToPracticePlans,
   subscribeToPlays,
@@ -130,12 +130,12 @@ export const usePlaybook = (teamId: string | undefined) => {
     }
   }, [teamId]);
 
-  const updatePlay = useCallback(async (playId: string, updates: Partial<Play>) => {
+  const updatePlayLocal = useCallback(async (playId: string, updates: Partial<Play>) => {
     if (!teamId) throw new Error('No team selected');
     
     try {
       setError(null);
-      await updatePlay(teamId, playId, updates);
+      await updatePlayService(teamId, playId, updates);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update play';
       setError(errorMessage);
@@ -145,7 +145,6 @@ export const usePlaybook = (teamId: string | undefined) => {
 
   const removePlay = useCallback(async (playId: string) => {
     if (!teamId) throw new Error('No team selected');
-    
     try {
       setError(null);
       await deletePlay(teamId, playId);
@@ -161,7 +160,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     loading,
     error,
     createPlay,
-    updatePlay,
+    updatePlay: updatePlayLocal,
     removePlay
   };
 };

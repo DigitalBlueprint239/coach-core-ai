@@ -15,7 +15,6 @@ import {
   IconButton,
   Divider,
   Alert,
-  AlertIcon,
   useToast,
   Link,
 } from '@chakra-ui/react';
@@ -240,7 +239,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </Box>
 
         <Alert status="info" borderRadius="md">
-          <AlertIcon />
           <Box>
             <Text fontSize="sm">
               Demo credentials: demo@coachcore.com / demo123

@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
 import { LoadingState } from '../LoadingStates';
+import { Timestamp } from 'firebase/firestore';
 
 // ============================================
 // TOUCH OPTIMIZATION TYPES
@@ -372,6 +373,10 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
     setIsLoading(true);
     try {
       const gameContext = {
+        gameId: 'demo-game',
+        opponent: 'Demo Opponent',
+        date: Timestamp.fromDate(new Date()), // Use Firestore Timestamp
+        location: 'Demo Field',
         down: 3,
         distance: 7,
         fieldPosition: 'midfield',
@@ -506,7 +511,7 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .touch-optimized-playbook {
           display: flex;
           flex-direction: column;
@@ -655,4 +660,4 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
       `}</style>
     </div>
   );
-}; 
+};

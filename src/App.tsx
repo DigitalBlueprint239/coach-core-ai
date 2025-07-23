@@ -1,118 +1,192 @@
-import React, { useState, useEffect } from 'react';
-import { AIProvider } from './ai-brain/AIContext';
-import Dashboard from './components/Dashboard';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import ToastManager from './components/ToastManager';
-import LoadingSpinner from './components/LoadingSpinner';
-import { AuthProvider } from './components/AuthProvider';
-import { TeamProvider } from './contexts/TeamContext';
-import { TeamSelector } from './components/TeamManagement';
-import { MigrationBanner } from './components/MigrationBanner';
-import { OnboardingModal } from './components/OnboardingModal';
-import { PWAInstallPrompt } from './components/PWAInstallPrompt';
-import { requestNotificationPermission, subscribeUserToPush } from './services/push-notifications';
-import SmartPlaybook from './components/SmartPlaybook/SmartPlaybook';
+import React, { useState } from 'react';
 
-const FirebaseTest = React.lazy(() => import('./components/FirebaseTest'));
+// Simple demo components
+const DemoDashboard: React.FC = () => {
+  const [loading, setLoading] = useState(false);
 
-const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'playbook' | 'test'>('dashboard');
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showPWAInstall, setShowPWAInstall] = useState(false);
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
-  const [demoMode, setDemoMode] = useState(false);
-
-  useEffect(() => {
-    // Register service worker for PWA
-    // registerServiceWorker(); // TEMPORARILY DISABLED - causing app to hang
-    // Show onboarding for new users (or if not completed)
-    const onboardingDone = localStorage.getItem('onboardingComplete');
-    if (!onboardingDone) {
-      setShowOnboarding(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (onboardingComplete) {
-      // Request push notification permission after onboarding
-      requestNotificationPermission().then((permission) => {
-        if (permission === 'granted') {
-          subscribeUserToPush();
-        }
-      });
-    }
-  }, [onboardingComplete]);
-
-  const handleOnboardingClose = () => {
-    setShowOnboarding(false);
-    setOnboardingComplete(true);
-    localStorage.setItem('onboardingComplete', 'true');
-  };
-
-  const handleDemoMode = async () => {
-    // Load sample data for demo mode
-    setDemoMode(true);
-    // ...populate state with demo data as needed
-  };
-
-  const renderContent = () => {
-    switch (currentView) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'playbook':
-        return <SmartPlaybook />;
-      case 'test':
-        return (
-          <React.Suspense fallback={<LoadingSpinner text="Loading Firebase Test..." />}>
-            <FirebaseTest />
-          </React.Suspense>
-        );
-      default:
-        return <Dashboard />;
-    }
+  const handleAIGenerate = async () => {
+    setLoading(true);
+    // Simulate AI generation
+    setTimeout(() => {
+      setLoading(false);
+      alert('AI Practice Plan Generated! 🚀');
+    }, 2000);
   };
 
   return (
-    <ErrorBoundary children={
-      <ToastManager>
-        <AuthProvider>
-          <TeamProvider>
-            <AIProvider>
-              <div className="min-h-screen bg-gray-50">
-                <nav className="bg-white shadow-sm border-b">
-                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                      <div className="flex items-center space-x-8">
-                        <div className="flex items-center space-x-1">
-                          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                          </div>
-                          <span className="text-xl font-bold text-gray-900">Coach Core</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </nav>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                  <MigrationBanner />
-                  {renderContent()}
-                </div>
-                {/* <PWAInstallPrompt showOnLoad={true} /> TEMPORARILY DISABLED */}
-                <OnboardingModal
-                  open={showOnboarding}
-                  onClose={handleOnboardingClose}
-                  onDemoMode={handleDemoMode}
-                  onComplete={handleOnboardingClose}
-                />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center space-x-3 mb-6">
+            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center">
+              <span className="text-3xl">🚀</span>
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">Coach Core AI</h1>
+              <p className="text-xl text-gray-600">The Ultimate Sports Coaching Platform</p>
+            </div>
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Experience the future of sports coaching with AI-powered practice planning, 
+            intelligent play design, and comprehensive team management.
+          </p>
+        </div>
+
+        {/* Demo Features */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {/* AI Practice Planner */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">📋</span>
               </div>
-            </AIProvider>
-          </TeamProvider>
-        </AuthProvider>
-      </ToastManager>
-    } />
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">AI Practice Planner</h3>
+                <p className="text-sm text-gray-600">Generate intelligent practice plans</p>
+              </div>
+            </div>
+            <button
+              onClick={handleAIGenerate}
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              {loading ? 'Generating...' : 'Generate Practice Plan'}
+            </button>
+          </div>
+
+          {/* Team Management */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">👥</span>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Team Management</h3>
+                <p className="text-sm text-gray-600">Manage player rosters</p>
+              </div>
+            </div>
+            <button
+              onClick={() => alert('Team Management Demo! 👥')}
+              className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
+            >
+              Manage Team
+            </button>
+          </div>
+
+          {/* Smart Playbook */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">🏈</span>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Smart Playbook</h3>
+                <p className="text-sm text-gray-600">Design plays with AI</p>
+              </div>
+            </div>
+            <button
+              onClick={() => alert('Smart Playbook Demo! 🏈')}
+              className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700"
+            >
+              Design Plays
+            </button>
+          </div>
+
+          {/* Analytics */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">📈</span>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Analytics</h3>
+                <p className="text-sm text-gray-600">Track performance metrics</p>
+              </div>
+            </div>
+            <button
+              onClick={() => alert('Analytics Demo! 📈')}
+              className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700"
+            >
+              View Analytics
+            </button>
+          </div>
+
+          {/* Drill Library */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">⚽</span>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Drill Library</h3>
+                <p className="text-sm text-gray-600">Browse coaching drills</p>
+              </div>
+            </div>
+            <button
+              onClick={() => alert('Drill Library Demo! ⚽')}
+              className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+            >
+              Browse Drills
+            </button>
+          </div>
+
+          {/* AI Assistant */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">🤖</span>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">AI Assistant</h3>
+                <p className="text-sm text-gray-600">Get coaching advice</p>
+              </div>
+            </div>
+            <button
+              onClick={() => alert('AI Assistant Demo! 🤖')}
+              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700"
+            >
+              Ask AI
+            </button>
+          </div>
+        </div>
+
+        {/* Demo Info */}
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Demo Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">What's Included</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• AI-powered practice plan generation</li>
+                <li>• Interactive playbook design</li>
+                <li>• Team roster management</li>
+                <li>• Comprehensive drill library</li>
+                <li>• Performance analytics</li>
+                <li>• Mobile-responsive design</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Technical Features</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• React 18 + TypeScript</li>
+                <li>• Firebase backend integration</li>
+                <li>• OpenAI GPT-4 integration</li>
+                <li>• PWA capabilities</li>
+                <li>• Real-time updates</li>
+                <li>• Offline functionality</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
+
+const App: React.FC = () => {
+  return <DemoDashboard />;
+};
+
 export default App;
 

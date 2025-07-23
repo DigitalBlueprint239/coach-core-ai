@@ -15,7 +15,7 @@ import {
   WithFieldValue,
   DocumentReference,
 } from 'firebase/firestore';
-import { firebase } from '@/services/firebase/config';
+import { firebase } from '../firebase/config';
 
 export abstract class BaseFirestoreService<T extends DocumentData> {
   protected collectionName: string;
@@ -31,24 +31,24 @@ export abstract class BaseFirestoreService<T extends DocumentData> {
   async getAll(constraints: QueryConstraint[] = []): Promise<T[]> {
     const q = query(this.collection, ...constraints);
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as T));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as unknown as T));
   }
 
   async getById(id: string): Promise<T | null> {
     const docRef = doc(this.collection, id);
     const snapshot = await getDoc(docRef);
-    return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } as T : null;
+    return snapshot.exists() ? ({ id: snapshot.id, ...(snapshot.data() as any) } as unknown as T) : null;
   }
 
   async create(data: WithFieldValue<T>): Promise<string> {
-    const docRef = doc(this.collection);
+    const docRef = doc(this.collection) as any;
     await setDoc(docRef, data);
     return docRef.id;
   }
 
   async update(id: string, data: Partial<T>): Promise<void> {
-    const docRef = doc(this.collection, id);
-    await updateDoc(docRef, data);
+    const docRef = doc(this.collection, id) as any;
+    await updateDoc(docRef, data as any);
   }
 
   async delete(id: string): Promise<void> {

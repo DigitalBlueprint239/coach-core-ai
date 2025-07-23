@@ -147,7 +147,7 @@ export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }>
 
     setIsCreating(true);
     try {
-      await createTeam(teamName.trim());
+      await createTeam({ name: teamName.trim() });
       showToast('Team created successfully!', 'success');
       setTeamName('');
       onClose();
@@ -425,3 +425,5 @@ export const TeamManagement: React.FC = () => {
     </div>
   );
 }; 
+
+export { useTeam };

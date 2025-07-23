@@ -1,6 +1,11 @@
 // src/services/push-notifications.ts
 
-const PUBLIC_VAPID_KEY = process.env.REACT_APP_VAPID_PUBLIC_KEY || '';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { app } from './firebase';
+
+const messaging = getMessaging(app);
+
+const VAPID_KEY = process.env.REACT_APP_VAPID_KEY;
 
 export const isPushSupported = () => {
   return 'serviceWorker' in navigator && 'PushManager' in window;
@@ -17,7 +22,7 @@ export const subscribeUserToPush = async (): Promise<PushSubscription | null> =>
   try {
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
+      applicationServerKey: urlBase64ToUint8Array(VAPID_KEY || '')
     });
     return subscription;
   } catch (error) {

@@ -15,7 +15,6 @@ import {
   IconButton,
   Divider,
   Alert,
-  AlertIcon,
   useToast,
   Link,
   Checkbox,
@@ -362,7 +361,7 @@ const SignupForm: React.FC<SignupFormProps> = ({
         </Box>
 
         <Alert status="info" borderRadius="md">
-          <AlertIcon />
+          👋
           <Box>
             <Text fontSize="sm">
               By creating an account, you'll get access to AI-powered coaching tools and analytics.

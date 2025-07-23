@@ -691,10 +691,10 @@ const FixedCoachCore = () => {
         const positionColors = {
           QB: '#ef4444', RB: '#22c55e', FB: '#16a34a', WR: '#3b82f6', TE: '#f59e0b',
           LT: '#6b7280', LG: '#6b7280', C: '#374151', RG: '#6b7280', RT: '#6b7280'
-        };
-        
-        const fillColor = positionColors[player.position] || '#1f2937';
-        
+        } as const;
+
+        const fillColor = positionColors[player.position as keyof typeof positionColors] || '#1f2937';
+
         ctx.fillStyle = fillColor;
         ctx.strokeStyle = 'white';
         ctx.lineWidth = 2;

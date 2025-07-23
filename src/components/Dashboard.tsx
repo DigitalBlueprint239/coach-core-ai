@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   // Get team level for feature gating
-  const teamLevel = currentTeam?.level || FootballLevel.VARSITY;
+   const teamLevel = (currentTeam?.level as FootballLevel) || FootballLevel.VARSITY;
   const { canAccess, availableFeatures, isYouth, isAdvanced } = useFeatureGating(teamLevel);
 
   if (authLoading) {

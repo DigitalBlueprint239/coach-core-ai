@@ -16,7 +16,6 @@ import {
   NumberDecrementStepper,
   Badge,
   Alert,
-  AlertIcon,
   AlertTitle,
   AlertDescription,
   Spinner,

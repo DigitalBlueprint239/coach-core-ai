@@ -208,9 +208,14 @@ class DeviceBenchmarker:
         """
         
         # Execute test script on device
+        # Ensure username and access key are not None for requests auth
+        if self.browserstack_username is None or self.browserstack_access_key is None:
+            logger.error("BrowserStack credentials are not set.")
+            return {}
+
         script_response = requests.post(
             f'https://api.browserstack.com/automate/sessions/{session_id}/execute',
-            auth=(self.browserstack_username, self.browserstack_access_key),
+            auth=(str(self.browserstack_username), str(self.browserstack_access_key)),
             json={'script': test_script}
         )
         
@@ -425,7 +430,7 @@ class DeviceBenchmarker:
         }
         
         # Analyze by device type
-        for device_type in model_df['device_type'].unique():
+        for device_type in pd.unique(model_df['device_type']):
             device_data = model_df[model_df['device_type'] == device_type]
             analysis['device_performance'][device_type] = {
                 'count': len(device_data),

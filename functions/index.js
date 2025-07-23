@@ -15,7 +15,7 @@ const {
 } = require("firebase-functions/v2/firestore");
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore, FieldValue} = require("firebase-admin/firestore");
-const logger = require("firebase-functions/logger");
+const {logger} = require("firebase-functions");
 
 // Initialize Firebase Admin
 initializeApp();
@@ -102,6 +102,7 @@ exports.onTeamMemberAdded = onDocumentUpdated(
             });
           }
 
+          // eslint-disable-next-line max-len
           logger.info(`Notifications sent to ${newMembers.length} new team members`);
         } catch (error) {
           logger.error(`Error sending team join notifications:`, error);

@@ -1,18 +1,12 @@
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
-import { redis } from './redis';
+// import { redis } from './redis'; // Redis is not available in this environment
 
 export const createRateLimiter = (windowMs: number, max: number) => {
   return rateLimit({
-    store: new RedisStore({
-      client: redis,
-      prefix: 'rate_limit:',
-    }),
     windowMs,
     max,
-    message: 'Too many requests, please try again later.',
-    standardHeaders: true,
-    legacyHeaders: false,
+    // store: new RedisStore({ client: redis }), // Disabled for now
   });
 };
 

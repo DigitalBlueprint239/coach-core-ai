@@ -1,7 +1,7 @@
 // API service layer for backend integration
 class APIService {
   constructor() {
-    this.baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api';
+    this.baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
     this.token = localStorage.getItem('authToken');
   }
 

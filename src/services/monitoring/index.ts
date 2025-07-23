@@ -1,19 +1,23 @@
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
-import { firebase } from '@/services/firebase/config';
+import { firebase } from '../firebase/config';
+import { logEvent } from 'firebase/analytics';
 
-export function initializeMonitoring() {
-  if (process.env.NODE_ENV === 'production') {
+const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
+const ENVIRONMENT = process.env.NODE_ENV || 'development';
+
+export const initializeMonitoring = () => {
+  if (process.env.NODE_ENV === 'production' && SENTRY_DSN) {
     Sentry.init({
-      dsn: process.env.REACT_APP_SENTRY_DSN,
+      dsn: SENTRY_DSN,
       integrations: [
-        new BrowserTracing(),
+        new BrowserTracing() as any,
       ],
       tracesSampleRate: 0.1,
-      environment: process.env.NODE_ENV,
+      environment: ENVIRONMENT,
     });
   }
-}
+};
 
 // Performance monitoring
 export function trackPerformance(metricName: string, value: number) {
@@ -29,6 +33,6 @@ export function trackPerformance(metricName: string, value: number) {
 // User analytics
 export function trackEvent(eventName: string, properties?: Record<string, any>) {
   if (firebase.analytics) {
-    firebase.analytics.logEvent(eventName, properties);
+    logEvent(firebase.analytics, eventName, properties);
   }
 } 

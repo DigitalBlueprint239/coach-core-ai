@@ -7,7 +7,6 @@ import {
   Button, 
   Badge, 
   Alert, 
-  AlertIcon,
   SimpleGrid,
   Card,
   CardBody,
@@ -115,17 +114,17 @@ const IntegrationCard: React.FC<{ integration: Integration; onToggle: (id: strin
   };
 
   return (
-    <Card>
-      <CardHeader pb={2}>
+    <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
+      <Box pb={2} fontWeight="bold">
         <HStack justify="space-between">
-          <Text fontWeight="bold">{integration.name}</Text>
+          <Text>{integration.name}</Text>
           <Badge colorScheme={getStatusColor(integration.status)}>
             {getStatusText(integration.status)}
           </Badge>
         </HStack>
-      </CardHeader>
-      <CardBody pt={0}>
-        <VStack align="start" spacing={3}>
+      </Box>
+      <Box pt={0}>
+        <Box mb={3}>
           <Text fontSize="sm" color="gray.600">
             {integration.description}
           </Text>
@@ -143,9 +142,9 @@ const IntegrationCard: React.FC<{ integration: Integration; onToggle: (id: strin
           >
             {integration.status === 'connected' ? 'Disconnect' : 'Connect'}
           </Button>
-        </VStack>
-      </CardBody>
-    </Card>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
@@ -189,17 +188,16 @@ export const CoachCoreIntegration: React.FC = () => {
   };
 
   return (
-    <VStack spacing={6} align="stretch" p={4}>
-      <Alert status="info">
-        <AlertIcon />
-        Integrations are in recovery mode - all connections are simulated
-      </Alert>
+    <Box p={4}>
+      <Box bg="blue.50" border="1px solid #bee3f8" color="blue.800" borderRadius="md" p={4} mb={4}>
+        ⚠️ Integrations are in recovery mode - all connections are simulated
+      </Box>
 
       <Text fontSize="2xl" fontWeight="bold">
         Coach Core Integrations
       </Text>
 
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+      <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={4}>
         {integrations.map((integration) => (
           <IntegrationCard
             key={integration.id}
@@ -207,14 +205,14 @@ export const CoachCoreIntegration: React.FC = () => {
             onToggle={handleToggleIntegration}
           />
         ))}
-      </SimpleGrid>
+      </Box>
 
       {loading && (
         <Text textAlign="center" color="gray.500">
           Loading integrations...
         </Text>
       )}
-    </VStack>
+    </Box>
   );
 };
 

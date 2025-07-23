@@ -8,7 +8,6 @@ import {
   Button,
   Badge,
   Alert,
-  AlertIcon,
   AlertTitle,
   AlertDescription,
   Spinner,
@@ -216,7 +215,6 @@ const PlayAISuggestion: React.FC<{ playContext: PlayContext }> = ({ playContext 
               </Box>
 
               <Alert status="info" borderRadius="md">
-                <AlertIcon />
                 <Box>
                   <AlertTitle>AI Reasoning</AlertTitle>
                   <AlertDescription>

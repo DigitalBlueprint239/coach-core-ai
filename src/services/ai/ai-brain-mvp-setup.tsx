@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, VStack, Text, Button, Input, Alert, AlertIcon } from '@chakra-ui/react';
+import { Box, VStack, Text, Button, Input, Alert } from '@chakra-ui/react';
 
 // Minimal AI Brain Interface
 export interface AIBrainConfig {
@@ -76,11 +76,10 @@ export const AIBrainSetup: React.FC = () => {
   };
 
   return (
-    <VStack spacing={4} align="stretch" p={4}>
-      <Alert status="warning">
-        <AlertIcon />
-        AI Brain is in recovery mode - using mock responses
-      </Alert>
+    <Box p={4}>
+      <Box bg="yellow.50" border="1px solid #f6e05e" color="yellow.800" borderRadius="md" p={4} mb={4}>
+        ⚠️ AI Brain is in recovery mode - using mock responses
+      </Box>
       
       <Text fontSize="lg" fontWeight="bold">AI Coaching Assistant</Text>
       
@@ -116,7 +115,7 @@ export const AIBrainSetup: React.FC = () => {
           )}
         </Box>
       )}
-    </VStack>
+    </Box>
   );
 };
 

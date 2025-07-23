@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import { firebase } from '@/services/firebase/config';
+import { firebase } from '../firebase/config';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 interface OptimizationRequest {

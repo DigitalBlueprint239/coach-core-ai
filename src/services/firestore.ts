@@ -320,7 +320,7 @@ export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> 
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...(doc.data() as any)
     })) as PracticePlan[];
   } catch (error) {
     console.error('Error fetching practice plans:', error);
@@ -420,7 +420,7 @@ export async function getPlays(teamId: string, level?: FootballLevel): Promise<P
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...(doc.data() as any)
     })) as Play[];
   } catch (error) {
     console.error('Error fetching plays:', error);
@@ -482,7 +482,7 @@ export function subscribeToPracticePlans(teamId: string, callback: (plans: Pract
   return onSnapshot(q, (snapshot) => {
     const plans = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...(doc.data() as any)
     })) as PracticePlan[];
     callback(plans);
   });
@@ -504,7 +504,7 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
   return onSnapshot(q, (snapshot) => {
     const plays = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...(doc.data() as any)
     })) as Play[];
     callback(plays);
   });

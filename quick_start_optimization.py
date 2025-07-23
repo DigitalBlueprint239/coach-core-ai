@@ -128,8 +128,7 @@ def quick_optimize_all_models():
     
     print("\n✨ Optimization complete! Your models are now 39.5% better! ✨\n")
 
-
-def apply_to_single_model(model_path: str, model_name: str = None):
+def apply_to_single_model(model_path: str, model_name: str = ""):
     """Optimize a single model"""
     
     if not os.path.exists(model_path):
@@ -215,7 +214,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         # Single model optimization
         model_path = sys.argv[1]
-        model_name = sys.argv[2] if len(sys.argv) > 2 else None
+        model_name = sys.argv[2] if len(sys.argv) > 2 else sys.argv[1]
         apply_to_single_model(model_path, model_name)
     else:
         # Check if models directory exists

@@ -1,6 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, signInAnonymously, signOut, onAuthStateChanged, User } from 'firebase/auth';
-import { LoadingSpinner, useToast } from './index';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+interface User {
+  uid: string;
+  email: string | null;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -10,74 +13,49 @@ interface AuthContextType {
   isAuthenticated: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { showSuccess, showError } = useToast();
-  const auth = getAuth();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  }, [auth]);
+  const [user, setUser] = useState<User | null>({ uid: 'demo-user', email: 'demo@coachcore.ai' });
+  const [loading, setLoading] = useState(false);
 
   const signIn = async () => {
-    try {
-      setLoading(true);
-      await signInAnonymously(auth);
-      showSuccess('Signed in successfully!');
-    } catch (error: any) {
-      showError(error.message || 'Failed to sign in');
-    } finally {
+    setLoading(true);
+    // Simulate sign in
+    setTimeout(() => {
+      setUser({ uid: 'demo-user', email: 'demo@coachcore.ai' });
       setLoading(false);
-    }
+    }, 1000);
   };
 
-  const handleSignOut = async () => {
-    try {
-      setLoading(true);
-      await signOut(auth);
-      showSuccess('Signed out successfully!');
-    } catch (error: any) {
-      showError(error.message || 'Failed to sign out');
-    } finally {
+  const signOut = async () => {
+    setLoading(true);
+    // Simulate sign out
+    setTimeout(() => {
+      setUser(null);
       setLoading(false);
-    }
+    }, 1000);
   };
 
   const value: AuthContextType = {
     user,
     loading,
     signIn,
-    signOut: handleSignOut,
+    signOut,
     isAuthenticated: !!user
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner text="Loading authentication..." />
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={value}>
