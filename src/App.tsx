@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AIProvider } from './ai-brain/AIContext';
 import Dashboard from './components/Dashboard';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
 import { AuthProvider } from './components/AuthProvider';
@@ -62,7 +62,9 @@ const App: React.FC = () => {
       case 'playbook':
         return (
           <React.Suspense fallback={<LoadingSpinner text="Loading Smart Playbook..." />}>
-            <SmartPlaybook />
+            <ErrorBoundary>
+              <SmartPlaybook />
+            </ErrorBoundary>
           </React.Suspense>
         );
       case 'test':

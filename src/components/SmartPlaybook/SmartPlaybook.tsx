@@ -11,7 +11,7 @@ import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
 import SavePlayDialog from './components/SavePlayDialog';
-import { ErrorBoundary } from '../ErrorBoundary';
+import ErrorBoundary from '../common/ErrorBoundary';
 import {
   createPlayer,
   createRoute,
@@ -571,14 +571,16 @@ const SmartPlaybook = () => {
             />
 
             {/* Route Editor */}
-            <RouteEditor
-              selectedRoute={routes.find(r => r.id === selectedRouteId)}
-              players={players}
-              onUpdateRoute={handleRouteUpdate}
-              onDeleteRoute={handleRouteDelete}
-              onApplyPreset={handleApplyPreset}
-              onClearSelection={() => setSelectedRouteId(null)}
-            />
+            <ErrorBoundary>
+              <RouteEditor
+                selectedRoute={routes.find(r => r.id === selectedRouteId)}
+                players={players}
+                onUpdateRoute={handleRouteUpdate}
+                onDeleteRoute={handleRouteDelete}
+                onApplyPreset={handleApplyPreset}
+                onClearSelection={() => setSelectedRouteId(null)}
+              />
+            </ErrorBoundary>
 
             {/* Save/Load Panel */}
             <SaveLoadPanel
@@ -596,13 +598,15 @@ const SmartPlaybook = () => {
 
           {/* Main Canvas Area */}
           <div className="lg:col-span-2">
-            <CanvasArea
-              canvasRef={canvasRef}
-              players={players}
-              routes={routes}
-              onCanvasEvent={handleCanvasEvent}
-              onPlayerDrag={handlePlayerDrag}
-            />
+            <ErrorBoundary>
+              <CanvasArea
+                canvasRef={canvasRef}
+                players={players}
+                routes={routes}
+                onCanvasEvent={handleCanvasEvent}
+                onPlayerDrag={handlePlayerDrag}
+              />
+            </ErrorBoundary>
 
             {/* Route Drawing Overlay */}
             {isDrawingRoute && routePoints.length > 0 && (

@@ -1,27 +1,21 @@
-import { initializeApp } from 'firebase/app';
-// The following imports may cause errors if the Firebase modules are not installed or available.
-// To fix, ensure you have installed the required Firebase packages:
-// npm install firebase
-// If you only need certain services, you can comment out unused imports.
-
-import { getAuth, type Auth } from 'firebase/auth';
-import { getFirestore, type Firestore } from 'firebase/firestore';
-import { getAnalytics, type Analytics } from 'firebase/analytics';
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB2iWL0UkuLJYpr-II9IpwGWDOMnLcfq_c",
-  authDomain: "coach-core-ai.firebaseapp.com",
-  projectId: "coach-core-ai",
-  storageBucket: "coach-core-ai.appspot.com",
-  messagingSenderId: "384023691487",
-  appId: "1:384023691487:web:931094d7a0da903d6e696a",
-  measurementId: "G-02HW7QDJLY"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const analytics = getAnalytics(app);
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 
-export { app, auth, db, analytics }; 
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const analytics = getAnalytics(app);
+export default app;
