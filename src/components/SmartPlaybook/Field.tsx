@@ -5,7 +5,7 @@
  * - Optimized with React.memo and useCallback for performance
  */
 
-import React, { useRef, useEffect, useCallback, memo, useState } from 'react';
+import React, { useRef, useEffect, useCallback, memo, useState, forwardRef } from 'react';
 
 // Constants for better maintainability
 const FIELD_COLORS = {
@@ -35,7 +35,7 @@ const ROUTE_STYLES = {
 const TOUCH_THRESHOLD = 20; // pixels for touch detection
 
 // Utility: Get canvas coordinates from event
-const getCanvasCoordinates = (event, canvas) => {
+const getCanvasCoordinates = (event: any, canvas: HTMLCanvasElement | null) => {
   if (!canvas) return null;
 
   const rect = canvas.getBoundingClientRect();
@@ -59,7 +59,7 @@ const getCanvasCoordinates = (event, canvas) => {
 };
 
 // Utility: Find player at position
-const findPlayerAtPosition = (players, x, y, threshold = 20) => {
+const findPlayerAtPosition = (players: any[], x: number, y: number, threshold = 20) => {
   for (const player of players) {
     const distance = Math.sqrt((x - player.x) ** 2 + (y - player.y) ** 2);
     if (distance <= threshold) {
@@ -70,7 +70,7 @@ const findPlayerAtPosition = (players, x, y, threshold = 20) => {
 };
 
 // Utility: Find route at position
-const findRouteAtPosition = (routes, x, y, threshold = 10) => {
+const findRouteAtPosition = (routes: any[], x: number, y: number, threshold = 10) => {
   for (const route of routes) {
     if (!route.points || route.points.length < 2) continue;
     
@@ -90,7 +90,7 @@ const findRouteAtPosition = (routes, x, y, threshold = 10) => {
 };
 
 // Utility: Calculate distance from point to line segment
-const distanceToLineSegment = (px, py, x1, y1, x2, y2) => {
+const distanceToLineSegment = (px: number, py: number, x1: number, y1: number, x2: number, y2: number) => {
   const A = px - x1;
   const B = py - y1;
   const C = x2 - x1;
@@ -120,7 +120,7 @@ const distanceToLineSegment = (px, py, x1, y1, x2, y2) => {
 };
 
 // Utility: Draw player circles with error handling
-const drawPlayers = (ctx, players = []) => {
+const drawPlayers = (ctx: CanvasRenderingContext2D, players: any[] = []) => {
   if (!ctx || !Array.isArray(players)) return;
   
   players.forEach(player => {
@@ -161,7 +161,7 @@ const drawPlayers = (ctx, players = []) => {
 };
 
 // Utility: Draw routes/arrows with error handling
-const drawRoutes = (ctx, routes = [], selectedRouteId = null) => {
+const drawRoutes = (ctx: CanvasRenderingContext2D, routes: any[] = [], selectedRouteId: string | null = null) => {
   if (!ctx || !Array.isArray(routes)) return;
   
   routes.forEach(route => {
@@ -181,7 +181,7 @@ const drawRoutes = (ctx, routes = [], selectedRouteId = null) => {
       ctx.beginPath();
       ctx.moveTo(route.points[0].x, route.points[0].y);
       
-      route.points.slice(1).forEach(point => {
+      route.points.slice(1).forEach((point: any) => {
         if (point && typeof point.x === 'number' && typeof point.y === 'number') {
           ctx.lineTo(point.x, point.y);
         }
@@ -226,7 +226,7 @@ const drawRoutes = (ctx, routes = [], selectedRouteId = null) => {
 };
 
 // Utility: Draw field with error handling
-const drawField = (ctx, width, height) => {
+const drawField = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
   if (!ctx || typeof width !== 'number' || typeof height !== 'number') {
     console.error('Invalid canvas context or dimensions');
     return;
@@ -264,7 +264,7 @@ const drawField = (ctx, width, height) => {
 };
 
 // Utility: Draw debug information
-const drawDebugInfo = (ctx, mode, width, height) => {
+const drawDebugInfo = (ctx: CanvasRenderingContext2D, mode: string, width: number, height: number) => {
   if (!ctx) return;
   
   try {
@@ -279,7 +279,20 @@ const drawDebugInfo = (ctx, mode, width, height) => {
   }
 };
 
-const Field = memo(({
+const Field = memo(forwardRef<HTMLCanvasElement, {
+  players?: any[];
+  routes?: any[];
+  onCanvasEvent?: (e: any) => void;
+  onPlayerDrag?: (id: string, x: number, y: number) => void;
+  onRouteSelect?: (id?: string) => void;
+  selectedRouteId?: string | null;
+  width?: number;
+  height?: number;
+  mode?: string;
+  debug?: boolean;
+  className?: string;
+  'data-testid'?: string;
+}>(({
   players = [],
   routes = [],
   onCanvasEvent = () => {},
@@ -292,14 +305,13 @@ const Field = memo(({
   debug = false,
   className = '',
   'data-testid': testId = 'smartplaybook-canvas'
-}) => {
-  const canvasRef = useRef(null);
+}, ref) => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedPlayerId, setDraggedPlayerId] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // Memoized event handlers for better performance
-  const handleCanvasEvent = useCallback((event) => {
+  const handleCanvasEvent = useCallback((event: any) => {
     try {
       onCanvasEvent(event);
     } catch (error) {
@@ -308,10 +320,10 @@ const Field = memo(({
   }, [onCanvasEvent]);
 
   // Enhanced touch and mouse event handling with drag support
-  const handleMouseDown = useCallback((event) => {
+  const handleMouseDown = useCallback((event: any) => {
     event.preventDefault();
     
-    const coords = getCanvasCoordinates(event, canvasRef.current);
+    const coords = getCanvasCoordinates(event, (ref as any)?.current);
     if (!coords) return;
 
     // Check if clicking on a route first
@@ -338,10 +350,10 @@ const Field = memo(({
     }
   }, [handleCanvasEvent, players, routes, mode, onRouteSelect]);
 
-  const handleTouchStart = useCallback((event) => {
+  const handleTouchStart = useCallback((event: any) => {
     event.preventDefault();
     
-    const coords = getCanvasCoordinates(event, canvasRef.current);
+    const coords = getCanvasCoordinates(event, (ref as any)?.current);
     if (!coords) return;
 
     // Check if touching a route first
@@ -368,7 +380,7 @@ const Field = memo(({
     }
   }, [handleCanvasEvent, players, routes, mode, onRouteSelect]);
 
-  const handleDoubleClick = useCallback((event) => {
+  const handleDoubleClick = useCallback((event: any) => {
     event.preventDefault();
     // Trigger finish route drawing on double click
     if (mode === 'route') {
@@ -378,11 +390,11 @@ const Field = memo(({
   }, [handleCanvasEvent, mode]);
 
   // Drag event handlers
-  const handleMouseMove = useCallback((event) => {
+  const handleMouseMove = useCallback((event: any) => {
     if (!isDragging || !draggedPlayerId) return;
     
     event.preventDefault();
-    const coords = getCanvasCoordinates(event, canvasRef.current);
+    const coords = getCanvasCoordinates(event, (ref as any)?.current);
     if (!coords) return;
 
     const newX = coords.x - dragOffset.x;
@@ -392,11 +404,11 @@ const Field = memo(({
     onPlayerDrag(draggedPlayerId, newX, newY);
   }, [isDragging, draggedPlayerId, dragOffset, onPlayerDrag]);
 
-  const handleTouchMove = useCallback((event) => {
+  const handleTouchMove = useCallback((event: any) => {
     if (!isDragging || !draggedPlayerId) return;
     
     event.preventDefault();
-    const coords = getCanvasCoordinates(event, canvasRef.current);
+    const coords = getCanvasCoordinates(event, (ref as any)?.current);
     if (!coords) return;
 
     const newX = coords.x - dragOffset.x;
@@ -424,7 +436,7 @@ const Field = memo(({
 
   // Memoized drawing function
   const drawCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
+    const canvas = (ref as any)?.current;
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
@@ -485,7 +497,7 @@ const Field = memo(({
 
   return (
     <canvas
-      ref={canvasRef}
+      ref={ref}
       width={width}
       height={height}
       tabIndex={0}
@@ -506,7 +518,7 @@ const Field = memo(({
       data-testid={testId}
     />
   );
-});
+}));
 
 // Add display name for better debugging
 Field.displayName = 'Field';

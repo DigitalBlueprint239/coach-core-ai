@@ -6,7 +6,7 @@ const ThumbsUp = (props: any) => <span {...props}>👍</span>;
 const ThumbsDown = (props: any) => <span {...props}>👎</span>;
 const ChevronDown = (props: any) => <span {...props}>▼</span>;
 // TODO: Replace with actual AIBrain class if available
-const AIBrain = { getInstance: () => ({ recordFeedback: () => {} }) };
+const AIBrain = { getInstance: () => ({ recordFeedback: (id: string, feedback: string) => {} }) };
 
 // ============================================
 // COACH CORE AI BRAIN - MVP IMPLEMENTATION
@@ -215,7 +215,7 @@ export class CoachCoreAIBrain {
     if (insights.recommendations.length > 2) confidence += 0.1;
     
     // Decrease for uncertainty
-    if (insights.insights.some(i => i.includes('unclear'))) confidence -= 0.1;
+    if (insights.insights.some((i: string) => i.includes('unclear'))) confidence -= 0.1;
     
     return Math.min(Math.max(confidence, 0.3), 0.95);
   }
@@ -383,7 +383,6 @@ export const AIInsightCard: React.FC<{ insight: AIInsight }> = ({ insight }) => 
 // ============================================
 
 // Replace the integration example with a functional component
-import React, { useState } from 'react';
 
 export const AIBrainIntegrationDemo: React.FC = () => {
   const [plan, setPlan] = useState<any>(null);

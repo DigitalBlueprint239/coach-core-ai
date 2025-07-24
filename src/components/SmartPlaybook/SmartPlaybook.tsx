@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import Field from './:components:SmartPlaybook:Field.js';
+import Field from './Field';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';

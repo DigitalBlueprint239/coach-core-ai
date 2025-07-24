@@ -16,7 +16,7 @@ import {
 // CONTEXT & STATE MANAGEMENT
 // ============================================
 
-const AppContext = createContext();
+const AppContext = createContext<any>(null);
 
 const useAppContext = () => {
   const context = useContext(AppContext);
@@ -26,7 +26,7 @@ const useAppContext = () => {
   return context;
 };
 
-const AppProvider = ({ children }) => {
+const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState({
     id: 'demo-user',
     email: 'coach@demo.com',

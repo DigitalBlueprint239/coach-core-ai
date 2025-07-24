@@ -506,7 +506,7 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .touch-optimized-playbook {
           display: flex;
           flex-direction: column;

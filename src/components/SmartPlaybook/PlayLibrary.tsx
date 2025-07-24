@@ -1,6 +1,12 @@
 import React from 'react';
 
-export default function PlayLibrary({ savedPlays, onLoadPlay, onDeletePlay }) {
+interface PlayLibraryProps {
+  savedPlays: any[];
+  onLoadPlay: (play: any) => void;
+  onDeletePlay: (id: string) => void;
+}
+
+export default function PlayLibrary({ savedPlays, onLoadPlay, onDeletePlay }: PlayLibraryProps) {
   return (
     <div className="p-4">
       <h3 className="font-bold text-lg mb-4">Play Library</h3>
