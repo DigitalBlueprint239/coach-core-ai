@@ -329,6 +329,42 @@ export class PracticeAI {
       ]
     };
   }
+
+  // Missing data retrieval methods
+  async getRecentPractices(teamId: string, limit: number = 7): Promise<Practice[]> {
+    // TODO: Implement database query for recent practices
+    return [];
+  }
+
+  async getPracticeHistory(teamId: string): Promise<Practice[]> {
+    // TODO: Implement database query for practice history
+    return [];
+  }
+
+  async getInjuryReport(teamId: string): Promise<InjuryStatus[]> {
+    // TODO: Implement database query for injury report
+    return [];
+  }
+
+  // Missing analysis methods
+  calculateOptimalIntensity(team: TeamContext, weather?: string): number {
+    // TODO: Implement intensity calculation based on team and weather
+    return 0.7; // Default medium intensity
+  }
+
+  identifyFocusAreas(team: TeamContext, goals: string[]): string[] {
+    // TODO: Implement focus area identification
+    return goals || ['fundamentals'];
+  }
+
+  buildIntelligentPlan(params: any): any {
+    // TODO: Implement intelligent plan building
+    return {
+      periods: [],
+      totalDuration: params.duration,
+      aiInsights: []
+    };
+  }
 }
 
 // ============================================
@@ -469,6 +505,36 @@ interface SmartPracticeResult {
   insights: string[];
   confidence: number;
   alternatives: PracticePlan[];
+}
+
+interface Practice {
+  id: string;
+  date: string;
+  duration: number;
+  intensity: number;
+  focus: string[];
+  attendance: number;
+}
+
+interface PracticePlan {
+  id: string;
+  name: string;
+  duration: number;
+  periods: PracticePeriod[];
+  totalIntensity: number;
+}
+
+interface InjuryStatus {
+  playerId: string;
+  injury: string;
+  severity: 'minor' | 'moderate' | 'severe';
+  expectedReturn: string;
+}
+
+interface PracticeInsights {
+  recommendations: string[];
+  insights: string[];
+  confidence: number;
 }
 
 interface AIInsight {
