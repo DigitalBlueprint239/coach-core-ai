@@ -1,5 +1,5 @@
 // src/components/ErrorBoundary.tsx
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode, useState, useCallback } from 'react';
 
 // ============================================
 // ERROR BOUNDARY TYPES
@@ -584,7 +584,7 @@ export class DataErrorBoundary extends ErrorBoundary {
 // ============================================
 
 export const useErrorBoundary = () => {
-  const [error, setError] = React.useState<Error | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const handleError = React.useCallback((error: Error, errorInfo: ErrorInfo) => {
     setError(error);

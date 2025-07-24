@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, VStack, Text, Button, Input, Alert } from '@chakra-ui/react';
 
 // Minimal AI Brain Interface
@@ -55,9 +55,9 @@ export class AIBrainService {
 
 // AI Brain Component
 export const AIBrainSetup: React.FC = () => {
-  const [prompt, setPrompt] = React.useState('');
-  const [response, setResponse] = React.useState<AIResponse | null>(null);
-  const [loading, setLoading] = React.useState(false);
+  const [prompt, setPrompt] = useState('');
+  const [response, setResponse] = useState<AIResponse | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const aiService = React.useMemo(() => new AIBrainService(), []);
 

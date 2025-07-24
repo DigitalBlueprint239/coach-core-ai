@@ -2,17 +2,22 @@
 // This file contains all new features in one place for easy integration
 // You can copy this entire file and gradually split it into modules
 
-import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
+import React, { useState } from 'react';
 import { 
-  Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity, 
-  BarChart3, Target, Clock, ThumbsUp, Filter, Download, Share2,
-  Bell, Mail, Settings, Check, X, AlertTriangle, Info, Smartphone,
-  Sparkles, Shield, Route, Play, Square, ChevronLeft, ChevronRight
-} from 'lucide-react';
-import { 
-  LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, 
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
-} from 'recharts';
+  Box, 
+  VStack, 
+  HStack, 
+  Text, 
+  Button, 
+  Heading,
+  Card,
+  CardBody,
+  CardHeader,
+  Badge,
+  Progress,
+  Spinner,
+  useToast
+} from '@chakra-ui/react';
 
 // ============================================
 // SECTION 1: FIREBASE SERVICE (Mock Version)

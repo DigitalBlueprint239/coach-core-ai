@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   VStack, 
@@ -150,12 +150,12 @@ const IntegrationCard: React.FC<{ integration: Integration; onToggle: (id: strin
 
 // Main Integration Dashboard
 export const CoachCoreIntegration: React.FC = () => {
-  const [integrations, setIntegrations] = React.useState<Integration[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const integrationService = React.useMemo(() => new IntegrationService(), []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadIntegrations();
   }, []);
 

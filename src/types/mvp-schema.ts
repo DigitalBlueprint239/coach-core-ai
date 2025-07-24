@@ -143,7 +143,7 @@ export const fromMVPCoach = (mvpCoach: MVPCoach): Partial<User> => ({
   email: mvpCoach.email,
   displayName: mvpCoach.displayName,
   teamIds: mvpCoach.teams,
-  subscription: { tier: mvpCoach.subscription, status: 'active', expiresAt: new Date(), features: [], billingCycle: 'monthly' }
+  subscription: { tier: mvpCoach.subscription, status: 'active', expiresAt: Timestamp.fromDate(new Date()), features: [], billingCycle: 'monthly' }
 });
 
 export const fromMVPTeam = (mvpTeam: MVPTeam): Partial<Team> => ({
