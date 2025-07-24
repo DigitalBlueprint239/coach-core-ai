@@ -6,12 +6,12 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import Field from './Field';
+import Field from './:components:SmartPlaybook:Field.js';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
 import SavePlayDialog from './components/SavePlayDialog';
-import { ErrorBoundary } from '../ErrorBoundary';
+import { ErrorBoundary } from '../common/ErrorBoundary';
 import {
   createPlayer,
   createRoute,
@@ -40,7 +40,8 @@ import SaveLoadPanel from './components/SaveLoadPanel';
 import Toolbar from './components/Toolbar';
 import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
-import { AIProvider } from '../../../ai-brain/AIContext';
+import { AIProvider } from '../../ai-brain/AIContext';
+
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -512,6 +513,7 @@ const SmartPlaybook = () => {
               >
                 {debugMode ? 'Hide Debug' : 'Show Debug'}
               </button>
+
             </div>
           </div>
         </div>
@@ -571,14 +573,16 @@ const SmartPlaybook = () => {
             />
 
             {/* Route Editor */}
-            <RouteEditor
-              selectedRoute={routes.find(r => r.id === selectedRouteId)}
-              players={players}
-              onUpdateRoute={handleRouteUpdate}
-              onDeleteRoute={handleRouteDelete}
-              onApplyPreset={handleApplyPreset}
-              onClearSelection={() => setSelectedRouteId(null)}
-            />
+            <ErrorBoundary>
+              <RouteEditor
+                selectedRoute={routes.find(r => r.id === selectedRouteId)}
+                players={players}
+                onUpdateRoute={handleRouteUpdate}
+                onDeleteRoute={handleRouteDelete}
+                onApplyPreset={handleApplyPreset}
+                onClearSelection={() => setSelectedRouteId(null)}
+              />
+            </ErrorBoundary>
 
             {/* Save/Load Panel */}
             <SaveLoadPanel
@@ -596,13 +600,15 @@ const SmartPlaybook = () => {
 
           {/* Main Canvas Area */}
           <div className="lg:col-span-2">
-            <CanvasArea
-              canvasRef={canvasRef}
-              players={players}
-              routes={routes}
-              onCanvasEvent={handleCanvasEvent}
-              onPlayerDrag={handlePlayerDrag}
-            />
+            <ErrorBoundary>
+              <CanvasArea
+                canvasRef={canvasRef}
+                players={players}
+                routes={routes}
+                onCanvasEvent={handleCanvasEvent}
+                onPlayerDrag={handlePlayerDrag}
+              />
+            </ErrorBoundary>
 
             {/* Route Drawing Overlay */}
             {isDrawingRoute && routePoints.length > 0 && (
@@ -631,31 +637,35 @@ const SmartPlaybook = () => {
           {/* Right Sidebar - Library */}
           <div className="lg:col-span-1">
             {showLibrary && (
-              <PlayLibrary
-                savedPlays={savedPlays}
-                onLoadPlay={loadPlay}
-                onDeletePlay={deletePlay}
-                onClose={() => setShowLibrary(false)}
-              />
+              <ErrorBoundary>
+                <PlayLibrary
+                  savedPlays={savedPlays}
+                  onLoadPlay={loadPlay}
+                  onDeletePlay={deletePlay}
+                  onClose={() => setShowLibrary(false)}
+                />
+              </ErrorBoundary>
             )}
           </div>
         </div>
       </div>
 
-      <SavePlayDialog
-        show={showSaveDialog}
-        playName={currentPlayName}
-        playPhase={currentPlayPhase}
-        playType={currentPlayType}
-        onPlayNameChange={setCurrentPlayName}
-        onPlayPhaseChange={setCurrentPlayPhase}
-        onPlayTypeChange={setCurrentPlayType}
-        onSave={() =>
-          saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)
-        }
-        onCancel={() => setShowSaveDialog(false)}
-        canSave={!!currentPlayName.trim() && players.length > 0}
-      />
+      <ErrorBoundary>
+        <SavePlayDialog
+          show={showSaveDialog}
+          playName={currentPlayName}
+          playPhase={currentPlayPhase}
+          playType={currentPlayType}
+          onPlayNameChange={setCurrentPlayName}
+          onPlayPhaseChange={setCurrentPlayPhase}
+          onPlayTypeChange={setCurrentPlayType}
+          onSave={() =>
+            saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)
+          }
+          onCancel={() => setShowSaveDialog(false)}
+          canSave={!!currentPlayName.trim() && players.length > 0}
+        />
+      </ErrorBoundary>
 
       {/* Debug Panel */}
       {debugMode && (
