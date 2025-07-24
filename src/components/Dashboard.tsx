@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useTeam, TeamManagement } from './TeamManagement';
+import { useTeam } from '../contexts/TeamContext';
+import { TeamManagement } from './TeamManagement';
 import { LoadingSpinner, useToast } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
+import ErrorBoundary from './common/ErrorBoundary';
 // TODO: Fix import path for AnalyticsDashboard if file exists
 // import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
@@ -197,7 +199,11 @@ const Dashboard: React.FC = () => {
 
         {activeTab === 'teams' && <TeamManagement />}
         {activeTab === 'practice' && <PracticePlanner />}
-        {activeTab === 'playbook' && <SmartPlaybook />}
+        {activeTab === 'playbook' && (
+          <ErrorBoundary>
+            <SmartPlaybook />
+          </ErrorBoundary>
+        )}
         {/* {activeTab === 'analytics' && <AnalyticsDashboard />} */}
       </main>
     </div>

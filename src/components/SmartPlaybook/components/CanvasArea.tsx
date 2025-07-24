@@ -1,5 +1,5 @@
 import React from 'react';
-import Field from '../Field';
+import Field from '../:components:SmartPlaybook:Field.js';
 
 interface CanvasAreaProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
