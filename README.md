@@ -61,6 +61,11 @@ src/
 - npm or yarn
 - Firebase account
 - OpenAI API key
+## ⚠️ Important Setup Note
+This project requires internet access for initial dependency installation.
+The testing environment needs `react-scripts` and testing libraries to be installed.
+See [SETUP.md](SETUP.md) for detailed instructions.
+
 
 ### Installation
 
@@ -123,6 +128,8 @@ src/
 - `npm start` - Start development server
 - `npm build` - Build for production
 - `npm test` - Run tests
+- Ensure you've run `npm install` to install `react-scripts` and all other
+  testing dependencies before executing the test suite.
 - `npm run deploy` - Deploy to Firebase
 - `npm run storybook` - Start Storybook
 - `npm run test:ai` - Test AI functionality
