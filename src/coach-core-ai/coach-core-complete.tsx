@@ -16,7 +16,7 @@ import {
 // CONTEXT & STATE MANAGEMENT
 // ============================================
 
-const AppContext = createContext();
+const AppContext = createContext<any>(null);
 
 const useAppContext = () => {
   const context = useContext(AppContext);
@@ -26,7 +26,7 @@ const useAppContext = () => {
   return context;
 };
 
-const AppProvider = ({ children }) => {
+const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState({
     id: 'demo-user',
     email: 'coach@demo.com',
@@ -82,7 +82,7 @@ const AppProvider = ({ children }) => {
 // PERSONA-BASED ONBOARDING SYSTEM
 // ============================================
 
-const PersonaPicker = ({ onPersonaSelect }) => {
+const PersonaPicker = ({ onPersonaSelect }: { onPersonaSelect: (persona: string) => void }) => {
   const personas = [
     {
       id: 'first_time_coach',

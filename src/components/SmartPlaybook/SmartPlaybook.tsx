@@ -50,13 +50,15 @@ const FIELD_DIMENSIONS = {
 
 const TOUCH_THRESHOLD = 20; // pixels for touch detection
 
+type ModeType = 'view' | 'player' | 'route' | 'delete';
+
 const SmartPlaybook = () => {
   // Core state
   const [players, setPlayers] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [selectedRouteId, setSelectedRouteId] = useState(null);
-  const [mode, setMode] = useState('view'); // view, player, route, delete
+  const [mode, setMode] = useState<ModeType>('view'); // view, player, route, delete
   const [savedPlays, setSavedPlays] = useState([]);
   const [currentPlayName, setCurrentPlayName] = useState('');
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');

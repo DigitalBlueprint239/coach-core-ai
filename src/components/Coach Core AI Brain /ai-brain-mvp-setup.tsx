@@ -6,7 +6,7 @@ const ThumbsUp = (props: any) => <span {...props}>👍</span>;
 const ThumbsDown = (props: any) => <span {...props}>👎</span>;
 const ChevronDown = (props: any) => <span {...props}>▼</span>;
 // TODO: Replace with actual AIBrain class if available
-const AIBrain = { getInstance: () => ({ recordFeedback: () => {} }) };
+const AIBrain = { getInstance: () => ({ recordFeedback: (id: any, feedback: any) => {} }) };
 
 // ============================================
 // COACH CORE AI BRAIN - MVP IMPLEMENTATION
@@ -383,7 +383,6 @@ export const AIInsightCard: React.FC<{ insight: AIInsight }> = ({ insight }) => 
 // ============================================
 
 // Replace the integration example with a functional component
-import React, { useState } from 'react';
 
 export const AIBrainIntegrationDemo: React.FC = () => {
   const [plan, setPlan] = useState<any>(null);

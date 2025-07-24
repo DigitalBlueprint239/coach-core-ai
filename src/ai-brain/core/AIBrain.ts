@@ -53,6 +53,33 @@ export class CoachCoreAIBrain {
     return { risk: 0.1, suggestions: [] };
   }
 
+  // === Data Retrieval Methods ===
+  async getRecentPractices(teamId: string, limit: number = 7): Promise<any[]> {
+    // TODO: Implement getting recent practices from database
+    return [];
+  }
+
+  async getTeamContext(teamId: string): Promise<any> {
+    // TODO: Implement getting team context from database
+    return { id: teamId, name: 'Demo Team', sport: 'football' };
+  }
+
+  // === Analysis Methods ===
+  analyzePracticeNeeds(team: any, recentPractices: any[]): any {
+    // TODO: Implement practice needs analysis
+    return { recommendation: 'balanced', focus: 'fundamentals' };
+  }
+
+  calculateOptimalIntensity(team: any, weather: any): string {
+    // TODO: Implement intensity calculation
+    return 'medium';
+  }
+
+  identifyFocusAreas(team: any, goals: any): string[] {
+    // TODO: Implement focus area identification
+    return ['passing', 'defense'];
+  }
+
   // === Feedback Loop ===
   recordOutcome(type: string, outcome: 'success' | 'failure' | 'neutral') {
     // TODO: Implement learning from outcomes
