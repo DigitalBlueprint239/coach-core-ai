@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   ChakraProvider,
   Box,
@@ -26,17 +26,12 @@ import {
 } from '@chakra-ui/react';
 import {
   User,
-  Calendar,
-  Target,
   BarChart3,
   BookOpen,
   MessageCircle,
   Settings,
   Search,
-  MoreVertical,
-  // Football doesn't exist in lucide-react - use a different icon
   CirclePlay, // Alternative for football/sports
-  Zap,
   Brain,
   Shield,
   Clock,
@@ -155,10 +150,10 @@ function App() {
                   <CardHeader pb={3}>
                     <HStack justify="space-between" align="start">
                       <HStack spacing={3} align="center">
-                        <Icon
-                          as={feature.icon}
-                          boxSize={6}
-                          color={`${feature.color}.500`}
+                        <Icon 
+                          as={feature.icon} 
+                          boxSize={6} 
+                          color={`${feature.color}.500`} 
                         />
                         <VStack align="start" spacing={1}>
                           <Heading size="md" color="gray.800">
@@ -196,9 +191,9 @@ function App() {
               <VStack spacing={4} align="center">
                 <Heading size="lg" color="gray.800">Demo Information</Heading>
                 <Text fontSize="md" color="gray.600" textAlign="center" maxW="3xl">
-                  This is a demonstration of the Coach Core AI platform. Each feature card above
-                  represents a core module of the coaching system. Click any button to explore
-                  the AI-powered coaching tools designed to help you train better, plan smarter,
+                  This is a demonstration of the Coach Core AI platform. Each feature card above 
+                  represents a core module of the coaching system. Click any button to explore 
+                  the AI-powered coaching tools designed to help you train better, plan smarter, 
                   and achieve more with your team.
                 </Text>
                 <HStack spacing={4} wrap="wrap" justify="center">
