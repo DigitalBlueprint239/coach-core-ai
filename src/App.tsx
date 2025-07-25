@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -11,27 +11,15 @@ import {
   CardBody,
   Badge,
   Icon,
-  SimpleGrid,
   Heading,
-  Container,
-  useColorModeValue,
   Flex,
-  Spacer,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
   Grid,
-  GridItem,
   Divider,
   Stat,
   StatLabel,
   StatNumber,
   StatHelpText,
   StatArrow,
-  Progress,
   useToast,
   useDisclosure,
   Modal,
@@ -45,79 +33,26 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  List,
-  ListItem,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription
 } from '@chakra-ui/react';
 import {
-  User,
   BarChart3,
-  BookOpen,
   MessageCircle,
   Settings,
-  Search,
   CirclePlay,
   Brain,
-  Shield,
-  Clock,
   Users,
   TrendingUp,
-  CheckCircle,
   Bell,
   Sparkles,
-  AlertTriangle,
-  ThumbsUp,
-  Star,
-  Filter,
-  Download,
-  Target,
-  Activity,
-  Calendar,
-  Mail,
-  MessageSquare,
-  Smartphone,
   Play,
   Trophy,
-  ChevronRight,
-  Plus,
-  MoreVertical,
   Zap,
   Route,
-  Square,
-  Edit3,
-  Trash2,
-  Save,
-  Grid as GridIcon,
-  List as ListIcon,
-  Upload,
-  FileText,
-  Camera,
-  Video,
-  Send,
-  Eye,
-  EyeOff,
-  Lock,
-  Unlock,
-  Globe,
-  Heart,
-  Gift,
-  DollarSign,
-  Monitor,
-  Headphones,
-  HelpCircle,
-  Bug,
-  Lightbulb,
-  RotateCcw,
-  Copy,
-  ExternalLink,
-  ChevronDown,
-  ChevronUp,
-  Menu as MenuIcon,
-  Flag,
-  Home
+  Edit3
 } from 'lucide-react';
 
 // Mock data for sophisticated football coaching features
@@ -190,7 +125,6 @@ const mockRecentActivity = [
 const AIPracticePlanner = () => {
   const [generating, setGenerating] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
-  const [aiInsights, setAiInsights] = useState([]);
   const toast = useToast();
 
   const generatePracticePlan = async () => {
@@ -318,7 +252,6 @@ const AIPracticePlanner = () => {
 // Smart Playbook Component with Interactive Features
 const SmartPlaybook = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedPlay, setSelectedPlay] = useState(null);
 
   return (
     <>
@@ -606,7 +539,6 @@ const RecentActivity = () => {
 
 // Main Dashboard Component
 const FootballCoachingDashboard = () => {
-  const toast = useToast();
 
   return (
     <Box minH="100vh" bg="gray.50">
