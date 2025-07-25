@@ -36,7 +36,8 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  AlertDescription
+  AlertDescription,
+  IconButton
 } from '@chakra-ui/react';
 import {
   BarChart3,
@@ -52,7 +53,10 @@ import {
   Trophy,
   Zap,
   Route,
-  Edit3
+  Edit3,
+  Download,
+  Calendar,
+  Video
 } from 'lucide-react';
 
 // Mock data for sophisticated football coaching features
