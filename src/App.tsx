@@ -47,7 +47,6 @@ import {
   TabPanel,
   List,
   ListItem,
-  ListIcon,
   Alert,
   AlertIcon,
   AlertTitle,
@@ -331,7 +330,7 @@ const SmartPlaybook = () => {
               <Heading size="md">Smart Playbook</Heading>
             </HStack>
             <Badge colorScheme="blue">Interactive</Badge>
-          </HStack>
+          </Flex>
         </CardHeader>
         <CardBody>
           <VStack spacing={4}>
