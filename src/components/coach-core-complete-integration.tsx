@@ -2,7 +2,7 @@
 // This file contains all new features in one place for easy integration
 // You can copy this entire file and gradually split it into modules
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   VStack, 
@@ -18,6 +18,33 @@ import {
   Spinner,
   useToast
 } from '@chakra-ui/react';
+import { 
+  Sparkles, 
+  AlertTriangle, 
+  ThumbsUp, 
+  Star, 
+  Filter, 
+  Download, 
+  Users, 
+  Target, 
+  Activity, 
+  Calendar, 
+  Mail, 
+  MessageSquare, 
+  Smartphone, 
+  Bell, 
+  Settings 
+} from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Bar,
+  Legend
+} from 'recharts';
 
 // ============================================
 // SECTION 1: FIREBASE SERVICE (Mock Version)
