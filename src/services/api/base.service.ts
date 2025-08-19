@@ -15,7 +15,7 @@ import {
   WithFieldValue,
   DocumentReference,
 } from 'firebase/firestore';
-import { firebase } from '../firebase/config';
+import { db } from '../firebase/firebase-config';
 
 export abstract class BaseFirestoreService<T extends DocumentData> {
   protected collectionName: string;
@@ -25,7 +25,7 @@ export abstract class BaseFirestoreService<T extends DocumentData> {
   }
 
   protected get collection() {
-    return collection(firebase.db, this.collectionName);
+    return collection(db, this.collectionName);
   }
 
   async getAll(constraints: QueryConstraint[] = []): Promise<T[]> {

@@ -13,8 +13,9 @@ import {
   StatLabel,
   StatNumber,
   StatHelpText,
-  StatArrow,
+  Tabs,
 } from '@chakra-ui/react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 
 interface ProgressAnalyticsProps {
   userId: string;
@@ -200,8 +201,8 @@ const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
             <StatLabel>Average Performance</StatLabel>
             <StatNumber color="brand.600">{overallProgress}%</StatNumber>
             <StatHelpText>
-              <StatArrow type="increase" />
-              +5.2% from last month
+              <Icon as={ArrowUp} color="green.500" boxSize={4} />
+              +18% this week
             </StatHelpText>
           </Stat>
         </Box>

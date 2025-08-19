@@ -1,77 +1,89 @@
 {
   "indexes": [
     {
-      "collectionGroup": "teams",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "members", "arrayConfig": "CONTAINS" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "teams",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "ownerId", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "practicePlans",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "teamId", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "practicePlans",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "createdBy", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "practicePlans",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "teamId", "mode": "ASCENDING" },
-        { "fieldPath": "sport", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+        {
+          "fieldPath": "teamId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "plays",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "teamId", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+        {
+          "fieldPath": "teamId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
-      "collectionGroup": "plays",
+      "collectionGroup": "players",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "createdBy", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+        {
+          "fieldPath": "teamId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "position",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
-      "collectionGroup": "plays",
+      "collectionGroup": "attendance",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "teamId", "mode": "ASCENDING" },
-        { "fieldPath": "category", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+        {
+          "fieldPath": "teamId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "playerId",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
-      "collectionGroup": "users",
+      "collectionGroup": "aiInsights",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "email", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "DESCENDING" }
+        {
+          "fieldPath": "teamId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "priority",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
       ]
     }
   ],

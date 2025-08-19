@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import axios, { AxiosInstance, AxiosHeaders } from 'axios';
-import { firebase } from '../firebase/config';
+import { db } from '../firebase/firebase-config';
 import { appConfig } from '../../config/app.config';
 
 // Create axios instance

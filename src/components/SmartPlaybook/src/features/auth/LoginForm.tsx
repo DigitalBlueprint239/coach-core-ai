@@ -237,14 +237,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             </Link>
           </Text>
         </Box>
-
-        <Alert status="info" borderRadius="md">
-          <Box>
-            <Text fontSize="sm">
-              Demo credentials: demo@coachcore.com / demo123
-            </Text>
-          </Box>
-        </Alert>
       </VStack>
     </Box>
   );

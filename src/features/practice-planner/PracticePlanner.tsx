@@ -38,7 +38,12 @@ const PracticePlanner: React.FC = () => {
             sport: (currentTeam as any).sport || 'football',
             ageGroup: (currentTeam.level as any),
           }
-        : { teamId: 'demo-team', teamName: 'Demo Team', sport: 'football', ageGroup: 'youth' };
+        : { 
+            teamId: '', 
+            teamName: 'My Team', 
+            sport: 'football', 
+            ageGroup: 'youth' 
+          };
       const result = await ai.generatePracticePlan(teamContext, goals, duration);
       setAIResult(result);
     } catch (err: any) {

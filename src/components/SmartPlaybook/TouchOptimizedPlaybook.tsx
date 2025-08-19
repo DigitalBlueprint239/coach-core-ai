@@ -373,10 +373,10 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
     setIsLoading(true);
     try {
       const gameContext = {
-        gameId: 'demo-game',
-        opponent: 'Demo Opponent',
+        gameId: `game-${Date.now()}`, // Generate unique game ID
+        opponent: 'Opponent', // Will be replaced with real opponent data
         date: Timestamp.fromDate(new Date()), // Use Firestore Timestamp
-        location: 'Demo Field',
+        location: 'Field', // Will be replaced with real location data
         down: 3,
         distance: 7,
         fieldPosition: 'midfield',

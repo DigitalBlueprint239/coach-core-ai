@@ -1,0 +1,336 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // ============================================================================
+    // HELPER FUNCTIONS
+    // ============================================================================
+    
+    // Authentication helpers
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+    
+    function isCoach() {
+      return isAuthenticated() && 
+        request.auth.token.role == 'coach';
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        request.auth.token.role == 'admin';
+    }
+    
+    function isPlayer() {
+      return isAuthenticated() && 
+        request.auth.token.role == 'player';
+    }
+    
+    // File validation helpers
+    function isValidFileSize() {
+      return request.resource.size <= 50 * 1024 * 1024; // 50MB max
+    }
+    
+    function isValidImageSize() {
+      return request.resource.size <= 10 * 1024 * 1024; // 10MB max for images
+    }
+    
+    function isValidDocumentSize() {
+      return request.resource.size <= 25 * 1024 * 1024; // 25MB max for documents
+    }
+    
+    function isValidVideoSize() {
+      return request.resource.size <= 100 * 1024 * 1024; // 100MB max for videos
+    }
+    
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/(jpeg|jpg|png|gif|webp|svg)');
+    }
+    
+    function isValidDocumentType() {
+      return request.resource.contentType.matches('application/(pdf|msword|vnd.openxmlformats-officedocument.wordprocessingml.document|vnd.ms-excel|vnd.openxmlformats-officedocument.spreadsheetml.sheet|vnd.ms-powerpoint|vnd.openxmlformats-officedocument.presentationml.presentation)');
+    }
+    
+    function isValidVideoType() {
+      return request.resource.contentType.matches('video/(mp4|avi|mov|wmv|flv|webm)');
+    }
+    
+    function isValidAudioType() {
+      return request.resource.contentType.matches('audio/(mp3|wav|ogg|m4a|aac)');
+    }
+    
+    function isValidArchiveType() {
+      return request.resource.contentType.matches('application/(zip|rar|7z|x-zip-compressed)');
+    }
+    
+    // File name validation
+    function isValidFileName() {
+      return request.resource.name.matches('^[a-zA-Z0-9._-]+$') &&
+        request.resource.name.size() <= 255;
+    }
+    
+    function hasValidExtension() {
+      return request.resource.name.matches('.*\\.(jpg|jpeg|png|gif|webp|svg|pdf|doc|docx|xls|xlsx|ppt|pptx|mp4|avi|mov|wmv|flv|webm|mp3|wav|ogg|m4a|aac|zip|rar|7z)$');
+    }
+    
+    // Metadata validation
+    function hasValidMetadata() {
+      return request.resource.metadata.keys().hasAll(['uploadedBy', 'uploadedAt']) &&
+        request.resource.metadata.uploadedBy == request.auth.uid &&
+        request.resource.metadata.uploadedAt is timestamp;
+    }
+    
+    // Rate limiting
+    function isWithinUploadLimit() {
+      return request.time.toMillis() - resource.metadata.uploadedAt.toMillis() > 1000; // 1 second between uploads
+    }
+    
+    // ============================================================================
+    // USER PROFILE IMAGES
+    // ============================================================================
+    match /users/{userId}/profile/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isEmailVerified() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        hasValidMetadata();
+      allow delete: if isAuthenticated() && 
+        request.auth.uid == userId;
+    }
+    
+    // ============================================================================
+    // TEAM DOCUMENTS
+    // ============================================================================
+    match /teams/{teamId}/documents/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidDocumentSize() &&
+        isValidDocumentType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidDocumentSize() &&
+        isValidDocumentType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // Team images (logos, team photos)
+    match /teams/{teamId}/images/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // Team videos
+    match /teams/{teamId}/videos/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // ============================================================================
+    // PRACTICE PLANS
+    // ============================================================================
+    match /practice-plans/{planId}/attachments/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidDocumentSize() &&
+        (isValidDocumentType() || isValidImageType() || isValidVideoType()) &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidDocumentSize() &&
+        (isValidDocumentType() || isValidImageType() || isValidVideoType()) &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // Practice videos
+    match /practice-plans/{planId}/videos/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // ============================================================================
+    // PLAY DIAGRAMS AND MEDIA
+    // ============================================================================
+    match /plays/{playId}/diagrams/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    match /plays/{playId}/videos/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // ============================================================================
+    // GAME FOOTAGE
+    // ============================================================================
+    match /games/{gameId}/footage/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidVideoSize() &&
+        isValidVideoType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    match /games/{gameId}/photos/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        isValidImageSize() &&
+        isValidImageType() &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // ============================================================================
+    // PLAYER MEDIA
+    // ============================================================================
+    match /players/{playerId}/media/{fileName} {
+      allow read: if isAuthenticated();
+      allow create: if isCoach() &&
+        (isValidImageSize() || isValidVideoSize()) &&
+        (isValidImageType() || isValidVideoType()) &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isCoach() &&
+        (isValidImageSize() || isValidVideoSize()) &&
+        (isValidImageType() || isValidVideoType()) &&
+        hasValidMetadata();
+      allow delete: if isCoach() || isAdmin();
+    }
+    
+    // ============================================================================
+    // ANALYTICS REPORTS
+    // ============================================================================
+    match /analytics/reports/{fileName} {
+      allow read: if isCoach() || isAdmin();
+      allow create: if false; // Only backend can create reports
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================================================
+    // BACKUP FILES
+    // ============================================================================
+    match /backups/{fileName} {
+      allow read: if isAdmin();
+      allow create: if false; // Only backend can create backups
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================================================
+    // TEMPORARY FILES
+    // ============================================================================
+    match /temp/{userId}/{fileName} {
+      allow read: if isAuthenticated() && 
+        request.auth.uid == userId;
+      allow create: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isValidFileSize() &&
+        isValidFileName() &&
+        hasValidExtension() &&
+        hasValidMetadata();
+      allow update: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isValidFileSize() &&
+        hasValidMetadata();
+      allow delete: if isAuthenticated() && 
+        request.auth.uid == userId;
+    }
+    
+    // ============================================================================
+    // SYSTEM FILES
+    // ============================================================================
+    match /system/{fileName} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // ============================================================================
+    // DEFAULT DENY
+    // ============================================================================
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+} 

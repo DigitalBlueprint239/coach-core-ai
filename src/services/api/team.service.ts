@@ -1,6 +1,6 @@
 import { where, orderBy, doc, WriteBatch, writeBatch } from 'firebase/firestore';
 import { BaseFirestoreService } from './base.service';
-import { firebase } from '../firebase/config';
+import { db } from '../firebase/firebase-config';
 import { FootballLevel } from '../../types/football';
 // import { Team, Player } from '@/types'; // Uncomment and adjust as needed
 
@@ -42,9 +42,9 @@ export class TeamService extends BaseFirestoreService<any> {
 
   async updateRoster(teamId: string, players: any[], level?: FootballLevel): Promise<void> {
     // Batch update logic with level awareness
-    const batch: WriteBatch = writeBatch(firebase.db);
+    const batch: WriteBatch = writeBatch(db);
     players.forEach(player => {
-      const playerRef = doc(firebase.db, 'players', player.id);
+      const playerRef = doc(db, 'players', player.id);
       const updateData = {
         ...player,
         ...(level && { level }) // Update level if provided

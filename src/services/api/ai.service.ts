@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import { firebase } from '../firebase/config';
+import { db } from '../firebase/firebase-config';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 interface OptimizationRequest {
@@ -30,7 +30,7 @@ export class AIOptimizationService {
   }
 
   private async cacheOptimization(teamId: string, result: OptimizationResponse) {
-    const cacheRef = doc(firebase.db, 'optimizationCache', teamId);
+    const cacheRef = doc(db, 'optimizationCache', teamId);
     await setDoc(cacheRef, {
       ...result,
       timestamp: serverTimestamp(),

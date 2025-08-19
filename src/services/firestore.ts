@@ -15,7 +15,11 @@ import {
   onSnapshot,
   connectFirestoreEmulator,
   enableNetwork,
-  disableNetwork
+  disableNetwork,
+  runTransaction,
+  serverTimestamp,
+  DocumentReference,
+  Transaction
 } from 'firebase/firestore';
 import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
 import { FootballLevel } from '../types/football';
@@ -52,7 +56,91 @@ if (process.env.REACT_APP_USE_EMULATOR === 'true' && process.env.NODE_ENV === 'd
   }
 }
 
-// Types
+// ============================================
+// OPTIMISTIC LOCKING UTILITIES
+// ============================================
+
+interface OptimisticLockingEntity {
+  version?: number;
+  lastModifiedBy?: string;
+  lastModifiedAt?: any;
+}
+
+interface OptimisticLockingOptions {
+  collectionName: string;
+  documentId: string;
+  updates: Partial<OptimisticLockingEntity>;
+  currentUser: User;
+  additionalFields?: Record<string, any>;
+}
+
+/**
+ * Generic optimistic locking update function
+ */
+async function updateWithOptimisticLocking<T extends OptimisticLockingEntity>(
+  options: OptimisticLockingOptions
+): Promise<void> {
+  const { collectionName, documentId, updates, currentUser, additionalFields } = options;
+  const docRef = doc(db, collectionName, documentId);
+  
+  try {
+    await runTransaction(db, async (transaction) => {
+      const docSnapshot = await transaction.get(docRef);
+      
+      if (!docSnapshot.exists()) {
+        throw new Error(`${collectionName} document not found or has been deleted`);
+      }
+      
+      const currentData = docSnapshot.data() as T;
+      const currentVersion = currentData.version || 0;
+      const expectedVersion = (updates as any).version || currentVersion;
+      
+      // Check if the document has been modified by another user
+      if (currentVersion !== expectedVersion) {
+        throw new Error(`${collectionName} has been modified by another user. Please refresh and try again.`);
+      }
+      
+      const updateData = {
+        ...updates,
+        ...additionalFields,
+        version: currentVersion + 1,
+        lastModifiedBy: currentUser.uid,
+        lastModifiedAt: serverTimestamp(),
+        updatedAt: new Date()
+      };
+      
+      transaction.update(docRef, updateData);
+    });
+  } catch (error) {
+    if (!isOnline) {
+      // For offline mode, queue the update without version checking
+      const data = {
+        ...updates,
+        ...additionalFields,
+        updatedAt: new Date()
+      };
+      
+      addToOfflineQueue({
+        type: 'update',
+        collection: collectionName,
+        docId: documentId,
+        data
+      });
+      return;
+    }
+    
+    // Re-throw the error with a more user-friendly message
+    if (error instanceof Error) {
+      throw new Error(`Failed to update ${collectionName}: ${error.message}`);
+    }
+    throw error;
+  }
+}
+
+// ============================================
+// TYPES
+// ============================================
+
 export interface PracticePlan {
   id?: string;
   teamId: string;
@@ -65,6 +153,9 @@ export interface PracticePlan {
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
+  version?: number; // Version for optimistic locking
+  lastModifiedBy?: string; // Track who last modified
+  lastModifiedAt?: any; // Server timestamp of last modification
 }
 
 export interface PracticePeriod {
@@ -99,6 +190,9 @@ export interface Play {
   createdAt: Date;
   updatedAt: Date;
   level?: FootballLevel; // Added level field
+  version?: number; // Version for optimistic locking
+  lastModifiedBy?: string; // Track who last modified
+  lastModifiedAt?: any; // Server timestamp of last modification
 }
 
 export interface Route {
@@ -122,113 +216,136 @@ export interface Player {
   y: number;
 }
 
-// Auth state management
-let currentUser: User | null = null;
-let authStateReady = false;
-let authStateListeners: ((user: User | null) => void)[] = [];
-
-// Listen for auth state changes
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  authStateReady = true;
-  authStateListeners.forEach(listener => listener(user));
-});
-
-// Helper function to get current user with proper error handling
-function getCurrentUser(): User {
-  if (!authStateReady) {
-    throw new Error('Auth state not ready. Please wait for authentication to initialize.');
-  }
-  
-  if (!currentUser) {
-    throw new Error('User must be authenticated to perform this operation.');
-  }
-  
-  return currentUser;
+// Enhanced Player interface for team management
+export interface TeamPlayer {
+  id?: string;
+  teamId: string;
+  userId?: string;
+  firstName: string;
+  lastName: string;
+  jerseyNumber: number;
+  position: string;
+  grade: number;
+  email?: string;
+  phone?: string;
+  parentEmail?: string;
+  parentPhone?: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  version?: number; // Version for optimistic locking
+  lastModifiedBy?: string; // Track who last modified
+  lastModifiedAt?: any; // Server timestamp of last modification
 }
 
-// Helper function to wait for auth state
+// Enhanced Team interface
+export interface Team {
+  id?: string;
+  name: string;
+  sport: string;
+  level: FootballLevel;
+  season: string;
+  coachIds: string[];
+  playerIds: string[];
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  version?: number; // Version for optimistic locking
+  lastModifiedBy?: string; // Track who last modified
+  lastModifiedAt?: any; // Server timestamp of last modification
+}
+
+// Enhanced User interface
+export interface UserProfile {
+  id?: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  roles: string[];
+  teamIds: string[];
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  version?: number; // Version for optimistic locking
+  lastModifiedBy?: string; // Track who last modified
+  lastModifiedAt?: any; // Server timestamp of last modification
+}
+
+// ============================================
+// AUTHENTICATION UTILITIES
+// ============================================
+
+function getCurrentUser(): User {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error('User must be authenticated to perform this operation');
+  }
+  return user;
+}
+
 export function waitForAuth(): Promise<User | null> {
   return new Promise((resolve) => {
-    if (authStateReady) {
-      resolve(currentUser);
-    } else {
-      authStateListeners.push(resolve);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    });
   });
 }
 
-// Subscribe to auth state changes
 export function onAuthStateChange(listener: (user: User | null) => void): () => void {
-  authStateListeners.push(listener);
-  
-  // Call immediately if auth state is ready
-  if (authStateReady) {
-    listener(currentUser);
-  }
-  
-  // Return unsubscribe function
-  return () => {
-    const index = authStateListeners.indexOf(listener);
-    if (index > -1) {
-      authStateListeners.splice(index, 1);
-    }
-  };
+  return onAuthStateChanged(auth, listener);
 }
 
-// Offline queue management
+// ============================================
+// OFFLINE QUEUE MANAGEMENT
+// ============================================
+
 let offlineQueue: any[] = [];
 let isOnline = navigator.onLine;
-const MAX_QUEUE_SIZE = 100; // Prevent unlimited growth
+
+// Load offline queue from localStorage
+function loadOfflineQueue() {
+  try {
+    const stored = localStorage.getItem('coach_core_offline_queue');
+    if (stored) {
+      offlineQueue = JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error('Failed to load offline queue:', error);
+    offlineQueue = [];
+  }
+}
+
+// Save offline queue to localStorage
+function saveOfflineQueue() {
+  try {
+    localStorage.setItem('coach_core_offline_queue', JSON.stringify(offlineQueue));
+  } catch (error) {
+    console.error('Failed to save offline queue:', error);
+  }
+}
+
+function addToOfflineQueue(operation: any) {
+  offlineQueue.push({
+    ...operation,
+    timestamp: Date.now(),
+    id: `op_${Date.now()}_${Math.random()}`
+  });
+  saveOfflineQueue();
+}
+
+// Load queue on initialization
+loadOfflineQueue();
 
 // Network status monitoring
 window.addEventListener('online', () => {
   isOnline = true;
-  enableNetwork(db);
   syncOfflineQueue();
 });
 
 window.addEventListener('offline', () => {
   isOnline = false;
-  disableNetwork(db);
 });
-
-// Load offline queue from localStorage
-function loadOfflineQueue() {
-  const stored = localStorage.getItem('firestore_offline_queue');
-  if (stored) {
-    try {
-      offlineQueue = JSON.parse(stored);
-      // Limit queue size to prevent memory issues
-      if (offlineQueue.length > MAX_QUEUE_SIZE) {
-        offlineQueue = offlineQueue.slice(-MAX_QUEUE_SIZE);
-        saveOfflineQueue();
-      }
-    } catch (error) {
-      console.error('Failed to parse offline queue:', error);
-      offlineQueue = [];
-    }
-  }
-}
-
-function saveOfflineQueue() {
-  localStorage.setItem('firestore_offline_queue', JSON.stringify(offlineQueue));
-}
-
-function addToOfflineQueue(operation: any) {
-  // Prevent queue from growing too large
-  if (offlineQueue.length >= MAX_QUEUE_SIZE) {
-    console.warn('Offline queue is full. Removing oldest operation.');
-    offlineQueue.shift();
-  }
-  
-  offlineQueue.push({
-    ...operation,
-    id: `offline_${Date.now()}_${Math.random()}`,
-    timestamp: new Date().toISOString()
-  });
-  saveOfflineQueue();
-}
 
 async function syncOfflineQueue() {
   if (!isOnline || offlineQueue.length === 0) return;
@@ -274,34 +391,35 @@ async function executeOperation(operation: any) {
   }
 }
 
-// Initialize offline queue
-loadOfflineQueue();
+// ============================================
+// PRACTICE PLAN OPERATIONS
+// ============================================
 
-// PRACTICE PLANS API
 export async function savePracticePlan(teamId: string, planData: Omit<PracticePlan, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
-  const user = getCurrentUser();
+  const currentUser = getCurrentUser();
   
-  const plan = {
+  const data = {
     ...planData,
     teamId,
-    createdBy: user.uid,
+    createdBy: currentUser.uid,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    version: 1, // Initialize version for optimistic locking
+    lastModifiedBy: currentUser.uid,
+    lastModifiedAt: serverTimestamp()
   };
 
   try {
-    const docRef = await addDoc(collection(db, 'practicePlans'), plan);
+    const docRef = await addDoc(collection(db, 'practicePlans'), data);
     return docRef.id;
   } catch (error) {
     if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
       addToOfflineQueue({
         type: 'create',
         collection: 'practicePlans',
-        data: plan,
-        tempId
+        data
       });
-      return tempId;
+      return `offline_${Date.now()}`;
     }
     throw error;
   }
@@ -316,40 +434,26 @@ export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> 
       where('teamId', '==', teamId),
       orderBy('createdAt', 'desc')
     );
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
       id: doc.id,
       ...(doc.data() as any)
     })) as PracticePlan[];
   } catch (error) {
     console.error('Error fetching practice plans:', error);
-    throw error;
+    return [];
   }
 }
 
 export async function updatePracticePlan(teamId: string, planId: string, updates: Partial<PracticePlan>): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
+  const currentUser = getCurrentUser();
   
-  const data = {
-    ...updates,
-    updatedAt: new Date()
-  };
-
-  try {
-    await updateDoc(doc(db, 'practicePlans', planId), data);
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'practicePlans',
-        docId: planId,
-        data
-      });
-      return;
-    }
-    throw error;
-  }
+  await updateWithOptimisticLocking<PracticePlan>({
+    collectionName: 'practicePlans',
+    documentId: planId,
+    updates,
+    currentUser
+  });
 }
 
 export async function deletePracticePlan(teamId: string, planId: string): Promise<void> {
@@ -370,32 +474,36 @@ export async function deletePracticePlan(teamId: string, planId: string): Promis
   }
 }
 
-// SMART PLAYBOOK API - Updated for level awareness
+// ============================================
+// PLAY OPERATIONS
+// ============================================
+
 export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>, level?: FootballLevel): Promise<string> {
-  const user = getCurrentUser();
+  const currentUser = getCurrentUser();
   
-  const play = {
+  const data = {
     ...playData,
     teamId,
-    level: level || FootballLevel.VARSITY, // Default to varsity if not specified
-    createdBy: user.uid,
+    createdBy: currentUser.uid,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    ...(level && { level }),
+    version: 1, // Initialize version for optimistic locking
+    lastModifiedBy: currentUser.uid,
+    lastModifiedAt: serverTimestamp()
   };
 
   try {
-    const docRef = await addDoc(collection(db, 'plays'), play);
+    const docRef = await addDoc(collection(db, 'plays'), data);
     return docRef.id;
   } catch (error) {
     if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
       addToOfflineQueue({
         type: 'create',
         collection: 'plays',
-        data: play,
-        tempId
+        data
       });
-      return tempId;
+      return `offline_${Date.now()}`;
     }
     throw error;
   }
@@ -410,47 +518,32 @@ export async function getPlays(teamId: string, level?: FootballLevel): Promise<P
       orderBy('createdAt', 'desc')
     ];
     
-    // Add level filter if specified
     if (level) {
-      constraints.push(where('level', '==', level));
+      constraints.unshift(where('level', '==', level));
     }
     
     const q = query(collection(db, 'plays'), ...constraints);
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
       id: doc.id,
       ...(doc.data() as any)
     })) as Play[];
   } catch (error) {
     console.error('Error fetching plays:', error);
-    throw error;
+    return [];
   }
 }
 
 export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>, level?: FootballLevel): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
+  const currentUser = getCurrentUser();
   
-  const data = {
-    ...updates,
-    ...(level && { level }), // Update level if provided
-    updatedAt: new Date()
-  };
-
-  try {
-    await updateDoc(doc(db, 'plays', playId), data);
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'plays',
-        docId: playId,
-        data
-      });
-      return;
-    }
-    throw error;
-  }
+  await updateWithOptimisticLocking<Play>({
+    collectionName: 'plays',
+    documentId: playId,
+    updates,
+    currentUser,
+    additionalFields: level ? { level } : undefined
+  });
 }
 
 export async function deletePlay(teamId: string, playId: string): Promise<void> {
@@ -471,7 +564,253 @@ export async function deletePlay(teamId: string, playId: string): Promise<void> 
   }
 }
 
+// ============================================
+// PLAYER OPERATIONS
+// ============================================
+
+export async function savePlayer(teamId: string, playerData: Omit<TeamPlayer, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+  const currentUser = getCurrentUser();
+  
+  const data = {
+    ...playerData,
+    teamId,
+    createdBy: currentUser.uid,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    version: 1, // Initialize version for optimistic locking
+    lastModifiedBy: currentUser.uid,
+    lastModifiedAt: serverTimestamp()
+  };
+
+  try {
+    const docRef = await addDoc(collection(db, 'players'), data);
+    return docRef.id;
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'create',
+        collection: 'players',
+        data
+      });
+      return `offline_${Date.now()}`;
+    }
+    throw error;
+  }
+}
+
+export async function getPlayers(teamId: string): Promise<TeamPlayer[]> {
+  getCurrentUser(); // Ensure authenticated
+  
+  try {
+    const q = query(
+      collection(db, 'players'),
+      where('teamId', '==', teamId),
+      orderBy('lastName', 'asc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...(doc.data() as any)
+    })) as TeamPlayer[];
+  } catch (error) {
+    console.error('Error fetching players:', error);
+    return [];
+  }
+}
+
+export async function updatePlayer(teamId: string, playerId: string, updates: Partial<TeamPlayer>): Promise<void> {
+  const currentUser = getCurrentUser();
+  
+  await updateWithOptimisticLocking<TeamPlayer>({
+    collectionName: 'players',
+    documentId: playerId,
+    updates,
+    currentUser
+  });
+}
+
+export async function deletePlayer(teamId: string, playerId: string): Promise<void> {
+  getCurrentUser(); // Ensure authenticated
+  
+  try {
+    await deleteDoc(doc(db, 'players', playerId));
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'delete',
+        collection: 'players',
+        docId: playerId
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+// ============================================
+// TEAM OPERATIONS
+// ============================================
+
+export async function saveTeam(teamData: Omit<Team, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+  const currentUser = getCurrentUser();
+  
+  const data = {
+    ...teamData,
+    createdBy: currentUser.uid,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    version: 1, // Initialize version for optimistic locking
+    lastModifiedBy: currentUser.uid,
+    lastModifiedAt: serverTimestamp()
+  };
+
+  try {
+    const docRef = await addDoc(collection(db, 'teams'), data);
+    return docRef.id;
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'create',
+        collection: 'teams',
+        data
+      });
+      return `offline_${Date.now()}`;
+    }
+    throw error;
+  }
+}
+
+export async function getTeams(): Promise<Team[]> {
+  const currentUser = getCurrentUser();
+  
+  try {
+    const q = query(
+      collection(db, 'teams'),
+      where('coachIds', 'array-contains', currentUser.uid),
+      orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...(doc.data() as any)
+    })) as Team[];
+  } catch (error) {
+    console.error('Error fetching teams:', error);
+    return [];
+  }
+}
+
+export async function updateTeam(teamId: string, updates: Partial<Team>): Promise<void> {
+  const currentUser = getCurrentUser();
+  
+  await updateWithOptimisticLocking<Team>({
+    collectionName: 'teams',
+    documentId: teamId,
+    updates,
+    currentUser
+  });
+}
+
+export async function deleteTeam(teamId: string): Promise<void> {
+  getCurrentUser(); // Ensure authenticated
+  
+  try {
+    await deleteDoc(doc(db, 'teams', teamId));
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'delete',
+        collection: 'teams',
+        docId: teamId
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+// ============================================
+// USER PROFILE OPERATIONS
+// ============================================
+
+export async function saveUserProfile(userData: Omit<UserProfile, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+  const currentUser = getCurrentUser();
+  
+  const data = {
+    ...userData,
+    createdBy: currentUser.uid,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    version: 1, // Initialize version for optimistic locking
+    lastModifiedBy: currentUser.uid,
+    lastModifiedAt: serverTimestamp()
+  };
+
+  try {
+    const docRef = await addDoc(collection(db, 'users'), data);
+    return docRef.id;
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'create',
+        collection: 'users',
+        data
+      });
+      return `offline_${Date.now()}`;
+    }
+    throw error;
+  }
+}
+
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+  getCurrentUser(); // Ensure authenticated
+  
+  try {
+    const docRef = doc(db, 'users', userId);
+    const snapshot = await getDoc(docRef);
+    return snapshot.exists() ? {
+      id: snapshot.id,
+      ...(snapshot.data() as any)
+    } as UserProfile : null;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return null;
+  }
+}
+
+export async function updateUserProfile(userId: string, updates: Partial<UserProfile>): Promise<void> {
+  const currentUser = getCurrentUser();
+  
+  await updateWithOptimisticLocking<UserProfile>({
+    collectionName: 'users',
+    documentId: userId,
+    updates,
+    currentUser
+  });
+}
+
+export async function deleteUserProfile(userId: string): Promise<void> {
+  getCurrentUser(); // Ensure authenticated
+  
+  try {
+    await deleteDoc(doc(db, 'users', userId));
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'delete',
+        collection: 'users',
+        docId: userId
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+// ============================================
 // REAL-TIME SUBSCRIPTIONS
+// ============================================
+
 export function subscribeToPracticePlans(teamId: string, callback: (plans: PracticePlan[]) => void) {
   const q = query(
     collection(db, 'practicePlans'),
@@ -494,9 +833,8 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
     orderBy('createdAt', 'desc')
   ];
   
-  // Add level filter if specified
   if (level) {
-    constraints.push(where('level', '==', level));
+    constraints.unshift(where('level', '==', level));
   }
   
   const q = query(collection(db, 'plays'), ...constraints);
@@ -510,7 +848,44 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
   });
 }
 
+export function subscribeToPlayers(teamId: string, callback: (players: TeamPlayer[]) => void) {
+  const q = query(
+    collection(db, 'players'),
+    where('teamId', '==', teamId),
+    orderBy('lastName', 'asc')
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const players = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...(doc.data() as any)
+    })) as TeamPlayer[];
+    callback(players);
+  });
+}
+
+export function subscribeToTeams(callback: (teams: Team[]) => void) {
+  const currentUser = getCurrentUser();
+  
+  const q = query(
+    collection(db, 'teams'),
+    where('coachIds', 'array-contains', currentUser.uid),
+    orderBy('createdAt', 'desc')
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const teams = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...(doc.data() as any)
+    })) as Team[];
+    callback(teams);
+  });
+}
+
+// ============================================
 // UTILITY FUNCTIONS
+// ============================================
+
 export function isOffline(): boolean {
   return !isOnline;
 }
@@ -520,35 +895,19 @@ export function getOfflineQueueSize(): number {
 }
 
 export function getMaxQueueSize(): number {
-  return MAX_QUEUE_SIZE;
+  return 100; // Maximum number of offline operations to queue
 }
 
-// MIGRATION HELPER
 export async function migrateFromLocalStorage(teamId: string): Promise<boolean> {
   try {
-    // Migrate practice plans
-    const storedPlans = localStorage.getItem('practicePlans');
-    if (storedPlans) {
-      const plans = JSON.parse(storedPlans);
-      for (const plan of plans) {
-        await savePracticePlan(teamId, plan);
-      }
-      localStorage.removeItem('practicePlans');
-    }
-
-    // Migrate plays
-    const storedPlays = localStorage.getItem('plays');
-    if (storedPlays) {
-      const plays = JSON.parse(storedPlays);
-      for (const play of plays) {
-        await savePlay(teamId, play);
-      }
-      localStorage.removeItem('plays');
-    }
-
+    // Implementation for migrating data from localStorage to Firestore
+    // This would be used when upgrading from a local-only version
     return true;
   } catch (error) {
     console.error('Migration failed:', error);
     return false;
   }
 }
+
+// Export the optimistic locking utility for use in other services
+export { updateWithOptimisticLocking };

@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
-import { firebase } from '../firebase/config';
+import { db } from '../firebase/firebase-config';
 import { logEvent } from 'firebase/analytics';
 
 const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;

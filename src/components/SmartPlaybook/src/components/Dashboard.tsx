@@ -10,7 +10,7 @@ const Dashboard = () => {
     down: 3,
     distance: 7,
     fieldPosition: 'red_zone',
-    opponent: 'Rival High',
+    opponent: 'Opponent', // Will be replaced with real opponent data
   };
 
   return (
@@ -41,7 +41,7 @@ const Dashboard = () => {
         </SimpleGrid>
         
         <ProgressAnalytics 
-          userId={'demo-user'} 
+          userId={''} // Will be replaced with real user ID
           metricType={'speed'} 
           timeRange={{ 
             start: new Date(Date.now() - 7*24*60*60*1000), 

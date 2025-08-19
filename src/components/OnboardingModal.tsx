@@ -40,7 +40,7 @@ const ONBOARDING_STEPS = [
   },
   {
     title: 'Ready to Get Started?',
-    description: 'You can start with your own team or try Demo Mode to explore all features with sample data.',
+    description: 'You\'re all set to start using Coach Core with your team!',
     illustration: '🚀'
   }
 ];
@@ -48,7 +48,6 @@ const ONBOARDING_STEPS = [
 interface OnboardingModalProps {
   open: boolean;
   onClose: () => void;
-  onDemoMode: () => void;
   onComplete?: () => void;
   className?: string;
 }
@@ -56,12 +55,10 @@ interface OnboardingModalProps {
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   open,
   onClose,
-  onDemoMode,
   onComplete,
   className = ''
 }) => {
   const [step, setStep] = useState(0);
-  const [loadingDemo, setLoadingDemo] = useState(false);
 
   if (!open) return null;
 
@@ -78,16 +75,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     if (step > 0) setStep(step - 1);
   };
 
-  const handleDemo = async () => {
-    setLoadingDemo(true);
-    try {
-      await onDemoMode();
-      onClose();
-    } finally {
-      setLoadingDemo(false);
-    }
-  };
-
   const { title, description, illustration } = ONBOARDING_STEPS[step];
 
   return (
@@ -99,21 +86,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
         <div className="onboarding-actions">
           {step === ONBOARDING_STEPS.length - 1 ? (
-            <>
-              <button
-                className="onboarding-btn demo"
-                onClick={handleDemo}
-                disabled={loadingDemo}
-              >
-                {loadingDemo ? <LoadingState type="spinner" size="small" text="Loading Demo..." /> : 'Try Demo Mode'}
-              </button>
-              <button
-                className="onboarding-btn primary"
-                onClick={handleNext}
-              >
-                Start Using Coach Core
-              </button>
-            </>
+            <button
+              className="onboarding-btn primary"
+              onClick={handleNext}
+            >
+              Start Using Coach Core
+            </button>
           ) : (
             <button
               className="onboarding-btn primary"
@@ -189,10 +167,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         .onboarding-btn.secondary {
           background: #f3f4f6;
           color: #374151;
-        }
-        .onboarding-btn.demo {
-          background: #fbbf24;
-          color: #111827;
         }
         .onboarding-btn:disabled {
           opacity: 0.7;
