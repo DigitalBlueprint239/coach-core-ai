@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { ChakraProvider, Box, useToast, Spinner, Center, Text, useDisclosure, Button } from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { unifiedTheme } from './theme/unified-theme';
 import ModernNavigation from './components/navigation/ModernNavigation';
 import ModernDashboard from './components/Dashboard/ModernDashboard';
@@ -7,6 +8,7 @@ import ModernPracticePlanner from './components/PracticePlanner/ModernPracticePl
 import PlaybookDesigner from './components/Playbook/PlaybookDesigner';
 import PlayDesignerFunctional from './components/PlayDesigner/PlayDesignerFunctional';
 import AIBrainDashboardOptimized from './components/AIBrain/AIBrainDashboardOptimized';
+import TeamManagement from './components/Team/TeamManagement';
 // import TeamManagementOptimized from './components/Team/TeamManagementOptimized';
 import ComprehensiveTestDashboard from './components/Testing/ComprehensiveTestDashboard';
 import AuthModal from './components/auth/AuthModal';
@@ -28,7 +30,6 @@ function App() {
     isLoading: true,
     error: null,
   });
-  const [currentView, setCurrentView] = useState('dashboard');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [showWelcomeWorkflow, setShowWelcomeWorkflow] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -57,25 +58,6 @@ function App() {
     };
   }, []);
 
-  const handleViewChange = async (view: string) => {
-    try {
-      setCurrentView(view);
-      toast({
-        title: 'Navigation',
-        description: `Switched to ${view.replace('-', ' ')}`,
-        status: 'info',
-        duration: 1200,
-        isClosable: true,
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Navigation failed'));
-    }
-  };
-
-  const resetError = () => {
-    setError(null);
-  };
-
   const handleAuthSuccess = (firebaseUser: any) => {
     // The auth service already manages the auth state through onAuthStateChanged
     // We just need to close the modal and show the welcome workflow
@@ -98,130 +80,45 @@ function App() {
     setShowWelcomeWorkflow(false);
     toast({
       title: 'Setup Complete!',
-      description: 'Your team is ready. Welcome to Coach Core!',
+      description: 'Your team is ready to go!',
       status: 'success',
-      duration: 5000,
+      duration: 3000,
       isClosable: true,
     });
   };
 
-  const renderCurrentView = () => {
-    if (error) {
-      return <ErrorFallback error={error} resetError={resetError} />;
-    }
-
-    try {
-      switch (currentView) {
-        case 'dashboard':
-          return (
-            <Suspense fallback={<LoadingSpinner />}>
-              <ModernDashboard onViewChange={handleViewChange} userProfile={authState.profile} />
-            </Suspense>
-          );
-        case 'practice-planner':
-          return (
-            <Suspense fallback={<LoadingSpinner />}>
-              <ModernPracticePlanner />
-            </Suspense>
-          );
-        case 'play-designer':
-          return (
-            <Suspense fallback={<LoadingSpinner />}>
-              <PlayDesignerFunctional />
-            </Suspense>
-          );
-        case 'playbook':
-          return (
-            <Box p={6}>
-              <PlaybookDesigner />
-            </Box>
-          );
-        case 'analytics':
-          return (
-            <Box p={6}>
-              <Box
-                bg="white"
-                p={8}
-                borderRadius="xl"
-                shadow="lg"
-                textAlign="center"
-              >
-                <Box
-                  w={16}
-                  h={16}
-                  bg="orange.500"
-                  borderRadius="full"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  mx="auto"
-                  mb={4}
-                  color="white"
-                  fontSize="2xl"
-                >
-                  📊
-                </Box>
-                <Box fontSize="2xl" fontWeight="bold" color="gray.800" mb={2}>
-                  Analytics Dashboard
-                </Box>
-                <Box color="gray.600" mb={6}>
-                  Performance tracking and insights coming soon...
-                </Box>
-              </Box>
-            </Box>
-          );
-        case 'ai-brain':
-          return (
-            <Box p={6}>
-              <AIBrainDashboardOptimized />
-            </Box>
-          );
-        case 'team-management':
-          return (
-            <Box p={6}>
-              {/* <TeamManagementOptimized /> */}
-            </Box>
-          );
-        case 'testing':
-          return (
-            <Box p={6}>
-              <ComprehensiveTestDashboard />
-            </Box>
-          );
-        default:
-          return (
-            <Suspense fallback={<LoadingSpinner />}>
-              <ModernDashboard userProfile={authState.profile} />
-            </Suspense>
-          );
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to render view'));
-      return <ErrorFallback error={error!} resetError={resetError} />;
-    }
+  const resetError = () => {
+    setError(null);
   };
 
   // Show authentication modal if user is not signed in
   if (!authState.user) {
     return (
       <ChakraProvider theme={unifiedTheme}>
-        <Box 
-          minH="100vh" 
-          bg="linear-gradient(135deg, dark.800 0%, dark.700 50%, dark.600 100%)"
-          display="flex" 
-          alignItems="center" 
-          justifyContent="center"
+        <Box
+          minH="100vh"
+          bg="linear-gradient(135deg, dark.50 0%, dark.100 50%, dark.200 100%)"
           position="relative"
           overflow="hidden"
         >
-          {/* Animated background elements */}
+          {/* Background Pattern */}
           <Box
             position="absolute"
-            top="-50%"
-            left="-50%"
-            w="200%"
-            h="200%"
-            bg="radial-gradient(circle, primary.500 0%, transparent 70%)"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            bg="radial-gradient(circle at 20% 80%, primary.400 0%, transparent 50%)"
+            opacity="0.1"
+            animation="pulse 8s ease-in-out infinite"
+          />
+          <Box
+            position="absolute"
+            top="0"
+            right="0"
+            w="96"
+            h="96"
+            bg="radial-gradient(circle, secondary.400 0%, transparent 70%)"
             opacity="0.05"
             animation="pulse 6s ease-in-out infinite"
           />
@@ -294,28 +191,98 @@ function App() {
   }
 
   return (
-    <ChakraProvider theme={unifiedTheme}>
-      <Box minH="100vh" bg="dark.50">
-        {/* Modern Navigation */}
-        <ModernNavigation 
-          onViewChange={handleViewChange} 
-          currentView={currentView}
-          userProfile={authState.profile}
-        />
+    <Router>
+      <ChakraProvider theme={unifiedTheme}>
+        <Box minH="100vh" bg="dark.50">
+          {/* Modern Navigation */}
+          <ModernNavigation 
+            userProfile={authState.profile}
+          />
 
-        {/* Main Content */}
-        <Box as="main">
-          {showWelcomeWorkflow ? (
-            <WelcomeWorkflow 
-              userProfile={authState.profile} 
-              onComplete={handleWelcomeComplete}
-            />
-          ) : (
-            renderCurrentView()
-          )}
+          {/* Main Content */}
+          <Box as="main">
+            {showWelcomeWorkflow ? (
+              <WelcomeWorkflow 
+                userProfile={authState.profile} 
+                onComplete={handleWelcomeComplete}
+              />
+            ) : (
+              <Routes>
+                <Route path="/" element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <ModernDashboard userProfile={authState.profile} />
+                  </Suspense>
+                } />
+                <Route path="/team" element={
+                  <Box p={6}>
+                    <TeamManagement />
+                  </Box>
+                } />
+                <Route path="/practice" element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <ModernPracticePlanner />
+                  </Suspense>
+                } />
+                <Route path="/play-designer" element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <PlayDesignerFunctional />
+                  </Suspense>
+                } />
+                <Route path="/playbook" element={
+                  <Box p={6}>
+                    <PlaybookDesigner />
+                  </Box>
+                } />
+                <Route path="/analytics" element={
+                  <Box p={6}>
+                    <Box
+                      bg="white"
+                      p={8}
+                      borderRadius="xl"
+                      shadow="lg"
+                      textAlign="center"
+                    >
+                      <Box
+                        w={16}
+                        h={16}
+                        bg="orange.500"
+                        borderRadius="full"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        mx="auto"
+                        mb={4}
+                        color="white"
+                        fontSize="2xl"
+                      >
+                        📊
+                      </Box>
+                      <Box fontSize="2xl" fontWeight="bold" color="gray.800" mb={2}>
+                        Analytics Dashboard
+                      </Box>
+                      <Box color="gray.600" mb={6}>
+                        Performance tracking and insights coming soon...
+                      </Box>
+                    </Box>
+                  </Box>
+                } />
+                <Route path="/ai-brain" element={
+                  <Box p={6}>
+                    <AIBrainDashboardOptimized />
+                  </Box>
+                } />
+                <Route path="/testing" element={
+                  <Box p={6}>
+                    <ComprehensiveTestDashboard />
+                  </Box>
+                } />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            )}
+          </Box>
         </Box>
-      </Box>
-    </ChakraProvider>
+      </ChakraProvider>
+    </Router>
   );
 }
 
