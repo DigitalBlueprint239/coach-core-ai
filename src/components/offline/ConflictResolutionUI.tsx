@@ -1,20 +1,26 @@
 // src/components/offline/ConflictResolutionUI.tsx
 import React, { useState, useEffect } from 'react';
-import { offlineQueueManager, ConflictResolution } from '../../services/offline/OfflineQueueManager';
+import {
+  offlineQueueManager,
+  ConflictResolution,
+} from '../../services/offline/OfflineQueueManager';
 
 interface ConflictResolutionUIProps {
   userId: string;
   className?: string;
 }
 
-export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({ 
-  userId, 
-  className = '' 
+export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
+  userId,
+  className = '',
 }) => {
   const [conflicts, setConflicts] = useState<ConflictResolution[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedConflict, setSelectedConflict] = useState<ConflictResolution | null>(null);
-  const [resolutionStrategy, setResolutionStrategy] = useState<'SERVER_WINS' | 'CLIENT_WINS' | 'MERGE'>('SERVER_WINS');
+  const [selectedConflict, setSelectedConflict] =
+    useState<ConflictResolution | null>(null);
+  const [resolutionStrategy, setResolutionStrategy] = useState<
+    'SERVER_WINS' | 'CLIENT_WINS' | 'MERGE'
+  >('SERVER_WINS');
   const [mergedData, setMergedData] = useState<any>(null);
 
   useEffect(() => {
@@ -38,7 +44,7 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
   const handleResolveConflict = async (conflict: ConflictResolution) => {
     try {
       let finalData = null;
-      
+
       switch (resolutionStrategy) {
         case 'SERVER_WINS':
           finalData = conflict.serverData;
@@ -63,19 +69,22 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
       setSelectedConflict(null);
       setMergedData(null);
       setResolutionStrategy('SERVER_WINS');
-
     } catch (error) {
       console.error('Failed to resolve conflict:', error);
     }
   };
 
-  const handleAutoResolveAll = async (strategy: 'SERVER_WINS' | 'CLIENT_WINS') => {
+  const handleAutoResolveAll = async (
+    strategy: 'SERVER_WINS' | 'CLIENT_WINS'
+  ) => {
     try {
       for (const conflict of conflicts) {
         await offlineQueueManager.resolveConflict(
           conflict.itemId,
           strategy,
-          strategy === 'SERVER_WINS' ? conflict.serverData : conflict.clientData,
+          strategy === 'SERVER_WINS'
+            ? conflict.serverData
+            : conflict.clientData,
           userId
         );
       }
@@ -88,22 +97,26 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
   const getConflictDescription = (conflict: ConflictResolution) => {
     const serverKeys = Object.keys(conflict.serverData || {});
     const clientKeys = Object.keys(conflict.clientData || {});
-    const conflictingKeys = serverKeys.filter(key => 
-      clientKeys.includes(key) && 
-      JSON.stringify(conflict.serverData[key]) !== JSON.stringify(conflict.clientData[key])
+    const conflictingKeys = serverKeys.filter(
+      key =>
+        clientKeys.includes(key) &&
+        JSON.stringify(conflict.serverData[key]) !==
+          JSON.stringify(conflict.clientData[key])
     );
 
     return {
       totalFields: Math.max(serverKeys.length, clientKeys.length),
       conflictingFields: conflictingKeys.length,
-      conflictingKeys
+      conflictingKeys,
     };
   };
 
   const renderDataComparison = (conflict: ConflictResolution) => {
     const serverData = conflict.serverData || {};
     const clientData = conflict.clientData || {};
-    const allKeys = [...new Set([...Object.keys(serverData), ...Object.keys(clientData)])];
+    const allKeys = [
+      ...new Set([...Object.keys(serverData), ...Object.keys(clientData)]),
+    ];
 
     return (
       <div className="space-y-4">
@@ -112,24 +125,33 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
           <div className="font-medium text-gray-700">Field</div>
           <div className="font-medium text-gray-700">Server Version</div>
           <div className="font-medium text-gray-700">Local Version</div>
-          
+
           {allKeys.map(key => {
             const serverValue = serverData[key];
             const clientValue = clientData[key];
-            const isConflicting = JSON.stringify(serverValue) !== JSON.stringify(clientValue);
-            
+            const isConflicting =
+              JSON.stringify(serverValue) !== JSON.stringify(clientValue);
+
             return (
               <React.Fragment key={key}>
-                <div className={`font-medium ${isConflicting ? 'text-red-600' : 'text-gray-900'}`}>
+                <div
+                  className={`font-medium ${isConflicting ? 'text-red-600' : 'text-gray-900'}`}
+                >
                   {key}
-                  {isConflicting && <span className="ml-1 text-red-500">*</span>}
+                  {isConflicting && (
+                    <span className="ml-1 text-red-500">*</span>
+                  )}
                 </div>
-                <div className={`p-2 bg-gray-50 rounded ${isConflicting ? 'border border-red-200' : ''}`}>
+                <div
+                  className={`p-2 bg-gray-50 rounded ${isConflicting ? 'border border-red-200' : ''}`}
+                >
                   <pre className="text-xs overflow-auto">
                     {JSON.stringify(serverValue, null, 2)}
                   </pre>
                 </div>
-                <div className={`p-2 bg-gray-50 rounded ${isConflicting ? 'border border-red-200' : ''}`}>
+                <div
+                  className={`p-2 bg-gray-50 rounded ${isConflicting ? 'border border-red-200' : ''}`}
+                >
                   <pre className="text-xs overflow-auto">
                     {JSON.stringify(clientValue, null, 2)}
                   </pre>
@@ -145,12 +167,14 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
   const renderMergeEditor = (conflict: ConflictResolution) => {
     const serverData = conflict.serverData || {};
     const clientData = conflict.clientData || {};
-    const allKeys = [...new Set([...Object.keys(serverData), ...Object.keys(clientData)])];
+    const allKeys = [
+      ...new Set([...Object.keys(serverData), ...Object.keys(clientData)]),
+    ];
 
     const handleMergeFieldChange = (key: string, value: any) => {
       setMergedData(prev => ({
         ...prev,
-        [key]: value
+        [key]: value,
       }));
     };
 
@@ -162,13 +186,16 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
             const serverValue = serverData[key];
             const clientValue = clientData[key];
             const currentValue = mergedData?.[key] ?? clientValue;
-            const isConflicting = JSON.stringify(serverValue) !== JSON.stringify(clientValue);
-            
+            const isConflicting =
+              JSON.stringify(serverValue) !== JSON.stringify(clientValue);
+
             return (
               <div key={key} className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   {key}
-                  {isConflicting && <span className="ml-1 text-red-500">*</span>}
+                  {isConflicting && (
+                    <span className="ml-1 text-red-500">*</span>
+                  )}
                 </label>
                 <div className="flex space-x-2">
                   <button
@@ -186,7 +213,7 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
                 </div>
                 <textarea
                   value={JSON.stringify(currentValue, null, 2)}
-                  onChange={(e) => {
+                  onChange={e => {
                     try {
                       const parsed = JSON.parse(e.target.value);
                       handleMergeFieldChange(key, parsed);
@@ -210,7 +237,9 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Conflict Resolution</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Conflict Resolution
+          </h2>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-500">
               {conflicts.length} conflicts
@@ -249,26 +278,39 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
         <div className="p-4">
           {/* Conflict List */}
           <div className="space-y-4">
-            {conflicts.map((conflict) => {
+            {conflicts.map(conflict => {
               const description = getConflictDescription(conflict);
-              
+
               return (
-                <div key={conflict.itemId} className="border border-gray-200 rounded-lg p-4">
+                <div
+                  key={conflict.itemId}
+                  className="border border-gray-200 rounded-lg p-4"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <h3 className="font-medium text-gray-900">
                         Conflict #{conflict.itemId.slice(-8)}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        {description.conflictingFields} of {description.totalFields} fields have conflicts
+                        {description.conflictingFields} of{' '}
+                        {description.totalFields} fields have conflicts
                       </p>
                     </div>
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => setSelectedConflict(selectedConflict?.itemId === conflict.itemId ? null : conflict)}
+                        onClick={() =>
+                          setSelectedConflict(
+                            selectedConflict?.itemId === conflict.itemId
+                              ? null
+                              : conflict
+                          )
+                        }
                         className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
                       >
-                        {selectedConflict?.itemId === conflict.itemId ? 'Hide' : 'View'} Details
+                        {selectedConflict?.itemId === conflict.itemId
+                          ? 'Hide'
+                          : 'View'}{' '}
+                        Details
                       </button>
                     </div>
                   </div>
@@ -281,43 +323,58 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
 
                       {/* Resolution Strategy */}
                       <div className="space-y-4">
-                        <h4 className="font-medium text-gray-900">Resolution Strategy</h4>
+                        <h4 className="font-medium text-gray-900">
+                          Resolution Strategy
+                        </h4>
                         <div className="space-y-3">
                           <label className="flex items-center">
                             <input
                               type="radio"
                               value="SERVER_WINS"
                               checked={resolutionStrategy === 'SERVER_WINS'}
-                              onChange={(e) => setResolutionStrategy(e.target.value as any)}
+                              onChange={e =>
+                                setResolutionStrategy(e.target.value as any)
+                              }
                               className="mr-2"
                             />
-                            <span className="text-sm">Server Wins (Use server version)</span>
+                            <span className="text-sm">
+                              Server Wins (Use server version)
+                            </span>
                           </label>
                           <label className="flex items-center">
                             <input
                               type="radio"
                               value="CLIENT_WINS"
                               checked={resolutionStrategy === 'CLIENT_WINS'}
-                              onChange={(e) => setResolutionStrategy(e.target.value as any)}
+                              onChange={e =>
+                                setResolutionStrategy(e.target.value as any)
+                              }
                               className="mr-2"
                             />
-                            <span className="text-sm">Local Wins (Use local version)</span>
+                            <span className="text-sm">
+                              Local Wins (Use local version)
+                            </span>
                           </label>
                           <label className="flex items-center">
                             <input
                               type="radio"
                               value="MERGE"
                               checked={resolutionStrategy === 'MERGE'}
-                              onChange={(e) => setResolutionStrategy(e.target.value as any)}
+                              onChange={e =>
+                                setResolutionStrategy(e.target.value as any)
+                              }
                               className="mr-2"
                             />
-                            <span className="text-sm">Merge (Combine both versions)</span>
+                            <span className="text-sm">
+                              Merge (Combine both versions)
+                            </span>
                           </label>
                         </div>
                       </div>
 
                       {/* Merge Editor */}
-                      {resolutionStrategy === 'MERGE' && renderMergeEditor(conflict)}
+                      {resolutionStrategy === 'MERGE' &&
+                        renderMergeEditor(conflict)}
 
                       {/* Resolution Actions */}
                       <div className="flex space-x-3 pt-4 border-t border-gray-200">
@@ -348,4 +405,4 @@ export const ConflictResolutionUI: React.FC<ConflictResolutionUIProps> = ({
       )}
     </div>
   );
-}; 
+};

@@ -7,10 +7,10 @@ interface LoadingSpinnerProps {
   minHeight?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'xl', 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 'xl',
   text = 'Loading your coaching dashboard...',
-  minHeight = '400px'
+  minHeight = '400px',
 }) => {
   return (
     <Center minH={minHeight}>
@@ -23,5 +23,3 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 };
 
 export default LoadingSpinner;
-
-

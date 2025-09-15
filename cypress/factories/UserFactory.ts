@@ -17,7 +17,7 @@ export class UserFactory {
 
   static create(overrides: Partial<User> = {}): User {
     const id = `user_${this.counter++}`;
-    
+
     return {
       id,
       email: `test${id}@coachcore.ai`,
@@ -27,32 +27,32 @@ export class UserFactory {
       role: 'coach',
       verified: true,
       createdAt: new Date(),
-      ...overrides
+      ...overrides,
     };
   }
 
   static createCoach(overrides: Partial<User> = {}): User {
     return this.create({
       role: 'coach',
-      ...overrides
+      ...overrides,
     });
   }
 
   static createPlayer(overrides: Partial<User> = {}): User {
     return this.create({
       role: 'player',
-      ...overrides
+      ...overrides,
     });
   }
 
   static createUnverified(overrides: Partial<User> = {}): User {
     return this.create({
       verified: false,
-      ...overrides
+      ...overrides,
     });
   }
 
   static createMultiple(count: number, overrides: Partial<User> = {}): User[] {
     return Array.from({ length: count }, () => this.create(overrides));
   }
-} 
+}

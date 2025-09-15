@@ -3,12 +3,12 @@
 
 // Breakpoints (following Chakra UI's default breakpoints)
 export const BREAKPOINTS = {
-  base: '0em',      // 0px
-  sm: '30em',       // 480px
-  md: '48em',       // 768px
-  lg: '62em',       // 992px
-  xl: '80em',       // 1280px
-  '2xl': '96em',    // 1536px
+  base: '0em', // 0px
+  sm: '30em', // 480px
+  md: '48em', // 768px
+  lg: '62em', // 992px
+  xl: '80em', // 1280px
+  '2xl': '96em', // 1536px
 } as const;
 
 // Responsive spacing scale
@@ -60,7 +60,13 @@ export const RESPONSIVE_PADDING = {
   page: { base: 4, sm: 6, md: 8, lg: 12, xl: 16 },
   section: { base: 6, sm: 8, md: 12, lg: 16, xl: 20 },
   card: { base: 4, sm: 5, md: 6, lg: 8, xl: 8 },
-  button: { base: '12px 16px', sm: '14px 18px', md: '16px 20px', lg: '18px 24px', xl: '18px 24px' },
+  button: {
+    base: '12px 16px',
+    sm: '14px 18px',
+    md: '16px 20px',
+    lg: '18px 24px',
+    xl: '18px 24px',
+  },
 } as const;
 
 // Responsive margin scales
@@ -107,25 +113,25 @@ export const useResponsive = () => {
     return responsiveObject.base || defaultValue || responsiveObject.lg;
   };
 
-  const getSpacing = (size: keyof typeof RESPONSIVE_SPACING) => 
+  const getSpacing = (size: keyof typeof RESPONSIVE_SPACING) =>
     getResponsiveValue(RESPONSIVE_SPACING[size]);
 
-  const getFontSize = (size: keyof typeof RESPONSIVE_FONTS) => 
+  const getFontSize = (size: keyof typeof RESPONSIVE_FONTS) =>
     getResponsiveValue(RESPONSIVE_FONTS[size]);
 
-  const getGridColumns = (size: keyof typeof RESPONSIVE_GRIDS) => 
+  const getGridColumns = (size: keyof typeof RESPONSIVE_GRIDS) =>
     getResponsiveValue(RESPONSIVE_GRIDS[size]);
 
-  const getContainerWidth = (size: keyof typeof RESPONSIVE_CONTAINERS) => 
+  const getContainerWidth = (size: keyof typeof RESPONSIVE_CONTAINERS) =>
     getResponsiveValue(RESPONSIVE_CONTAINERS[size]);
 
-  const getPadding = (size: keyof typeof RESPONSIVE_PADDING) => 
+  const getPadding = (size: keyof typeof RESPONSIVE_PADDING) =>
     getResponsiveValue(RESPONSIVE_PADDING[size]);
 
-  const getMargin = (size: keyof typeof RESPONSIVE_MARGIN) => 
+  const getMargin = (size: keyof typeof RESPONSIVE_MARGIN) =>
     getResponsiveValue(RESPONSIVE_MARGIN[size]);
 
-  const getTouchSize = (size: keyof typeof TOUCH_SIZES) => 
+  const getTouchSize = (size: keyof typeof TOUCH_SIZES) =>
     getResponsiveValue(TOUCH_SIZES[size]);
 
   return {
@@ -153,12 +159,36 @@ export const responsiveStyles = {
 
   // Grid styles
   grid: {
-    '1': { gridTemplateColumns: { base: 'repeat(1, 1fr)', lg: 'repeat(1, 1fr)' } },
-    '2': { gridTemplateColumns: { base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' } },
-    '3': { gridTemplateColumns: { base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' } },
-    '4': { gridTemplateColumns: { base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' } },
-    '6': { gridTemplateColumns: { base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(6, 1fr)' } },
-    '12': { gridTemplateColumns: { base: 'repeat(6, 1fr)', md: 'repeat(12, 1fr)' } },
+    '1': {
+      gridTemplateColumns: { base: 'repeat(1, 1fr)', lg: 'repeat(1, 1fr)' },
+    },
+    '2': {
+      gridTemplateColumns: { base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
+    },
+    '3': {
+      gridTemplateColumns: {
+        base: 'repeat(1, 1fr)',
+        sm: 'repeat(2, 1fr)',
+        lg: 'repeat(3, 1fr)',
+      },
+    },
+    '4': {
+      gridTemplateColumns: {
+        base: 'repeat(1, 1fr)',
+        sm: 'repeat(2, 1fr)',
+        lg: 'repeat(4, 1fr)',
+      },
+    },
+    '6': {
+      gridTemplateColumns: {
+        base: 'repeat(2, 1fr)',
+        md: 'repeat(3, 1fr)',
+        lg: 'repeat(6, 1fr)',
+      },
+    },
+    '12': {
+      gridTemplateColumns: { base: 'repeat(6, 1fr)', md: 'repeat(12, 1fr)' },
+    },
   },
 
   // Flex styles

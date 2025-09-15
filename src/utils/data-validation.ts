@@ -8,13 +8,16 @@ export const dataValidator = {
   validatePracticePlan: () => [],
   validatePlay: () => [],
   hasErrors: () => false,
-  getErrorMessage: () => ''
+  getErrorMessage: () => '',
 };
 
 export const useValidation = () => ({
   validate: () => ({ isValid: true, errors: [] }),
-  validateAndSanitize: (data: any) => ({ result: { isValid: true, errors: [] }, sanitized: data }),
-  DataValidator: dataValidator
+  validateAndSanitize: (data: any) => ({
+    result: { isValid: true, errors: [] },
+    sanitized: data,
+  }),
+  DataValidator: dataValidator,
 });
 
 export default dataValidator;

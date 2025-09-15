@@ -1,10 +1,10 @@
 // src/utils/backup-automation.ts
-import { 
-  collection, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
   limit,
   writeBatch,
   doc,
@@ -12,7 +12,7 @@ import {
   getDoc,
   deleteDoc,
   Timestamp,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
@@ -113,7 +113,9 @@ export class BackupAutomationManager {
       this.checkAndRunScheduledBackup();
     }, interval);
 
-    console.log(`Backup scheduler initialized with ${this.config.schedule.frequency} frequency`);
+    console.log(
+      `Backup scheduler initialized with ${this.config.schedule.frequency} frequency`
+    );
   }
 
   private getScheduleInterval(): number {
@@ -132,7 +134,7 @@ export class BackupAutomationManager {
   private async checkAndRunScheduledBackup(): Promise<void> {
     const now = new Date();
     const scheduleTime = this.parseScheduleTime(this.config.schedule.time);
-    
+
     // Check if it's time to run the backup
     if (this.shouldRunBackup(now, scheduleTime)) {
       await this.createBackupJob();
@@ -171,25 +173,25 @@ export class BackupAutomationManager {
 
   async createBackupJob(): Promise<string> {
     const jobId = `backup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const job: BackupJob = {
       id: jobId,
       config: this.config,
       status: 'pending',
-      progress: { current: 0, total: 0, collection: '' }
+      progress: { current: 0, total: 0, collection: '' },
     };
 
     this.jobs.set(jobId, job);
-    
+
     // Store job in Firestore
     await setDoc(doc(db, '_backupJobs', jobId), {
       ...job,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
     });
 
     // Start the backup job
     this.runBackupJob(jobId);
-    
+
     return jobId;
   }
 
@@ -203,7 +205,7 @@ export class BackupAutomationManager {
       await this.updateJobInFirestore(job);
 
       const backupId = await this.performBackup(job);
-      
+
       job.status = 'completed';
       job.completedAt = Timestamp.now();
       job.backupId = backupId;
@@ -216,7 +218,6 @@ export class BackupAutomationManager {
 
       // Clean up old backups
       await this.cleanupOldBackups();
-
     } catch (error) {
       job.status = 'failed';
       job.completedAt = Timestamp.now();
@@ -239,8 +240,8 @@ export class BackupAutomationManager {
       metadata: {
         totalDocuments: 0,
         totalSize: 0,
-        checksum: ''
-      }
+        checksum: '',
+      },
     };
 
     let totalDocuments = 0;
@@ -252,10 +253,10 @@ export class BackupAutomationManager {
 
       const collectionData = await this.backupCollection(collectionName);
       backup.collections[collectionName] = collectionData;
-      
+
       totalDocuments += collectionData.documents.length;
       totalSize += JSON.stringify(collectionData).length;
-      
+
       job.progress.current++;
       job.progress.total = this.config.collections.length;
       await this.updateJobInFirestore(job);
@@ -283,7 +284,7 @@ export class BackupAutomationManager {
 
   private async backupCollection(collectionName: string): Promise<any> {
     const snapshot = await getDocs(collection(db, collectionName));
-    
+
     return {
       name: collectionName,
       documentCount: snapshot.docs.length,
@@ -294,22 +295,22 @@ export class BackupAutomationManager {
           hasPendingWrites: doc.metadata.hasPendingWrites,
           fromCache: doc.metadata.fromCache,
           createdAt: doc.data().createdAt ?? null,
-          updatedAt: doc.data().updatedAt ?? null
-        }
-      }))
+          updatedAt: doc.data().updatedAt ?? null,
+        },
+      })),
     };
   }
 
   private generateChecksum(data: any): string {
     const jsonString = JSON.stringify(data);
     let hash = 0;
-    
+
     for (let i = 0; i < jsonString.length; i++) {
       const char = jsonString.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
-    
+
     return hash.toString(16);
   }
 
@@ -332,21 +333,24 @@ export class BackupAutomationManager {
       case 'firestore':
         await setDoc(doc(db, '_backups', backupId), {
           ...backup,
-          storedAt: serverTimestamp()
+          storedAt: serverTimestamp(),
         });
         break;
-        
+
       case 'cloud_storage':
         await this.storeInCloudStorage(backupId, backup);
         break;
-        
+
       case 'external':
         await this.storeExternally(backupId, backup);
         break;
     }
   }
 
-  private async storeInCloudStorage(backupId: string, backup: any): Promise<void> {
+  private async storeInCloudStorage(
+    backupId: string,
+    backup: any
+  ): Promise<void> {
     // Implementation for Google Cloud Storage
     // This would use the Firebase Storage SDK
     console.log('Storing backup in cloud storage:', backupId);
@@ -364,7 +368,7 @@ export class BackupAutomationManager {
   async restoreBackup(backupId: string, collections?: string[]): Promise<void> {
     try {
       const backup = await this.loadBackup(backupId);
-      
+
       if (!backup) {
         throw new Error('Backup not found');
       }
@@ -375,7 +379,8 @@ export class BackupAutomationManager {
         throw new Error('Backup is corrupted or invalid');
       }
 
-      const collectionsToRestore = collections || Object.keys(backup.collections);
+      const collectionsToRestore =
+        collections || Object.keys(backup.collections);
       const batch = writeBatch(db);
 
       for (const collectionName of collectionsToRestore) {
@@ -390,7 +395,6 @@ export class BackupAutomationManager {
 
       await batch.commit();
       console.log(`Backup ${backupId} restored successfully`);
-
     } catch (error) {
       console.error('Error restoring backup:', error);
       throw error;
@@ -402,13 +406,13 @@ export class BackupAutomationManager {
       case 'firestore':
         const backupDoc = await getDoc(doc(db, '_backups', backupId));
         return backupDoc.exists() ? backupDoc.data() : null;
-        
+
       case 'cloud_storage':
         return await this.loadFromCloudStorage(backupId);
-        
+
       case 'external':
         return await this.loadFromExternal(backupId);
-        
+
       default:
         throw new Error('Unknown storage type');
     }
@@ -465,7 +469,6 @@ export class BackupAutomationManager {
           await this.deleteBackup(backups[i].id);
         }
       }
-
     } catch (error) {
       console.error('Error cleaning up old backups:', error);
     }
@@ -476,12 +479,14 @@ export class BackupAutomationManager {
     return snapshot.docs.map(doc => ({
       id: doc.id,
       timestamp: doc.data().timestamp,
-      collections: doc.data().collections ? Object.keys(doc.data().collections) : [],
+      collections: doc.data().collections
+        ? Object.keys(doc.data().collections)
+        : [],
       documentCount: doc.data().metadata?.totalDocuments || 0,
       size: doc.data().metadata?.totalSize || 0,
       checksum: doc.data().metadata?.checksum || '',
       config: doc.data().config,
-      status: 'valid' // This would be validated
+      status: 'valid', // This would be validated
     }));
   }
 
@@ -498,18 +503,24 @@ export class BackupAutomationManager {
   // NOTIFICATIONS
   // ============================================
 
-  private async sendNotification(type: 'success' | 'failure', job: BackupJob): Promise<void> {
+  private async sendNotification(
+    type: 'success' | 'failure',
+    job: BackupJob
+  ): Promise<void> {
     const message = this.createNotificationMessage(type, job);
-    
+
     // Send to configured recipients
     for (const recipient of this.config.notifications.recipients) {
       await this.sendToRecipient(recipient, message);
     }
   }
 
-  private createNotificationMessage(type: 'success' | 'failure', job: BackupJob): string {
+  private createNotificationMessage(
+    type: 'success' | 'failure',
+    job: BackupJob
+  ): string {
     const baseMessage = `Backup job ${job.id} ${type === 'success' ? 'completed successfully' : 'failed'}`;
-    
+
     if (type === 'success') {
       return `${baseMessage}\nBackup ID: ${job.backupId}\nSize: ${job.size} bytes\nDuration: ${this.calculateDuration(job)}`;
     } else {
@@ -519,15 +530,18 @@ export class BackupAutomationManager {
 
   private calculateDuration(job: BackupJob): string {
     if (!job.startedAt || !job.completedAt) return 'Unknown';
-    
+
     const duration = job.completedAt.toMillis() - job.startedAt.toMillis();
     const minutes = Math.floor(duration / 60000);
     const seconds = Math.floor((duration % 60000) / 1000);
-    
+
     return `${minutes}m ${seconds}s`;
   }
 
-  private async sendToRecipient(recipient: string, message: string): Promise<void> {
+  private async sendToRecipient(
+    recipient: string,
+    message: string
+  ): Promise<void> {
     // Implementation for sending notifications
     // This could be email, Slack, webhook, etc.
     console.log(`Sending notification to ${recipient}:`, message);
@@ -540,7 +554,7 @@ export class BackupAutomationManager {
   private async updateJobInFirestore(job: BackupJob): Promise<void> {
     await setDoc(doc(db, '_backupJobs', job.id), {
       ...job,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
   }
 
@@ -567,7 +581,7 @@ export class BackupAutomationManager {
 
   updateConfig(newConfig: Partial<BackupConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    
+
     // Restart scheduler if schedule changed
     if (this.scheduler) {
       clearInterval(this.scheduler);
@@ -610,10 +624,10 @@ export const useBackupAutomation = (config: BackupConfig) => {
     };
 
     loadJobs();
-    
+
     // Poll for job updates
     const interval = setInterval(loadJobs, 5000);
-    
+
     return () => {
       clearInterval(interval);
       manager.destroy();
@@ -630,13 +644,19 @@ export const useBackupAutomation = (config: BackupConfig) => {
     }
   }, [manager]);
 
-  const restoreBackup = useCallback(async (backupId: string, collections?: string[]) => {
-    return manager.restoreBackup(backupId, collections);
-  }, [manager]);
+  const restoreBackup = useCallback(
+    async (backupId: string, collections?: string[]) => {
+      return manager.restoreBackup(backupId, collections);
+    },
+    [manager]
+  );
 
-  const cancelJob = useCallback(async (jobId: string) => {
-    return manager.cancelJob(jobId);
-  }, [manager]);
+  const cancelJob = useCallback(
+    async (jobId: string) => {
+      return manager.cancelJob(jobId);
+    },
+    [manager]
+  );
 
   return {
     manager,
@@ -646,9 +666,10 @@ export const useBackupAutomation = (config: BackupConfig) => {
     restoreBackup,
     cancelJob,
     getJobStatus: (jobId: string) => manager.getJobStatus(jobId),
-    updateConfig: (config: Partial<BackupConfig>) => manager.updateConfig(config),
-    getConfig: () => manager.getConfig()
+    updateConfig: (config: Partial<BackupConfig>) =>
+      manager.updateConfig(config),
+    getConfig: () => manager.getConfig(),
   };
 };
 
-export default BackupAutomationManager; 
+export default BackupAutomationManager;

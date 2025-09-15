@@ -42,7 +42,7 @@ class PracticeService {
   async savePracticePlan(plan: PracticePlan): Promise<PracticeServiceResponse> {
     try {
       const existingIndex = this.plans.findIndex(p => p.id === plan.id);
-      
+
       if (existingIndex >= 0) {
         // Update existing plan
         this.plans[existingIndex] = {
@@ -95,7 +95,7 @@ class PracticeService {
   async getPracticePlanById(id: string): Promise<PracticeServiceResponse> {
     try {
       const plan = this.plans.find(p => p.id === id);
-      
+
       if (!plan) {
         return {
           success: false,
@@ -120,7 +120,7 @@ class PracticeService {
   async deletePracticePlan(id: string): Promise<PracticeServiceResponse> {
     try {
       const index = this.plans.findIndex(p => p.id === id);
-      
+
       if (index === -1) {
         return {
           success: false,
@@ -144,10 +144,13 @@ class PracticeService {
     }
   }
 
-  async sharePracticePlan(id: string, recipients: string[]): Promise<PracticeServiceResponse> {
+  async sharePracticePlan(
+    id: string,
+    recipients: string[]
+  ): Promise<PracticeServiceResponse> {
     try {
       const plan = this.plans.find(p => p.id === id);
-      
+
       if (!plan) {
         return {
           success: false,
@@ -178,10 +181,13 @@ class PracticeService {
   }
 
   // Export plans to different formats
-  async exportPracticePlan(id: string, format: 'json' | 'pdf' | 'csv'): Promise<PracticeServiceResponse> {
+  async exportPracticePlan(
+    id: string,
+    format: 'json' | 'pdf' | 'csv'
+  ): Promise<PracticeServiceResponse> {
     try {
       const plan = this.plans.find(p => p.id === id);
-      
+
       if (!plan) {
         return {
           success: false,
@@ -190,7 +196,7 @@ class PracticeService {
       }
 
       let exportData: any;
-      
+
       switch (format) {
         case 'json':
           exportData = JSON.stringify(plan, null, 2);

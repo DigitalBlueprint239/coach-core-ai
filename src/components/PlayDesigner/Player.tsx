@@ -29,11 +29,11 @@ export const Player: React.FC<PlayerProps> = ({
   onDragEnd,
   onSelect,
   onDoubleClick,
-  mobileOptimized = false
+  mobileOptimized = false,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const playerRef = useRef<any>(null);
-  
+
   const spacing = useBreakpointValue({ base: 2, md: 3, lg: 4 });
   const fontSize = useBreakpointValue({ base: 10, md: 12, lg: 14 });
 
@@ -42,13 +42,13 @@ export const Player: React.FC<PlayerProps> = ({
     offense: {
       primary: '#ff4444',
       secondary: '#cc0000',
-      text: '#ffffff'
+      text: '#ffffff',
     },
     defense: {
       primary: '#4444ff',
       secondary: '#0000cc',
-      text: '#ffffff'
-    }
+      text: '#ffffff',
+    },
   };
 
   const colors = teamColors[team];
@@ -61,7 +61,7 @@ export const Player: React.FC<PlayerProps> = ({
     setIsDragging(false);
     const newX = e.target.x();
     const newY = e.target.y();
-    
+
     if (onDragEnd) {
       onDragEnd(newX, newY);
     }

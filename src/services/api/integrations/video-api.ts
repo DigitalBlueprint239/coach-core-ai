@@ -89,7 +89,10 @@ class VideoAPIService {
   }
 
   // Hudl Integration
-  async getHudlVideos(teamId: string, filters?: VideoSearchFilters): Promise<VideoMetadata[]> {
+  async getHudlVideos(
+    teamId: string,
+    filters?: VideoSearchFilters
+  ): Promise<VideoMetadata[]> {
     try {
       const response = await apiService.get(`/hudl/teams/${teamId}/videos`, {
         ...this.buildHudlFilters(filters),
@@ -141,12 +144,18 @@ class VideoAPIService {
     }
   }
 
-  async analyzeHudlVideo(videoId: string, analysis: Partial<VideoAnalysis>): Promise<VideoAnalysis> {
+  async analyzeHudlVideo(
+    videoId: string,
+    analysis: Partial<VideoAnalysis>
+  ): Promise<VideoAnalysis> {
     try {
-      const response = await apiService.post(`/hudl/videos/${videoId}/analysis`, {
-        ...analysis,
-        api_key: this.hudlAPIKey,
-      });
+      const response = await apiService.post(
+        `/hudl/videos/${videoId}/analysis`,
+        {
+          ...analysis,
+          api_key: this.hudlAPIKey,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to create video analysis');
@@ -160,7 +169,10 @@ class VideoAPIService {
   }
 
   // YouTube Integration
-  async searchYouTubeVideos(query: string, filters?: VideoSearchFilters): Promise<VideoMetadata[]> {
+  async searchYouTubeVideos(
+    query: string,
+    filters?: VideoSearchFilters
+  ): Promise<VideoMetadata[]> {
     try {
       const response = await apiService.get('/youtube/search', {
         q: query,
@@ -191,7 +203,9 @@ class VideoAPIService {
       });
 
       if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch YouTube video details');
+        throw new Error(
+          response.error || 'Failed to fetch YouTube video details'
+        );
       }
 
       return this.transformYouTubeVideo(response.data);
@@ -202,7 +216,10 @@ class VideoAPIService {
   }
 
   // Vimeo Integration
-  async searchVimeoVideos(query: string, filters?: VideoSearchFilters): Promise<VideoMetadata[]> {
+  async searchVimeoVideos(
+    query: string,
+    filters?: VideoSearchFilters
+  ): Promise<VideoMetadata[]> {
     try {
       const response = await apiService.get('/vimeo/search', {
         query,
@@ -250,7 +267,10 @@ class VideoAPIService {
 
   async getLocalVideos(filters?: VideoSearchFilters): Promise<VideoMetadata[]> {
     try {
-      const response = await apiService.get('/videos', this.buildLocalFilters(filters));
+      const response = await apiService.get(
+        '/videos',
+        this.buildLocalFilters(filters)
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch local videos');
@@ -263,7 +283,10 @@ class VideoAPIService {
     }
   }
 
-  async updateLocalVideo(videoId: string, updates: Partial<VideoMetadata>): Promise<VideoMetadata> {
+  async updateLocalVideo(
+    videoId: string,
+    updates: Partial<VideoMetadata>
+  ): Promise<VideoMetadata> {
     try {
       const response = await apiService.patch(`/videos/${videoId}`, updates);
 
@@ -294,7 +317,9 @@ class VideoAPIService {
   }
 
   // Video Analysis
-  async createVideoAnalysis(analysis: Partial<VideoAnalysis>): Promise<VideoAnalysis> {
+  async createVideoAnalysis(
+    analysis: Partial<VideoAnalysis>
+  ): Promise<VideoAnalysis> {
     try {
       const response = await apiService.post('/video-analysis', analysis);
 
@@ -324,9 +349,15 @@ class VideoAPIService {
     }
   }
 
-  async updateVideoAnalysis(analysisId: string, updates: Partial<VideoAnalysis>): Promise<VideoAnalysis> {
+  async updateVideoAnalysis(
+    analysisId: string,
+    updates: Partial<VideoAnalysis>
+  ): Promise<VideoAnalysis> {
     try {
-      const response = await apiService.patch(`/video-analysis/${analysisId}`, updates);
+      const response = await apiService.patch(
+        `/video-analysis/${analysisId}`,
+        updates
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to update video analysis');
@@ -342,48 +373,62 @@ class VideoAPIService {
   // Helper methods for building filters
   private buildHudlFilters(filters?: VideoSearchFilters): Record<string, any> {
     const hudlFilters: Record<string, any> = {};
-    
+
     if (filters?.query) hudlFilters.search = filters.query;
-    if (filters?.categories?.length) hudlFilters.categories = filters.categories.join(',');
+    if (filters?.categories?.length)
+      hudlFilters.categories = filters.categories.join(',');
     if (filters?.tags?.length) hudlFilters.tags = filters.tags.join(',');
     if (filters?.duration?.min) hudlFilters.min_duration = filters.duration.min;
     if (filters?.duration?.max) hudlFilters.max_duration = filters.duration.max;
-    if (filters?.dateRange?.start) hudlFilters.start_date = filters.dateRange.start.toISOString();
-    if (filters?.dateRange?.end) hudlFilters.end_date = filters.dateRange.end.toISOString();
+    if (filters?.dateRange?.start)
+      hudlFilters.start_date = filters.dateRange.start.toISOString();
+    if (filters?.dateRange?.end)
+      hudlFilters.end_date = filters.dateRange.end.toISOString();
 
     return hudlFilters;
   }
 
-  private buildYouTubeFilters(filters?: VideoSearchFilters): Record<string, any> {
+  private buildYouTubeFilters(
+    filters?: VideoSearchFilters
+  ): Record<string, any> {
     const youtubeFilters: Record<string, any> = {};
-    
-    if (filters?.categories?.length) youtubeFilters.videoCategoryId = filters.categories[0];
+
+    if (filters?.categories?.length)
+      youtubeFilters.videoCategoryId = filters.categories[0];
     if (filters?.duration?.min) youtubeFilters.videoDuration = 'medium';
     if (filters?.duration?.max) youtubeFilters.videoDuration = 'short';
-    if (filters?.dateRange?.start) youtubeFilters.publishedAfter = filters.dateRange.start.toISOString();
-    if (filters?.dateRange?.end) youtubeFilters.publishedBefore = filters.dateRange.end.toISOString();
+    if (filters?.dateRange?.start)
+      youtubeFilters.publishedAfter = filters.dateRange.start.toISOString();
+    if (filters?.dateRange?.end)
+      youtubeFilters.publishedBefore = filters.dateRange.end.toISOString();
 
     return youtubeFilters;
   }
 
   private buildVimeoFilters(filters?: VideoSearchFilters): Record<string, any> {
     const vimeoFilters: Record<string, any> = {};
-    
-    if (filters?.categories?.length) vimeoFilters.categories = filters.categories.join(',');
-    if (filters?.duration?.min) vimeoFilters.min_duration = filters.duration.min;
-    if (filters?.duration?.max) vimeoFilters.max_duration = filters.duration.max;
-    if (filters?.dateRange?.start) vimeoFilters.created_time = filters.dateRange.start.toISOString();
+
+    if (filters?.categories?.length)
+      vimeoFilters.categories = filters.categories.join(',');
+    if (filters?.duration?.min)
+      vimeoFilters.min_duration = filters.duration.min;
+    if (filters?.duration?.max)
+      vimeoFilters.max_duration = filters.duration.max;
+    if (filters?.dateRange?.start)
+      vimeoFilters.created_time = filters.dateRange.start.toISOString();
 
     return vimeoFilters;
   }
 
   private buildLocalFilters(filters?: VideoSearchFilters): Record<string, any> {
     const localFilters: Record<string, any> = {};
-    
+
     if (filters?.query) localFilters.search = filters.query;
-    if (filters?.categories?.length) localFilters.categories = filters.categories.join(',');
+    if (filters?.categories?.length)
+      localFilters.categories = filters.categories.join(',');
     if (filters?.tags?.length) localFilters.tags = filters.tags.join(',');
-    if (filters?.platform?.length) localFilters.platforms = filters.platform.join(',');
+    if (filters?.platform?.length)
+      localFilters.platforms = filters.platform.join(',');
 
     return localFilters;
   }
@@ -453,7 +498,7 @@ class VideoAPIService {
       uploadDate: new Date(data.created_time),
       lastModified: new Date(data.modified_time),
       size: 0,
-      resolution: data.width + 'x' + data.height,
+      resolution: `${data.width}x${data.height}`,
       fps: 30,
     };
   }

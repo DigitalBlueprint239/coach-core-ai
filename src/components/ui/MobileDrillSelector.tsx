@@ -40,11 +40,15 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
   className = '',
   style = {},
 }) => {
-  const [activeCategory, setActiveCategory] = useState<Drill['category']>('warmup');
+  const [activeCategory, setActiveCategory] =
+    useState<Drill['category']>('warmup');
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddDrill, setShowAddDrill] = useState(false);
   const [showDrillDetails, setShowDrillDetails] = useState<string | null>(null);
-  const [dragState, setDragState] = useState<{ isDragging: boolean; drillId: string | null }>({
+  const [dragState, setDragState] = useState<{
+    isDragging: boolean;
+    drillId: string | null;
+  }>({
     isDragging: false,
     drillId: null,
   });
@@ -58,91 +62,118 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
 
   const filteredDrills = drills.filter(drill => {
     const matchesCategory = drill.category === activeCategory;
-    const matchesSearch = drill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         drill.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      drill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      drill.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const categories: Drill['category'][] = ['warmup', 'skill', 'tactical', 'conditioning'];
+  const categories: Drill['category'][] = [
+    'warmup',
+    'skill',
+    'tactical',
+    'conditioning',
+  ];
 
   // ============================================
   // HAPTIC FEEDBACK
   // ============================================
 
-  const triggerHapticFeedback = useCallback(async (type: 'light' | 'medium' | 'success' | 'error') => {
-    try {
-      switch (type) {
-        case 'light':
-          await Haptics.impact({ style: 'light' });
-          break;
-        case 'medium':
-          await Haptics.impact({ style: 'medium' });
-          break;
-        case 'success':
-          await Haptics.notification({ type: 'success' });
-          break;
-        case 'error':
-          await Haptics.notification({ type: 'error' });
-          break;
+  const triggerHapticFeedback = useCallback(
+    async (type: 'light' | 'medium' | 'success' | 'error') => {
+      try {
+        switch (type) {
+          case 'light':
+            await Haptics.impact({ style: 'light' });
+            break;
+          case 'medium':
+            await Haptics.impact({ style: 'medium' });
+            break;
+          case 'success':
+            await Haptics.notification({ type: 'success' });
+            break;
+          case 'error':
+            await Haptics.notification({ type: 'error' });
+            break;
+        }
+      } catch (error) {
+        console.warn('Haptic feedback not available:', error);
       }
-    } catch (error) {
-      console.warn('Haptic feedback not available:', error);
-    }
-  }, []);
+    },
+    []
+  );
 
   // ============================================
   // DRILL SELECTION HANDLERS
   // ============================================
 
-  const handleDrillToggle = useCallback((drillId: string) => {
-    if (selectedDrills.includes(drillId)) {
-      onDrillDeselect(drillId);
-      triggerHapticFeedback('light');
-    } else {
-      onDrillSelect(drillId);
+  const handleDrillToggle = useCallback(
+    (drillId: string) => {
+      if (selectedDrills.includes(drillId)) {
+        onDrillDeselect(drillId);
+        triggerHapticFeedback('light');
+      } else {
+        onDrillSelect(drillId);
+        triggerHapticFeedback('success');
+      }
+    },
+    [selectedDrills, onDrillSelect, onDrillDeselect, triggerHapticFeedback]
+  );
+
+  const handleDrillLongPress = useCallback(
+    (drillId: string) => {
+      setShowDrillDetails(drillId);
+      triggerHapticFeedback('medium');
+    },
+    [triggerHapticFeedback]
+  );
+
+  const handleDrillDelete = useCallback(
+    (drillId: string) => {
+      onDrillDelete(drillId);
+      setShowDrillDetails(null);
       triggerHapticFeedback('success');
-    }
-  }, [selectedDrills, onDrillSelect, onDrillDeselect, triggerHapticFeedback]);
+    },
+    [onDrillDelete, triggerHapticFeedback]
+  );
 
-  const handleDrillLongPress = useCallback((drillId: string) => {
-    setShowDrillDetails(drillId);
-    triggerHapticFeedback('medium');
-  }, [triggerHapticFeedback]);
-
-  const handleDrillDelete = useCallback((drillId: string) => {
-    onDrillDelete(drillId);
-    setShowDrillDetails(null);
-    triggerHapticFeedback('success');
-  }, [onDrillDelete, triggerHapticFeedback]);
-
-  const handleDrillEdit = useCallback((drill: Drill) => {
-    onDrillEdit(drill);
-    setShowDrillDetails(null);
-    triggerHapticFeedback('light');
-  }, [onDrillEdit, triggerHapticFeedback]);
+  const handleDrillEdit = useCallback(
+    (drill: Drill) => {
+      onDrillEdit(drill);
+      setShowDrillDetails(null);
+      triggerHapticFeedback('light');
+    },
+    [onDrillEdit, triggerHapticFeedback]
+  );
 
   // ============================================
   // CATEGORY NAVIGATION
   // ============================================
 
-  const handleCategoryChange = useCallback((category: Drill['category']) => {
-    setActiveCategory(category);
-    triggerHapticFeedback('light');
-  }, [triggerHapticFeedback]);
+  const handleCategoryChange = useCallback(
+    (category: Drill['category']) => {
+      setActiveCategory(category);
+      triggerHapticFeedback('light');
+    },
+    [triggerHapticFeedback]
+  );
 
-  const handleSwipeCategory = useCallback((direction: 'left' | 'right') => {
-    const currentIndex = categories.indexOf(activeCategory);
-    let newIndex: number;
+  const handleSwipeCategory = useCallback(
+    (direction: 'left' | 'right') => {
+      const currentIndex = categories.indexOf(activeCategory);
+      let newIndex: number;
 
-    if (direction === 'left') {
-      newIndex = (currentIndex + 1) % categories.length;
-    } else {
-      newIndex = (currentIndex - 1 + categories.length) % categories.length;
-    }
+      if (direction === 'left') {
+        newIndex = (currentIndex + 1) % categories.length;
+      } else {
+        newIndex = (currentIndex - 1 + categories.length) % categories.length;
+      }
 
-    setActiveCategory(categories[newIndex]);
-    triggerHapticFeedback('light');
-  }, [activeCategory, categories, triggerHapticFeedback]);
+      setActiveCategory(categories[newIndex]);
+      triggerHapticFeedback('light');
+    },
+    [activeCategory, categories, triggerHapticFeedback]
+  );
 
   // ============================================
   // SEARCH HANDLERS
@@ -152,9 +183,12 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
     triggerHapticFeedback('light');
   }, [triggerHapticFeedback]);
 
-  const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  }, []);
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+    },
+    []
+  );
 
   const handleSearchClear = useCallback(() => {
     setSearchQuery('');
@@ -171,23 +205,26 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
     triggerHapticFeedback('light');
   }, [triggerHapticFeedback]);
 
-  const handleCreateDrill = useCallback((drillData: Partial<Drill>) => {
-    const newDrill: Drill = {
-      id: `drill_${Date.now()}`,
-      name: drillData.name || 'New Drill',
-      description: drillData.description || '',
-      category: drillData.category || 'warmup',
-      duration: drillData.duration || 10,
-      difficulty: drillData.difficulty || 'beginner',
-      equipment: drillData.equipment || [],
-      instructions: drillData.instructions || [],
-      ...drillData,
-    };
+  const handleCreateDrill = useCallback(
+    (drillData: Partial<Drill>) => {
+      const newDrill: Drill = {
+        id: `drill_${Date.now()}`,
+        name: drillData.name || 'New Drill',
+        description: drillData.description || '',
+        category: drillData.category || 'warmup',
+        duration: drillData.duration || 10,
+        difficulty: drillData.difficulty || 'beginner',
+        equipment: drillData.equipment || [],
+        instructions: drillData.instructions || [],
+        ...drillData,
+      };
 
-    onDrillAdd(newDrill);
-    setShowAddDrill(false);
-    triggerHapticFeedback('success');
-  }, [onDrillAdd, triggerHapticFeedback]);
+      onDrillAdd(newDrill);
+      setShowAddDrill(false);
+      triggerHapticFeedback('success');
+    },
+    [onDrillAdd, triggerHapticFeedback]
+  );
 
   // ============================================
   // PULL TO REFRESH
@@ -324,7 +361,8 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
               style={{
                 padding: '8px 16px',
                 borderRadius: '20px',
-                backgroundColor: activeCategory === category ? '#007AFF' : '#F0F0F0',
+                backgroundColor:
+                  activeCategory === category ? '#007AFF' : '#F0F0F0',
                 color: activeCategory === category ? '#FFFFFF' : '#000000',
                 fontSize: '14px',
                 fontWeight: '500',
@@ -369,11 +407,15 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
                 backgroundColor: '#FFFFFF',
                 borderRadius: '12px',
                 padding: '16px',
-                border: selectedDrills.includes(drill.id) ? '2px solid #007AFF' : '1px solid #E5E5E7',
+                border: selectedDrills.includes(drill.id)
+                  ? '2px solid #007AFF'
+                  : '1px solid #E5E5E7',
                 position: 'relative',
                 overflow: 'hidden',
               }}
-              hapticFeedback={selectedDrills.includes(drill.id) ? 'success' : 'light'}
+              hapticFeedback={
+                selectedDrills.includes(drill.id) ? 'success' : 'light'
+              }
             >
               {/* Selection Indicator */}
               {selectedDrills.includes(drill.id) && (
@@ -413,7 +455,16 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
                   }}
                 >
                   {drill.thumbnail ? (
-                    <img src={drill.thumbnail} alt={drill.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
+                    <img
+                      src={drill.thumbnail}
+                      alt={drill.name}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                      }}
+                    />
                   ) : (
                     getCategoryIcon(drill.category)
                   )}
@@ -421,8 +472,19 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
 
                 {/* Drill Info */}
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>{drill.name}</h3>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    <h3
+                      style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}
+                    >
+                      {drill.name}
+                    </h3>
                     <span
                       style={{
                         padding: '2px 8px',
@@ -436,10 +498,23 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
                       {drill.difficulty}
                     </span>
                   </div>
-                  <p style={{ margin: 0, fontSize: '14px', color: '#666666', marginBottom: '8px' }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '14px',
+                      color: '#666666',
+                      marginBottom: '8px',
+                    }}
+                  >
                     {drill.description}
                   </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                    }}
+                  >
                     <span style={{ fontSize: '12px', color: '#666666' }}>
                       ⏱️ {drill.duration} min
                     </span>
@@ -504,12 +579,22 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
               width: '100%',
             }}
           >
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+            <h3
+              style={{
+                margin: '0 0 16px 0',
+                fontSize: '18px',
+                fontWeight: '600',
+              }}
+            >
               Drill Options
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+            >
               <TouchableOpacity
-                onPress={() => handleDrillEdit(drills.find(d => d.id === showDrillDetails)!)}
+                onPress={() =>
+                  handleDrillEdit(drills.find(d => d.id === showDrillDetails)!)
+                }
                 style={{
                   padding: '12px 16px',
                   backgroundColor: '#007AFF',
@@ -584,10 +669,18 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
               width: '100%',
             }}
           >
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+            <h3
+              style={{
+                margin: '0 0 16px 0',
+                fontSize: '18px',
+                fontWeight: '600',
+              }}
+            >
               Create New Drill
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+            >
               <input
                 type="text"
                 placeholder="Drill name"
@@ -610,7 +703,12 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
                 }}
               />
               <TouchableOpacity
-                onPress={() => handleCreateDrill({ name: 'New Drill', description: 'Drill description' })}
+                onPress={() =>
+                  handleCreateDrill({
+                    name: 'New Drill',
+                    description: 'Drill description',
+                  })
+                }
                 style={{
                   padding: '12px 16px',
                   backgroundColor: '#007AFF',
@@ -651,4 +749,4 @@ export const MobileDrillSelector: React.FC<MobileDrillSelectorProps> = ({
 // EXPORT
 // ============================================
 
-export default MobileDrillSelector; 
+export default MobileDrillSelector;

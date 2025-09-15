@@ -1,4 +1,13 @@
-import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
 
 export interface UserProfile {
@@ -111,7 +120,10 @@ class UserProfileService {
   /**
    * Update user profile fields
    */
-  async updateUserProfile(uid: string, updates: Partial<UserProfile>): Promise<void> {
+  async updateUserProfile(
+    uid: string,
+    updates: Partial<UserProfile>
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
@@ -131,7 +143,7 @@ class UserProfileService {
     try {
       const rolesQuery = query(collection(db, 'teamRoles'));
       const rolesSnapshot = await getDocs(rolesQuery);
-      
+
       if (rolesSnapshot.empty) {
         // Return default roles if none exist
         return this.getDefaultTeamRoles();
@@ -152,8 +164,15 @@ class UserProfileService {
       {
         id: 'head-coach',
         name: 'Head Coach',
-        description: 'Primary coach responsible for team strategy and overall direction',
-        permissions: ['manage_team', 'create_practices', 'manage_players', 'view_analytics', 'ai_access'],
+        description:
+          'Primary coach responsible for team strategy and overall direction',
+        permissions: [
+          'manage_team',
+          'create_practices',
+          'manage_players',
+          'view_analytics',
+          'ai_access',
+        ],
         isDefault: true,
       },
       {
@@ -228,11 +247,14 @@ class UserProfileService {
   /**
    * Update user preferences
    */
-  async updateUserPreferences(uid: string, preferences: Partial<UserProfile['preferences']>): Promise<void> {
+  async updateUserPreferences(
+    uid: string,
+    preferences: Partial<UserProfile['preferences']>
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
-        'preferences': preferences,
+        preferences,
         updatedAt: new Date(),
       });
     } catch (error) {
@@ -260,7 +282,12 @@ class UserProfileService {
   /**
    * Associate user with a team
    */
-  async associateUserWithTeam(uid: string, teamId: string, teamName: string, role: UserProfile['role']): Promise<void> {
+  async associateUserWithTeam(
+    uid: string,
+    teamId: string,
+    teamName: string,
+    role: UserProfile['role']
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
@@ -278,7 +305,9 @@ class UserProfileService {
   /**
    * Get user's team information
    */
-  async getUserTeam(uid: string): Promise<{ teamId: string; teamName: string } | null> {
+  async getUserTeam(
+    uid: string
+  ): Promise<{ teamId: string; teamName: string } | null> {
     try {
       const profile = await this.getUserProfile(uid);
       if (!profile?.teamId || !profile?.teamName) {
@@ -304,11 +333,11 @@ class UserProfileService {
   }): Promise<UserProfile[]> {
     try {
       let usersQuery = collection(db, 'users');
-      
+
       if (criteria.role) {
         usersQuery = query(usersQuery, where('role', '==', criteria.role));
       }
-      
+
       if (criteria.teamId) {
         usersQuery = query(usersQuery, where('teamId', '==', criteria.teamId));
       }
@@ -324,5 +353,3 @@ class UserProfileService {
 
 export const userProfileService = new UserProfileService();
 export default userProfileService;
-
-

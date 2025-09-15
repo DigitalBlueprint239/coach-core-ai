@@ -17,7 +17,13 @@ import {
   Collapse,
   Progress,
 } from '@chakra-ui/react';
-import { Wifi, WifiOff, AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react';
+import {
+  Wifi,
+  WifiOff,
+  AlertTriangle,
+  CheckCircle,
+  RefreshCw,
+} from 'lucide-react';
 import { useAppStore } from '../../services/state/app-store';
 
 interface NetworkStatus {
@@ -44,13 +50,13 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
     isOnline: navigator.onLine,
     lastUpdated: new Date(),
   });
-  
+
   const [isExpanded, setIsExpanded] = useState(false);
   const { isOpen, onToggle } = useDisclosure();
   const toast = useToast();
-  
+
   const { offlineQueue, syncStatus, syncOfflineData } = useAppStore();
-  
+
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const onlineColor = useColorModeValue('green.500', 'green.400');
@@ -79,9 +85,9 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
       lastUpdated: new Date(),
       ...networkInfo,
     };
-    
+
     setNetworkStatus(newStatus);
-    
+
     // Show toast notification if enabled
     if (showToast) {
       if (newStatus.isOnline && !networkStatus.isOnline) {
@@ -95,7 +101,8 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
       } else if (!newStatus.isOnline && networkStatus.isOnline) {
         toast({
           title: 'Connection Lost',
-          description: 'You are currently offline. Changes will be saved locally.',
+          description:
+            'You are currently offline. Changes will be saved locally.',
           status: 'warning',
           duration: 5000,
           isClosable: true,
@@ -165,15 +172,20 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
   // Get connection quality
   const getConnectionQuality = () => {
     if (!networkStatus.effectiveType) return 'Unknown';
-    
+
     const qualityMap: Record<string, { label: string; color: string }> = {
       'slow-2g': { label: 'Very Slow', color: 'red' },
       '2g': { label: 'Slow', color: 'orange' },
       '3g': { label: 'Moderate', color: 'yellow' },
       '4g': { label: 'Fast', color: 'green' },
     };
-    
-    return qualityMap[networkStatus.effectiveType] || { label: 'Unknown', color: 'gray' };
+
+    return (
+      qualityMap[networkStatus.effectiveType] || {
+        label: 'Unknown',
+        color: 'gray',
+      }
+    );
   };
 
   const connectionQuality = getConnectionQuality();
@@ -203,17 +215,24 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
               <Text fontSize="sm" fontWeight="medium">
                 Network Status
               </Text>
-              <Text fontSize="xs" color={useColorModeValue('gray.600', 'gray.400')}>
+              <Text
+                fontSize="xs"
+                color={useColorModeValue('gray.600', 'gray.400')}
+              >
                 {getStatusText()}
               </Text>
             </VStack>
           </HStack>
 
           <HStack spacing={2}>
-            <Badge colorScheme={getStatusColor()} variant="subtle" fontSize="xs">
+            <Badge
+              colorScheme={getStatusColor()}
+              variant="subtle"
+              fontSize="xs"
+            >
               {getStatusText()}
             </Badge>
-            
+
             {offlineQueue.length > 0 && (
               <Badge colorScheme="orange" variant="solid" fontSize="xs">
                 {offlineQueue.length} pending
@@ -237,12 +256,19 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
             {/* Connection Details */}
             {showDetails && (
               <VStack spacing={3} align="stretch">
-                <Text fontSize="sm" fontWeight="semibold" color={useColorModeValue('gray.700', 'gray.200')}>
+                <Text
+                  fontSize="sm"
+                  fontWeight="semibold"
+                  color={useColorModeValue('gray.700', 'gray.200')}
+                >
                   Connection Details
                 </Text>
-                
+
                 <HStack justify="space-between">
-                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
+                  <Text
+                    fontSize="sm"
+                    color={useColorModeValue('gray.600', 'gray.400')}
+                  >
                     Connection Type:
                   </Text>
                   <Text fontSize="sm" fontWeight="medium">
@@ -251,7 +277,10 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
                 </HStack>
 
                 <HStack justify="space-between">
-                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
+                  <Text
+                    fontSize="sm"
+                    color={useColorModeValue('gray.600', 'gray.400')}
+                  >
                     Speed:
                   </Text>
                   <Text fontSize="sm" fontWeight="medium">
@@ -260,7 +289,10 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
                 </HStack>
 
                 <HStack justify="space-between">
-                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
+                  <Text
+                    fontSize="sm"
+                    color={useColorModeValue('gray.600', 'gray.400')}
+                  >
                     Latency:
                   </Text>
                   <Text fontSize="sm" fontWeight="medium">
@@ -269,10 +301,17 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
                 </HStack>
 
                 <HStack justify="space-between">
-                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
+                  <Text
+                    fontSize="sm"
+                    color={useColorModeValue('gray.600', 'gray.400')}
+                  >
                     Quality:
                   </Text>
-                  <Badge colorScheme={connectionQuality.color} variant="subtle" fontSize="xs">
+                  <Badge
+                    colorScheme={connectionQuality.color}
+                    variant="subtle"
+                    fontSize="xs"
+                  >
                     {connectionQuality.label}
                   </Badge>
                 </HStack>
@@ -283,7 +322,11 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
             {offlineQueue.length > 0 && (
               <VStack spacing={3} align="stretch">
                 <HStack justify="space-between" align="center">
-                  <Text fontSize="sm" fontWeight="semibold" color={useColorModeValue('gray.700', 'gray.200')}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    color={useColorModeValue('gray.700', 'gray.200')}
+                  >
                     Offline Queue
                   </Text>
                   <Badge colorScheme="orange" variant="solid" fontSize="xs">
@@ -300,7 +343,10 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
                 />
 
                 <HStack justify="space-between">
-                  <Text fontSize="xs" color={useColorModeValue('gray.600', 'gray.400')}>
+                  <Text
+                    fontSize="xs"
+                    color={useColorModeValue('gray.600', 'gray.400')}
+                  >
                     Status: {syncStatus}
                   </Text>
                   <Button
@@ -318,7 +364,11 @@ const NetworkStatusMonitor: React.FC<NetworkStatusMonitorProps> = ({
             )}
 
             {/* Last Updated */}
-            <Text fontSize="xs" color={useColorModeValue('gray.500', 'gray.500')} textAlign="center">
+            <Text
+              fontSize="xs"
+              color={useColorModeValue('gray.500', 'gray.500')}
+              textAlign="center"
+            >
               Last updated: {networkStatus.lastUpdated.toLocaleTimeString()}
             </Text>
           </VStack>

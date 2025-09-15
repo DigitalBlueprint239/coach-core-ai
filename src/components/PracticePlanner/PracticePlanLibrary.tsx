@@ -61,7 +61,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
       setLoading(true);
       const practiceService = new PracticeService();
       const result = await practiceService.getPracticePlans();
-      
+
       if (result.success && result.data) {
         setPlans(result.data);
       }
@@ -83,7 +83,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
     try {
       const practiceService = new PracticeService();
       const result = await practiceService.deletePracticePlan(planId);
-      
+
       if (result.success) {
         toast({
           title: 'Plan Deleted',
@@ -125,7 +125,14 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
         extension = 'json';
       } else {
         // Simple CSV export
-        const headers = ['Title', 'Sport', 'Age Group', 'Duration', 'Goals', 'Notes'];
+        const headers = [
+          'Title',
+          'Sport',
+          'Age Group',
+          'Duration',
+          'Goals',
+          'Notes',
+        ];
         const rows = [
           plan.title,
           plan.sport,
@@ -134,7 +141,9 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
           plan.goals.join('; '),
           plan.notes,
         ];
-        data = [headers, rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+        data = [headers, rows]
+          .map(row => row.map(cell => `"${cell}"`).join(','))
+          .join('\n');
         mimeType = 'text/csv';
         extension = 'csv';
       }
@@ -191,7 +200,8 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
             No Practice Plans Yet
           </Heading>
           <Text color="gray.500" mb={4}>
-            Create your first practice plan or generate one with AI to get started.
+            Create your first practice plan or generate one with AI to get
+            started.
           </Text>
         </CardBody>
       </Card>
@@ -203,9 +213,9 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
       <Heading size="md" color="gray.800">
         Practice Plan Library ({plans.length})
       </Heading>
-      
+
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-        {plans.map((plan) => (
+        {plans.map(plan => (
           <Card
             key={plan.id}
             variant="elevated"
@@ -235,7 +245,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                 </HStack>
               </VStack>
             </CardHeader>
-            
+
             <CardBody pt={0}>
               <VStack align="start" spacing={3}>
                 <HStack spacing={4} fontSize="sm" color="gray.600">
@@ -248,10 +258,15 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                     <Text>{plan.periods.length} periods</Text>
                   </HStack>
                 </HStack>
-                
+
                 {plan.goals.length > 0 && (
                   <Box>
-                    <Text fontSize="xs" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="xs"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Goals:
                     </Text>
                     <Text fontSize="xs" color="gray.600" noOfLines={2}>
@@ -260,25 +275,25 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                     </Text>
                   </Box>
                 )}
-                
+
                 <Text fontSize="xs" color="gray.500">
                   Created: {formatDate(plan.createdAt)}
                 </Text>
-                
+
                 <HStack spacing={2} w="full" justify="space-between">
                   <Button
                     size="sm"
                     variant="ghost"
                     colorScheme="blue"
                     leftIcon={<Icon as={Edit} boxSize={4} />}
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       onEditPlan(plan);
                     }}
                   >
                     Edit
                   </Button>
-                  
+
                   <HStack spacing={1}>
                     <Tooltip label="Export as JSON">
                       <IconButton
@@ -287,13 +302,13 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                         colorScheme="gray"
                         icon={<Icon as={Download} boxSize={4} />}
                         aria-label="Export as JSON"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleExportPlan(plan, 'json');
                         }}
                       />
                     </Tooltip>
-                    
+
                     <Tooltip label="Export as CSV">
                       <IconButton
                         size="sm"
@@ -301,13 +316,13 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                         colorScheme="gray"
                         icon={<Icon as={Download} boxSize={4} />}
                         aria-label="Export as CSV"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleExportPlan(plan, 'csv');
                         }}
                       />
                     </Tooltip>
-                    
+
                     <Tooltip label="Delete Plan">
                       <IconButton
                         size="sm"
@@ -315,7 +330,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                         colorScheme="red"
                         icon={<Icon as={Trash2} boxSize={4} />}
                         aria-label="Delete Plan"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleDeletePlan(plan.id);
                         }}

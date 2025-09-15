@@ -16,7 +16,7 @@ export class TeamFactory {
 
   static create(overrides: Partial<Team> = {}): Team {
     const id = `team_${this.counter++}`;
-    
+
     return {
       id,
       name: `Test Team ${id}`,
@@ -26,48 +26,54 @@ export class TeamFactory {
       players: [],
       createdAt: new Date(),
       updatedAt: new Date(),
-      ...overrides
+      ...overrides,
     };
   }
 
   static createFootball(overrides: Partial<Team> = {}): Team {
     return this.create({
       sport: 'football',
-      ...overrides
+      ...overrides,
     });
   }
 
   static createBasketball(overrides: Partial<Team> = {}): Team {
     return this.create({
       sport: 'basketball',
-      ...overrides
+      ...overrides,
     });
   }
 
   static createYouth(overrides: Partial<Team> = {}): Team {
     return this.create({
       level: 'youth',
-      ...overrides
+      ...overrides,
     });
   }
 
   static createProfessional(overrides: Partial<Team> = {}): Team {
     return this.create({
       level: 'professional',
-      ...overrides
+      ...overrides,
     });
   }
 
-  static createWithPlayers(playerCount: number, overrides: Partial<Team> = {}): Team {
-    const players = Array.from({ length: playerCount }, (_, i) => `player_${i + 1}`);
-    
+  static createWithPlayers(
+    playerCount: number,
+    overrides: Partial<Team> = {}
+  ): Team {
+    const players = Array.from(
+      { length: playerCount },
+      (_, i) => `player_${i + 1}`
+    );
+
     return this.create({
       players,
-      ...overrides
+      ...overrides,
     });
   }
 
   static createMultiple(count: number, overrides: Partial<Team> = {}): Team[] {
     return Array.from({ length: count }, () => this.create(overrides));
   }
-} 
+}

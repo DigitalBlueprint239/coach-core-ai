@@ -1,19 +1,25 @@
 // src/components/offline/QueueViewer.tsx
 import React, { useState, useEffect } from 'react';
-import { offlineQueueManager, QueueItem } from '../../services/offline/OfflineQueueManager';
+import {
+  offlineQueueManager,
+  QueueItem,
+} from '../../services/offline/OfflineQueueManager';
 
 interface QueueViewerProps {
   userId: string;
   className?: string;
 }
 
-export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = '' }) => {
+export const QueueViewer: React.FC<QueueViewerProps> = ({
+  userId,
+  className = '',
+}) => {
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     status: '' as QueueItem['status'] | '',
     priority: '' as QueueItem['priority'] | '',
-    collection: ''
+    collection: '',
   });
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -30,7 +36,7 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
         userId,
         ...(filters.status && { status: filters.status }),
         ...(filters.priority && { priority: filters.priority }),
-        ...(filters.collection && { collection: filters.collection })
+        ...(filters.collection && { collection: filters.collection }),
       });
       setQueueItems(items);
     } catch (error) {
@@ -49,15 +55,15 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
       item.status = 'PENDING';
       item.retryCount = 0;
       item.error = undefined;
-      
+
       // Update the item in the queue
       await offlineQueueManager['updateInIndexedDB']('queue', item);
-      
+
       // Trigger queue processing
       if (offlineQueueManager.isOnline()) {
         await offlineQueueManager.processQueue();
       }
-      
+
       loadQueueItems();
     } catch (error) {
       console.error('Failed to retry item:', error);
@@ -76,7 +82,9 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
 
   const handleRemoveSelected = async () => {
     try {
-      await Promise.all(selectedItems.map(id => offlineQueueManager.removeFromQueue(id)));
+      await Promise.all(
+        selectedItems.map(id => offlineQueueManager.removeFromQueue(id))
+      );
       setSelectedItems([]);
       loadQueueItems();
     } catch (error) {
@@ -93,8 +101,8 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
   };
 
   const handleSelectItem = (itemId: string) => {
-    setSelectedItems(prev => 
-      prev.includes(itemId) 
+    setSelectedItems(prev =>
+      prev.includes(itemId)
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
     );
@@ -102,22 +110,33 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
 
   const getStatusColor = (status: QueueItem['status']) => {
     switch (status) {
-      case 'PENDING': return 'text-yellow-600 bg-yellow-50';
-      case 'PROCESSING': return 'text-blue-600 bg-blue-50';
-      case 'COMPLETED': return 'text-green-600 bg-green-50';
-      case 'FAILED': return 'text-red-600 bg-red-50';
-      case 'CONFLICT': return 'text-orange-600 bg-orange-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'PENDING':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'PROCESSING':
+        return 'text-blue-600 bg-blue-50';
+      case 'COMPLETED':
+        return 'text-green-600 bg-green-50';
+      case 'FAILED':
+        return 'text-red-600 bg-red-50';
+      case 'CONFLICT':
+        return 'text-orange-600 bg-orange-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getPriorityColor = (priority: QueueItem['priority']) => {
     switch (priority) {
-      case 'CRITICAL': return 'text-red-600';
-      case 'HIGH': return 'text-orange-600';
-      case 'NORMAL': return 'text-blue-600';
-      case 'LOW': return 'text-gray-600';
-      default: return 'text-gray-600';
+      case 'CRITICAL':
+        return 'text-red-600';
+      case 'HIGH':
+        return 'text-orange-600';
+      case 'NORMAL':
+        return 'text-blue-600';
+      case 'LOW':
+        return 'text-gray-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
@@ -143,7 +162,8 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
   const filteredItems = queueItems.filter(item => {
     if (filters.status && item.status !== filters.status) return false;
     if (filters.priority && item.priority !== filters.priority) return false;
-    if (filters.collection && item.collection !== filters.collection) return false;
+    if (filters.collection && item.collection !== filters.collection)
+      return false;
     return true;
   });
 
@@ -172,7 +192,9 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <select
             value={filters.status}
-            onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value as any }))}
+            onChange={e =>
+              setFilters(prev => ({ ...prev, status: e.target.value as any }))
+            }
             className="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
             <option value="">All Status</option>
@@ -185,7 +207,9 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
 
           <select
             value={filters.priority}
-            onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value as any }))}
+            onChange={e =>
+              setFilters(prev => ({ ...prev, priority: e.target.value as any }))
+            }
             className="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
             <option value="">All Priorities</option>
@@ -199,7 +223,9 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
             type="text"
             placeholder="Filter by collection..."
             value={filters.collection}
-            onChange={(e) => setFilters(prev => ({ ...prev, collection: e.target.value }))}
+            onChange={e =>
+              setFilters(prev => ({ ...prev, collection: e.target.value }))
+            }
             className="px-3 py-2 border border-gray-300 rounded-md text-sm"
           />
 
@@ -258,7 +284,7 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredItems.map((item) => (
+              {filteredItems.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
                     <input
@@ -279,12 +305,16 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(item.status)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(item.status)}`}
+                    >
                       {item.status}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`text-sm font-medium ${getPriorityColor(item.priority)}`}>
+                    <span
+                      className={`text-sm font-medium ${getPriorityColor(item.priority)}`}
+                    >
                       {item.priority}
                     </span>
                   </td>
@@ -320,4 +350,4 @@ export const QueueViewer: React.FC<QueueViewerProps> = ({ userId, className = ''
       </div>
     </div>
   );
-}; 
+};

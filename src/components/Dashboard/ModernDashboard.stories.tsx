@@ -8,7 +8,8 @@ const meta: Meta<typeof ModernDashboard> = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A modern, visually appealing dashboard with improved UX, animations, and better visual hierarchy.',
+        component:
+          'A modern, visually appealing dashboard with improved UX, animations, and better visual hierarchy.',
       },
     },
   },
@@ -28,7 +29,8 @@ export const WithData: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Dashboard with sample data showing team statistics and recent activity.',
+        story:
+          'Dashboard with sample data showing team statistics and recent activity.',
       },
     },
   },

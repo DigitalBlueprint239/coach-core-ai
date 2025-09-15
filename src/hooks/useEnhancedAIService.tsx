@@ -1,15 +1,19 @@
 // src/hooks/useEnhancedAIService.ts
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { 
-  EnhancedAIService, 
-  EnhancedAIServiceConfig, 
-  AIError, 
-  RateLimitError, 
-  QuotaError, 
-  SecurityError 
+import {
+  EnhancedAIService,
+  EnhancedAIServiceConfig,
+  AIError,
+  RateLimitError,
+  QuotaError,
+  SecurityError,
 } from '../services/ai-service-enhanced';
-import { 
-  User, TeamContext, GameContext, PlayerContext, AIConversation 
+import {
+  User,
+  TeamContext,
+  GameContext,
+  PlayerContext,
+  AIConversation,
 } from '../types/firestore-schema';
 
 // ============================================
@@ -93,7 +97,7 @@ export const useEnhancedAIService = (config: EnhancedAIServiceConfig) => {
     error: null,
     lastResponse: null,
     metrics: null,
-    alerts: []
+    alerts: [],
   });
 
   const serviceRef = useRef<EnhancedAIService | null>(null);
@@ -102,7 +106,7 @@ export const useEnhancedAIService = (config: EnhancedAIServiceConfig) => {
   // Initialize service
   useEffect(() => {
     serviceRef.current = new EnhancedAIService(config);
-    
+
     // Set up metrics polling
     const metricsInterval = setInterval(() => {
       if (serviceRef.current) {
@@ -156,119 +160,195 @@ export const useEnhancedAIService = (config: EnhancedAIServiceConfig) => {
     return aiError;
   }, []);
 
-  const createRequestHandler = useCallback(<T extends any[], R>(
-    operation: string,
-    handler: (...args: T) => Promise<R>
-  ) => {
-    return async (...args: T): Promise<R> => {
-      setState(prev => ({ ...prev, loading: true, error: null }));
+  const createRequestHandler = useCallback(
+    <T extends any[], R>(
+      operation: string,
+      handler: (...args: T) => Promise<R>
+    ) => {
+      return async (...args: T): Promise<R> => {
+        setState(prev => ({ ...prev, loading: true, error: null }));
 
-      try {
-        const result = await handler(...args);
-        setState(prev => ({ 
-          ...prev, 
-          loading: false, 
-          lastResponse: result,
-          error: null 
-        }));
-        return result;
-      } catch (error) {
-        const aiError = handleError(error, operation);
-        setState(prev => ({ ...prev, loading: false }));
-        throw aiError;
-      }
-    };
-  }, [handleError]);
+        try {
+          const result = await handler(...args);
+          setState(prev => ({
+            ...prev,
+            loading: false,
+            lastResponse: result,
+            error: null,
+          }));
+          return result;
+        } catch (error) {
+          const aiError = handleError(error, operation);
+          setState(prev => ({ ...prev, loading: false }));
+          throw aiError;
+        }
+      };
+    },
+    [handleError]
+  );
 
   // ============================================
   // AI OPERATIONS
   // ============================================
 
-  const generatePracticePlan = useCallback(async (params: PracticePlanParams) => {
-    if (!serviceRef.current) {
-      throw new Error('AI service not initialized');
-    }
-
-    return createRequestHandler(
-      'generatePracticePlan',
-      serviceRef.current.generatePracticePlan.bind(serviceRef.current)
-    )(params.teamContext, params.goals, params.duration, params.constraints, params.userId);
-  }, [createRequestHandler]);
-
-  const generatePlaySuggestion = useCallback(async (params: PlaySuggestionParams) => {
-    if (!serviceRef.current) {
-      throw new Error('AI service not initialized');
-    }
-
-    // This would need to be implemented in the service
-    return createRequestHandler(
-      'generatePlaySuggestion',
-      async (gameContext: GameContext, teamContext: TeamContext, playerContext: PlayerContext, userId: string) => {
-        // Placeholder implementation
-        throw new Error('Not implemented yet');
+  const generatePracticePlan = useCallback(
+    async (params: PracticePlanParams) => {
+      if (!serviceRef.current) {
+        throw new Error('AI service not initialized');
       }
-    )(params.gameContext, params.teamContext, params.playerContext, params.userId);
-  }, [createRequestHandler]);
 
-  const analyzeTeamPerformance = useCallback(async (params: PerformanceParams) => {
-    if (!serviceRef.current) {
-      throw new Error('AI service not initialized');
-    }
+      return createRequestHandler(
+        'generatePracticePlan',
+        serviceRef.current.generatePracticePlan.bind(serviceRef.current)
+      )(
+        params.teamContext,
+        params.goals,
+        params.duration,
+        params.constraints,
+        params.userId
+      );
+    },
+    [createRequestHandler]
+  );
 
-    // This would need to be implemented in the service
-    return createRequestHandler(
-      'analyzeTeamPerformance',
-      async (teamContext: TeamContext, performanceData: any, timeRange: string, userId: string) => {
-        // Placeholder implementation
-        throw new Error('Not implemented yet');
+  const generatePlaySuggestion = useCallback(
+    async (params: PlaySuggestionParams) => {
+      if (!serviceRef.current) {
+        throw new Error('AI service not initialized');
       }
-    )(params.teamContext, params.performanceData, params.timeRange, params.userId);
-  }, [createRequestHandler]);
 
-  const generateDrillSuggestions = useCallback(async (params: DrillParams) => {
-    if (!serviceRef.current) {
-      throw new Error('AI service not initialized');
-    }
+      // This would need to be implemented in the service
+      return createRequestHandler(
+        'generatePlaySuggestion',
+        async (
+          gameContext: GameContext,
+          teamContext: TeamContext,
+          playerContext: PlayerContext,
+          userId: string
+        ) => {
+          // Placeholder implementation
+          throw new Error('Not implemented yet');
+        }
+      )(
+        params.gameContext,
+        params.teamContext,
+        params.playerContext,
+        params.userId
+      );
+    },
+    [createRequestHandler]
+  );
 
-    // This would need to be implemented in the service
-    return createRequestHandler(
-      'generateDrillSuggestions',
-      async (teamContext: TeamContext, focusAreas: string[], duration: number, skillLevel: string, userId: string) => {
-        // Placeholder implementation
-        throw new Error('Not implemented yet');
+  const analyzeTeamPerformance = useCallback(
+    async (params: PerformanceParams) => {
+      if (!serviceRef.current) {
+        throw new Error('AI service not initialized');
       }
-    )(params.teamContext, params.focusAreas, params.duration, params.skillLevel, params.userId);
-  }, [createRequestHandler]);
 
-  const processConversation = useCallback(async (params: ConversationParams) => {
-    if (!serviceRef.current) {
-      throw new Error('AI service not initialized');
-    }
+      // This would need to be implemented in the service
+      return createRequestHandler(
+        'analyzeTeamPerformance',
+        async (
+          teamContext: TeamContext,
+          performanceData: any,
+          timeRange: string,
+          userId: string
+        ) => {
+          // Placeholder implementation
+          throw new Error('Not implemented yet');
+        }
+      )(
+        params.teamContext,
+        params.performanceData,
+        params.timeRange,
+        params.userId
+      );
+    },
+    [createRequestHandler]
+  );
 
-    // This would need to be implemented in the service
-    return createRequestHandler(
-      'processConversation',
-      async (message: string, conversationHistory: AIConversation[], userContext: User, teamContext: TeamContext, userId: string) => {
-        // Placeholder implementation
-        throw new Error('Not implemented yet');
+  const generateDrillSuggestions = useCallback(
+    async (params: DrillParams) => {
+      if (!serviceRef.current) {
+        throw new Error('AI service not initialized');
       }
-    )(params.message, params.conversationHistory, params.userContext, params.teamContext, params.userId);
-  }, [createRequestHandler]);
 
-  const validateSafety = useCallback(async (params: SafetyParams) => {
-    if (!serviceRef.current) {
-      throw new Error('AI service not initialized');
-    }
+      // This would need to be implemented in the service
+      return createRequestHandler(
+        'generateDrillSuggestions',
+        async (
+          teamContext: TeamContext,
+          focusAreas: string[],
+          duration: number,
+          skillLevel: string,
+          userId: string
+        ) => {
+          // Placeholder implementation
+          throw new Error('Not implemented yet');
+        }
+      )(
+        params.teamContext,
+        params.focusAreas,
+        params.duration,
+        params.skillLevel,
+        params.userId
+      );
+    },
+    [createRequestHandler]
+  );
 
-    // This would need to be implemented in the service
-    return createRequestHandler(
-      'validateSafety',
-      async (suggestion: any, teamContext: TeamContext, ageGroup: string, userId: string) => {
-        // Placeholder implementation
-        throw new Error('Not implemented yet');
+  const processConversation = useCallback(
+    async (params: ConversationParams) => {
+      if (!serviceRef.current) {
+        throw new Error('AI service not initialized');
       }
-    )(params.suggestion, params.teamContext, params.ageGroup, params.userId);
-  }, [createRequestHandler]);
+
+      // This would need to be implemented in the service
+      return createRequestHandler(
+        'processConversation',
+        async (
+          message: string,
+          conversationHistory: AIConversation[],
+          userContext: User,
+          teamContext: TeamContext,
+          userId: string
+        ) => {
+          // Placeholder implementation
+          throw new Error('Not implemented yet');
+        }
+      )(
+        params.message,
+        params.conversationHistory,
+        params.userContext,
+        params.teamContext,
+        params.userId
+      );
+    },
+    [createRequestHandler]
+  );
+
+  const validateSafety = useCallback(
+    async (params: SafetyParams) => {
+      if (!serviceRef.current) {
+        throw new Error('AI service not initialized');
+      }
+
+      // This would need to be implemented in the service
+      return createRequestHandler(
+        'validateSafety',
+        async (
+          suggestion: any,
+          teamContext: TeamContext,
+          ageGroup: string,
+          userId: string
+        ) => {
+          // Placeholder implementation
+          throw new Error('Not implemented yet');
+        }
+      )(params.suggestion, params.teamContext, params.ageGroup, params.userId);
+    },
+    [createRequestHandler]
+  );
 
   // ============================================
   // UTILITY METHODS
@@ -323,12 +403,12 @@ export const useEnhancedAIService = (config: EnhancedAIServiceConfig) => {
     clearCache,
     getCacheStats,
     getUserQuota,
-    resetUserQuota
+    resetUserQuota,
   };
 
   return {
     ...state,
-    ...actions
+    ...actions,
   };
 };
 
@@ -361,7 +441,7 @@ export class AIErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('AI Error Boundary caught an error:', error, errorInfo);
-    
+
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
@@ -379,7 +459,8 @@ export class AIErrorBoundary extends Component<Props, State> {
             AI Service Error
           </h2>
           <p className="text-red-800 mb-4">
-            {this.state.error?.message || 'An unexpected error occurred with the AI service.'}
+            {this.state.error?.message ||
+              'An unexpected error occurred with the AI service.'}
           </p>
           <button
             onClick={() => this.setState({ hasError: false, error: null })}
@@ -405,7 +486,11 @@ interface ErrorMessageProps {
   onDismiss?: () => void;
 }
 
-export const AIErrorMessage: React.FC<ErrorMessageProps> = ({ error, onRetry, onDismiss }) => {
+export const AIErrorMessage: React.FC<ErrorMessageProps> = ({
+  error,
+  onRetry,
+  onDismiss,
+}) => {
   const getErrorIcon = () => {
     switch (error.type) {
       case 'RATE_LIMIT':
@@ -439,9 +524,7 @@ export const AIErrorMessage: React.FC<ErrorMessageProps> = ({ error, onRetry, on
   return (
     <div className={`p-4 border rounded-lg ${getErrorColor()}`}>
       <div className="flex items-start">
-        <div className="flex-shrink-0 text-xl mr-3">
-          {getErrorIcon()}
-        </div>
+        <div className="flex-shrink-0 text-xl mr-3">{getErrorIcon()}</div>
         <div className="flex-1">
           <h3 className="font-semibold mb-1">
             {error.type === 'RATE_LIMIT' && 'Rate Limit Exceeded'}
@@ -451,9 +534,7 @@ export const AIErrorMessage: React.FC<ErrorMessageProps> = ({ error, onRetry, on
             {error.type === 'API' && 'API Error'}
             {error.type === 'UNKNOWN' && 'Unknown Error'}
           </h3>
-          <p className="text-sm mb-3">
-            {error.message}
-          </p>
+          <p className="text-sm mb-3">{error.message}</p>
           <div className="flex space-x-2">
             {onRetry && error.retryable && (
               <button
@@ -476,4 +557,4 @@ export const AIErrorMessage: React.FC<ErrorMessageProps> = ({ error, onRetry, on
       </div>
     </div>
   );
-}; 
+};

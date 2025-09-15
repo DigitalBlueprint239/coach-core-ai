@@ -83,7 +83,14 @@ export interface CollaborationComment {
 }
 
 export interface CollaborationEvent {
-  type: 'join' | 'leave' | 'cursor-move' | 'selection-change' | 'content-change' | 'comment' | 'approval';
+  type:
+    | 'join'
+    | 'leave'
+    | 'cursor-move'
+    | 'selection-change'
+    | 'content-change'
+    | 'comment'
+    | 'approval';
   participantId: string;
   timestamp: Date;
   data: any;
@@ -105,7 +112,7 @@ class RealTimeCollaborationEngine {
   private initializeEngine(): void {
     // Setup event listeners
     this.setupEventListeners();
-    
+
     // Initialize connection
     this.connect();
   }
@@ -114,9 +121,11 @@ class RealTimeCollaborationEngine {
     // Listen for online/offline status
     window.addEventListener('online', () => this.handleOnline());
     window.addEventListener('offline', () => this.handleOffline());
-    
+
     // Listen for page visibility changes
-    document.addEventListener('visibilitychange', () => this.handleVisibilityChange());
+    document.addEventListener('visibilitychange', () =>
+      this.handleVisibilityChange()
+    );
   }
 
   private async connect(): Promise<void> {
@@ -133,7 +142,7 @@ class RealTimeCollaborationEngine {
   }
 
   private async simulateConnection(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(resolve, 1000);
     });
   }
@@ -141,11 +150,14 @@ class RealTimeCollaborationEngine {
   private handleConnectionError(): void {
     if (this.connectionRetryCount < this.maxRetries) {
       this.connectionRetryCount++;
-      setTimeout(() => this.connect(), this.retryDelay * this.connectionRetryCount);
+      setTimeout(
+        () => this.connect(),
+        this.retryDelay * this.connectionRetryCount
+      );
     } else {
-      this.emit('connection-failed', { 
+      this.emit('connection-failed', {
         error: 'Max retries exceeded',
-        retryCount: this.connectionRetryCount 
+        retryCount: this.connectionRetryCount,
       });
     }
   }
@@ -178,7 +190,7 @@ class RealTimeCollaborationEngine {
     settings?: Partial<CollaborationSettings>
   ): Promise<CollaborationSession> {
     const sessionId = this.generateId();
-    
+
     const defaultSettings: CollaborationSettings = {
       allowAnonymous: false,
       requireApproval: true,
@@ -212,7 +224,7 @@ class RealTimeCollaborationEngine {
 
     this.sessions.set(sessionId, session);
     this.emit('session-created', session);
-    
+
     return session;
   }
 
@@ -239,31 +251,36 @@ class RealTimeCollaborationEngine {
 
     session.participants.push(newParticipant);
     this.participants.set(participantId, newParticipant);
-    
+
     session.updatedAt = new Date();
-    
+
     this.emit('participant-joined', { sessionId, participant: newParticipant });
     this.emit('session-updated', session);
-    
+
     return newParticipant;
   }
 
-  public async leaveSession(sessionId: string, participantId: string): Promise<void> {
+  public async leaveSession(
+    sessionId: string,
+    participantId: string
+  ): Promise<void> {
     const session = this.sessions.get(sessionId);
     if (!session) return;
 
-    const participantIndex = session.participants.findIndex(p => p.id === participantId);
+    const participantIndex = session.participants.findIndex(
+      p => p.id === participantId
+    );
     if (participantIndex === -1) return;
 
     const participant = session.participants[participantIndex];
     participant.isOnline = false;
     participant.lastSeen = new Date();
-    
+
     session.participants.splice(participantIndex, 1);
     this.participants.delete(participantId);
-    
+
     session.updatedAt = new Date();
-    
+
     this.emit('participant-left', { sessionId, participant });
     this.emit('session-updated', session);
   }
@@ -284,7 +301,7 @@ class RealTimeCollaborationEngine {
       change.id = this.generateId();
       change.userId = participantId;
       change.timestamp = new Date();
-      
+
       session.document.changeHistory.push(change);
       session.document.version++;
       session.document.lastModified = new Date();
@@ -292,12 +309,12 @@ class RealTimeCollaborationEngine {
     }
 
     session.updatedAt = new Date();
-    
-    this.emit('document-updated', { 
-      sessionId, 
-      changes, 
+
+    this.emit('document-updated', {
+      sessionId,
+      changes,
       version: session.document.version,
-      participant 
+      participant,
     });
     this.emit('session-updated', session);
   }
@@ -416,9 +433,19 @@ class RealTimeCollaborationEngine {
     if (!change) return;
 
     // Mark change as approved/rejected
-    change.metadata = { ...change.metadata, approved, approvedBy: participantId, approvedAt: new Date() };
+    change.metadata = {
+      ...change.metadata,
+      approved,
+      approvedBy: participantId,
+      approvedAt: new Date(),
+    };
 
-    this.emit('change-approved', { sessionId, changeId, approved, participant });
+    this.emit('change-approved', {
+      sessionId,
+      changeId,
+      approved,
+      participant,
+    });
     this.emit('session-updated', session);
   }
 
@@ -428,15 +455,22 @@ class RealTimeCollaborationEngine {
     return this.sessions.get(sessionId);
   }
 
-  public getSessionsByType(type: CollaborationSession['type']): CollaborationSession[] {
+  public getSessionsByType(
+    type: CollaborationSession['type']
+  ): CollaborationSession[] {
     return Array.from(this.sessions.values()).filter(s => s.type === type);
   }
 
   public getActiveSessions(): CollaborationSession[] {
-    return Array.from(this.sessions.values()).filter(s => s.status === 'active');
+    return Array.from(this.sessions.values()).filter(
+      s => s.status === 'active'
+    );
   }
 
-  public getParticipant(sessionId: string, participantId: string): CollaborationParticipant | undefined {
+  public getParticipant(
+    sessionId: string,
+    participantId: string
+  ): CollaborationParticipant | undefined {
     const session = this.sessions.get(sessionId);
     return session?.participants.find(p => p.id === participantId);
   }
@@ -504,10 +538,10 @@ class RealTimeCollaborationEngine {
     // Clean up all sessions and participants
     this.sessions.clear();
     this.participants.clear();
-    
+
     // Remove all event listeners
     this.eventListeners.clear();
-    
+
     // Disconnect
     await this.disconnect();
   }

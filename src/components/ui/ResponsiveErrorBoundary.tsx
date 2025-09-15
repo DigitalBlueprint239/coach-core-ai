@@ -44,7 +44,7 @@ export class ResponsiveErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ error, errorInfo });
-    
+
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
@@ -73,15 +73,17 @@ export class ResponsiveErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      return <ErrorFallback 
-        error={this.state.error!}
-        onRetry={this.handleRetry}
-        onGoHome={this.handleGoHome}
-        onGoBack={this.handleGoBack}
-        showHomeButton={this.props.showHomeButton}
-        showBackButton={this.props.showBackButton}
-        showRefreshButton={this.props.showRefreshButton}
-      />;
+      return (
+        <ErrorFallback
+          error={this.state.error!}
+          onRetry={this.handleRetry}
+          onGoHome={this.handleGoHome}
+          onGoBack={this.handleGoBack}
+          showHomeButton={this.props.showHomeButton}
+          showBackButton={this.props.showBackButton}
+          showRefreshButton={this.props.showRefreshButton}
+        />
+      );
     }
 
     return this.props.children;
@@ -139,25 +141,29 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           justifyContent="center"
           color="red.600"
         >
-          <Icon as={AlertTriangle} boxSize={{ base: '40px', md: '50px', lg: '60px' }} />
+          <Icon
+            as={AlertTriangle}
+            boxSize={{ base: '40px', md: '50px', lg: '60px' }}
+          />
         </Box>
 
         <VStack spacing={4}>
-          <Heading 
-            size={headingSize} 
+          <Heading
+            size={headingSize}
             color={textColor}
             className="animate-fade-in-responsive"
           >
             Oops! Something went wrong
           </Heading>
-          
-          <Text 
-            fontSize={textSize} 
+
+          <Text
+            fontSize={textSize}
             color={textColor}
             maxW="500px"
             className="animate-slide-up-responsive"
           >
-            We encountered an unexpected error. Don't worry, our team has been notified and we're working to fix it.
+            We encountered an unexpected error. Don't worry, our team has been
+            notified and we're working to fix it.
           </Text>
 
           {process.env.NODE_ENV === 'development' && (

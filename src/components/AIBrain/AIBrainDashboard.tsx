@@ -24,9 +24,6 @@ import {
   Center,
   Progress,
   Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
   Tabs,
   TabList,
   TabPanels,
@@ -51,6 +48,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
+import { SafeStatLabel, SafeStatNumber, SafeStatHelpText } from '../../ui/stat';
 import {
   Brain,
   Lightbulb,
@@ -138,7 +136,9 @@ interface PlayerInsight {
 
 const AIBrainDashboard: React.FC = () => {
   const [insights, setInsights] = useState<AIInsight[]>([]);
-  const [recommendations, setRecommendations] = useState<AIRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<AIRecommendation[]>(
+    []
+  );
   const [teamPerformance, setTeamPerformance] = useState<TeamPerformance>({
     overallScore: 78,
     offense: 82,
@@ -149,14 +149,25 @@ const AIBrainDashboard: React.FC = () => {
   });
   const [playerInsights, setPlayerInsights] = useState<PlayerInsight[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(null);
-  const [selectedRecommendation, setSelectedRecommendation] = useState<AIRecommendation | null>(null);
-  
-  const { isOpen: isInsightModalOpen, onOpen: onInsightModalOpen, onClose: onInsightModalClose } = useDisclosure();
-  const { isOpen: isRecommendationModalOpen, onOpen: onRecommendationModalOpen, onClose: onRecommendationModalClose } = useDisclosure();
-  
+  const [selectedInsight, setSelectedInsight] = useState<AIInsight | null>(
+    null
+  );
+  const [selectedRecommendation, setSelectedRecommendation] =
+    useState<AIRecommendation | null>(null);
+
+  const {
+    isOpen: isInsightModalOpen,
+    onOpen: onInsightModalOpen,
+    onClose: onInsightModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isRecommendationModalOpen,
+    onOpen: onRecommendationModalOpen,
+    onClose: onRecommendationModalClose,
+  } = useDisclosure();
+
   const toast = useToast();
-  
+
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -167,7 +178,8 @@ const AIBrainDashboard: React.FC = () => {
       id: '1',
       type: 'performance',
       title: 'Defensive Line Gap Control',
-      description: 'Analysis shows defensive linemen are consistently getting pushed out of their gaps, leading to 23% of opponent rushing yards. Recommend focusing on hand placement and leverage drills.',
+      description:
+        'Analysis shows defensive linemen are consistently getting pushed out of their gaps, leading to 23% of opponent rushing yards. Recommend focusing on hand placement and leverage drills.',
       confidence: 87,
       impact: 'high',
       category: 'Defense',
@@ -180,7 +192,8 @@ const AIBrainDashboard: React.FC = () => {
       id: '2',
       type: 'strategy',
       title: 'Third Down Conversion Optimization',
-      description: 'Current third down conversion rate is 34%. AI analysis suggests implementing more play-action passes on 3rd and short situations could improve this to 42%.',
+      description:
+        'Current third down conversion rate is 34%. AI analysis suggests implementing more play-action passes on 3rd and short situations could improve this to 42%.',
       confidence: 92,
       impact: 'high',
       category: 'Offense',
@@ -193,7 +206,8 @@ const AIBrainDashboard: React.FC = () => {
       id: '3',
       type: 'health',
       title: 'Recovery Time Optimization',
-      description: 'Player fatigue analysis indicates optimal recovery periods between high-intensity sessions should be 48-72 hours instead of current 24-36 hours.',
+      description:
+        'Player fatigue analysis indicates optimal recovery periods between high-intensity sessions should be 48-72 hours instead of current 24-36 hours.',
       confidence: 78,
       impact: 'medium',
       category: 'Health & Fitness',
@@ -209,7 +223,8 @@ const AIBrainDashboard: React.FC = () => {
     {
       id: '1',
       title: 'Implement Gap Control Drills',
-      description: 'Focus on defensive line technique with specific drills targeting hand placement, leverage, and gap responsibility.',
+      description:
+        'Focus on defensive line technique with specific drills targeting hand placement, leverage, and gap responsibility.',
       type: 'practice',
       confidence: 89,
       expectedOutcome: 'Reduce opponent rushing yards by 15-20% within 3 weeks',
@@ -227,7 +242,8 @@ const AIBrainDashboard: React.FC = () => {
     {
       id: '2',
       title: 'Enhanced Play-Action Package',
-      description: 'Develop 3-4 new play-action concepts specifically designed for 3rd and short situations.',
+      description:
+        'Develop 3-4 new play-action concepts specifically designed for 3rd and short situations.',
       type: 'game',
       confidence: 91,
       expectedOutcome: 'Improve 3rd down conversion rate from 34% to 42%',
@@ -282,14 +298,15 @@ const AIBrainDashboard: React.FC = () => {
 
   const handleGenerateInsights = async () => {
     setIsGenerating(true);
-    
+
     // Simulate AI analysis
     setTimeout(() => {
       const newInsight: AIInsight = {
         id: Date.now().toString(),
         type: 'performance',
         title: 'New AI-Generated Insight',
-        description: 'This is a newly generated insight based on recent performance data and AI analysis.',
+        description:
+          'This is a newly generated insight based on recent performance data and AI analysis.',
         confidence: Math.floor(Math.random() * 30) + 70, // 70-100
         impact: ['high', 'medium', 'low'][Math.floor(Math.random() * 3)] as any,
         category: 'AI Analysis',
@@ -298,13 +315,14 @@ const AIBrainDashboard: React.FC = () => {
         priority: Math.floor(Math.random() * 5) + 1,
         tags: ['ai-generated', 'performance'],
       };
-      
+
       setInsights(prev => [newInsight, ...prev]);
       setIsGenerating(false);
-      
+
       toast({
         title: 'New Insight Generated',
-        description: 'AI has analyzed your team data and generated a new insight',
+        description:
+          'AI has analyzed your team data and generated a new insight',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -313,15 +331,16 @@ const AIBrainDashboard: React.FC = () => {
   };
 
   const handleAcceptRecommendation = (recommendationId: string) => {
-    setRecommendations(prev => 
-      prev.map(rec => 
+    setRecommendations(prev =>
+      prev.map(rec =>
         rec.id === recommendationId ? { ...rec, isAccepted: true } : rec
       )
     );
-    
+
     toast({
       title: 'Recommendation Accepted',
-      description: 'This recommendation has been added to your implementation plan',
+      description:
+        'This recommendation has been added to your implementation plan',
       status: 'success',
       duration: 2000,
       isClosable: true,
@@ -329,12 +348,12 @@ const AIBrainDashboard: React.FC = () => {
   };
 
   const handleImplementInsight = (insightId: string) => {
-    setInsights(prev => 
-      prev.map(insight => 
+    setInsights(prev =>
+      prev.map(insight =>
         insight.id === insightId ? { ...insight, isImplemented: true } : insight
       )
     );
-    
+
     toast({
       title: 'Insight Implemented',
       description: 'This insight has been marked as implemented',
@@ -346,38 +365,55 @@ const AIBrainDashboard: React.FC = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'red';
-      case 'medium': return 'orange';
-      case 'low': return 'green';
-      default: return 'gray';
+      case 'high':
+        return 'red';
+      case 'medium':
+        return 'orange';
+      case 'low':
+        return 'green';
+      default:
+        return 'gray';
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'performance': return Activity;
-      case 'strategy': return Brain;
-      case 'health': return Heart;
-      case 'tactical': return Target;
-      default: return Info;
+      case 'performance':
+        return Activity;
+      case 'strategy':
+        return Brain;
+      case 'health':
+        return Heart;
+      case 'tactical':
+        return Target;
+      default:
+        return Info;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return TrendingUp;
-      case 'declining': return TrendingUp;
-      case 'stable': return TrendingUp;
-      default: return TrendingUp;
+      case 'improving':
+        return TrendingUp;
+      case 'declining':
+        return TrendingUp;
+      case 'stable':
+        return TrendingUp;
+      default:
+        return TrendingUp;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case 'improving': return 'green';
-      case 'declining': return 'red';
-      case 'stable': return 'blue';
-      default: return 'gray';
+      case 'improving':
+        return 'green';
+      case 'declining':
+        return 'red';
+      case 'stable':
+        return 'blue';
+      default:
+        return 'gray';
     }
   };
 
@@ -393,7 +429,7 @@ const AIBrainDashboard: React.FC = () => {
             AI-powered insights and recommendations for your coaching decisions
           </Text>
         </VStack>
-        
+
         <HStack spacing={4}>
           <Button
             leftIcon={<Icon as={RefreshCw} />}
@@ -421,16 +457,29 @@ const AIBrainDashboard: React.FC = () => {
         <Card variant="elevated" bg={cardBg}>
           <CardBody>
             <Stat>
-              <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">
+              <SafeStatLabel color="gray.600" fontSize="sm" fontWeight="medium">
                 Overall Performance
-              </StatLabel>
-              <StatNumber fontSize="3xl" fontWeight="bold" color="brand.600">
+              </SafeStatLabel>
+              <SafeStatNumber
+                fontSize="3xl"
+                fontWeight="bold"
+                color="brand.600"
+              >
                 {teamPerformance.overallScore}%
-              </StatNumber>
-              <StatHelpText color={getTrendColor(teamPerformance.trend)} fontSize="sm">
-                <Icon as={teamPerformance.trend === 'improving' ? ArrowUp : ArrowDown} color={getTrendColor(teamPerformance.trend)} boxSize={4} />
+              </SafeStatNumber>
+              <SafeStatHelpText
+                color={getTrendColor(teamPerformance.trend)}
+                fontSize="sm"
+              >
+                <Icon
+                  as={
+                    teamPerformance.trend === 'improving' ? ArrowUp : ArrowDown
+                  }
+                  color={getTrendColor(teamPerformance.trend)}
+                  boxSize={4}
+                />
                 {teamPerformance.trend}
-              </StatHelpText>
+              </SafeStatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -438,16 +487,20 @@ const AIBrainDashboard: React.FC = () => {
         <Card variant="elevated" bg={cardBg}>
           <CardBody>
             <Stat>
-              <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">
+              <SafeStatLabel color="gray.600" fontSize="sm" fontWeight="medium">
                 Offense
-              </StatLabel>
-              <StatNumber fontSize="3xl" fontWeight="bold" color="green.600">
+              </SafeStatLabel>
+              <SafeStatNumber
+                fontSize="3xl"
+                fontWeight="bold"
+                color="green.600"
+              >
                 {teamPerformance.offense}%
-              </StatNumber>
-              <StatHelpText color="green.500" fontSize="sm">
+              </SafeStatNumber>
+              <SafeStatHelpText color="green.500" fontSize="sm">
                 <Icon as={ArrowUp} color="green.500" boxSize={4} />
                 +3% this week
-              </StatHelpText>
+              </SafeStatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -455,16 +508,16 @@ const AIBrainDashboard: React.FC = () => {
         <Card variant="elevated" bg={cardBg}>
           <CardBody>
             <Stat>
-              <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">
+              <SafeStatLabel color="gray.600" fontSize="sm" fontWeight="medium">
                 Defense
-              </StatLabel>
-              <StatNumber fontSize="3xl" fontWeight="bold" color="blue.600">
+              </SafeStatLabel>
+              <SafeStatNumber fontSize="3xl" fontWeight="bold" color="blue.600">
                 {teamPerformance.defense}%
-              </StatNumber>
-              <StatHelpText color="red.500" fontSize="sm">
+              </SafeStatNumber>
+              <SafeStatHelpText color="red.500" fontSize="sm">
                 <Icon as={ArrowDown} color="red.500" boxSize={4} />
                 -2% this week
-              </StatHelpText>
+              </SafeStatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -472,16 +525,20 @@ const AIBrainDashboard: React.FC = () => {
         <Card variant="elevated" bg={cardBg}>
           <CardBody>
             <Stat>
-              <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">
+              <SafeStatLabel color="gray.600" fontSize="sm" fontWeight="medium">
                 Special Teams
-              </StatLabel>
-              <StatNumber fontSize="3xl" fontWeight="bold" color="purple.600">
+              </SafeStatLabel>
+              <SafeStatNumber
+                fontSize="3xl"
+                fontWeight="bold"
+                color="purple.600"
+              >
                 {teamPerformance.specialTeams}%
-              </StatNumber>
-              <StatHelpText color="green.500" fontSize="sm">
+              </SafeStatNumber>
+              <SafeStatHelpText color="green.500" fontSize="sm">
                 <Icon as={ArrowUp} color="green.500" boxSize={4} />
                 +5% this week
-              </StatHelpText>
+              </SafeStatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -494,7 +551,7 @@ const AIBrainDashboard: React.FC = () => {
           <Tab>Player Analysis</Tab>
           <Tab>AI Chat</Tab>
         </TabList>
-        
+
         <TabPanels>
           {/* AI Insights Tab */}
           <TabPanel>
@@ -507,9 +564,9 @@ const AIBrainDashboard: React.FC = () => {
                   {insights.filter(i => !i.isImplemented).length} Pending
                 </Badge>
               </Flex>
-              
+
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-                {insights.map((insight) => (
+                {insights.map(insight => (
                   <Card
                     key={insight.id}
                     variant="elevated"
@@ -531,16 +588,23 @@ const AIBrainDashboard: React.FC = () => {
                       <VStack align="start" spacing={2}>
                         <Flex justify="space-between" align="center" w="full">
                           <HStack spacing={2}>
-                            <Icon as={getTypeIcon(insight.type)} boxSize={5} color="brand.500" />
+                            <Icon
+                              as={getTypeIcon(insight.type)}
+                              boxSize={5}
+                              color="brand.500"
+                            />
                             <Heading size="sm" color="gray.800">
                               {insight.title}
                             </Heading>
                           </HStack>
-                          <Badge colorScheme={getImpactColor(insight.impact)} variant="solid">
+                          <Badge
+                            colorScheme={getImpactColor(insight.impact)}
+                            variant="solid"
+                          >
                             {insight.impact.toUpperCase()}
                           </Badge>
                         </Flex>
-                        
+
                         <HStack spacing={2}>
                           <Badge colorScheme="blue" variant="subtle">
                             {insight.category}
@@ -554,18 +618,18 @@ const AIBrainDashboard: React.FC = () => {
                         </HStack>
                       </VStack>
                     </CardHeader>
-                    
+
                     <CardBody pt={0}>
                       <VStack spacing={3} align="start">
                         <Text fontSize="sm" color="gray.600" noOfLines={3}>
                           {insight.description}
                         </Text>
-                        
+
                         <HStack spacing={2} w="full" justify="space-between">
                           <Text fontSize="xs" color="gray.500">
                             {insight.createdAt.toLocaleDateString()}
                           </Text>
-                          
+
                           <HStack spacing={2}>
                             {insight.isImplemented ? (
                               <Badge colorScheme="green" variant="subtle">
@@ -576,7 +640,7 @@ const AIBrainDashboard: React.FC = () => {
                                 size="sm"
                                 colorScheme="brand"
                                 variant="outline"
-                                onClick={(e) => {
+                                onClick={e => {
                                   e.stopPropagation();
                                   handleImplementInsight(insight.id);
                                 }}
@@ -593,16 +657,16 @@ const AIBrainDashboard: React.FC = () => {
               </SimpleGrid>
             </VStack>
           </TabPanel>
-          
+
           {/* Recommendations Tab */}
           <TabPanel>
             <VStack spacing={6} align="stretch">
               <Heading size="md" color="gray.800">
                 AI Recommendations ({recommendations.length})
               </Heading>
-              
+
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-                {recommendations.map((recommendation) => (
+                {recommendations.map(recommendation => (
                   <Card
                     key={recommendation.id}
                     variant="elevated"
@@ -626,11 +690,16 @@ const AIBrainDashboard: React.FC = () => {
                           <Heading size="sm" color="gray.800">
                             {recommendation.title}
                           </Heading>
-                          <Badge colorScheme={recommendation.isAccepted ? 'green' : 'blue'} variant="solid">
+                          <Badge
+                            colorScheme={
+                              recommendation.isAccepted ? 'green' : 'blue'
+                            }
+                            variant="solid"
+                          >
                             {recommendation.isAccepted ? 'Accepted' : 'New'}
                           </Badge>
                         </Flex>
-                        
+
                         <HStack spacing={2}>
                           <Badge colorScheme="blue" variant="subtle">
                             {recommendation.type}
@@ -644,33 +713,40 @@ const AIBrainDashboard: React.FC = () => {
                         </HStack>
                       </VStack>
                     </CardHeader>
-                    
+
                     <CardBody pt={0}>
                       <VStack spacing={3} align="start">
                         <Text fontSize="sm" color="gray.600" noOfLines={2}>
                           {recommendation.description}
                         </Text>
-                        
+
                         <Box w="full">
-                          <Text fontSize="xs" fontWeight="medium" color="gray.700" mb={1}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="medium"
+                            color="gray.700"
+                            mb={1}
+                          >
                             Expected Outcome:
                           </Text>
                           <Text fontSize="xs" color="gray.600">
                             {recommendation.expectedOutcome}
                           </Text>
                         </Box>
-                        
+
                         <HStack spacing={2} w="full" justify="space-between">
                           <HStack spacing={1}>
                             <Icon as={Clock} boxSize={4} />
-                            <Text fontSize="xs">{recommendation.estimatedTime} min</Text>
+                            <Text fontSize="xs">
+                              {recommendation.estimatedTime} min
+                            </Text>
                           </HStack>
-                          
+
                           {!recommendation.isAccepted && (
                             <Button
                               size="sm"
                               colorScheme="brand"
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
                                 handleAcceptRecommendation(recommendation.id);
                               }}
@@ -686,16 +762,16 @@ const AIBrainDashboard: React.FC = () => {
               </SimpleGrid>
             </VStack>
           </TabPanel>
-          
+
           {/* Player Analysis Tab */}
           <TabPanel>
             <VStack spacing={6} align="stretch">
               <Heading size="md" color="gray.800">
                 Player Performance Insights ({playerInsights.length})
               </Heading>
-              
+
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-                {playerInsights.map((player) => (
+                {playerInsights.map(player => (
                   <Card
                     key={player.playerId}
                     variant="elevated"
@@ -713,36 +789,49 @@ const AIBrainDashboard: React.FC = () => {
                             {player.position}
                           </Badge>
                         </Flex>
-                        
+
                         <HStack spacing={2}>
                           <Badge colorScheme="green" variant="subtle">
                             {player.performance}% performance
                           </Badge>
-                          <Badge colorScheme={getTrendColor(player.trend)} variant="subtle">
+                          <Badge
+                            colorScheme={getTrendColor(player.trend)}
+                            variant="subtle"
+                          >
                             {player.trend}
                           </Badge>
                         </HStack>
                       </VStack>
                     </CardHeader>
-                    
+
                     <CardBody pt={0}>
                       <VStack spacing={3} align="start">
                         <Box w="full">
-                          <Text fontSize="xs" fontWeight="medium" color="gray.700" mb={2}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="medium"
+                            color="gray.700"
+                            mb={2}
+                          >
                             AI Recommendations:
                           </Text>
                           <List spacing={1}>
                             {player.recommendations.map((rec, index) => (
-                              <ListItem key={index} fontSize="xs" color="gray.600">
+                              <ListItem
+                                key={index}
+                                fontSize="xs"
+                                color="gray.600"
+                              >
                                 <ListIcon as={CheckCircle} color="green.500" />
                                 {rec}
                               </ListItem>
                             ))}
                           </List>
                         </Box>
-                        
+
                         <Text fontSize="xs" color="gray.500">
-                          Last assessed: {player.lastAssessment.toLocaleDateString()}
+                          Last assessed:{' '}
+                          {player.lastAssessment.toLocaleDateString()}
                         </Text>
                       </VStack>
                     </CardBody>
@@ -761,7 +850,8 @@ const AIBrainDashboard: React.FC = () => {
                   AI Coaching Assistant
                 </Heading>
                 <Text color="gray.600" fontSize="sm">
-                  Ask me anything about coaching, practice planning, or team strategy
+                  Ask me anything about coaching, practice planning, or team
+                  strategy
                 </Text>
               </CardHeader>
               <CardBody>
@@ -773,7 +863,11 @@ const AIBrainDashboard: React.FC = () => {
       </Tabs>
 
       {/* Insight Details Modal */}
-      <Modal isOpen={isInsightModalOpen} onClose={onInsightModalClose} size="xl">
+      <Modal
+        isOpen={isInsightModalOpen}
+        onClose={onInsightModalClose}
+        size="xl"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Insight Details</ModalHeader>
@@ -782,44 +876,70 @@ const AIBrainDashboard: React.FC = () => {
             {selectedInsight && (
               <VStack spacing={4} align="stretch">
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Title
                   </Text>
                   <Text fontSize="lg" fontWeight="semibold">
                     {selectedInsight.title}
                   </Text>
                 </Box>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Description
                   </Text>
-                  <Text fontSize="md">
-                    {selectedInsight.description}
-                  </Text>
+                  <Text fontSize="md">{selectedInsight.description}</Text>
                 </Box>
-                
+
                 <Grid templateColumns="repeat(3, 1fr)" gap={4}>
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Confidence
                     </Text>
                     <Text fontSize="lg" color="green.600">
                       {selectedInsight.confidence}%
                     </Text>
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Impact
                     </Text>
-                    <Badge colorScheme={getImpactColor(selectedInsight.impact)} size="lg">
+                    <Badge
+                      colorScheme={getImpactColor(selectedInsight.impact)}
+                      size="lg"
+                    >
                       {selectedInsight.impact.toUpperCase()}
                     </Badge>
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Priority
                     </Text>
                     <Text fontSize="lg" color="orange.600">
@@ -827,9 +947,14 @@ const AIBrainDashboard: React.FC = () => {
                     </Text>
                   </Box>
                 </Grid>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Tags
                   </Text>
                   <HStack spacing={2} flexWrap="wrap">
@@ -863,7 +988,11 @@ const AIBrainDashboard: React.FC = () => {
       </Modal>
 
       {/* Recommendation Details Modal */}
-      <Modal isOpen={isRecommendationModalOpen} onClose={onRecommendationModalClose} size="xl">
+      <Modal
+        isOpen={isRecommendationModalOpen}
+        onClose={onRecommendationModalClose}
+        size="xl"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Recommendation Details</ModalHeader>
@@ -872,67 +1001,104 @@ const AIBrainDashboard: React.FC = () => {
             {selectedRecommendation && (
               <VStack spacing={4} align="stretch">
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Title
                   </Text>
                   <Text fontSize="lg" fontWeight="semibold">
                     {selectedRecommendation.title}
                   </Text>
                 </Box>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Description
                   </Text>
                   <Text fontSize="md">
                     {selectedRecommendation.description}
                   </Text>
                 </Box>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Expected Outcome
                   </Text>
                   <Text fontSize="md" color="green.600">
                     {selectedRecommendation.expectedOutcome}
                   </Text>
                 </Box>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Implementation Steps
                   </Text>
                   <List spacing={2}>
-                    {selectedRecommendation.implementationSteps.map((step, index) => (
-                      <ListItem key={index} fontSize="md">
-                        <ListIcon as={CheckCircle} color="green.500" />
-                        {step}
-                      </ListItem>
-                    ))}
+                    {selectedRecommendation.implementationSteps.map(
+                      (step, index) => (
+                        <ListItem key={index} fontSize="md">
+                          <ListIcon as={CheckCircle} color="green.500" />
+                          {step}
+                        </ListItem>
+                      )
+                    )}
                   </List>
                 </Box>
-                
+
                 <Grid templateColumns="repeat(3, 1fr)" gap={4}>
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Time Required
                     </Text>
                     <Text fontSize="lg">
                       {selectedRecommendation.estimatedTime} min
                     </Text>
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Difficulty
                     </Text>
                     <Badge colorScheme="orange" size="lg">
                       {selectedRecommendation.difficulty}
                     </Badge>
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={1}
+                    >
                       Confidence
                     </Text>
                     <Text fontSize="lg" color="green.600">
@@ -967,12 +1133,14 @@ const AIBrainDashboard: React.FC = () => {
 
 // AI Chat Interface Component
 const AIChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<Array<{
-    id: string;
-    type: 'user' | 'ai';
-    content: string;
-    timestamp: Date;
-  }>>([]);
+  const [messages, setMessages] = useState<
+    Array<{
+      id: string;
+      type: 'user' | 'ai';
+      content: string;
+      timestamp: Date;
+    }>
+  >([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -985,12 +1153,14 @@ const AIChatInterface: React.FC = () => {
 
   // Initialize with welcome message
   useEffect(() => {
-    setMessages([{
-      id: 'welcome',
-      type: 'ai',
-      content: `Hello Coach! I'm your AI coaching assistant. I can help you with practice planning, team analysis, strategy development, and more. What would you like to work on today?`,
-      timestamp: new Date()
-    }]);
+    setMessages([
+      {
+        id: 'welcome',
+        type: 'ai',
+        content: `Hello Coach! I'm your AI coaching assistant. I can help you with practice planning, team analysis, strategy development, and more. What would you like to work on today?`,
+        timestamp: new Date(),
+      },
+    ]);
   }, []);
 
   const handleSendMessage = async () => {
@@ -1000,7 +1170,7 @@ const AIChatInterface: React.FC = () => {
       id: Date.now().toString(),
       type: 'user' as const,
       content: inputValue,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -1029,17 +1199,26 @@ const AIChatInterface: React.FC = () => {
 
   const generateAIResponse = (userInput: string) => {
     const lowerInput = userInput.toLowerCase();
-    
+
     // Simple rule-based responses (in production, this would be AI-generated)
     let response = '';
-    
+
     if (lowerInput.includes('practice') || lowerInput.includes('drill')) {
       response = `Great question about practice planning! For effective practices, I recommend:\n\n1. Start with a 10-15 minute dynamic warm-up\n2. Focus on 2-3 main objectives per session\n3. Include both individual skills and team drills\n4. End with a 5-10 minute cool-down\n\nWould you like me to generate a specific practice plan for your team?`;
-    } else if (lowerInput.includes('defense') || lowerInput.includes('tackling')) {
+    } else if (
+      lowerInput.includes('defense') ||
+      lowerInput.includes('tackling')
+    ) {
       response = `Defensive fundamentals are crucial! Here are key points:\n\n1. Emphasize proper tackling technique (Heads Up Tackling)\n2. Focus on gap control and assignment responsibility\n3. Practice pursuit angles and open-field tackling\n4. Build communication between defensive players\n\nSafety first - always ensure proper form before adding intensity.`;
-    } else if (lowerInput.includes('offense') || lowerInput.includes('scoring')) {
+    } else if (
+      lowerInput.includes('offense') ||
+      lowerInput.includes('scoring')
+    ) {
       response = `Offensive success comes from:\n\n1. Solid fundamentals (blocking, ball handling, route running)\n2. Understanding defensive schemes and how to attack them\n3. Consistent execution of basic plays\n4. Adapting to what the defense gives you\n\nWhat specific offensive area would you like to focus on?`;
-    } else if (lowerInput.includes('team') || lowerInput.includes('chemistry')) {
+    } else if (
+      lowerInput.includes('team') ||
+      lowerInput.includes('chemistry')
+    ) {
       response = `Team chemistry is built through:\n\n1. Regular team-building activities\n2. Clear communication and expectations\n3. Celebrating individual and team successes\n4. Addressing conflicts constructively\n5. Building trust through shared experiences\n\nRemember, great teams are built both on and off the field!`;
     } else {
       response = `That's an interesting question! As your AI coaching assistant, I'm here to help with:\n\n• Practice planning and drill selection\n• Game strategy and analysis\n• Player development and motivation\n• Team management and communication\n• Performance optimization\n\nCould you be more specific about what you'd like to know?`;
@@ -1049,7 +1228,7 @@ const AIChatInterface: React.FC = () => {
       id: Date.now().toString(),
       type: 'ai' as const,
       content: response,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   };
 
@@ -1063,17 +1242,17 @@ const AIChatInterface: React.FC = () => {
   return (
     <VStack spacing={4} align="stretch" h="500px">
       {/* Messages */}
-      <Box 
-        flex={1} 
-        overflowY="auto" 
-        p={4} 
-        bg="gray.50" 
+      <Box
+        flex={1}
+        overflowY="auto"
+        p={4}
+        bg="gray.50"
         borderRadius="lg"
         border="1px"
         borderColor="gray.200"
       >
         <VStack spacing={4} align="stretch">
-          {messages.map((message) => (
+          {messages.map(message => (
             <Box
               key={message.id}
               alignSelf={message.type === 'user' ? 'flex-end' : 'flex-start'}
@@ -1091,18 +1270,13 @@ const AIChatInterface: React.FC = () => {
                 <Text fontSize="sm" whiteSpace="pre-line">
                   {message.content}
                 </Text>
-                <Text 
-                  fontSize="xs" 
-                  opacity={0.7} 
-                  mt={2}
-                  textAlign="right"
-                >
+                <Text fontSize="xs" opacity={0.7} mt={2} textAlign="right">
                   {message.timestamp.toLocaleTimeString()}
                 </Text>
               </Box>
             </Box>
           ))}
-          
+
           {isTyping && (
             <Box alignSelf="flex-start">
               <Box
@@ -1122,7 +1296,7 @@ const AIChatInterface: React.FC = () => {
               </Box>
             </Box>
           )}
-          
+
           <div ref={messagesEndRef} />
         </VStack>
       </Box>
@@ -1131,7 +1305,7 @@ const AIChatInterface: React.FC = () => {
       <HStack spacing={3}>
         <Textarea
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={e => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Ask me about practice planning, team strategy, player development, or anything coaching-related..."
           size="lg"
@@ -1167,7 +1341,7 @@ const AIChatInterface: React.FC = () => {
             'How do I improve team tackling?',
             'What drills work best for 12-year-olds?',
             'How can I motivate my players?',
-            'What\'s a good practice structure?'
+            "What's a good practice structure?",
           ].map((prompt, index) => (
             <Button
               key={index}

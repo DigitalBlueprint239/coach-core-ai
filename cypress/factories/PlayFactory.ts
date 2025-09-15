@@ -37,7 +37,7 @@ export class PlayFactory {
 
   static create(overrides: Partial<Play> = {}): Play {
     const id = `play_${this.counter++}`;
-    
+
     return {
       id,
       name: `Test Play ${id}`,
@@ -51,7 +51,7 @@ export class PlayFactory {
       positions: this.generateDefaultPositions(),
       routes: [],
       tags: ['test', 'automated'],
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -62,7 +62,7 @@ export class PlayFactory {
       positions: this.generateOffensivePositions(),
       routes: this.generateOffensiveRoutes(),
       tags: ['offensive', 'test'],
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -73,7 +73,7 @@ export class PlayFactory {
       positions: this.generateDefensivePositions(),
       routes: this.generateDefensiveRoutes(),
       tags: ['defensive', 'test'],
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -82,7 +82,7 @@ export class PlayFactory {
       version: 2,
       lastModifiedBy: 'conflict_user',
       lastModifiedAt: new Date(),
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -92,7 +92,7 @@ export class PlayFactory {
       positions: this.generateComplexPositions(),
       routes: this.generateComplexRoutes(),
       tags: ['complex', 'advanced', 'test'],
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -102,7 +102,7 @@ export class PlayFactory {
       { id: 'pos_2', x: 30, y: 10, role: 'RB' },
       { id: 'pos_3', x: 70, y: 10, role: 'WR' },
       { id: 'pos_4', x: 20, y: 30, role: 'OL' },
-      { id: 'pos_5', x: 80, y: 30, role: 'OL' }
+      { id: 'pos_5', x: 80, y: 30, role: 'OL' },
     ];
   }
 
@@ -115,7 +115,7 @@ export class PlayFactory {
       { id: 'pos_5', x: 80, y: 30, role: 'WR' },
       { id: 'pos_6', x: 30, y: 60, role: 'OL' },
       { id: 'pos_7', x: 50, y: 60, role: 'OL' },
-      { id: 'pos_8', x: 70, y: 60, role: 'OL' }
+      { id: 'pos_8', x: 70, y: 60, role: 'OL' },
     ];
   }
 
@@ -128,14 +128,14 @@ export class PlayFactory {
       { id: 'pos_5', x: 80, y: 30, role: 'CB' },
       { id: 'pos_6', x: 40, y: 60, role: 'DE' },
       { id: 'pos_7', x: 60, y: 60, role: 'DE' },
-      { id: 'pos_8', x: 50, y: 70, role: 'DT' }
+      { id: 'pos_8', x: 50, y: 70, role: 'DT' },
     ];
   }
 
   private static generateComplexPositions(): PlayerPosition[] {
     return [
       ...this.generateOffensivePositions(),
-      ...this.generateDefensivePositions()
+      ...this.generateDefensivePositions(),
     ];
   }
 
@@ -144,15 +144,21 @@ export class PlayFactory {
       {
         id: 'route_1',
         playerId: 'pos_3',
-        waypoints: [{ x: 60, y: 40 }, { x: 80, y: 20 }],
-        type: 'run'
+        waypoints: [
+          { x: 60, y: 40 },
+          { x: 80, y: 20 },
+        ],
+        type: 'run',
       },
       {
         id: 'route_2',
         playerId: 'pos_5',
-        waypoints: [{ x: 80, y: 30 }, { x: 90, y: 10 }],
-        type: 'run'
-      }
+        waypoints: [
+          { x: 80, y: 30 },
+          { x: 90, y: 10 },
+        ],
+        type: 'run',
+      },
     ];
   }
 
@@ -161,26 +167,32 @@ export class PlayFactory {
       {
         id: 'route_1',
         playerId: 'pos_1',
-        waypoints: [{ x: 50, y: 50 }, { x: 50, y: 30 }],
-        type: 'run'
+        waypoints: [
+          { x: 50, y: 50 },
+          { x: 50, y: 30 },
+        ],
+        type: 'run',
       },
       {
         id: 'route_2',
         playerId: 'pos_2',
-        waypoints: [{ x: 30, y: 40 }, { x: 40, y: 30 }],
-        type: 'run'
-      }
+        waypoints: [
+          { x: 30, y: 40 },
+          { x: 40, y: 30 },
+        ],
+        type: 'run',
+      },
     ];
   }
 
   private static generateComplexRoutes(): Route[] {
     return [
       ...this.generateOffensiveRoutes(),
-      ...this.generateDefensiveRoutes()
+      ...this.generateDefensiveRoutes(),
     ];
   }
 
   static createMultiple(count: number, overrides: Partial<Play> = {}): Play[] {
     return Array.from({ length: count }, () => this.create(overrides));
   }
-} 
+}

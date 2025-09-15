@@ -1,6 +1,6 @@
 /**
  * Base Error Boundary Component
- * 
+ *
  * A comprehensive error boundary with:
  * - Error logging to monitoring service
  * - User-friendly fallback UI
@@ -10,8 +10,18 @@
  * - State reset capabilities
  */
 
-import React, { Component, ErrorInfo, ReactNode, useState, useCallback } from 'react';
-import { getEnvironmentConfig, isDevelopment, isProduction } from '../../config/environment';
+import React, {
+  Component,
+  ErrorInfo,
+  ReactNode,
+  useState,
+  useCallback,
+} from 'react';
+import {
+  getEnvironmentConfig,
+  isDevelopment,
+  isProduction,
+} from '../../config/environment';
 
 // ============================================
 // TYPES AND INTERFACES
@@ -30,7 +40,14 @@ export interface ErrorBoundaryState {
 
 export interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback?: ReactNode | ((error: Error, errorInfo: ErrorInfo, retry: () => void, reset: () => void) => ReactNode);
+  fallback?:
+    | ReactNode
+    | ((
+        error: Error,
+        errorInfo: ErrorInfo,
+        retry: () => void,
+        reset: () => void
+      ) => ReactNode);
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   onRecover?: () => void;
   onReset?: () => void;
@@ -98,7 +115,7 @@ class ErrorReportingService {
   private config = getEnvironmentConfig();
 
   constructor() {
-    this.endpoint = this.config.API.baseUrl + '/errors';
+    this.endpoint = `${this.config.API.baseUrl}/errors`;
   }
 
   async reportError(errorReport: ErrorReport): Promise<void> {
@@ -140,14 +157,14 @@ class ErrorReportingService {
           tags: {
             component: errorReport.context.componentName,
             errorId: errorReport.errorId,
-            environment: errorReport.appInfo.environment
+            environment: errorReport.appInfo.environment,
           },
           extra: {
             errorInfo: errorReport.errorInfo,
             userInfo: errorReport.userInfo,
             context: errorReport.context,
-            recovery: errorReport.recovery
-          }
+            recovery: errorReport.recovery,
+          },
         });
       }
 
@@ -156,7 +173,7 @@ class ErrorReportingService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.config.AI.aiProxyToken}`
+          Authorization: `Bearer ${this.config.AI.aiProxyToken}`,
         },
         body: JSON.stringify(errorReport),
       });
@@ -176,7 +193,10 @@ class ErrorReportingService {
 // MAIN ERROR BOUNDARY COMPONENT
 // ============================================
 
-export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class BaseErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   private errorReportingService: ErrorReportingService;
   private retryTimeout: NodeJS.Timeout | null = null;
   private autoRetryTimeout: NodeJS.Timeout | null = null;
@@ -191,7 +211,7 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
       retryCount: 0,
       lastErrorTime: 0,
       isRecovering: false,
-      recoveryAttempts: 0
+      recoveryAttempts: 0,
     };
     this.errorReportingService = new ErrorReportingService();
   }
@@ -201,7 +221,7 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
       hasError: true,
       error,
       errorId: BaseErrorBoundary.generateErrorId(),
-      lastErrorTime: Date.now()
+      lastErrorTime: Date.now(),
     };
   }
 
@@ -250,33 +270,35 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
         error: {
           name: error.name,
           message: error.message,
-          stack: error.stack
+          stack: error.stack,
         },
         errorInfo: {
-          componentStack: errorInfo.componentStack || ''
+          componentStack: errorInfo.componentStack || '',
         },
         userInfo: {
           userId: this.getUserId(),
           userAgent: navigator.userAgent,
           url: window.location.href,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         },
         appInfo: {
           version: process.env.REACT_APP_VERSION || '1.0.0',
           environment: process.env.NODE_ENV || 'development',
-          buildNumber: process.env.REACT_APP_BUILD_NUMBER
+          buildNumber: process.env.REACT_APP_BUILD_NUMBER,
         },
         context: {
-          componentName: this.props.componentName || this.getComponentName(errorInfo.componentStack || ''),
+          componentName:
+            this.props.componentName ||
+            this.getComponentName(errorInfo.componentStack || ''),
           props: this.props,
           state: this.state,
-          customContext: this.props.context
+          customContext: this.props.context,
         },
         recovery: {
           retryCount: this.state.retryCount,
           recoveryAttempts: this.state.recoveryAttempts,
-          lastErrorTime: this.state.lastErrorTime
-        }
+          lastErrorTime: this.state.lastErrorTime,
+        },
       };
 
       await this.errorReportingService.reportError(errorReport);
@@ -301,7 +323,7 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
 
   private scheduleAutoRetry(): void {
     const { autoRetryDelay = 5000 } = this.props;
-    
+
     if (this.autoRetryTimeout) {
       clearTimeout(this.autoRetryTimeout);
     }
@@ -336,7 +358,7 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
       error: null,
       errorInfo: null,
       retryCount: retryCount + 1,
-      isRecovering: false
+      isRecovering: false,
     });
 
     // Call recovery handler
@@ -353,7 +375,7 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
       retryCount: 0,
       lastErrorTime: 0,
       isRecovering: false,
-      recoveryAttempts: 0
+      recoveryAttempts: 0,
     });
 
     // Call reset handler
@@ -377,21 +399,15 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
   };
 
   render(): ReactNode {
-    const { 
-      hasError, 
-      error, 
-      errorInfo, 
-      retryCount, 
-      errorId, 
-      isRecovering 
-    } = this.state;
-    
-    const { 
-      children, 
-      fallback, 
-      maxRetries = 3, 
-      showErrorDetails = isDevelopment(), 
-      className = '' 
+    const { hasError, error, errorInfo, retryCount, errorId, isRecovering } =
+      this.state;
+
+    const {
+      children,
+      fallback,
+      maxRetries = 3,
+      showErrorDetails = isDevelopment(),
+      className = '',
     } = this.props;
 
     if (isRecovering) {
@@ -437,9 +453,14 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
             reset: this.handleReset,
             report: this.handleReport,
             goBack: this.handleGoBack,
-            reload: this.handleReload
+            reload: this.handleReload,
           };
-          return fallback(error!, errorInfo!, this.handleRetry, this.handleReset);
+          return fallback(
+            error!,
+            errorInfo!,
+            this.handleRetry,
+            this.handleReset
+          );
         }
         return fallback;
       }
@@ -452,34 +473,35 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
               <div className="error-icon">⚠️</div>
               <h2 className="error-title">Something went wrong</h2>
               <p className="error-message">
-                We're sorry, but something unexpected happened. Our team has been notified.
+                We're sorry, but something unexpected happened. Our team has
+                been notified.
               </p>
             </div>
 
             <div className="error-actions">
-              <button 
+              <button
                 className="error-button primary"
                 onClick={this.handleRetry}
                 disabled={retryCount >= maxRetries}
               >
                 {retryCount >= maxRetries ? 'Max retries reached' : 'Try Again'}
               </button>
-              
-              <button 
+
+              <button
                 className="error-button secondary"
                 onClick={this.handleReset}
               >
                 Reset
               </button>
-              
-              <button 
+
+              <button
                 className="error-button secondary"
                 onClick={this.handleGoBack}
               >
                 Go Back
               </button>
-              
-              <button 
+
+              <button
                 className="error-button secondary"
                 onClick={this.handleReload}
               >
@@ -492,9 +514,16 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
                 <details>
                   <summary>Error Details</summary>
                   <div className="error-info">
-                    <p><strong>Error ID:</strong> {errorId}</p>
-                    <p><strong>Component:</strong> {this.props.componentName || 'Unknown'}</p>
-                    <p><strong>Error:</strong> {error.name}: {error.message}</p>
+                    <p>
+                      <strong>Error ID:</strong> {errorId}
+                    </p>
+                    <p>
+                      <strong>Component:</strong>{' '}
+                      {this.props.componentName || 'Unknown'}
+                    </p>
+                    <p>
+                      <strong>Error:</strong> {error.name}: {error.message}
+                    </p>
                     {error.stack && (
                       <div className="error-stack">
                         <strong>Stack Trace:</strong>
@@ -514,9 +543,10 @@ export class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
 
             <div className="error-footer">
               <p className="error-help">
-                If this problem persists, please contact support with error ID: <code>{errorId}</code>
+                If this problem persists, please contact support with error ID:{' '}
+                <code>{errorId}</code>
               </p>
-              <button 
+              <button
                 className="error-button tertiary"
                 onClick={this.handleReport}
               >
@@ -711,7 +741,7 @@ export const useErrorBoundary = () => {
     error,
     errorInfo,
     handleError,
-    clearError
+    clearError,
   };
 };
 
@@ -769,4 +799,4 @@ export const isAIError = (error: Error): boolean => {
   );
 };
 
-export default BaseErrorBoundary; 
+export default BaseErrorBoundary;

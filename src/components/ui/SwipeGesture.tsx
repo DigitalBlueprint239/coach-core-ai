@@ -68,29 +68,32 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   // HAPTIC FEEDBACK
   // ============================================
 
-  const triggerHapticFeedback = useCallback(async (type: 'light' | 'medium' | 'heavy' | 'success' | 'error') => {
-    try {
-      switch (type) {
-        case 'light':
-          await Haptics.impact({ style: 'light' });
-          break;
-        case 'medium':
-          await Haptics.impact({ style: 'medium' });
-          break;
-        case 'heavy':
-          await Haptics.impact({ style: 'heavy' });
-          break;
-        case 'success':
-          await Haptics.notification({ type: 'success' });
-          break;
-        case 'error':
-          await Haptics.notification({ type: 'error' });
-          break;
+  const triggerHapticFeedback = useCallback(
+    async (type: 'light' | 'medium' | 'heavy' | 'success' | 'error') => {
+      try {
+        switch (type) {
+          case 'light':
+            await Haptics.impact({ style: 'light' });
+            break;
+          case 'medium':
+            await Haptics.impact({ style: 'medium' });
+            break;
+          case 'heavy':
+            await Haptics.impact({ style: 'heavy' });
+            break;
+          case 'success':
+            await Haptics.notification({ type: 'success' });
+            break;
+          case 'error':
+            await Haptics.notification({ type: 'error' });
+            break;
+        }
+      } catch (error) {
+        console.warn('Haptic feedback not available:', error);
       }
-    } catch (error) {
-      console.warn('Haptic feedback not available:', error);
-    }
-  }, []);
+    },
+    []
+  );
 
   // ============================================
   // TOUCH EVENT HANDLERS
@@ -99,7 +102,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   const handleTouchStart = useCallback((event: TouchEvent) => {
     const touch = event.touches[0];
     const rect = containerRef.current?.getBoundingClientRect();
-    
+
     if (!rect) return;
 
     touchStateRef.current = {
@@ -118,111 +121,148 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
     setShowDeleteButton(false);
   }, []);
 
-  const handleTouchMove = useCallback((event: TouchEvent) => {
-    const touch = event.touches[0];
-    const rect = containerRef.current?.getBoundingClientRect();
-    
-    if (!rect) return;
+  const handleTouchMove = useCallback(
+    (event: TouchEvent) => {
+      const touch = event.touches[0];
+      const rect = containerRef.current?.getBoundingClientRect();
 
-    const currentX = touch.clientX - rect.left;
-    const currentY = touch.clientY - rect.top;
-    const deltaX = currentX - touchStateRef.current.startX;
-    const deltaY = currentY - touchStateRef.current.startY;
-    const deltaTime = Date.now() - touchStateRef.current.startTime;
+      if (!rect) return;
 
-    // Update touch state
-    touchStateRef.current.currentX = currentX;
-    touchStateRef.current.currentY = currentY;
-    touchStateRef.current.velocityX = deltaX / deltaTime;
-    touchStateRef.current.velocityY = deltaY / deltaTime;
-    touchStateRef.current.isMoving = Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5;
+      const currentX = touch.clientX - rect.left;
+      const currentY = touch.clientY - rect.top;
+      const deltaX = currentX - touchStateRef.current.startX;
+      const deltaY = currentY - touchStateRef.current.startY;
+      const deltaTime = Date.now() - touchStateRef.current.startTime;
 
-    // Handle pull-to-refresh
-    if (enablePullToRefresh && deltaY > 0 && currentY < 100) {
-      const pullDistance = Math.min(deltaY * 0.5, 100);
-      setPullDistance(pullDistance);
-      
-      if (pullDistance > 80) {
-        triggerHapticFeedback('medium');
+      // Update touch state
+      touchStateRef.current.currentX = currentX;
+      touchStateRef.current.currentY = currentY;
+      touchStateRef.current.velocityX = deltaX / deltaTime;
+      touchStateRef.current.velocityY = deltaY / deltaTime;
+      touchStateRef.current.isMoving =
+        Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5;
+
+      // Handle pull-to-refresh
+      if (enablePullToRefresh && deltaY > 0 && currentY < 100) {
+        const pullDistance = Math.min(deltaY * 0.5, 100);
+        setPullDistance(pullDistance);
+
+        if (pullDistance > 80) {
+          triggerHapticFeedback('medium');
+        }
       }
-    }
 
-    // Handle swipe-to-delete
-    if (enableSwipeDelete && deltaX < 0 && Math.abs(deltaX) > Math.abs(deltaY)) {
-      const swipeDistance = Math.min(Math.abs(deltaX), 100);
-      setSwipeOffset(-swipeDistance);
-      
-      if (swipeDistance > 80) {
-        setShowDeleteButton(true);
-        triggerHapticFeedback('light');
+      // Handle swipe-to-delete
+      if (
+        enableSwipeDelete &&
+        deltaX < 0 &&
+        Math.abs(deltaX) > Math.abs(deltaY)
+      ) {
+        const swipeDistance = Math.min(Math.abs(deltaX), 100);
+        setSwipeOffset(-swipeDistance);
+
+        if (swipeDistance > 80) {
+          setShowDeleteButton(true);
+          triggerHapticFeedback('light');
+        }
       }
-    }
 
-    // Handle swipe navigation
-    if (enableSwipeNavigation && Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX > 0 && onSwipeRight) {
-        onSwipeRight();
-        triggerHapticFeedback('success');
-      } else if (deltaX < 0 && onSwipeLeft) {
-        onSwipeLeft();
-        triggerHapticFeedback('success');
+      // Handle swipe navigation
+      if (
+        enableSwipeNavigation &&
+        Math.abs(deltaX) > swipeThreshold &&
+        Math.abs(deltaX) > Math.abs(deltaY)
+      ) {
+        if (deltaX > 0 && onSwipeRight) {
+          onSwipeRight();
+          triggerHapticFeedback('success');
+        } else if (deltaX < 0 && onSwipeLeft) {
+          onSwipeLeft();
+          triggerHapticFeedback('success');
+        }
       }
-    }
-  }, [enablePullToRefresh, enableSwipeDelete, enableSwipeNavigation, swipeThreshold, onSwipeRight, onSwipeLeft, triggerHapticFeedback]);
+    },
+    [
+      enablePullToRefresh,
+      enableSwipeDelete,
+      enableSwipeNavigation,
+      swipeThreshold,
+      onSwipeRight,
+      onSwipeLeft,
+      triggerHapticFeedback,
+    ]
+  );
 
-  const handleTouchEnd = useCallback((event: TouchEvent) => {
-    const deltaX = touchStateRef.current.currentX - touchStateRef.current.startX;
-    const deltaY = touchStateRef.current.currentY - touchStateRef.current.startY;
-    const deltaTime = Date.now() - touchStateRef.current.startTime;
-    const velocityX = Math.abs(touchStateRef.current.velocityX);
-    const velocityY = Math.abs(touchStateRef.current.velocityY);
+  const handleTouchEnd = useCallback(
+    (event: TouchEvent) => {
+      const deltaX =
+        touchStateRef.current.currentX - touchStateRef.current.startX;
+      const deltaY =
+        touchStateRef.current.currentY - touchStateRef.current.startY;
+      const deltaTime = Date.now() - touchStateRef.current.startTime;
+      const velocityX = Math.abs(touchStateRef.current.velocityX);
+      const velocityY = Math.abs(touchStateRef.current.velocityY);
 
-    // Handle pull-to-refresh completion
-    if (enablePullToRefresh && deltaY > 80 && onPullToRefresh) {
-      setIsRefreshing(true);
-      onPullToRefresh().finally(() => {
-        setIsRefreshing(false);
+      // Handle pull-to-refresh completion
+      if (enablePullToRefresh && deltaY > 80 && onPullToRefresh) {
+        setIsRefreshing(true);
+        onPullToRefresh().finally(() => {
+          setIsRefreshing(false);
+          setPullDistance(0);
+          triggerHapticFeedback('success');
+        });
+      } else {
         setPullDistance(0);
-        triggerHapticFeedback('success');
-      });
-    } else {
-      setPullDistance(0);
-    }
-
-    // Handle swipe-to-delete completion
-    if (enableSwipeDelete && deltaX < -80 && onSwipeDelete) {
-      onSwipeDelete();
-      triggerHapticFeedback('success');
-    } else {
-      setSwipeOffset(0);
-      setShowDeleteButton(false);
-    }
-
-    // Handle swipe navigation with velocity
-    if (enableSwipeNavigation && velocityX > swipeVelocity) {
-      if (deltaX > 0 && onSwipeRight) {
-        onSwipeRight();
-        triggerHapticFeedback('success');
-      } else if (deltaX < 0 && onSwipeLeft) {
-        onSwipeLeft();
-        triggerHapticFeedback('success');
       }
-    }
 
-    // Handle vertical swipes
-    if (velocityY > swipeVelocity) {
-      if (deltaY > 0 && onSwipeDown) {
-        onSwipeDown();
+      // Handle swipe-to-delete completion
+      if (enableSwipeDelete && deltaX < -80 && onSwipeDelete) {
+        onSwipeDelete();
         triggerHapticFeedback('success');
-      } else if (deltaY < 0 && onSwipeUp) {
-        onSwipeUp();
-        triggerHapticFeedback('success');
+      } else {
+        setSwipeOffset(0);
+        setShowDeleteButton(false);
       }
-    }
 
-    // Reset touch state
-    touchStateRef.current.isMoving = false;
-  }, [enablePullToRefresh, enableSwipeDelete, enableSwipeNavigation, swipeVelocity, onPullToRefresh, onSwipeDelete, onSwipeRight, onSwipeLeft, onSwipeUp, onSwipeDown, triggerHapticFeedback]);
+      // Handle swipe navigation with velocity
+      if (enableSwipeNavigation && velocityX > swipeVelocity) {
+        if (deltaX > 0 && onSwipeRight) {
+          onSwipeRight();
+          triggerHapticFeedback('success');
+        } else if (deltaX < 0 && onSwipeLeft) {
+          onSwipeLeft();
+          triggerHapticFeedback('success');
+        }
+      }
+
+      // Handle vertical swipes
+      if (velocityY > swipeVelocity) {
+        if (deltaY > 0 && onSwipeDown) {
+          onSwipeDown();
+          triggerHapticFeedback('success');
+        } else if (deltaY < 0 && onSwipeUp) {
+          onSwipeUp();
+          triggerHapticFeedback('success');
+        }
+      }
+
+      // Reset touch state
+      touchStateRef.current.isMoving = false;
+    },
+    [
+      enablePullToRefresh,
+      enableSwipeDelete,
+      enableSwipeNavigation,
+      swipeVelocity,
+      onPullToRefresh,
+      onSwipeDelete,
+      onSwipeRight,
+      onSwipeLeft,
+      onSwipeUp,
+      onSwipeDown,
+      triggerHapticFeedback,
+    ]
+  );
 
   // ============================================
   // EFFECTS
@@ -233,8 +273,12 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
     if (!container) return;
 
     // Add touch event listeners
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchstart', handleTouchStart, {
+      passive: false,
+    });
+    container.addEventListener('touchmove', handleTouchMove, {
+      passive: false,
+    });
     container.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     // Cleanup
@@ -254,7 +298,9 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
     overflow: 'hidden',
     touchAction: 'pan-y', // Allow vertical scrolling
     transform: `translateX(${swipeOffset}px)`,
-    transition: touchStateRef.current.isMoving ? 'none' : 'transform 0.3s ease-out',
+    transition: touchStateRef.current.isMoving
+      ? 'none'
+      : 'transform 0.3s ease-out',
     ...style,
   };
 
@@ -306,9 +352,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
       )}
 
       {/* Main content */}
-      <div className="swipe-content">
-        {children}
-      </div>
+      <div className="swipe-content">{children}</div>
 
       {/* Swipe-to-delete button */}
       {enableSwipeDelete && (
@@ -324,4 +368,4 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
 // EXPORT
 // ============================================
 
-export default SwipeGesture; 
+export default SwipeGesture;

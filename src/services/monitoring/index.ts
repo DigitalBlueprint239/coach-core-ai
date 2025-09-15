@@ -10,9 +10,7 @@ export const initializeMonitoring = () => {
   if (process.env.NODE_ENV === 'production' && SENTRY_DSN) {
     Sentry.init({
       dsn: SENTRY_DSN,
-      integrations: [
-        new BrowserTracing() as any,
-      ],
+      integrations: [new BrowserTracing() as any],
       tracesSampleRate: 0.1,
       environment: ENVIRONMENT,
     });
@@ -22,17 +20,23 @@ export const initializeMonitoring = () => {
 // Performance monitoring
 export function trackPerformance(metricName: string, value: number) {
   if ('sendBeacon' in navigator) {
-    navigator.sendBeacon('/api/metrics', JSON.stringify({
-      metric: metricName,
-      value,
-      timestamp: Date.now(),
-    }));
+    navigator.sendBeacon(
+      '/api/metrics',
+      JSON.stringify({
+        metric: metricName,
+        value,
+        timestamp: Date.now(),
+      })
+    );
   }
 }
 
 // User analytics
-export function trackEvent(eventName: string, properties?: Record<string, any>) {
-  if (firebase.analytics) {
-    logEvent(firebase.analytics, eventName, properties);
-  }
-} 
+export function trackEvent(
+  eventName: string,
+  properties?: Record<string, any>
+) {
+  // Analytics logging would be implemented here
+  // For now, just log to console
+  console.log('Analytics Event:', eventName, properties);
+}

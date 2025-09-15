@@ -16,57 +16,67 @@ declare global {
       // Authentication commands
       login(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
-      signup(email: string, password: string, teamName: string): Chainable<void>;
-      
+      signup(
+        email: string,
+        password: string,
+        teamName: string
+      ): Chainable<void>;
+
       // Team management commands
       createTeam(teamName: string): Chainable<string>;
       invitePlayer(email: string, role: string): Chainable<void>;
       joinTeam(teamId: string): Chainable<void>;
-      
+
       // Play management commands
       createPlay(playData: any): Chainable<string>;
       editPlay(playId: string, updates: any): Chainable<void>;
       deletePlay(playId: string): Chainable<void>;
       duplicatePlay(playId: string): Chainable<string>;
-      
+
       // Practice management commands
       createPractice(practiceData: any): Chainable<string>;
       addDrillToPractice(practiceId: string, drillData: any): Chainable<void>;
       schedulePractice(practiceId: string, date: string): Chainable<void>;
-      
+
       // AI service commands
       mockAISuggestion(suggestion: any): Chainable<void>;
       mockAIAnalysis(analysis: any): Chainable<void>;
       waitForAIResponse(): Chainable<void>;
-      
+
       // Offline/Online commands
       goOffline(): Chainable<void>;
       goOnline(): Chainable<void>;
       waitForSync(): Chainable<void>;
       checkOfflineQueue(): Chainable<any>;
-      
+
       // Conflict resolution commands
       simulateConflict(playId: string): Chainable<void>;
       resolveConflict(strategy: string): Chainable<void>;
       checkConflictStatus(): Chainable<any>;
-      
+
       // Performance commands
       measureLoadTime(): Chainable<number>;
       measureMemoryUsage(): Chainable<number>;
       measureCanvasPerformance(): Chainable<any>;
-      
+
       // Visual regression commands
       compareScreenshot(name: string): Chainable<void>;
       updateBaseline(name: string): Chainable<void>;
-      
+
       // Database commands
       seedTestData(): Chainable<void>;
       cleanTestData(): Chainable<void>;
       resetDatabase(): Chainable<void>;
-      
+
       // Utility commands
-      withRetry<T>(fn: () => Cypress.Chainable<T>, options?: any): Cypress.Chainable<T>;
-      waitForElement(selector: string, timeout?: number): Chainable<JQuery<HTMLElement>>;
+      withRetry<T>(
+        fn: () => Cypress.Chainable<T>,
+        options?: any
+      ): Cypress.Chainable<T>;
+      waitForElement(
+        selector: string,
+        timeout?: number
+      ): Chainable<JQuery<HTMLElement>>;
       waitForNetworkIdle(): Chainable<void>;
       scrollToElement(selector: string): Chainable<void>;
       typeWithDelay(text: string, delay?: number): Chainable<void>;
@@ -78,23 +88,26 @@ declare global {
 // RETRY UTILITY
 // ============================================
 
-Cypress.Commands.add('withRetry', <T>(
-  fn: () => Cypress.Chainable<T>,
-  options = { maxAttempts: 3, delay: 1000 }
-) => {
-  const { maxAttempts, delay } = options;
-  
-  for (let i = 0; i < maxAttempts; i++) {
-    try {
-      return fn();
-    } catch (error) {
-      if (i === maxAttempts - 1) throw error;
-      cy.wait(delay * Math.pow(2, i));
+Cypress.Commands.add(
+  'withRetry',
+  <T>(
+    fn: () => Cypress.Chainable<T>,
+    options = { maxAttempts: 3, delay: 1000 }
+  ) => {
+    const { maxAttempts, delay } = options;
+
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        return fn();
+      } catch (error) {
+        if (i === maxAttempts - 1) throw error;
+        cy.wait(delay * Math.pow(2, i));
+      }
     }
+
+    throw new Error('Max retries reached');
   }
-  
-  throw new Error('Max retries reached');
-});
+);
 
 // ============================================
 // AUTHENTICATION COMMANDS
@@ -115,15 +128,18 @@ Cypress.Commands.add('logout', () => {
   cy.url().should('include', '/login');
 });
 
-Cypress.Commands.add('signup', (email: string, password: string, teamName: string) => {
-  cy.visit('/signup');
-  cy.get('[data-testid="email-input"]').type(email);
-  cy.get('[data-testid="password-input"]').type(password);
-  cy.get('[data-testid="confirm-password-input"]').type(password);
-  cy.get('[data-testid="team-name-input"]').type(teamName);
-  cy.get('[data-testid="signup-button"]').click();
-  cy.url().should('include', '/verify-email');
-});
+Cypress.Commands.add(
+  'signup',
+  (email: string, password: string, teamName: string) => {
+    cy.visit('/signup');
+    cy.get('[data-testid="email-input"]').type(email);
+    cy.get('[data-testid="password-input"]').type(password);
+    cy.get('[data-testid="confirm-password-input"]').type(password);
+    cy.get('[data-testid="team-name-input"]').type(teamName);
+    cy.get('[data-testid="signup-button"]').click();
+    cy.url().should('include', '/verify-email');
+  }
+);
 
 // ============================================
 // TEAM MANAGEMENT COMMANDS
@@ -173,17 +189,19 @@ Cypress.Commands.add('createPlay', (playData: any) => {
 
 Cypress.Commands.add('editPlay', (playId: string, updates: any) => {
   cy.visit(`/plays/${playId}/edit`);
-  
+
   if (updates.name) {
     cy.get('[data-testid="play-name-input"]').clear().type(updates.name);
   }
   if (updates.description) {
-    cy.get('[data-testid="play-description-input"]').clear().type(updates.description);
+    cy.get('[data-testid="play-description-input"]')
+      .clear()
+      .type(updates.description);
   }
   if (updates.formation) {
     cy.get('[data-testid="formation-select"]').select(updates.formation);
   }
-  
+
   cy.get('[data-testid="save-play-button"]').click();
   cy.get('[data-testid="save-success-message"]').should('be.visible');
 });
@@ -222,14 +240,17 @@ Cypress.Commands.add('createPractice', (practiceData: any) => {
   });
 });
 
-Cypress.Commands.add('addDrillToPractice', (practiceId: string, drillData: any) => {
-  cy.visit(`/practices/${practiceId}/drills`);
-  cy.get('[data-testid="add-drill-button"]').click();
-  cy.get('[data-testid="drill-name-input"]').type(drillData.name);
-  cy.get('[data-testid="drill-duration-input"]').type(drillData.duration);
-  cy.get('[data-testid="save-drill-button"]').click();
-  cy.get('[data-testid="drill-added-message"]').should('be.visible');
-});
+Cypress.Commands.add(
+  'addDrillToPractice',
+  (practiceId: string, drillData: any) => {
+    cy.visit(`/practices/${practiceId}/drills`);
+    cy.get('[data-testid="add-drill-button"]').click();
+    cy.get('[data-testid="drill-name-input"]').type(drillData.name);
+    cy.get('[data-testid="drill-duration-input"]').type(drillData.duration);
+    cy.get('[data-testid="save-drill-button"]').click();
+    cy.get('[data-testid="drill-added-message"]').should('be.visible');
+  }
+);
 
 Cypress.Commands.add('schedulePractice', (practiceId: string, date: string) => {
   cy.visit(`/practices/${practiceId}/schedule`);
@@ -245,14 +266,14 @@ Cypress.Commands.add('schedulePractice', (practiceId: string, date: string) => {
 Cypress.Commands.add('mockAISuggestion', (suggestion: any) => {
   cy.task('ai:mock', {
     type: 'suggestion',
-    response: suggestion
+    response: suggestion,
   });
 });
 
 Cypress.Commands.add('mockAIAnalysis', (analysis: any) => {
   cy.task('ai:mock', {
     type: 'analysis',
-    response: analysis
+    response: analysis,
   });
 });
 
@@ -401,13 +422,13 @@ Cypress.Commands.add('typeWithDelay', (text: string, delay = 100) => {
 beforeEach(() => {
   // Reset AI mocks
   cy.task('ai:reset');
-  
+
   // Reset network to online
   cy.task('network:online');
-  
+
   // Clear local storage
   cy.clearLocalStorage();
-  
+
   // Clear cookies
   cy.clearCookies();
 });
@@ -419,10 +440,10 @@ beforeEach(() => {
 afterEach(() => {
   // Clean up test data
   cy.task('db:clean');
-  
+
   // Reset AI mocks
   cy.task('ai:reset');
-  
+
   // Reset network
   cy.task('network:online');
-}); 
+});

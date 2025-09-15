@@ -99,7 +99,11 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   };
 
   return (
-    <Popover isOpen={isOpen} onClose={() => setIsOpen(false)} placement="bottom-end">
+    <Popover
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      placement="bottom-end"
+    >
       <PopoverTrigger>
         <Box position="relative">
           <IconButton
@@ -174,7 +178,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             </Box>
           ) : (
             <VStack spacing={0} align="stretch">
-              {notifications.map((notification) => (
+              {notifications.map(notification => (
                 <Box
                   key={notification.id}
                   p={4}
@@ -224,4 +228,3 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 };
 
 export default NotificationCenter;
-

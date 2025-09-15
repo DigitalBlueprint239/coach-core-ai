@@ -50,12 +50,16 @@ export class SecurityRulesGenerator {
 
     const firestoreRules = this.generateFirestoreRules(finalConfig);
     const storageRules = this.generateStorageRules(finalConfig);
-    const validation = this.validateRules(firestoreRules, storageRules, finalConfig);
+    const validation = this.validateRules(
+      firestoreRules,
+      storageRules,
+      finalConfig
+    );
 
     return {
       firestore: firestoreRules,
       storage: storageRules,
-      validation
+      validation,
     };
   }
 
@@ -773,17 +777,21 @@ service firebase.storage {
   /**
    * Validate generated rules
    */
-  private validateRules(firestoreRules: string, storageRules: string, config: SecurityRuleConfig): ValidationResult {
+  private validateRules(
+    firestoreRules: string,
+    storageRules: string,
+    config: SecurityRuleConfig
+  ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
     const suggestions: string[] = [];
 
     // Basic syntax validation
-    if (!firestoreRules.includes('rules_version = \'2\'')) {
+    if (!firestoreRules.includes("rules_version = '2'")) {
       errors.push('Firestore rules missing rules_version declaration');
     }
 
-    if (!storageRules.includes('rules_version = \'2\'')) {
+    if (!storageRules.includes("rules_version = '2'")) {
       errors.push('Storage rules missing rules_version declaration');
     }
 
@@ -806,7 +814,9 @@ service firebase.storage {
     }
 
     // File size validation
-    if (!storageRules.includes(`request.resource.size <= ${config.maxFileSize}`)) {
+    if (
+      !storageRules.includes(`request.resource.size <= ${config.maxFileSize}`)
+    ) {
       warnings.push('Storage rules missing file size validation');
     }
 
@@ -826,7 +836,7 @@ service firebase.storage {
       isValid: errors.length === 0,
       errors,
       warnings,
-      suggestions
+      suggestions,
     };
   }
 
@@ -835,16 +845,28 @@ service firebase.storage {
    */
   getRuleTemplates(): Record<string, string> {
     return {
-      'basic': this.generateRules({ environment: 'development', enableStrictMode: false }),
-      'development': this.generateRules({ environment: 'development', enableStrictMode: false }),
-      'staging': this.generateRules({ environment: 'staging', enableStrictMode: true }),
-      'production': this.generateRules({ environment: 'production', enableStrictMode: true }),
-      'strict': this.generateRules({ 
-        environment: 'production', 
-        enableStrictMode: true, 
+      basic: this.generateRules({
+        environment: 'development',
+        enableStrictMode: false,
+      }),
+      development: this.generateRules({
+        environment: 'development',
+        enableStrictMode: false,
+      }),
+      staging: this.generateRules({
+        environment: 'staging',
+        enableStrictMode: true,
+      }),
+      production: this.generateRules({
+        environment: 'production',
+        enableStrictMode: true,
+      }),
+      strict: this.generateRules({
+        environment: 'production',
+        enableStrictMode: true,
         enableRateLimiting: true,
-        enableAuditLogging: true 
-      })
+        enableAuditLogging: true,
+      }),
     };
   }
 
@@ -858,14 +880,14 @@ service firebase.storage {
         enableStrictMode: true,
         enableRateLimiting: true,
         maxFileSize: 100 * 1024 * 1024, // 100MB for video uploads
-        allowedFileTypes: ['image/*', 'video/*', 'application/pdf', 'text/*']
+        allowedFileTypes: ['image/*', 'video/*', 'application/pdf', 'text/*'],
       },
       'youth-sports': {
         environment: 'production',
         enableStrictMode: true,
         enableRateLimiting: true,
         maxFileSize: 50 * 1024 * 1024,
-        allowedFileTypes: ['image/*', 'application/pdf']
+        allowedFileTypes: ['image/*', 'application/pdf'],
       },
       'professional-team': {
         environment: 'production',
@@ -873,8 +895,14 @@ service firebase.storage {
         enableRateLimiting: true,
         enableAuditLogging: true,
         maxFileSize: 500 * 1024 * 1024, // 500MB for high-quality video
-        allowedFileTypes: ['image/*', 'video/*', 'application/pdf', 'text/*', 'audio/*']
-      }
+        allowedFileTypes: [
+          'image/*',
+          'video/*',
+          'application/pdf',
+          'text/*',
+          'audio/*',
+        ],
+      },
     };
 
     const config = useCaseConfigs[useCase] || this.defaultConfig;
@@ -886,6 +914,8 @@ service firebase.storage {
 export const securityRulesGenerator = new SecurityRulesGenerator();
 
 // Export convenience functions
-export const generateRules = (config?: Partial<SecurityRuleConfig>) => securityRulesGenerator.generateRules(config);
+export const generateRules = (config?: Partial<SecurityRuleConfig>) =>
+  securityRulesGenerator.generateRules(config);
 export const getRuleTemplates = () => securityRulesGenerator.getRuleTemplates();
-export const generateRulesForUseCase = (useCase: string) => securityRulesGenerator.generateRulesForUseCase(useCase); 
+export const generateRulesForUseCase = (useCase: string) =>
+  securityRulesGenerator.generateRulesForUseCase(useCase);

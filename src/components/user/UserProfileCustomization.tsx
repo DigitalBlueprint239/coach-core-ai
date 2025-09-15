@@ -31,21 +31,25 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react';
-import { 
-  User, 
-  Shield, 
-  Settings, 
-  Bell, 
-  Eye, 
-  Brain, 
-  Trophy, 
-  Users, 
-  Target, 
+import {
+  User,
+  Shield,
+  Settings,
+  Bell,
+  Eye,
+  Brain,
+  Trophy,
+  Users,
+  Target,
   Save,
   CheckCircle,
   AlertTriangle,
 } from 'lucide-react';
-import { userProfileService, UserProfile, TeamRole } from '../../services/user/user-profile-service';
+import {
+  userProfileService,
+  UserProfile,
+  TeamRole,
+} from '../../services/user/user-profile-service';
 
 interface UserProfileCustomizationProps {
   userProfile: UserProfile;
@@ -63,7 +67,7 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
   const [teamRoles, setTeamRoles] = useState<TeamRole[]>([]);
   const [formData, setFormData] = useState<Partial<UserProfile>>(userProfile);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -92,10 +96,16 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
       newErrors.role = 'Please select a role';
     }
 
-    if (formData.preferences?.coaching?.experienceLevel === 'advanced' || 
-        formData.preferences?.coaching?.experienceLevel === 'expert') {
-      if (!formData.experience?.yearsCoaching || formData.experience.yearsCoaching < 3) {
-        newErrors.experience = 'Advanced/Expert level requires at least 3 years of coaching experience';
+    if (
+      formData.preferences?.coaching?.experienceLevel === 'advanced' ||
+      formData.preferences?.coaching?.experienceLevel === 'expert'
+    ) {
+      if (
+        !formData.experience?.yearsCoaching ||
+        formData.experience.yearsCoaching < 3
+      ) {
+        newErrors.experience =
+          'Advanced/Expert level requires at least 3 years of coaching experience';
       }
     }
 
@@ -108,7 +118,7 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
       ...prev,
       [field]: value,
     }));
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({
@@ -118,7 +128,11 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
     }
   };
 
-  const handlePreferencesChange = (category: string, field: string, value: any) => {
+  const handlePreferencesChange = (
+    category: string,
+    field: string,
+    value: any
+  ) => {
     setFormData(prev => ({
       ...prev,
       preferences: {
@@ -146,9 +160,10 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
 
     setIsLoading(true);
     try {
-      const updatedProfile = await userProfileService.upsertUserProfile(formData);
+      const updatedProfile =
+        await userProfileService.upsertUserProfile(formData);
       onProfileUpdate(updatedProfile);
-      
+
       toast({
         title: 'Profile Updated',
         description: 'Your profile has been successfully updated!',
@@ -178,22 +193,24 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <Icon as={User} mr={3} color="blue.500" />
         Basic Information
       </Heading>
-      
+
       <FormControl isInvalid={!!errors.displayName}>
         <FormLabel>Display Name</FormLabel>
         <Input
           value={formData.displayName || ''}
-          onChange={(e) => handleInputChange('displayName', e.target.value)}
+          onChange={e => handleInputChange('displayName', e.target.value)}
           placeholder="Enter your display name"
         />
-        {errors.displayName && <FormHelperText color="red.500">{errors.displayName}</FormHelperText>}
+        {errors.displayName && (
+          <FormHelperText color="red.500">{errors.displayName}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl>
         <FormLabel>Bio</FormLabel>
         <Textarea
           value={formData.bio || ''}
-          onChange={(e) => handleInputChange('bio', e.target.value)}
+          onChange={e => handleInputChange('bio', e.target.value)}
           placeholder="Tell us about your coaching experience and philosophy"
           rows={4}
         />
@@ -203,7 +220,7 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <FormLabel>Phone Number</FormLabel>
         <Input
           value={formData.phoneNumber || ''}
-          onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+          onChange={e => handleInputChange('phoneNumber', e.target.value)}
           placeholder="(555) 123-4567"
         />
       </FormControl>
@@ -212,7 +229,7 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <FormLabel>Emergency Contact</FormLabel>
         <Input
           value={formData.emergencyContact || ''}
-          onChange={(e) => handleInputChange('emergencyContact', e.target.value)}
+          onChange={e => handleInputChange('emergencyContact', e.target.value)}
           placeholder="Name and phone number"
         />
       </FormControl>
@@ -225,12 +242,12 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <Icon as={Shield} mr={3} color="green.500" />
         Role & Experience
       </Heading>
-      
+
       <FormControl isInvalid={!!errors.role}>
         <FormLabel>Team Role</FormLabel>
         <Select
           value={formData.role || ''}
-          onChange={(e) => handleInputChange('role', e.target.value)}
+          onChange={e => handleInputChange('role', e.target.value)}
           placeholder="Select your role"
         >
           {teamRoles.map(role => (
@@ -239,7 +256,9 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
             </option>
           ))}
         </Select>
-        {errors.role && <FormHelperText color="red.500">{errors.role}</FormHelperText>}
+        {errors.role && (
+          <FormHelperText color="red.500">{errors.role}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl>
@@ -247,10 +266,12 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <Input
           type="number"
           value={formData.experience?.yearsCoaching || 0}
-          onChange={(e) => handleInputChange('experience', {
-            ...formData.experience,
-            yearsCoaching: parseInt(e.target.value) || 0,
-          })}
+          onChange={e =>
+            handleInputChange('experience', {
+              ...formData.experience,
+              yearsCoaching: parseInt(e.target.value) || 0,
+            })
+          }
           min={0}
           max={50}
         />
@@ -260,13 +281,24 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <FormLabel>Sports You Coach</FormLabel>
         <CheckboxGroup
           value={formData.experience?.sports || []}
-          onChange={(values) => handleInputChange('experience', {
-            ...formData.experience,
-            sports: values as string[],
-          })}
+          onChange={values =>
+            handleInputChange('experience', {
+              ...formData.experience,
+              sports: values as string[],
+            })
+          }
         >
           <Stack spacing={2}>
-            {['Football', 'Basketball', 'Baseball', 'Soccer', 'Tennis', 'Track & Field', 'Swimming', 'Volleyball'].map(sport => (
+            {[
+              'Football',
+              'Basketball',
+              'Baseball',
+              'Soccer',
+              'Tennis',
+              'Track & Field',
+              'Swimming',
+              'Volleyball',
+            ].map(sport => (
               <Checkbox key={sport} value={sport.toLowerCase()}>
                 {sport}
               </Checkbox>
@@ -279,13 +311,22 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <FormLabel>Age Groups You Work With</FormLabel>
         <CheckboxGroup
           value={formData.experience?.ageGroups || []}
-          onChange={(values) => handleInputChange('experience', {
-            ...formData.experience,
-            ageGroups: values as string[],
-          })}
+          onChange={values =>
+            handleInputChange('experience', {
+              ...formData.experience,
+              ageGroups: values as string[],
+            })
+          }
         >
           <Stack spacing={2}>
-            {['Youth (5-8)', 'Elementary (9-12)', 'Middle School (13-14)', 'High School (15-18)', 'College (19-22)', 'Adult (23+)'].map(group => (
+            {[
+              'Youth (5-8)',
+              'Elementary (9-12)',
+              'Middle School (13-14)',
+              'High School (15-18)',
+              'College (19-22)',
+              'Adult (23+)',
+            ].map(group => (
               <Checkbox key={group} value={group.toLowerCase()}>
                 {group}
               </Checkbox>
@@ -309,7 +350,7 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <Icon as={Settings} mr={3} color="purple.500" />
         Preferences & Settings
       </Heading>
-      
+
       <Card>
         <CardHeader>
           <HStack>
@@ -321,19 +362,37 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
           <VStack spacing={4} align="stretch">
             <Checkbox
               isChecked={formData.preferences?.notifications?.email}
-              onChange={(e) => handlePreferencesChange('notifications', 'email', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'notifications',
+                  'email',
+                  e.target.checked
+                )
+              }
             >
               Email Notifications
             </Checkbox>
             <Checkbox
               isChecked={formData.preferences?.notifications?.push}
-              onChange={(e) => handlePreferencesChange('notifications', 'push', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'notifications',
+                  'push',
+                  e.target.checked
+                )
+              }
             >
               Push Notifications
             </Checkbox>
             <Checkbox
               isChecked={formData.preferences?.notifications?.inApp}
-              onChange={(e) => handlePreferencesChange('notifications', 'inApp', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'notifications',
+                  'inApp',
+                  e.target.checked
+                )
+              }
             >
               In-App Notifications
             </Checkbox>
@@ -352,19 +411,37 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
           <VStack spacing={4} align="stretch">
             <Checkbox
               isChecked={formData.preferences?.privacy?.shareProfile}
-              onChange={(e) => handlePreferencesChange('privacy', 'shareProfile', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'privacy',
+                  'shareProfile',
+                  e.target.checked
+                )
+              }
             >
               Share Profile with Other Coaches
             </Checkbox>
             <Checkbox
               isChecked={formData.preferences?.privacy?.allowAnalytics}
-              onChange={(e) => handlePreferencesChange('privacy', 'allowAnalytics', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'privacy',
+                  'allowAnalytics',
+                  e.target.checked
+                )
+              }
             >
               Allow Analytics & Insights
             </Checkbox>
             <Checkbox
               isChecked={formData.preferences?.privacy?.publicPlaybook}
-              onChange={(e) => handlePreferencesChange('privacy', 'publicPlaybook', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'privacy',
+                  'publicPlaybook',
+                  e.target.checked
+                )
+              }
             >
               Make Playbook Public
             </Checkbox>
@@ -383,13 +460,21 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
           <VStack spacing={4} align="stretch">
             <Checkbox
               isChecked={formData.preferences?.ai?.autoSuggest}
-              onChange={(e) => handlePreferencesChange('ai', 'autoSuggest', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange('ai', 'autoSuggest', e.target.checked)
+              }
             >
               Auto-suggest Practice Plans
             </Checkbox>
             <Checkbox
               isChecked={formData.preferences?.ai?.learningEnabled}
-              onChange={(e) => handlePreferencesChange('ai', 'learningEnabled', e.target.checked)}
+              onChange={e =>
+                handlePreferencesChange(
+                  'ai',
+                  'learningEnabled',
+                  e.target.checked
+                )
+              }
             >
               Enable AI Learning from Your Preferences
             </Checkbox>
@@ -397,7 +482,13 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
               <FormLabel>AI Confidence Threshold</FormLabel>
               <Select
                 value={formData.preferences?.ai?.confidenceThreshold || 0.7}
-                onChange={(e) => handlePreferencesChange('ai', 'confidenceThreshold', parseFloat(e.target.value))}
+                onChange={e =>
+                  handlePreferencesChange(
+                    'ai',
+                    'confidenceThreshold',
+                    parseFloat(e.target.value)
+                  )
+                }
               >
                 <option value={0.5}>50% - More Suggestions</option>
                 <option value={0.7}>70% - Balanced</option>
@@ -416,13 +507,15 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         <Icon as={CheckCircle} mr={3} color="green.500" />
         Review & Complete
       </Heading>
-      
+
       <Card>
         <CardHeader>
           <HStack>
             <Avatar name={formData.displayName} size="lg" />
             <VStack align="start" spacing={1}>
-              <Text fontSize="xl" fontWeight="bold">{formData.displayName}</Text>
+              <Text fontSize="xl" fontWeight="bold">
+                {formData.displayName}
+              </Text>
               <Badge colorScheme="blue" variant="subtle">
                 {teamRoles.find(r => r.id === formData.role)?.name || 'Coach'}
               </Badge>
@@ -441,11 +534,15 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
             </HStack>
             <HStack justify="space-between">
               <Text fontWeight="medium">Sports:</Text>
-              <Text>{formData.experience?.sports?.join(', ') || 'None selected'}</Text>
+              <Text>
+                {formData.experience?.sports?.join(', ') || 'None selected'}
+              </Text>
             </HStack>
             <HStack justify="space-between">
               <Text fontWeight="medium">AI Suggestions:</Text>
-              <Text>{formData.preferences?.ai?.autoSuggest ? 'Enabled' : 'Disabled'}</Text>
+              <Text>
+                {formData.preferences?.ai?.autoSuggest ? 'Enabled' : 'Disabled'}
+              </Text>
             </HStack>
           </VStack>
         </CardBody>
@@ -454,8 +551,9 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
       <Alert status="info">
         <AlertIcon />
         <Text>
-          You can always update these settings later from your profile page. 
-          Your preferences will help us provide a more personalized coaching experience.
+          You can always update these settings later from your profile page.
+          Your preferences will help us provide a more personalized coaching
+          experience.
         </Text>
       </Alert>
     </VStack>
@@ -478,11 +576,16 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
 
   const getStepTitle = (step: number) => {
     switch (step) {
-      case 1: return 'Basic Information';
-      case 2: return 'Role & Experience';
-      case 3: return 'Preferences & Settings';
-      case 4: return 'Review & Complete';
-      default: return '';
+      case 1:
+        return 'Basic Information';
+      case 2:
+        return 'Role & Experience';
+      case 3:
+        return 'Preferences & Settings';
+      case 4:
+        return 'Review & Complete';
+      default:
+        return '';
     }
   };
 
@@ -502,17 +605,24 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
         {/* Progress Bar */}
         <Box>
           <HStack justify="space-between" mb={2}>
-            <Text fontSize="sm" fontWeight="medium">Step {currentStep} of 4</Text>
-            <Text fontSize="sm" color="gray.500">{getStepTitle(currentStep)}</Text>
+            <Text fontSize="sm" fontWeight="medium">
+              Step {currentStep} of 4
+            </Text>
+            <Text fontSize="sm" color="gray.500">
+              {getStepTitle(currentStep)}
+            </Text>
           </HStack>
-          <Progress value={(currentStep / 4) * 100} colorScheme="blue" size="lg" borderRadius="full" />
+          <Progress
+            value={(currentStep / 4) * 100}
+            colorScheme="blue"
+            size="lg"
+            borderRadius="full"
+          />
         </Box>
 
         {/* Step Content */}
         <Card bg={bgColor} border="1px" borderColor={borderColor}>
-          <CardBody p={8}>
-            {renderCurrentStep()}
-          </CardBody>
+          <CardBody p={8}>{renderCurrentStep()}</CardBody>
         </Card>
 
         {/* Navigation */}
@@ -555,5 +665,3 @@ const UserProfileCustomization: React.FC<UserProfileCustomizationProps> = ({
 };
 
 export default UserProfileCustomization;
-
-

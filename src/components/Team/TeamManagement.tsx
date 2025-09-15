@@ -66,6 +66,9 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react';
+import { teamDataService } from '../../services/data/data-service';
+import { syncService } from '../../services/data/sync-service';
+import { useAuth } from '../../hooks/useAuth';
 import {
   Plus,
   Users,
@@ -100,6 +103,7 @@ import {
 
 interface Player {
   id: string;
+  teamId: string;
   number: string;
   firstName: string;
   lastName: string;
@@ -119,14 +123,19 @@ interface Player {
   lastAttendance: Date;
   attendanceRate: number;
   performanceRating: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface AttendanceRecord {
   id: string;
   playerId: string;
+  teamId: string;
   date: Date;
   status: 'present' | 'absent' | 'late' | 'excused';
   notes: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface TeamStats {
@@ -139,18 +148,31 @@ interface TeamStats {
 
 const TeamManagement: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+  const [attendanceRecords, setAttendanceRecords] = useState<
+    AttendanceRecord[]
+  >([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPosition, setFilterPosition] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  
-  const { isOpen: isPlayerModalOpen, onOpen: onPlayerModalOpen, onClose: onPlayerModalClose } = useDisclosure();
-  const { isOpen: isAttendanceModalOpen, onOpen: onAttendanceModalOpen, onClose: onAttendanceModalClose } = useDisclosure();
-  
+  const [isLoading, setIsLoading] = useState(true);
+  const [syncStatus, setSyncStatus] = useState<any>(null);
+  const { user } = useAuth();
+
+  const {
+    isOpen: isPlayerModalOpen,
+    onOpen: onPlayerModalOpen,
+    onClose: onPlayerModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isAttendanceModalOpen,
+    onOpen: onAttendanceModalOpen,
+    onClose: onAttendanceModalClose,
+  } = useDisclosure();
+
   const toast = useToast();
-  
+
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -226,12 +248,60 @@ const TeamManagement: React.FC = () => {
   ];
 
   useEffect(() => {
-    setPlayers(samplePlayers);
-  }, []);
+    loadPlayers();
+    loadAttendanceRecords();
+    setupSyncStatus();
+  }, [user]);
+
+  const loadPlayers = async () => {
+    if (!user) return;
+    
+    try {
+      setIsLoading(true);
+      const playersData = await teamDataService.readMany<Player>('players', {
+        where: [{ field: 'teamId', operator: '==', value: user.uid }],
+        orderBy: [{ field: 'lastName', direction: 'asc' }],
+      });
+      setPlayers(playersData);
+    } catch (error) {
+      console.error('Error loading players:', error);
+      toast({
+        title: 'Error Loading Players',
+        description: 'Failed to load player data. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadAttendanceRecords = async () => {
+    if (!user) return;
+    
+    try {
+      const attendanceData = await teamDataService.readMany<AttendanceRecord>('attendance', {
+        where: [{ field: 'teamId', operator: '==', value: user.uid }],
+        orderBy: [{ field: 'date', direction: 'desc' }],
+      });
+      setAttendanceRecords(attendanceData);
+    } catch (error) {
+      console.error('Error loading attendance records:', error);
+    }
+  };
+
+  const setupSyncStatus = () => {
+    const unsubscribe = syncService.onStatusChange((status) => {
+      setSyncStatus(status);
+    });
+    
+    return unsubscribe;
+  };
 
   const handleAddPlayer = () => {
     const newPlayer: Player = {
-      id: Date.now().toString(),
+      id: '', // Will be set by Firebase
       number: '',
       firstName: '',
       lastName: '',
@@ -251,8 +321,9 @@ const TeamManagement: React.FC = () => {
       lastAttendance: new Date(),
       attendanceRate: 100,
       performanceRating: 70,
+      teamId: user?.uid || '',
     };
-    
+
     setSelectedPlayer(newPlayer);
     setIsEditing(true);
     onPlayerModalOpen();
@@ -264,99 +335,210 @@ const TeamManagement: React.FC = () => {
     onPlayerModalOpen();
   };
 
-  const handleDeletePlayer = (playerId: string) => {
-    setPlayers(prev => prev.filter(p => p.id !== playerId));
-    
-    toast({
-      title: 'Player Removed',
-      description: 'Player has been removed from the team',
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
-  };
+  const handleDeletePlayer = async (playerId: string) => {
+    try {
+      await teamDataService.delete('players', playerId);
+      setPlayers(prev => prev.filter(p => p.id !== playerId));
 
-  const handleSavePlayer = () => {
-    if (!selectedPlayer) return;
-    
-    if (isEditing) {
-      setPlayers(prev => prev.map(p => p.id === selectedPlayer.id ? selectedPlayer : p));
-    } else {
-      setPlayers(prev => [selectedPlayer, ...prev]);
+      toast({
+        title: 'Player Removed',
+        description: 'Player has been removed from the team',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Error deleting player:', error);
+      toast({
+        title: 'Error Removing Player',
+        description: 'Failed to remove player. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
-    
-    setIsEditing(false);
-    setSelectedPlayer(null);
-    onPlayerModalClose();
-    
-    toast({
-      title: 'Player Saved',
-      description: 'Player information has been saved successfully',
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
   };
 
-  const handleAttendanceCheck = (playerId: string, status: 'present' | 'absent' | 'late' | 'excused') => {
-    const newRecord: AttendanceRecord = {
-      id: Date.now().toString(),
-      playerId,
-      date: new Date(),
-      status,
-      notes: '',
-    };
-    
-    setAttendanceRecords(prev => [newRecord, ...prev]);
-    
-    // Update player's last attendance
-    setPlayers(prev => prev.map(p => 
-      p.id === playerId ? { ...p, lastAttendance: new Date() } : p
-    ));
-    
-    toast({
-      title: 'Attendance Recorded',
-      description: `Marked as ${status}`,
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
+  const handleSavePlayer = async () => {
+    if (!selectedPlayer || !user) return;
+
+    try {
+      let savedPlayer: Player;
+
+      if (isEditing && selectedPlayer.id) {
+        // Update existing player
+        await teamDataService.update('players', selectedPlayer.id, selectedPlayer);
+        savedPlayer = selectedPlayer;
+        setPlayers(prev =>
+          prev.map(p => (p.id === selectedPlayer.id ? selectedPlayer : p))
+        );
+      } else {
+        // Create new player
+        const playerData = {
+          ...selectedPlayer,
+          teamId: user.uid,
+        };
+        const playerId = await teamDataService.create('players', playerData);
+        savedPlayer = { ...selectedPlayer, id: playerId };
+        setPlayers(prev => [savedPlayer, ...prev]);
+      }
+
+      setIsEditing(false);
+      setSelectedPlayer(null);
+      onPlayerModalClose();
+
+      toast({
+        title: 'Player Saved',
+        description: 'Player information has been saved successfully',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Error saving player:', error);
+      toast({
+        title: 'Error Saving Player',
+        description: 'Failed to save player information. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleAttendanceCheck = async (
+    playerId: string,
+    status: 'present' | 'absent' | 'late' | 'excused'
+  ) => {
+    if (!user) return;
+
+    try {
+      const today = new Date();
+      const existingRecord = attendanceRecords.find(
+        record => record.playerId === playerId && 
+        record.date.toDateString() === today.toDateString()
+      );
+
+      if (existingRecord) {
+        // Update existing record
+        await teamDataService.update('attendance', existingRecord.id, {
+          status,
+          updatedAt: new Date(),
+        });
+        
+        setAttendanceRecords(prev =>
+          prev.map(record =>
+            record.id === existingRecord.id
+              ? { ...record, status }
+              : record
+          )
+        );
+      } else {
+        // Create new record
+        const newRecord: AttendanceRecord = {
+          id: '', // Will be set by Firebase
+          playerId,
+          teamId: user.uid,
+          date: today,
+          status,
+          notes: '',
+        };
+        
+        const recordId = await teamDataService.create('attendance', newRecord);
+        const savedRecord = { ...newRecord, id: recordId };
+        setAttendanceRecords(prev => [savedRecord, ...prev]);
+      }
+
+      // Update player's last attendance and rate
+      const playerRecords = attendanceRecords.filter(
+        record => record.playerId === playerId
+      );
+      const totalRecords = playerRecords.length + 1;
+      const presentRecords = playerRecords.filter(
+        record => record.status === 'present'
+      ).length + (status === 'present' ? 1 : 0);
+      const attendanceRate = Math.round((presentRecords / totalRecords) * 100);
+
+      // Update player attendance data
+      await teamDataService.update('players', playerId, {
+        lastAttendance: today,
+        attendanceRate,
+        updatedAt: new Date(),
+      });
+
+      setPlayers(prev =>
+        prev.map(player => {
+          if (player.id === playerId) {
+            return {
+              ...player,
+              lastAttendance: today,
+              attendanceRate,
+            };
+          }
+          return player;
+        })
+      );
+
+      toast({
+        title: 'Attendance Updated',
+        description: `Player marked as ${status}`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+      toast({
+        title: 'Error Updating Attendance',
+        description: 'Failed to update attendance. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   const filteredPlayers = players.filter(player => {
-    const matchesSearch = `${player.firstName} ${player.lastName} ${player.number} ${player.position}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    
-    const matchesPosition = filterPosition === 'all' || player.position === filterPosition;
-    const matchesStatus = filterStatus === 'all' || 
+    const matchesSearch =
+      `${player.firstName} ${player.lastName} ${player.number} ${player.position}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+    const matchesPosition =
+      filterPosition === 'all' || player.position === filterPosition;
+    const matchesStatus =
+      filterStatus === 'all' ||
       (filterStatus === 'active' && player.isActive) ||
       (filterStatus === 'inactive' && !player.isActive);
-    
+
     return matchesSearch && matchesPosition && matchesStatus;
   });
 
   const teamStats: TeamStats = {
     totalPlayers: players.length,
     activePlayers: players.filter(p => p.isActive).length,
-    averageAttendance: Math.round(players.reduce((sum, p) => sum + p.attendanceRate, 0) / players.length),
-    topPerformers: players.sort((a, b) => b.performanceRating - a.performanceRating).slice(0, 3),
+    averageAttendance: Math.round(
+      players.reduce((sum, p) => sum + p.attendanceRate, 0) / players.length
+    ),
+    topPerformers: players
+      .sort((a, b) => b.performanceRating - a.performanceRating)
+      .slice(0, 3),
     recentAbsences: players.filter(p => p.attendanceRate < 80).slice(0, 3),
   };
 
   const getPositionColor = (position: string): string => {
     const colors: { [key: string]: string } = {
-      'QB': 'red.500',
-      'RB': 'blue.500',
-      'WR': 'green.500',
-      'TE': 'purple.500',
-      'OL': 'orange.500',
-      'DL': 'red.600',
-      'LB': 'yellow.500',
-      'CB': 'cyan.500',
-      'S': 'pink.500',
-      'K': 'gray.500',
-      'P': 'gray.600',
+      QB: 'red.500',
+      RB: 'blue.500',
+      WR: 'green.500',
+      TE: 'purple.500',
+      OL: 'orange.500',
+      DL: 'red.600',
+      LB: 'yellow.500',
+      CB: 'cyan.500',
+      S: 'pink.500',
+      K: 'gray.500',
+      P: 'gray.600',
     };
     return colors[position] || 'gray.500';
   };
@@ -387,7 +569,7 @@ const TeamManagement: React.FC = () => {
             Manage roster, track attendance, and monitor player performance
           </Text>
         </VStack>
-        
+
         <HStack spacing={4}>
           <Button
             leftIcon={<Icon as={Download} />}
@@ -414,8 +596,45 @@ const TeamManagement: React.FC = () => {
         </HStack>
       </Flex>
 
+      {/* Sync Status Indicator */}
+      {syncStatus && (
+        <Alert 
+          status={syncStatus.isOnline ? 'success' : 'warning'} 
+          mb={4}
+          borderRadius="md"
+        >
+          <AlertIcon />
+          <Box>
+            <AlertTitle>
+              {syncStatus.isOnline ? 'Online' : 'Offline'}
+            </AlertTitle>
+            <AlertDescription>
+              {syncStatus.isOnline 
+                ? syncStatus.isSyncing 
+                  ? 'Syncing data...' 
+                  : syncStatus.lastSync 
+                    ? `Last synced: ${syncStatus.lastSync.toLocaleTimeString()}`
+                    : 'Ready to sync'
+                : 'Working offline - changes will sync when online'
+              }
+            </AlertDescription>
+          </Box>
+        </Alert>
+      )}
+
+      {/* Loading State */}
+      {isLoading && (
+        <Center py={8}>
+          <VStack spacing={4}>
+            <Spinner size="xl" color="brand.500" />
+            <Text color="gray.600">Loading team data...</Text>
+          </VStack>
+        </Center>
+      )}
+
       {/* Team Stats */}
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={6}>
+      {!isLoading && (
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={6}>
         <Card variant="elevated" bg={cardBg}>
           <CardBody>
             <VStack spacing={2}>
@@ -472,6 +691,7 @@ const TeamManagement: React.FC = () => {
           </CardBody>
         </Card>
       </SimpleGrid>
+      )}
 
       <Tabs variant="enclosed" colorScheme="brand" mb={6}>
         <TabList>
@@ -479,7 +699,7 @@ const TeamManagement: React.FC = () => {
           <Tab>Attendance</Tab>
           <Tab>Performance</Tab>
         </TabList>
-        
+
         <TabPanels>
           {/* Roster Tab */}
           <TabPanel>
@@ -487,7 +707,10 @@ const TeamManagement: React.FC = () => {
               {/* Search and Filters */}
               <Card variant="elevated" bg={cardBg}>
                 <CardBody>
-                  <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
+                  <Grid
+                    templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
+                    gap={4}
+                  >
                     <InputGroup>
                       <InputLeftElement>
                         <Icon as={Search} color="gray.400" />
@@ -495,13 +718,13 @@ const TeamManagement: React.FC = () => {
                       <Input
                         placeholder="Search players..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={e => setSearchTerm(e.target.value)}
                       />
                     </InputGroup>
-                    
+
                     <Select
                       value={filterPosition}
-                      onChange={(e) => setFilterPosition(e.target.value)}
+                      onChange={e => setFilterPosition(e.target.value)}
                     >
                       <option value="all">All Positions</option>
                       <option value="QB">QB</option>
@@ -516,10 +739,10 @@ const TeamManagement: React.FC = () => {
                       <option value="K">K</option>
                       <option value="P">P</option>
                     </Select>
-                    
+
                     <Select
                       value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
+                      onChange={e => setFilterStatus(e.target.value)}
                     >
                       <option value="all">All Status</option>
                       <option value="active">Active</option>
@@ -551,18 +774,25 @@ const TeamManagement: React.FC = () => {
                         </Tr>
                       </Thead>
                       <Tbody>
-                        {filteredPlayers.map((player) => (
+                        {filteredPlayers.map(player => (
                           <Tr key={player.id}>
                             <Td>
                               <HStack spacing={3}>
-                                <Avatar size="sm" name={`${player.firstName} ${player.lastName}`}>
+                                <Avatar
+                                  size="sm"
+                                  name={`${player.firstName} ${player.lastName}`}
+                                >
                                   {player.isCaptain && (
-                                    <AvatarBadge boxSize="1em" bg="yellow.500" />
+                                    <AvatarBadge
+                                      boxSize="1em"
+                                      bg="yellow.500"
+                                    />
                                   )}
                                 </Avatar>
                                 <VStack align="start" spacing={0}>
                                   <Text fontWeight="semibold">
-                                    #{player.number} {player.firstName} {player.lastName}
+                                    #{player.number} {player.firstName}{' '}
+                                    {player.lastName}
                                   </Text>
                                   <Text fontSize="xs" color="gray.500">
                                     {player.isCaptain ? 'Captain' : 'Player'}
@@ -579,16 +809,28 @@ const TeamManagement: React.FC = () => {
                             <Td>
                               <VStack align="start" spacing={0}>
                                 <Text fontSize="sm">{player.phone}</Text>
-                                <Text fontSize="xs" color="gray.500">{player.email}</Text>
+                                <Text fontSize="xs" color="gray.500">
+                                  {player.email}
+                                </Text>
                               </VStack>
                             </Td>
                             <Td>
-                              <Badge colorScheme={getAttendanceColor(player.attendanceRate)} variant="subtle">
+                              <Badge
+                                colorScheme={getAttendanceColor(
+                                  player.attendanceRate
+                                )}
+                                variant="subtle"
+                              >
                                 {player.attendanceRate}%
                               </Badge>
                             </Td>
                             <Td>
-                              <Badge colorScheme={getPerformanceColor(player.performanceRating)} variant="subtle">
+                              <Badge
+                                colorScheme={getPerformanceColor(
+                                  player.performanceRating
+                                )}
+                                variant="subtle"
+                              >
                                 {player.performanceRating}
                               </Badge>
                             </Td>
@@ -629,7 +871,7 @@ const TeamManagement: React.FC = () => {
               </Card>
             </VStack>
           </TabPanel>
-          
+
           {/* Attendance Tab */}
           <TabPanel>
             <VStack spacing={6} align="stretch">
@@ -641,25 +883,28 @@ const TeamManagement: React.FC = () => {
                 </CardHeader>
                 <CardBody>
                   <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-                    {players.map((player) => (
+                    {players.map(player => (
                       <Card key={player.id} variant="outline" size="sm">
                         <CardBody p={3}>
                           <VStack spacing={3} align="stretch">
                             <HStack justify="space-between">
                               <Text fontWeight="semibold">
-                                #{player.number} {player.firstName} {player.lastName}
+                                #{player.number} {player.firstName}{' '}
+                                {player.lastName}
                               </Text>
                               <Badge colorScheme="blue" variant="subtle">
                                 {player.position}
                               </Badge>
                             </HStack>
-                            
+
                             <HStack spacing={2} justify="center">
                               <Button
                                 size="sm"
                                 colorScheme="green"
                                 variant="outline"
-                                onClick={() => handleAttendanceCheck(player.id, 'present')}
+                                onClick={() =>
+                                  handleAttendanceCheck(player.id, 'present')
+                                }
                               >
                                 Present
                               </Button>
@@ -667,7 +912,9 @@ const TeamManagement: React.FC = () => {
                                 size="sm"
                                 colorScheme="red"
                                 variant="outline"
-                                onClick={() => handleAttendanceCheck(player.id, 'absent')}
+                                onClick={() =>
+                                  handleAttendanceCheck(player.id, 'absent')
+                                }
                               >
                                 Absent
                               </Button>
@@ -675,7 +922,9 @@ const TeamManagement: React.FC = () => {
                                 size="sm"
                                 colorScheme="yellow"
                                 variant="outline"
-                                onClick={() => handleAttendanceCheck(player.id, 'late')}
+                                onClick={() =>
+                                  handleAttendanceCheck(player.id, 'late')
+                                }
                               >
                                 Late
                               </Button>
@@ -689,7 +938,7 @@ const TeamManagement: React.FC = () => {
               </Card>
             </VStack>
           </TabPanel>
-          
+
           {/* Performance Tab */}
           <TabPanel>
             <VStack spacing={6} align="stretch">
@@ -704,16 +953,28 @@ const TeamManagement: React.FC = () => {
                   <CardBody>
                     <VStack spacing={3} align="stretch">
                       {teamStats.topPerformers.map((player, index) => (
-                        <HStack key={player.id} justify="space-between" p={3} bg="gray.50" borderRadius="md">
+                        <HStack
+                          key={player.id}
+                          justify="space-between"
+                          p={3}
+                          bg="gray.50"
+                          borderRadius="md"
+                        >
                           <HStack spacing={3}>
                             <Badge colorScheme="yellow" variant="solid">
                               #{index + 1}
                             </Badge>
                             <Text fontWeight="semibold">
-                              #{player.number} {player.firstName} {player.lastName}
+                              #{player.number} {player.firstName}{' '}
+                              {player.lastName}
                             </Text>
                           </HStack>
-                          <Badge colorScheme={getPerformanceColor(player.performanceRating)} variant="solid">
+                          <Badge
+                            colorScheme={getPerformanceColor(
+                              player.performanceRating
+                            )}
+                            variant="solid"
+                          >
                             {player.performanceRating}
                           </Badge>
                         </HStack>
@@ -731,10 +992,17 @@ const TeamManagement: React.FC = () => {
                   </CardHeader>
                   <CardBody>
                     <VStack spacing={3} align="stretch">
-                      {teamStats.recentAbsences.map((player) => (
-                        <HStack key={player.id} justify="space-between" p={3} bg="red.50" borderRadius="md">
+                      {teamStats.recentAbsences.map(player => (
+                        <HStack
+                          key={player.id}
+                          justify="space-between"
+                          p={3}
+                          bg="red.50"
+                          borderRadius="md"
+                        >
                           <Text fontWeight="semibold">
-                            #{player.number} {player.firstName} {player.lastName}
+                            #{player.number} {player.firstName}{' '}
+                            {player.lastName}
                           </Text>
                           <Badge colorScheme="red" variant="solid">
                             {player.attendanceRate}%
@@ -763,23 +1031,43 @@ const TeamManagement: React.FC = () => {
               <VStack spacing={4} align="stretch">
                 <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Jersey Number
                     </Text>
                     <Input
                       value={selectedPlayer.number}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, number: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          number: e.target.value,
+                        })
+                      }
                       placeholder="Enter jersey number"
                     />
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Position
                     </Text>
                     <Select
                       value={selectedPlayer.position}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, position: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          position: e.target.value,
+                        })
+                      }
                     >
                       <option value="">Select Position</option>
                       <option value="QB">QB</option>
@@ -796,39 +1084,69 @@ const TeamManagement: React.FC = () => {
                     </Select>
                   </Box>
                 </Grid>
-                
+
                 <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       First Name
                     </Text>
                     <Input
                       value={selectedPlayer.firstName}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, firstName: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          firstName: e.target.value,
+                        })
+                      }
                       placeholder="Enter first name"
                     />
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Last Name
                     </Text>
                     <Input
                       value={selectedPlayer.lastName}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, lastName: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          lastName: e.target.value,
+                        })
+                      }
                       placeholder="Enter last name"
                     />
                   </Box>
                 </Grid>
-                
+
                 <Grid templateColumns="repeat(3, 1fr)" gap={4}>
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Grade
                     </Text>
                     <NumberInput
                       value={selectedPlayer.grade}
-                      onChange={(value) => setSelectedPlayer({ ...selectedPlayer, grade: parseInt(value) })}
+                      onChange={value =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          grade: parseInt(value),
+                        })
+                      }
                       min={9}
                       max={12}
                     >
@@ -839,25 +1157,45 @@ const TeamManagement: React.FC = () => {
                       </NumberInputStepper>
                     </NumberInput>
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Height
                     </Text>
                     <Input
                       value={selectedPlayer.height}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, height: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          height: e.target.value,
+                        })
+                      }
                       placeholder="e.g., 6'2&quot;"
                     />
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Weight (lbs)
                     </Text>
                     <NumberInput
                       value={selectedPlayer.weight}
-                      onChange={(value) => setSelectedPlayer({ ...selectedPlayer, weight: parseInt(value) })}
+                      onChange={value =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          weight: parseInt(value),
+                        })
+                      }
                       min={100}
                       max={400}
                     >
@@ -869,43 +1207,73 @@ const TeamManagement: React.FC = () => {
                     </NumberInput>
                   </Box>
                 </Grid>
-                
+
                 <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Phone
                     </Text>
                     <Input
                       value={selectedPlayer.phone}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, phone: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          phone: e.target.value,
+                        })
+                      }
                       placeholder="Enter phone number"
                     />
                   </Box>
-                  
+
                   <Box>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="gray.700"
+                      mb={2}
+                    >
                       Email
                     </Text>
                     <Input
                       value={selectedPlayer.email}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, email: e.target.value })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          email: e.target.value,
+                        })
+                      }
                       placeholder="Enter email address"
                     />
                   </Box>
                 </Grid>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="medium"
+                    color="gray.700"
+                    mb={2}
+                  >
                     Medical Notes
                   </Text>
                   <Textarea
                     value={selectedPlayer.medicalNotes}
-                    onChange={(e) => setSelectedPlayer({ ...selectedPlayer, medicalNotes: e.target.value })}
+                    onChange={e =>
+                      setSelectedPlayer({
+                        ...selectedPlayer,
+                        medicalNotes: e.target.value,
+                      })
+                    }
                     placeholder="Enter any medical notes or allergies"
                     rows={3}
                   />
                 </Box>
-                
+
                 <HStack spacing={4}>
                   <FormControl display="flex" alignItems="center">
                     <FormLabel htmlFor="is-active" mb="0">
@@ -914,10 +1282,15 @@ const TeamManagement: React.FC = () => {
                     <Switch
                       id="is-active"
                       isChecked={selectedPlayer.isActive}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, isActive: e.target.checked })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          isActive: e.target.checked,
+                        })
+                      }
                     />
                   </FormControl>
-                  
+
                   <FormControl display="flex" alignItems="center">
                     <FormLabel htmlFor="is-captain" mb="0">
                       Team Captain
@@ -925,7 +1298,12 @@ const TeamManagement: React.FC = () => {
                     <Switch
                       id="is-captain"
                       isChecked={selectedPlayer.isCaptain}
-                      onChange={(e) => setSelectedPlayer({ ...selectedPlayer, isCaptain: e.target.checked })}
+                      onChange={e =>
+                        setSelectedPlayer({
+                          ...selectedPlayer,
+                          isCaptain: e.target.checked,
+                        })
+                      }
                     />
                   </FormControl>
                 </HStack>

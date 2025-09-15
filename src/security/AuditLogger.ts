@@ -1,14 +1,14 @@
 // src/security/AuditLogger.ts
-import { 
-  addDoc, 
-  collection, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
   getDocs,
   Timestamp,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { AuditLog, DataAccessLog } from '../types/privacy-schema';
@@ -43,7 +43,7 @@ export class AuditLogger {
         userAgent: metadata?.userAgent || navigator.userAgent,
         sessionId: metadata?.sessionId || this.getSessionId(),
         severity,
-        outcome
+        outcome,
       };
 
       const docRef = await addDoc(collection(db, 'auditLogs'), auditLog);
@@ -79,10 +79,13 @@ export class AuditLogger {
         timestamp: serverTimestamp(),
         purpose,
         consentLevel,
-        anonymized
+        anonymized,
       };
 
-      const docRef = await addDoc(collection(db, 'dataAccessLogs'), dataAccessLog);
+      const docRef = await addDoc(
+        collection(db, 'dataAccessLogs'),
+        dataAccessLog
+      );
       return docRef.id;
     } catch (error) {
       console.error('Error logging data access:', error);
@@ -108,7 +111,7 @@ export class AuditLogger {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error getting audit logs:', error);
@@ -134,7 +137,7 @@ export class AuditLogger {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as DataAccessLog[];
     } catch (error) {
       console.error('Error getting data access logs:', error);
@@ -160,7 +163,7 @@ export class AuditLogger {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error getting audit logs by severity:', error);
@@ -186,7 +189,7 @@ export class AuditLogger {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error getting audit logs by action:', error);
@@ -283,4 +286,4 @@ export class AuditLogger {
 
     return logId;
   }
-} 
+}

@@ -1,4 +1,8 @@
-import { extendTheme, ThemeConfig, type ThemeComponents } from '@chakra-ui/react';
+import {
+  extendTheme,
+  ThemeConfig,
+  type ThemeComponents,
+} from '@chakra-ui/react';
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
@@ -20,7 +24,7 @@ const colors = {
     800: '#004d4d',
     900: '#003333',
   },
-  
+
   // Brand alias for compatibility
   brand: {
     50: '#e6ffff',
@@ -34,7 +38,7 @@ const colors = {
     800: '#004d4d',
     900: '#003333',
   },
-  
+
   // Dark backgrounds (from brandTheme)
   dark: {
     50: '#f8f9fa',
@@ -49,7 +53,7 @@ const colors = {
     900: '#1a1d20',
     950: '#0d1117',
   },
-  
+
   // Semantic colors
   success: {
     50: '#f0fdf4',
@@ -87,7 +91,7 @@ const colors = {
     800: '#991b1b',
     900: '#7f1d1d',
   },
-  
+
   // Inclusive color palette
   inclusive: {
     blue: '#0d6efd',
@@ -97,7 +101,7 @@ const colors = {
     pink: '#d63384',
     teal: '#20c997',
   },
-  
+
   // Neutral colors
   gray: {
     50: '#f9fafb',
@@ -110,12 +114,13 @@ const colors = {
     700: '#374151',
     800: '#1f2937',
     900: '#111827',
-  }
+  },
 };
 
 // Modern typography
 const fonts = {
-  heading: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
+  heading:
+    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
   body: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
   mono: '"JetBrains Mono", "Fira Code", Consolas, "Liberation Mono", Menlo, Courier, monospace',
 };
@@ -164,7 +169,7 @@ const components: ThemeComponents = {
           boxShadow: 'brand-glow',
         },
       },
-      'inclusive': {
+      inclusive: {
         bg: 'inclusive.blue',
         color: 'white',
         _hover: {
@@ -205,7 +210,7 @@ const components: ThemeComponents = {
       variant: 'brand-primary',
     },
   },
-  
+
   Card: {
     parts: ['container'],
     baseStyle: {
@@ -242,7 +247,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Input: {
     baseStyle: {
       field: {
@@ -259,7 +264,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Modal: {
     baseStyle: {
       dialog: {
@@ -272,7 +277,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Badge: {
     baseStyle: {
       borderRadius: 'full',

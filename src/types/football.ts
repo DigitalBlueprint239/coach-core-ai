@@ -1,16 +1,16 @@
 // FootballLevel enum for all supported levels
 export enum FootballLevel {
-  YOUTH_6U = "youth_6u",
-  YOUTH_8U = "youth_8u",
-  YOUTH_10U = "youth_10u",
-  YOUTH_12U = "youth_12u",
-  YOUTH_14U = "youth_14u",
-  MIDDLE_SCHOOL = "middle_school",
-  JV = "jv",
-  VARSITY = "varsity",
-  COLLEGE = "college",
-  SEMI_PRO = "semi_pro",
-  PROFESSIONAL = "professional"
+  YOUTH_6U = 'youth_6u',
+  YOUTH_8U = 'youth_8u',
+  YOUTH_10U = 'youth_10u',
+  YOUTH_12U = 'youth_12u',
+  YOUTH_14U = 'youth_14u',
+  MIDDLE_SCHOOL = 'middle_school',
+  JV = 'jv',
+  VARSITY = 'varsity',
+  COLLEGE = 'college',
+  SEMI_PRO = 'semi_pro',
+  PROFESSIONAL = 'professional',
 }
 
 // Base entity for all football-related data
@@ -75,11 +75,11 @@ export interface Team extends BaseFootballEntity {
 // YouthPlay and AdvancedPlay for progressive complexity
 export interface YouthPlay {
   name: string;
-  formation: "i-formation" | "spread" | "single-back";
-  play_type: "run" | "pass";
-  direction: "left" | "middle" | "right";
+  formation: 'i-formation' | 'spread' | 'single-back';
+  play_type: 'run' | 'pass';
+  direction: 'left' | 'middle' | 'right';
   fun_factor: 1 | 2 | 3 | 4 | 5;
-  complexity: "basic" | "intermediate" | "advanced";
+  complexity: 'basic' | 'intermediate' | 'advanced';
   recommended_age: number[];
   visual_guide: string;
 }
@@ -90,4 +90,4 @@ export interface AdvancedPlay extends YouthPlay {
   protection_scheme?: string;
   route_combinations?: any[];
   defensive_keys?: any[];
-} 
+}

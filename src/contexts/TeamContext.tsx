@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 interface Team {
   id: string;
@@ -52,9 +58,9 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       // TODO: Replace with actual API call to get user's teams from Firestore
       // For now, we'll use empty arrays that will be populated when backend is ready
       const fetchedTeams: Team[] = [];
-      
+
       setTeams(fetchedTeams);
-      
+
       // Set first team as current if available
       if (fetchedTeams.length > 0) {
         setCurrentTeam(fetchedTeams[0]);
@@ -80,7 +86,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       sport: teamData.sport || 'football',
       level: teamData.level || 'varsity',
       code: teamData.code || `CODE${Date.now()}`,
-      memberIds: teamData.memberIds || []
+      memberIds: teamData.memberIds || [],
     };
     return newTeam;
   };
@@ -111,12 +117,8 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     addTeam,
     createTeam,
     joinTeam,
-    leaveTeam
+    leaveTeam,
   };
 
-  return (
-    <TeamContext.Provider value={value}>
-      {children}
-    </TeamContext.Provider>
-  );
-}; 
+  return <TeamContext.Provider value={value}>{children}</TeamContext.Provider>;
+};

@@ -152,7 +152,7 @@ class APIIntegrationManager {
 
   addIntegration(config: IntegrationConfig): void {
     this.integrations.set(config.name, config);
-    
+
     if (config.isEnabled && config.autoSync && config.syncInterval > 0) {
       this.startAutoSync(config.name);
     }
@@ -172,9 +172,13 @@ class APIIntegrationManager {
     if (integration) {
       const updatedIntegration = { ...integration, ...updates };
       this.integrations.set(name, updatedIntegration);
-      
+
       // Restart auto-sync if needed
-      if (updatedIntegration.isEnabled && updatedIntegration.autoSync && updatedIntegration.syncInterval > 0) {
+      if (
+        updatedIntegration.isEnabled &&
+        updatedIntegration.autoSync &&
+        updatedIntegration.syncInterval > 0
+      ) {
         this.stopAutoSync(name);
         this.startAutoSync(name);
       } else {
@@ -241,20 +245,20 @@ class APIIntegrationManager {
 
   async testAllIntegrations(): Promise<Map<string, boolean>> {
     const results = new Map<string, boolean>();
-    
+
     for (const [name, integration] of this.integrations) {
       if (integration.isEnabled) {
         results.set(name, await this.testIntegration(name));
       }
     }
-    
+
     return results;
   }
 
   private async testWeatherAPI(): Promise<boolean> {
     try {
       // Test with a known location (New York City)
-      await weatherAPIService.getCurrentWeather(40.7128, -74.0060);
+      await weatherAPIService.getCurrentWeather(40.7128, -74.006);
       return true;
     } catch {
       return false;
@@ -301,11 +305,17 @@ class APIIntegrationManager {
     }
   }
 
-  private async testGenericAPI(integration: IntegrationConfig): Promise<boolean> {
+  private async testGenericAPI(
+    integration: IntegrationConfig
+  ): Promise<boolean> {
     try {
-      const response = await apiService.get(`${integration.baseURL}/health`, {}, {
-        timeout: integration.timeout,
-      });
+      const response = await apiService.get(
+        `${integration.baseURL}/health`,
+        {},
+        {
+          timeout: integration.timeout,
+        }
+      );
       return response.success;
     } catch {
       return false;
@@ -314,7 +324,11 @@ class APIIntegrationManager {
 
   startAutoSync(integrationName: string): void {
     const integration = this.integrations.get(integrationName);
-    if (!integration || !integration.autoSync || integration.syncInterval <= 0) {
+    if (
+      !integration ||
+      !integration.autoSync ||
+      integration.syncInterval <= 0
+    ) {
       return;
     }
 
@@ -322,13 +336,16 @@ class APIIntegrationManager {
     this.stopAutoSync(integrationName);
 
     // Start new interval
-    const interval = setInterval(async () => {
-      try {
-        await this.syncIntegration(integrationName);
-      } catch (error) {
-        console.error(`Auto-sync failed for ${integrationName}:`, error);
-      }
-    }, integration.syncInterval * 60 * 1000);
+    const interval = setInterval(
+      async () => {
+        try {
+          await this.syncIntegration(integrationName);
+        } catch (error) {
+          console.error(`Auto-sync failed for ${integrationName}:`, error);
+        }
+      },
+      integration.syncInterval * 60 * 1000
+    );
 
     this.syncIntervals.set(integrationName, interval);
   }
@@ -381,7 +398,8 @@ class APIIntegrationManager {
         isConnected: false,
         status: 'error',
         message: `Sync failed: ${error.message}`,
-        errorCount: (this.statusCache.get(integrationName)?.errorCount || 0) + 1,
+        errorCount:
+          (this.statusCache.get(integrationName)?.errorCount || 0) + 1,
       });
       return false;
     }
@@ -427,7 +445,10 @@ class APIIntegrationManager {
     }
   }
 
-  private updateIntegrationStatus(name: string, updates: Partial<IntegrationStatus>): void {
+  private updateIntegrationStatus(
+    name: string,
+    updates: Partial<IntegrationStatus>
+  ): void {
     const currentStatus = this.statusCache.get(name) || {
       name,
       isEnabled: false,
@@ -453,18 +474,24 @@ class APIIntegrationManager {
   getOverallHealth(): 'healthy' | 'warning' | 'error' {
     const statuses = this.getAllIntegrationStatuses();
     const enabledStatuses = statuses.filter(s => s.isEnabled);
-    
+
     if (enabledStatuses.length === 0) return 'healthy';
-    
+
     const errorCount = enabledStatuses.filter(s => s.status === 'error').length;
-    const warningCount = enabledStatuses.filter(s => s.status === 'warning').length;
-    
+    const warningCount = enabledStatuses.filter(
+      s => s.status === 'warning'
+    ).length;
+
     if (errorCount > 0) return 'error';
     if (warningCount > 0) return 'warning';
     return 'healthy';
   }
 
-  updateMetrics(requestTime: number, success: boolean, cacheHit: boolean): void {
+  updateMetrics(
+    requestTime: number,
+    success: boolean,
+    cacheHit: boolean
+  ): void {
     this.metrics.totalRequests++;
     if (success) {
       this.metrics.successfulRequests++;
@@ -475,11 +502,14 @@ class APIIntegrationManager {
     // Update average response time
     const currentAvg = this.metrics.averageResponseTime;
     const requestCount = this.metrics.totalRequests;
-    this.metrics.averageResponseTime = (currentAvg * (requestCount - 1) + requestTime) / requestCount;
+    this.metrics.averageResponseTime =
+      (currentAvg * (requestCount - 1) + requestTime) / requestCount;
 
     // Update cache hit rate
-    const currentCacheHits = this.metrics.cacheHitRate * (this.metrics.totalRequests - 1);
-    this.metrics.cacheHitRate = (currentCacheHits + (cacheHit ? 1 : 0)) / this.metrics.totalRequests;
+    const currentCacheHits =
+      this.metrics.cacheHitRate * (this.metrics.totalRequests - 1);
+    this.metrics.cacheHitRate =
+      (currentCacheHits + (cacheHit ? 1 : 0)) / this.metrics.totalRequests;
 
     this.metrics.lastUpdated = new Date();
   }
@@ -501,13 +531,16 @@ class APIIntegrationManager {
 
   private startHealthMonitoring(): void {
     // Monitor integration health every 5 minutes
-    setInterval(async () => {
-      try {
-        await this.testAllIntegrations();
-      } catch (error) {
-        console.error('Health monitoring failed:', error);
-      }
-    }, 5 * 60 * 1000);
+    setInterval(
+      async () => {
+        try {
+          await this.testAllIntegrations();
+        } catch (error) {
+          console.error('Health monitoring failed:', error);
+        }
+      },
+      5 * 60 * 1000
+    );
   }
 
   // Utility methods for common operations
@@ -530,7 +563,9 @@ class APIIntegrationManager {
       const results = [];
       if (this.isIntegrationEnabled('hudl')) {
         try {
-          const hudlResults = await videoAPIService.getHudlVideos('team-id', { query });
+          const hudlResults = await videoAPIService.getHudlVideos('team-id', {
+            query,
+          });
           results.push(...hudlResults);
         } catch (error) {
           console.error('Hudl search failed:', error);
@@ -538,7 +573,8 @@ class APIIntegrationManager {
       }
       if (this.isIntegrationEnabled('youtube')) {
         try {
-          const youtubeResults = await videoAPIService.searchYouTubeVideos(query);
+          const youtubeResults =
+            await videoAPIService.searchYouTubeVideos(query);
           results.push(...youtubeResults);
         } catch (error) {
           console.error('YouTube search failed:', error);
@@ -548,27 +584,39 @@ class APIIntegrationManager {
     }
   }
 
-  async getPlayerHealthMetrics(playerId: string, startDate: Date, endDate: Date) {
+  async getPlayerHealthMetrics(
+    playerId: string,
+    startDate: Date,
+    endDate: Date
+  ) {
     const results = [];
-    
+
     if (this.isIntegrationEnabled('fitbit')) {
       try {
-        const fitbitMetrics = await wearableAPIService.getHealthMetrics(playerId, startDate, endDate);
+        const fitbitMetrics = await wearableAPIService.getHealthMetrics(
+          playerId,
+          startDate,
+          endDate
+        );
         results.push(...fitbitMetrics);
       } catch (error) {
         console.error('Fitbit metrics failed:', error);
       }
     }
-    
+
     if (this.isIntegrationEnabled('garmin')) {
       try {
-        const garminMetrics = await wearableAPIService.getHealthMetrics(playerId, startDate, endDate);
+        const garminMetrics = await wearableAPIService.getHealthMetrics(
+          playerId,
+          startDate,
+          endDate
+        );
         results.push(...garminMetrics);
       } catch (error) {
         console.error('Garmin metrics failed:', error);
       }
     }
-    
+
     return results;
   }
 
@@ -583,7 +631,7 @@ class APIIntegrationManager {
     for (const [name] of this.syncIntervals) {
       this.stopAutoSync(name);
     }
-    
+
     // Clear caches
     this.statusCache.clear();
     this.integrations.clear();

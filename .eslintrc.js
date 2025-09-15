@@ -33,6 +33,18 @@ module.exports = {
     'object-shorthand': 'error',
     'prefer-template': 'error',
     'prettier/prettier': 'error',
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: '@chakra-ui/react',
+            importNames: ['StatArrow', 'StatNumber', 'StatLabel', 'StatHelpText'],
+            message: 'Use SafeStat* components from src/ui/stat instead of raw Chakra components to prevent runtime errors.'
+          }
+        ]
+      }
+    ]
   },
   settings: {
     react: {

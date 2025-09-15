@@ -1,4 +1,8 @@
-import { extendTheme, ThemeConfig, type ThemeComponents } from '@chakra-ui/react';
+import {
+  extendTheme,
+  ThemeConfig,
+  type ThemeComponents,
+} from '@chakra-ui/react';
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
@@ -20,7 +24,7 @@ const colors = {
     800: '#1e40af',
     900: '#1e3a8a',
   },
-  
+
   // Sports-specific colors
   sports: {
     field: {
@@ -58,9 +62,9 @@ const colors = {
       700: '#a16207',
       800: '#854d0e',
       900: '#713f12',
-    }
+    },
   },
-  
+
   // Semantic colors
   success: {
     50: '#f0fdf4',
@@ -98,7 +102,7 @@ const colors = {
     800: '#991b1b',
     900: '#7f1d1d',
   },
-  
+
   // Neutral colors
   gray: {
     50: '#f9fafb',
@@ -111,12 +115,13 @@ const colors = {
     700: '#374151',
     800: '#1f2937',
     900: '#111827',
-  }
+  },
 };
 
 // Enhanced typography
 const fonts = {
-  heading: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  heading:
+    'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   body: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   mono: 'JetBrains Mono, SF Mono, Monaco, Inconsolata, "Roboto Mono", monospace',
 };
@@ -188,7 +193,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Card: {
     baseStyle: {
       container: {
@@ -220,7 +225,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Input: {
     baseStyle: {
       field: {
@@ -237,7 +242,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Modal: {
     baseStyle: {
       dialog: {
@@ -250,7 +255,7 @@ const components: ThemeComponents = {
       },
     },
   },
-  
+
   Badge: {
     baseStyle: {
       borderRadius: 'full',

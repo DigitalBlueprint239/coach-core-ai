@@ -34,20 +34,29 @@ export const AdvancedLoading: React.FC<AdvancedLoadingProps> = ({
       <VStack spacing={spacing} align="stretch" w="full">
         {showHeader && (
           <Box>
-            <Skeleton height={skeletonHeight?.height} borderRadius={skeletonHeight?.borderRadius} />
+            <Skeleton
+              height={skeletonHeight?.height}
+              borderRadius={skeletonHeight?.borderRadius}
+            />
             <SkeletonText mt={2} noOfLines={1} spacing={2} />
           </Box>
         )}
-        
+
         {Array.from({ length: rows }).map((_, index) => (
           <Box key={index}>
             <HStack spacing={3} align="start">
-              {showAvatar && (
-                <SkeletonCircle size={{ base: 'sm', md: 'md' }} />
-              )}
+              {showAvatar && <SkeletonCircle size={{ base: 'sm', md: 'md' }} />}
               <VStack align="start" spacing={2} flex={1}>
-                <Skeleton height={skeletonHeight?.height} borderRadius={skeletonHeight?.borderRadius} w="60%" />
-                <Skeleton height={skeletonHeight?.height} borderRadius={skeletonHeight?.borderRadius} w="80%" />
+                <Skeleton
+                  height={skeletonHeight?.height}
+                  borderRadius={skeletonHeight?.borderRadius}
+                  w="60%"
+                />
+                <Skeleton
+                  height={skeletonHeight?.height}
+                  borderRadius={skeletonHeight?.borderRadius}
+                  w="80%"
+                />
                 {showActions && (
                   <HStack spacing={2}>
                     <Skeleton height="24px" w="60px" borderRadius="md" />

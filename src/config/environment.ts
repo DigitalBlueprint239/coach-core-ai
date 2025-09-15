@@ -10,7 +10,7 @@ export interface EnvironmentConfig {
   // Environment
   NODE_ENV: 'development' | 'production' | 'test';
   ENVIRONMENT: 'development' | 'staging' | 'production';
-  
+
   // Firebase Configuration
   FIREBASE: {
     apiKey: string;
@@ -21,28 +21,30 @@ export interface EnvironmentConfig {
     appId: string;
     measurementId?: string;
   };
-  
+
   // API Configuration
   API: {
     baseUrl: string;
     aiServiceUrl: string;
     timeout: number;
   };
-  
+
   // AI Services
   AI: {
     openaiApiKey: string;
+    claudeApiKey: string;
     aiProxyToken: string;
     enableAiAssistant: boolean;
+    enableClaudeService: boolean;
   };
-  
+
   // Analytics & Monitoring
   MONITORING: {
     sentryDsn?: string;
     enableAnalytics: boolean;
     enableErrorReporting: boolean;
   };
-  
+
   // Security
   SECURITY: {
     enableCSP: boolean;
@@ -50,7 +52,7 @@ export interface EnvironmentConfig {
     enable2FA: boolean;
     sessionTimeout: number;
   };
-  
+
   // Features
   FEATURES: {
     enablePushNotifications: boolean;
@@ -58,7 +60,7 @@ export interface EnvironmentConfig {
     enableHudlIntegration: boolean;
     enableStripeIntegration: boolean;
   };
-  
+
   // Development
   DEVELOPMENT: {
     useEmulator: boolean;
@@ -70,45 +72,46 @@ export interface EnvironmentConfig {
 // Environment validation schema
 const requiredEnvVars = {
   // Firebase (required)
-  'REACT_APP_FIREBASE_API_KEY': 'Firebase API Key',
-  'REACT_APP_FIREBASE_AUTH_DOMAIN': 'Firebase Auth Domain',
-  'REACT_APP_FIREBASE_PROJECT_ID': 'Firebase Project ID',
-  'REACT_APP_FIREBASE_STORAGE_BUCKET': 'Firebase Storage Bucket',
-  'REACT_APP_FIREBASE_MESSAGING_SENDER_ID': 'Firebase Messaging Sender ID',
-  'REACT_APP_FIREBASE_APP_ID': 'Firebase App ID',
-  
+  REACT_APP_FIREBASE_API_KEY: 'Firebase API Key',
+  REACT_APP_FIREBASE_AUTH_DOMAIN: 'Firebase Auth Domain',
+  REACT_APP_FIREBASE_PROJECT_ID: 'Firebase Project ID',
+  REACT_APP_FIREBASE_STORAGE_BUCKET: 'Firebase Storage Bucket',
+  REACT_APP_FIREBASE_MESSAGING_SENDER_ID: 'Firebase Messaging Sender ID',
+  REACT_APP_FIREBASE_APP_ID: 'Firebase App ID',
+
   // AI Services (required)
-  'REACT_APP_OPENAI_API_KEY': 'OpenAI API Key',
-  'REACT_APP_AI_PROXY_TOKEN': 'AI Proxy Token',
+  REACT_APP_OPENAI_API_KEY: 'OpenAI API Key',
+  REACT_APP_CLAUDE_API_KEY: 'Claude API Key',
+  REACT_APP_AI_PROXY_TOKEN: 'AI Proxy Token',
 } as const;
 
 const optionalEnvVars = {
   // Firebase (optional)
-  'REACT_APP_FIREBASE_MEASUREMENT_ID': 'Firebase Measurement ID',
-  
+  REACT_APP_FIREBASE_MEASUREMENT_ID: 'Firebase Measurement ID',
+
   // API (optional)
-  'REACT_APP_API_BASE_URL': 'API Base URL',
-  'REACT_APP_AI_SERVICE_URL': 'AI Service URL',
-  
+  REACT_APP_API_BASE_URL: 'API Base URL',
+  REACT_APP_AI_SERVICE_URL: 'AI Service URL',
+
   // Monitoring (optional)
-  'REACT_APP_SENTRY_DSN': 'Sentry DSN',
-  
+  REACT_APP_SENTRY_DSN: 'Sentry DSN',
+
   // Features (optional)
-  'REACT_APP_ENABLE_AI_ASSISTANT': 'Enable AI Assistant',
-  'REACT_APP_ENABLE_ANALYTICS': 'Enable Analytics',
-  'REACT_APP_ENABLE_PUSH_NOTIFICATIONS': 'Enable Push Notifications',
-  'REACT_APP_ENABLE_OFFLINE_MODE': 'Enable Offline Mode',
-  'REACT_APP_ENABLE_HUDL_INTEGRATION': 'Enable Hudl Integration',
-  'REACT_APP_ENABLE_STRIPE_INTEGRATION': 'Enable Stripe Integration',
-  
+  REACT_APP_ENABLE_AI_ASSISTANT: 'Enable AI Assistant',
+  REACT_APP_ENABLE_ANALYTICS: 'Enable Analytics',
+  REACT_APP_ENABLE_PUSH_NOTIFICATIONS: 'Enable Push Notifications',
+  REACT_APP_ENABLE_OFFLINE_MODE: 'Enable Offline Mode',
+  REACT_APP_ENABLE_HUDL_INTEGRATION: 'Enable Hudl Integration',
+  REACT_APP_ENABLE_STRIPE_INTEGRATION: 'Enable Stripe Integration',
+
   // Security (optional)
-  'REACT_APP_ENABLE_CSP': 'Enable Content Security Policy',
-  'REACT_APP_ENABLE_HSTS': 'Enable HSTS',
-  'REACT_APP_ENABLE_2FA': 'Enable Two-Factor Authentication',
-  
+  REACT_APP_ENABLE_CSP: 'Enable Content Security Policy',
+  REACT_APP_ENABLE_HSTS: 'Enable HSTS',
+  REACT_APP_ENABLE_2FA: 'Enable Two-Factor Authentication',
+
   // Development (optional)
-  'REACT_APP_USE_EMULATOR': 'Use Firebase Emulator',
-  'REACT_APP_ENABLE_DEBUG_MODE': 'Enable Debug Mode',
+  REACT_APP_USE_EMULATOR: 'Use Firebase Emulator',
+  REACT_APP_ENABLE_DEBUG_MODE: 'Enable Debug Mode',
 } as const;
 
 /**
@@ -151,18 +154,22 @@ function validateEnvironment(): void {
  * Get environment-specific configuration
  */
 function getEnvironmentConfig(): EnvironmentConfig {
-  const nodeEnv = (process.env.NODE_ENV || 'development') as EnvironmentConfig['NODE_ENV'];
-  
+  const nodeEnv = (process.env.NODE_ENV ||
+    'development') as EnvironmentConfig['NODE_ENV'];
+
   // Determine environment (development, staging, production)
   let environment: EnvironmentConfig['ENVIRONMENT'] = 'development';
   if (nodeEnv === 'production') {
-    environment = process.env.REACT_APP_ENVIRONMENT === 'staging' ? 'staging' : 'production';
+    environment =
+      process.env.REACT_APP_ENVIRONMENT === 'staging'
+        ? 'staging'
+        : 'production';
   }
 
   return {
     NODE_ENV: nodeEnv,
     ENVIRONMENT: environment,
-    
+
     FIREBASE: {
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY!,
       authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN!,
@@ -172,42 +179,58 @@ function getEnvironmentConfig(): EnvironmentConfig {
       appId: process.env.REACT_APP_FIREBASE_APP_ID!,
       measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
     },
-    
+
     API: {
-      baseUrl: process.env.REACT_APP_API_BASE_URL || getDefaultApiUrl(environment),
-      aiServiceUrl: process.env.REACT_APP_AI_SERVICE_URL || getDefaultAiServiceUrl(environment),
+      baseUrl:
+        process.env.REACT_APP_API_BASE_URL || getDefaultApiUrl(environment),
+      aiServiceUrl:
+        process.env.REACT_APP_AI_SERVICE_URL ||
+        getDefaultAiServiceUrl(environment),
       timeout: 30000, // 30 seconds
     },
-    
+
     AI: {
       openaiApiKey: process.env.REACT_APP_OPENAI_API_KEY!,
+      claudeApiKey: process.env.REACT_APP_CLAUDE_API_KEY!,
       aiProxyToken: process.env.REACT_APP_AI_PROXY_TOKEN!,
       enableAiAssistant: process.env.REACT_APP_ENABLE_AI_ASSISTANT === 'true',
+      enableClaudeService: process.env.REACT_APP_ENABLE_AI_ASSISTANT === 'true',
     },
-    
+
     MONITORING: {
       sentryDsn: process.env.REACT_APP_SENTRY_DSN,
       enableAnalytics: process.env.REACT_APP_ENABLE_ANALYTICS === 'true',
       enableErrorReporting: environment === 'production',
     },
-    
+
     SECURITY: {
-      enableCSP: process.env.REACT_APP_ENABLE_CSP === 'true' || environment === 'production',
-      enableHSTS: process.env.REACT_APP_ENABLE_HSTS === 'true' || environment === 'production',
+      enableCSP:
+        process.env.REACT_APP_ENABLE_CSP === 'true' ||
+        environment === 'production',
+      enableHSTS:
+        process.env.REACT_APP_ENABLE_HSTS === 'true' ||
+        environment === 'production',
       enable2FA: process.env.REACT_APP_ENABLE_2FA === 'true',
       sessionTimeout: 3600000, // 1 hour
     },
-    
+
     FEATURES: {
-      enablePushNotifications: process.env.REACT_APP_ENABLE_PUSH_NOTIFICATIONS === 'true',
+      enablePushNotifications:
+        process.env.REACT_APP_ENABLE_PUSH_NOTIFICATIONS === 'true',
       enableOfflineMode: process.env.REACT_APP_ENABLE_OFFLINE_MODE === 'true',
-      enableHudlIntegration: process.env.REACT_APP_ENABLE_HUDL_INTEGRATION === 'true',
-      enableStripeIntegration: process.env.REACT_APP_ENABLE_STRIPE_INTEGRATION === 'true',
+      enableHudlIntegration:
+        process.env.REACT_APP_ENABLE_HUDL_INTEGRATION === 'true',
+      enableStripeIntegration:
+        process.env.REACT_APP_ENABLE_STRIPE_INTEGRATION === 'true',
     },
-    
+
     DEVELOPMENT: {
-      useEmulator: process.env.REACT_APP_USE_EMULATOR === 'true' && environment === 'development',
-      enableDebugMode: process.env.REACT_APP_ENABLE_DEBUG_MODE === 'true' && environment === 'development',
+      useEmulator:
+        process.env.REACT_APP_USE_EMULATOR === 'true' &&
+        environment === 'development',
+      enableDebugMode:
+        process.env.REACT_APP_ENABLE_DEBUG_MODE === 'true' &&
+        environment === 'development',
       enableHotReload: environment === 'development',
     },
   };
@@ -216,7 +239,9 @@ function getEnvironmentConfig(): EnvironmentConfig {
 /**
  * Get default API URL based on environment
  */
-function getDefaultApiUrl(environment: EnvironmentConfig['ENVIRONMENT']): string {
+function getDefaultApiUrl(
+  environment: EnvironmentConfig['ENVIRONMENT']
+): string {
   switch (environment) {
     case 'development':
       return 'http://localhost:3001/api';
@@ -232,7 +257,9 @@ function getDefaultApiUrl(environment: EnvironmentConfig['ENVIRONMENT']): string
 /**
  * Get default AI service URL based on environment
  */
-function getDefaultAiServiceUrl(environment: EnvironmentConfig['ENVIRONMENT']): string {
+function getDefaultAiServiceUrl(
+  environment: EnvironmentConfig['ENVIRONMENT']
+): string {
   switch (environment) {
     case 'development':
       return 'http://localhost:8000';
@@ -271,9 +298,11 @@ export function resetEnvironmentConfig(): void {
 /**
  * Check if running in specific environment
  */
-export const isDevelopment = () => getEnvironmentConfig().ENVIRONMENT === 'development';
+export const isDevelopment = () =>
+  getEnvironmentConfig().ENVIRONMENT === 'development';
 export const isStaging = () => getEnvironmentConfig().ENVIRONMENT === 'staging';
-export const isProduction = () => getEnvironmentConfig().ENVIRONMENT === 'production';
+export const isProduction = () =>
+  getEnvironmentConfig().ENVIRONMENT === 'production';
 
 /**
  * Get Firebase configuration
@@ -311,4 +340,4 @@ export const getFeaturesConfig = () => getEnvironmentConfig().FEATURES;
 export const getDevelopmentConfig = () => getEnvironmentConfig().DEVELOPMENT;
 
 // Export default configuration
-export default getEnvironmentConfig(); 
+export default getEnvironmentConfig();

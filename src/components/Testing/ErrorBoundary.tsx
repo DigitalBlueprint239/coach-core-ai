@@ -1,6 +1,16 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import {
-  Box, VStack, Text, Heading, Button, Alert, AlertIcon, AlertTitle, AlertDescription, Code, useColorModeValue,
+  Box,
+  VStack,
+  Text,
+  Heading,
+  Button,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Code,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 interface Props {
@@ -44,7 +54,7 @@ class ErrorBoundary extends Component<Props, State> {
             <Heading size="lg" color="red.500">
               🚨 Something went wrong
             </Heading>
-            
+
             <Alert status="error" borderRadius="lg">
               <AlertIcon />
               <Box>
@@ -57,8 +67,17 @@ class ErrorBoundary extends Component<Props, State> {
 
             {this.state.error && (
               <Box textAlign="left" w="full" maxW="2xl">
-                <Text fontWeight="semibold" mb={2}>Error Details:</Text>
-                <Code p={4} borderRadius="md" bg="gray.100" color="red.600" fontSize="sm" display="block">
+                <Text fontWeight="semibold" mb={2}>
+                  Error Details:
+                </Text>
+                <Code
+                  p={4}
+                  borderRadius="md"
+                  bg="gray.100"
+                  color="red.600"
+                  fontSize="sm"
+                  display="block"
+                >
                   {this.state.error.toString()}
                 </Code>
               </Box>
@@ -66,8 +85,17 @@ class ErrorBoundary extends Component<Props, State> {
 
             {this.state.errorInfo && (
               <Box textAlign="left" w="full" maxW="2xl">
-                <Text fontWeight="semibold" mb={2}>Component Stack:</Text>
-                <Code p={4} borderRadius="md" bg="gray.100" color="gray.600" fontSize="xs" display="block">
+                <Text fontWeight="semibold" mb={2}>
+                  Component Stack:
+                </Text>
+                <Code
+                  p={4}
+                  borderRadius="md"
+                  bg="gray.100"
+                  color="gray.600"
+                  fontSize="xs"
+                  display="block"
+                >
                   {this.state.errorInfo.componentStack}
                 </Code>
               </Box>
@@ -76,7 +104,11 @@ class ErrorBoundary extends Component<Props, State> {
             <Button
               colorScheme="blue"
               onClick={() => {
-                this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+                this.setState({
+                  hasError: false,
+                  error: undefined,
+                  errorInfo: undefined,
+                });
                 window.location.reload();
               }}
             >

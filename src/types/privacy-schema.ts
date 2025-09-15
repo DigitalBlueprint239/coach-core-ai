@@ -10,27 +10,27 @@ export interface ConsentSettings {
   aiTraining: ConsentLevel;
   aiTrainingLastUpdated: Timestamp | FieldValue;
   aiTrainingReason: string;
-  
+
   // Analytics Consent
   analytics: ConsentLevel;
   analyticsLastUpdated: Timestamp | FieldValue;
   analyticsReason: string;
-  
+
   // Data Collection Consent
   dataCollection: ConsentLevel;
   dataCollectionLastUpdated: Timestamp | FieldValue;
   dataCollectionReason: string;
-  
+
   // Data Sharing Consent
   dataSharing: ConsentLevel;
   dataSharingLastUpdated: Timestamp | FieldValue;
   dataSharingReason: string;
-  
+
   // Marketing Consent
   marketing: ConsentLevel;
   marketingLastUpdated: Timestamp | FieldValue;
   marketingReason: string;
-  
+
   // Third-party Integration Consent
   thirdPartyIntegrations: ConsentLevel;
   thirdPartyIntegrationsLastUpdated: Timestamp | FieldValue;
@@ -58,38 +58,43 @@ export interface ConsentHistory {
 export interface EnhancedPrivacySettings {
   // Profile Visibility
   profileVisibility: 'public' | 'team_only' | 'private' | 'coaches_only';
-  
+
   // Data Collection Preferences
   allowDataCollection: boolean;
   allowAnonymousDataCollection: boolean;
   allowPerformanceTracking: boolean;
   allowUsageAnalytics: boolean;
-  
+
   // AI Features
   allowAIPersonalization: boolean;
   allowAITraining: boolean;
   allowAISuggestions: boolean;
   allowAIAnalytics: boolean;
-  
+
   // Communication Preferences
   allowEmailNotifications: boolean;
   allowPushNotifications: boolean;
   allowSMSNotifications: boolean;
   allowInAppNotifications: boolean;
-  
+
   // Data Retention
-  dataRetentionPeriod: '30_days' | '90_days' | '1_year' | '2_years' | 'indefinite';
+  dataRetentionPeriod:
+    | '30_days'
+    | '90_days'
+    | '1_year'
+    | '2_years'
+    | 'indefinite';
   autoDeleteInactiveData: boolean;
   deleteAccountDataOnDeactivation: boolean;
-  
+
   // Data Export/Portability
   allowDataExport: boolean;
   allowDataPortability: boolean;
-  
+
   // Right to be Forgotten
   allowDataDeletion: boolean;
   deletionConfirmationRequired: boolean;
-  
+
   // Audit and Transparency
   showDataUsageHistory: boolean;
   showConsentHistory: boolean;
@@ -165,7 +170,11 @@ export interface PrivacyCompliance {
 }
 
 export interface GDPRCompliance {
-  dataProcessingBasis: 'consent' | 'legitimate_interest' | 'contract' | 'legal_obligation';
+  dataProcessingBasis:
+    | 'consent'
+    | 'legitimate_interest'
+    | 'contract'
+    | 'legal_obligation';
   dataSubjectRights: {
     rightToAccess: boolean;
     rightToRectification: boolean;
@@ -200,4 +209,4 @@ export interface HIPAACompliance {
   minimumNecessary: boolean;
   accessControls: boolean;
   auditTrail: boolean;
-} 
+}

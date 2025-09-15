@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  VStack, 
-  HStack, 
-  Text, 
-  Button, 
-  Badge, 
-  Alert, 
+import {
+  Box,
+  VStack,
+  HStack,
+  Text,
+  Button,
+  Badge,
+  Alert,
   SimpleGrid,
   Card,
   CardBody,
-  CardHeader
+  CardHeader,
 } from '@chakra-ui/react';
 
 // Integration Status Types
@@ -33,29 +33,29 @@ export class IntegrationService {
       name: 'Hudl Video Analysis',
       type: 'video',
       status: 'mock',
-      description: 'Video analysis and play breakdown'
+      description: 'Video analysis and play breakdown',
     },
     {
       id: 'polar',
       name: 'Polar Heart Rate',
-      type: 'wearable', 
+      type: 'wearable',
       status: 'mock',
-      description: 'Player heart rate monitoring'
+      description: 'Player heart rate monitoring',
     },
     {
       id: 'gps-tracking',
       name: 'GPS Player Tracking',
       type: 'analytics',
       status: 'mock',
-      description: 'Real-time player positioning'
+      description: 'Real-time player positioning',
     },
     {
       id: 'team-communication',
       name: 'Team Communication',
       type: 'communication',
       status: 'mock',
-      description: 'Team messaging and notifications'
-    }
+      description: 'Team messaging and notifications',
+    },
   ];
 
   async getIntegrations(): Promise<Integration[]> {
@@ -66,7 +66,7 @@ export class IntegrationService {
 
   async connectIntegration(id: string): Promise<boolean> {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     const integration = this.integrations.find(i => i.id === id);
     if (integration) {
       integration.status = 'connected';
@@ -78,7 +78,7 @@ export class IntegrationService {
 
   async disconnectIntegration(id: string): Promise<boolean> {
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const integration = this.integrations.find(i => i.id === id);
     if (integration) {
       integration.status = 'disconnected';
@@ -89,27 +89,37 @@ export class IntegrationService {
 }
 
 // Integration Card Component
-const IntegrationCard: React.FC<{ integration: Integration; onToggle: (id: string) => void }> = ({
-  integration,
-  onToggle
-}) => {
+const IntegrationCard: React.FC<{
+  integration: Integration;
+  onToggle: (id: string) => void;
+}> = ({ integration, onToggle }) => {
   const getStatusColor = (status: IntegrationStatus) => {
     switch (status) {
-      case 'connected': return 'green';
-      case 'disconnected': return 'gray';
-      case 'error': return 'red';
-      case 'mock': return 'yellow';
-      default: return 'gray';
+      case 'connected':
+        return 'green';
+      case 'disconnected':
+        return 'gray';
+      case 'error':
+        return 'red';
+      case 'mock':
+        return 'yellow';
+      default:
+        return 'gray';
     }
   };
 
   const getStatusText = (status: IntegrationStatus) => {
     switch (status) {
-      case 'connected': return 'Connected';
-      case 'disconnected': return 'Disconnected';
-      case 'error': return 'Error';
-      case 'mock': return 'Mock Mode';
-      default: return 'Unknown';
+      case 'connected':
+        return 'Connected';
+      case 'disconnected':
+        return 'Disconnected';
+      case 'error':
+        return 'Error';
+      case 'mock':
+        return 'Mock Mode';
+      default:
+        return 'Unknown';
     }
   };
 
@@ -128,13 +138,13 @@ const IntegrationCard: React.FC<{ integration: Integration; onToggle: (id: strin
           <Text fontSize="sm" color="gray.600">
             {integration.description}
           </Text>
-          
+
           {integration.lastSync && (
             <Text fontSize="xs" color="gray.500">
               Last sync: {integration.lastSync.toLocaleString()}
             </Text>
           )}
-          
+
           <Button
             size="sm"
             colorScheme={integration.status === 'connected' ? 'red' : 'blue'}
@@ -189,7 +199,14 @@ export const CoachCoreIntegration: React.FC = () => {
 
   return (
     <Box p={4}>
-      <Box bg="blue.50" border="1px solid #bee3f8" color="blue.800" borderRadius="md" p={4} mb={4}>
+      <Box
+        bg="blue.50"
+        border="1px solid #bee3f8"
+        color="blue.800"
+        borderRadius="md"
+        p={4}
+        mb={4}
+      >
         ⚠️ Integrations are in recovery mode - all connections are simulated
       </Box>
 
@@ -198,7 +215,7 @@ export const CoachCoreIntegration: React.FC = () => {
       </Text>
 
       <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={4}>
-        {integrations.map((integration) => (
+        {integrations.map(integration => (
           <IntegrationCard
             key={integration.id}
             integration={integration}
@@ -216,4 +233,4 @@ export const CoachCoreIntegration: React.FC = () => {
   );
 };
 
-export default CoachCoreIntegration; 
+export default CoachCoreIntegration;

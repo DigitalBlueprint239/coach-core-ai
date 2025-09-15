@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
-import { 
-  Box, 
-  VStack, 
-  HStack, 
-  Text, 
-  Heading, 
-  Button, 
+import {
+  Box,
+  VStack,
+  HStack,
+  Text,
+  Heading,
+  Button,
   Icon,
   useToast,
   Card,
   CardBody,
   CardHeader,
   Badge,
-  Divider
+  Divider,
 } from '@chakra-ui/react';
-import { 
-  Play, 
-  Save, 
-  Download, 
-  Share, 
-  Settings, 
-  Users, 
+import {
+  Play,
+  Save,
+  Download,
+  Share,
+  Settings,
+  Users,
   Target,
   Plus,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 
 export const PlayDesignerFunctional: React.FC = () => {
@@ -82,12 +82,7 @@ export const PlayDesignerFunctional: React.FC = () => {
   };
 
   return (
-    <Box
-      bg="gray.50"
-      minH="100vh"
-      p={6}
-      className="animate-fade-in-responsive"
-    >
+    <Box bg="gray.50" minH="100vh" p={6} className="animate-fade-in-responsive">
       <VStack spacing={6} align="stretch">
         {/* Header */}
         <Box textAlign="center">
@@ -108,7 +103,7 @@ export const PlayDesignerFunctional: React.FC = () => {
           </CardHeader>
           <CardBody>
             <HStack spacing={4} wrap="wrap">
-              {tools.map((tool) => (
+              {tools.map(tool => (
                 <Button
                   key={tool.id}
                   variant={selectedTool === tool.id ? 'solid' : 'outline'}
@@ -167,13 +162,17 @@ export const PlayDesignerFunctional: React.FC = () => {
                   🎨 Football Field
                 </Text>
                 <Text color="green.700" textAlign="center">
-                  {selectedTool === 'select' && 'Click to select players or routes'}
-                  {selectedTool === 'player' && 'Click to add players to the field'}
+                  {selectedTool === 'select' &&
+                    'Click to select players or routes'}
+                  {selectedTool === 'player' &&
+                    'Click to add players to the field'}
                   {selectedTool === 'route' && 'Click and drag to draw routes'}
-                  {selectedTool === 'formation' && 'Click to set formation positions'}
+                  {selectedTool === 'formation' &&
+                    'Click to set formation positions'}
                 </Text>
                 <Text fontSize="sm" color="green.600">
-                  Selected Tool: <Badge colorScheme="blue">{selectedTool}</Badge>
+                  Selected Tool:{' '}
+                  <Badge colorScheme="blue">{selectedTool}</Badge>
                 </Text>
               </VStack>
             </Box>
@@ -235,13 +234,17 @@ export const PlayDesignerFunctional: React.FC = () => {
                 Status: Play Designer is Working! 🎉
               </Text>
               <Text color="gray.600">
-                Total Plays Created: <Badge colorScheme="blue">{playCount}</Badge>
+                Total Plays Created:{' '}
+                <Badge colorScheme="blue">{playCount}</Badge>
               </Text>
               <Text color="gray.600">
                 Current Tool: <Badge colorScheme="green">{selectedTool}</Badge>
               </Text>
               <Text color="gray.600">
-                Drawing Mode: <Badge colorScheme={isDrawing ? 'green' : 'gray'}>{isDrawing ? 'Active' : 'Inactive'}</Badge>
+                Drawing Mode:{' '}
+                <Badge colorScheme={isDrawing ? 'green' : 'gray'}>
+                  {isDrawing ? 'Active' : 'Inactive'}
+                </Badge>
               </Text>
             </VStack>
           </CardBody>

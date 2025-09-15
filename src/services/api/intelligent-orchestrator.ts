@@ -58,7 +58,12 @@ export interface WorkflowExecution {
 export interface WorkflowStep {
   id: string;
   name: string;
-  type: 'api_call' | 'data_processing' | 'correlation' | 'notification' | 'decision';
+  type:
+    | 'api_call'
+    | 'data_processing'
+    | 'correlation'
+    | 'notification'
+    | 'decision';
   status: 'pending' | 'running' | 'completed' | 'failed';
   dependencies: string[];
   data: any;
@@ -84,7 +89,7 @@ class IntelligentDataOrchestrator {
     this.workflows = new Map();
     this.isRunning = false;
     this.jobQueue = [];
-    
+
     this.startProcessing();
   }
 
@@ -95,7 +100,7 @@ class IntelligentDataOrchestrator {
     location: { lat: number; lon: number }
   ): Promise<WorkflowExecution> {
     const workflowId = `weather-practice-${teamId}-${practiceDate.getTime()}`;
-    
+
     const workflow: WorkflowExecution = {
       id: workflowId,
       workflowType: 'weather-aware-practice-planning',
@@ -149,7 +154,7 @@ class IntelligentDataOrchestrator {
 
     this.workflows.set(workflowId, workflow);
     this.executeWorkflow(workflowId);
-    
+
     return workflow;
   }
 
@@ -160,7 +165,7 @@ class IntelligentDataOrchestrator {
     analysisType: 'play-review' | 'technique' | 'strategy'
   ): Promise<WorkflowExecution> {
     const workflowId = `video-analysis-${videoId}`;
-    
+
     const workflow: WorkflowExecution = {
       id: workflowId,
       workflowType: 'video-enhanced-play-analysis',
@@ -214,7 +219,7 @@ class IntelligentDataOrchestrator {
 
     this.workflows.set(workflowId, workflow);
     this.executeWorkflow(workflowId);
-    
+
     return workflow;
   }
 
@@ -224,7 +229,7 @@ class IntelligentDataOrchestrator {
     practiceId: string
   ): Promise<WorkflowExecution> {
     const workflowId = `health-monitoring-${teamId}-${practiceId}`;
-    
+
     const workflow: WorkflowExecution = {
       id: workflowId,
       workflowType: 'real-time-health-monitoring',
@@ -278,7 +283,7 @@ class IntelligentDataOrchestrator {
 
     this.workflows.set(workflowId, workflow);
     this.executeWorkflow(workflowId);
-    
+
     return workflow;
   }
 
@@ -291,15 +296,25 @@ class IntelligentDataOrchestrator {
     correlationType: 'causal' | 'correlational' | 'temporal'
   ): Promise<DataCorrelation> {
     const correlationId = `${sourceType}-${sourceId}-${targetType}-${targetId}`;
-    
+
     // Check if correlation already exists
     if (this.correlations.has(correlationId)) {
       return this.correlations.get(correlationId)!;
     }
 
     // Calculate correlation strength and confidence
-    const strength = await this.calculateCorrelationStrength(sourceType, sourceId, targetType, targetId);
-    const confidence = await this.calculateConfidence(sourceType, sourceId, targetType, targetId);
+    const strength = await this.calculateCorrelationStrength(
+      sourceType,
+      sourceId,
+      targetType,
+      targetId
+    );
+    const confidence = await this.calculateConfidence(
+      sourceType,
+      sourceId,
+      targetType,
+      targetId
+    );
 
     const correlation: DataCorrelation = {
       id: correlationId,
@@ -323,27 +338,33 @@ class IntelligentDataOrchestrator {
   }
 
   // **Predictive Caching System**
-  async getPredictiveCache<T>(key: string, fallback: () => Promise<T>): Promise<T> {
+  async getPredictiveCache<T>(
+    key: string,
+    fallback: () => Promise<T>
+  ): Promise<T> {
     const cached = this.cache.get(key);
-    
+
     if (cached && cached.expiry > new Date()) {
       // Update access statistics
       cached.accessCount++;
       cached.lastAccessed = new Date();
-      
+
       // Predict next access based on patterns
-      cached.predictedNextAccess = this.predictNextAccess(key, cached.accessCount);
-      
+      cached.predictedNextAccess = this.predictNextAccess(
+        key,
+        cached.accessCount
+      );
+
       return cached.data;
     }
 
     // Fetch fresh data
     const data = await fallback();
-    
+
     // Store with predictive expiry
     const expiry = this.calculatePredictiveExpiry(key, data);
     const priority = this.calculatePriority(key, data);
-    
+
     this.cache.set(key, {
       key,
       data,
@@ -366,7 +387,7 @@ class IntelligentDataOrchestrator {
     try {
       while (workflow.currentStep < workflow.steps.length) {
         const step = workflow.steps[workflow.currentStep];
-        
+
         if (this.canExecuteStep(step, workflow)) {
           await this.executeStep(step, workflow);
           workflow.currentStep++;
@@ -385,7 +406,10 @@ class IntelligentDataOrchestrator {
     }
   }
 
-  private async executeStep(step: WorkflowStep, workflow: WorkflowExecution): Promise<void> {
+  private async executeStep(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): Promise<void> {
     step.status = 'running';
     step.startedAt = new Date();
 
@@ -413,63 +437,79 @@ class IntelligentDataOrchestrator {
     } catch (error) {
       step.status = 'failed';
       step.error = error.message;
-      
+
       if (step.retryCount < step.maxRetries) {
         step.retryCount++;
         step.status = 'pending';
         // Retry after exponential backoff
-        setTimeout(() => this.executeWorkflow(workflow.id), Math.pow(2, step.retryCount) * 1000);
+        setTimeout(
+          () => this.executeWorkflow(workflow.id),
+          Math.pow(2, step.retryCount) * 1000
+        );
         return;
       }
-      
+
       throw error;
     }
   }
 
-  private async executeAPICall(step: WorkflowStep, workflow: WorkflowExecution): Promise<any> {
+  private async executeAPICall(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): Promise<any> {
     const { data } = step;
-    
+
     switch (workflow.workflowType) {
       case 'weather-aware-practice-planning':
         if (step.name === 'Fetch Weather Data') {
-          return await weatherAPIService.getCurrentWeather(data.location.lat, data.location.lon);
+          return await weatherAPIService.getCurrentWeather(
+            data.location.lat,
+            data.location.lon
+          );
         }
         break;
-        
+
       case 'video-enhanced-play-analysis':
         if (step.name === 'Process Video') {
           return await videoAPIService.getVideoAnalysis(data.videoId);
         }
         break;
-        
+
       case 'real-time-health-monitoring':
         if (step.name === 'Sync Wearable Data') {
           // Get all players in team and sync their wearable data
           const players = await this.getTeamPlayers(data.teamId);
           const healthData = [];
-          
+
           for (const player of players) {
-            const metrics = await wearableAPIService.getLatestHealthMetrics(player.id);
+            const metrics = await wearableAPIService.getLatestHealthMetrics(
+              player.id
+            );
             if (metrics) healthData.push(metrics);
           }
-          
+
           return healthData;
         }
         break;
     }
-    
+
     throw new Error(`Unknown API call: ${step.name}`);
   }
 
-  private async executeDataProcessing(step: WorkflowStep, workflow: WorkflowExecution): Promise<any> {
+  private async executeDataProcessing(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): Promise<any> {
     const { data } = step;
-    
+
     switch (workflow.workflowType) {
       case 'weather-aware-practice-planning':
         if (step.name === 'Analyze Weather Risk') {
-          const weatherData = workflow.steps.find(s => s.name === 'Fetch Weather Data')?.result;
+          const weatherData = workflow.steps.find(
+            s => s.name === 'Fetch Weather Data'
+          )?.result;
           if (!weatherData) throw new Error('Weather data not available');
-          
+
           return await weatherAPIService.getPracticeWeatherRecommendation(
             weatherData,
             'practice',
@@ -477,7 +517,7 @@ class IntelligentDataOrchestrator {
           );
         }
         break;
-        
+
       case 'video-enhanced-play-analysis':
         if (step.name === 'AI Analysis') {
           // Simulate AI analysis
@@ -489,39 +529,53 @@ class IntelligentDataOrchestrator {
           };
         }
         break;
-        
+
       case 'real-time-health-monitoring':
         if (step.name === 'Analyze Health Metrics') {
-          const healthData = workflow.steps.find(s => s.name === 'Sync Wearable Data')?.result;
+          const healthData = workflow.steps.find(
+            s => s.name === 'Sync Wearable Data'
+          )?.result;
           if (!healthData) throw new Error('Health data not available');
-          
+
           return this.analyzeHealthMetrics(healthData);
         }
         break;
     }
-    
+
     throw new Error(`Unknown data processing: ${step.name}`);
   }
 
-  private async executeCorrelation(step: WorkflowStep, workflow: WorkflowExecution): Promise<any> {
+  private async executeCorrelation(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): Promise<any> {
     // Execute correlation logic
     return { correlation: 'correlation result' };
   }
 
-  private async executeNotification(step: WorkflowStep, workflow: WorkflowExecution): Promise<any> {
+  private async executeNotification(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): Promise<any> {
     // Execute notification logic
     return { notification: 'notification sent' };
   }
 
-  private async executeDecision(step: WorkflowStep, workflow: WorkflowExecution): Promise<any> {
+  private async executeDecision(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): Promise<any> {
     // Execute decision logic
     return { decision: 'decision made' };
   }
 
   // **Helper Methods**
-  private canExecuteStep(step: WorkflowStep, workflow: WorkflowExecution): boolean {
+  private canExecuteStep(
+    step: WorkflowStep,
+    workflow: WorkflowExecution
+  ): boolean {
     if (step.dependencies.length === 0) return true;
-    
+
     return step.dependencies.every(depId => {
       const depStep = workflow.steps.find(s => s.id === depId);
       return depStep && depStep.status === 'completed';
@@ -548,7 +602,10 @@ class IntelligentDataOrchestrator {
     return Math.random() * 0.3 + 0.7; // 0.7 to 1.0
   }
 
-  private async getSampleSize(sourceType: string, targetType: string): Promise<number> {
+  private async getSampleSize(
+    sourceType: string,
+    targetType: string
+  ): Promise<number> {
     // Simulate sample size calculation
     return Math.floor(Math.random() * 1000) + 100;
   }
@@ -564,7 +621,7 @@ class IntelligentDataOrchestrator {
   private calculatePredictiveExpiry(key: string, data: any): Date {
     // Calculate expiry based on data type and volatility
     const expiry = new Date();
-    
+
     if (key.includes('weather')) {
       expiry.setMinutes(expiry.getMinutes() + 30); // Weather data expires in 30 minutes
     } else if (key.includes('health')) {
@@ -574,7 +631,7 @@ class IntelligentDataOrchestrator {
     } else {
       expiry.setHours(expiry.getHours() + 6); // Default: 6 hours
     }
-    
+
     return expiry;
   }
 
@@ -595,10 +652,10 @@ class IntelligentDataOrchestrator {
     };
 
     let totalHeartRate = 0;
-    
+
     healthData.forEach(metric => {
       totalHeartRate += metric.heartRate?.current || 0;
-      
+
       if (metric.heartRate?.current > 180) {
         analysis.playersAtRisk++;
         analysis.alerts.push({
@@ -611,7 +668,7 @@ class IntelligentDataOrchestrator {
     });
 
     analysis.averageHeartRate = totalHeartRate / healthData.length;
-    
+
     if (analysis.playersAtRisk > 0) {
       analysis.recommendations.push('Consider reducing practice intensity');
       analysis.recommendations.push('Monitor players at risk closely');
@@ -637,7 +694,7 @@ class IntelligentDataOrchestrator {
 
   private processJobQueue(): void {
     if (this.jobQueue.length === 0) return;
-    
+
     const job = this.jobQueue.shift();
     if (job) {
       this.executeJob(job);
@@ -654,7 +711,9 @@ class IntelligentDataOrchestrator {
   }
 
   // **Public Interface Methods**
-  async getWorkflowStatus(workflowId: string): Promise<WorkflowExecution | undefined> {
+  async getWorkflowStatus(
+    workflowId: string
+  ): Promise<WorkflowExecution | undefined> {
     return this.workflows.get(workflowId);
   }
 
@@ -667,9 +726,14 @@ class IntelligentDataOrchestrator {
   }
 
   async getCacheStats(): Promise<{ size: number; hitRate: number }> {
-    const totalRequests = Array.from(this.cache.values()).reduce((sum, item) => sum + item.accessCount, 0);
-    const cacheHits = Array.from(this.cache.values()).filter(item => item.lastAccessed > item.timestamp).length;
-    
+    const totalRequests = Array.from(this.cache.values()).reduce(
+      (sum, item) => sum + item.accessCount,
+      0
+    );
+    const cacheHits = Array.from(this.cache.values()).filter(
+      item => item.lastAccessed > item.timestamp
+    ).length;
+
     return {
       size: this.cache.size,
       hitRate: totalRequests > 0 ? cacheHits / totalRequests : 0,

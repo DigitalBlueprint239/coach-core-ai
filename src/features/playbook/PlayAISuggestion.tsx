@@ -14,7 +14,7 @@ const PlayAISuggestion: React.FC<PlayAISuggestionProps> = ({ playContext }) => {
         teamId: currentTeam.id,
         teamName: currentTeam.name,
         sport: (currentTeam as any).sport || 'football', // fallback
-        ageGroup: (currentTeam.level as any), // fallback
+        ageGroup: currentTeam.level as any, // fallback
       }
     : null;
   const [suggestion, setSuggestion] = useState<any>(null);
@@ -56,7 +56,8 @@ const PlayAISuggestion: React.FC<PlayAISuggestionProps> = ({ playContext }) => {
           </div>
           <div className="text-sm text-gray-700">
             Confidence: {(suggestion.confidence * 100).toFixed(0)}%<br />
-            Urgency: {suggestion.urgency}<br />
+            Urgency: {suggestion.urgency}
+            <br />
             Reasoning:
             <ul className="list-disc ml-6">
               {suggestion.reasoning.map((r: string, i: number) => (

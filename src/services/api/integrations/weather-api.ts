@@ -74,7 +74,11 @@ class WeatherAPIService {
     }
   }
 
-  async getWeatherForecast(lat: number, lon: number, days: number = 5): Promise<WeatherForecast[]> {
+  async getWeatherForecast(
+    lat: number,
+    lon: number,
+    days: number = 5
+  ): Promise<WeatherForecast[]> {
     try {
       const response = await apiService.get(`${this.baseURL}/forecast`, {
         lat,
@@ -132,12 +136,20 @@ class WeatherAPIService {
     if (weather.temperature < 32) {
       canPracticeOutdoors = false;
       riskLevel = 'high';
-      recommendations.push('Move practice indoors due to freezing temperatures');
-      alternatives.push('Indoor conditioning', 'Film study', 'Strategy session');
+      recommendations.push(
+        'Move practice indoors due to freezing temperatures'
+      );
+      alternatives.push(
+        'Indoor conditioning',
+        'Film study',
+        'Strategy session'
+      );
       safetyNotes.push('Risk of hypothermia and frostbite');
     } else if (weather.temperature < 40) {
       riskLevel = 'medium';
-      recommendations.push('Limit outdoor practice time and ensure proper warm-up');
+      recommendations.push(
+        'Limit outdoor practice time and ensure proper warm-up'
+      );
       alternatives.push('Short outdoor drills', 'Extended indoor warm-up');
       equipmentNeeded.push('Extra layers', 'Hand warmers');
     } else if (weather.temperature > 95) {
@@ -156,7 +168,7 @@ class WeatherAPIService {
     // Precipitation checks
     if (weather.precipitation > 0.1) {
       if (weather.precipitationType === 'rain' && weather.precipitation < 0.5) {
-        riskLevel = Math.max(riskLevel === 'low' ? 'low' : 'medium', riskLevel);
+        riskLevel = riskLevel === 'low' ? 'medium' : riskLevel;
         recommendations.push('Light rain - consider indoor alternatives');
         alternatives.push('Indoor drills', 'Film study');
         equipmentNeeded.push('Towels', 'Indoor facility access');
@@ -171,7 +183,7 @@ class WeatherAPIService {
 
     // Wind checks
     if (weather.windSpeed > 25) {
-      riskLevel = Math.max(riskLevel === 'low' ? 'medium' : 'high', riskLevel);
+      riskLevel = riskLevel === 'low' ? 'medium' : 'high';
       recommendations.push('High winds - limit outdoor activities');
       alternatives.push('Indoor drills', 'Weight training');
       safetyNotes.push('Risk of flying debris and poor ball control');
@@ -179,7 +191,7 @@ class WeatherAPIService {
 
     // Visibility checks
     if (weather.visibility < 5) {
-      riskLevel = Math.max(riskLevel === 'low' ? 'medium' : 'high', riskLevel);
+      riskLevel = riskLevel === 'low' ? 'medium' : 'high';
       recommendations.push('Poor visibility - consider indoor alternatives');
       alternatives.push('Indoor conditioning', 'Film study');
       safetyNotes.push('Safety risk due to poor visibility');
@@ -253,7 +265,7 @@ class WeatherAPIService {
     data.list.forEach((item: any) => {
       const date = new Date(item.dt * 1000);
       const dayKey = date.toDateString();
-      
+
       if (!dailyData.has(dayKey)) {
         dailyData.set(dayKey, {
           date,
@@ -273,7 +285,7 @@ class WeatherAPIService {
     });
 
     // Convert to array and sort by date
-    dailyData.forEach((forecast) => {
+    dailyData.forEach(forecast => {
       forecasts.push({
         ...forecast,
         precipitation: Math.round(forecast.precipitation * 100) / 100,
@@ -297,12 +309,31 @@ class WeatherAPIService {
   }
 
   private getWindDirection(degrees: number): string {
-    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    const directions = [
+      'N',
+      'NNE',
+      'NE',
+      'ENE',
+      'E',
+      'ESE',
+      'SE',
+      'SSE',
+      'S',
+      'SSW',
+      'SW',
+      'WSW',
+      'W',
+      'WNW',
+      'NW',
+      'NNW',
+    ];
     const index = Math.round(degrees / 22.5) % 16;
     return directions[index];
   }
 
-  private getPrecipitationType(weatherId: number): 'rain' | 'snow' | 'sleet' | 'none' {
+  private getPrecipitationType(
+    weatherId: number
+  ): 'rain' | 'snow' | 'sleet' | 'none' {
     if (weatherId >= 200 && weatherId < 300) return 'rain';
     if (weatherId >= 300 && weatherId < 400) return 'rain';
     if (weatherId >= 500 && weatherId < 600) return 'rain';
@@ -318,7 +349,9 @@ class WeatherAPIService {
     return 'advisory';
   }
 
-  private getAlertSeverity(severity: string): 'minor' | 'moderate' | 'severe' | 'extreme' {
+  private getAlertSeverity(
+    severity: string
+  ): 'minor' | 'moderate' | 'severe' | 'extreme' {
     const severityLower = severity.toLowerCase();
     if (severityLower.includes('extreme')) return 'extreme';
     if (severityLower.includes('severe')) return 'severe';

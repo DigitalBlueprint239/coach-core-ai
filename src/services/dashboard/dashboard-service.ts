@@ -1,4 +1,13 @@
-import { collection, query, where, getDocs, orderBy, limit, doc, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+  doc,
+  getDoc,
+} from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
 
 export interface DashboardStats {
@@ -38,11 +47,26 @@ class DashboardService {
   async getTeamStats(teamId: string): Promise<DashboardStats> {
     try {
       // Try to get real data from Firestore
-      const [playersSnapshot, practicesSnapshot, gamesSnapshot] = await Promise.all([
-        getDocs(query(collection(db, 'players'), where('teamId', '==', teamId))),
-        getDocs(query(collection(db, 'practicePlans'), where('teamId', '==', teamId), where('status', '==', 'active'))),
-        getDocs(query(collection(db, 'games'), where('teamId', '==', teamId), where('date', '>', new Date())))
-      ]);
+      const [playersSnapshot, practicesSnapshot, gamesSnapshot] =
+        await Promise.all([
+          getDocs(
+            query(collection(db, 'players'), where('teamId', '==', teamId))
+          ),
+          getDocs(
+            query(
+              collection(db, 'practicePlans'),
+              where('teamId', '==', teamId),
+              where('status', '==', 'active')
+            )
+          ),
+          getDocs(
+            query(
+              collection(db, 'games'),
+              where('teamId', '==', teamId),
+              where('date', '>', new Date())
+            )
+          ),
+        ]);
 
       const totalPlayers = playersSnapshot.size;
       const activePractices = practicesSnapshot.size;
@@ -67,7 +91,10 @@ class DashboardService {
         totalExpected += data.expectedCount || 0;
       });
 
-      const attendanceRate = totalExpected > 0 ? Math.round((totalAttendance / totalExpected) * 100) : 0;
+      const attendanceRate =
+        totalExpected > 0
+          ? Math.round((totalAttendance / totalExpected) * 100)
+          : 0;
 
       // Calculate team performance from recent games
       const recentGames = await getDocs(
@@ -88,7 +115,10 @@ class DashboardService {
         totalOpponentScore += data.opponentScore || 0;
       });
 
-      const teamPerformance = recentGames.size > 0 ? Math.round((totalScore / (totalScore + totalOpponentScore)) * 100) : 0;
+      const teamPerformance =
+        recentGames.size > 0
+          ? Math.round((totalScore / (totalScore + totalOpponentScore)) * 100)
+          : 0;
 
       return {
         totalPlayers,
@@ -96,11 +126,11 @@ class DashboardService {
         completedSessions: Math.floor(Math.random() * 20) + 10, // Placeholder
         upcomingGames,
         teamPerformance,
-        attendanceRate
+        attendanceRate,
       };
     } catch (error) {
       console.warn('Error fetching team stats, using fallback data:', error);
-      
+
       // Return meaningful fallback data instead of zeros
       return {
         totalPlayers: 24,
@@ -108,7 +138,7 @@ class DashboardService {
         completedSessions: 15,
         upcomingGames: 2,
         teamPerformance: 78,
-        attendanceRate: 92
+        attendanceRate: 92,
       };
     }
   }
@@ -116,14 +146,39 @@ class DashboardService {
   /**
    * Get recent activities
    */
-  async getRecentActivities(teamId: string, limit: number = 10): Promise<RecentActivity[]> {
+  async getRecentActivities(
+    teamId: string,
+    limit: number = 10
+  ): Promise<RecentActivity[]> {
     try {
       // Try to get real data from Firestore
-      const [practicesSnapshot, gamesSnapshot, assessmentsSnapshot] = await Promise.all([
-        getDocs(query(collection(db, 'practicePlans'), where('teamId', '==', teamId), orderBy('date', 'desc'), limit(limit))),
-        getDocs(query(collection(db, 'games'), where('teamId', '==', teamId), orderBy('date', 'desc'), limit(limit))),
-        getDocs(query(collection(db, 'assessments'), where('teamId', '==', teamId), orderBy('date', 'desc'), limit(limit)))
-      ]);
+      const [practicesSnapshot, gamesSnapshot, assessmentsSnapshot] =
+        await Promise.all([
+          getDocs(
+            query(
+              collection(db, 'practicePlans'),
+              where('teamId', '==', teamId),
+              orderBy('date', 'desc'),
+              limit(limit)
+            )
+          ),
+          getDocs(
+            query(
+              collection(db, 'games'),
+              where('teamId', '==', teamId),
+              orderBy('date', 'desc'),
+              limit(limit)
+            )
+          ),
+          getDocs(
+            query(
+              collection(db, 'assessments'),
+              where('teamId', '==', teamId),
+              orderBy('date', 'desc'),
+              limit(limit)
+            )
+          ),
+        ]);
 
       const activities: RecentActivity[] = [];
 
@@ -137,7 +192,7 @@ class DashboardService {
           description: data.description || 'Team practice session',
           timestamp: data.date?.toDate() || new Date(),
           status: data.status || 'upcoming',
-          priority: 'medium'
+          priority: 'medium',
         });
       });
 
@@ -148,10 +203,12 @@ class DashboardService {
           id: doc.id,
           type: 'game',
           title: data.opponent ? `vs ${data.opponent}` : 'Game',
-          description: data.location ? `at ${data.location}` : 'Game location TBD',
+          description: data.location
+            ? `at ${data.location}`
+            : 'Game location TBD',
           timestamp: data.date?.toDate() || new Date(),
           status: data.date?.toDate() > new Date() ? 'upcoming' : 'completed',
-          priority: 'high'
+          priority: 'high',
         });
       });
 
@@ -165,7 +222,7 @@ class DashboardService {
           description: data.description || 'Individual player evaluation',
           timestamp: data.date?.toDate() || new Date(),
           status: data.status || 'completed',
-          priority: 'medium'
+          priority: 'medium',
         });
       });
 
@@ -174,8 +231,11 @@ class DashboardService {
         .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
         .slice(0, limit);
     } catch (error) {
-      console.warn('Error fetching recent activities, using fallback data:', error);
-      
+      console.warn(
+        'Error fetching recent activities, using fallback data:',
+        error
+      );
+
       // Return meaningful fallback data
       return [
         {
@@ -185,7 +245,7 @@ class DashboardService {
           description: 'Focus on passing drills and team coordination',
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
           status: 'completed',
-          priority: 'medium'
+          priority: 'medium',
         },
         {
           id: '2',
@@ -194,7 +254,7 @@ class DashboardService {
           description: 'Home game at Memorial Field',
           timestamp: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
           status: 'upcoming',
-          priority: 'high'
+          priority: 'high',
         },
         {
           id: '3',
@@ -203,7 +263,7 @@ class DashboardService {
           description: 'Monthly performance review for all players',
           timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
           status: 'completed',
-          priority: 'medium'
+          priority: 'medium',
         },
         {
           id: '4',
@@ -212,8 +272,8 @@ class DashboardService {
           description: 'Game planning and play review',
           timestamp: new Date(Date.now() + 2 * 60 * 60 * 1000), // In 2 hours
           status: 'upcoming',
-          priority: 'high'
-        }
+          priority: 'high',
+        },
       ];
     }
   }
@@ -230,11 +290,15 @@ class DashboardService {
       }
 
       const teamData = teamDoc.data();
-      
+
       // Get player count
-      const playersSnapshot = await getDocs(query(collection(db, 'players'), where('teamId', '==', teamId)));
+      const playersSnapshot = await getDocs(
+        query(collection(db, 'players'), where('teamId', '==', teamId))
+      );
       const totalPlayers = playersSnapshot.size;
-      const activePlayers = playersSnapshot.docs.filter(doc => doc.data().status === 'active').length;
+      const activePlayers = playersSnapshot.docs.filter(
+        doc => doc.data().status === 'active'
+      ).length;
 
       // Get next practice
       const nextPracticeSnapshot = await getDocs(
@@ -246,7 +310,8 @@ class DashboardService {
           limit(1)
         )
       );
-      const nextPractice = nextPracticeSnapshot.docs[0]?.data().date?.toDate() || null;
+      const nextPractice =
+        nextPracticeSnapshot.docs[0]?.data().date?.toDate() || null;
 
       // Get next game
       const nextGameSnapshot = await getDocs(
@@ -268,11 +333,11 @@ class DashboardService {
         activePlayers,
         nextPractice,
         nextGame,
-        lastPerformance: teamData.lastPerformance || 0
+        lastPerformance: teamData.lastPerformance || 0,
       };
     } catch (error) {
       console.warn('Error fetching team overview, using fallback data:', error);
-      
+
       // Return meaningful fallback data
       return {
         teamId,
@@ -282,11 +347,10 @@ class DashboardService {
         activePlayers: 22,
         nextPractice: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
         nextGame: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // In 3 days
-        lastPerformance: 78
+        lastPerformance: 78,
       };
     }
   }
 }
 
 export const dashboardService = new DashboardService();
-

@@ -1,9 +1,9 @@
 // src/utils/optimistic-locking-test.ts
-import { 
-  updatePlay, 
-  updatePracticePlan, 
-  updatePlayer, 
-  updateTeam, 
+import {
+  updatePlay,
+  updatePracticePlan,
+  updatePlayer,
+  updateTeam,
   updateUserProfile,
   getPlays,
   getPracticePlans,
@@ -14,9 +14,15 @@ import {
   savePracticePlan,
   savePlayer,
   saveTeam,
-  saveUserProfile
+  saveUserProfile,
 } from '../services/firestore';
-import { Play, PracticePlan, TeamPlayer, Team, UserProfile } from '../services/firestore';
+import {
+  Play,
+  PracticePlan,
+  TeamPlayer,
+  Team,
+  UserProfile,
+} from '../services/firestore';
 
 // ============================================
 // OPTIMISTIC LOCKING TEST UTILITIES
@@ -60,32 +66,57 @@ export class OptimisticLockingTestManager {
   ): Promise<OptimisticLockingTestResult> {
     const startTime = Date.now();
     const testName = `Optimistic Locking Test - ${entityType}`;
-    
+
     try {
       // Get current entity data
-      const currentEntity = await this.getCurrentEntity(entityType, teamId, entityId);
+      const currentEntity = await this.getCurrentEntity(
+        entityType,
+        teamId,
+        entityId
+      );
       if (!currentEntity) {
         throw new Error(`${entityType} not found`);
       }
 
       // Simulate concurrent updates
       const updatePromises = [
-        this.simulateUpdate(entityType, teamId, entityId, { name: 'Update 1' }, 0),
-        this.simulateUpdate(entityType, teamId, entityId, { name: 'Update 2' }, 100),
-        this.simulateUpdate(entityType, teamId, entityId, { name: 'Update 3' }, 200)
+        this.simulateUpdate(
+          entityType,
+          teamId,
+          entityId,
+          { name: 'Update 1' },
+          0
+        ),
+        this.simulateUpdate(
+          entityType,
+          teamId,
+          entityId,
+          { name: 'Update 2' },
+          100
+        ),
+        this.simulateUpdate(
+          entityType,
+          teamId,
+          entityId,
+          { name: 'Update 3' },
+          200
+        ),
       ];
 
       const results = await Promise.allSettled(updatePromises);
-      
+
       // Analyze results
-      const successfulUpdates = results.filter(r => r.status === 'fulfilled').length;
-      const conflicts = results.filter(r => 
-        r.status === 'rejected' && 
-        r.reason?.message?.includes('modified by another user')
+      const successfulUpdates = results.filter(
+        r => r.status === 'fulfilled'
+      ).length;
+      const conflicts = results.filter(
+        r =>
+          r.status === 'rejected' &&
+          r.reason?.message?.includes('modified by another user')
       ).length;
 
       const duration = Date.now() - startTime;
-      
+
       return {
         testName,
         success: conflicts > 0, // Success if conflicts were detected
@@ -94,10 +125,9 @@ export class OptimisticLockingTestManager {
           entityType,
           operation: 'concurrent_update',
           conflictDetected: conflicts > 0,
-          resolutionStrategy: 'optimistic_locking'
-        }
+          resolutionStrategy: 'optimistic_locking',
+        },
       };
-
     } catch (error) {
       const duration = Date.now() - startTime;
       return {
@@ -109,8 +139,8 @@ export class OptimisticLockingTestManager {
           entityType,
           operation: 'concurrent_update',
           conflictDetected: false,
-          resolutionStrategy: 'none'
-        }
+          resolutionStrategy: 'none',
+        },
       };
     }
   }
@@ -118,7 +148,9 @@ export class OptimisticLockingTestManager {
   /**
    * Test optimistic locking across all entity types
    */
-  async testAllEntities(teamId: string): Promise<OptimisticLockingTestResult[]> {
+  async testAllEntities(
+    teamId: string
+  ): Promise<OptimisticLockingTestResult[]> {
     if (this.isRunning) {
       throw new Error('Test already running');
     }
@@ -131,20 +163,23 @@ export class OptimisticLockingTestManager {
       const testEntities = await this.createTestEntities(teamId);
 
       // Test each entity type
-      const entityTypes: Array<'play' | 'practicePlan' | 'player' | 'team' | 'user'> = [
-        'play', 'practicePlan', 'player', 'team', 'user'
-      ];
+      const entityTypes: Array<
+        'play' | 'practicePlan' | 'player' | 'team' | 'user'
+      > = ['play', 'practicePlan', 'player', 'team', 'user'];
 
       for (const entityType of entityTypes) {
         const entityId = testEntities[entityType];
         if (entityId) {
-          const result = await this.testEntityOptimisticLocking(entityType, teamId, entityId);
+          const result = await this.testEntityOptimisticLocking(
+            entityType,
+            teamId,
+            entityId
+          );
           this.testResults.push(result);
         }
       }
 
       return this.testResults;
-
     } finally {
       this.isRunning = false;
     }
@@ -153,7 +188,9 @@ export class OptimisticLockingTestManager {
   /**
    * Create test entities for testing
    */
-  private async createTestEntities(teamId: string): Promise<Record<string, string>> {
+  private async createTestEntities(
+    teamId: string
+  ): Promise<Record<string, string>> {
     const entities: Record<string, string> = {};
 
     try {
@@ -166,7 +203,7 @@ export class OptimisticLockingTestManager {
         players: [],
         tags: ['test'],
         difficulty: 'beginner',
-        sport: 'football'
+        sport: 'football',
       });
       entities.play = playId;
 
@@ -177,7 +214,7 @@ export class OptimisticLockingTestManager {
         duration: 90,
         periods: [],
         goals: ['Test goal'],
-        notes: 'Test practice plan for optimistic locking'
+        notes: 'Test practice plan for optimistic locking',
       });
       entities.practicePlan = planId;
 
@@ -187,7 +224,7 @@ export class OptimisticLockingTestManager {
         lastName: 'Player',
         jerseyNumber: 99,
         position: 'quarterback',
-        grade: 10
+        grade: 10,
       });
       entities.player = playerId;
 
@@ -198,7 +235,7 @@ export class OptimisticLockingTestManager {
         level: 'varsity',
         season: '2024',
         coachIds: [],
-        playerIds: []
+        playerIds: [],
       });
       entities.team = teamId;
 
@@ -207,10 +244,9 @@ export class OptimisticLockingTestManager {
         email: 'test@example.com',
         displayName: 'Test User',
         roles: ['coach'],
-        teamIds: [teamId]
+        teamIds: [teamId],
       });
       entities.user = userId;
-
     } catch (error) {
       console.error('Error creating test entities:', error);
     }
@@ -262,7 +298,11 @@ export class OptimisticLockingTestManager {
     }
 
     // Get current entity to include version
-    const currentEntity = await this.getCurrentEntity(entityType, teamId, entityId);
+    const currentEntity = await this.getCurrentEntity(
+      entityType,
+      teamId,
+      entityId
+    );
     if (!currentEntity) {
       throw new Error(`${entityType} not found`);
     }
@@ -270,7 +310,7 @@ export class OptimisticLockingTestManager {
     // Prepare update data with version
     const updateData = {
       ...updates,
-      version: currentEntity.version
+      version: currentEntity.version,
     };
 
     // Perform the update
@@ -296,7 +336,9 @@ export class OptimisticLockingTestManager {
   /**
    * Test conflict resolution strategies
    */
-  async testConflictResolutionStrategies(teamId: string): Promise<OptimisticLockingTestResult[]> {
+  async testConflictResolutionStrategies(
+    teamId: string
+  ): Promise<OptimisticLockingTestResult[]> {
     const results: OptimisticLockingTestResult[] = [];
 
     // Test 1: Last-write-wins strategy
@@ -317,7 +359,9 @@ export class OptimisticLockingTestManager {
   /**
    * Test last-write-wins conflict resolution
    */
-  private async testLastWriteWinsStrategy(teamId: string): Promise<OptimisticLockingTestResult> {
+  private async testLastWriteWinsStrategy(
+    teamId: string
+  ): Promise<OptimisticLockingTestResult> {
     const startTime = Date.now();
     const testName = 'Last-Write-Wins Conflict Resolution';
 
@@ -331,20 +375,33 @@ export class OptimisticLockingTestManager {
         players: [],
         tags: ['test'],
         difficulty: 'beginner',
-        sport: 'football'
+        sport: 'football',
       });
 
       // Simulate conflicting updates
-      const update1 = this.simulateUpdate('play', teamId, playId, { name: 'Update 1' }, 0);
-      const update2 = this.simulateUpdate('play', teamId, playId, { name: 'Update 2' }, 50);
+      const update1 = this.simulateUpdate(
+        'play',
+        teamId,
+        playId,
+        { name: 'Update 1' },
+        0
+      );
+      const update2 = this.simulateUpdate(
+        'play',
+        teamId,
+        playId,
+        { name: 'Update 2' },
+        50
+      );
 
       const results = await Promise.allSettled([update1, update2]);
-      
+
       // Check that one succeeded and one failed with conflict
       const successCount = results.filter(r => r.status === 'fulfilled').length;
-      const conflictCount = results.filter(r => 
-        r.status === 'rejected' && 
-        r.reason?.message?.includes('modified by another user')
+      const conflictCount = results.filter(
+        r =>
+          r.status === 'rejected' &&
+          r.reason?.message?.includes('modified by another user')
       ).length;
 
       const duration = Date.now() - startTime;
@@ -357,10 +414,9 @@ export class OptimisticLockingTestManager {
           entityType: 'play',
           operation: 'conflict_resolution',
           conflictDetected: conflictCount > 0,
-          resolutionStrategy: 'last_write_wins'
-        }
+          resolutionStrategy: 'last_write_wins',
+        },
       };
-
     } catch (error) {
       const duration = Date.now() - startTime;
       return {
@@ -372,8 +428,8 @@ export class OptimisticLockingTestManager {
           entityType: 'play',
           operation: 'conflict_resolution',
           conflictDetected: false,
-          resolutionStrategy: 'last_write_wins'
-        }
+          resolutionStrategy: 'last_write_wins',
+        },
       };
     }
   }
@@ -381,7 +437,9 @@ export class OptimisticLockingTestManager {
   /**
    * Test merge conflict resolution
    */
-  private async testMergeStrategy(teamId: string): Promise<OptimisticLockingTestResult> {
+  private async testMergeStrategy(
+    teamId: string
+  ): Promise<OptimisticLockingTestResult> {
     const startTime = Date.now();
     const testName = 'Merge Conflict Resolution';
 
@@ -395,27 +453,40 @@ export class OptimisticLockingTestManager {
         players: [],
         tags: ['test'],
         difficulty: 'beginner',
-        sport: 'football'
+        sport: 'football',
       });
 
       // Simulate updates to different fields
-      const update1 = this.simulateUpdate('play', teamId, playId, { 
-        name: 'Updated Name',
-        description: 'Updated description'
-      }, 0);
-      
-      const update2 = this.simulateUpdate('play', teamId, playId, { 
-        formation: '3-4',
-        difficulty: 'intermediate'
-      }, 50);
+      const update1 = this.simulateUpdate(
+        'play',
+        teamId,
+        playId,
+        {
+          name: 'Updated Name',
+          description: 'Updated description',
+        },
+        0
+      );
+
+      const update2 = this.simulateUpdate(
+        'play',
+        teamId,
+        playId,
+        {
+          formation: '3-4',
+          difficulty: 'intermediate',
+        },
+        50
+      );
 
       const results = await Promise.allSettled([update1, update2]);
-      
+
       // In optimistic locking, only one should succeed
       const successCount = results.filter(r => r.status === 'fulfilled').length;
-      const conflictCount = results.filter(r => 
-        r.status === 'rejected' && 
-        r.reason?.message?.includes('modified by another user')
+      const conflictCount = results.filter(
+        r =>
+          r.status === 'rejected' &&
+          r.reason?.message?.includes('modified by another user')
       ).length;
 
       const duration = Date.now() - startTime;
@@ -428,10 +499,9 @@ export class OptimisticLockingTestManager {
           entityType: 'play',
           operation: 'merge_resolution',
           conflictDetected: conflictCount > 0,
-          resolutionStrategy: 'optimistic_locking'
-        }
+          resolutionStrategy: 'optimistic_locking',
+        },
       };
-
     } catch (error) {
       const duration = Date.now() - startTime;
       return {
@@ -443,8 +513,8 @@ export class OptimisticLockingTestManager {
           entityType: 'play',
           operation: 'merge_resolution',
           conflictDetected: false,
-          resolutionStrategy: 'optimistic_locking'
-        }
+          resolutionStrategy: 'optimistic_locking',
+        },
       };
     }
   }
@@ -452,7 +522,9 @@ export class OptimisticLockingTestManager {
   /**
    * Test user-defined conflict resolution
    */
-  private async testUserDefinedResolution(teamId: string): Promise<OptimisticLockingTestResult> {
+  private async testUserDefinedResolution(
+    teamId: string
+  ): Promise<OptimisticLockingTestResult> {
     const startTime = Date.now();
     const testName = 'User-Defined Conflict Resolution';
 
@@ -466,19 +538,32 @@ export class OptimisticLockingTestManager {
         players: [],
         tags: ['test'],
         difficulty: 'beginner',
-        sport: 'football'
+        sport: 'football',
       });
 
       // Simulate a conflict scenario
-      const update1 = this.simulateUpdate('play', teamId, playId, { name: 'User Update 1' }, 0);
-      const update2 = this.simulateUpdate('play', teamId, playId, { name: 'User Update 2' }, 100);
+      const update1 = this.simulateUpdate(
+        'play',
+        teamId,
+        playId,
+        { name: 'User Update 1' },
+        0
+      );
+      const update2 = this.simulateUpdate(
+        'play',
+        teamId,
+        playId,
+        { name: 'User Update 2' },
+        100
+      );
 
       const results = await Promise.allSettled([update1, update2]);
-      
+
       // Check that conflicts are properly detected
-      const conflictCount = results.filter(r => 
-        r.status === 'rejected' && 
-        r.reason?.message?.includes('modified by another user')
+      const conflictCount = results.filter(
+        r =>
+          r.status === 'rejected' &&
+          r.reason?.message?.includes('modified by another user')
       ).length;
 
       const duration = Date.now() - startTime;
@@ -491,10 +576,9 @@ export class OptimisticLockingTestManager {
           entityType: 'play',
           operation: 'user_defined_resolution',
           conflictDetected: conflictCount > 0,
-          resolutionStrategy: 'user_choice'
-        }
+          resolutionStrategy: 'user_choice',
+        },
       };
-
     } catch (error) {
       const duration = Date.now() - startTime;
       return {
@@ -506,8 +590,8 @@ export class OptimisticLockingTestManager {
           entityType: 'play',
           operation: 'user_defined_resolution',
           conflictDetected: false,
-          resolutionStrategy: 'user_choice'
-        }
+          resolutionStrategy: 'user_choice',
+        },
       };
     }
   }
@@ -519,7 +603,8 @@ export class OptimisticLockingTestManager {
     const totalTests = this.testResults.length;
     const successfulTests = this.testResults.filter(r => r.success).length;
     const failedTests = totalTests - successfulTests;
-    const averageDuration = this.testResults.reduce((sum, r) => sum + r.duration, 0) / totalTests;
+    const averageDuration =
+      this.testResults.reduce((sum, r) => sum + r.duration, 0) / totalTests;
 
     let report = `
 # Optimistic Locking Test Report
@@ -566,4 +651,4 @@ ${result.error ? `- **Error**: ${result.error}` : ''}
 }
 
 // Export singleton instance
-export const optimisticLockingTestManager = new OptimisticLockingTestManager(); 
+export const optimisticLockingTestManager = new OptimisticLockingTestManager();

@@ -8,22 +8,24 @@ interface AIMonitoringDashboardProps {
   userId: string;
 }
 
-export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({ 
-  config, 
-  userId 
+export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
+  config,
+  userId,
 }) => {
-  const { 
-    metrics, 
-    alerts, 
-    getUserQuota, 
-    resetUserQuota, 
+  const {
+    metrics,
+    alerts,
+    getUserQuota,
+    resetUserQuota,
     getCacheStats,
-    clearCache 
+    clearCache,
   } = useEnhancedAIService(config);
 
   const [userQuota, setUserQuota] = useState<any>(null);
   const [cacheStats, setCacheStats] = useState<any>(null);
-  const [selectedTimeRange, setSelectedTimeRange] = useState<'1h' | '24h' | '7d'>('24h');
+  const [selectedTimeRange, setSelectedTimeRange] = useState<
+    '1h' | '24h' | '7d'
+  >('24h');
 
   // Update data periodically
   useEffect(() => {
@@ -45,7 +47,7 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(amount);
   };
 
@@ -57,11 +59,16 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
 
   const getAlertSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'CRITICAL': return 'bg-red-100 border-red-300 text-red-800';
-      case 'HIGH': return 'bg-orange-100 border-orange-300 text-orange-800';
-      case 'MEDIUM': return 'bg-yellow-100 border-yellow-300 text-yellow-800';
-      case 'LOW': return 'bg-blue-100 border-blue-300 text-blue-800';
-      default: return 'bg-gray-100 border-gray-300 text-gray-800';
+      case 'CRITICAL':
+        return 'bg-red-100 border-red-300 text-red-800';
+      case 'HIGH':
+        return 'bg-orange-100 border-orange-300 text-orange-800';
+      case 'MEDIUM':
+        return 'bg-yellow-100 border-yellow-300 text-yellow-800';
+      case 'LOW':
+        return 'bg-blue-100 border-blue-300 text-blue-800';
+      default:
+        return 'bg-gray-100 border-gray-300 text-gray-800';
     }
   };
 
@@ -98,7 +105,9 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Requests</p>
+              <p className="text-sm font-medium text-gray-500">
+                Total Requests
+              </p>
               <p className="text-2xl font-semibold text-gray-900">
                 {metrics ? formatNumber(metrics.requestCount) : '0'}
               </p>
@@ -115,8 +124,12 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Success Rate</p>
-              <p className={`text-2xl font-semibold ${getSuccessRateColor(metrics?.successRate || 1)}`}>
-                {metrics ? `${(metrics.successRate * 100).toFixed(1)}%` : '100%'}
+              <p
+                className={`text-2xl font-semibold ${getSuccessRateColor(metrics?.successRate || 1)}`}
+              >
+                {metrics
+                  ? `${(metrics.successRate * 100).toFixed(1)}%`
+                  : '100%'}
               </p>
             </div>
           </div>
@@ -130,8 +143,12 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Avg Response Time</p>
-              <p className={`text-2xl font-semibold ${getResponseTimeColor(metrics?.averageResponseTime || 0)}`}>
+              <p className="text-sm font-medium text-gray-500">
+                Avg Response Time
+              </p>
+              <p
+                className={`text-2xl font-semibold ${getResponseTimeColor(metrics?.averageResponseTime || 0)}`}
+              >
                 {metrics ? formatDuration(metrics.averageResponseTime) : '0ms'}
               </p>
             </div>
@@ -159,20 +176,25 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* User Quota */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">User Quota</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            User Quota
+          </h2>
           {userQuota ? (
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Requests Today</span>
                   <span className="font-medium">
-                    {userQuota.requestsToday} / {config.rateLimit?.requestsPerDay}
+                    {userQuota.requestsToday} /{' '}
+                    {config.rateLimit?.requestsPerDay}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full" 
-                    style={{ width: `${(userQuota.requestsToday / (config.rateLimit?.requestsPerDay || 1)) * 100}%` }}
+                  <div
+                    className="bg-blue-600 h-2 rounded-full"
+                    style={{
+                      width: `${(userQuota.requestsToday / (config.rateLimit?.requestsPerDay || 1)) * 100}%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -181,13 +203,16 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Requests This Hour</span>
                   <span className="font-medium">
-                    {userQuota.requestsThisHour} / {config.rateLimit?.requestsPerHour}
+                    {userQuota.requestsThisHour} /{' '}
+                    {config.rateLimit?.requestsPerHour}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-green-600 h-2 rounded-full" 
-                    style={{ width: `${(userQuota.requestsThisHour / (config.rateLimit?.requestsPerHour || 1)) * 100}%` }}
+                  <div
+                    className="bg-green-600 h-2 rounded-full"
+                    style={{
+                      width: `${(userQuota.requestsThisHour / (config.rateLimit?.requestsPerHour || 1)) * 100}%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -196,13 +221,16 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Requests This Minute</span>
                   <span className="font-medium">
-                    {userQuota.requestsThisMinute} / {config.rateLimit?.requestsPerMinute}
+                    {userQuota.requestsThisMinute} /{' '}
+                    {config.rateLimit?.requestsPerMinute}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-yellow-600 h-2 rounded-full" 
-                    style={{ width: `${(userQuota.requestsThisMinute / (config.rateLimit?.requestsPerMinute || 1)) * 100}%` }}
+                  <div
+                    className="bg-yellow-600 h-2 rounded-full"
+                    style={{
+                      width: `${(userQuota.requestsThisMinute / (config.rateLimit?.requestsPerMinute || 1)) * 100}%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -210,7 +238,9 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
               <div className="pt-4 border-t">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Total Cost</span>
-                  <span className="font-medium">{formatCurrency(userQuota.totalCost)}</span>
+                  <span className="font-medium">
+                    {formatCurrency(userQuota.totalCost)}
+                  </span>
                 </div>
               </div>
 
@@ -228,27 +258,36 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
 
         {/* Cache Stats */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Cache Statistics</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Cache Statistics
+          </h2>
           {cacheStats ? (
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">Cache Size</span>
                 <span className="font-medium">{cacheStats.size} items</span>
               </div>
-              
+
               <div className="flex justify-between">
                 <span className="text-gray-600">Memory Usage</span>
-                <span className="font-medium">~{(cacheStats.size * 0.1).toFixed(1)} MB</span>
+                <span className="font-medium">
+                  ~{(cacheStats.size * 0.1).toFixed(1)} MB
+                </span>
               </div>
 
               <div>
                 <span className="text-gray-600 text-sm">Cached Keys:</span>
                 <div className="mt-2 max-h-32 overflow-y-auto">
-                  {cacheStats.keys.slice(0, 10).map((key: string, index: number) => (
-                    <div key={index} className="text-xs text-gray-500 font-mono bg-gray-50 p-1 rounded mb-1">
-                      {key.length > 50 ? key.substring(0, 50) + '...' : key}
-                    </div>
-                  ))}
+                  {cacheStats.keys
+                    .slice(0, 10)
+                    .map((key: string, index: number) => (
+                      <div
+                        key={index}
+                        className="text-xs text-gray-500 font-mono bg-gray-50 p-1 rounded mb-1"
+                      >
+                        {key.length > 50 ? `${key.substring(0, 50)}...` : key}
+                      </div>
+                    ))}
                   {cacheStats.keys.length > 10 && (
                     <div className="text-xs text-gray-400">
                       ... and {cacheStats.keys.length - 10} more
@@ -281,8 +320,8 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
 
         {alerts && alerts.length > 0 ? (
           <div className="space-y-3">
-            {alerts.map((alert) => (
-              <div 
+            {alerts.map(alert => (
+              <div
                 key={alert.id}
                 className={`p-4 border rounded-lg ${getAlertSeverityColor(alert.severity)}`}
               >
@@ -292,12 +331,17 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
                       <span className="font-medium mr-2">
                         {alert.type.replace('_', ' ')}
                       </span>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        alert.severity === 'CRITICAL' ? 'bg-red-200 text-red-800' :
-                        alert.severity === 'HIGH' ? 'bg-orange-200 text-orange-800' :
-                        alert.severity === 'MEDIUM' ? 'bg-yellow-200 text-yellow-800' :
-                        'bg-blue-200 text-blue-800'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          alert.severity === 'CRITICAL'
+                            ? 'bg-red-200 text-red-800'
+                            : alert.severity === 'HIGH'
+                              ? 'bg-orange-200 text-orange-800'
+                              : alert.severity === 'MEDIUM'
+                                ? 'bg-yellow-200 text-yellow-800'
+                                : 'bg-blue-200 text-blue-800'
+                        }`}
+                      >
                         {alert.severity}
                       </span>
                     </div>
@@ -316,18 +360,18 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-center py-4">
-            No active alerts
-          </p>
+          <p className="text-gray-500 text-center py-4">No active alerts</p>
         )}
       </div>
 
       {/* Performance Chart Placeholder */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Performance Trends</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          Performance Trends
+        </h2>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-2">
-            {(['1h', '24h', '7d'] as const).map((range) => (
+            {(['1h', '24h', '7d'] as const).map(range => (
               <button
                 key={range}
                 onClick={() => setSelectedTimeRange(range)}
@@ -342,7 +386,7 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
             ))}
           </div>
         </div>
-        
+
         <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
           <p className="text-gray-500">
             Performance chart for {selectedTimeRange} would be displayed here
@@ -351,4 +395,4 @@ export const AIMonitoringDashboard: React.FC<AIMonitoringDashboardProps> = ({
       </div>
     </div>
   );
-}; 
+};

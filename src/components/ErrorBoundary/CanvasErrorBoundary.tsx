@@ -1,6 +1,6 @@
 /**
  * Canvas Error Boundary
- * 
+ *
  * Specialized error boundary for canvas-related components:
  * - SmartPlaybook (canvas crashes)
  * - WebGL errors
@@ -10,7 +10,10 @@
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import BaseErrorBoundary, { ErrorBoundaryProps, ErrorBoundaryState } from './BaseErrorBoundary';
+import BaseErrorBoundary, {
+  ErrorBoundaryProps,
+  ErrorBoundaryState,
+} from './BaseErrorBoundary';
 import { isCanvasError } from './BaseErrorBoundary';
 
 export interface CanvasErrorBoundaryProps extends ErrorBoundaryProps {
@@ -26,7 +29,10 @@ export interface CanvasErrorBoundaryState extends ErrorBoundaryState {
   fallbackMode: boolean;
 }
 
-export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, CanvasErrorBoundaryState> {
+export class CanvasErrorBoundary extends Component<
+  CanvasErrorBoundaryProps,
+  CanvasErrorBoundaryState
+> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 
   constructor(props: CanvasErrorBoundaryProps) {
@@ -35,15 +41,17 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
       ...this.state,
       contextLost: false,
       webglSupported: this.checkWebGLSupport(),
-      fallbackMode: false
+      fallbackMode: false,
     };
   }
 
   private checkWebGLSupport(): boolean {
     try {
       const canvas = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && 
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+      return !!(
+        window.WebGLRenderingContext &&
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+      );
     } catch {
       return false;
     }
@@ -81,7 +89,7 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
       fallbackMode: false,
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     });
 
     if (this.props.onCanvasReset) {
@@ -91,7 +99,7 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
 
   private handleContextRecovery = (): void => {
     this.setState({ contextLost: false });
-    
+
     if (this.props.onContextLost) {
       this.props.onContextLost();
     }
@@ -106,56 +114,57 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
     const { contextLost, webglSupported, fallbackMode } = this.state;
 
     // Custom fallback for canvas errors
-    const canvasFallback = (error: Error, errorInfo: ErrorInfo, retry: () => void, reset: () => void) => (
+    const canvasFallback = (
+      error: Error,
+      errorInfo: ErrorInfo,
+      retry: () => void,
+      reset: () => void
+    ) => (
       <div className="canvas-error-boundary">
         <div className="canvas-error-container">
           <div className="canvas-error-header">
             <div className="canvas-error-icon">🎨</div>
             <h2 className="canvas-error-title">Canvas Error</h2>
             <p className="canvas-error-message">
-              {contextLost 
+              {contextLost
                 ? 'The canvas context was lost. This can happen when the browser reclaims memory.'
                 : fallbackMode
-                ? 'WebGL is not supported or failed to initialize. Using fallback mode.'
-                : 'There was an error with the canvas rendering. This might be due to memory issues or browser limitations.'
-              }
+                  ? 'WebGL is not supported or failed to initialize. Using fallback mode.'
+                  : 'There was an error with the canvas rendering. This might be due to memory issues or browser limitations.'}
             </p>
           </div>
 
           <div className="canvas-error-actions">
             {contextLost && (
-              <button 
+              <button
                 className="canvas-error-button primary"
                 onClick={this.handleContextRecovery}
               >
                 Recover Context
               </button>
             )}
-            
+
             {!webglSupported && !fallbackMode && (
-              <button 
+              <button
                 className="canvas-error-button primary"
                 onClick={this.handleWebGLFallback}
               >
                 Use Fallback Mode
               </button>
             )}
-            
-            <button 
+
+            <button
               className="canvas-error-button secondary"
               onClick={this.handleCanvasReset}
             >
               Reset Canvas
             </button>
-            
-            <button 
-              className="canvas-error-button secondary"
-              onClick={retry}
-            >
+
+            <button className="canvas-error-button secondary" onClick={retry}>
               Try Again
             </button>
-            
-            <button 
+
+            <button
               className="canvas-error-button secondary"
               onClick={() => window.location.reload()}
             >
@@ -166,10 +175,19 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
           <div className="canvas-error-info">
             <h3>Canvas Information</h3>
             <ul>
-              <li><strong>WebGL Support:</strong> {webglSupported ? 'Yes' : 'No'}</li>
-              <li><strong>Canvas Type:</strong> {props.canvasType || '2d'}</li>
-              <li><strong>Context Lost:</strong> {contextLost ? 'Yes' : 'No'}</li>
-              <li><strong>Fallback Mode:</strong> {fallbackMode ? 'Active' : 'Inactive'}</li>
+              <li>
+                <strong>WebGL Support:</strong> {webglSupported ? 'Yes' : 'No'}
+              </li>
+              <li>
+                <strong>Canvas Type:</strong> {props.canvasType || '2d'}
+              </li>
+              <li>
+                <strong>Context Lost:</strong> {contextLost ? 'Yes' : 'No'}
+              </li>
+              <li>
+                <strong>Fallback Mode:</strong>{' '}
+                {fallbackMode ? 'Active' : 'Inactive'}
+              </li>
             </ul>
           </div>
 
@@ -320,7 +338,7 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
           canvasType: props.canvasType,
           webglSupported: this.state.webglSupported,
           contextLost: this.state.contextLost,
-          fallbackMode: this.state.fallbackMode
+          fallbackMode: this.state.fallbackMode,
         }}
       >
         {children}
@@ -329,4 +347,4 @@ export class CanvasErrorBoundary extends Component<CanvasErrorBoundaryProps, Can
   }
 }
 
-export default CanvasErrorBoundary; 
+export default CanvasErrorBoundary;

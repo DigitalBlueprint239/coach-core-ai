@@ -14,10 +14,10 @@ const pulse = keyframes`
   100% { opacity: 1; }
 `;
 
-const StatusIndicator: React.FC<StatusIndicatorProps> = ({ 
-  status, 
-  message, 
-  showIcon = true 
+const StatusIndicator: React.FC<StatusIndicatorProps> = ({
+  status,
+  message,
+  showIcon = true,
 }) => {
   const getStatusConfig = () => {
     switch (status) {
@@ -79,9 +79,7 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
       animation={status === 'loading' ? `${pulse} 2s infinite` : 'none'}
     >
       <HStack spacing={2}>
-        {showIcon && (
-          <Icon as={config.icon} color={config.color} boxSize={4} />
-        )}
+        {showIcon && <Icon as={config.icon} color={config.color} boxSize={4} />}
         <Text fontSize="sm" color={config.color} fontWeight="medium">
           {config.text}
         </Text>
@@ -91,4 +89,3 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 };
 
 export default StatusIndicator;
-

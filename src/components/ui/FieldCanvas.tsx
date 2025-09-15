@@ -1,6 +1,12 @@
 // src/components/ui/FieldCanvas.tsx
 
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Haptics } from '@capacitor/haptics';
 
 interface FieldCanvasProps {
@@ -74,7 +80,11 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawingPoints, setDrawingPoints] = useState<Point[]>([]);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean }>({
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    visible: boolean;
+  }>({
     x: 0,
     y: 0,
     visible: false,
@@ -87,18 +97,18 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
   const canvasContext = useMemo(() => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
-    
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
     // Set canvas size with device pixel ratio
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    
+
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
-    
+
     return ctx;
   }, [width, height]);
 
@@ -111,7 +121,10 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
 
     // Apply transformations
     ctx.save();
-    ctx.translate(gestureStateRef.current.offsetX, gestureStateRef.current.offsetY);
+    ctx.translate(
+      gestureStateRef.current.offsetX,
+      gestureStateRef.current.offsetY
+    );
     ctx.scale(gestureStateRef.current.scale, gestureStateRef.current.scale);
 
     // Draw field background
@@ -138,234 +151,281 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
   // DRAWING FUNCTIONS
   // ============================================
 
-  const drawFieldBackground = useCallback((ctx: CanvasRenderingContext2D) => {
-    // Field outline
-    ctx.strokeStyle = '#2C3E50';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(0, 0, width, height);
+  const drawFieldBackground = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      // Field outline
+      ctx.strokeStyle = '#2C3E50';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(0, 0, width, height);
 
-    // Field markings (yard lines, hash marks, etc.)
-    ctx.strokeStyle = '#34495E';
-    ctx.lineWidth = 1;
-    
-    // Draw yard lines every 10 yards
-    for (let i = 0; i <= width; i += width / 10) {
+      // Field markings (yard lines, hash marks, etc.)
+      ctx.strokeStyle = '#34495E';
+      ctx.lineWidth = 1;
+
+      // Draw yard lines every 10 yards
+      for (let i = 0; i <= width; i += width / 10) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+        ctx.stroke();
+      }
+
+      // Draw hash marks
+      for (let i = 0; i <= height; i += height / 5) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(10, i);
+        ctx.moveTo(width - 10, i);
+        ctx.lineTo(width, i);
+        ctx.stroke();
+      }
+    },
+    [width, height]
+  );
+
+  const drawPlayers = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      // Example player positions - replace with actual player data
+      const players = [
+        { id: 'qb', x: width * 0.5, y: height * 0.8, color: '#E74C3C' },
+        { id: 'rb', x: width * 0.3, y: height * 0.7, color: '#3498DB' },
+        { id: 'wr1', x: width * 0.2, y: height * 0.3, color: '#2ECC71' },
+        { id: 'wr2', x: width * 0.8, y: height * 0.3, color: '#F39C12' },
+      ];
+
+      players.forEach(player => {
+        ctx.fillStyle = player.color;
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, 15, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(player.id.toUpperCase(), player.x, player.y + 4);
+      });
+    },
+    [width, height]
+  );
+
+  const drawRoutes = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      // Example routes - replace with actual route data
+      const routes = [
+        {
+          start: { x: width * 0.5, y: height * 0.8 },
+          end: { x: width * 0.2, y: height * 0.3 },
+          color: '#E74C3C',
+        },
+        {
+          start: { x: width * 0.3, y: height * 0.7 },
+          end: { x: width * 0.8, y: height * 0.3 },
+          color: '#3498DB',
+        },
+      ];
+
+      routes.forEach(route => {
+        ctx.strokeStyle = route.color;
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(route.start.x, route.start.y);
+        ctx.lineTo(route.end.x, route.end.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      });
+    },
+    [width, height]
+  );
+
+  const drawPath = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      points: Point[],
+      color: string,
+      lineWidth: number
+    ) => {
+      if (points.length < 2) return;
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i, height);
+      ctx.moveTo(points[0].x, points[0].y);
+
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+
       ctx.stroke();
-    }
-
-    // Draw hash marks
-    for (let i = 0; i <= height; i += height / 5) {
-      ctx.beginPath();
-      ctx.moveTo(0, i);
-      ctx.lineTo(10, i);
-      ctx.moveTo(width - 10, i);
-      ctx.lineTo(width, i);
-      ctx.stroke();
-    }
-  }, [width, height]);
-
-  const drawPlayers = useCallback((ctx: CanvasRenderingContext2D) => {
-    // Example player positions - replace with actual player data
-    const players = [
-      { id: 'qb', x: width * 0.5, y: height * 0.8, color: '#E74C3C' },
-      { id: 'rb', x: width * 0.3, y: height * 0.7, color: '#3498DB' },
-      { id: 'wr1', x: width * 0.2, y: height * 0.3, color: '#2ECC71' },
-      { id: 'wr2', x: width * 0.8, y: height * 0.3, color: '#F39C12' },
-    ];
-
-    players.forEach(player => {
-      ctx.fillStyle = player.color;
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, 15, 0, 2 * Math.PI);
-      ctx.fill();
-      
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '12px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(player.id.toUpperCase(), player.x, player.y + 4);
-    });
-  }, [width, height]);
-
-  const drawRoutes = useCallback((ctx: CanvasRenderingContext2D) => {
-    // Example routes - replace with actual route data
-    const routes = [
-      { start: { x: width * 0.5, y: height * 0.8 }, end: { x: width * 0.2, y: height * 0.3 }, color: '#E74C3C' },
-      { start: { x: width * 0.3, y: height * 0.7 }, end: { x: width * 0.8, y: height * 0.3 }, color: '#3498DB' },
-    ];
-
-    routes.forEach(route => {
-      ctx.strokeStyle = route.color;
-      ctx.lineWidth = 3;
-      ctx.setLineDash([5, 5]);
-      ctx.beginPath();
-      ctx.moveTo(route.start.x, route.start.y);
-      ctx.lineTo(route.end.x, route.end.y);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    });
-  }, [width, height]);
-
-  const drawPath = useCallback((ctx: CanvasRenderingContext2D, points: Point[], color: string, lineWidth: number) => {
-    if (points.length < 2) return;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-
-    for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i].x, points[i].y);
-    }
-
-    ctx.stroke();
-  }, []);
+    },
+    []
+  );
 
   // ============================================
   // TOUCH EVENT HANDLERS
   // ============================================
 
-  const getTouchPosition = useCallback((event: TouchEvent, touch: Touch): Point => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return { x: 0, y: 0 };
+  const getTouchPosition = useCallback(
+    (event: TouchEvent, touch: Touch): Point => {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return { x: 0, y: 0 };
 
-    return {
-      x: (touch.clientX - rect.left - gestureStateRef.current.offsetX) / gestureStateRef.current.scale,
-      y: (touch.clientY - rect.top - gestureStateRef.current.offsetY) / gestureStateRef.current.scale,
-    };
-  }, []);
-
-  const handleTouchStart = useCallback((event: TouchEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const touches = Array.from(event.touches);
-    
-    touches.forEach(touch => {
-      const position = getTouchPosition(event, touch);
-      const touchState: TouchState = {
-        id: touch.identifier,
-        startX: position.x,
-        startY: position.y,
-        currentX: position.x,
-        currentY: position.y,
-        startTime: Date.now(),
+      return {
+        x:
+          (touch.clientX - rect.left - gestureStateRef.current.offsetX) /
+          gestureStateRef.current.scale,
+        y:
+          (touch.clientY - rect.top - gestureStateRef.current.offsetY) /
+          gestureStateRef.current.scale,
       };
-      
-      touchStatesRef.current.set(touch.identifier, touchState);
-    });
+    },
+    []
+  );
 
-    // Determine gesture type
-    if (touches.length === 1 && enableTouchDrawing) {
-      // Single touch - drawing mode
-      gestureStateRef.current.isDrawing = true;
-      setIsDrawing(true);
-      setDrawingPoints([getTouchPosition(event, touches[0])]);
-    } else if (touches.length === 2 && enablePinchZoom) {
-      // Two touches - zoom/pan mode
-      gestureStateRef.current.isZooming = true;
-      triggerHapticFeedback('light');
-    } else if (touches.length === 1 && enablePanning) {
-      // Single touch - panning mode
-      gestureStateRef.current.isPanning = true;
-    }
-  }, [getTouchPosition, enableTouchDrawing, enablePinchZoom, enablePanning]);
+  const handleTouchStart = useCallback(
+    (event: TouchEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-  const handleTouchMove = useCallback((event: TouchEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
+      const touches = Array.from(event.touches);
 
-    const touches = Array.from(event.touches);
-    
-    if (gestureStateRef.current.isDrawing && touches.length === 1) {
-      // Drawing mode
-      const position = getTouchPosition(event, touches[0]);
-      setDrawingPoints(prev => [...prev, position]);
-    } else if (gestureStateRef.current.isZooming && touches.length === 2) {
-      // Pinch to zoom
-      const touch1 = touchStatesRef.current.get(touches[0].identifier);
-      const touch2 = touchStatesRef.current.get(touches[1].identifier);
-      
-      if (touch1 && touch2) {
-        const currentDistance = Math.hypot(
-          touches[0].clientX - touches[1].clientX,
-          touches[0].clientY - touches[1].clientY
-        );
-        
-        const startDistance = Math.hypot(
-          touch1.startX - touch2.startX,
-          touch1.startY - touch2.startY
-        );
-        
-        const scaleFactor = currentDistance / startDistance;
-        const newScale = Math.max(minScale, Math.min(maxScale, gestureStateRef.current.scale * scaleFactor));
-        
-        gestureStateRef.current.scale = newScale;
-        onZoom?.(newScale);
-      }
-    } else if (gestureStateRef.current.isPanning && touches.length === 1) {
-      // Panning mode
-      const touch = touchStatesRef.current.get(touches[0].identifier);
-      if (touch) {
-        const deltaX = touches[0].clientX - touch.startX;
-        const deltaY = touches[0].clientY - touch.startY;
-        
-        gestureStateRef.current.offsetX += deltaX;
-        gestureStateRef.current.offsetY += deltaY;
-        
-        onPan?.({ x: gestureStateRef.current.offsetX, y: gestureStateRef.current.offsetY });
-        
-        // Update touch start position for smooth panning
-        touch.startX = touches[0].clientX;
-        touch.startY = touches[0].clientY;
-      }
-    }
-
-    // Update current positions
-    touches.forEach(touch => {
-      const touchState = touchStatesRef.current.get(touch.identifier);
-      if (touchState) {
+      touches.forEach(touch => {
         const position = getTouchPosition(event, touch);
-        touchState.currentX = position.x;
-        touchState.currentY = position.y;
+        const touchState: TouchState = {
+          id: touch.identifier,
+          startX: position.x,
+          startY: position.y,
+          currentX: position.x,
+          currentY: position.y,
+          startTime: Date.now(),
+        };
+
+        touchStatesRef.current.set(touch.identifier, touchState);
+      });
+
+      // Determine gesture type
+      if (touches.length === 1 && enableTouchDrawing) {
+        // Single touch - drawing mode
+        gestureStateRef.current.isDrawing = true;
+        setIsDrawing(true);
+        setDrawingPoints([getTouchPosition(event, touches[0])]);
+      } else if (touches.length === 2 && enablePinchZoom) {
+        // Two touches - zoom/pan mode
+        gestureStateRef.current.isZooming = true;
+        triggerHapticFeedback('light');
+      } else if (touches.length === 1 && enablePanning) {
+        // Single touch - panning mode
+        gestureStateRef.current.isPanning = true;
       }
-    });
-  }, [getTouchPosition, minScale, maxScale, onZoom, onPan]);
+    },
+    [getTouchPosition, enableTouchDrawing, enablePinchZoom, enablePanning]
+  );
 
-  const handleTouchEnd = useCallback((event: TouchEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const handleTouchMove = useCallback(
+    (event: TouchEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-    const touches = Array.from(event.touches);
-    
-    if (gestureStateRef.current.isDrawing && drawingPoints.length > 0) {
-      // Finish drawing
-      onDraw?.(drawingPoints);
-      setDrawingPoints([]);
-      setIsDrawing(false);
-      triggerHapticFeedback('success');
-    }
+      const touches = Array.from(event.touches);
 
-    // Remove ended touches
-    const endedTouches = Array.from(touchStatesRef.current.keys()).filter(
-      id => !touches.some(touch => touch.identifier === id)
-    );
-    
-    endedTouches.forEach(id => {
-      touchStatesRef.current.delete(id);
-    });
+      if (gestureStateRef.current.isDrawing && touches.length === 1) {
+        // Drawing mode
+        const position = getTouchPosition(event, touches[0]);
+        setDrawingPoints(prev => [...prev, position]);
+      } else if (gestureStateRef.current.isZooming && touches.length === 2) {
+        // Pinch to zoom
+        const touch1 = touchStatesRef.current.get(touches[0].identifier);
+        const touch2 = touchStatesRef.current.get(touches[1].identifier);
 
-    // Reset gesture states
-    if (touches.length === 0) {
-      gestureStateRef.current.isPanning = false;
-      gestureStateRef.current.isZooming = false;
-      gestureStateRef.current.isDrawing = false;
-    }
-  }, [drawingPoints, onDraw]);
+        if (touch1 && touch2) {
+          const currentDistance = Math.hypot(
+            touches[0].clientX - touches[1].clientX,
+            touches[0].clientY - touches[1].clientY
+          );
+
+          const startDistance = Math.hypot(
+            touch1.startX - touch2.startX,
+            touch1.startY - touch2.startY
+          );
+
+          const scaleFactor = currentDistance / startDistance;
+          const newScale = Math.max(
+            minScale,
+            Math.min(maxScale, gestureStateRef.current.scale * scaleFactor)
+          );
+
+          gestureStateRef.current.scale = newScale;
+          onZoom?.(newScale);
+        }
+      } else if (gestureStateRef.current.isPanning && touches.length === 1) {
+        // Panning mode
+        const touch = touchStatesRef.current.get(touches[0].identifier);
+        if (touch) {
+          const deltaX = touches[0].clientX - touch.startX;
+          const deltaY = touches[0].clientY - touch.startY;
+
+          gestureStateRef.current.offsetX += deltaX;
+          gestureStateRef.current.offsetY += deltaY;
+
+          onPan?.({
+            x: gestureStateRef.current.offsetX,
+            y: gestureStateRef.current.offsetY,
+          });
+
+          // Update touch start position for smooth panning
+          touch.startX = touches[0].clientX;
+          touch.startY = touches[0].clientY;
+        }
+      }
+
+      // Update current positions
+      touches.forEach(touch => {
+        const touchState = touchStatesRef.current.get(touch.identifier);
+        if (touchState) {
+          const position = getTouchPosition(event, touch);
+          touchState.currentX = position.x;
+          touchState.currentY = position.y;
+        }
+      });
+    },
+    [getTouchPosition, minScale, maxScale, onZoom, onPan]
+  );
+
+  const handleTouchEnd = useCallback(
+    (event: TouchEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const touches = Array.from(event.touches);
+
+      if (gestureStateRef.current.isDrawing && drawingPoints.length > 0) {
+        // Finish drawing
+        onDraw?.(drawingPoints);
+        setDrawingPoints([]);
+        setIsDrawing(false);
+        triggerHapticFeedback('success');
+      }
+
+      // Remove ended touches
+      const endedTouches = Array.from(touchStatesRef.current.keys()).filter(
+        id => !touches.some(touch => touch.identifier === id)
+      );
+
+      endedTouches.forEach(id => {
+        touchStatesRef.current.delete(id);
+      });
+
+      // Reset gesture states
+      if (touches.length === 0) {
+        gestureStateRef.current.isPanning = false;
+        gestureStateRef.current.isZooming = false;
+        gestureStateRef.current.isDrawing = false;
+      }
+    },
+    [drawingPoints, onDraw]
+  );
 
   // ============================================
   // LONG PRESS HANDLER
@@ -374,7 +434,7 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
   const handleLongPress = useCallback((event: TouchEvent) => {
     const touch = event.touches[0];
     const rect = canvasRef.current?.getBoundingClientRect();
-    
+
     if (rect) {
       setContextMenu({
         x: touch.clientX - rect.left,
@@ -389,54 +449,60 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
   // HAPTIC FEEDBACK
   // ============================================
 
-  const triggerHapticFeedback = useCallback(async (type: 'light' | 'medium' | 'heavy' | 'success' | 'error') => {
-    try {
-      switch (type) {
-        case 'light':
-          await Haptics.impact({ style: 'light' });
-          break;
-        case 'medium':
-          await Haptics.impact({ style: 'medium' });
-          break;
-        case 'heavy':
-          await Haptics.impact({ style: 'heavy' });
-          break;
-        case 'success':
-          await Haptics.notification({ type: 'success' });
-          break;
-        case 'error':
-          await Haptics.notification({ type: 'error' });
-          break;
+  const triggerHapticFeedback = useCallback(
+    async (type: 'light' | 'medium' | 'heavy' | 'success' | 'error') => {
+      try {
+        switch (type) {
+          case 'light':
+            await Haptics.impact({ style: 'light' });
+            break;
+          case 'medium':
+            await Haptics.impact({ style: 'medium' });
+            break;
+          case 'heavy':
+            await Haptics.impact({ style: 'heavy' });
+            break;
+          case 'success':
+            await Haptics.notification({ type: 'success' });
+            break;
+          case 'error':
+            await Haptics.notification({ type: 'error' });
+            break;
+        }
+      } catch (error) {
+        console.warn('Haptic feedback not available:', error);
       }
-    } catch (error) {
-      console.warn('Haptic feedback not available:', error);
-    }
-  }, []);
+    },
+    []
+  );
 
   // ============================================
   // CONTEXT MENU HANDLERS
   // ============================================
 
-  const handleContextMenuAction = useCallback((action: string) => {
-    setContextMenu(prev => ({ ...prev, visible: false }));
-    
-    switch (action) {
-      case 'add-player':
-        // Add player at context menu position
-        break;
-      case 'add-route':
-        // Start route drawing
-        break;
-      case 'delete':
-        // Delete element at position
-        break;
-      case 'properties':
-        // Show properties panel
-        break;
-    }
-    
-    triggerHapticFeedback('light');
-  }, [triggerHapticFeedback]);
+  const handleContextMenuAction = useCallback(
+    (action: string) => {
+      setContextMenu(prev => ({ ...prev, visible: false }));
+
+      switch (action) {
+        case 'add-player':
+          // Add player at context menu position
+          break;
+        case 'add-route':
+          // Start route drawing
+          break;
+        case 'delete':
+          // Delete element at position
+          break;
+        case 'properties':
+          // Show properties panel
+          break;
+      }
+
+      triggerHapticFeedback('light');
+    },
+    [triggerHapticFeedback]
+  );
 
   // ============================================
   // EFFECTS
@@ -456,7 +522,7 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
     const handleLongPressStart = (event: TouchEvent) => {
       longPressTimer = setTimeout(() => handleLongPress(event), 500);
     };
-    
+
     const handleLongPressCancel = () => {
       clearTimeout(longPressTimer);
     };
@@ -476,14 +542,20 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
       canvas.removeEventListener('touchstart', handleLongPressStart);
       canvas.removeEventListener('touchmove', handleLongPressCancel);
       canvas.removeEventListener('touchend', handleLongPressCancel);
-      
+
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      
+
       clearTimeout(longPressTimer);
     };
-  }, [handleTouchStart, handleTouchMove, handleTouchEnd, handleLongPress, renderCanvas]);
+  }, [
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    handleLongPress,
+    renderCanvas,
+  ]);
 
   // ============================================
   // RENDER
@@ -512,7 +584,7 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
           WebkitUserSelect: 'none',
         }}
       />
-      
+
       {/* Context Menu */}
       {contextMenu.visible && (
         <div
@@ -567,4 +639,4 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
 // EXPORT
 // ============================================
 
-export default FieldCanvas; 
+export default FieldCanvas;

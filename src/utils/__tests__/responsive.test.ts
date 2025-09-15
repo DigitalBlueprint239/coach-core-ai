@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { 
-  BREAKPOINTS, 
-  RESPONSIVE_SPACING, 
-  RESPONSIVE_FONTS, 
+import {
+  BREAKPOINTS,
+  RESPONSIVE_SPACING,
+  RESPONSIVE_FONTS,
   RESPONSIVE_GRIDS,
   createResponsiveValue,
-  getResponsiveValue
+  getResponsiveValue,
 } from '../responsive';
 
 describe('Responsive Utilities', () => {
@@ -44,7 +44,9 @@ describe('Responsive Utilities', () => {
 
   describe('RESPONSIVE_GRIDS', () => {
     it('should have valid grid templates', () => {
-      expect(RESPONSIVE_GRIDS.stats).toBe('repeat(auto-fit, minmax(250px, 1fr))');
+      expect(RESPONSIVE_GRIDS.stats).toBe(
+        'repeat(auto-fit, minmax(250px, 1fr))'
+      );
       expect(RESPONSIVE_GRIDS.sidebar).toBe('1fr 300px');
       expect(RESPONSIVE_GRIDS.twoColumn).toBe('repeat(2, 1fr)');
       expect(RESPONSIVE_GRIDS.threeColumn).toBe('repeat(3, 1fr)');

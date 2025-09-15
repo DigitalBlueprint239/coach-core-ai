@@ -1,15 +1,15 @@
 // src/utils/multi-user-testing.ts
-import { 
-  doc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  getDoc, 
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
   onSnapshot,
   writeBatch,
   runTransaction,
   Timestamp,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
@@ -85,7 +85,11 @@ export interface ConflictResult {
 }
 
 export interface TestError {
-  type: 'operation_failed' | 'timeout' | 'conflict_unresolved' | 'data_corruption';
+  type:
+    | 'operation_failed'
+    | 'timeout'
+    | 'conflict_unresolved'
+    | 'data_corruption';
   message: string;
   operationId?: string;
   userId?: string;
@@ -137,38 +141,37 @@ export class MultiUserTestingManager {
         conflictsDetected: 0,
         conflictsResolved: 0,
         averageOperationTime: 0,
-        totalErrors: 0
-      }
+        totalErrors: 0,
+      },
     };
 
     this.activeTests.set(scenario.id, testResult);
 
     try {
       console.log(`Starting test scenario: ${scenario.name}`);
-      
+
       // Initialize test users
       await this.initializeTestUsers(scenario.users);
-      
+
       // Execute operations concurrently
-      const operationPromises = scenario.operations.map(operation => 
+      const operationPromises = scenario.operations.map(operation =>
         this.executeOperation(operation, testResult)
       );
-      
+
       // Wait for all operations to complete or timeout
       await Promise.race([
         Promise.all(operationPromises),
-        this.createTimeout(scenario.timeout)
+        this.createTimeout(scenario.timeout),
       ]);
-      
+
       // Calculate test results
       this.calculateTestSummary(testResult);
       testResult.success = testResult.errors.length === 0;
-      
     } catch (error) {
       testResult.errors.push({
         type: 'operation_failed',
         message: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     } finally {
       testResult.endTime = Date.now();
@@ -182,7 +185,7 @@ export class MultiUserTestingManager {
   private async initializeTestUsers(users: TestUser[]): Promise<void> {
     for (const user of users) {
       this.userSessions.set(user.sessionId, user);
-      
+
       // Create user document if it doesn't exist
       await this.createUserDocument(user);
     }
@@ -190,19 +193,26 @@ export class MultiUserTestingManager {
 
   private async createUserDocument(user: TestUser): Promise<void> {
     const userDoc = doc(db, 'users', user.id);
-    await setDoc(userDoc, {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      teamId: user.teamId,
-      sessionId: user.sessionId,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    }, { merge: true });
+    await setDoc(
+      userDoc,
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        teamId: user.teamId,
+        sessionId: user.sessionId,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
   }
 
-  private async executeOperation(operation: TestOperation, testResult: TestResult): Promise<void> {
+  private async executeOperation(
+    operation: TestOperation,
+    testResult: TestResult
+  ): Promise<void> {
     // Wait for the specified delay
     if (operation.delay > 0) {
       await this.sleep(operation.delay);
@@ -215,7 +225,7 @@ export class MultiUserTestingManager {
       success: false,
       startTime: Date.now(),
       endTime: 0,
-      duration: 0
+      duration: 0,
     };
 
     try {
@@ -236,55 +246,69 @@ export class MultiUserTestingManager {
 
       operationResult.success = true;
       testResult.summary.successfulOperations++;
-
     } catch (error) {
-      operationResult.error = error instanceof Error ? error.message : 'Unknown error';
+      operationResult.error =
+        error instanceof Error ? error.message : 'Unknown error';
       testResult.summary.failedOperations++;
-      
+
       testResult.errors.push({
         type: 'operation_failed',
         message: operationResult.error,
         operationId: operation.id,
         userId: operation.userId,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     } finally {
       operationResult.endTime = Date.now();
-      operationResult.duration = operationResult.endTime - operationResult.startTime;
+      operationResult.duration =
+        operationResult.endTime - operationResult.startTime;
       testResult.operations.push(operationResult);
     }
   }
 
-  private async executeCreateOperation(operation: TestOperation, result: OperationResult): Promise<void> {
-    const docRef = doc(db, operation.collection, operation.documentId || this.generateDocumentId());
-    
+  private async executeCreateOperation(
+    operation: TestOperation,
+    result: OperationResult
+  ): Promise<void> {
+    const docRef = doc(
+      db,
+      operation.collection,
+      operation.documentId || this.generateDocumentId()
+    );
+
     await setDoc(docRef, {
       ...operation.data,
       createdBy: operation.userId,
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
 
     result.data = { id: docRef.id };
   }
 
-  private async executeUpdateOperation(operation: TestOperation, result: OperationResult): Promise<void> {
+  private async executeUpdateOperation(
+    operation: TestOperation,
+    result: OperationResult
+  ): Promise<void> {
     if (!operation.documentId) {
       throw new Error('Document ID required for update operation');
     }
 
     const docRef = doc(db, operation.collection, operation.documentId);
-    
+
     await updateDoc(docRef, {
       ...operation.data,
       updatedBy: operation.userId,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
 
     result.data = { id: operation.documentId };
   }
 
-  private async executeDeleteOperation(operation: TestOperation, result: OperationResult): Promise<void> {
+  private async executeDeleteOperation(
+    operation: TestOperation,
+    result: OperationResult
+  ): Promise<void> {
     if (!operation.documentId) {
       throw new Error('Document ID required for delete operation');
     }
@@ -295,7 +319,10 @@ export class MultiUserTestingManager {
     result.data = { id: operation.documentId };
   }
 
-  private async executeReadOperation(operation: TestOperation, result: OperationResult): Promise<void> {
+  private async executeReadOperation(
+    operation: TestOperation,
+    result: OperationResult
+  ): Promise<void> {
     if (!operation.documentId) {
       throw new Error('Document ID required for read operation');
     }
@@ -330,9 +357,9 @@ export class MultiUserTestingManager {
 
   private setupDefaultConflictResolvers(): void {
     // Default conflict resolver for practice plans
-    this.setConflictResolver('practicePlans', (conflict) => {
+    this.setConflictResolver('practicePlans', conflict => {
       const { localData, serverData } = conflict;
-      
+
       // Merge strategy: combine both datasets, server wins on conflicts
       return {
         ...localData,
@@ -340,47 +367,53 @@ export class MultiUserTestingManager {
         updatedAt: serverTimestamp(),
         conflictResolved: true,
         resolvedBy: 'system',
-        resolvedAt: serverTimestamp()
+        resolvedAt: serverTimestamp(),
       };
     });
 
     // Default conflict resolver for plays
-    this.setConflictResolver('plays', (conflict) => {
+    this.setConflictResolver('plays', conflict => {
       const { localData, serverData } = conflict;
-      
+
       // Last-write-wins strategy
       const localTime = localData.updatedAt?.toMillis() || 0;
       const serverTime = serverData.updatedAt?.toMillis() || 0;
-      
+
       return localTime > serverTime ? localData : serverData;
     });
 
     // Default conflict resolver for players
-    this.setConflictResolver('players', (conflict) => {
+    this.setConflictResolver('players', conflict => {
       const { localData, serverData } = conflict;
-      
+
       // Field-level merge strategy
       return {
         ...localData,
         ...serverData,
         stats: {
           ...localData.stats,
-          ...serverData.stats
+          ...serverData.stats,
         },
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       };
     });
   }
 
-  setConflictResolver(collection: string, resolver: (conflict: any) => any): void {
+  setConflictResolver(
+    collection: string,
+    resolver: (conflict: any) => any
+  ): void {
     this.conflictResolvers.set(collection, resolver);
   }
 
-  async detectConflicts(collection: string, documentId: string): Promise<ConflictResult[]> {
+  async detectConflicts(
+    collection: string,
+    documentId: string
+  ): Promise<ConflictResult[]> {
     const conflicts: ConflictResult[] = [];
-    
+
     // Monitor document changes
-    const unsubscribe = onSnapshot(doc(db, collection, documentId), (doc) => {
+    const unsubscribe = onSnapshot(doc(db, collection, documentId), doc => {
       // This would implement conflict detection logic
       // For now, we'll simulate conflicts
     });
@@ -390,16 +423,16 @@ export class MultiUserTestingManager {
 
   async resolveConflict(conflict: ConflictResult): Promise<any> {
     const resolver = this.conflictResolvers.get(conflict.collection);
-    
+
     if (resolver) {
       const resolvedData = resolver(conflict);
-      
+
       // Update the document with resolved data
       const docRef = doc(db, conflict.collection, conflict.documentId);
       await updateDoc(docRef, {
         ...resolvedData,
         conflictResolved: true,
-        resolvedAt: serverTimestamp()
+        resolvedAt: serverTimestamp(),
       });
 
       return resolvedData;
@@ -413,7 +446,11 @@ export class MultiUserTestingManager {
   // REAL-TIME SYNCHRONIZATION TESTING
   // ============================================
 
-  async testRealTimeSync(collection: string, documentId: string, users: TestUser[]): Promise<TestResult> {
+  async testRealTimeSync(
+    collection: string,
+    documentId: string,
+    users: TestUser[]
+  ): Promise<TestResult> {
     const testResult: TestResult = {
       scenarioId: `realtime_sync_${Date.now()}`,
       startTime: Date.now(),
@@ -430,19 +467,25 @@ export class MultiUserTestingManager {
         conflictsDetected: 0,
         conflictsResolved: 0,
         averageOperationTime: 0,
-        totalErrors: 0
-      }
+        totalErrors: 0,
+      },
     };
 
     try {
       // Set up real-time listeners for all users
-      const listeners = users.map(user => 
+      const listeners = users.map(user =>
         this.setupRealTimeListener(collection, documentId, user, testResult)
       );
 
       // Perform concurrent updates
-      const updatePromises = users.map((user, index) => 
-        this.performConcurrentUpdate(collection, documentId, user, index, testResult)
+      const updatePromises = users.map((user, index) =>
+        this.performConcurrentUpdate(
+          collection,
+          documentId,
+          user,
+          index,
+          testResult
+        )
       );
 
       await Promise.all(updatePromises);
@@ -454,12 +497,11 @@ export class MultiUserTestingManager {
       listeners.forEach(unsubscribe => unsubscribe());
 
       testResult.success = true;
-
     } catch (error) {
       testResult.errors.push({
         type: 'operation_failed',
         message: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     } finally {
       testResult.endTime = Date.now();
@@ -471,17 +513,17 @@ export class MultiUserTestingManager {
   }
 
   private setupRealTimeListener(
-    collection: string, 
-    documentId: string, 
-    user: TestUser, 
+    collection: string,
+    documentId: string,
+    user: TestUser,
     testResult: TestResult
   ): () => void {
     const docRef = doc(db, collection, documentId);
-    
-    return onSnapshot(docRef, (doc) => {
+
+    return onSnapshot(docRef, doc => {
       if (doc.exists()) {
         const data = doc.data();
-        
+
         // Check for conflicts
         if (data.conflictResolved) {
           testResult.conflicts.push({
@@ -494,9 +536,9 @@ export class MultiUserTestingManager {
             serverData: data,
             resolvedData: data,
             resolutionStrategy: 'server_wins',
-            timestamp: Date.now()
+            timestamp: Date.now(),
           });
-          
+
           testResult.summary.conflictsResolved++;
         }
       }
@@ -504,10 +546,10 @@ export class MultiUserTestingManager {
   }
 
   private async performConcurrentUpdate(
-    collection: string, 
-    documentId: string, 
-    user: TestUser, 
-    index: number, 
+    collection: string,
+    documentId: string,
+    user: TestUser,
+    index: number,
     testResult: TestResult
   ): Promise<void> {
     const operationResult: OperationResult = {
@@ -517,30 +559,31 @@ export class MultiUserTestingManager {
       success: false,
       startTime: Date.now(),
       endTime: 0,
-      duration: 0
+      duration: 0,
     };
 
     try {
       const docRef = doc(db, collection, documentId);
-      
+
       await updateDoc(docRef, {
         [`updates.${user.id}`]: {
           value: `Update from ${user.name} at ${Date.now()}`,
-          timestamp: serverTimestamp()
+          timestamp: serverTimestamp(),
         },
         updatedAt: serverTimestamp(),
-        updatedBy: user.id
+        updatedBy: user.id,
       });
 
       operationResult.success = true;
       testResult.summary.successfulOperations++;
-
     } catch (error) {
-      operationResult.error = error instanceof Error ? error.message : 'Unknown error';
+      operationResult.error =
+        error instanceof Error ? error.message : 'Unknown error';
       testResult.summary.failedOperations++;
     } finally {
       operationResult.endTime = Date.now();
-      operationResult.duration = operationResult.endTime - operationResult.startTime;
+      operationResult.duration =
+        operationResult.endTime - operationResult.startTime;
       testResult.operations.push(operationResult);
     }
   }
@@ -549,7 +592,10 @@ export class MultiUserTestingManager {
   // TEST SCENARIO GENERATORS
   // ============================================
 
-  generateConcurrentUpdateScenario(users: TestUser[], documentId: string): TestScenario {
+  generateConcurrentUpdateScenario(
+    users: TestUser[],
+    documentId: string
+  ): TestScenario {
     const operations: TestOperation[] = users.map((user, index) => ({
       id: `update_${user.id}_${index}`,
       userId: user.id,
@@ -558,10 +604,10 @@ export class MultiUserTestingManager {
       documentId,
       data: {
         [`concurrentUpdate_${user.id}`]: `Update from ${user.name}`,
-        updatedBy: user.id
+        updatedBy: user.id,
       },
       delay: Math.random() * 1000, // Random delay up to 1 second
-      retries: 3
+      retries: 3,
     }));
 
     return {
@@ -571,13 +617,13 @@ export class MultiUserTestingManager {
       users,
       operations,
       expectedConflicts: users.length - 1,
-      timeout: 30000
+      timeout: 30000,
     };
   }
 
   generateConflictResolutionScenario(users: TestUser[]): TestScenario {
     const operations: TestOperation[] = [];
-    
+
     // Create a document
     operations.push({
       id: 'create_doc',
@@ -587,10 +633,10 @@ export class MultiUserTestingManager {
       data: {
         name: 'Test Practice Plan',
         teamId: users[0].teamId,
-        createdBy: users[0].id
+        createdBy: users[0].id,
       },
       delay: 0,
-      retries: 3
+      retries: 3,
     });
 
     // Concurrent updates by different users
@@ -603,10 +649,10 @@ export class MultiUserTestingManager {
         documentId: '{{created_doc_id}}', // Will be replaced with actual ID
         data: {
           [`userUpdate_${user.id}`]: `Update from ${user.name}`,
-          updatedBy: user.id
+          updatedBy: user.id,
         },
-        delay: 100 + (index * 50), // Staggered delays
-        retries: 3
+        delay: 100 + index * 50, // Staggered delays
+        retries: 3,
       });
     });
 
@@ -617,7 +663,7 @@ export class MultiUserTestingManager {
       users,
       operations,
       expectedConflicts: users.length,
-      timeout: 30000
+      timeout: 30000,
     };
   }
 
@@ -627,22 +673,32 @@ export class MultiUserTestingManager {
 
   private calculateTestSummary(testResult: TestResult): void {
     const { operations } = testResult;
-    
+
     testResult.summary.totalOperations = operations.length;
-    testResult.summary.successfulOperations = operations.filter(op => op.success).length;
-    testResult.summary.failedOperations = operations.filter(op => !op.success).length;
+    testResult.summary.successfulOperations = operations.filter(
+      op => op.success
+    ).length;
+    testResult.summary.failedOperations = operations.filter(
+      op => !op.success
+    ).length;
     testResult.summary.conflictsDetected = testResult.conflicts.length;
-    testResult.summary.conflictsResolved = testResult.conflicts.filter(c => c.resolvedData).length;
+    testResult.summary.conflictsResolved = testResult.conflicts.filter(
+      c => c.resolvedData
+    ).length;
     testResult.summary.totalErrors = testResult.errors.length;
-    
+
     const successfulOps = operations.filter(op => op.success);
     if (successfulOps.length > 0) {
       const totalTime = successfulOps.reduce((sum, op) => sum + op.duration, 0);
-      testResult.summary.averageOperationTime = totalTime / successfulOps.length;
+      testResult.summary.averageOperationTime =
+        totalTime / successfulOps.length;
     }
   }
 
-  async cleanupTestData(collection: string, prefix: string = 'test_'): Promise<void> {
+  async cleanupTestData(
+    collection: string,
+    prefix: string = 'test_'
+  ): Promise<void> {
     // This would implement cleanup logic for test data
     console.log(`Cleaning up test data in ${collection} with prefix ${prefix}`);
   }
@@ -667,35 +723,51 @@ export const useMultiUserTesting = () => {
   const [activeTests, setActiveTests] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
-  const runTestScenario = useCallback(async (scenario: TestScenario) => {
-    setIsRunning(true);
-    try {
-      const result = await manager.runTestScenario(scenario);
-      setActiveTests(prev => [...prev, result]);
-      return result;
-    } finally {
-      setIsRunning(false);
-    }
-  }, [manager]);
+  const runTestScenario = useCallback(
+    async (scenario: TestScenario) => {
+      setIsRunning(true);
+      try {
+        const result = await manager.runTestScenario(scenario);
+        setActiveTests(prev => [...prev, result]);
+        return result;
+      } finally {
+        setIsRunning(false);
+      }
+    },
+    [manager]
+  );
 
-  const testRealTimeSync = useCallback(async (collection: string, documentId: string, users: TestUser[]) => {
-    setIsRunning(true);
-    try {
-      const result = await manager.testRealTimeSync(collection, documentId, users);
-      setActiveTests(prev => [...prev, result]);
-      return result;
-    } finally {
-      setIsRunning(false);
-    }
-  }, [manager]);
+  const testRealTimeSync = useCallback(
+    async (collection: string, documentId: string, users: TestUser[]) => {
+      setIsRunning(true);
+      try {
+        const result = await manager.testRealTimeSync(
+          collection,
+          documentId,
+          users
+        );
+        setActiveTests(prev => [...prev, result]);
+        return result;
+      } finally {
+        setIsRunning(false);
+      }
+    },
+    [manager]
+  );
 
-  const generateConcurrentUpdateScenario = useCallback((users: TestUser[], documentId: string) => {
-    return manager.generateConcurrentUpdateScenario(users, documentId);
-  }, [manager]);
+  const generateConcurrentUpdateScenario = useCallback(
+    (users: TestUser[], documentId: string) => {
+      return manager.generateConcurrentUpdateScenario(users, documentId);
+    },
+    [manager]
+  );
 
-  const generateConflictResolutionScenario = useCallback((users: TestUser[]) => {
-    return manager.generateConflictResolutionScenario(users);
-  }, [manager]);
+  const generateConflictResolutionScenario = useCallback(
+    (users: TestUser[]) => {
+      return manager.generateConflictResolutionScenario(users);
+    },
+    [manager]
+  );
 
   return {
     manager,
@@ -705,10 +777,11 @@ export const useMultiUserTesting = () => {
     testRealTimeSync,
     generateConcurrentUpdateScenario,
     generateConflictResolutionScenario,
-    cleanupTestData: (collection: string, prefix?: string) => manager.cleanupTestData(collection, prefix),
+    cleanupTestData: (collection: string, prefix?: string) =>
+      manager.cleanupTestData(collection, prefix),
     getActiveTests: () => manager.getActiveTests(),
-    stopTest: (testId: string) => manager.stopTest(testId)
+    stopTest: (testId: string) => manager.stopTest(testId),
   };
 };
 
-export default MultiUserTestingManager; 
+export default MultiUserTestingManager;

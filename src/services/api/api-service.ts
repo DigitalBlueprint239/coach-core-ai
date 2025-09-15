@@ -42,7 +42,8 @@ class APIService {
 
   constructor() {
     this.config = {
-      baseURL: process.env.REACT_APP_API_BASE_URL || 'https://api.coachcore.com/v1',
+      baseURL:
+        process.env.REACT_APP_API_BASE_URL || 'https://api.coachcore.com/v1',
       timeout: 30000,
       retryAttempts: 3,
       retryDelay: 1000,
@@ -52,26 +53,33 @@ class APIService {
 
     this.cache = new Map();
     this.requestQueue = new Map();
-    
+
     // Initialize auth token
     this.initializeAuth();
   }
 
   private async initializeAuth() {
     try {
-      const user = authService.getCurrentUser();
+      const user = await authService.getCurrentProfile();
       if (user) {
         this.authToken = await user.getIdToken();
       }
-      
+
       // Listen for auth state changes
-      authService.onAuthStateChanged((state) => {
+            // Listen for auth state changes through the auth service
+      const unsubscribe = authService.addAuthStateListener(async (state) => {
         if (state.user) {
-          state.user.getIdToken().then(token => {
+          try {
+            const token = await state.user.getIdToken();
             this.authToken = token;
-          });
+            this.isAuthenticated = true;
+          } catch (error) {
+            console.error('Failed to get auth token:', error);
+            this.isAuthenticated = false;
+          }
         } else {
           this.authToken = null;
+          this.isAuthenticated = false;
         }
       });
     } catch (error) {
@@ -86,21 +94,21 @@ class APIService {
 
   private getCachedData(key: string): any | null {
     if (!this.config.enableCaching) return null;
-    
+
     const cached = this.cache.get(key);
     if (!cached) return null;
-    
+
     if (Date.now() - cached.timestamp.getTime() > cached.expiry) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return cached.data;
   }
 
   private setCachedData(key: string, data: any): void {
     if (!this.config.enableCaching) return;
-    
+
     this.cache.set(key, {
       key,
       data,
@@ -109,9 +117,12 @@ class APIService {
     });
   }
 
-  private async makeRequest(request: APIRequest, attempt: number = 1): Promise<APIResponse> {
+  private async makeRequest(
+    request: APIRequest,
+    attempt: number = 1
+  ): Promise<APIResponse> {
     const { endpoint, method, data, params, headers, timeout } = request;
-    
+
     try {
       // Build URL with query parameters
       const url = new URL(endpoint, this.config.baseURL);
@@ -126,7 +137,7 @@ class APIService {
       // Prepare headers
       const requestHeaders: Record<string, string> = {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
         ...headers,
       };
 
@@ -149,20 +160,19 @@ class APIService {
 
       // Make the request
       const response = await fetch(url.toString(), requestOptions);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const responseData = await response.json();
-      
+
       return {
         success: true,
         data: responseData,
         statusCode: response.status,
         timestamp: new Date(),
       };
-
     } catch (error: any) {
       // Handle timeout and abort errors
       if (error.name === 'AbortError' || error.name === 'TimeoutError') {
@@ -192,9 +202,9 @@ class APIService {
       'ECONNRESET',
       'ENOTFOUND',
     ];
-    
-    return retryableErrors.some(msg => 
-      error.message?.includes(msg) || error.code === 'ECONNRESET'
+
+    return retryableErrors.some(
+      msg => error.message?.includes(msg) || error.code === 'ECONNRESET'
     );
   }
 
@@ -209,7 +219,7 @@ class APIService {
   // Public API methods
   async request<T = any>(request: APIRequest): Promise<APIResponse<T>> {
     const requestKey = this.getRequestKey(request);
-    
+
     // Check if request is already in progress
     if (this.requestQueue.has(requestKey)) {
       return this.requestQueue.get(requestKey)!;
@@ -234,20 +244,23 @@ class APIService {
 
     try {
       const response = await requestPromise;
-      
+
       // Cache successful GET responses
       if (response.success && request.method === 'GET') {
         const cacheKey = this.getCacheKey(request.endpoint, request.params);
         this.setCachedData(cacheKey, response.data);
       }
-      
+
       return response;
     } finally {
       this.requestQueue.delete(requestKey);
     }
   }
 
-  async get<T = any>(endpoint: string, params?: Record<string, any>): Promise<APIResponse<T>> {
+  async get<T = any>(
+    endpoint: string,
+    params?: Record<string, any>
+  ): Promise<APIResponse<T>> {
     return this.request({
       endpoint,
       method: 'GET',

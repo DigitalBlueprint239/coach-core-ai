@@ -1,11 +1,8 @@
 // Core Services
-export * from './ai/ai-brain-mvp-setup';
 export * from './firebase/firebase-config';
-// export * from './auth/authService'; // File does not exist
-
-// Integration Services  
-export * from '../integration/coach-core-integration';
-
-// Default exports for backward compatibility
-export { default as AIBrainSetup } from './ai/ai-brain-mvp-setup';
-export { default as CoachCoreIntegration } from '../integration/coach-core-integration'; 
+export * from './ai/ai-service';
+export * from './data/data-service';
+export * from './data/sync-service';
+export * from './data/conflict-resolution';
+export * from './data/offline-first-service';
+export * from './offline/offline-queue';

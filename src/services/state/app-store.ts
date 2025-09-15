@@ -1,6 +1,13 @@
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
-import { dataService, Team, Player, PracticePlan, Game, AIInsight } from '../firebase/data-service';
+import {
+  dataService,
+  Team,
+  Player,
+  PracticePlan,
+  Game,
+  AIInsight,
+} from '../data/data-service';
 import { useState, useEffect } from 'react';
 
 // App State Types
@@ -11,27 +18,31 @@ export interface AppState {
     email: string | null;
     displayName: string | null;
     photoURL: string | null;
-    role: 'head-coach' | 'assistant-coach' | 'administrator' | 'parent-volunteer';
+    role:
+      | 'head-coach'
+      | 'assistant-coach'
+      | 'administrator'
+      | 'parent-volunteer';
     teamId: string | null;
     teamName: string | null;
   } | null;
-  
+
   // Team State
   currentTeam: Team | null;
   teams: Team[];
-  
+
   // Players State
   players: Player[];
   selectedPlayer: Player | null;
-  
+
   // Practice Plans State
   practices: PracticePlan[];
   currentPractice: PracticePlan | null;
-  
+
   // Games State
   games: Game[];
   currentGame: Game | null;
-  
+
   // AI State
   aiInsights: AIInsight[];
   aiHistory: Array<{
@@ -41,12 +52,12 @@ export interface AppState {
     timestamp: Date;
     confidence: number;
   }>;
-  
+
   // UI State
   isLoading: boolean;
   activeTab: string;
   showHelp: boolean;
-  
+
   // Offline State
   offlineQueue: Array<{
     id: string;
@@ -56,7 +67,7 @@ export interface AppState {
     timestamp: Date;
   }>;
   syncStatus: 'synced' | 'syncing' | 'offline';
-  
+
   // Actions
   setUser: (user: AppState['user']) => void;
   setCurrentTeam: (team: Team | null) => void;
@@ -118,108 +129,128 @@ export const useAppStore = create<AppState>()(
       ...initialState,
 
       // User Actions
-      setUser: (user) => set({ user }),
+      setUser: user => set({ user }),
 
       // Team Actions
-      setCurrentTeam: (team) => set({ currentTeam: team }),
-      setTeams: (teams) => set({ teams }),
+      setCurrentTeam: team => set({ currentTeam: team }),
+      setTeams: teams => set({ teams }),
 
       // Player Actions
-      addPlayer: (player) => set((state) => ({ 
-        players: [...state.players, player] 
-      })),
-      updatePlayer: (id, updates) => set((state) => ({
-        players: state.players.map(p => 
-          p.id === id ? { ...p, ...updates, updatedAt: new Date() } : p
-        ),
-        selectedPlayer: state.selectedPlayer?.id === id 
-          ? { ...state.selectedPlayer, ...updates, updatedAt: new Date() }
-          : state.selectedPlayer
-      })),
-      removePlayer: (id) => set((state) => ({
-        players: state.players.filter(p => p.id !== id),
-        selectedPlayer: state.selectedPlayer?.id === id ? null : state.selectedPlayer
-      })),
-      setPlayers: (players) => set({ players }),
-      setSelectedPlayer: (player) => set({ selectedPlayer: player }),
+      addPlayer: player =>
+        set(state => ({
+          players: [...state.players, player],
+        })),
+      updatePlayer: (id, updates) =>
+        set(state => ({
+          players: state.players.map(p =>
+            p.id === id ? { ...p, ...updates, updatedAt: new Date() } : p
+          ),
+          selectedPlayer:
+            state.selectedPlayer?.id === id
+              ? { ...state.selectedPlayer, ...updates, updatedAt: new Date() }
+              : state.selectedPlayer,
+        })),
+      removePlayer: id =>
+        set(state => ({
+          players: state.players.filter(p => p.id !== id),
+          selectedPlayer:
+            state.selectedPlayer?.id === id ? null : state.selectedPlayer,
+        })),
+      setPlayers: players => set({ players }),
+      setSelectedPlayer: player => set({ selectedPlayer: player }),
 
       // Practice Actions
-      addPractice: (practice) => set((state) => ({ 
-        practices: [practice, ...state.practices] 
-      })),
-      updatePractice: (id, updates) => set((state) => ({
-        practices: state.practices.map(p => 
-          p.id === id ? { ...p, ...updates, updatedAt: new Date() } : p
-        ),
-        currentPractice: state.currentPractice?.id === id 
-          ? { ...state.currentPractice, ...updates, updatedAt: new Date() }
-          : state.currentPractice
-      })),
-      removePractice: (id) => set((state) => ({
-        practices: state.practices.filter(p => p.id !== id),
-        currentPractice: state.currentPractice?.id === id ? null : state.currentPractice
-      })),
-      setPractices: (practices) => set({ practices }),
-      setCurrentPractice: (practice) => set({ currentPractice: practice }),
+      addPractice: practice =>
+        set(state => ({
+          practices: [practice, ...state.practices],
+        })),
+      updatePractice: (id, updates) =>
+        set(state => ({
+          practices: state.practices.map(p =>
+            p.id === id ? { ...p, ...updates, updatedAt: new Date() } : p
+          ),
+          currentPractice:
+            state.currentPractice?.id === id
+              ? { ...state.currentPractice, ...updates, updatedAt: new Date() }
+              : state.currentPractice,
+        })),
+      removePractice: id =>
+        set(state => ({
+          practices: state.practices.filter(p => p.id !== id),
+          currentPractice:
+            state.currentPractice?.id === id ? null : state.currentPractice,
+        })),
+      setPractices: practices => set({ practices }),
+      setCurrentPractice: practice => set({ currentPractice: practice }),
 
       // Game Actions
-      addGame: (game) => set((state) => ({ 
-        games: [game, ...state.games] 
-      })),
-      updateGame: (id, updates) => set((state) => ({
-        games: state.games.map(g => 
-          g.id === id ? { ...g, ...updates, updatedAt: new Date() } : g
-        ),
-        currentGame: state.currentGame?.id === id 
-          ? { ...state.currentGame, ...updates, updatedAt: new Date() }
-          : state.currentGame
-      })),
-      removeGame: (id) => set((state) => ({
-        games: state.games.filter(g => g.id !== id),
-        currentGame: state.currentGame?.id === id ? null : state.currentGame
-      })),
-      setGames: (games) => set({ games }),
-      setCurrentGame: (game) => set({ currentGame: game }),
+      addGame: game =>
+        set(state => ({
+          games: [game, ...state.games],
+        })),
+      updateGame: (id, updates) =>
+        set(state => ({
+          games: state.games.map(g =>
+            g.id === id ? { ...g, ...updates, updatedAt: new Date() } : g
+          ),
+          currentGame:
+            state.currentGame?.id === id
+              ? { ...state.currentGame, ...updates, updatedAt: new Date() }
+              : state.currentGame,
+        })),
+      removeGame: id =>
+        set(state => ({
+          games: state.games.filter(g => g.id !== id),
+          currentGame: state.currentGame?.id === id ? null : state.currentGame,
+        })),
+      setGames: games => set({ games }),
+      setCurrentGame: game => set({ currentGame: game }),
 
       // AI Actions
-      addAIInsight: (insight) => set((state) => ({ 
-        aiInsights: [insight, ...state.aiInsights] 
-      })),
-      updateAIInsight: (id, updates) => set((state) => ({
-        aiInsights: state.aiInsights.map(i => 
-          i.id === id ? { ...i, ...updates, updatedAt: new Date() } : i
-        )
-      })),
-      removeAIInsight: (id) => set((state) => ({
-        aiInsights: state.aiInsights.filter(i => i.id !== id)
-      })),
-      setAIInsights: (insights) => set({ aiInsights: insights }),
-      addAIMessage: (query, response, confidence) => set((state) => ({
-        aiHistory: [
-          {
-            id: Date.now().toString(),
-            query,
-            response,
-            timestamp: new Date(),
-            confidence
-          },
-          ...state.aiHistory.slice(0, 49) // Keep last 50 messages
-        ]
-      })),
+      addAIInsight: insight =>
+        set(state => ({
+          aiInsights: [insight, ...state.aiInsights],
+        })),
+      updateAIInsight: (id, updates) =>
+        set(state => ({
+          aiInsights: state.aiInsights.map(i =>
+            i.id === id ? { ...i, ...updates, updatedAt: new Date() } : i
+          ),
+        })),
+      removeAIInsight: id =>
+        set(state => ({
+          aiInsights: state.aiInsights.filter(i => i.id !== id),
+        })),
+      setAIInsights: insights => set({ aiInsights: insights }),
+      addAIMessage: (query, response, confidence) =>
+        set(state => ({
+          aiHistory: [
+            {
+              id: Date.now().toString(),
+              query,
+              response,
+              timestamp: new Date(),
+              confidence,
+            },
+            ...state.aiHistory.slice(0, 49), // Keep last 50 messages
+          ],
+        })),
 
       // UI Actions
-      setLoading: (loading) => set({ isLoading: loading }),
-      setActiveTab: (tab) => set({ activeTab: tab }),
-      setShowHelp: (show) => set({ showHelp: show }),
+      setLoading: loading => set({ isLoading: loading }),
+      setActiveTab: tab => set({ activeTab: tab }),
+      setShowHelp: show => set({ showHelp: show }),
 
       // Offline Actions
-      addToOfflineQueue: (operation) => set((state) => ({
-        offlineQueue: [...state.offlineQueue, operation]
-      })),
-      removeFromOfflineQueue: (id) => set((state) => ({
-        offlineQueue: state.offlineQueue.filter(op => op.id !== id)
-      })),
-      setSyncStatus: (status) => set({ syncStatus: status }),
+      addToOfflineQueue: operation =>
+        set(state => ({
+          offlineQueue: [...state.offlineQueue, operation],
+        })),
+      removeFromOfflineQueue: id =>
+        set(state => ({
+          offlineQueue: state.offlineQueue.filter(op => op.id !== id),
+        })),
+      setSyncStatus: status => set({ syncStatus: status }),
 
       // Sync offline data when back online
       syncOfflineData: async () => {
@@ -233,11 +264,11 @@ export const useAppStore = create<AppState>()(
             type: op.type as 'create' | 'update' | 'delete',
             collection: op.collection,
             id: op.id,
-            data: op.data
+            data: op.data,
           }));
 
           await dataService.batchOperation(operations);
-          
+
           // Clear offline queue after successful sync
           set({ offlineQueue: [], syncStatus: 'synced' });
         } catch (error) {
@@ -251,7 +282,7 @@ export const useAppStore = create<AppState>()(
     })),
     {
       name: 'coach-core-storage',
-      partialize: (state) => ({
+      partialize: state => ({
         user: state.user,
         currentTeam: state.currentTeam,
         teams: state.teams,
@@ -263,13 +294,17 @@ export const useAppStore = create<AppState>()(
         offlineQueue: state.offlineQueue,
         syncStatus: state.syncStatus,
       }),
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => state => {
         // Rehydrate dates after storage
         if (state) {
           const rehydrateDates = (obj: any) => {
             if (obj && typeof obj === 'object') {
               Object.keys(obj).forEach(key => {
-                if (key === 'createdAt' || key === 'updatedAt' || key === 'date') {
+                if (
+                  key === 'createdAt' ||
+                  key === 'updatedAt' ||
+                  key === 'date'
+                ) {
                   if (obj[key]) {
                     obj[key] = new Date(obj[key]);
                   }
@@ -281,7 +316,7 @@ export const useAppStore = create<AppState>()(
               });
             }
           };
-          
+
           rehydrateDates(state);
         }
       },
@@ -290,38 +325,44 @@ export const useAppStore = create<AppState>()(
 );
 
 // Selectors for common data access patterns
-export const useTeamData = () => useAppStore((state) => ({
-  currentTeam: state.currentTeam,
-  players: state.players,
-  practices: state.practices,
-  games: state.games,
-  aiInsights: state.aiInsights,
-}));
+export const useTeamData = () =>
+  useAppStore(state => ({
+    currentTeam: state.currentTeam,
+    players: state.players,
+    practices: state.practices,
+    games: state.games,
+    aiInsights: state.aiInsights,
+  }));
 
-export const usePlayerData = () => useAppStore((state) => ({
-  players: state.players,
-  selectedPlayer: state.selectedPlayer,
-}));
+export const usePlayerData = () =>
+  useAppStore(state => ({
+    players: state.players,
+    selectedPlayer: state.selectedPlayer,
+  }));
 
-export const usePracticeData = () => useAppStore((state) => ({
-  practices: state.practices,
-  currentPractice: state.currentPractice,
-}));
+export const usePracticeData = () =>
+  useAppStore(state => ({
+    practices: state.practices,
+    currentPractice: state.currentPractice,
+  }));
 
-export const useGameData = () => useAppStore((state) => ({
-  games: state.games,
-  currentGame: state.currentGame,
-}));
+export const useGameData = () =>
+  useAppStore(state => ({
+    games: state.games,
+    currentGame: state.currentGame,
+  }));
 
-export const useAIState = () => useAppStore((state) => ({
-  aiInsights: state.aiInsights,
-  aiHistory: state.aiHistory,
-}));
+export const useAIState = () =>
+  useAppStore(state => ({
+    aiInsights: state.aiInsights,
+    aiHistory: state.aiHistory,
+  }));
 
-export const useOfflineState = () => useAppStore((state) => ({
-  offlineQueue: state.offlineQueue,
-  syncStatus: state.syncStatus,
-}));
+export const useOfflineState = () =>
+  useAppStore(state => ({
+    offlineQueue: state.offlineQueue,
+    syncStatus: state.syncStatus,
+  }));
 
 // Network status monitoring
 export const useNetworkStatus = () => {
@@ -354,8 +395,8 @@ export const useNetworkStatus = () => {
 
 // Auto-sync when coming back online
 useAppStore.subscribe(
-  (state) => state.syncStatus,
-  (syncStatus) => {
+  state => state.syncStatus,
+  syncStatus => {
     if (syncStatus === 'synced' && navigator.onLine) {
       // Trigger any additional sync logic here
       console.log('Data synced successfully');

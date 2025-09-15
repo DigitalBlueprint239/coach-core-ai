@@ -13,7 +13,11 @@ import {
   HStack,
   Icon,
 } from '@chakra-ui/react';
-import { TOUCH_SIZES, RESPONSIVE_FONTS, RESPONSIVE_SPACING } from '../../utils/responsive';
+import {
+  TOUCH_SIZES,
+  RESPONSIVE_FONTS,
+  RESPONSIVE_SPACING,
+} from '../../utils/responsive';
 
 interface MobileOptimizedInputProps extends Omit<InputProps, 'size'> {
   label?: string;
@@ -58,29 +62,44 @@ const MobileOptimizedInput: React.FC<MobileOptimizedInputProps> = ({
   ...rest
 }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
-  
+
   const borderColor = useColorModeValue('gray.300', 'gray.600');
   const focusBorderColor = useColorModeValue('blue.500', 'blue.400');
   const errorBorderColor = useColorModeValue('red.500', 'red.400');
   const labelColor = useColorModeValue('gray.700', 'gray.200');
   const helperColor = useColorModeValue('gray.600', 'gray.400');
   const errorColor = useColorModeValue('red.500', 'red.400');
-  
+
   // Get responsive input size
   const getInputSize = () => {
     if (isMobile) {
       // Mobile: ensure touch-friendly sizing
       switch (size) {
         case 'xs':
-          return { h: TOUCH_SIZES.input, px: 3, py: 2, fontSize: RESPONSIVE_FONTS.xs };
+          return {
+            h: TOUCH_SIZES.input,
+            px: 3,
+            py: 2,
+            fontSize: RESPONSIVE_FONTS.xs,
+          };
         case 'sm':
-          return { h: TOUCH_SIZES.input, px: 4, py: 2, fontSize: RESPONSIVE_FONTS.sm };
+          return {
+            h: TOUCH_SIZES.input,
+            px: 4,
+            py: 2,
+            fontSize: RESPONSIVE_FONTS.sm,
+          };
         case 'lg':
           return { h: '56px', px: 6, py: 3, fontSize: RESPONSIVE_FONTS.md };
         case 'xl':
           return { h: '60px', px: 8, py: 4, fontSize: RESPONSIVE_FONTS.lg };
         default: // md
-          return { h: TOUCH_SIZES.input, px: 5, py: 2, fontSize: RESPONSIVE_FONTS.sm };
+          return {
+            h: TOUCH_SIZES.input,
+            px: 5,
+            py: 2,
+            fontSize: RESPONSIVE_FONTS.sm,
+          };
       }
     } else {
       // Desktop: use standard sizing

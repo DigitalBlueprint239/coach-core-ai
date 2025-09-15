@@ -8,10 +8,10 @@ interface SyncStatusIndicatorProps {
   className?: string;
 }
 
-export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({ 
-  userId, 
+export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
+  userId,
   showDetails = false,
-  className = ''
+  className = '',
 }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [queueStats, setQueueStats] = useState<any>(null);
@@ -21,7 +21,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
 
   useEffect(() => {
     // Network status listener
-    const unsubscribe = offlineQueueManager.onNetworkStatusChange((status) => {
+    const unsubscribe = offlineQueueManager.onNetworkStatusChange(status => {
       setIsOnline(status === 'online');
       if (status === 'online') {
         setLastSync(Date.now());
@@ -57,12 +57,18 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
       }
     };
 
-    navigator.serviceWorker?.addEventListener('message', handleServiceWorkerMessage);
+    navigator.serviceWorker?.addEventListener(
+      'message',
+      handleServiceWorkerMessage
+    );
 
     return () => {
       unsubscribe();
       clearInterval(statsInterval);
-      navigator.serviceWorker?.removeEventListener('message', handleServiceWorkerMessage);
+      navigator.serviceWorker?.removeEventListener(
+        'message',
+        handleServiceWorkerMessage
+      );
     };
   }, []);
 
@@ -90,7 +96,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
   const formatLastSync = (timestamp: number) => {
     const now = Date.now();
     const diff = now - timestamp;
-    
+
     if (diff < 60000) return 'Just now';
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
@@ -99,10 +105,10 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
 
   const handleManualSync = async () => {
     if (!isOnline) return;
-    
+
     setIsProcessing(true);
     setSyncProgress(0);
-    
+
     try {
       await offlineQueueManager.processQueue();
       setLastSync(Date.now());
@@ -117,16 +123,14 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
       {/* Status Icon */}
-      <div className={`text-lg ${getStatusColor()}`}>
-        {getStatusIcon()}
-      </div>
+      <div className={`text-lg ${getStatusColor()}`}>{getStatusIcon()}</div>
 
       {/* Status Text */}
       <div className="flex flex-col">
         <span className={`text-sm font-medium ${getStatusColor()}`}>
           {getStatusText()}
         </span>
-        
+
         {lastSync && (
           <span className="text-xs text-gray-500">
             Last sync: {formatLastSync(lastSync)}
@@ -138,7 +142,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
       {isProcessing && (
         <div className="flex-1 max-w-32">
           <div className="w-full bg-gray-200 rounded-full h-1">
-            <div 
+            <div
               className="bg-blue-600 h-1 rounded-full transition-all duration-300"
               style={{ width: `${syncProgress}%` }}
             ></div>
@@ -164,11 +168,13 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
             <div>Pending: {queueStats.pending}</div>
             <div>Failed: {queueStats.failed}</div>
             {queueStats.conflicts > 0 && (
-              <div className="text-orange-600">Conflicts: {queueStats.conflicts}</div>
+              <div className="text-orange-600">
+                Conflicts: {queueStats.conflicts}
+              </div>
             )}
           </div>
         </div>
       )}
     </div>
   );
-}; 
+};

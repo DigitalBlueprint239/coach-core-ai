@@ -29,7 +29,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   disabled = false,
   options = [],
   rows = 3,
-  className = ''
+  className = '',
 }) => {
   const id = `field-${name}`;
   const hasError = !!error;
@@ -39,12 +39,15 @@ export const FormField: React.FC<FormFieldProps> = ({
       id,
       name,
       value,
-      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => 
-        onChange(e.target.value),
+      onChange: (
+        e: React.ChangeEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+      ) => onChange(e.target.value),
       placeholder,
       required,
       disabled,
-      className: `form-input ${hasError ? 'error' : ''} ${disabled ? 'disabled' : ''}`
+      className: `form-input ${hasError ? 'error' : ''} ${disabled ? 'disabled' : ''}`,
     };
 
     switch (type) {
@@ -53,13 +56,13 @@ export const FormField: React.FC<FormFieldProps> = ({
           <textarea
             {...commonProps}
             rows={rows}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
           />
         );
-      
+
       case 'select':
         return (
-          <select {...commonProps} onChange={(e) => onChange(e.target.value)}>
+          <select {...commonProps} onChange={e => onChange(e.target.value)}>
             <option value="">Select an option</option>
             {options.map(option => (
               <option key={option.value} value={option.value}>
@@ -68,7 +71,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             ))}
           </select>
         );
-      
+
       default:
         return <input {...commonProps} type={type} />;
     }
@@ -80,12 +83,12 @@ export const FormField: React.FC<FormFieldProps> = ({
         {label}
         {required && <span className="required">*</span>}
       </label>
-      
+
       {renderInput()}
-      
+
       {helpText && <p className="help-text">{helpText}</p>}
       {hasError && <p className="error-text">{error}</p>}
-      
+
       <style>{`
         .form-field {
           margin-bottom: 1rem;
@@ -148,4 +151,4 @@ export const FormField: React.FC<FormFieldProps> = ({
       `}</style>
     </div>
   );
-}; 
+};

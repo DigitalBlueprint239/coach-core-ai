@@ -28,7 +28,7 @@ describe('Play Creation with Conflict Resolution', () => {
     const testPlay = PlayFactory.create({
       name: 'Conflict Test Play',
       description: 'Initial description',
-      teamId
+      teamId,
     });
 
     cy.createPlay(testPlay);
@@ -37,8 +37,10 @@ describe('Play Creation with Conflict Resolution', () => {
     // Coach 1 starts editing
     cy.login(coach1.email, coach1.password);
     cy.visit(`/plays/${playId}/edit`);
-    cy.get('[data-testid="play-description-input"]').clear().type('Coach 1 updated description');
-    
+    cy.get('[data-testid="play-description-input"]')
+      .clear()
+      .type('Coach 1 updated description');
+
     // Coach 2 starts editing simultaneously (simulate concurrent access)
     cy.window().then(win => {
       // Simulate another session editing the same play
@@ -55,7 +57,10 @@ describe('Play Creation with Conflict Resolution', () => {
     // Verify conflict details
     cy.get('[data-testid="server-version"]').should('contain', '2');
     cy.get('[data-testid="client-version"]').should('contain', '1');
-    cy.get('[data-testid="conflict-details"]').should('contain', 'Coach 2 updated description');
+    cy.get('[data-testid="conflict-details"]').should(
+      'contain',
+      'Coach 2 updated description'
+    );
   });
 
   it('should resolve conflicts using different strategies', () => {
@@ -73,7 +78,10 @@ describe('Play Creation with Conflict Resolution', () => {
     // Test Server Wins strategy
     cy.get('[data-testid="resolve-server-wins-button"]').click();
     cy.get('[data-testid="conflict-resolved-message"]').should('be.visible');
-    cy.get('[data-testid="play-description-input"]').should('contain', 'Server version');
+    cy.get('[data-testid="play-description-input"]').should(
+      'contain',
+      'Server version'
+    );
 
     // Verify version was updated
     cy.get('[data-testid="play-version"]').should('contain', '3');
@@ -94,7 +102,10 @@ describe('Play Creation with Conflict Resolution', () => {
     // Test Client Wins strategy
     cy.get('[data-testid="resolve-client-wins-button"]').click();
     cy.get('[data-testid="conflict-resolved-message"]').should('be.visible');
-    cy.get('[data-testid="play-description-input"]').should('contain', 'Client version');
+    cy.get('[data-testid="play-description-input"]').should(
+      'contain',
+      'Client version'
+    );
 
     // Verify version was updated
     cy.get('[data-testid="play-version"]').should('contain', '3');
@@ -117,11 +128,16 @@ describe('Play Creation with Conflict Resolution', () => {
     cy.get('[data-testid="merge-editor"]').should('be.visible');
 
     // Edit merged content
-    cy.get('[data-testid="merged-description-input"]').clear().type('Merged description from both versions');
+    cy.get('[data-testid="merged-description-input"]')
+      .clear()
+      .type('Merged description from both versions');
     cy.get('[data-testid="save-merge-button"]').click();
 
     cy.get('[data-testid="conflict-resolved-message"]').should('be.visible');
-    cy.get('[data-testid="play-description-input"]').should('contain', 'Merged description');
+    cy.get('[data-testid="play-description-input"]').should(
+      'contain',
+      'Merged description'
+    );
   });
 
   it('should handle offline editing and sync conflicts', () => {
@@ -139,7 +155,9 @@ describe('Play Creation with Conflict Resolution', () => {
 
     // Edit play while offline
     cy.visit(`/plays/${playId}/edit`);
-    cy.get('[data-testid="play-description-input"]').clear().type('Offline edit - will conflict');
+    cy.get('[data-testid="play-description-input"]')
+      .clear()
+      .type('Offline edit - will conflict');
     cy.get('[data-testid="save-play-button"]').click();
 
     // Should be queued for offline sync
@@ -176,16 +194,23 @@ describe('Play Creation with Conflict Resolution', () => {
     });
 
     cy.visit(`/plays/${playId}/edit`);
-    cy.get('[data-testid="play-description-input"]').clear().type('Multiple conflict test');
+    cy.get('[data-testid="play-description-input"]')
+      .clear()
+      .type('Multiple conflict test');
     cy.get('[data-testid="save-play-button"]').click();
 
     // Should show multiple conflict options
     cy.get('[data-testid="conflict-list"]').should('be.visible');
-    cy.get('[data-testid="conflict-item"]').should('have.length.greaterThan', 1);
+    cy.get('[data-testid="conflict-item"]').should(
+      'have.length.greaterThan',
+      1
+    );
 
     // Resolve each conflict
     cy.get('[data-testid="resolve-all-conflicts-button"]').click();
-    cy.get('[data-testid="all-conflicts-resolved-message"]').should('be.visible');
+    cy.get('[data-testid="all-conflicts-resolved-message"]').should(
+      'be.visible'
+    );
   });
 
   it('should handle optimistic locking failures gracefully', () => {
@@ -200,11 +225,13 @@ describe('Play Creation with Conflict Resolution', () => {
     // Simulate optimistic locking failure
     cy.intercept('PUT', `/api/plays/${playId}`, {
       statusCode: 409,
-      body: { error: 'Version conflict detected' }
+      body: { error: 'Version conflict detected' },
     }).as('versionConflict');
 
     cy.visit(`/plays/${playId}/edit`);
-    cy.get('[data-testid="play-description-input"]').clear().type('Optimistic locking test');
+    cy.get('[data-testid="play-description-input"]')
+      .clear()
+      .type('Optimistic locking test');
     cy.get('[data-testid="save-play-button"]').click();
 
     cy.wait('@versionConflict');
@@ -212,7 +239,10 @@ describe('Play Creation with Conflict Resolution', () => {
     cy.get('[data-testid="reload-latest-button"]').click();
 
     // Should reload latest version
-    cy.get('[data-testid="play-description-input"]').should('not.contain', 'Optimistic locking test');
+    cy.get('[data-testid="play-description-input"]').should(
+      'not.contain',
+      'Optimistic locking test'
+    );
   });
 
   it('should provide conflict resolution history', () => {
@@ -237,11 +267,19 @@ describe('Play Creation with Conflict Resolution', () => {
     cy.get('[data-testid="conflict-history-item"]').should('have.length', 3);
 
     // Verify conflict details in history
-    cy.get('[data-testid="conflict-history-item"]').first().within(() => {
-      cy.get('[data-testid="conflict-resolution-strategy"]').should('contain', 'Server Wins');
-      cy.get('[data-testid="conflict-resolved-by"]').should('contain', coach1.firstName);
-      cy.get('[data-testid="conflict-timestamp"]').should('be.visible');
-    });
+    cy.get('[data-testid="conflict-history-item"]')
+      .first()
+      .within(() => {
+        cy.get('[data-testid="conflict-resolution-strategy"]').should(
+          'contain',
+          'Server Wins'
+        );
+        cy.get('[data-testid="conflict-resolved-by"]').should(
+          'contain',
+          coach1.firstName
+        );
+        cy.get('[data-testid="conflict-timestamp"]').should('be.visible');
+      });
   });
 
   it('should handle canvas position conflicts', () => {
@@ -259,7 +297,10 @@ describe('Play Creation with Conflict Resolution', () => {
 
     // Move a player position
     cy.get('[data-testid="player-position"]').first().trigger('mousedown');
-    cy.get('[data-testid="play-canvas"]').trigger('mousemove', { clientX: 100, clientY: 100 });
+    cy.get('[data-testid="play-canvas"]').trigger('mousemove', {
+      clientX: 100,
+      clientY: 100,
+    });
     cy.get('[data-testid="play-canvas"]').trigger('mouseup');
 
     // Simulate conflict with position changes
@@ -293,7 +334,10 @@ describe('Play Creation with Conflict Resolution', () => {
 
     // Modify a route
     cy.get('[data-testid="route-point"]').first().trigger('mousedown');
-    cy.get('[data-testid="play-canvas"]').trigger('mousemove', { clientX: 150, clientY: 150 });
+    cy.get('[data-testid="play-canvas"]').trigger('mousemove', {
+      clientX: 150,
+      clientY: 150,
+    });
     cy.get('[data-testid="play-canvas"]').trigger('mouseup');
 
     // Simulate route conflict
@@ -322,7 +366,7 @@ describe('Play Creation with Conflict Resolution', () => {
       const testPlay = PlayFactory.create({ teamId });
       cy.createPlay(testPlay);
       const playId = cy.url().then(url => url.split('/').pop());
-      
+
       cy.simulateConflict(playId);
       cy.get('[data-testid="resolve-server-wins-button"]').click();
       cy.get('[data-testid="conflict-resolved-message"]').should('be.visible');
@@ -331,11 +375,17 @@ describe('Play Creation with Conflict Resolution', () => {
     // Check conflict analytics
     cy.visit('/analytics/conflicts');
     cy.get('[data-testid="conflict-analytics"]').should('be.visible');
-    
+
     // Verify analytics data
     cy.get('[data-testid="total-conflicts"]').should('contain', '5');
-    cy.get('[data-testid="conflict-resolution-rate"]').should('contain', '100%');
-    cy.get('[data-testid="most-used-strategy"]').should('contain', 'Server Wins');
+    cy.get('[data-testid="conflict-resolution-rate"]').should(
+      'contain',
+      '100%'
+    );
+    cy.get('[data-testid="most-used-strategy"]').should(
+      'contain',
+      'Server Wins'
+    );
     cy.get('[data-testid="conflict-trend-chart"]').should('be.visible');
   });
-}); 
+});

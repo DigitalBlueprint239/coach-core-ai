@@ -7,13 +7,13 @@ describe('Coach Onboarding Flow', () => {
   const testCoach = UserFactory.createCoach({
     email: 'newcoach@coachcore.ai',
     firstName: 'John',
-    lastName: 'Coach'
+    lastName: 'Coach',
   });
 
   const testTeam = TeamFactory.create({
     name: 'Championship Team',
     sport: 'football',
-    level: 'high-school'
+    level: 'high-school',
   });
 
   beforeEach(() => {
@@ -35,12 +35,15 @@ describe('Coach Onboarding Flow', () => {
     // Verify email verification page
     cy.url().should('include', '/verify-email');
     cy.get('[data-testid="verification-message"]').should('be.visible');
-    cy.get('[data-testid="verification-message"]').should('contain', testCoach.email);
+    cy.get('[data-testid="verification-message"]').should(
+      'contain',
+      testCoach.email
+    );
 
     // Step 2: Email verification (mock)
     cy.task('ai:mock', {
       type: 'email-verification',
-      response: { verified: true }
+      response: { verified: true },
     });
 
     // Simulate email verification
@@ -63,7 +66,7 @@ describe('Coach Onboarding Flow', () => {
     const testPlayers = [
       { email: 'player1@coachcore.ai', role: 'QB' },
       { email: 'player2@coachcore.ai', role: 'RB' },
-      { email: 'player3@coachcore.ai', role: 'WR' }
+      { email: 'player3@coachcore.ai', role: 'WR' },
     ];
 
     testPlayers.forEach(player => {
@@ -81,17 +84,20 @@ describe('Coach Onboarding Flow', () => {
     const firstPlay = {
       name: 'First Play - QB Sneak',
       description: 'Simple quarterback sneak for short yardage',
-      formation: '4-3-4'
+      formation: '4-3-4',
     };
 
     cy.get('[data-testid="play-name-input"]').type(firstPlay.name);
-    cy.get('[data-testid="play-description-input"]').type(firstPlay.description);
+    cy.get('[data-testid="play-description-input"]').type(
+      firstPlay.description
+    );
     cy.get('[data-testid="formation-select"]').select(firstPlay.formation);
 
     // Mock AI suggestion
     cy.mockAISuggestion({
-      suggestion: 'Consider adding a fake handoff to the running back to mislead the defense.',
-      confidence: 0.85
+      suggestion:
+        'Consider adding a fake handoff to the running back to mislead the defense.',
+      confidence: 0.85,
     });
 
     cy.get('[data-testid="ai-suggest-button"]').click();
@@ -100,7 +106,10 @@ describe('Coach Onboarding Flow', () => {
 
     // Apply AI suggestion
     cy.get('[data-testid="apply-suggestion-button"]').click();
-    cy.get('[data-testid="play-description-input"]').should('contain', 'fake handoff');
+    cy.get('[data-testid="play-description-input"]').should(
+      'contain',
+      'fake handoff'
+    );
 
     // Save the play
     cy.get('[data-testid="save-play-button"]').click();
@@ -128,12 +137,15 @@ describe('Coach Onboarding Flow', () => {
     // Mock failed verification
     cy.task('ai:mock', {
       type: 'email-verification',
-      response: { verified: false, error: 'Invalid email domain' }
+      response: { verified: false, error: 'Invalid email domain' },
     });
 
     cy.visit('/verify-email/confirm?token=invalid-token');
     cy.get('[data-testid="verification-error"]').should('be.visible');
-    cy.get('[data-testid="verification-error"]').should('contain', 'Invalid email domain');
+    cy.get('[data-testid="verification-error"]').should(
+      'contain',
+      'Invalid email domain'
+    );
   });
 
   it('should validate team creation requirements', () => {
@@ -167,7 +179,9 @@ describe('Coach Onboarding Flow', () => {
     cy.get('[data-testid="email-error"]').should('be.visible');
 
     // Try to invite without role
-    cy.get('[data-testid="player-email-input"]').clear().type('valid@coachcore.ai');
+    cy.get('[data-testid="player-email-input"]')
+      .clear()
+      .type('valid@coachcore.ai');
     cy.get('[data-testid="player-role-select"]').select('');
     cy.get('[data-testid="send-invite-button"]').click();
     cy.get('[data-testid="role-error"]').should('be.visible');
@@ -188,24 +202,27 @@ describe('Coach Onboarding Flow', () => {
       suggestions: [
         {
           type: 'formation',
-          suggestion: 'Consider using a 4-3-4 formation for better offensive balance',
-          confidence: 0.9
+          suggestion:
+            'Consider using a 4-3-4 formation for better offensive balance',
+          confidence: 0.9,
         },
         {
           type: 'tactics',
           suggestion: 'Add a play-action pass to keep the defense guessing',
-          confidence: 0.85
+          confidence: 0.85,
         },
         {
           type: 'timing',
           suggestion: 'Use a quick snap count to catch the defense off guard',
-          confidence: 0.75
-        }
-      ]
+          confidence: 0.75,
+        },
+      ],
     });
 
     cy.get('[data-testid="play-name-input"]').type('AI Enhanced Play');
-    cy.get('[data-testid="play-description-input"]').type('A play designed with AI assistance');
+    cy.get('[data-testid="play-description-input"]').type(
+      'A play designed with AI assistance'
+    );
     cy.get('[data-testid="formation-select"]').select('4-3-4');
 
     // Request AI suggestions
@@ -214,21 +231,32 @@ describe('Coach Onboarding Flow', () => {
 
     // Verify suggestions are displayed
     cy.get('[data-testid="ai-suggestion"]').should('have.length', 3);
-    cy.get('[data-testid="ai-suggestion"]').first().should('contain', '4-3-4 formation');
-    cy.get('[data-testid="ai-suggestion"]').eq(1).should('contain', 'play-action pass');
-    cy.get('[data-testid="ai-suggestion"]').eq(2).should('contain', 'quick snap count');
+    cy.get('[data-testid="ai-suggestion"]')
+      .first()
+      .should('contain', '4-3-4 formation');
+    cy.get('[data-testid="ai-suggestion"]')
+      .eq(1)
+      .should('contain', 'play-action pass');
+    cy.get('[data-testid="ai-suggestion"]')
+      .eq(2)
+      .should('contain', 'quick snap count');
 
     // Apply a suggestion
     cy.get('[data-testid="apply-suggestion-button"]').first().click();
-    cy.get('[data-testid="play-description-input"]').should('contain', '4-3-4 formation');
+    cy.get('[data-testid="play-description-input"]').should(
+      'contain',
+      '4-3-4 formation'
+    );
   });
 
   it('should complete onboarding with retry logic', () => {
     // Test with network failures and retries
     cy.visit('/signup');
-    
+
     // Simulate network failure during signup
-    cy.intercept('POST', '/api/auth/signup', { statusCode: 500 }).as('signupFailure');
+    cy.intercept('POST', '/api/auth/signup', { statusCode: 500 }).as(
+      'signupFailure'
+    );
     cy.get('[data-testid="email-input"]').type(testCoach.email);
     cy.get('[data-testid="password-input"]').type(testCoach.password);
     cy.get('[data-testid="confirm-password-input"]').type(testCoach.password);
@@ -236,14 +264,17 @@ describe('Coach Onboarding Flow', () => {
     cy.get('[data-testid="last-name-input"]').type(testCoach.lastName);
     cy.get('[data-testid="role-select"]').select('coach');
     cy.get('[data-testid="signup-button"]').click();
-    
+
     cy.wait('@signupFailure');
     cy.get('[data-testid="error-message"]').should('be.visible');
 
     // Retry with success
-    cy.intercept('POST', '/api/auth/signup', { statusCode: 200, body: { success: true } }).as('signupSuccess');
+    cy.intercept('POST', '/api/auth/signup', {
+      statusCode: 200,
+      body: { success: true },
+    }).as('signupSuccess');
     cy.get('[data-testid="retry-button"]').click();
     cy.wait('@signupSuccess');
     cy.url().should('include', '/verify-email');
   });
-}); 
+});

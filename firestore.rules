@@ -1,6 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Waitlist - allow unauthenticated users to add emails (for signup)
+    // But prevent reading the data (security)
+    match /waitlist/{emailId} {
+      allow create: if true; // Anyone can add to waitlist
+      allow read, write, update, delete: if false; // No one can read/modify
+    }
+    
     // Users can read/write their own profile
     // Allow creation of new user profiles for authentication
     match /users/{userId} {

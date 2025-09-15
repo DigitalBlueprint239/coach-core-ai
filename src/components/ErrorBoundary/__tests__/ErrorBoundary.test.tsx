@@ -1,6 +1,6 @@
 /**
  * Error Boundary Tests
- * 
+ *
  * Comprehensive test suite for all error boundary components:
  * - Unit tests for each error boundary type
  * - Integration tests for error recovery
@@ -24,7 +24,7 @@ import {
   isDataError,
   isAuthError,
   isCanvasError,
-  isAIError
+  isAIError,
 } from '../index';
 
 // ============================================
@@ -38,8 +38,8 @@ jest.mock('../BaseErrorBoundary', () => {
     ...original,
     ErrorReportingService: jest.fn().mockImplementation(() => ({
       reportError: jest.fn().mockResolvedValue(undefined),
-      processQueue: jest.fn()
-    }))
+      processQueue: jest.fn(),
+    })),
   };
 });
 
@@ -54,30 +54,36 @@ jest.mock('../../../config/environment', () => ({
       projectId: 'test-project',
       storageBucket: 'test.appspot.com',
       messagingSenderId: '123456789',
-      appId: 'test-app-id'
+      appId: 'test-app-id',
     },
     API: {
       baseUrl: 'http://localhost:3001/api',
       aiServiceUrl: 'http://localhost:8000',
-      timeout: 30000
+      timeout: 30000,
     },
     AI: {
       openaiApiKey: 'test-openai-key',
       aiProxyToken: 'test-proxy-token',
-      enableAiAssistant: true
+      enableAiAssistant: true,
     },
     MONITORING: {
       sentryDsn: 'test-sentry-dsn',
       enableAnalytics: true,
-      enableErrorReporting: true
-    }
+      enableErrorReporting: true,
+    },
   })),
   isDevelopment: jest.fn(() => true),
-  isProduction: jest.fn(() => false)
+  isProduction: jest.fn(() => false),
 }));
 
 // Component that throws an error
-const ThrowError = ({ shouldThrow = false, errorType = 'generic' }: { shouldThrow?: boolean; errorType?: string }) => {
+const ThrowError = ({
+  shouldThrow = false,
+  errorType = 'generic',
+}: {
+  shouldThrow?: boolean;
+  errorType?: string;
+}) => {
   if (shouldThrow) {
     switch (errorType) {
       case 'network':
@@ -131,7 +137,7 @@ describe('BaseErrorBoundary', () => {
 
   it('calls onError callback when error occurs', () => {
     const onError = jest.fn();
-    
+
     render(
       <BaseErrorBoundary onError={onError}>
         <ThrowError shouldThrow={true} />
@@ -141,14 +147,14 @@ describe('BaseErrorBoundary', () => {
     expect(onError).toHaveBeenCalledWith(
       expect.any(Error),
       expect.objectContaining({
-        componentStack: expect.any(String)
+        componentStack: expect.any(String),
       })
     );
   });
 
   it('handles retry functionality', async () => {
     const onRecover = jest.fn();
-    
+
     render(
       <BaseErrorBoundary onRecover={onRecover} maxRetries={3}>
         <ThrowError shouldThrow={true} />
@@ -221,7 +227,7 @@ describe('CanvasErrorBoundary', () => {
 
   it('handles context recovery', () => {
     const onCanvasReset = jest.fn();
-    
+
     render(
       <CanvasErrorBoundary onCanvasReset={onCanvasReset}>
         <ThrowError shouldThrow={true} errorType="canvas" />
@@ -318,7 +324,7 @@ describe('DataLoadingErrorBoundary', () => {
 
   it('handles permission errors', () => {
     const onPermissionRequest = jest.fn();
-    
+
     render(
       <DataLoadingErrorBoundary onPermissionRequest={onPermissionRequest}>
         <ThrowError shouldThrow={true} errorType="auth" />
@@ -401,36 +407,36 @@ describe('withErrorBoundary HOC', () => {
   it('wraps component with canvas error boundary', () => {
     const TestComponent = () => <div>Test</div>;
     const WrappedComponent = withErrorBoundary(TestComponent, 'canvas');
-    
+
     render(<WrappedComponent />);
-    
+
     expect(screen.getByText('Test')).toBeInTheDocument();
   });
 
   it('wraps component with AI error boundary', () => {
     const TestComponent = () => <div>Test</div>;
     const WrappedComponent = withErrorBoundary(TestComponent, 'ai');
-    
+
     render(<WrappedComponent />);
-    
+
     expect(screen.getByText('Test')).toBeInTheDocument();
   });
 
   it('wraps component with data error boundary', () => {
     const TestComponent = () => <div>Test</div>;
     const WrappedComponent = withErrorBoundary(TestComponent, 'data');
-    
+
     render(<WrappedComponent />);
-    
+
     expect(screen.getByText('Test')).toBeInTheDocument();
   });
 
   it('wraps component with base error boundary by default', () => {
     const TestComponent = () => <div>Test</div>;
     const WrappedComponent = withErrorBoundary(TestComponent);
-    
+
     render(<WrappedComponent />);
-    
+
     expect(screen.getByText('Test')).toBeInTheDocument();
   });
 });
@@ -485,7 +491,7 @@ describe('Error Boundary Integration', () => {
 
   it('provides proper error context', () => {
     const onError = jest.fn();
-    
+
     render(
       <BaseErrorBoundary onError={onError} componentName="TestComponent">
         <ThrowError shouldThrow={true} />
@@ -495,7 +501,7 @@ describe('Error Boundary Integration', () => {
     expect(onError).toHaveBeenCalledWith(
       expect.any(Error),
       expect.objectContaining({
-        componentStack: expect.stringContaining('TestComponent')
+        componentStack: expect.stringContaining('TestComponent'),
       })
     );
   });
@@ -508,16 +514,16 @@ describe('Error Boundary Integration', () => {
 describe('Error Boundary Performance', () => {
   it('does not impact render performance significantly', () => {
     const startTime = performance.now();
-    
+
     render(
       <BaseErrorBoundary>
         <div>Performance test</div>
       </BaseErrorBoundary>
     );
-    
+
     const endTime = performance.now();
     const renderTime = endTime - startTime;
-    
+
     // Should render in under 100ms
     expect(renderTime).toBeLessThan(100);
   });
@@ -546,7 +552,9 @@ describe('Error Boundary Performance', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Component rendered successfully')).toBeInTheDocument();
+      expect(
+        screen.getByText('Component rendered successfully')
+      ).toBeInTheDocument();
     });
   });
-}); 
+});

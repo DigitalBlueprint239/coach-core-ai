@@ -44,7 +44,8 @@ class PWAService {
     this.config = {
       name: 'Coach Core',
       shortName: 'CoachCore',
-      description: 'Complete coaching platform for team management, practice planning, and strategic development',
+      description:
+        'Complete coaching platform for team management, practice planning, and strategic development',
       themeColor: '#3182ce',
       backgroundColor: '#ffffff',
       display: 'standalone',
@@ -109,22 +110,31 @@ class PWAService {
   }
 
   private checkIfInstalled(): boolean {
-    return window.matchMedia('(display-mode: standalone)').matches ||
-           (window.navigator as any).standalone === true;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true
+    );
   }
 
   private async registerServiceWorker(): Promise<void> {
     if ('serviceWorker' in navigator) {
       try {
-        this.serviceWorkerRegistration = await navigator.serviceWorker.register('/sw.js');
-        console.log('Service Worker registered:', this.serviceWorkerRegistration);
+        this.serviceWorkerRegistration =
+          await navigator.serviceWorker.register('/sw.js');
+        console.log(
+          'Service Worker registered:',
+          this.serviceWorkerRegistration
+        );
 
         // Listen for updates
         this.serviceWorkerRegistration.addEventListener('updatefound', () => {
           const newWorker = this.serviceWorkerRegistration!.installing;
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              if (
+                newWorker.state === 'installed' &&
+                navigator.serviceWorker.controller
+              ) {
                 this.updateInfo.available = true;
                 this.notifyUpdateAvailable();
               }
@@ -138,7 +148,7 @@ class PWAService {
   }
 
   private listenForInstallPrompt(): void {
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       this.deferredPrompt = e as PWAInstallPrompt;
       this.notifyInstallPromptAvailable();
@@ -172,7 +182,7 @@ class PWAService {
     try {
       await this.deferredPrompt.prompt();
       const choiceResult = await this.deferredPrompt.userChoice;
-      
+
       if (choiceResult.outcome === 'accepted') {
         console.log('PWA installed successfully');
         this.isInstalled = true;
@@ -244,10 +254,7 @@ class PWAService {
     }
   }
 
-  public async cacheData(
-    cacheName: string,
-    urls: string[]
-  ): Promise<boolean> {
+  public async cacheData(cacheName: string, urls: string[]): Promise<boolean> {
     if (!('caches' in window)) {
       return false;
     }
@@ -336,9 +343,11 @@ class PWAService {
 
   private notifyOnlineStatus(isOnline: boolean): void {
     // Dispatch custom event for UI to listen to
-    window.dispatchEvent(new CustomEvent('pwa-online-status', {
-      detail: { isOnline }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('pwa-online-status', {
+        detail: { isOnline },
+      })
+    );
   }
 
   // **Utility Methods**

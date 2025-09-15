@@ -44,12 +44,13 @@ const brandColors = {
     orange: '#fd7e14',
     pink: '#d63384',
     teal: '#20c997',
-  }
+  },
 };
 
 // Modern typography
 const fonts = {
-  heading: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
+  heading:
+    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
   body: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
   mono: '"JetBrains Mono", "Fira Code", Consolas, "Liberation Mono", Menlo, Courier, monospace',
 };
@@ -112,7 +113,7 @@ const components = {
           boxShadow: 'brand-glow',
         },
       },
-      'inclusive': {
+      inclusive: {
         bg: 'inclusive.blue',
         color: 'white',
         _hover: {

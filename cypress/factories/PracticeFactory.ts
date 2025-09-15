@@ -37,11 +37,13 @@ export class PracticeFactory {
 
   static create(overrides: Partial<Practice> = {}): Practice {
     const id = `practice_${this.counter++}`;
-    
+
     return {
       id,
       name: `Test Practice ${id}`,
-      date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Tomorrow
+      date: new Date(Date.now() + 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split('T')[0], // Tomorrow
       duration: 90,
       teamId: `team_${id}`,
       createdBy: `coach_${id}`,
@@ -51,21 +53,27 @@ export class PracticeFactory {
       notes: 'Test practice notes',
       createdAt: new Date(),
       updatedAt: new Date(),
-      ...overrides
+      ...overrides,
     };
   }
 
-  static createWithDrills(drillCount: number, overrides: Partial<Practice> = {}): Practice {
+  static createWithDrills(
+    drillCount: number,
+    overrides: Partial<Practice> = {}
+  ): Practice {
     return this.create({
       drills: this.generateDrills(drillCount),
-      ...overrides
+      ...overrides,
     });
   }
 
-  static createWithAttendance(playerCount: number, overrides: Partial<Practice> = {}): Practice {
+  static createWithAttendance(
+    playerCount: number,
+    overrides: Partial<Practice> = {}
+  ): Practice {
     return this.create({
       attendance: this.generateAttendance(playerCount),
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -73,15 +81,17 @@ export class PracticeFactory {
     return this.create({
       status: 'in-progress',
       date: new Date().toISOString().split('T')[0], // Today
-      ...overrides
+      ...overrides,
     });
   }
 
   static createCompleted(overrides: Partial<Practice> = {}): Practice {
     return this.create({
       status: 'completed',
-      date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Yesterday
-      ...overrides
+      date: new Date(Date.now() - 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split('T')[0], // Yesterday
+      ...overrides,
     });
   }
 
@@ -92,7 +102,7 @@ export class PracticeFactory {
       drills: this.generateComplexDrills(),
       attendance: this.generateAttendance(15),
       notes: 'Complex practice with multiple drills and full attendance',
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -105,7 +115,11 @@ export class PracticeFactory {
         duration: 10,
         category: 'warmup',
         equipment: [],
-        instructions: ['Start with neck stretches', 'Move to shoulder stretches', 'Finish with leg stretches']
+        instructions: [
+          'Start with neck stretches',
+          'Move to shoulder stretches',
+          'Finish with leg stretches',
+        ],
       },
       {
         id: 'drill_2',
@@ -114,8 +128,12 @@ export class PracticeFactory {
         duration: 20,
         category: 'skill',
         equipment: ['footballs'],
-        instructions: ['QB throws to stationary receivers', 'Add movement patterns', 'Practice different routes']
-      }
+        instructions: [
+          'QB throws to stationary receivers',
+          'Add movement patterns',
+          'Practice different routes',
+        ],
+      },
     ];
   }
 
@@ -125,32 +143,32 @@ export class PracticeFactory {
         name: 'Warm-up Stretches',
         category: 'warmup' as const,
         duration: 10,
-        equipment: []
+        equipment: [],
       },
       {
         name: 'Passing Practice',
         category: 'skill' as const,
         duration: 20,
-        equipment: ['footballs']
+        equipment: ['footballs'],
       },
       {
         name: 'Tackling Drills',
         category: 'skill' as const,
         duration: 25,
-        equipment: ['tackling dummies']
+        equipment: ['tackling dummies'],
       },
       {
         name: 'Route Running',
         category: 'skill' as const,
         duration: 15,
-        equipment: ['cones']
+        equipment: ['cones'],
       },
       {
         name: 'Conditioning',
         category: 'conditioning' as const,
         duration: 30,
-        equipment: []
-      }
+        equipment: [],
+      },
     ];
 
     return Array.from({ length: count }, (_, i) => ({
@@ -160,7 +178,11 @@ export class PracticeFactory {
       duration: drillTypes[i % drillTypes.length].duration,
       category: drillTypes[i % drillTypes.length].category,
       equipment: drillTypes[i % drillTypes.length].equipment,
-      instructions: [`Step 1 for drill ${i + 1}`, `Step 2 for drill ${i + 1}`, `Step 3 for drill ${i + 1}`]
+      instructions: [
+        `Step 1 for drill ${i + 1}`,
+        `Step 2 for drill ${i + 1}`,
+        `Step 3 for drill ${i + 1}`,
+      ],
     }));
   }
 
@@ -173,7 +195,11 @@ export class PracticeFactory {
         duration: 15,
         category: 'warmup',
         equipment: ['foam rollers', 'resistance bands'],
-        instructions: ['Dynamic stretching', 'Mobility work', 'Activation exercises']
+        instructions: [
+          'Dynamic stretching',
+          'Mobility work',
+          'Activation exercises',
+        ],
       },
       {
         id: 'drill_2',
@@ -182,7 +208,11 @@ export class PracticeFactory {
         duration: 30,
         category: 'skill',
         equipment: ['footballs', 'cones', 'timing devices'],
-        instructions: ['Set up route tree', 'Practice timing', 'Add defensive pressure']
+        instructions: [
+          'Set up route tree',
+          'Practice timing',
+          'Add defensive pressure',
+        ],
       },
       {
         id: 'drill_3',
@@ -191,7 +221,11 @@ export class PracticeFactory {
         duration: 25,
         category: 'tactical',
         equipment: ['whiteboard', 'cones'],
-        instructions: ['Review defensive schemes', 'Practice communication', 'Live team drills']
+        instructions: [
+          'Review defensive schemes',
+          'Practice communication',
+          'Live team drills',
+        ],
       },
       {
         id: 'drill_4',
@@ -200,23 +234,39 @@ export class PracticeFactory {
         duration: 20,
         category: 'conditioning',
         equipment: ['weights', 'resistance bands'],
-        instructions: ['Circuit training', 'Interval sprints', 'Strength exercises']
-      }
+        instructions: [
+          'Circuit training',
+          'Interval sprints',
+          'Strength exercises',
+        ],
+      },
     ];
   }
 
   private static generateAttendance(playerCount: number): AttendanceRecord[] {
-    const statuses: AttendanceRecord['status'][] = ['present', 'absent', 'late', 'excused'];
-    
+    const statuses: AttendanceRecord['status'][] = [
+      'present',
+      'absent',
+      'late',
+      'excused',
+    ];
+
     return Array.from({ length: playerCount }, (_, i) => ({
       playerId: `player_${i + 1}`,
       status: statuses[i % statuses.length],
-      checkInTime: statuses[i % statuses.length] === 'present' ? new Date() : undefined,
-      notes: statuses[i % statuses.length] === 'excused' ? 'Doctor appointment' : undefined
+      checkInTime:
+        statuses[i % statuses.length] === 'present' ? new Date() : undefined,
+      notes:
+        statuses[i % statuses.length] === 'excused'
+          ? 'Doctor appointment'
+          : undefined,
     }));
   }
 
-  static createMultiple(count: number, overrides: Partial<Practice> = {}): Practice[] {
+  static createMultiple(
+    count: number,
+    overrides: Partial<Practice> = {}
+  ): Practice[] {
     return Array.from({ length: count }, () => this.create(overrides));
   }
-} 
+}

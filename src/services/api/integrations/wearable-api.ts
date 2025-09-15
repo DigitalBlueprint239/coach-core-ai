@@ -3,7 +3,12 @@ import apiService from '../api-service';
 export interface WearableDevice {
   id: string;
   name: string;
-  type: 'fitness-tracker' | 'smartwatch' | 'heart-rate-monitor' | 'gps-tracker' | 'sleep-tracker';
+  type:
+    | 'fitness-tracker'
+    | 'smartwatch'
+    | 'heart-rate-monitor'
+    | 'gps-tracker'
+    | 'sleep-tracker';
   brand: string;
   model: string;
   playerId: string;
@@ -127,12 +132,15 @@ class WearableAPIService {
   constructor() {
     this.fitbitClientId = process.env.REACT_APP_FITBIT_CLIENT_ID || '';
     this.garminConsumerKey = process.env.REACT_APP_GARMIN_CONSUMER_KEY || '';
-    this.appleHealthKitEnabled = process.env.REACT_APP_APPLE_HEALTH_KIT === 'true';
+    this.appleHealthKitEnabled =
+      process.env.REACT_APP_APPLE_HEALTH_KIT === 'true';
     this.googleFitEnabled = process.env.REACT_APP_GOOGLE_FIT === 'true';
   }
 
   // Device Management
-  async registerDevice(deviceData: Partial<WearableDevice>): Promise<WearableDevice> {
+  async registerDevice(
+    deviceData: Partial<WearableDevice>
+  ): Promise<WearableDevice> {
     try {
       const response = await apiService.post('/wearables/devices', deviceData);
 
@@ -149,7 +157,9 @@ class WearableAPIService {
 
   async getPlayerDevices(playerId: string): Promise<WearableDevice[]> {
     try {
-      const response = await apiService.get(`/wearables/players/${playerId}/devices`);
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/devices`
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch player devices');
@@ -162,9 +172,15 @@ class WearableAPIService {
     }
   }
 
-  async updateDevice(deviceId: string, updates: Partial<WearableDevice>): Promise<WearableDevice> {
+  async updateDevice(
+    deviceId: string,
+    updates: Partial<WearableDevice>
+  ): Promise<WearableDevice> {
     try {
-      const response = await apiService.patch(`/wearables/devices/${deviceId}`, updates);
+      const response = await apiService.patch(
+        `/wearables/devices/${deviceId}`,
+        updates
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to update device');
@@ -179,10 +195,13 @@ class WearableAPIService {
 
   async deactivateDevice(deviceId: string): Promise<boolean> {
     try {
-      const response = await apiService.patch(`/wearables/devices/${deviceId}`, {
-        isActive: false,
-        lastSync: new Date(),
-      });
+      const response = await apiService.patch(
+        `/wearables/devices/${deviceId}`,
+        {
+          isActive: false,
+          lastSync: new Date(),
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to deactivate device');
@@ -196,7 +215,10 @@ class WearableAPIService {
   }
 
   // Fitbit Integration
-  async connectFitbit(playerId: string, authCode: string): Promise<WearableDevice> {
+  async connectFitbit(
+    playerId: string,
+    authCode: string
+  ): Promise<WearableDevice> {
     try {
       const response = await apiService.post('/wearables/fitbit/connect', {
         playerId,
@@ -215,7 +237,11 @@ class WearableAPIService {
     }
   }
 
-  async syncFitbitData(deviceId: string, startDate: Date, endDate: Date): Promise<WearableDataSync> {
+  async syncFitbitData(
+    deviceId: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<WearableDataSync> {
     try {
       const response = await apiService.post(`/wearables/fitbit/sync`, {
         deviceId,
@@ -235,7 +261,10 @@ class WearableAPIService {
   }
 
   // Garmin Integration
-  async connectGarmin(playerId: string, authToken: string): Promise<WearableDevice> {
+  async connectGarmin(
+    playerId: string,
+    authToken: string
+  ): Promise<WearableDevice> {
     try {
       const response = await apiService.post('/wearables/garmin/connect', {
         playerId,
@@ -254,7 +283,11 @@ class WearableAPIService {
     }
   }
 
-  async syncGarminData(deviceId: string, startDate: Date, endDate: Date): Promise<WearableDataSync> {
+  async syncGarminData(
+    deviceId: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<WearableDataSync> {
     try {
       const response = await apiService.post(`/wearables/garmin/sync`, {
         deviceId,
@@ -274,16 +307,22 @@ class WearableAPIService {
   }
 
   // Apple HealthKit Integration
-  async connectAppleHealthKit(playerId: string, healthData: any): Promise<WearableDevice> {
+  async connectAppleHealthKit(
+    playerId: string,
+    healthData: any
+  ): Promise<WearableDevice> {
     if (!this.appleHealthKitEnabled) {
       throw new Error('Apple HealthKit integration is not enabled');
     }
 
     try {
-      const response = await apiService.post('/wearables/apple-healthkit/connect', {
-        playerId,
-        healthData,
-      });
+      const response = await apiService.post(
+        '/wearables/apple-healthkit/connect',
+        {
+          playerId,
+          healthData,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to connect Apple HealthKit');
@@ -297,7 +336,10 @@ class WearableAPIService {
   }
 
   // Google Fit Integration
-  async connectGoogleFit(playerId: string, accessToken: string): Promise<WearableDevice> {
+  async connectGoogleFit(
+    playerId: string,
+    accessToken: string
+  ): Promise<WearableDevice> {
     if (!this.googleFitEnabled) {
       throw new Error('Google Fit integration is not enabled');
     }
@@ -336,7 +378,10 @@ class WearableAPIService {
         params.metrics = metrics.join(',');
       }
 
-      const response = await apiService.get(`/wearables/players/${playerId}/metrics`, params);
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/metrics`,
+        params
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch health metrics');
@@ -349,12 +394,18 @@ class WearableAPIService {
     }
   }
 
-  async getLatestHealthMetrics(playerId: string): Promise<HealthMetrics | null> {
+  async getLatestHealthMetrics(
+    playerId: string
+  ): Promise<HealthMetrics | null> {
     try {
-      const response = await apiService.get(`/wearables/players/${playerId}/metrics/latest`);
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/metrics/latest`
+      );
 
       if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch latest health metrics');
+        throw new Error(
+          response.error || 'Failed to fetch latest health metrics'
+        );
       }
 
       return response.data;
@@ -370,12 +421,17 @@ class WearableAPIService {
     date: Date
   ): Promise<PerformanceMetrics> {
     try {
-      const response = await apiService.get(`/wearables/players/${playerId}/performance`, {
-        date: date.toISOString(),
-      });
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/performance`,
+        {
+          date: date.toISOString(),
+        }
+      );
 
       if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch performance metrics');
+        throw new Error(
+          response.error || 'Failed to fetch performance metrics'
+        );
       }
 
       return response.data;
@@ -390,9 +446,12 @@ class WearableAPIService {
     days: number = 30
   ): Promise<PerformanceMetrics[]> {
     try {
-      const response = await apiService.get(`/wearables/players/${playerId}/performance/trends`, {
-        days,
-      });
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/performance/trends`,
+        {
+          days,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch performance trends');
@@ -419,12 +478,17 @@ class WearableAPIService {
     recommendations: string[];
   }> {
     try {
-      const response = await apiService.get(`/wearables/teams/${teamId}/performance`, {
-        date: date.toISOString(),
-      });
+      const response = await apiService.get(
+        `/wearables/teams/${teamId}/performance`,
+        {
+          date: date.toISOString(),
+        }
+      );
 
       if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch team performance overview');
+        throw new Error(
+          response.error || 'Failed to fetch team performance overview'
+        );
       }
 
       return response.data;
@@ -440,9 +504,12 @@ class WearableAPIService {
     unreadOnly: boolean = false
   ): Promise<WearableAlert[]> {
     try {
-      const response = await apiService.get(`/wearables/players/${playerId}/alerts`, {
-        unreadOnly,
-      });
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/alerts`,
+        {
+          unreadOnly,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch wearable alerts');
@@ -478,9 +545,12 @@ class WearableAPIService {
     limit: number = 50
   ): Promise<WearableDataSync[]> {
     try {
-      const response = await apiService.get(`/wearables/devices/${deviceId}/sync-history`, {
-        limit,
-      });
+      const response = await apiService.get(
+        `/wearables/devices/${deviceId}/sync-history`,
+        {
+          limit,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch sync history');
@@ -495,7 +565,9 @@ class WearableAPIService {
 
   async forceDataSync(deviceId: string): Promise<WearableDataSync> {
     try {
-      const response = await apiService.post(`/wearables/devices/${deviceId}/force-sync`);
+      const response = await apiService.post(
+        `/wearables/devices/${deviceId}/force-sync`
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to force data sync');
@@ -525,9 +597,12 @@ class WearableAPIService {
     improvementAreas: string[];
   }> {
     try {
-      const response = await apiService.get(`/wearables/players/${playerId}/insights`, {
-        timeframe,
-      });
+      const response = await apiService.get(
+        `/wearables/players/${playerId}/insights`,
+        {
+          timeframe,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch player insights');
@@ -548,11 +623,14 @@ class WearableAPIService {
     format: 'csv' | 'json' | 'pdf' = 'csv'
   ): Promise<string> {
     try {
-      const response = await apiService.post(`/wearables/players/${playerId}/export`, {
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-        format,
-      });
+      const response = await apiService.post(
+        `/wearables/players/${playerId}/export`,
+        {
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          format,
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to export health data');

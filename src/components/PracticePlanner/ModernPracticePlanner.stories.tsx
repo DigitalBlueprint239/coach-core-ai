@@ -8,7 +8,8 @@ const meta: Meta<typeof ModernPracticePlanner> = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A modern practice planner with drag-and-drop functionality, AI integration, and improved visual design.',
+        component:
+          'A modern practice planner with drag-and-drop functionality, AI integration, and improved visual design.',
       },
     },
   },
@@ -28,7 +29,8 @@ export const WithGeneratedPlan: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Practice planner with an AI-generated practice plan showing periods and drills.',
+        story:
+          'Practice planner with an AI-generated practice plan showing periods and drills.',
       },
     },
   },

@@ -6,10 +6,10 @@ interface AnimatedCardProps extends BoxProps {
   delay?: number;
 }
 
-const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
-  children, 
-  delay = 0, 
-  ...props 
+const AnimatedCard: React.FC<AnimatedCardProps> = ({
+  children,
+  delay = 0,
+  ...props
 }) => {
   return (
     <Box
@@ -41,4 +41,3 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
 };
 
 export default AnimatedCard;
-

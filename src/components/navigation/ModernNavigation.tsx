@@ -52,6 +52,7 @@ import {
   HelpCircle,
   Sun,
   Moon,
+  Play,
 } from 'lucide-react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../services/state/app-store';
@@ -63,40 +64,93 @@ const ModernNavigation: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
-  
+
   const { user, currentTeam, setUser, clearStore } = useAppStore();
-  
+
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const textColor = useColorModeValue('gray.800', 'white');
   const brandColor = useColorModeValue('blue.600', 'blue.400');
-  
+
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   // Navigation items
   const navigationItems = [
-    { name: 'Dashboard', path: '/', icon: Home, description: 'Overview and analytics' },
-    { name: 'Team', path: '/team', icon: Users, description: 'Player management and roster' },
-    { name: 'Practice', path: '/practice', icon: Target, description: 'Practice planning and drills' },
-    { name: 'Games', path: '/games', icon: Trophy, description: 'Game management and stats' },
-    { name: 'AI Brain', path: '/ai-brain', icon: Brain, description: 'AI-powered coaching insights' },
-    { name: 'Analytics', path: '/analytics', icon: BarChart3, description: 'Performance metrics and reports' },
-    { name: 'Playbook', path: '/playbook', icon: BookOpen, description: 'Team plays and strategies' },
-    { name: 'Communication', path: '/communication', icon: MessageSquare, description: 'Team messaging and updates' },
+    {
+      name: 'Dashboard',
+      path: '/',
+      icon: Home,
+      description: 'Overview and analytics',
+    },
+    {
+      name: 'Team',
+      path: '/team',
+      icon: Users,
+      description: 'Player management and roster',
+    },
+    {
+      name: 'Practice',
+      path: '/practice',
+      icon: Target,
+      description: 'Practice planning and drills',
+    },
+    {
+      name: 'Games',
+      path: '/games',
+      icon: Trophy,
+      description: 'Game management and stats',
+    },
+    {
+      name: 'AI Brain',
+      path: '/ai-brain',
+      icon: Brain,
+      description: 'AI-powered coaching insights',
+    },
+    {
+      name: 'AI Play Generator',
+      path: '/ai-play-generator',
+      icon: Play,
+      description: 'Generate AI-powered football plays',
+    },
+    {
+      name: 'Analytics',
+      path: '/analytics',
+      icon: BarChart3,
+      description: 'Performance metrics and reports',
+    },
+    {
+      name: 'Playbook',
+      path: '/playbook',
+      icon: BookOpen,
+      description: 'Team plays and strategies',
+    },
+    {
+      name: 'Communication',
+      path: '/communication',
+      icon: MessageSquare,
+      description: 'Team messaging and updates',
+    },
+    {
+      name: 'Performance',
+      path: '/performance',
+      icon: BarChart3,
+      description: 'App performance monitoring',
+    },
   ];
 
   // Generate breadcrumbs based on current location
   const generateBreadcrumbs = () => {
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const breadcrumbs = [{ name: 'Home', path: '/' }];
-    
+
     let currentPath = '';
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`;
-      const name = segment.charAt(0).toUpperCase() + segment.slice(1).replace('-', ' ');
+      const name =
+        segment.charAt(0).toUpperCase() + segment.slice(1).replace('-', ' ');
       breadcrumbs.push({ name, path: currentPath });
     });
-    
+
     return breadcrumbs;
   };
 
@@ -127,14 +181,20 @@ const ModernNavigation: React.FC = () => {
 
   // Get current page title
   const getCurrentPageTitle = () => {
-    const currentItem = navigationItems.find(item => item.path === location.pathname);
+    const currentItem = navigationItems.find(
+      item => item.path === location.pathname
+    );
     return currentItem ? currentItem.name : 'Coach Core AI';
   };
 
   // Get current page description
   const getCurrentPageDescription = () => {
-    const currentItem = navigationItems.find(item => item.path === location.pathname);
-    return currentItem ? currentItem.description : 'AI-powered youth football coaching platform';
+    const currentItem = navigationItems.find(
+      item => item.path === location.pathname
+    );
+    return currentItem
+      ? currentItem.description
+      : 'AI-powered youth football coaching platform';
   };
 
   return (
@@ -163,7 +223,7 @@ const ModernNavigation: React.FC = () => {
               onClick={onOpen}
               display={{ base: 'flex', md: 'none' }}
             />
-            
+
             <Link to="/">
               <HStack spacing={3} cursor="pointer">
                 <Box
@@ -194,16 +254,27 @@ const ModernNavigation: React.FC = () => {
 
           {/* Desktop Navigation */}
           <HStack spacing={6} display={{ base: 'none', md: 'flex' }}>
-            {navigationItems.map((item) => (
-              <Tooltip key={item.path} label={item.description} placement="bottom">
+            {navigationItems.map(item => (
+              <Tooltip
+                key={item.path}
+                label={item.description}
+                placement="bottom"
+              >
                 <Link to={item.path}>
                   <Button
-                    variant={location.pathname === item.path ? 'solid' : 'ghost'}
-                    colorScheme={location.pathname === item.path ? 'blue' : 'gray'}
+                    variant={
+                      location.pathname === item.path ? 'solid' : 'ghost'
+                    }
+                    colorScheme={
+                      location.pathname === item.path ? 'blue' : 'gray'
+                    }
                     size="sm"
                     leftIcon={<item.icon size={16} />}
                     _hover={{
-                      bg: location.pathname === item.path ? 'blue.600' : 'gray.100',
+                      bg:
+                        location.pathname === item.path
+                          ? 'blue.600'
+                          : 'gray.100',
                     }}
                   >
                     {item.name}
@@ -250,35 +321,50 @@ const ModernNavigation: React.FC = () => {
                 _hover={{ bg: 'gray.100' }}
               >
                 <HStack spacing={3}>
-                  <Avatar size="sm" name={user?.displayName || 'Coach'} src={user?.photoURL || undefined}>
+                  <Avatar
+                    size="sm"
+                    name={user?.displayName || 'Coach'}
+                    src={user?.photoURL || undefined}
+                  >
                     {user?.role === 'head-coach' && (
                       <AvatarBadge boxSize="1em" bg="green.500" />
                     )}
                   </Avatar>
-                  <VStack spacing={0} align="start" display={{ base: 'none', lg: 'flex' }}>
+                  <VStack
+                    spacing={0}
+                    align="start"
+                    display={{ base: 'none', lg: 'flex' }}
+                  >
                     <Text fontSize="sm" fontWeight="medium" color={textColor}>
                       {user?.displayName || 'Coach'}
                     </Text>
                     <Text fontSize="xs" color="gray.500">
-                      {user?.role?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Coach'}
+                      {user?.role
+                        ?.replace('-', ' ')
+                        .replace(/\b\w/g, l => l.toUpperCase()) || 'Coach'}
                     </Text>
                   </VStack>
                 </HStack>
               </MenuButton>
-              
+
               <MenuList>
-                <MenuItem icon={<User size={16} />} onClick={() => setIsProfileOpen(true)}>
+                <MenuItem
+                  icon={<User size={16} />}
+                  onClick={() => setIsProfileOpen(true)}
+                >
                   Profile Settings
                 </MenuItem>
-                <MenuItem icon={<Settings size={16} />}>
-                  App Settings
-                </MenuItem>
+                <MenuItem icon={<Settings size={16} />}>App Settings</MenuItem>
                 <MenuDivider />
                 <MenuItem icon={<HelpCircle size={16} />}>
                   Help & Support
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem icon={<LogOut size={16} />} onClick={handleSignOut} color="red.600">
+                <MenuItem
+                  icon={<LogOut size={16} />}
+                  onClick={handleSignOut}
+                  color="red.600"
+                >
                   Sign Out
                 </MenuItem>
               </MenuList>
@@ -303,12 +389,23 @@ const ModernNavigation: React.FC = () => {
             fontSize="sm"
           >
             {generateBreadcrumbs().map((breadcrumb, index) => (
-              <BreadcrumbItem key={breadcrumb.path} isCurrentPage={index === generateBreadcrumbs().length - 1}>
+              <BreadcrumbItem
+                key={breadcrumb.path}
+                isCurrentPage={index === generateBreadcrumbs().length - 1}
+              >
                 <BreadcrumbLink
                   as={Link}
                   to={breadcrumb.path}
-                  color={index === generateBreadcrumbs().length - 1 ? 'gray.800' : 'gray.600'}
-                  fontWeight={index === generateBreadcrumbs().length - 1 ? 'semibold' : 'normal'}
+                  color={
+                    index === generateBreadcrumbs().length - 1
+                      ? 'gray.800'
+                      : 'gray.600'
+                  }
+                  fontWeight={
+                    index === generateBreadcrumbs().length - 1
+                      ? 'semibold'
+                      : 'normal'
+                  }
                   _hover={{ color: 'blue.600' }}
                 >
                   {breadcrumb.name}
@@ -355,7 +452,7 @@ const ModernNavigation: React.FC = () => {
 
       {/* Mobile Navigation Drawer */}
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="xs">
-        <DrawerOverlay />
+        {/* <DrawerOverlay /> */}
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">
@@ -376,21 +473,28 @@ const ModernNavigation: React.FC = () => {
               <Text fontWeight="bold">Coach Core</Text>
             </HStack>
           </DrawerHeader>
-          
+
           <DrawerBody p={0}>
             <VStack spacing={0} align="stretch">
-              {navigationItems.map((item) => (
+              {navigationItems.map(item => (
                 <Link key={item.path} to={item.path} onClick={onClose}>
                   <Button
-                    variant={location.pathname === item.path ? 'solid' : 'ghost'}
-                    colorScheme={location.pathname === item.path ? 'blue' : 'gray'}
+                    variant={
+                      location.pathname === item.path ? 'solid' : 'ghost'
+                    }
+                    colorScheme={
+                      location.pathname === item.path ? 'blue' : 'gray'
+                    }
                     size="lg"
                     w="full"
                     justifyContent="start"
                     leftIcon={<item.icon size={18} />}
                     borderRadius={0}
                     _hover={{
-                      bg: location.pathname === item.path ? 'blue.600' : 'gray.100',
+                      bg:
+                        location.pathname === item.path
+                          ? 'blue.600'
+                          : 'gray.100',
                     }}
                   >
                     <VStack spacing={1} align="start" flex={1}>
@@ -402,9 +506,9 @@ const ModernNavigation: React.FC = () => {
                   </Button>
                 </Link>
               ))}
-              
+
               <Divider my={4} />
-              
+
               <VStack spacing={2} p={4}>
                 <Text fontSize="sm" fontWeight="medium" color="gray.600">
                   Team: {currentTeam?.name || 'No Team Selected'}

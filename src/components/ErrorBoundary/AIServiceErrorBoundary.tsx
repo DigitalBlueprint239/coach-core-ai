@@ -1,6 +1,6 @@
 /**
  * AI Service Error Boundary
- * 
+ *
  * Specialized error boundary for AI-related components:
  * - PracticePlanner (AI service failures)
  * - OpenAI API errors
@@ -10,7 +10,10 @@
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import BaseErrorBoundary, { ErrorBoundaryProps, ErrorBoundaryState } from './BaseErrorBoundary';
+import BaseErrorBoundary, {
+  ErrorBoundaryProps,
+  ErrorBoundaryState,
+} from './BaseErrorBoundary';
 import { isAIError, isNetworkError } from './BaseErrorBoundary';
 
 export interface AIServiceErrorBoundaryProps extends ErrorBoundaryProps {
@@ -32,7 +35,10 @@ export interface AIServiceErrorBoundaryState extends ErrorBoundaryState {
   fallbackMode: boolean;
 }
 
-export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProps, AIServiceErrorBoundaryState> {
+export class AIServiceErrorBoundary extends Component<
+  AIServiceErrorBoundaryProps,
+  AIServiceErrorBoundaryState
+> {
   private retryBackoffTimeout: NodeJS.Timeout | null = null;
   private serviceCheckInterval: NodeJS.Timeout | null = null;
 
@@ -42,7 +48,7 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
       ...this.state,
       serviceStatus: 'online',
       lastErrorType: 'unknown',
-      fallbackMode: false
+      fallbackMode: false,
     };
   }
 
@@ -63,10 +69,10 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Determine error type
     const errorType = this.classifyAIError(error);
-    
-    this.setState({ 
+
+    this.setState({
       lastErrorType: errorType,
-      serviceStatus: this.determineServiceStatus(errorType)
+      serviceStatus: this.determineServiceStatus(errorType),
     });
 
     // Handle rate limiting
@@ -83,29 +89,37 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
     super.componentDidCatch(error, errorInfo);
   }
 
-  private classifyAIError(error: Error): 'api' | 'network' | 'model' | 'rate_limit' | 'unknown' {
+  private classifyAIError(
+    error: Error
+  ): 'api' | 'network' | 'model' | 'rate_limit' | 'unknown' {
     const message = error.message.toLowerCase();
-    
+
     if (message.includes('rate limit') || message.includes('429')) {
       return 'rate_limit';
     }
-    
+
     if (message.includes('api key') || message.includes('authentication')) {
       return 'api';
     }
-    
-    if (message.includes('model') || message.includes('gpt') || message.includes('openai')) {
+
+    if (
+      message.includes('model') ||
+      message.includes('gpt') ||
+      message.includes('openai')
+    ) {
       return 'model';
     }
-    
+
     if (isNetworkError(error)) {
       return 'network';
     }
-    
+
     return 'unknown';
   }
 
-  private determineServiceStatus(errorType: string): 'online' | 'offline' | 'degraded' {
+  private determineServiceStatus(
+    errorType: string
+  ): 'online' | 'offline' | 'degraded' {
     switch (errorType) {
       case 'rate_limit':
         return 'degraded';
@@ -130,10 +144,12 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
     if (resetMatch || limitMatch || remainingMatch) {
       this.setState({
         rateLimitInfo: {
-          resetTime: resetMatch ? parseInt(resetMatch[1]) * 1000 : Date.now() + 60000,
+          resetTime: resetMatch
+            ? parseInt(resetMatch[1]) * 1000
+            : Date.now() + 60000,
           limit: limitMatch ? parseInt(limitMatch[1]) : 0,
-          remaining: remainingMatch ? parseInt(remainingMatch[1]) : 0
-        }
+          remaining: remainingMatch ? parseInt(remainingMatch[1]) : 0,
+        },
       });
     }
   }
@@ -146,11 +162,11 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
 
   private async checkServiceHealth(): Promise<void> {
     try {
-      const response = await fetch('/api/health', { 
+      const response = await fetch('/api/health', {
         method: 'GET',
-        timeout: 5000 
+        timeout: 5000,
       });
-      
+
       if (response.ok) {
         this.setState({ serviceStatus: 'online' });
       } else {
@@ -168,7 +184,7 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
       fallbackMode: false,
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     });
 
     if (this.props.onAIServiceReset) {
@@ -178,7 +194,7 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
 
   private handleFallbackMode = (): void => {
     this.setState({ fallbackMode: true });
-    
+
     if (this.props.onFallbackMode) {
       this.props.onFallbackMode();
     }
@@ -200,30 +216,36 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
 
   private getErrorMessage(): string {
     const { lastErrorType, serviceStatus, rateLimitInfo } = this.state;
-    
+
     switch (lastErrorType) {
       case 'rate_limit':
         if (rateLimitInfo) {
-          const resetTime = new Date(rateLimitInfo.resetTime).toLocaleTimeString();
+          const resetTime = new Date(
+            rateLimitInfo.resetTime
+          ).toLocaleTimeString();
           return `Rate limit exceeded. Please try again after ${resetTime}.`;
         }
         return 'Too many requests. Please wait a moment and try again.';
-        
+
       case 'api':
         return 'AI service authentication failed. Please check your API configuration.';
-        
+
       case 'model':
         return 'AI model is temporarily unavailable. Please try again later.';
-        
+
       case 'network':
         return 'Unable to connect to AI service. Please check your internet connection.';
-        
+
       default:
         return 'AI service encountered an unexpected error. Please try again.';
     }
   }
 
-  private getRecoveryActions(): Array<{ label: string; action: () => void; primary?: boolean }> {
+  private getRecoveryActions(): Array<{
+    label: string;
+    action: () => void;
+    primary?: boolean;
+  }> {
     const { lastErrorType, serviceStatus, fallbackMode } = this.state;
     const actions = [];
 
@@ -233,23 +255,23 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
         actions.push({
           label: 'Wait and Retry',
           action: this.handleRetryWithBackoff,
-          primary: true
+          primary: true,
         });
         break;
-        
+
       case 'network':
         actions.push({
           label: 'Check Connection',
           action: this.handleRetry,
-          primary: true
+          primary: true,
         });
         break;
-        
+
       default:
         actions.push({
           label: 'Try Again',
           action: this.handleRetry,
-          primary: true
+          primary: true,
         });
     }
 
@@ -257,18 +279,18 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
     if (!fallbackMode && this.props.enableOfflineMode) {
       actions.push({
         label: 'Use Offline Mode',
-        action: this.handleFallbackMode
+        action: this.handleFallbackMode,
       });
     }
 
     actions.push({
       label: 'Reset Service',
-      action: this.handleAIServiceReset
+      action: this.handleAIServiceReset,
     });
 
     actions.push({
       label: 'Reload Page',
-      action: () => window.location.reload()
+      action: () => window.location.reload(),
     });
 
     return actions;
@@ -276,12 +298,18 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
 
   render(): ReactNode {
     const { children, fallback, ...props } = this.props;
-    const { serviceStatus, lastErrorType, rateLimitInfo, fallbackMode } = this.state;
+    const { serviceStatus, lastErrorType, rateLimitInfo, fallbackMode } =
+      this.state;
 
     // Custom fallback for AI service errors
-    const aiServiceFallback = (error: Error, errorInfo: ErrorInfo, retry: () => void, reset: () => void) => {
+    const aiServiceFallback = (
+      error: Error,
+      errorInfo: ErrorInfo,
+      retry: () => void,
+      reset: () => void
+    ) => {
       const actions = this.getRecoveryActions();
-      
+
       return (
         <div className="ai-service-error-boundary">
           <div className="ai-service-error-container">
@@ -297,7 +325,9 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
               <div className={`status-indicator ${serviceStatus}`}>
                 <span className="status-dot"></span>
                 <span className="status-text">
-                  Service Status: {serviceStatus.charAt(0).toUpperCase() + serviceStatus.slice(1)}
+                  Service Status:{' '}
+                  {serviceStatus.charAt(0).toUpperCase() +
+                    serviceStatus.slice(1)}
                 </span>
               </div>
             </div>
@@ -318,9 +348,17 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
               <div className="rate-limit-info">
                 <h3>Rate Limit Information</h3>
                 <div className="rate-limit-details">
-                  <p><strong>Limit:</strong> {rateLimitInfo.limit} requests</p>
-                  <p><strong>Remaining:</strong> {rateLimitInfo.remaining} requests</p>
-                  <p><strong>Reset Time:</strong> {new Date(rateLimitInfo.resetTime).toLocaleString()}</p>
+                  <p>
+                    <strong>Limit:</strong> {rateLimitInfo.limit} requests
+                  </p>
+                  <p>
+                    <strong>Remaining:</strong> {rateLimitInfo.remaining}{' '}
+                    requests
+                  </p>
+                  <p>
+                    <strong>Reset Time:</strong>{' '}
+                    {new Date(rateLimitInfo.resetTime).toLocaleString()}
+                  </p>
                 </div>
               </div>
             )}
@@ -520,7 +558,7 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
           serviceName: props.serviceName,
           serviceStatus: this.state.serviceStatus,
           lastErrorType: this.state.lastErrorType,
-          fallbackMode: this.state.fallbackMode
+          fallbackMode: this.state.fallbackMode,
         }}
       >
         {children}
@@ -529,4 +567,4 @@ export class AIServiceErrorBoundary extends Component<AIServiceErrorBoundaryProp
   }
 }
 
-export default AIServiceErrorBoundary; 
+export default AIServiceErrorBoundary;

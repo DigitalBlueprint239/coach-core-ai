@@ -5,34 +5,34 @@ import { FootballLevel } from '../types/football';
 // FEATURE DEFINITIONS
 // ============================================
 
-export type Feature = 
+export type Feature =
   // Core features available to all levels
   | 'roster_management'
   | 'attendance_tracking'
   | 'basic_plays'
   | 'practice_plans'
   | 'team_dashboard'
-  
+
   // Youth-specific features
   | 'parent_portal'
   | 'safety_tracking'
   | 'skill_development'
   | 'fun_activities'
   | 'simplified_plays'
-  
+
   // Middle school features
   | 'basic_analytics'
   | 'player_progress'
   | 'team_stats'
   | 'game_schedule'
-  
+
   // High school features
   | 'advanced_analytics'
   | 'video_analysis'
   | 'opponent_scouting'
   | 'advanced_plays'
   | 'performance_metrics'
-  
+
   // College/Professional features
   | 'ai_insights'
   | 'advanced_scouting'
@@ -54,7 +54,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'parent_portal',
     'safety_tracking',
     'fun_activities',
-    'simplified_plays'
+    'simplified_plays',
   ],
   [FootballLevel.YOUTH_8U]: [
     'roster_management',
@@ -65,7 +65,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'parent_portal',
     'safety_tracking',
     'fun_activities',
-    'simplified_plays'
+    'simplified_plays',
   ],
   [FootballLevel.YOUTH_10U]: [
     'roster_management',
@@ -77,7 +77,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'safety_tracking',
     'skill_development',
     'fun_activities',
-    'simplified_plays'
+    'simplified_plays',
   ],
   [FootballLevel.YOUTH_12U]: [
     'roster_management',
@@ -90,7 +90,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'skill_development',
     'fun_activities',
     'simplified_plays',
-    'basic_analytics'
+    'basic_analytics',
   ],
   [FootballLevel.YOUTH_14U]: [
     'roster_management',
@@ -105,7 +105,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'simplified_plays',
     'basic_analytics',
     'player_progress',
-    'team_stats'
+    'team_stats',
   ],
   [FootballLevel.MIDDLE_SCHOOL]: [
     'roster_management',
@@ -119,7 +119,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'basic_analytics',
     'player_progress',
     'team_stats',
-    'game_schedule'
+    'game_schedule',
   ],
   [FootballLevel.JV]: [
     'roster_management',
@@ -133,7 +133,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'team_stats',
     'game_schedule',
     'advanced_analytics',
-    'performance_metrics'
+    'performance_metrics',
   ],
   [FootballLevel.VARSITY]: [
     'roster_management',
@@ -150,7 +150,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'video_analysis',
     'opponent_scouting',
     'advanced_plays',
-    'performance_metrics'
+    'performance_metrics',
   ],
   [FootballLevel.COLLEGE]: [
     'roster_management',
@@ -171,7 +171,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'ai_insights',
     'advanced_scouting',
     'recruitment_tools',
-    'professional_analytics'
+    'professional_analytics',
   ],
   [FootballLevel.SEMI_PRO]: [
     'roster_management',
@@ -193,7 +193,7 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'advanced_scouting',
     'recruitment_tools',
     'professional_analytics',
-    'team_comparison'
+    'team_comparison',
   ],
   [FootballLevel.PROFESSIONAL]: [
     'roster_management',
@@ -215,8 +215,8 @@ const FEATURE_MAP: Record<FootballLevel, Feature[]> = {
     'advanced_scouting',
     'recruitment_tools',
     'professional_analytics',
-    'team_comparison'
-  ]
+    'team_comparison',
+  ],
 };
 
 // ============================================
@@ -245,7 +245,9 @@ export class FeatureGating {
   static getNewFeaturesAtLevel(level: FootballLevel): Feature[] {
     const currentFeatures = this.getAvailableFeatures(level);
     const lowerLevelFeatures = this.getFeaturesForLowerLevels(level);
-    return currentFeatures.filter(feature => !lowerLevelFeatures.includes(feature));
+    return currentFeatures.filter(
+      feature => !lowerLevelFeatures.includes(feature)
+    );
   }
 
   /**
@@ -255,13 +257,13 @@ export class FeatureGating {
     const allLevels = Object.values(FootballLevel);
     const currentLevelIndex = allLevels.indexOf(level);
     const lowerLevels = allLevels.slice(0, currentLevelIndex);
-    
+
     const allFeatures = new Set<Feature>();
     lowerLevels.forEach(lowerLevel => {
       const features = this.getAvailableFeatures(lowerLevel);
       features.forEach(feature => allFeatures.add(feature));
     });
-    
+
     return Array.from(allFeatures);
   }
 
@@ -287,7 +289,10 @@ export class FeatureGating {
   /**
    * Validate if a play is appropriate for a given level
    */
-  static validatePlayForLevel(play: any, level: FootballLevel): { isValid: boolean; reason?: string } {
+  static validatePlayForLevel(
+    play: any,
+    level: FootballLevel
+  ): { isValid: boolean; reason?: string } {
     // Check if play has required level-specific fields
     if (!play.level) {
       return { isValid: false, reason: 'Play must have a level specified' };
@@ -295,17 +300,26 @@ export class FeatureGating {
 
     // Check if play level matches team level
     if (play.level !== level) {
-      return { isValid: false, reason: `Play level (${play.level}) does not match team level (${level})` };
+      return {
+        isValid: false,
+        reason: `Play level (${play.level}) does not match team level (${level})`,
+      };
     }
 
     // Check for youth-specific constraints
     if (this.isYouthLevel(level)) {
       if (play.complexity === 'advanced') {
-        return { isValid: false, reason: 'Advanced plays are not suitable for youth levels' };
+        return {
+          isValid: false,
+          reason: 'Advanced plays are not suitable for youth levels',
+        };
       }
-      
+
       if (!play.safety_rating || play.safety_rating === 'low') {
-        return { isValid: false, reason: 'Youth plays must have appropriate safety ratings' };
+        return {
+          isValid: false,
+          reason: 'Youth plays must have appropriate safety ratings',
+        };
       }
     }
 
@@ -321,7 +335,7 @@ export class FeatureGating {
       FootballLevel.YOUTH_8U,
       FootballLevel.YOUTH_10U,
       FootballLevel.YOUTH_12U,
-      FootballLevel.YOUTH_14U
+      FootballLevel.YOUTH_14U,
     ].includes(level);
   }
 
@@ -333,7 +347,7 @@ export class FeatureGating {
       FootballLevel.VARSITY,
       FootballLevel.COLLEGE,
       FootballLevel.SEMI_PRO,
-      FootballLevel.PROFESSIONAL
+      FootballLevel.PROFESSIONAL,
     ].includes(level);
   }
 
@@ -347,21 +361,42 @@ export class FeatureGating {
       allowedFormations: ['shotgun', 'i_formation', 'spread'],
       contactRules: {},
       timingRestrictions: {},
-      equipmentRequirements: ['helmet', 'shoulder_pads', 'mouthguard']
+      equipmentRequirements: ['helmet', 'shoulder_pads', 'mouthguard'],
     };
 
     if (this.isYouthLevel(level)) {
       constraints.maxPlayers = 11;
       constraints.allowedFormations = ['shotgun', 'i_formation'];
       constraints.contactRules = { maxContact: 'minimal', fullContact: false };
-      constraints.timingRestrictions = { maxPracticeTime: 90, requiredBreaks: true };
-      constraints.equipmentRequirements = ['helmet', 'shoulder_pads', 'mouthguard'];
+      constraints.timingRestrictions = {
+        maxPracticeTime: 90,
+        requiredBreaks: true,
+      };
+      constraints.equipmentRequirements = [
+        'helmet',
+        'shoulder_pads',
+        'mouthguard',
+      ];
     } else if (this.isAdvancedLevel(level)) {
       constraints.maxPlayers = 11;
-      constraints.allowedFormations = ['shotgun', 'i_formation', 'spread', 'wildcat', 'pistol'];
+      constraints.allowedFormations = [
+        'shotgun',
+        'i_formation',
+        'spread',
+        'wildcat',
+        'pistol',
+      ];
       constraints.contactRules = { maxContact: 'full', fullContact: true };
-      constraints.timingRestrictions = { maxPracticeTime: 180, requiredBreaks: false };
-      constraints.equipmentRequirements = ['helmet', 'shoulder_pads', 'mouthguard', 'cleats'];
+      constraints.timingRestrictions = {
+        maxPracticeTime: 180,
+        requiredBreaks: false,
+      };
+      constraints.equipmentRequirements = [
+        'helmet',
+        'shoulder_pads',
+        'mouthguard',
+        'cleats',
+      ];
     }
 
     return constraints;
@@ -375,13 +410,28 @@ export class FeatureGating {
 import { useMemo } from 'react';
 
 export const useFeatureGating = (level: FootballLevel) => {
-  const availableFeatures = useMemo(() => FeatureGating.getAvailableFeatures(level), [level]);
-  const newFeatures = useMemo(() => FeatureGating.getNewFeaturesAtLevel(level), [level]);
-  const constraints = useMemo(() => FeatureGating.getLevelConstraints(level), [level]);
+  const availableFeatures = useMemo(
+    () => FeatureGating.getAvailableFeatures(level),
+    [level]
+  );
+  const newFeatures = useMemo(
+    () => FeatureGating.getNewFeaturesAtLevel(level),
+    [level]
+  );
+  const constraints = useMemo(
+    () => FeatureGating.getLevelConstraints(level),
+    [level]
+  );
   const isYouth = useMemo(() => FeatureGating.isYouthLevel(level), [level]);
-  const isAdvanced = useMemo(() => FeatureGating.isAdvancedLevel(level), [level]);
+  const isAdvanced = useMemo(
+    () => FeatureGating.isAdvancedLevel(level),
+    [level]
+  );
 
-  const canAccess = useMemo(() => (feature: Feature) => FeatureGating.canAccessFeature(feature, level), [level]);
+  const canAccess = useMemo(
+    () => (feature: Feature) => FeatureGating.canAccessFeature(feature, level),
+    [level]
+  );
 
   return {
     availableFeatures,
@@ -390,6 +440,6 @@ export const useFeatureGating = (level: FootballLevel) => {
     isYouth,
     isAdvanced,
     canAccess,
-    level
+    level,
   };
-}; 
+};

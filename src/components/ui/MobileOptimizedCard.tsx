@@ -15,7 +15,11 @@ import {
   useColorModeValue,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { RESPONSIVE_SPACING, RESPONSIVE_FONTS, TOUCH_SIZES } from '../../utils/responsive';
+import {
+  RESPONSIVE_SPACING,
+  RESPONSIVE_FONTS,
+  TOUCH_SIZES,
+} from '../../utils/responsive';
 
 interface MobileOptimizedCardProps {
   title?: string;
@@ -23,7 +27,12 @@ interface MobileOptimizedCardProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
   badges?: Array<{ text: string; colorScheme?: string }>;
-  actions?: Array<{ icon: React.ComponentType<any>; onClick: () => void; label: string; colorScheme?: string }>;
+  actions?: Array<{
+    icon: React.ComponentType<any>;
+    onClick: () => void;
+    label: string;
+    colorScheme?: string;
+  }>;
   onClick?: () => void;
   isClickable?: boolean;
   isSelected?: boolean;
@@ -48,9 +57,9 @@ const MobileOptimizedCard: React.FC<MobileOptimizedCardProps> = ({
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const selectedBg = useColorModeValue('blue.50', 'blue.900');
   const selectedBorder = useColorModeValue('blue.200', 'blue.600');
-  
+
   const isMobile = useBreakpointValue({ base: true, md: false });
-  
+
   // Responsive sizing
   const getCardSize = () => {
     switch (size) {
@@ -134,7 +143,7 @@ const MobileOptimizedCard: React.FC<MobileOptimizedCardProps> = ({
                 {title}
               </Heading>
             )}
-            
+
             {subtitle && (
               <Text
                 fontSize={RESPONSIVE_FONTS.sm}
@@ -144,7 +153,7 @@ const MobileOptimizedCard: React.FC<MobileOptimizedCardProps> = ({
                 {subtitle}
               </Text>
             )}
-            
+
             {badges.length > 0 && (
               <HStack spacing={2} flexWrap="wrap">
                 {badges.map((badge, index) => (
@@ -167,7 +176,10 @@ const MobileOptimizedCard: React.FC<MobileOptimizedCardProps> = ({
       )}
 
       {/* Body */}
-      <CardBody p={cardSize.p} pt={title || subtitle || badges.length > 0 ? 0 : cardSize.p}>
+      <CardBody
+        p={cardSize.p}
+        pt={title || subtitle || badges.length > 0 ? 0 : cardSize.p}
+      >
         <Box fontSize={RESPONSIVE_FONTS.md} lineHeight="relaxed">
           {children}
         </Box>
@@ -189,7 +201,7 @@ const MobileOptimizedCard: React.FC<MobileOptimizedCardProps> = ({
               {footer}
             </Box>
           )}
-          
+
           {actions.length > 0 && (
             <HStack spacing={2} flexShrink={0}>
               {actions.map((action, index) => (
@@ -197,7 +209,7 @@ const MobileOptimizedCard: React.FC<MobileOptimizedCardProps> = ({
                   key={index}
                   aria-label={action.label}
                   icon={<action.icon />}
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     action.onClick();
                   }}

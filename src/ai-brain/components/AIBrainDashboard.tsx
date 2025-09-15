@@ -15,9 +15,6 @@ import {
   Grid,
   Divider,
   Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
   useToast,
   useDisclosure,
   Modal,
@@ -53,8 +50,9 @@ import {
   FormLabel,
   Select,
   Input,
-  Textarea
+  Textarea,
 } from '@chakra-ui/react';
+import { SafeStatLabel, SafeStatNumber, SafeStatHelpText } from '../../ui/stat';
 import {
   Brain,
   Zap,
@@ -81,7 +79,7 @@ import {
   Calendar,
   Award,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
 } from 'lucide-react';
 import { StopCircle as Stop } from 'lucide-react';
 // Note: decoupled from enhanced AI service for now to allow clean builds
@@ -127,7 +125,7 @@ const AIBrainDashboard: React.FC = () => {
     cacheHitRate: 67.8,
     errorRate: 5.8,
     costPerDay: 12.45,
-    tokensUsed: 45678
+    tokensUsed: 45678,
   });
 
   const [insights, setInsights] = useState<AIInsight[]>([
@@ -135,34 +133,37 @@ const AIBrainDashboard: React.FC = () => {
       id: '1',
       type: 'optimization',
       title: 'Cache Performance Improving',
-      description: 'Cache hit rate increased by 15% this week, reducing API calls and costs.',
+      description:
+        'Cache hit rate increased by 15% this week, reducing API calls and costs.',
       confidence: 0.92,
       priority: 'medium',
       timestamp: new Date(),
-      actionable: false
+      actionable: false,
     },
     {
       id: '2',
       type: 'alert',
       title: 'High Error Rate Detected',
-      description: 'Error rate spiked to 8.2% in the last hour. Check API connectivity.',
+      description:
+        'Error rate spiked to 8.2% in the last hour. Check API connectivity.',
       confidence: 0.89,
       priority: 'high',
       timestamp: new Date(Date.now() - 3600000),
       actionable: true,
-      action: 'Investigate API Issues'
+      action: 'Investigate API Issues',
     },
     {
       id: '3',
       type: 'suggestion',
       title: 'Model Optimization Opportunity',
-      description: 'Consider switching to GPT-4o for better performance on complex queries.',
+      description:
+        'Consider switching to GPT-4o for better performance on complex queries.',
       confidence: 0.76,
       priority: 'medium',
       timestamp: new Date(Date.now() - 7200000),
       actionable: true,
-      action: 'Upgrade Model'
-    }
+      action: 'Upgrade Model',
+    },
   ]);
 
   const [modelStatus, setModelStatus] = useState<AIModelStatus[]>([
@@ -172,7 +173,7 @@ const AIBrainDashboard: React.FC = () => {
       performance: 94.2,
       lastUsed: new Date(),
       requestsToday: 456,
-      averageLatency: 2.1
+      averageLatency: 2.1,
     },
     {
       name: 'GPT-3.5-turbo',
@@ -180,7 +181,7 @@ const AIBrainDashboard: React.FC = () => {
       performance: 87.6,
       lastUsed: new Date(Date.now() - 3600000),
       requestsToday: 234,
-      averageLatency: 1.8
+      averageLatency: 1.8,
     },
     {
       name: 'GPT-4o',
@@ -188,8 +189,8 @@ const AIBrainDashboard: React.FC = () => {
       performance: 96.1,
       lastUsed: new Date(Date.now() - 7200000),
       requestsToday: 89,
-      averageLatency: 1.9
-    }
+      averageLatency: 1.9,
+    },
   ]);
 
   const [isMonitoring, setIsMonitoring] = useState(true);
@@ -205,12 +206,24 @@ const AIBrainDashboard: React.FC = () => {
       setMetrics(prev => ({
         ...prev,
         totalRequests: prev.totalRequests + Math.floor(Math.random() * 5),
-        successRate: Math.max(85, Math.min(98, prev.successRate + (Math.random() - 0.5) * 2)),
-        averageResponseTime: Math.max(1.5, Math.min(4, prev.averageResponseTime + (Math.random() - 0.5) * 0.3)),
-        cacheHitRate: Math.max(60, Math.min(80, prev.cacheHitRate + (Math.random() - 0.5) * 3)),
-        errorRate: Math.max(2, Math.min(10, prev.errorRate + (Math.random() - 0.5) * 2)),
+        successRate: Math.max(
+          85,
+          Math.min(98, prev.successRate + (Math.random() - 0.5) * 2)
+        ),
+        averageResponseTime: Math.max(
+          1.5,
+          Math.min(4, prev.averageResponseTime + (Math.random() - 0.5) * 0.3)
+        ),
+        cacheHitRate: Math.max(
+          60,
+          Math.min(80, prev.cacheHitRate + (Math.random() - 0.5) * 3)
+        ),
+        errorRate: Math.max(
+          2,
+          Math.min(10, prev.errorRate + (Math.random() - 0.5) * 2)
+        ),
         costPerDay: prev.costPerDay + Math.random() * 0.5,
-        tokensUsed: prev.tokensUsed + Math.floor(Math.random() * 100)
+        tokensUsed: prev.tokensUsed + Math.floor(Math.random() * 100),
       }));
     }, 5000);
 
@@ -229,21 +242,31 @@ const AIBrainDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'green';
-      case 'idle': return 'yellow';
-      case 'error': return 'red';
-      case 'maintenance': return 'orange';
-      default: return 'gray';
+      case 'active':
+        return 'green';
+      case 'idle':
+        return 'yellow';
+      case 'error':
+        return 'red';
+      case 'maintenance':
+        return 'orange';
+      default:
+        return 'gray';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'red';
-      case 'high': return 'orange';
-      case 'medium': return 'yellow';
-      case 'low': return 'green';
-      default: return 'gray';
+      case 'critical':
+        return 'red';
+      case 'high':
+        return 'orange';
+      case 'medium':
+        return 'yellow';
+      case 'low':
+        return 'green';
+      default:
+        return 'gray';
     }
   };
 
@@ -255,18 +278,25 @@ const AIBrainDashboard: React.FC = () => {
           <HStack>
             <Icon as={Brain} color="purple.600" boxSize={8} />
             <VStack align="start" spacing={0}>
-              <Heading size="lg" color="purple.600">AI Brain Dashboard</Heading>
-              <Text fontSize="sm" color="gray.600">Real-time AI system monitoring and insights</Text>
+              <Heading size="lg" color="purple.600">
+                AI Brain Dashboard
+              </Heading>
+              <Text fontSize="sm" color="gray.600">
+                Real-time AI system monitoring and insights
+              </Text>
             </VStack>
           </HStack>
-          
+
           <HStack spacing={4}>
             <HStack>
-              <Icon as={Activity} color={isMonitoring ? "green.500" : "gray.400"} />
+              <Icon
+                as={Activity}
+                color={isMonitoring ? 'green.500' : 'gray.400'}
+              />
               <Text fontSize="sm">Live Monitoring</Text>
-              <Switch 
-                isChecked={isMonitoring} 
-                onChange={(e) => setIsMonitoring(e.target.checked)}
+              <Switch
+                isChecked={isMonitoring}
+                onChange={e => setIsMonitoring(e.target.checked)}
                 colorScheme="purple"
               />
             </HStack>
@@ -290,7 +320,7 @@ const AIBrainDashboard: React.FC = () => {
         </Flex>
       </Box>
 
-      <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={6}>
+      <Grid templateColumns={{ base: '1fr', lg: '2fr 1fr' }} gap={6}>
         {/* Main Content */}
         <VStack spacing={6} align="stretch">
           {/* Performance Metrics */}
@@ -307,39 +337,47 @@ const AIBrainDashboard: React.FC = () => {
             <CardBody>
               <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                 <Stat>
-                  <StatLabel>Success Rate</StatLabel>
-                  <StatNumber>{metrics.successRate.toFixed(1)}%</StatNumber>
-                  <StatHelpText>
+                  <SafeStatLabel>Success Rate</SafeStatLabel>
+                  <SafeStatNumber>
+                    {metrics.successRate.toFixed(1)}%
+                  </SafeStatNumber>
+                  <SafeStatHelpText>
                     <Icon as={ArrowUp} color="green.500" boxSize={4} />
                     2.1% from last hour
-                  </StatHelpText>
+                  </SafeStatHelpText>
                 </Stat>
-                
+
                 <Stat>
-                  <StatLabel>Avg Response Time</StatLabel>
-                  <StatNumber>{metrics.averageResponseTime.toFixed(1)}s</StatNumber>
-                  <StatHelpText>
+                  <SafeStatLabel>Avg Response Time</SafeStatLabel>
+                  <SafeStatNumber>
+                    {metrics.averageResponseTime.toFixed(1)}s
+                  </SafeStatNumber>
+                  <SafeStatHelpText>
                     <Icon as={ArrowDown} color="red.500" boxSize={4} />
                     0.3s improvement
-                  </StatHelpText>
+                  </SafeStatHelpText>
                 </Stat>
-                
+
                 <Stat>
-                  <StatLabel>Cache Hit Rate</StatLabel>
-                  <StatNumber>{metrics.cacheHitRate.toFixed(1)}%</StatNumber>
-                  <StatHelpText>
+                  <SafeStatLabel>Cache Hit Rate</SafeStatLabel>
+                  <SafeStatNumber>
+                    {metrics.cacheHitRate.toFixed(1)}%
+                  </SafeStatNumber>
+                  <SafeStatHelpText>
                     <Icon as={ArrowUp} color="green.500" boxSize={4} />
                     15% improvement
-                  </StatHelpText>
+                  </SafeStatHelpText>
                 </Stat>
-                
+
                 <Stat>
-                  <StatLabel>Error Rate</StatLabel>
-                  <StatNumber>{metrics.errorRate.toFixed(1)}%</StatNumber>
-                  <StatHelpText>
+                  <SafeStatLabel>Error Rate</SafeStatLabel>
+                  <SafeStatNumber>
+                    {metrics.errorRate.toFixed(1)}%
+                  </SafeStatNumber>
+                  <SafeStatHelpText>
                     <Icon as={ArrowDown} color="red.500" boxSize={4} />
                     1.2% reduction
-                  </StatHelpText>
+                  </SafeStatHelpText>
                 </Stat>
               </Grid>
             </CardBody>
@@ -358,10 +396,16 @@ const AIBrainDashboard: React.FC = () => {
             </CardHeader>
             <CardBody>
               <VStack spacing={4} align="stretch">
-                {insights.map((insight) => (
-                  <Alert 
-                    key={insight.id} 
-                    status={insight.priority === 'critical' ? 'error' : insight.priority === 'high' ? 'warning' : 'info'}
+                {insights.map(insight => (
+                  <Alert
+                    key={insight.id}
+                    status={
+                      insight.priority === 'critical'
+                        ? 'error'
+                        : insight.priority === 'high'
+                          ? 'warning'
+                          : 'info'
+                    }
                     borderRadius="md"
                   >
                     <AlertIcon />
@@ -369,7 +413,9 @@ const AIBrainDashboard: React.FC = () => {
                       <Flex justify="space-between" align="start" mb={2}>
                         <AlertTitle>{insight.title}</AlertTitle>
                         <HStack>
-                          <Badge colorScheme={getPriorityColor(insight.priority)}>
+                          <Badge
+                            colorScheme={getPriorityColor(insight.priority)}
+                          >
                             {insight.priority}
                           </Badge>
                           <Badge colorScheme="purple">
@@ -410,7 +456,9 @@ const AIBrainDashboard: React.FC = () => {
                   <Icon as={Cpu} color="green.500" />
                   <Heading size="md">Model Status</Heading>
                 </HStack>
-                <Badge colorScheme="green">{modelStatus.filter(m => m.status === 'active').length} Active</Badge>
+                <Badge colorScheme="green">
+                  {modelStatus.filter(m => m.status === 'active').length} Active
+                </Badge>
               </Flex>
             </CardHeader>
             <CardBody>
@@ -426,7 +474,7 @@ const AIBrainDashboard: React.FC = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {modelStatus.map((model) => (
+                  {modelStatus.map(model => (
                     <Tr key={model.name}>
                       <Td fontWeight="medium">{model.name}</Td>
                       <Td>
@@ -436,13 +484,15 @@ const AIBrainDashboard: React.FC = () => {
                       </Td>
                       <Td>
                         <HStack>
-                          <Progress 
-                            value={model.performance} 
-                            size="sm" 
-                            colorScheme="green" 
+                          <Progress
+                            value={model.performance}
+                            size="sm"
+                            colorScheme="green"
                             flex={1}
                           />
-                          <Text fontSize="sm">{model.performance.toFixed(1)}%</Text>
+                          <Text fontSize="sm">
+                            {model.performance.toFixed(1)}%
+                          </Text>
                         </HStack>
                       </Td>
                       <Td>{model.requestsToday}</Td>
@@ -497,31 +547,39 @@ const AIBrainDashboard: React.FC = () => {
               <VStack spacing={4} align="stretch">
                 <Box>
                   <Flex justify="space-between" mb={2}>
-                    <Text fontSize="sm" fontWeight="medium">API Connectivity</Text>
+                    <Text fontSize="sm" fontWeight="medium">
+                      API Connectivity
+                    </Text>
                     <Badge colorScheme="green">Healthy</Badge>
                   </Flex>
                   <Progress value={95} colorScheme="green" size="sm" />
                 </Box>
-                
+
                 <Box>
                   <Flex justify="space-between" mb={2}>
-                    <Text fontSize="sm" fontWeight="medium">Database</Text>
+                    <Text fontSize="sm" fontWeight="medium">
+                      Database
+                    </Text>
                     <Badge colorScheme="green">Connected</Badge>
                   </Flex>
                   <Progress value={88} colorScheme="green" size="sm" />
                 </Box>
-                
+
                 <Box>
                   <Flex justify="space-between" mb={2}>
-                    <Text fontSize="sm" fontWeight="medium">Cache System</Text>
+                    <Text fontSize="sm" fontWeight="medium">
+                      Cache System
+                    </Text>
                     <Badge colorScheme="green">Optimal</Badge>
                   </Flex>
                   <Progress value={92} colorScheme="green" size="sm" />
                 </Box>
-                
+
                 <Box>
                   <Flex justify="space-between" mb={2}>
-                    <Text fontSize="sm" fontWeight="medium">Memory Usage</Text>
+                    <Text fontSize="sm" fontWeight="medium">
+                      Memory Usage
+                    </Text>
                     <Badge colorScheme="yellow">Moderate</Badge>
                   </Flex>
                   <Progress value={67} colorScheme="yellow" size="sm" />
@@ -538,41 +596,55 @@ const AIBrainDashboard: React.FC = () => {
             <CardBody>
               <VStack spacing={4} align="stretch">
                 <Stat>
-                  <StatLabel>Today's Cost</StatLabel>
-                  <StatNumber>${metrics.costPerDay.toFixed(2)}</StatNumber>
-                  <StatHelpText>
+                  <SafeStatLabel>Today's Cost</SafeStatLabel>
+                  <SafeStatNumber>
+                    ${metrics.costPerDay.toFixed(2)}
+                  </SafeStatNumber>
+                  <SafeStatHelpText>
                     <Icon as={ArrowUp} color="green.500" boxSize={4} />
                     +5% this week
-                  </StatHelpText>
+                  </SafeStatHelpText>
                 </Stat>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" mb={2}>Token Usage</Text>
+                  <Text fontSize="sm" fontWeight="medium" mb={2}>
+                    Token Usage
+                  </Text>
                   <Text fontSize="2xl" fontWeight="bold" color="purple.600">
                     {metrics.tokensUsed.toLocaleString()}
                   </Text>
-                  <Text fontSize="sm" color="gray.600">tokens used today</Text>
+                  <Text fontSize="sm" color="gray.600">
+                    tokens used today
+                  </Text>
                 </Box>
-                
+
                 <Box>
-                  <Text fontSize="sm" fontWeight="medium" mb={2}>Cost Breakdown</Text>
+                  <Text fontSize="sm" fontWeight="medium" mb={2}>
+                    Cost Breakdown
+                  </Text>
                   <List spacing={2}>
                     <ListItem>
                       <Flex justify="space-between">
                         <Text fontSize="sm">GPT-4 Requests</Text>
-                        <Text fontSize="sm" fontWeight="medium">$8.45</Text>
+                        <Text fontSize="sm" fontWeight="medium">
+                          $8.45
+                        </Text>
                       </Flex>
                     </ListItem>
                     <ListItem>
                       <Flex justify="space-between">
                         <Text fontSize="sm">GPT-3.5 Requests</Text>
-                        <Text fontSize="sm" fontWeight="medium">$3.20</Text>
+                        <Text fontSize="sm" fontWeight="medium">
+                          $3.20
+                        </Text>
                       </Flex>
                     </ListItem>
                     <ListItem>
                       <Flex justify="space-between">
                         <Text fontSize="sm">Storage & Cache</Text>
-                        <Text fontSize="sm" fontWeight="medium">$0.80</Text>
+                        <Text fontSize="sm" fontWeight="medium">
+                          $0.80
+                        </Text>
                       </Flex>
                     </ListItem>
                   </List>
@@ -588,16 +660,36 @@ const AIBrainDashboard: React.FC = () => {
             </CardHeader>
             <CardBody>
               <VStack spacing={3}>
-                <Button leftIcon={<RefreshCw />} colorScheme="blue" size="sm" w="full">
+                <Button
+                  leftIcon={<RefreshCw />}
+                  colorScheme="blue"
+                  size="sm"
+                  w="full"
+                >
                   Clear Cache
                 </Button>
-                <Button leftIcon={<Shield />} colorScheme="green" size="sm" w="full">
+                <Button
+                  leftIcon={<Shield />}
+                  colorScheme="green"
+                  size="sm"
+                  w="full"
+                >
                   Security Scan
                 </Button>
-                <Button leftIcon={<Database />} colorScheme="purple" size="sm" w="full">
+                <Button
+                  leftIcon={<Database />}
+                  colorScheme="purple"
+                  size="sm"
+                  w="full"
+                >
                   Backup Data
                 </Button>
-                <Button leftIcon={<BarChart3 />} colorScheme="orange" size="sm" w="full">
+                <Button
+                  leftIcon={<BarChart3 />}
+                  colorScheme="orange"
+                  size="sm"
+                  w="full"
+                >
                   Generate Report
                 </Button>
               </VStack>
@@ -625,75 +717,81 @@ const AIBrainDashboard: React.FC = () => {
                   <VStack spacing={4} align="stretch">
                     <FormControl>
                       <FormLabel>Default Model</FormLabel>
-                      <Select value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)}>
+                      <Select
+                        value={selectedModel}
+                        onChange={e => setSelectedModel(e.target.value)}
+                      >
                         <option value="GPT-4">GPT-4</option>
                         <option value="GPT-3.5-turbo">GPT-3.5-turbo</option>
                         <option value="GPT-4o">GPT-4o</option>
                       </Select>
                     </FormControl>
-                    
+
                     <FormControl>
                       <FormLabel>Max Tokens</FormLabel>
                       <Input type="number" defaultValue={1500} />
                     </FormControl>
-                    
+
                     <FormControl>
                       <FormLabel>Temperature</FormLabel>
                       <Input type="number" step="0.1" defaultValue={0.7} />
                     </FormControl>
                   </VStack>
                 </TabPanel>
-                
+
                 <TabPanel>
                   <VStack spacing={4} align="stretch">
                     <FormControl>
                       <FormLabel>Cache TTL (minutes)</FormLabel>
                       <Input type="number" defaultValue={5} />
                     </FormControl>
-                    
+
                     <FormControl>
                       <FormLabel>Rate Limit (requests/minute)</FormLabel>
                       <Input type="number" defaultValue={60} />
                     </FormControl>
-                    
+
                     <FormControl>
                       <FormLabel>Timeout (seconds)</FormLabel>
                       <Input type="number" defaultValue={30} />
                     </FormControl>
                   </VStack>
                 </TabPanel>
-                
+
                 <TabPanel>
                   <VStack spacing={4} align="stretch">
                     <FormControl display="flex" alignItems="center">
                       <FormLabel mb="0">Enable Safety Validation</FormLabel>
                       <Switch defaultChecked />
                     </FormControl>
-                    
+
                     <FormControl display="flex" alignItems="center">
                       <FormLabel mb="0">Content Filtering</FormLabel>
                       <Switch defaultChecked />
                     </FormControl>
-                    
+
                     <FormControl display="flex" alignItems="center">
                       <FormLabel mb="0">Audit Logging</FormLabel>
                       <Switch defaultChecked />
                     </FormControl>
                   </VStack>
                 </TabPanel>
-                
+
                 <TabPanel>
                   <VStack spacing={4} align="stretch">
                     <FormControl display="flex" alignItems="center">
                       <FormLabel mb="0">Real-time Monitoring</FormLabel>
-                      <Switch isChecked={isMonitoring} onChange={(e) => setIsMonitoring(e.target.checked)} />
+                      <Switch
+                        isChecked={isMonitoring}
+                        onChange={e => setIsMonitoring(e.target.checked)}
+                      />
                     </FormControl>
-                    
+
                     <FormControl>
                       <FormLabel>Alert Threshold (%)</FormLabel>
                       <Input type="number" defaultValue={10} />
                     </FormControl>
-                    
+
                     <FormControl>
                       <FormLabel>Update Interval (seconds)</FormLabel>
                       <Input type="number" defaultValue={5} />
@@ -709,4 +807,4 @@ const AIBrainDashboard: React.FC = () => {
   );
 };
 
-export default AIBrainDashboard; 
+export default AIBrainDashboard;

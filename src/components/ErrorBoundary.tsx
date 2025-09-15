@@ -1,5 +1,11 @@
 // src/components/ErrorBoundary.tsx
-import React, { Component, ErrorInfo, ReactNode, useState, useCallback } from 'react';
+import React, {
+  Component,
+  ErrorInfo,
+  ReactNode,
+  useState,
+  useCallback,
+} from 'react';
 
 // ============================================
 // ERROR BOUNDARY TYPES
@@ -16,7 +22,9 @@ export interface ErrorBoundaryState {
 
 export interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback?: ReactNode | ((error: Error, errorInfo: ErrorInfo, retry: () => void) => ReactNode);
+  fallback?:
+    | ReactNode
+    | ((error: Error, errorInfo: ErrorInfo, retry: () => void) => ReactNode);
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   onRecover?: () => void;
   maxRetries?: number;
@@ -58,7 +66,10 @@ export interface ErrorReport {
 // MAIN ERROR BOUNDARY COMPONENT
 // ============================================
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   private errorReportingService: ErrorReportingService;
 
   constructor(props: ErrorBoundaryProps) {
@@ -69,7 +80,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       errorInfo: null,
       errorId: '',
       retryCount: 0,
-      lastErrorTime: 0
+      lastErrorTime: 0,
     };
     this.errorReportingService = new ErrorReportingService();
   }
@@ -79,7 +90,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       hasError: true,
       error,
       errorId: ErrorBoundary.generateErrorId(),
-      lastErrorTime: Date.now()
+      lastErrorTime: Date.now(),
     };
   }
 
@@ -113,27 +124,27 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         error: {
           name: error.name,
           message: error.message,
-          stack: error.stack
+          stack: error.stack,
         },
         errorInfo: {
-          componentStack: errorInfo.componentStack || ''
+          componentStack: errorInfo.componentStack || '',
         },
         userInfo: {
           userId: this.getUserId(),
           userAgent: navigator.userAgent,
           url: window.location.href,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         },
         appInfo: {
           version: process.env.REACT_APP_VERSION || '1.0.0',
           environment: process.env.NODE_ENV || 'development',
-          buildNumber: process.env.REACT_APP_BUILD_NUMBER
+          buildNumber: process.env.REACT_APP_BUILD_NUMBER,
         },
         context: {
           componentName: this.getComponentName(errorInfo.componentStack || ''),
           props: this.props,
-          state: this.state
-        }
+          state: this.state,
+        },
       };
 
       await this.errorReportingService.reportError(errorReport);
@@ -179,7 +190,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       hasError: false,
       error: null,
       errorInfo: null,
-      retryCount: retryCount + 1
+      retryCount: retryCount + 1,
     });
 
     // Call recovery handler
@@ -194,13 +205,19 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       error: null,
       errorInfo: null,
       retryCount: 0,
-      lastErrorTime: 0
+      lastErrorTime: 0,
     });
   };
 
   render(): ReactNode {
     const { hasError, error, errorInfo, retryCount, errorId } = this.state;
-    const { children, fallback, maxRetries = 3, showErrorDetails = false, className = '' } = this.props;
+    const {
+      children,
+      fallback,
+      maxRetries = 3,
+      showErrorDetails = false,
+      className = '',
+    } = this.props;
 
     if (hasError) {
       // Custom fallback component or function
@@ -219,27 +236,28 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               <div className="error-icon">⚠️</div>
               <h2 className="error-title">Something went wrong</h2>
               <p className="error-message">
-                We're sorry, but something unexpected happened. Our team has been notified.
+                We're sorry, but something unexpected happened. Our team has
+                been notified.
               </p>
             </div>
 
             <div className="error-actions">
-              <button 
+              <button
                 className="error-button primary"
                 onClick={this.handleRetry}
                 disabled={retryCount >= maxRetries}
               >
                 {retryCount >= maxRetries ? 'Max retries reached' : 'Try Again'}
               </button>
-              
-              <button 
+
+              <button
                 className="error-button secondary"
                 onClick={() => window.location.reload()}
               >
                 Reload Page
               </button>
-              
-              <button 
+
+              <button
                 className="error-button secondary"
                 onClick={() => window.history.back()}
               >
@@ -252,8 +270,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 <details>
                   <summary>Error Details</summary>
                   <div className="error-info">
-                    <p><strong>Error ID:</strong> {errorId}</p>
-                    <p><strong>Error:</strong> {error.name}: {error.message}</p>
+                    <p>
+                      <strong>Error ID:</strong> {errorId}
+                    </p>
+                    <p>
+                      <strong>Error:</strong> {error.name}: {error.message}
+                    </p>
                     {error.stack && (
                       <div className="error-stack">
                         <strong>Stack Trace:</strong>
@@ -273,7 +295,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
             <div className="error-footer">
               <p className="error-help">
-                If this problem persists, please contact support with error ID: <code>{errorId}</code>
+                If this problem persists, please contact support with error ID:{' '}
+                <code>{errorId}</code>
               </p>
             </div>
           </div>
@@ -436,7 +459,8 @@ class ErrorReportingService {
   private isProcessing: boolean = false;
 
   constructor() {
-    this.endpoint = process.env.REACT_APP_ERROR_REPORTING_ENDPOINT || '/api/errors';
+    this.endpoint =
+      process.env.REACT_APP_ERROR_REPORTING_ENDPOINT || '/api/errors';
   }
 
   async reportError(errorReport: ErrorReport): Promise<void> {
@@ -503,10 +527,15 @@ export class NetworkErrorBoundary extends ErrorBoundary {
         <div className="network-error">
           <div className="network-error-icon">🌐</div>
           <h3>Network Error</h3>
-          <p>Unable to connect to the server. Please check your internet connection.</p>
+          <p>
+            Unable to connect to the server. Please check your internet
+            connection.
+          </p>
           <div className="network-error-actions">
             <button onClick={retry}>Retry Connection</button>
-            <button onClick={() => window.location.reload()}>Reload Page</button>
+            <button onClick={() => window.location.reload()}>
+              Reload Page
+            </button>
           </div>
           <style>{`
             .network-error {
@@ -532,7 +561,7 @@ export class NetworkErrorBoundary extends ErrorBoundary {
             }
           `}</style>
         </div>
-      )
+      ),
     });
   }
 }
@@ -545,7 +574,9 @@ export class DataErrorBoundary extends ErrorBoundary {
         <div className="data-error">
           <div className="data-error-icon">📊</div>
           <h3>Data Loading Error</h3>
-          <p>Failed to load the requested data. This might be a temporary issue.</p>
+          <p>
+            Failed to load the requested data. This might be a temporary issue.
+          </p>
           <div className="data-error-actions">
             <button onClick={retry}>Retry Loading</button>
             <button onClick={() => window.history.back()}>Go Back</button>
@@ -574,7 +605,7 @@ export class DataErrorBoundary extends ErrorBoundary {
             }
           `}</style>
         </div>
-      )
+      ),
     });
   }
 }
@@ -586,10 +617,13 @@ export class DataErrorBoundary extends ErrorBoundary {
 export const useErrorBoundary = () => {
   const [error, setError] = useState<Error | null>(null);
 
-  const handleError = React.useCallback((error: Error, errorInfo: ErrorInfo) => {
-    setError(error);
-    console.error('Error caught by hook:', error, errorInfo);
-  }, []);
+  const handleError = React.useCallback(
+    (error: Error, errorInfo: ErrorInfo) => {
+      setError(error);
+      console.error('Error caught by hook:', error, errorInfo);
+    },
+    []
+  );
 
   const clearError = React.useCallback(() => {
     setError(null);
@@ -598,7 +632,7 @@ export const useErrorBoundary = () => {
   return {
     error,
     handleError,
-    clearError
+    clearError,
   };
 };
 

@@ -9,10 +9,10 @@ interface ProgressAnalyticsProps {
   };
 }
 
-const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({ 
-  userId, 
-  metricType, 
-  timeRange 
+const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
+  userId,
+  metricType,
+  timeRange,
 }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border">
@@ -29,12 +29,14 @@ const ProgressAnalytics: React.FC<ProgressAnalyticsProps> = ({
         <div className="flex justify-between items-center">
           <span className="text-gray-600">Time Range:</span>
           <span className="text-sm">
-            {timeRange.start.toLocaleDateString()} - {timeRange.end.toLocaleDateString()}
+            {timeRange.start.toLocaleDateString()} -{' '}
+            {timeRange.end.toLocaleDateString()}
           </span>
         </div>
         <div className="mt-4 p-4 bg-gray-50 rounded">
           <p className="text-sm text-gray-600">
-            Analytics data will be displayed here once the feature is fully implemented.
+            Analytics data will be displayed here once the feature is fully
+            implemented.
           </p>
         </div>
       </div>

@@ -40,46 +40,64 @@ export interface EnvironmentCheck {
 export class EnvironmentValidator {
   private requiredVars: Record<string, string> = {
     // Firebase Configuration
-    'REACT_APP_FIREBASE_API_KEY': 'Firebase API Key - Required for authentication and database access',
-    'REACT_APP_FIREBASE_AUTH_DOMAIN': 'Firebase Auth Domain - Required for user authentication',
-    'REACT_APP_FIREBASE_PROJECT_ID': 'Firebase Project ID - Required for database and storage access',
-    'REACT_APP_FIREBASE_STORAGE_BUCKET': 'Firebase Storage Bucket - Required for file uploads',
-    'REACT_APP_FIREBASE_MESSAGING_SENDER_ID': 'Firebase Messaging Sender ID - Required for push notifications',
-    'REACT_APP_FIREBASE_APP_ID': 'Firebase App ID - Required for app identification',
-    
+    REACT_APP_FIREBASE_API_KEY:
+      'Firebase API Key - Required for authentication and database access',
+    REACT_APP_FIREBASE_AUTH_DOMAIN:
+      'Firebase Auth Domain - Required for user authentication',
+    REACT_APP_FIREBASE_PROJECT_ID:
+      'Firebase Project ID - Required for database and storage access',
+    REACT_APP_FIREBASE_STORAGE_BUCKET:
+      'Firebase Storage Bucket - Required for file uploads',
+    REACT_APP_FIREBASE_MESSAGING_SENDER_ID:
+      'Firebase Messaging Sender ID - Required for push notifications',
+    REACT_APP_FIREBASE_APP_ID:
+      'Firebase App ID - Required for app identification',
+
     // AI Services
-    'REACT_APP_OPENAI_API_KEY': 'OpenAI API Key - Required for AI assistant features',
-    'REACT_APP_AI_PROXY_TOKEN': 'AI Proxy Token - Required for secure AI service communication',
+    REACT_APP_OPENAI_API_KEY:
+      'OpenAI API Key - Required for AI assistant features',
+    REACT_APP_AI_PROXY_TOKEN:
+      'AI Proxy Token - Required for secure AI service communication',
   };
 
   private optionalVars: Record<string, string> = {
     // Firebase (optional)
-    'REACT_APP_FIREBASE_MEASUREMENT_ID': 'Firebase Measurement ID - Optional for analytics',
-    
+    REACT_APP_FIREBASE_MEASUREMENT_ID:
+      'Firebase Measurement ID - Optional for analytics',
+
     // API Configuration
-    'REACT_APP_API_BASE_URL': 'API Base URL - Optional, defaults to environment-specific URLs',
-    'REACT_APP_AI_SERVICE_URL': 'AI Service URL - Optional, defaults to environment-specific URLs',
-    
+    REACT_APP_API_BASE_URL:
+      'API Base URL - Optional, defaults to environment-specific URLs',
+    REACT_APP_AI_SERVICE_URL:
+      'AI Service URL - Optional, defaults to environment-specific URLs',
+
     // Monitoring
-    'REACT_APP_SENTRY_DSN': 'Sentry DSN - Optional for error tracking',
-    
+    REACT_APP_SENTRY_DSN: 'Sentry DSN - Optional for error tracking',
+
     // Features
-    'REACT_APP_ENABLE_AI_ASSISTANT': 'Enable AI Assistant - Optional feature flag',
-    'REACT_APP_ENABLE_ANALYTICS': 'Enable Analytics - Optional feature flag',
-    'REACT_APP_ENABLE_PUSH_NOTIFICATIONS': 'Enable Push Notifications - Optional feature flag',
-    'REACT_APP_ENABLE_OFFLINE_MODE': 'Enable Offline Mode - Optional feature flag',
-    'REACT_APP_ENABLE_HUDL_INTEGRATION': 'Enable Hudl Integration - Optional feature flag',
-    'REACT_APP_ENABLE_STRIPE_INTEGRATION': 'Enable Stripe Integration - Optional feature flag',
-    
+    REACT_APP_ENABLE_AI_ASSISTANT:
+      'Enable AI Assistant - Optional feature flag',
+    REACT_APP_ENABLE_ANALYTICS: 'Enable Analytics - Optional feature flag',
+    REACT_APP_ENABLE_PUSH_NOTIFICATIONS:
+      'Enable Push Notifications - Optional feature flag',
+    REACT_APP_ENABLE_OFFLINE_MODE:
+      'Enable Offline Mode - Optional feature flag',
+    REACT_APP_ENABLE_HUDL_INTEGRATION:
+      'Enable Hudl Integration - Optional feature flag',
+    REACT_APP_ENABLE_STRIPE_INTEGRATION:
+      'Enable Stripe Integration - Optional feature flag',
+
     // Security
-    'REACT_APP_ENABLE_CSP': 'Enable Content Security Policy - Optional security feature',
-    'REACT_APP_ENABLE_HSTS': 'Enable HSTS - Optional security feature',
-    'REACT_APP_ENABLE_2FA': 'Enable Two-Factor Authentication - Optional security feature',
-    
+    REACT_APP_ENABLE_CSP:
+      'Enable Content Security Policy - Optional security feature',
+    REACT_APP_ENABLE_HSTS: 'Enable HSTS - Optional security feature',
+    REACT_APP_ENABLE_2FA:
+      'Enable Two-Factor Authentication - Optional security feature',
+
     // Development
-    'REACT_APP_USE_EMULATOR': 'Use Firebase Emulator - Optional for development',
-    'REACT_APP_ENABLE_DEBUG_MODE': 'Enable Debug Mode - Optional for development',
-    'REACT_APP_VAPID_KEY': 'VAPID Key - Optional for push notifications',
+    REACT_APP_USE_EMULATOR: 'Use Firebase Emulator - Optional for development',
+    REACT_APP_ENABLE_DEBUG_MODE: 'Enable Debug Mode - Optional for development',
+    REACT_APP_VAPID_KEY: 'VAPID Key - Optional for push notifications',
   };
 
   private securityChecks: EnvironmentCheck[] = [
@@ -90,7 +108,7 @@ export class EnvironmentValidator {
         return apiKey ? apiKey.startsWith('AIza') : false;
       },
       errorMessage: 'Firebase API key format appears invalid',
-      suggestion: 'Verify your Firebase API key in the Firebase Console'
+      suggestion: 'Verify your Firebase API key in the Firebase Console',
     },
     {
       name: 'Firebase Project ID Format',
@@ -99,7 +117,8 @@ export class EnvironmentValidator {
         return projectId ? /^[a-z0-9-]+$/.test(projectId) : false;
       },
       errorMessage: 'Firebase project ID format is invalid',
-      suggestion: 'Project ID should contain only lowercase letters, numbers, and hyphens'
+      suggestion:
+        'Project ID should contain only lowercase letters, numbers, and hyphens',
     },
     {
       name: 'OpenAI API Key Format',
@@ -108,23 +127,23 @@ export class EnvironmentValidator {
         return apiKey ? apiKey.startsWith('sk-') : false;
       },
       errorMessage: 'OpenAI API key format appears invalid',
-      suggestion: 'Verify your OpenAI API key in the OpenAI dashboard'
+      suggestion: 'Verify your OpenAI API key in the OpenAI dashboard',
     },
     {
       name: 'Environment Consistency',
       check: () => {
         const nodeEnv = process.env.NODE_ENV;
         const appEnv = process.env.REACT_APP_ENVIRONMENT;
-        
+
         if (nodeEnv === 'production' && appEnv === 'development') {
           return false;
         }
-        
+
         return true;
       },
       errorMessage: 'Environment configuration is inconsistent',
-      suggestion: 'Ensure NODE_ENV and REACT_APP_ENVIRONMENT are properly set'
-    }
+      suggestion: 'Ensure NODE_ENV and REACT_APP_ENVIRONMENT are properly set',
+    },
   ];
 
   /**
@@ -142,7 +161,7 @@ export class EnvironmentValidator {
           variable,
           message: `Missing required environment variable: ${description}`,
           severity: 'critical',
-          suggestion: `Add ${variable} to your .env file`
+          suggestion: `Add ${variable} to your .env file`,
         });
       }
     }
@@ -153,7 +172,7 @@ export class EnvironmentValidator {
         warnings.push({
           variable,
           message: `Missing optional environment variable: ${description}`,
-          suggestion: `Consider adding ${variable} for enhanced functionality`
+          suggestion: `Consider adding ${variable} for enhanced functionality`,
         });
       }
     }
@@ -167,14 +186,14 @@ export class EnvironmentValidator {
             variable: check.name,
             message: check.errorMessage,
             severity: 'error',
-            suggestion: check.suggestion
+            suggestion: check.suggestion,
           });
         }
       } catch (error) {
         errors.push({
           variable: check.name,
           message: `Security check failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          severity: 'error'
+          severity: 'error',
         });
       }
     }
@@ -189,14 +208,14 @@ export class EnvironmentValidator {
             variable: check.name,
             message: check.errorMessage,
             severity: 'error',
-            suggestion: check.suggestion
+            suggestion: check.suggestion,
           });
         }
       } catch (error) {
         errors.push({
           variable: check.name,
           message: `Environment check failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          severity: 'error'
+          severity: 'error',
         });
       }
     }
@@ -211,7 +230,7 @@ export class EnvironmentValidator {
       errors,
       warnings,
       suggestions,
-      environment
+      environment,
     };
   }
 
@@ -231,18 +250,19 @@ export class EnvironmentValidator {
         check: () => {
           const apiUrl = process.env.REACT_APP_API_BASE_URL;
           const aiUrl = process.env.REACT_APP_AI_SERVICE_URL;
-          
+
           if (apiUrl && !apiUrl.includes('localhost')) {
             return false;
           }
           if (aiUrl && !aiUrl.includes('localhost')) {
             return false;
           }
-          
+
           return true;
         },
         errorMessage: 'Development environment should use localhost URLs',
-        suggestion: 'Use localhost URLs for development or set REACT_APP_ENVIRONMENT=staging'
+        suggestion:
+          'Use localhost URLs for development or set REACT_APP_ENVIRONMENT=staging',
       });
     }
 
@@ -253,11 +273,12 @@ export class EnvironmentValidator {
         check: () => {
           const csp = process.env.REACT_APP_ENABLE_CSP;
           const hsts = process.env.REACT_APP_ENABLE_HSTS;
-          
+
           return csp === 'true' && hsts === 'true';
         },
         errorMessage: 'Production environment should enable security features',
-        suggestion: 'Set REACT_APP_ENABLE_CSP=true and REACT_APP_ENABLE_HSTS=true for production'
+        suggestion:
+          'Set REACT_APP_ENABLE_CSP=true and REACT_APP_ENABLE_HSTS=true for production',
       });
 
       checks.push({
@@ -265,18 +286,18 @@ export class EnvironmentValidator {
         check: () => {
           const apiUrl = process.env.REACT_APP_API_BASE_URL;
           const aiUrl = process.env.REACT_APP_AI_SERVICE_URL;
-          
+
           if (apiUrl && apiUrl.includes('localhost')) {
             return false;
           }
           if (aiUrl && aiUrl.includes('localhost')) {
             return false;
           }
-          
+
           return true;
         },
         errorMessage: 'Production environment should not use localhost URLs',
-        suggestion: 'Use production URLs for API and AI services'
+        suggestion: 'Use production URLs for API and AI services',
       });
     }
 
@@ -286,7 +307,10 @@ export class EnvironmentValidator {
   /**
    * Generate suggestions based on errors and warnings
    */
-  private generateSuggestions(errors: ValidationError[], warnings: ValidationWarning[]): string[] {
+  private generateSuggestions(
+    errors: ValidationError[],
+    warnings: ValidationWarning[]
+  ): string[] {
     const suggestions: string[] = [];
 
     // Firebase-related suggestions
@@ -354,12 +378,15 @@ export class EnvironmentValidator {
    */
   validateVariable(variable: string, value: string): ValidationError | null {
     // Firebase API key validation
-    if (variable === 'REACT_APP_FIREBASE_API_KEY' && !value.startsWith('AIza')) {
+    if (
+      variable === 'REACT_APP_FIREBASE_API_KEY' &&
+      !value.startsWith('AIza')
+    ) {
       return {
         variable,
         message: 'Firebase API key format appears invalid',
         severity: 'error',
-        suggestion: 'Verify your Firebase API key in the Firebase Console'
+        suggestion: 'Verify your Firebase API key in the Firebase Console',
       };
     }
 
@@ -369,7 +396,7 @@ export class EnvironmentValidator {
         variable,
         message: 'OpenAI API key format appears invalid',
         severity: 'error',
-        suggestion: 'Verify your OpenAI API key in the OpenAI dashboard'
+        suggestion: 'Verify your OpenAI API key in the OpenAI dashboard',
       };
     }
 
@@ -382,7 +409,8 @@ export class EnvironmentValidator {
           variable,
           message: 'Invalid URL format',
           severity: 'error',
-          suggestion: 'Ensure the URL is properly formatted (e.g., https://example.com)'
+          suggestion:
+            'Ensure the URL is properly formatted (e.g., https://example.com)',
         };
       }
     }
@@ -393,15 +421,21 @@ export class EnvironmentValidator {
   /**
    * Get environment variable documentation
    */
-  getDocumentation(): Record<string, { description: string; required: boolean; example?: string }> {
-    const docs: Record<string, { description: string; required: boolean; example?: string }> = {};
+  getDocumentation(): Record<
+    string,
+    { description: string; required: boolean; example?: string }
+  > {
+    const docs: Record<
+      string,
+      { description: string; required: boolean; example?: string }
+    > = {};
 
     // Add required variables
     for (const [variable, description] of Object.entries(this.requiredVars)) {
       docs[variable] = {
         description,
         required: true,
-        example: this.getExampleValue(variable)
+        example: this.getExampleValue(variable),
       };
     }
 
@@ -410,7 +444,7 @@ export class EnvironmentValidator {
       docs[variable] = {
         description,
         required: false,
-        example: this.getExampleValue(variable)
+        example: this.getExampleValue(variable),
       };
     }
 
@@ -422,16 +456,18 @@ export class EnvironmentValidator {
    */
   private getExampleValue(variable: string): string | undefined {
     const examples: Record<string, string> = {
-      'REACT_APP_FIREBASE_API_KEY': 'AIzaSyB2iWL0UkuLJYpr-II9IpwGWDOMnLcfq_c',
-      'REACT_APP_FIREBASE_AUTH_DOMAIN': 'your-project.firebaseapp.com',
-      'REACT_APP_FIREBASE_PROJECT_ID': 'your-project-id',
-      'REACT_APP_FIREBASE_STORAGE_BUCKET': 'your-project.appspot.com',
-      'REACT_APP_FIREBASE_MESSAGING_SENDER_ID': '123456789012',
-      'REACT_APP_FIREBASE_APP_ID': '1:123456789012:web:abcdef1234567890',
-      'REACT_APP_OPENAI_API_KEY': 'sk-1234567890abcdef1234567890abcdef1234567890abcdef',
-      'REACT_APP_API_BASE_URL': 'https://api.coachcore.ai/api',
-      'REACT_APP_AI_SERVICE_URL': 'https://ai.coachcore.ai',
-      'REACT_APP_SENTRY_DSN': 'https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/123456',
+      REACT_APP_FIREBASE_API_KEY: 'AIzaSyB2iWL0UkuLJYpr-II9IpwGWDOMnLcfq_c',
+      REACT_APP_FIREBASE_AUTH_DOMAIN: 'your-project.firebaseapp.com',
+      REACT_APP_FIREBASE_PROJECT_ID: 'your-project-id',
+      REACT_APP_FIREBASE_STORAGE_BUCKET: 'your-project.appspot.com',
+      REACT_APP_FIREBASE_MESSAGING_SENDER_ID: '123456789012',
+      REACT_APP_FIREBASE_APP_ID: '1:123456789012:web:abcdef1234567890',
+      REACT_APP_OPENAI_API_KEY:
+        'sk-1234567890abcdef1234567890abcdef1234567890abcdef',
+      REACT_APP_API_BASE_URL: 'https://api.coachcore.ai/api',
+      REACT_APP_AI_SERVICE_URL: 'https://ai.coachcore.ai',
+      REACT_APP_SENTRY_DSN:
+        'https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/123456',
     };
 
     return examples[variable];
@@ -469,6 +505,8 @@ export const environmentValidator = new EnvironmentValidator();
 
 // Export convenience functions
 export const validateEnvironment = () => environmentValidator.validate();
-export const validateVariable = (variable: string, value: string) => environmentValidator.validateVariable(variable, value);
+export const validateVariable = (variable: string, value: string) =>
+  environmentValidator.validateVariable(variable, value);
 export const getEnvironmentDocs = () => environmentValidator.getDocumentation();
-export const generateEnvExample = () => environmentValidator.generateEnvExample(); 
+export const generateEnvExample = () =>
+  environmentValidator.generateEnvExample();

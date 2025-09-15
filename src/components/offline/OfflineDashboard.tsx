@@ -12,15 +12,19 @@ interface OfflineDashboardProps {
 
 type TabType = 'overview' | 'queue' | 'conflicts' | 'settings';
 
-export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({ 
-  userId, 
-  className = '' 
+export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
+  userId,
+  className = '',
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const handleClearQueue = async () => {
-    if (window.confirm('Are you sure you want to clear the entire offline queue? This action cannot be undone.')) {
+    if (
+      window.confirm(
+        'Are you sure you want to clear the entire offline queue? This action cannot be undone.'
+      )
+    ) {
       try {
         await offlineQueueManager.clearQueue();
         alert('Queue cleared successfully');
@@ -45,7 +49,7 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'queue', label: 'Queue', icon: '📋' },
     { id: 'conflicts', label: 'Conflicts', icon: '⚠️' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' }
+    { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
   return (
@@ -56,7 +60,8 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
           Offline Management Dashboard
         </h1>
         <p className="text-gray-600">
-          Monitor and manage offline operations, sync status, and resolve conflicts
+          Monitor and manage offline operations, sync status, and resolve
+          conflicts
         </p>
       </div>
 
@@ -86,7 +91,9 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
       {/* Advanced Controls */}
       {showAdvanced && (
         <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h3 className="font-semibold text-yellow-900 mb-3">Advanced Controls</h3>
+          <h3 className="font-semibold text-yellow-900 mb-3">
+            Advanced Controls
+          </h3>
           <div className="flex space-x-3">
             <button
               onClick={handleClearQueue}
@@ -117,7 +124,7 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
       {/* Tab Navigation */}
       <div className="mb-6">
         <nav className="flex space-x-8 border-b border-gray-200">
-          {tabs.map((tab) => (
+          {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
@@ -148,10 +155,11 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
                     </div>
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Total Operations</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      Total Operations
+                    </p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {/* This would be populated with actual stats */}
-                      -
+                      {/* This would be populated with actual stats */}-
                     </p>
                   </div>
                 </div>
@@ -167,8 +175,7 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-500">Pending</p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {/* This would be populated with actual stats */}
-                      -
+                      {/* This would be populated with actual stats */}-
                     </p>
                   </div>
                 </div>
@@ -182,10 +189,11 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
                     </div>
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Conflicts</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      Conflicts
+                    </p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {/* This would be populated with actual stats */}
-                      -
+                      {/* This would be populated with actual stats */}-
                     </p>
                   </div>
                 </div>
@@ -199,10 +207,11 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
                     </div>
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Success Rate</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      Success Rate
+                    </p>
                     <p className="text-2xl font-semibold text-gray-900">
-                      {/* This would be populated with actual stats */}
-                      -
+                      {/* This would be populated with actual stats */}-
                     </p>
                   </div>
                 </div>
@@ -211,15 +220,19 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
 
             {/* Network Status */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Network Status</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Network Status
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-700">Connection Status</span>
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    navigator.onLine 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full ${
+                      navigator.onLine
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}
+                  >
                     {navigator.onLine ? 'Online' : 'Offline'}
                   </span>
                 </div>
@@ -240,7 +253,9 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
 
             {/* Recent Activity */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Recent Activity
+              </h3>
               <div className="text-gray-500 text-center py-8">
                 Recent activity will be displayed here
               </div>
@@ -248,41 +263,61 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
           </div>
         )}
 
-        {activeTab === 'queue' && (
-          <QueueViewer userId={userId} />
-        )}
+        {activeTab === 'queue' && <QueueViewer userId={userId} />}
 
-        {activeTab === 'conflicts' && (
-          <ConflictResolutionUI userId={userId} />
-        )}
+        {activeTab === 'conflicts' && <ConflictResolutionUI userId={userId} />}
 
         {activeTab === 'settings' && (
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Offline Settings</h3>
-            
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Offline Settings
+            </h3>
+
             <div className="space-y-6">
               {/* Queue Settings */}
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Queue Settings</h4>
+                <h4 className="font-medium text-gray-900 mb-3">
+                  Queue Settings
+                </h4>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">Auto-sync on reconnect</span>
-                    <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                    <span className="text-gray-700">
+                      Auto-sync on reconnect
+                    </span>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="rounded border-gray-300"
+                    />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">Retry failed operations</span>
-                    <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                    <span className="text-gray-700">
+                      Retry failed operations
+                    </span>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="rounded border-gray-300"
+                    />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">Show sync notifications</span>
-                    <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                    <span className="text-gray-700">
+                      Show sync notifications
+                    </span>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="rounded border-gray-300"
+                    />
                   </div>
                 </div>
               </div>
 
               {/* Conflict Resolution Settings */}
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Conflict Resolution</h4>
+                <h4 className="font-medium text-gray-900 mb-3">
+                  Conflict Resolution
+                </h4>
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -296,8 +331,14 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
                     </select>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">Auto-resolve simple conflicts</span>
-                    <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                    <span className="text-gray-700">
+                      Auto-resolve simple conflicts
+                    </span>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="rounded border-gray-300"
+                    />
                   </div>
                 </div>
               </div>
@@ -308,17 +349,17 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Max queue size</span>
-                    <input 
-                      type="number" 
-                      defaultValue="1000" 
+                    <input
+                      type="number"
+                      defaultValue="1000"
                       className="w-24 px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Cache TTL (minutes)</span>
-                    <input 
-                      type="number" 
-                      defaultValue="5" 
+                    <input
+                      type="number"
+                      defaultValue="5"
                       className="w-24 px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -337,4 +378,4 @@ export const OfflineDashboard: React.FC<OfflineDashboardProps> = ({
       </div>
     </div>
   );
-}; 
+};

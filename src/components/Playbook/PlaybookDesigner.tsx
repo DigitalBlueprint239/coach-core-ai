@@ -202,37 +202,70 @@ interface WorkflowStep {
 const PlaybookDesigner: React.FC = () => {
   const [currentPlay, setCurrentPlay] = useState<Play | null>(null);
   const [plays, setPlays] = useState<Play[]>([]);
-  const [selectedFormation, setSelectedFormation] = useState<Formation | null>(null);
-  const [drawingMode, setDrawingMode] = useState<'select' | 'draw' | 'erase'>('select');
+  const [selectedFormation, setSelectedFormation] = useState<Formation | null>(
+    null
+  );
+  const [drawingMode, setDrawingMode] = useState<'select' | 'draw' | 'erase'>(
+    'select'
+  );
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [zoom, setZoom] = useState(1);
   const [showGrid, setShowGrid] = useState(true);
   const [showHelp, setShowHelp] = useState(false);
   const [workflowProgress, setWorkflowProgress] = useState<WorkflowStep[]>([
-    { title: 'Formation Setup', description: 'Choose or create formation', isCompleted: false, isRequired: true },
-    { title: 'Player Placement', description: 'Position players on field', isCompleted: false, isRequired: true },
-    { title: 'Route Design', description: 'Design player movements', isCompleted: false, isRequired: true },
-    { title: 'Play Details', description: 'Add play information', isCompleted: false, isRequired: true },
-    { title: 'Save & Share', description: 'Save play and share', isCompleted: false, isRequired: false },
+    {
+      title: 'Formation Setup',
+      description: 'Choose or create formation',
+      isCompleted: false,
+      isRequired: true,
+    },
+    {
+      title: 'Player Placement',
+      description: 'Position players on field',
+      isCompleted: false,
+      isRequired: true,
+    },
+    {
+      title: 'Route Design',
+      description: 'Design player movements',
+      isCompleted: false,
+      isRequired: true,
+    },
+    {
+      title: 'Play Details',
+      description: 'Add play information',
+      isCompleted: false,
+      isRequired: true,
+    },
+    {
+      title: 'Save & Share',
+      description: 'Save play and share',
+      isCompleted: false,
+      isRequired: false,
+    },
   ]);
-  
+
   // Form state
   const [playName, setPlayName] = useState('');
   const [playDescription, setPlayDescription] = useState('');
-  const [playCategory, setPlayCategory] = useState<'offense' | 'defense' | 'special'>('offense');
-  const [playDifficulty, setPlayDifficulty] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
+  const [playCategory, setPlayCategory] = useState<
+    'offense' | 'defense' | 'special'
+  >('offense');
+  const [playDifficulty, setPlayDifficulty] = useState<
+    'beginner' | 'intermediate' | 'advanced'
+  >('intermediate');
   const [playTags, setPlayTags] = useState<string[]>([]);
-  
+
   // AI and suggestions
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
   const [showAITips, setShowAITips] = useState(false);
-  
+
   // UI state
   const [activeTab, setActiveTab] = useState('design');
   const [showFormationLibrary, setShowFormationLibrary] = useState(false);
   const [showPlayLibrary, setShowPlayLibrary] = useState(false);
   const [canvasRef] = useState(useRef<HTMLDivElement>(null));
-  
+
   const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -259,7 +292,7 @@ const PlaybookDesigner: React.FC = () => {
         { x: 50, y: 0, position: 'C', number: '66', color: 'gray.500' },
         { x: 75, y: 0, position: 'RG', number: '71', color: 'gray.500' },
         { x: 85, y: 0, position: 'RT', number: '77', color: 'gray.500' },
-      ]
+      ],
     },
     {
       id: 'i-formation',
@@ -279,7 +312,7 @@ const PlaybookDesigner: React.FC = () => {
         { x: 50, y: 0, position: 'C', number: '66', color: 'gray.500' },
         { x: 75, y: 0, position: 'RG', number: '71', color: 'gray.500' },
         { x: 85, y: 0, position: 'RT', number: '77', color: 'gray.500' },
-      ]
+      ],
     },
     {
       id: 'spread',
@@ -299,8 +332,8 @@ const PlaybookDesigner: React.FC = () => {
         { x: 50, y: 0, position: 'C', number: '66', color: 'gray.500' },
         { x: 75, y: 0, position: 'RG', number: '71', color: 'gray.500' },
         { x: 85, y: 0, position: 'RT', number: '77', color: 'gray.500' },
-      ]
-    }
+      ],
+    },
   ];
 
   // Quick start play templates
@@ -310,35 +343,35 @@ const PlaybookDesigner: React.FC = () => {
       category: 'offense',
       formation: 'i-formation',
       description: 'Strong side power running play',
-      difficulty: 'intermediate'
+      difficulty: 'intermediate',
     },
     {
       name: 'Screen Pass',
       category: 'offense',
       formation: 'shotgun',
       description: 'Quick screen to running back',
-      difficulty: 'beginner'
+      difficulty: 'beginner',
     },
     {
       name: 'Cover 2',
       category: 'defense',
       formation: '4-3',
       description: 'Two-deep zone coverage',
-      difficulty: 'intermediate'
+      difficulty: 'intermediate',
     },
     {
       name: 'Punt Return',
       category: 'special',
       formation: 'return',
       description: 'Punt return with blocking',
-      difficulty: 'beginner'
-    }
+      difficulty: 'beginner',
+    },
   ];
 
   // Update workflow progress
   const updateWorkflowProgress = (stepIndex: number, isCompleted: boolean) => {
-    setWorkflowProgress(prev => 
-      prev.map((step, index) => 
+    setWorkflowProgress(prev =>
+      prev.map((step, index) =>
         index === stepIndex ? { ...step, isCompleted } : step
       )
     );
@@ -363,7 +396,7 @@ const PlaybookDesigner: React.FC = () => {
   // Apply formation template
   const applyFormation = (formation: Formation) => {
     setSelectedFormation(formation);
-    
+
     // Create players from formation positions
     const players: Player[] = formation.positions.map((pos, index) => ({
       id: `player-${index}`,
@@ -464,7 +497,7 @@ const PlaybookDesigner: React.FC = () => {
   // Save play
   const handleSavePlay = () => {
     if (!currentPlay) return;
-    
+
     const updatedPlay = { ...currentPlay, lastModified: new Date() };
     setPlays(prev => {
       const existingIndex = prev.findIndex(p => p.id === currentPlay.id);
@@ -476,9 +509,9 @@ const PlaybookDesigner: React.FC = () => {
         return [...prev, updatedPlay];
       }
     });
-    
+
     updateWorkflowProgress(4, true);
-    
+
     toast({
       title: 'Play Saved!',
       description: 'Your play has been saved successfully.',
@@ -491,10 +524,10 @@ const PlaybookDesigner: React.FC = () => {
   // Delete play
   const handleDeletePlay = () => {
     if (!currentPlay) return;
-    
+
     setPlays(prev => prev.filter(p => p.id !== currentPlay.id));
     setCurrentPlay(null);
-    
+
     toast({
       title: 'Play Deleted',
       description: 'Play has been removed.',
@@ -507,7 +540,7 @@ const PlaybookDesigner: React.FC = () => {
   // Export play
   const handleExportPlay = () => {
     if (!currentPlay) return;
-    
+
     const data = JSON.stringify(currentPlay, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -518,7 +551,7 @@ const PlaybookDesigner: React.FC = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     toast({
       title: 'Play Exported!',
       description: 'Play has been exported as JSON.',
@@ -531,10 +564,10 @@ const PlaybookDesigner: React.FC = () => {
   // Share play
   const handleSharePlay = () => {
     if (!currentPlay) return;
-    
+
     // For now, just copy to clipboard
     navigator.clipboard.writeText(JSON.stringify(currentPlay, null, 2));
-    
+
     toast({
       title: 'Play Shared!',
       description: 'Play data copied to clipboard.',
@@ -557,7 +590,7 @@ const PlaybookDesigner: React.FC = () => {
               Design and visualize plays with professional tools
             </Text>
           </Box>
-          
+
           <HStack spacing={4}>
             <Button
               leftIcon={<Icon as={HelpCircle} />}
@@ -567,11 +600,7 @@ const PlaybookDesigner: React.FC = () => {
             >
               Help
             </Button>
-            <Button
-              leftIcon={<Icon as={Settings} />}
-              variant="ghost"
-              size="sm"
-            >
+            <Button leftIcon={<Icon as={Settings} />} variant="ghost" size="sm">
               Settings
             </Button>
           </HStack>
@@ -580,7 +609,11 @@ const PlaybookDesigner: React.FC = () => {
         {/* Workflow Progress */}
         <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
           <CardBody>
-            <Stepper index={workflowProgress.filter(step => step.isCompleted).length} colorScheme="blue" size="sm">
+            <Stepper
+              index={workflowProgress.filter(step => step.isCompleted).length}
+              colorScheme="blue"
+              size="sm"
+            >
               {workflowProgress.map((step, index) => (
                 <Step key={index}>
                   <StepIndicator>
@@ -619,7 +652,8 @@ const PlaybookDesigner: React.FC = () => {
                 </ListItem>
                 <ListItem>
                   <ListIcon as={CheckCircle} color="green.500" />
-                  Draw routes by clicking and dragging from player to destination
+                  Draw routes by clicking and dragging from player to
+                  destination
                 </ListItem>
                 <ListItem>
                   <ListIcon as={CheckCircle} color="green.500" />
@@ -631,7 +665,12 @@ const PlaybookDesigner: React.FC = () => {
         </Alert>
       )}
 
-      <Tabs variant="enclosed" colorScheme="blue" index={activeTab === 'design' ? 0 : 1} onChange={(index) => setActiveTab(index === 0 ? 'design' : 'library')}>
+      <Tabs
+        variant="enclosed"
+        colorScheme="blue"
+        index={activeTab === 'design' ? 0 : 1}
+        onChange={index => setActiveTab(index === 0 ? 'design' : 'library')}
+      >
         <TabList>
           <Tab>
             <Icon as={Edit} mr={2} />
@@ -650,7 +689,12 @@ const PlaybookDesigner: React.FC = () => {
               {/* Main Canvas Area */}
               <VStack spacing={6} align="stretch">
                 {/* Quick Start Templates */}
-                <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
+                <Card
+                  bg={bgColor}
+                  border="1px"
+                  borderColor={borderColor}
+                  shadow="sm"
+                >
                   <CardHeader>
                     <Heading size="md" color="gray.800">
                       <Icon as={Zap} mr={2} color="blue.500" />
@@ -692,7 +736,12 @@ const PlaybookDesigner: React.FC = () => {
                                 {template.difficulty}
                               </Badge>
                             </HStack>
-                            <Button size="sm" colorScheme="blue" variant="ghost" rightIcon={<Icon as={ArrowRight} />}>
+                            <Button
+                              size="sm"
+                              colorScheme="blue"
+                              variant="ghost"
+                              rightIcon={<Icon as={ArrowRight} />}
+                            >
                               Use Template
                             </Button>
                           </CardBody>
@@ -703,7 +752,12 @@ const PlaybookDesigner: React.FC = () => {
                 </Card>
 
                 {/* Formation Selection */}
-                <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
+                <Card
+                  bg={bgColor}
+                  border="1px"
+                  borderColor={borderColor}
+                  shadow="sm"
+                >
                   <CardHeader>
                     <Heading size="md" color="gray.800">
                       <Icon as={Users} mr={2} color="blue.500" />
@@ -715,12 +769,16 @@ const PlaybookDesigner: React.FC = () => {
                   </CardHeader>
                   <CardBody>
                     <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
-                      {defaultFormations.map((formation) => (
+                      {defaultFormations.map(formation => (
                         <Card
                           key={formation.id}
                           bg={cardBg}
                           border="1px"
-                          borderColor={selectedFormation?.id === formation.id ? 'blue.300' : borderColor}
+                          borderColor={
+                            selectedFormation?.id === formation.id
+                              ? 'blue.300'
+                              : borderColor
+                          }
                           cursor="pointer"
                           _hover={{
                             borderColor: 'blue.300',
@@ -741,20 +799,22 @@ const PlaybookDesigner: React.FC = () => {
                               overflow="hidden"
                             >
                               {/* Simple formation visualization */}
-                              {formation.positions.slice(0, 6).map((pos, index) => (
-                                <Box
-                                  key={index}
-                                  position="absolute"
-                                  left={`${pos.x}%`}
-                                  top={`${pos.y * 0.8}%`}
-                                  w="8px"
-                                  h="8px"
-                                  bg={pos.color}
-                                  borderRadius="full"
-                                  border="1px"
-                                  borderColor="white"
-                                />
-                              ))}
+                              {formation.positions
+                                .slice(0, 6)
+                                .map((pos, index) => (
+                                  <Box
+                                    key={index}
+                                    position="absolute"
+                                    left={`${pos.x}%`}
+                                    top={`${pos.y * 0.8}%`}
+                                    w="8px"
+                                    h="8px"
+                                    bg={pos.color}
+                                    borderRadius="full"
+                                    border="1px"
+                                    borderColor="white"
+                                  />
+                                ))}
                             </Box>
                             <Text fontWeight="semibold" color="gray.800" mb={1}>
                               {formation.name}
@@ -773,7 +833,12 @@ const PlaybookDesigner: React.FC = () => {
                 </Card>
 
                 {/* Field Canvas */}
-                <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
+                <Card
+                  bg={bgColor}
+                  border="1px"
+                  borderColor={borderColor}
+                  shadow="sm"
+                >
                   <CardHeader>
                     <Flex justify="space-between" align="center">
                       <Heading size="md" color="gray.800">
@@ -788,7 +853,12 @@ const PlaybookDesigner: React.FC = () => {
                           onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
                           aria-label="Zoom out"
                         />
-                        <Text fontSize="sm" color="gray.600" minW="60px" textAlign="center">
+                        <Text
+                          fontSize="sm"
+                          color="gray.600"
+                          minW="60px"
+                          textAlign="center"
+                        >
                           {Math.round(zoom * 100)}%
                         </Text>
                         <IconButton
@@ -819,7 +889,9 @@ const PlaybookDesigner: React.FC = () => {
                       borderRadius="xl"
                       position="relative"
                       overflow="hidden"
-                      cursor={drawingMode === 'select' ? 'default' : 'crosshair'}
+                      cursor={
+                        drawingMode === 'select' ? 'default' : 'crosshair'
+                      }
                     >
                       {/* Grid lines */}
                       {showGrid && (
@@ -834,7 +906,7 @@ const PlaybookDesigner: React.FC = () => {
                           opacity={0.3}
                         />
                       )}
-                      
+
                       {/* Field markings */}
                       <Box
                         position="absolute"
@@ -854,9 +926,9 @@ const PlaybookDesigner: React.FC = () => {
                         bg="white"
                         opacity={0.8}
                       />
-                      
+
                       {/* Players */}
-                      {currentPlay?.players.map((player) => (
+                      {currentPlay?.players.map(player => (
                         <Box
                           key={player.id}
                           position="absolute"
@@ -890,7 +962,7 @@ const PlaybookDesigner: React.FC = () => {
                           </Text>
                         </Box>
                       ))}
-                      
+
                       {/* No formation selected message */}
                       {!selectedFormation && (
                         <Box
@@ -906,7 +978,8 @@ const PlaybookDesigner: React.FC = () => {
                             Select a Formation
                           </Text>
                           <Text fontSize="sm">
-                            Choose a formation above to start designing your play
+                            Choose a formation above to start designing your
+                            play
                           </Text>
                         </Box>
                       )}
@@ -918,7 +991,14 @@ const PlaybookDesigner: React.FC = () => {
               {/* Sidebar - Controls & Properties */}
               <VStack spacing={6} align="stretch">
                 {/* Play Information */}
-                <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm" position="sticky" top={6}>
+                <Card
+                  bg={bgColor}
+                  border="1px"
+                  borderColor={borderColor}
+                  shadow="sm"
+                  position="sticky"
+                  top={6}
+                >
                   <CardHeader>
                     <Heading size="md" color="gray.800">
                       <Icon as={Edit} mr={2} color="blue.500" />
@@ -928,33 +1008,39 @@ const PlaybookDesigner: React.FC = () => {
                   <CardBody>
                     <VStack spacing={4} align="stretch">
                       <FormControl>
-                        <FormLabel fontWeight="semibold" color="gray.700">Play Name</FormLabel>
+                        <FormLabel fontWeight="semibold" color="gray.700">
+                          Play Name
+                        </FormLabel>
                         <Input
                           placeholder="Enter play name"
                           value={playName}
-                          onChange={(e) => setPlayName(e.target.value)}
+                          onChange={e => setPlayName(e.target.value)}
                           size="lg"
                           borderRadius="xl"
                         />
                       </FormControl>
-                      
+
                       <FormControl>
-                        <FormLabel fontWeight="semibold" color="gray.700">Description</FormLabel>
+                        <FormLabel fontWeight="semibold" color="gray.700">
+                          Description
+                        </FormLabel>
                         <Textarea
                           placeholder="Describe the play objective"
                           value={playDescription}
-                          onChange={(e) => setPlayDescription(e.target.value)}
+                          onChange={e => setPlayDescription(e.target.value)}
                           rows={3}
                           borderRadius="xl"
                           resize="vertical"
                         />
                       </FormControl>
-                      
+
                       <FormControl>
-                        <FormLabel fontWeight="semibold" color="gray.700">Category</FormLabel>
+                        <FormLabel fontWeight="semibold" color="gray.700">
+                          Category
+                        </FormLabel>
                         <Select
                           value={playCategory}
-                          onChange={(e) => setPlayCategory(e.target.value as any)}
+                          onChange={e => setPlayCategory(e.target.value as any)}
                           size="lg"
                           borderRadius="xl"
                         >
@@ -963,12 +1049,16 @@ const PlaybookDesigner: React.FC = () => {
                           <option value="special">Special Teams</option>
                         </Select>
                       </FormControl>
-                      
+
                       <FormControl>
-                        <FormLabel fontWeight="semibold" color="gray.700">Difficulty</FormLabel>
+                        <FormLabel fontWeight="semibold" color="gray.700">
+                          Difficulty
+                        </FormLabel>
                         <Select
                           value={playDifficulty}
-                          onChange={(e) => setPlayDifficulty(e.target.value as any)}
+                          onChange={e =>
+                            setPlayDifficulty(e.target.value as any)
+                          }
                           size="lg"
                           borderRadius="xl"
                         >
@@ -977,7 +1067,7 @@ const PlaybookDesigner: React.FC = () => {
                           <option value="advanced">Advanced</option>
                         </Select>
                       </FormControl>
-                      
+
                       <Button
                         leftIcon={<Icon as={Plus} />}
                         colorScheme="blue"
@@ -993,7 +1083,12 @@ const PlaybookDesigner: React.FC = () => {
                 </Card>
 
                 {/* Drawing Tools */}
-                <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
+                <Card
+                  bg={bgColor}
+                  border="1px"
+                  borderColor={borderColor}
+                  shadow="sm"
+                >
                   <CardHeader>
                     <Heading size="md" color="gray.800">
                       <Icon as={PenTool} mr={2} color="blue.500" />
@@ -1012,7 +1107,7 @@ const PlaybookDesigner: React.FC = () => {
                       >
                         Select
                       </Button>
-                      
+
                       <Button
                         leftIcon={<Icon as={PenTool} />}
                         variant={drawingMode === 'draw' ? 'solid' : 'outline'}
@@ -1023,7 +1118,7 @@ const PlaybookDesigner: React.FC = () => {
                       >
                         Draw Routes
                       </Button>
-                      
+
                       <Button
                         leftIcon={<Icon as={Eraser} />}
                         variant={drawingMode === 'erase' ? 'solid' : 'outline'}
@@ -1034,16 +1129,20 @@ const PlaybookDesigner: React.FC = () => {
                       >
                         Erase
                       </Button>
-                      
+
                       <Divider />
-                      
+
                       <HStack justify="space-between">
-                        <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                        <Text
+                          fontSize="sm"
+                          fontWeight="semibold"
+                          color="gray.700"
+                        >
                           Show Grid
                         </Text>
                         <Switch
                           isChecked={showGrid}
-                          onChange={(e) => setShowGrid(e.target.checked)}
+                          onChange={e => setShowGrid(e.target.checked)}
                           colorScheme="blue"
                         />
                       </HStack>
@@ -1053,7 +1152,12 @@ const PlaybookDesigner: React.FC = () => {
 
                 {/* Play Actions */}
                 {currentPlay && (
-                  <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
+                  <Card
+                    bg={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="sm"
+                  >
                     <CardHeader>
                       <Heading size="md" color="gray.800">
                         <Icon as={Play} mr={2} color="blue.500" />
@@ -1071,7 +1175,7 @@ const PlaybookDesigner: React.FC = () => {
                         >
                           Save Play
                         </Button>
-                        
+
                         <Button
                           leftIcon={<Icon as={Share} />}
                           variant="outline"
@@ -1081,7 +1185,7 @@ const PlaybookDesigner: React.FC = () => {
                         >
                           Share Play
                         </Button>
-                        
+
                         <Button
                           leftIcon={<Icon as={Download} />}
                           variant="outline"
@@ -1091,7 +1195,7 @@ const PlaybookDesigner: React.FC = () => {
                         >
                           Export Play
                         </Button>
-                        
+
                         <Button
                           leftIcon={<Icon as={Trash2} />}
                           variant="outline"
@@ -1108,7 +1212,12 @@ const PlaybookDesigner: React.FC = () => {
                 )}
 
                 {/* Smart Tips */}
-                <Card bg={bgColor} border="1px" borderColor={borderColor} shadow="sm">
+                <Card
+                  bg={bgColor}
+                  border="1px"
+                  borderColor={borderColor}
+                  shadow="sm"
+                >
                   <CardHeader>
                     <Heading size="md" color="gray.800">
                       <Icon as={Info} mr={2} color="blue.500" />
@@ -1118,17 +1227,29 @@ const PlaybookDesigner: React.FC = () => {
                   <CardBody>
                     <VStack spacing={3} align="stretch">
                       <Box p={3} bg={cardBg} borderRadius="lg">
-                        <Text fontSize="sm" color="gray.700" fontWeight="medium">
+                        <Text
+                          fontSize="sm"
+                          color="gray.700"
+                          fontWeight="medium"
+                        >
                           🎯 Start with formation, then add routes
                         </Text>
                       </Box>
                       <Box p={3} bg={cardBg} borderRadius="lg">
-                        <Text fontSize="sm" color="gray.700" fontWeight="medium">
+                        <Text
+                          fontSize="sm"
+                          color="gray.700"
+                          fontWeight="medium"
+                        >
                           📐 Use grid for precise positioning
                         </Text>
                       </Box>
                       <Box p={3} bg={cardBg} borderRadius="lg">
-                        <Text fontSize="sm" color="gray.700" fontWeight="medium">
+                        <Text
+                          fontSize="sm"
+                          color="gray.700"
+                          fontWeight="medium"
+                        >
                           🎨 Different colors for different positions
                         </Text>
                       </Box>
@@ -1147,7 +1268,8 @@ const PlaybookDesigner: React.FC = () => {
                 Play Library
               </Text>
               <Text color="gray.500">
-                Your saved plays will appear here. Start designing plays to build your library.
+                Your saved plays will appear here. Start designing plays to
+                build your library.
               </Text>
             </Box>
           </TabPanel>

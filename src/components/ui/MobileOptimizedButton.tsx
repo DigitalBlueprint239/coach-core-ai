@@ -5,7 +5,11 @@ import {
   useColorModeValue,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { TOUCH_SIZES, RESPONSIVE_FONTS, RESPONSIVE_SPACING } from '../../utils/responsive';
+import {
+  TOUCH_SIZES,
+  RESPONSIVE_FONTS,
+  RESPONSIVE_SPACING,
+} from '../../utils/responsive';
 
 interface MobileOptimizedButtonProps extends Omit<ButtonProps, 'size'> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -34,22 +38,37 @@ const MobileOptimizedButton: React.FC<MobileOptimizedButtonProps> = ({
   ...rest
 }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
-  
+
   // Get responsive button size
   const getButtonSize = () => {
     if (isMobile) {
       // Mobile: ensure touch-friendly sizing
       switch (size) {
         case 'xs':
-          return { h: TOUCH_SIZES.button, px: 3, py: 2, fontSize: RESPONSIVE_FONTS.xs };
+          return {
+            h: TOUCH_SIZES.button,
+            px: 3,
+            py: 2,
+            fontSize: RESPONSIVE_FONTS.xs,
+          };
         case 'sm':
-          return { h: TOUCH_SIZES.button, px: 4, py: 2, fontSize: RESPONSIVE_FONTS.sm };
+          return {
+            h: TOUCH_SIZES.button,
+            px: 4,
+            py: 2,
+            fontSize: RESPONSIVE_FONTS.sm,
+          };
         case 'lg':
           return { h: '52px', px: 6, py: 3, fontSize: RESPONSIVE_FONTS.md };
         case 'xl':
           return { h: '56px', px: 8, py: 4, fontSize: RESPONSIVE_FONTS.lg };
         default: // md
-          return { h: TOUCH_SIZES.button, px: 5, py: 2, fontSize: RESPONSIVE_FONTS.sm };
+          return {
+            h: TOUCH_SIZES.button,
+            px: 5,
+            py: 2,
+            fontSize: RESPONSIVE_FONTS.sm,
+          };
       }
     } else {
       // Desktop: use standard sizing

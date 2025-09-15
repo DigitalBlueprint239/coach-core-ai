@@ -19,7 +19,7 @@ export const withRetry = async <T>(
     backoffMultiplier = 2,
     maxDelay = 30000,
     onRetry,
-    shouldRetry
+    shouldRetry,
   } = options;
 
   for (let i = 0; i < maxAttempts; i++) {
@@ -27,32 +27,32 @@ export const withRetry = async <T>(
       return await fn();
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      
+
       // Check if we should retry this error
       if (shouldRetry && !shouldRetry(err)) {
         throw err;
       }
-      
+
       // If this is the last attempt, throw the error
       if (i === maxAttempts - 1) {
         throw err;
       }
-      
+
       // Call onRetry callback if provided
       if (onRetry) {
         onRetry(i + 1, err);
       }
-      
+
       // Calculate delay with exponential backoff
       const currentDelay = Math.min(
         delay * Math.pow(backoffMultiplier, i),
         maxDelay
       );
-      
+
       await new Promise(resolve => setTimeout(resolve, currentDelay));
     }
   }
-  
+
   throw new Error('Max retries reached');
 };
 
@@ -67,14 +67,16 @@ export const withNetworkRetry = async <T>(
   return withRetry(fn, {
     maxAttempts: 3,
     delay: 1000,
-    shouldRetry: (error) => {
+    shouldRetry: error => {
       // Retry network-related errors
-      return error.name === 'NetworkError' || 
-             error.message.includes('network') ||
-             error.message.includes('fetch') ||
-             error.message.includes('timeout');
+      return (
+        error.name === 'NetworkError' ||
+        error.message.includes('network') ||
+        error.message.includes('fetch') ||
+        error.message.includes('timeout')
+      );
     },
-    ...options
+    ...options,
   });
 };
 
@@ -85,14 +87,16 @@ export const withDatabaseRetry = async <T>(
   return withRetry(fn, {
     maxAttempts: 5,
     delay: 500,
-    shouldRetry: (error) => {
+    shouldRetry: error => {
       // Retry database-related errors
-      return error.name === 'QuotaExceededError' ||
-             error.message.includes('database') ||
-             error.message.includes('indexeddb') ||
-             error.message.includes('quota');
+      return (
+        error.name === 'QuotaExceededError' ||
+        error.message.includes('database') ||
+        error.message.includes('indexeddb') ||
+        error.message.includes('quota')
+      );
     },
-    ...options
+    ...options,
   });
 };
 
@@ -103,21 +107,23 @@ export const withAPIRetry = async <T>(
   return withRetry(fn, {
     maxAttempts: 3,
     delay: 1000,
-    shouldRetry: (error) => {
+    shouldRetry: error => {
       // Retry API-related errors
       const retryableStatuses = [408, 429, 500, 502, 503, 504];
       const statusMatch = error.message.match(/HTTP (\d+)/);
-      
+
       if (statusMatch) {
         const status = parseInt(statusMatch[1]);
         return retryableStatuses.includes(status);
       }
-      
-      return error.message.includes('timeout') ||
-             error.message.includes('network') ||
-             error.message.includes('connection');
+
+      return (
+        error.message.includes('timeout') ||
+        error.message.includes('network') ||
+        error.message.includes('connection')
+      );
     },
-    ...options
+    ...options,
   });
 };
 
@@ -126,14 +132,15 @@ export const withAPIRetry = async <T>(
 // ============================================
 
 export const retryable = (options: RetryOptions = {}) => {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      return withRetry(
-        () => originalMethod.apply(this, args),
-        options
-      );
+      return withRetry(() => originalMethod.apply(this, args), options);
     };
 
     return descriptor;
@@ -144,13 +151,15 @@ export const networkRetryable = (options: RetryOptions = {}) => {
   return retryable({
     maxAttempts: 3,
     delay: 1000,
-    shouldRetry: (error) => {
-      return error.name === 'NetworkError' || 
-             error.message.includes('network') ||
-             error.message.includes('fetch') ||
-             error.message.includes('timeout');
+    shouldRetry: error => {
+      return (
+        error.name === 'NetworkError' ||
+        error.message.includes('network') ||
+        error.message.includes('fetch') ||
+        error.message.includes('timeout')
+      );
     },
-    ...options
+    ...options,
   });
 };
 
@@ -158,13 +167,15 @@ export const databaseRetryable = (options: RetryOptions = {}) => {
   return retryable({
     maxAttempts: 5,
     delay: 500,
-    shouldRetry: (error) => {
-      return error.name === 'QuotaExceededError' ||
-             error.message.includes('database') ||
-             error.message.includes('indexeddb') ||
-             error.message.includes('quota');
+    shouldRetry: error => {
+      return (
+        error.name === 'QuotaExceededError' ||
+        error.message.includes('database') ||
+        error.message.includes('indexeddb') ||
+        error.message.includes('quota')
+      );
     },
-    ...options
+    ...options,
   });
 };
 
@@ -175,39 +186,39 @@ export const databaseRetryable = (options: RetryOptions = {}) => {
 import { useCallback } from 'react';
 
 export const useRetry = () => {
-  const retry = useCallback(<T>(
-    fn: () => Promise<T>,
-    options: RetryOptions = {}
-  ): Promise<T> => {
-    return withRetry(fn, options);
-  }, []);
+  const retry = useCallback(
+    <T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> => {
+      return withRetry(fn, options);
+    },
+    []
+  );
 
-  const networkRetry = useCallback(<T>(
-    fn: () => Promise<T>,
-    options: RetryOptions = {}
-  ): Promise<T> => {
-    return withNetworkRetry(fn, options);
-  }, []);
+  const networkRetry = useCallback(
+    <T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> => {
+      return withNetworkRetry(fn, options);
+    },
+    []
+  );
 
-  const databaseRetry = useCallback(<T>(
-    fn: () => Promise<T>,
-    options: RetryOptions = {}
-  ): Promise<T> => {
-    return withDatabaseRetry(fn, options);
-  }, []);
+  const databaseRetry = useCallback(
+    <T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> => {
+      return withDatabaseRetry(fn, options);
+    },
+    []
+  );
 
-  const apiRetry = useCallback(<T>(
-    fn: () => Promise<T>,
-    options: RetryOptions = {}
-  ): Promise<T> => {
-    return withAPIRetry(fn, options);
-  }, []);
+  const apiRetry = useCallback(
+    <T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> => {
+      return withAPIRetry(fn, options);
+    },
+    []
+  );
 
   return {
     retry,
     networkRetry,
     databaseRetry,
-    apiRetry
+    apiRetry,
   };
 };
 
@@ -215,7 +226,9 @@ export const useRetry = () => {
 // RETRY UTILITIES
 // ============================================
 
-export const createRetryableFunction = <T extends (...args: any[]) => Promise<any>>(
+export const createRetryableFunction = <
+  T extends (...args: any[]) => Promise<any>,
+>(
   fn: T,
   options: RetryOptions = {}
 ): T => {
@@ -224,33 +237,41 @@ export const createRetryableFunction = <T extends (...args: any[]) => Promise<an
   }) as T;
 };
 
-export const createNetworkRetryableFunction = <T extends (...args: any[]) => Promise<any>>(
+export const createNetworkRetryableFunction = <
+  T extends (...args: any[]) => Promise<any>,
+>(
   fn: T
 ): T => {
   return createRetryableFunction(fn, {
     maxAttempts: 3,
     delay: 1000,
-    shouldRetry: (error) => {
-      return error.name === 'NetworkError' || 
-             error.message.includes('network') ||
-             error.message.includes('fetch') ||
-             error.message.includes('timeout');
-    }
+    shouldRetry: error => {
+      return (
+        error.name === 'NetworkError' ||
+        error.message.includes('network') ||
+        error.message.includes('fetch') ||
+        error.message.includes('timeout')
+      );
+    },
   });
 };
 
-export const createDatabaseRetryableFunction = <T extends (...args: any[]) => Promise<any>>(
+export const createDatabaseRetryableFunction = <
+  T extends (...args: any[]) => Promise<any>,
+>(
   fn: T
 ): T => {
   return createRetryableFunction(fn, {
     maxAttempts: 5,
     delay: 500,
-    shouldRetry: (error) => {
-      return error.name === 'QuotaExceededError' ||
-             error.message.includes('database') ||
-             error.message.includes('indexeddb') ||
-             error.message.includes('quota');
-    }
+    shouldRetry: error => {
+      return (
+        error.name === 'QuotaExceededError' ||
+        error.message.includes('database') ||
+        error.message.includes('indexeddb') ||
+        error.message.includes('quota')
+      );
+    },
   });
 };
 
@@ -258,4 +279,4 @@ export const createDatabaseRetryableFunction = <T extends (...args: any[]) => Pr
 // DEFAULT EXPORT
 // ============================================
 
-export default withRetry; 
+export default withRetry;

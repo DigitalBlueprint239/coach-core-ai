@@ -17,11 +17,13 @@ const PracticePlanner: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [aiResult, setAIResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<'helpful' | 'not_helpful' | null>(null);
+  const [feedback, setFeedback] = useState<'helpful' | 'not_helpful' | null>(
+    null
+  );
 
   const handleGoalChange = (goal: string) => {
-    setGoals((prev) =>
-      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    setGoals(prev =>
+      prev.includes(goal) ? prev.filter(g => g !== goal) : [...prev, goal]
     );
   };
 
@@ -36,15 +38,19 @@ const PracticePlanner: React.FC = () => {
             teamId: currentTeam.id,
             teamName: currentTeam.name,
             sport: (currentTeam as any).sport || 'football',
-            ageGroup: (currentTeam.level as any),
+            ageGroup: currentTeam.level as any,
           }
-        : { 
-            teamId: '', 
-            teamName: 'My Team', 
-            sport: 'football', 
-            ageGroup: 'youth' 
+        : {
+            teamId: '',
+            teamName: 'My Team',
+            sport: 'football',
+            ageGroup: 'youth',
           };
-      const result = await ai.generatePracticePlan(teamContext, goals, duration);
+      const result = await ai.generatePracticePlan(
+        teamContext,
+        goals,
+        duration
+      );
       setAIResult(result);
     } catch (err: any) {
       setError('AI generation failed. Please try again.');
@@ -55,12 +61,17 @@ const PracticePlanner: React.FC = () => {
 
   const handleFeedback = (type: 'helpful' | 'not_helpful') => {
     setFeedback(type);
-    ai.recordOutcome('practice_generated', type === 'helpful' ? 'success' : 'failure');
+    ai.recordOutcome(
+      'practice_generated',
+      type === 'helpful' ? 'success' : 'failure'
+    );
   };
 
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md mt-6">
-      <h2 className="text-2xl font-bold mb-4 text-center">Practice Plan Generator (AI)</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Practice Plan Generator (AI)
+      </h2>
       <div className="mb-4">
         <label className="block mb-1 font-medium">Duration (minutes)</label>
         <input
@@ -97,9 +108,14 @@ const PracticePlanner: React.FC = () => {
       {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
       {aiResult && (
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 className="font-semibold text-lg mb-2">AI-Generated Practice Plan</h3>
+          <h3 className="font-semibold text-lg mb-2">
+            AI-Generated Practice Plan
+          </h3>
           <div className="mb-2">
-            <span className="font-medium">Confidence:</span> <span className="text-blue-700">{Math.round((aiResult.confidence || 0) * 100)}%</span>
+            <span className="font-medium">Confidence:</span>{' '}
+            <span className="text-blue-700">
+              {Math.round((aiResult.confidence || 0) * 100)}%
+            </span>
           </div>
           {aiResult.insights && aiResult.insights.length > 0 && (
             <div className="mb-2">
@@ -117,7 +133,8 @@ const PracticePlanner: React.FC = () => {
               <ul className="list-decimal ml-6 text-sm">
                 {aiResult.plan.periods.map((period: any, i: number) => (
                   <li key={i} className="mb-1">
-                    <span className="font-semibold">{period.name}</span> - {period.duration} min, Intensity: {period.intensity}
+                    <span className="font-semibold">{period.name}</span> -{' '}
+                    {period.duration} min, Intensity: {period.intensity}
                     {period.drills && (
                       <ul className="list-disc ml-6 text-xs text-gray-700">
                         {period.drills.map((drill: string, j: number) => (
@@ -137,14 +154,20 @@ const PracticePlanner: React.FC = () => {
               onClick={() => handleFeedback('helpful')}
               className={`p-1 rounded ${feedback === 'helpful' ? 'bg-green-100 text-green-600' : 'text-gray-400 hover:text-green-600'}`}
               disabled={!!feedback}
-            >👍</button>
+            >
+              👍
+            </button>
             <button
               onClick={() => handleFeedback('not_helpful')}
               className={`p-1 rounded ${feedback === 'not_helpful' ? 'bg-red-100 text-red-600' : 'text-gray-400 hover:text-red-600'}`}
               disabled={!!feedback}
-            >👎</button>
+            >
+              👎
+            </button>
             {feedback && (
-              <span className="text-xs ml-2 text-gray-600">Thank you for your feedback!</span>
+              <span className="text-xs ml-2 text-gray-600">
+                Thank you for your feedback!
+              </span>
             )}
           </div>
         </div>

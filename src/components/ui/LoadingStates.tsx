@@ -41,7 +41,7 @@ export const SkeletonTable: React.FC<{
         <Skeleton key={i} height="20px" width={`${100 / columns}%`} />
       ))}
     </HStack>
-    
+
     {/* Rows */}
     {Array.from({ length: rows }).map((_, rowIndex) => (
       <HStack key={rowIndex} spacing={4} mb={3}>
@@ -60,7 +60,9 @@ export const SkeletonList: React.FC<{
   <VStack spacing={3} align="stretch">
     {Array.from({ length: items }).map((_, i) => (
       <HStack key={i} spacing={3} p={3} borderWidth="1px" borderRadius="md">
-        {showAvatar && <Skeleton height="40px" width="40px" borderRadius="full" />}
+        {showAvatar && (
+          <Skeleton height="40px" width="40px" borderRadius="full" />
+        )}
         <VStack flex={1} align="stretch" spacing={2}>
           <Skeleton height="16px" width="70%" />
           <Skeleton height="14px" width="50%" />
@@ -78,7 +80,7 @@ export const LoadingSpinner: React.FC<{
   color?: string;
 }> = ({ size = 'md', text = 'Loading...', color }) => {
   const spinnerColor = color || useColorModeValue('blue.500', 'blue.400');
-  
+
   return (
     <Center p={8}>
       <VStack spacing={4}>
@@ -108,7 +110,7 @@ export const InlineSpinner: React.FC<{
   color?: string;
 }> = ({ size = 'sm', text, color }) => {
   const spinnerColor = color || useColorModeValue('blue.500', 'blue.400');
-  
+
   return (
     <HStack spacing={2}>
       <Spinner
@@ -138,16 +140,16 @@ export const LoadingProgress: React.FC<{
   showValue?: boolean;
   colorScheme?: string;
   size?: 'sm' | 'md' | 'lg';
-}> = ({ 
-  value, 
-  max = 100, 
-  text, 
-  showValue = true, 
+}> = ({
+  value,
+  max = 100,
+  text,
+  showValue = true,
   colorScheme = 'blue',
-  size = 'md'
+  size = 'md',
 }) => {
   const percentage = Math.round((value / max) * 100);
-  
+
   return (
     <VStack spacing={3} align="stretch" w="100%">
       {text && (
@@ -169,7 +171,7 @@ export const LoadingProgress: React.FC<{
           )}
         </HStack>
       )}
-      
+
       <Progress
         value={value}
         max={max}
@@ -198,7 +200,7 @@ export const IndeterminateProgress: React.FC<{
         {text}
       </Text>
     )}
-    
+
     <Progress
       size={size}
       colorScheme={colorScheme}
@@ -212,7 +214,10 @@ export const IndeterminateProgress: React.FC<{
 export const PageLoading: React.FC<{
   title?: string;
   subtitle?: string;
-}> = ({ title = 'Loading Page', subtitle = 'Please wait while we prepare your content' }) => (
+}> = ({
+  title = 'Loading Page',
+  subtitle = 'Please wait while we prepare your content',
+}) => (
   <Center minH="60vh" p={8}>
     <VStack spacing={6} textAlign="center">
       <Spinner
@@ -222,7 +227,7 @@ export const PageLoading: React.FC<{
         color="blue.500"
         size="xl"
       />
-      
+
       <VStack spacing={2}>
         <Text
           fontSize={RESPONSIVE_FONTS.lg}
@@ -250,7 +255,7 @@ export const ContentLoading: React.FC<{
 }> = ({ type = 'card', count = 3, height }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const spacing = isMobile ? RESPONSIVE_SPACING.md : RESPONSIVE_SPACING.sm;
-  
+
   return (
     <VStack spacing={spacing} align="stretch">
       {type === 'card' && (
@@ -260,14 +265,10 @@ export const ContentLoading: React.FC<{
           ))}
         </>
       )}
-      
-      {type === 'table' && (
-        <SkeletonTable rows={count} columns={4} />
-      )}
-      
-      {type === 'list' && (
-        <SkeletonList items={count} showAvatar={true} />
-      )}
+
+      {type === 'table' && <SkeletonTable rows={count} columns={4} />}
+
+      {type === 'list' && <SkeletonList items={count} showAvatar={true} />}
     </VStack>
   );
 };
@@ -282,15 +283,15 @@ export const LoadingButton: React.FC<{
   colorScheme?: string;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'solid' | 'outline' | 'ghost';
-}> = ({ 
-  isLoading, 
-  loadingText = 'Loading...', 
-  children, 
-  onClick, 
+}> = ({
+  isLoading,
+  loadingText = 'Loading...',
+  children,
+  onClick,
   disabled,
   colorScheme = 'blue',
   size = 'md',
-  variant = 'solid'
+  variant = 'solid',
 }) => (
   <Box
     as="button"

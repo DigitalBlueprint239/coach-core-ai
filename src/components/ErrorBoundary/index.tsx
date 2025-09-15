@@ -1,36 +1,45 @@
 /**
  * Error Boundary Index
- * 
+ *
  * Main exports for all error boundary components and utilities
  */
 
 // Base error boundary
 export { default as BaseErrorBoundary } from './BaseErrorBoundary';
-export type { 
-  ErrorBoundaryProps, 
-  ErrorBoundaryState, 
-  ErrorReport, 
-  ErrorRecoveryOptions 
+export type {
+  ErrorBoundaryProps,
+  ErrorBoundaryState,
+  ErrorReport,
+  ErrorRecoveryOptions,
 } from './BaseErrorBoundary';
 
 // Specialized error boundaries
 export { default as CanvasErrorBoundary } from './CanvasErrorBoundary';
-export type { CanvasErrorBoundaryProps, CanvasErrorBoundaryState } from './CanvasErrorBoundary';
+export type {
+  CanvasErrorBoundaryProps,
+  CanvasErrorBoundaryState,
+} from './CanvasErrorBoundary';
 
 export { default as AIServiceErrorBoundary } from './AIServiceErrorBoundary';
-export type { AIServiceErrorBoundaryProps, AIServiceErrorBoundaryState } from './AIServiceErrorBoundary';
+export type {
+  AIServiceErrorBoundaryProps,
+  AIServiceErrorBoundaryState,
+} from './AIServiceErrorBoundary';
 
 export { default as DataLoadingErrorBoundary } from './DataLoadingErrorBoundary';
-export type { DataLoadingErrorBoundaryProps, DataLoadingErrorBoundaryState } from './DataLoadingErrorBoundary';
+export type {
+  DataLoadingErrorBoundaryProps,
+  DataLoadingErrorBoundaryState,
+} from './DataLoadingErrorBoundary';
 
 // Utilities and hooks
-export { 
+export {
   useErrorBoundary,
   isNetworkError,
   isDataError,
   isAuthError,
   isCanvasError,
-  isAIError
+  isAIError,
 } from './BaseErrorBoundary';
 
 // ============================================
@@ -38,7 +47,12 @@ export {
 // ============================================
 
 import React, { ReactNode } from 'react';
-import { BaseErrorBoundary, CanvasErrorBoundary, AIServiceErrorBoundary, DataLoadingErrorBoundary } from './';
+import {
+  BaseErrorBoundary,
+  CanvasErrorBoundary,
+  AIServiceErrorBoundary,
+  DataLoadingErrorBoundary,
+} from './';
 
 /**
  * Wrap SmartPlaybook component with canvas error boundary
@@ -63,7 +77,10 @@ export const withCanvasErrorBoundary = (component: ReactNode, props?: any) => (
 /**
  * Wrap PracticePlanner component with AI service error boundary
  */
-export const withAIServiceErrorBoundary = (component: ReactNode, props?: any) => (
+export const withAIServiceErrorBoundary = (
+  component: ReactNode,
+  props?: any
+) => (
   <AIServiceErrorBoundary
     componentName="PracticePlanner"
     serviceName="OpenAI"
@@ -84,7 +101,10 @@ export const withAIServiceErrorBoundary = (component: ReactNode, props?: any) =>
 /**
  * Wrap Dashboard component with data loading error boundary
  */
-export const withDataLoadingErrorBoundary = (component: ReactNode, props?: any) => (
+export const withDataLoadingErrorBoundary = (
+  component: ReactNode,
+  props?: any
+) => (
   <DataLoadingErrorBoundary
     componentName="Dashboard"
     dataType="team"
@@ -105,7 +125,10 @@ export const withDataLoadingErrorBoundary = (component: ReactNode, props?: any) 
 /**
  * Wrap TeamManagement component with data loading error boundary
  */
-export const withTeamManagementErrorBoundary = (component: ReactNode, props?: any) => (
+export const withTeamManagementErrorBoundary = (
+  component: ReactNode,
+  props?: any
+) => (
   <DataLoadingErrorBoundary
     componentName="TeamManagement"
     dataType="team"
@@ -126,7 +149,10 @@ export const withTeamManagementErrorBoundary = (component: ReactNode, props?: an
 /**
  * Wrap Analytics component with data loading error boundary
  */
-export const withAnalyticsErrorBoundary = (component: ReactNode, props?: any) => (
+export const withAnalyticsErrorBoundary = (
+  component: ReactNode,
+  props?: any
+) => (
   <DataLoadingErrorBoundary
     componentName="Analytics"
     dataType="analytics"
@@ -203,7 +229,7 @@ export const ErrorBoundaryProvider: React.FC<ErrorBoundaryProviderProps> = ({
   enableGlobalErrorReporting = true,
   enableAutoRetry = true,
   maxRetries = 3,
-  retryDelay = 2000
+  retryDelay = 2000,
 }) => {
   return (
     <BaseErrorBoundary
@@ -230,9 +256,9 @@ export const ERROR_BOUNDARY_CONFIG = {
     retryDelay: 2000,
     autoRetry: true,
     autoRetryDelay: 5000,
-    enableWebGLFallback: true
+    enableWebGLFallback: true,
   },
-  
+
   // AI service components
   ai: {
     maxRetries: 5,
@@ -240,9 +266,9 @@ export const ERROR_BOUNDARY_CONFIG = {
     autoRetry: true,
     autoRetryDelay: 10000,
     retryWithBackoff: true,
-    enableOfflineMode: true
+    enableOfflineMode: true,
   },
-  
+
   // Data loading components
   data: {
     maxRetries: 3,
@@ -250,17 +276,17 @@ export const ERROR_BOUNDARY_CONFIG = {
     autoRetry: true,
     autoRetryDelay: 5000,
     enableCaching: true,
-    cacheTimeout: 300000 // 5 minutes
+    cacheTimeout: 300000, // 5 minutes
   },
-  
+
   // Base configuration
   base: {
     maxRetries: 3,
     retryDelay: 2000,
     autoRetry: false,
     errorReporting: true,
-    showErrorDetails: process.env.NODE_ENV === 'development'
-  }
+    showErrorDetails: process.env.NODE_ENV === 'development',
+  },
 };
 
 // ============================================
@@ -270,7 +296,9 @@ export const ERROR_BOUNDARY_CONFIG = {
 /**
  * Get error boundary configuration for a specific component type
  */
-export const getErrorBoundaryConfig = (type: keyof typeof ERROR_BOUNDARY_CONFIG) => {
+export const getErrorBoundaryConfig = (
+  type: keyof typeof ERROR_BOUNDARY_CONFIG
+) => {
   return ERROR_BOUNDARY_CONFIG[type];
 };
 
@@ -282,7 +310,7 @@ export const createErrorBoundary = (
   customProps?: any
 ) => {
   const config = getErrorBoundaryConfig(type);
-  
+
   switch (type) {
     case 'canvas':
       return (component: ReactNode) => (
@@ -320,5 +348,5 @@ export default {
   ErrorBoundaryProvider,
   ERROR_BOUNDARY_CONFIG,
   getErrorBoundaryConfig,
-  createErrorBoundary
-}; 
+  createErrorBoundary,
+};

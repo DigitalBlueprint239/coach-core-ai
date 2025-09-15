@@ -15,7 +15,14 @@ import {
   Collapse,
   useDisclosure,
 } from '@chakra-ui/react';
-import { BarChart3, TrendingUp, TrendingDown, Activity, Zap, Info } from 'lucide-react';
+import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  Zap,
+  Info,
+} from 'lucide-react';
 import { RESPONSIVE_SPACING, RESPONSIVE_FONTS } from '../../utils/responsive';
 
 interface PerformanceMetrics {
@@ -55,46 +62,48 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   const measurePerformance = useCallback(() => {
     const startTime = performance.now();
-    
+
     // Measure render time
     const renderStart = performance.now();
     requestAnimationFrame(() => {
       const renderTime = performance.now() - renderStart;
-      
+
       // Measure memory usage (if available)
       const memory = (performance as any).memory;
       const memoryUsage = memory ? memory.usedJSHeapSize / 1024 / 1024 : 0;
-      
+
       // Measure FPS
       let frameCount = 0;
       let lastTime = performance.now();
-      
+
       const measureFPS = () => {
         frameCount++;
         const currentTime = performance.now();
-        
+
         if (currentTime - lastTime >= 1000) {
-          const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-          
+          const fps = Math.round(
+            (frameCount * 1000) / (currentTime - lastTime)
+          );
+
           setMetrics(prev => ({
             ...prev,
             renderTime,
             memoryUsage,
             fps,
           }));
-          
+
           frameCount = 0;
           lastTime = currentTime;
         }
-        
+
         if (isMonitoring) {
           requestAnimationFrame(measureFPS);
         }
       };
-      
+
       requestAnimationFrame(measureFPS);
     });
-    
+
     // Measure load time
     const loadTime = performance.now() - startTime;
     setMetrics(prev => ({ ...prev, loadTime }));
@@ -111,13 +120,13 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   const getPerformanceScore = useCallback(() => {
     let score = 100;
-    
+
     if (metrics.loadTime > 1000) score -= 20;
     if (metrics.renderTime > 16) score -= 15;
     if (metrics.memoryUsage > 100) score -= 15;
     if (metrics.fps < 30) score -= 20;
     if (metrics.networkLatency > 200) score -= 10;
-    
+
     return Math.max(0, score);
   }, [metrics]);
 
@@ -168,7 +177,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
               Performance Monitor
             </Heading>
           </HStack>
-          
+
           <HStack spacing={2}>
             <Badge colorScheme={performanceColor} variant="subtle">
               {performanceScore}/100
@@ -207,7 +216,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           >
             {isMonitoring ? 'Stop' : 'Start'} Monitoring
           </Button>
-          
+
           {showDetails && (
             <Button
               size={{ base: 'sm', md: 'md' }}
@@ -225,8 +234,12 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             <VStack spacing={3} align="stretch" pt={2}>
               <Box>
                 <HStack justify="space-between" mb={1}>
-                  <Text fontSize="xs" color="gray.500">Load Time</Text>
-                  <Text fontSize="xs" color="gray.700">{metrics.loadTime.toFixed(2)}ms</Text>
+                  <Text fontSize="xs" color="gray.500">
+                    Load Time
+                  </Text>
+                  <Text fontSize="xs" color="gray.700">
+                    {metrics.loadTime.toFixed(2)}ms
+                  </Text>
                 </HStack>
                 <Progress
                   value={Math.min(100, (metrics.loadTime / 1000) * 100)}
@@ -238,8 +251,12 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
               <Box>
                 <HStack justify="space-between" mb={1}>
-                  <Text fontSize="xs" color="gray.500">Render Time</Text>
-                  <Text fontSize="xs" color="gray.700">{metrics.renderTime.toFixed(2)}ms</Text>
+                  <Text fontSize="xs" color="gray.500">
+                    Render Time
+                  </Text>
+                  <Text fontSize="xs" color="gray.700">
+                    {metrics.renderTime.toFixed(2)}ms
+                  </Text>
                 </HStack>
                 <Progress
                   value={Math.min(100, (metrics.renderTime / 16) * 100)}
@@ -251,8 +268,12 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
               <Box>
                 <HStack justify="space-between" mb={1}>
-                  <Text fontSize="xs" color="gray.500">Memory Usage</Text>
-                  <Text fontSize="xs" color="gray.700">{metrics.memoryUsage.toFixed(1)}MB</Text>
+                  <Text fontSize="xs" color="gray.500">
+                    Memory Usage
+                  </Text>
+                  <Text fontSize="xs" color="gray.700">
+                    {metrics.memoryUsage.toFixed(1)}MB
+                  </Text>
                 </HStack>
                 <Progress
                   value={Math.min(100, (metrics.memoryUsage / 100) * 100)}
@@ -264,12 +285,22 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
               <Box>
                 <HStack justify="space-between" mb={1}>
-                  <Text fontSize="xs" color="gray.500">FPS</Text>
-                  <Text fontSize="xs" color="gray.700">{metrics.fps}</Text>
+                  <Text fontSize="xs" color="gray.500">
+                    FPS
+                  </Text>
+                  <Text fontSize="xs" color="gray.700">
+                    {metrics.fps}
+                  </Text>
                 </HStack>
                 <Progress
                   value={Math.min(100, (metrics.fps / 60) * 100)}
-                  colorScheme={metrics.fps < 30 ? 'red' : metrics.fps < 50 ? 'yellow' : 'green'}
+                  colorScheme={
+                    metrics.fps < 30
+                      ? 'red'
+                      : metrics.fps < 50
+                        ? 'yellow'
+                        : 'green'
+                  }
                   size="xs"
                   borderRadius="full"
                 />
