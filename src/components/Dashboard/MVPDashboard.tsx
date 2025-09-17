@@ -185,11 +185,9 @@ const MVPDashboard: React.FC = React.memo(() => {
     },
   ], [profile]);
 
-  // Memoized color values
-  const colors = useMemo(() => ({
-    bgColor: useColorModeValue('white', 'gray.800'),
-    borderColor: useColorModeValue('gray.200', 'gray.700'),
-  }), []);
+  // Color values
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   // Performance monitoring display (only in development)
   const performanceDisplay = __DEV__ ? (
@@ -260,7 +258,7 @@ const MVPDashboard: React.FC = React.memo(() => {
             </Button>
           </HStack>
           
-          <Card bg={colors.bgColor} border="1px" borderColor={colors.borderColor}>
+          <Card bg={bgColor} border="1px" borderColor={borderColor}>
             <CardBody>
               <VStack spacing={4} align="stretch">
                 <HStack justify="space-between">

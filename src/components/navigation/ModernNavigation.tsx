@@ -1,526 +1,505 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
-  VStack,
+  Flex,
   HStack,
+  VStack,
   Text,
-  Heading,
   Button,
   IconButton,
   Avatar,
-  AvatarBadge,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   MenuDivider,
-  useColorModeValue,
-  useDisclosure,
   Drawer,
   DrawerBody,
   DrawerHeader,
+  DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  useDisclosure,
+  useColorModeValue,
   Badge,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Collapse,
   Divider,
-  useToast,
   Tooltip,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  useBreakpointValue,
-  Icon,
-  Flex,
 } from '@chakra-ui/react';
 import {
   Menu as MenuIcon,
+  X,
   Home,
   Users,
-  Calendar,
+  BookOpen,
+  Play,
   Brain,
+  BarChart3,
+  Calendar,
   Settings,
   LogOut,
-  User,
   Bell,
   Search,
-  ChevronRight,
-  Trophy,
-  Target,
-  BarChart3,
-  BookOpen,
-  MessageSquare,
+  ChevronDown,
+  User,
+  Shield,
   HelpCircle,
   Sun,
   Moon,
-  Play,
+  MessageCircle,
 } from 'lucide-react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { useAppStore } from '../../services/state/app-store';
-import { authService } from '../../services/firebase/auth-service';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import FeedbackModal from '../Feedback/FeedbackModal';
 
+// Navigation item component
+const NavItem = ({ icon, label, href, isActive, onClick, badge }: any) => {
+  const activeColor = useColorModeValue('brand.500', 'brand.300');
+  const hoverBg = useColorModeValue('brand.50', 'brand.900');
+  const textColor = useColorModeValue('gray.700', 'gray.300');
+  const activeTextColor = useColorModeValue('brand.600', 'brand.200');
+
+  return (
+    <Button
+      as={Link}
+      to={href}
+      onClick={onClick}
+      variant="ghost"
+      size="lg"
+      justifyContent="flex-start"
+      leftIcon={<Icon as={icon} boxSize={5} />}
+      color={isActive ? activeTextColor : textColor}
+      bg={isActive ? hoverBg : 'transparent'}
+      fontWeight={isActive ? '600' : '500'}
+      borderRadius="xl"
+      px={4}
+      py={3}
+      h="auto"
+      minH="48px"
+      position="relative"
+      _hover={{
+        bg: hoverBg,
+        color: activeTextColor,
+        transform: 'translateX(4px)',
+      }}
+      transition="all 0.2s ease-in-out"
+      rightIcon={badge ? (
+        <Badge
+          colorScheme="red"
+          borderRadius="full"
+          fontSize="xs"
+          minW="20px"
+          h="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {badge}
+        </Badge>
+      ) : undefined}
+    >
+      {label}
+    </Button>
+  );
+};
+
+// Mobile navigation item
+const MobileNavItem = ({ icon, label, href, isActive, onClick, badge }: any) => {
+  const activeColor = useColorModeValue('brand.500', 'brand.300');
+  const hoverBg = useColorModeValue('brand.50', 'brand.900');
+  const textColor = useColorModeValue('gray.700', 'gray.300');
+  const activeTextColor = useColorModeValue('brand.600', 'brand.200');
+
+  return (
+    <Button
+      as={Link}
+      to={href}
+      onClick={onClick}
+      variant="ghost"
+      size="lg"
+      justifyContent="flex-start"
+      leftIcon={<Icon as={icon} boxSize={5} />}
+      color={isActive ? activeTextColor : textColor}
+      bg={isActive ? hoverBg : 'transparent'}
+      fontWeight={isActive ? '600' : '500'}
+      borderRadius="xl"
+      px={4}
+      py={3}
+      h="auto"
+      minH="48px"
+      w="full"
+      _hover={{
+        bg: hoverBg,
+        color: activeTextColor,
+      }}
+      rightIcon={badge ? (
+        <Badge
+          colorScheme="red"
+          borderRadius="full"
+          fontSize="xs"
+          minW="20px"
+          h="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {badge}
+        </Badge>
+      ) : undefined}
+    >
+      {label}
+    </Button>
+  );
+};
+
+// User menu component
+const UserMenu = () => {
+  const { user, profile, logout } = useAuth();
+  const navigate = useNavigate();
+  const menuBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  return (
+    <Menu>
+      <MenuButton
+        as={Button}
+        variant="ghost"
+        p={0}
+        h="auto"
+        minW="auto"
+        _hover={{ bg: 'transparent' }}
+        _active={{ bg: 'transparent' }}
+      >
+        <HStack spacing={3}>
+          <Avatar
+            size="sm"
+            name={profile?.displayName || user?.email}
+            src={profile?.photoURL}
+            bg="brand.500"
+            color="white"
+          />
+          <VStack align="start" spacing={0} display={{ base: 'none', md: 'flex' }}>
+            <Text fontSize="sm" fontWeight="600" color="gray.900">
+              {profile?.displayName || 'Coach'}
+            </Text>
+            <Text fontSize="xs" color="gray.500">
+              {profile?.role || 'Head Coach'}
+            </Text>
+          </VStack>
+          <Icon as={ChevronDown} boxSize={4} color="gray.500" />
+        </HStack>
+      </MenuButton>
+      <MenuList
+        bg={menuBg}
+        borderColor={borderColor}
+        borderRadius="xl"
+        boxShadow="xl"
+        py={2}
+        minW="200px"
+      >
+        <MenuItem
+          icon={<Icon as={User} boxSize={4} />}
+          onClick={() => navigate('/profile')}
+          borderRadius="lg"
+          mx={2}
+        >
+          Profile
+        </MenuItem>
+        <MenuItem
+          icon={<Icon as={Settings} boxSize={4} />}
+          onClick={() => navigate('/settings')}
+          borderRadius="lg"
+          mx={2}
+        >
+          Settings
+        </MenuItem>
+        <MenuItem
+          icon={<Icon as={Shield} boxSize={4} />}
+          onClick={() => navigate('/privacy')}
+          borderRadius="lg"
+          mx={2}
+        >
+          Privacy
+        </MenuItem>
+        <MenuItem
+          icon={<Icon as={HelpCircle} boxSize={4} />}
+          onClick={() => navigate('/help')}
+          borderRadius="lg"
+          mx={2}
+        >
+          Help & Support
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem
+          icon={<Icon as={LogOut} boxSize={4} />}
+          onClick={handleLogout}
+          color="red.500"
+          borderRadius="lg"
+          mx={2}
+        >
+          Sign Out
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+};
+
+// Main navigation component
 const ModernNavigation: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const toast = useToast();
-
-  const { user, currentTeam, setUser, clearStore } = useAppStore();
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  
+  // Check if we're in staging environment
+  const isStaging = import.meta.env.VITE_ENVIRONMENT === 'staging' || 
+                   window.location.hostname.includes('staging');
+  
+  // Color values
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
-  const textColor = useColorModeValue('gray.800', 'white');
-  const brandColor = useColorModeValue('blue.600', 'blue.400');
-
-  const isMobile = useBreakpointValue({ base: true, md: false });
-
+  const shadowColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.3)');
+  
   // Navigation items
-  const navigationItems = [
-    {
-      name: 'Dashboard',
-      path: '/',
-      icon: Home,
-      description: 'Overview and analytics',
-    },
-    {
-      name: 'Team',
-      path: '/team',
-      icon: Users,
-      description: 'Player management and roster',
-    },
-    {
-      name: 'Practice',
-      path: '/practice',
-      icon: Target,
-      description: 'Practice planning and drills',
-    },
-    {
-      name: 'Games',
-      path: '/games',
-      icon: Trophy,
-      description: 'Game management and stats',
-    },
-    {
-      name: 'AI Brain',
-      path: '/ai-brain',
-      icon: Brain,
-      description: 'AI-powered coaching insights',
-    },
-    {
-      name: 'AI Play Generator',
-      path: '/ai-play-generator',
-      icon: Play,
-      description: 'Generate AI-powered football plays',
-    },
-    {
-      name: 'Analytics',
-      path: '/analytics',
-      icon: BarChart3,
-      description: 'Performance metrics and reports',
-    },
-    {
-      name: 'Playbook',
-      path: '/playbook',
-      icon: BookOpen,
-      description: 'Team plays and strategies',
-    },
-    {
-      name: 'Communication',
-      path: '/communication',
-      icon: MessageSquare,
-      description: 'Team messaging and updates',
-    },
-    {
-      name: 'Performance',
-      path: '/performance',
-      icon: BarChart3,
-      description: 'App performance monitoring',
-    },
+  const navItems = [
+    { icon: Home, label: 'Dashboard', href: '/dashboard' },
+    { icon: Users, label: 'Team', href: '/team' },
+    { icon: BookOpen, label: 'Practice', href: '/practice' },
+    { icon: Play, label: 'Plays', href: '/play-designer' },
+    { icon: Calendar, label: 'Games', href: '/games' },
+    { icon: Brain, label: 'AI Brain', href: '/ai-brain' },
+    { icon: BarChart3, label: 'Analytics', href: '/analytics' },
   ];
 
-  // Generate breadcrumbs based on current location
-  const generateBreadcrumbs = () => {
-    const pathSegments = location.pathname.split('/').filter(Boolean);
-    const breadcrumbs = [{ name: 'Home', path: '/' }];
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    let currentPath = '';
-    pathSegments.forEach((segment, index) => {
-      currentPath += `/${segment}`;
-      const name =
-        segment.charAt(0).toUpperCase() + segment.slice(1).replace('-', ' ');
-      breadcrumbs.push({ name, path: currentPath });
-    });
-
-    return breadcrumbs;
-  };
-
-  // Handle sign out
-  const handleSignOut = useCallback(async () => {
-    try {
-      await authService.signOut();
-      clearStore();
-      navigate('/');
-      toast({
-        title: 'Signed out successfully',
-        description: 'You have been signed out of your account.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error('Sign out error:', error);
-      toast({
-        title: 'Sign out failed',
-        description: 'Please try again.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+  // Check if item is active
+  const isActive = (href: string) => {
+    if (href === '/dashboard') {
+      return location.pathname === '/' || location.pathname === '/dashboard';
     }
-  }, [clearStore, navigate, toast]);
-
-  // Get current page title
-  const getCurrentPageTitle = () => {
-    const currentItem = navigationItems.find(
-      item => item.path === location.pathname
-    );
-    return currentItem ? currentItem.name : 'Coach Core AI';
-  };
-
-  // Get current page description
-  const getCurrentPageDescription = () => {
-    const currentItem = navigationItems.find(
-      item => item.path === location.pathname
-    );
-    return currentItem
-      ? currentItem.description
-      : 'AI-powered youth football coaching platform';
+    return location.pathname.startsWith(href);
   };
 
   return (
     <>
-      {/* Main Navigation Bar */}
+      {/* Desktop Navigation */}
       <Box
         as="nav"
-        bg={bgColor}
-        borderBottom="1px"
-        borderColor={borderColor}
-        px={4}
-        py={3}
         position="sticky"
         top={0}
         zIndex={1000}
-        boxShadow="sm"
+        borderBottom="1px solid"
+        borderColor={borderColor}
+        backdropFilter="blur(10px)"
+        bg={isScrolled ? `${bgColor}CC` : bgColor}
+        transition="all 0.2s ease-in-out"
+        boxShadow={isScrolled ? `0 4px 6px -1px ${shadowColor}` : 'none'}
       >
-        <Flex justify="space-between" align="center" maxW="7xl" mx="auto">
-          {/* Logo and Brand */}
-          <HStack spacing={4}>
-            <IconButton
-              aria-label="Open navigation menu"
-              icon={<MenuIcon />}
-              variant="ghost"
-              size="lg"
-              onClick={onOpen}
-              display={{ base: 'flex', md: 'none' }}
-            />
-
-            <Link to="/">
-              <HStack spacing={3} cursor="pointer">
-                <Box
-                  w={10}
-                  h={10}
-                  bg={brandColor}
-                  borderRadius="full"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  boxShadow="lg"
-                >
-                  <Text color="white" fontWeight="bold" fontSize="lg">
-                    CC
-                  </Text>
-                </Box>
-                <VStack spacing={0} align="start">
-                  <Heading size="md" color={brandColor}>
-                    Coach Core
-                  </Heading>
-                  <Text fontSize="xs" color="gray.500" fontWeight="medium">
-                    AI-Powered Youth Football
-                  </Text>
-                </VStack>
-              </HStack>
-            </Link>
-          </HStack>
-
-          {/* Desktop Navigation */}
-          <HStack spacing={6} display={{ base: 'none', md: 'flex' }}>
-            {navigationItems.map(item => (
-              <Tooltip
-                key={item.path}
-                label={item.description}
-                placement="bottom"
+        <Box maxW="7xl" mx="auto" px={4}>
+          <Flex h={16} align="center" justify="space-between">
+            {/* Logo */}
+            <HStack spacing={4}>
+              <Button
+                as={Link}
+                to="/dashboard"
+                variant="ghost"
+                fontSize="xl"
+                fontWeight="bold"
+                color="brand.500"
+                _hover={{ color: 'brand.600' }}
               >
-                <Link to={item.path}>
-                  <Button
-                    variant={
-                      location.pathname === item.path ? 'solid' : 'ghost'
-                    }
-                    colorScheme={
-                      location.pathname === item.path ? 'blue' : 'gray'
-                    }
-                    size="sm"
-                    leftIcon={<item.icon size={16} />}
-                    _hover={{
-                      bg:
-                        location.pathname === item.path
-                          ? 'blue.600'
-                          : 'gray.100',
-                    }}
+                Coach Core AI
+              </Button>
+            </HStack>
+
+            {/* Desktop Navigation Items */}
+            <HStack spacing={2} display={{ base: 'none', md: 'flex' }}>
+              {navItems.map((item) => (
+                <NavItem
+                  key={item.href}
+                  {...item}
+                  isActive={isActive(item.href)}
+                />
+              ))}
+            </HStack>
+
+            {/* Right Side Actions */}
+            <HStack spacing={3}>
+              {/* Search */}
+              <InputGroup maxW="300px" display={{ base: 'none', lg: 'flex' }}>
+                <InputLeftElement>
+                  <Icon as={Search} boxSize={4} color="gray.400" />
+                </InputLeftElement>
+                <Input
+                  placeholder="Search..."
+                  borderRadius="xl"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  _focus={{
+                    borderColor: 'brand.500',
+                    boxShadow: '0 0 0 1px var(--chakra-colors-brand-500)',
+                  }}
+                />
+              </InputGroup>
+
+              {/* Notifications */}
+              <Tooltip label="Notifications" placement="bottom">
+                <IconButton
+                  aria-label="Notifications"
+                  icon={<Icon as={Bell} boxSize={5} />}
+                  variant="ghost"
+                  size="lg"
+                  position="relative"
+                >
+                  <Badge
+                    position="absolute"
+                    top={1}
+                    right={1}
+                    colorScheme="red"
+                    borderRadius="full"
+                    fontSize="xs"
+                    minW="18px"
+                    h="18px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
                   >
-                    {item.name}
-                  </Button>
-                </Link>
+                    3
+                  </Badge>
+                </IconButton>
               </Tooltip>
-            ))}
-          </HStack>
 
-          {/* User Profile and Actions */}
-          <HStack spacing={3}>
-            {/* Notifications */}
-            <Tooltip label="Notifications">
-              <IconButton
-                aria-label="Notifications"
-                icon={<Bell size={18} />}
-                variant="ghost"
-                size="sm"
-                color="gray.600"
-                _hover={{ bg: 'gray.100' }}
-              />
-            </Tooltip>
-
-            {/* Search */}
-            <Tooltip label="Search">
-              <IconButton
-                aria-label="Search"
-                icon={<Search size={18} />}
-                variant="ghost"
-                size="sm"
-                color="gray.600"
-                _hover={{ bg: 'gray.100' }}
-              />
-            </Tooltip>
-
-            {/* User Menu */}
-            <Menu>
-              <MenuButton
-                as={Button}
-                variant="ghost"
-                size="sm"
-                px={3}
-                py={2}
-                _hover={{ bg: 'gray.100' }}
-              >
-                <HStack spacing={3}>
-                  <Avatar
+              {/* Staging Feedback Button */}
+              {isStaging && (
+                <Tooltip label="Submit Feedback" placement="bottom">
+                  <Button
+                    leftIcon={<Icon as={MessageCircle} boxSize={4} />}
+                    colorScheme="blue"
+                    variant="solid"
                     size="sm"
-                    name={user?.displayName || 'Coach'}
-                    src={user?.photoURL || undefined}
+                    onClick={() => setIsFeedbackOpen(true)}
+                    borderRadius="xl"
+                    fontWeight="500"
                   >
-                    {user?.role === 'head-coach' && (
-                      <AvatarBadge boxSize="1em" bg="green.500" />
-                    )}
-                  </Avatar>
-                  <VStack
-                    spacing={0}
-                    align="start"
-                    display={{ base: 'none', lg: 'flex' }}
-                  >
-                    <Text fontSize="sm" fontWeight="medium" color={textColor}>
-                      {user?.displayName || 'Coach'}
-                    </Text>
-                    <Text fontSize="xs" color="gray.500">
-                      {user?.role
-                        ?.replace('-', ' ')
-                        .replace(/\b\w/g, l => l.toUpperCase()) || 'Coach'}
-                    </Text>
-                  </VStack>
-                </HStack>
-              </MenuButton>
+                    Feedback
+                  </Button>
+                </Tooltip>
+              )}
 
-              <MenuList>
-                <MenuItem
-                  icon={<User size={16} />}
-                  onClick={() => setIsProfileOpen(true)}
-                >
-                  Profile Settings
-                </MenuItem>
-                <MenuItem icon={<Settings size={16} />}>App Settings</MenuItem>
-                <MenuDivider />
-                <MenuItem icon={<HelpCircle size={16} />}>
-                  Help & Support
-                </MenuItem>
-                <MenuDivider />
-                <MenuItem
-                  icon={<LogOut size={16} />}
-                  onClick={handleSignOut}
-                  color="red.600"
-                >
-                  Sign Out
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
-        </Flex>
-      </Box>
+              {/* User Menu */}
+              <UserMenu />
 
-      {/* Breadcrumbs */}
-      <Box
-        bg="gray.50"
-        borderBottom="1px"
-        borderColor="gray.200"
-        px={4}
-        py={2}
-        display={{ base: 'none', md: 'block' }}
-      >
-        <Box maxW="7xl" mx="auto">
-          <Breadcrumb
-            spacing="8px"
-            separator={<ChevronRight size={12} color="gray.400" />}
-            fontSize="sm"
-          >
-            {generateBreadcrumbs().map((breadcrumb, index) => (
-              <BreadcrumbItem
-                key={breadcrumb.path}
-                isCurrentPage={index === generateBreadcrumbs().length - 1}
-              >
-                <BreadcrumbLink
-                  as={Link}
-                  to={breadcrumb.path}
-                  color={
-                    index === generateBreadcrumbs().length - 1
-                      ? 'gray.800'
-                      : 'gray.600'
-                  }
-                  fontWeight={
-                    index === generateBreadcrumbs().length - 1
-                      ? 'semibold'
-                      : 'normal'
-                  }
-                  _hover={{ color: 'blue.600' }}
-                >
-                  {breadcrumb.name}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            ))}
-          </Breadcrumb>
-        </Box>
-      </Box>
-
-      {/* Page Header */}
-      <Box
-        bg="white"
-        borderBottom="1px"
-        borderColor="gray.200"
-        px={4}
-        py={6}
-        display={{ base: 'none', md: 'block' }}
-      >
-        <Box maxW="7xl" mx="auto">
-          <VStack spacing={2} align="start">
-            <Heading size="lg" color={textColor}>
-              {getCurrentPageTitle()}
-            </Heading>
-            <Text color="gray.600" fontSize="md">
-              {getCurrentPageDescription()}
-            </Text>
-            {currentTeam && (
-              <HStack spacing={3}>
-                <Badge colorScheme="blue" variant="subtle" fontSize="sm">
-                  {currentTeam.name}
-                </Badge>
-                <Badge colorScheme="green" variant="subtle" fontSize="sm">
-                  {currentTeam.sport}
-                </Badge>
-                <Badge colorScheme="purple" variant="subtle" fontSize="sm">
-                  {currentTeam.ageGroup}
-                </Badge>
-              </HStack>
-            )}
-          </VStack>
+              {/* Mobile Menu Button */}
+              <IconButton
+                aria-label="Open menu"
+                icon={<Icon as={MenuIcon} />}
+                variant="ghost"
+                size="lg"
+                display={{ base: 'flex', md: 'none' }}
+                onClick={onOpen}
+              />
+            </HStack>
+          </Flex>
         </Box>
       </Box>
 
       {/* Mobile Navigation Drawer */}
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="xs">
-        {/* <DrawerOverlay /> */}
+      <Drawer isOpen={isOpen} onClose={onClose} placement="left" size="sm">
+        <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">
-            <HStack spacing={3}>
-              <Box
-                w={8}
-                h={8}
-                bg={brandColor}
-                borderRadius="full"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color="white" fontWeight="bold" fontSize="sm">
-                  CC
-                </Text>
-              </Box>
-              <Text fontWeight="bold">Coach Core</Text>
-            </HStack>
+          <DrawerHeader>
+            <Text fontSize="xl" fontWeight="bold" color="brand.500">
+              Coach Core AI
+            </Text>
           </DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={2} align="stretch">
+              {/* Mobile Search */}
+              <InputGroup>
+                <InputLeftElement>
+                  <Icon as={Search} boxSize={4} color="gray.400" />
+                </InputLeftElement>
+                <Input
+                  placeholder="Search..."
+                  borderRadius="xl"
+                  border="1px solid"
+                  borderColor="gray.200"
+                />
+              </InputGroup>
 
-          <DrawerBody p={0}>
-            <VStack spacing={0} align="stretch">
-              {navigationItems.map(item => (
-                <Link key={item.path} to={item.path} onClick={onClose}>
-                  <Button
-                    variant={
-                      location.pathname === item.path ? 'solid' : 'ghost'
-                    }
-                    colorScheme={
-                      location.pathname === item.path ? 'blue' : 'gray'
-                    }
-                    size="lg"
-                    w="full"
-                    justifyContent="start"
-                    leftIcon={<item.icon size={18} />}
-                    borderRadius={0}
-                    _hover={{
-                      bg:
-                        location.pathname === item.path
-                          ? 'blue.600'
-                          : 'gray.100',
-                    }}
-                  >
-                    <VStack spacing={1} align="start" flex={1}>
-                      <Text fontWeight="medium">{item.name}</Text>
-                      <Text fontSize="xs" color="gray.500" textAlign="left">
-                        {item.description}
-                      </Text>
-                    </VStack>
-                  </Button>
-                </Link>
-              ))}
+              <Divider />
 
-              <Divider my={4} />
+              {/* Mobile Navigation Items */}
+              <VStack spacing={1} align="stretch">
+                {navItems.map((item) => (
+                  <MobileNavItem
+                    key={item.href}
+                    {...item}
+                    isActive={isActive(item.href)}
+                    onClick={onClose}
+                  />
+                ))}
+              </VStack>
 
-              <VStack spacing={2} p={4}>
-                <Text fontSize="sm" fontWeight="medium" color="gray.600">
-                  Team: {currentTeam?.name || 'No Team Selected'}
-                </Text>
-                <Text fontSize="xs" color="gray.500">
-                  {user?.email}
-                </Text>
+              <Divider />
+
+              {/* Mobile User Menu */}
+              <VStack spacing={1} align="stretch">
+                <MobileNavItem
+                  icon={User}
+                  label="Profile"
+                  href="/profile"
+                  isActive={isActive('/profile')}
+                  onClick={onClose}
+                />
+                <MobileNavItem
+                  icon={Settings}
+                  label="Settings"
+                  href="/settings"
+                  isActive={isActive('/settings')}
+                  onClick={onClose}
+                />
+                <MobileNavItem
+                  icon={HelpCircle}
+                  label="Help & Support"
+                  href="/help"
+                  isActive={isActive('/help')}
+                  onClick={onClose}
+                />
               </VStack>
             </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+      />
     </>
   );
 };

@@ -151,6 +151,13 @@ export class EnhancedWaitlistService {
     localStorage.removeItem('demo_access_token');
     localStorage.removeItem('demo_user_data');
   }
+
+  // Get remaining attempts (placeholder implementation)
+  getRemainingAttempts(email: string): number {
+    // This would typically check against a rate limiting service
+    // For now, return a default value
+    return 3;
+  }
 }
 
 export const enhancedWaitlistService = new EnhancedWaitlistService();

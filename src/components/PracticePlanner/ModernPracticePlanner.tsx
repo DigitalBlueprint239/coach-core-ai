@@ -386,28 +386,98 @@ const ModernPracticePlanner: React.FC = () => {
     if (user) {
       loadPracticePlans();
       setupSyncStatus();
+    } else {
+      // For demo mode or unauthenticated users, create a local plan
+      console.log('No user authenticated, creating demo practice plan');
+      const demoPlan: PracticePlan = {
+        id: `demo_plan_${Date.now()}`,
+        title: 'Demo Practice Plan',
+        sport: 'football',
+        ageGroup: 'youth',
+        duration: 90,
+        goals: ['Basic Skills', 'Team Building'],
+        periods: [],
+        notes: 'This is a demo plan. Create an account to save your practice plans.',
+        teamId: 'demo',
+        createdAt: new Date(),
+        lastModified: new Date(),
+        aiConfidence: 0,
+        tags: ['demo'],
+        difficulty: 'beginner',
+      };
+      setCurrentPlan(demoPlan);
+      setIsLoading(false);
     }
   }, [user]);
 
   const loadPracticePlans = async () => {
-    if (!user) return;
+    if (!user) {
+      console.warn('No user authenticated, cannot load practice plans');
+      return;
+    }
     
     try {
       setIsLoading(true);
+      console.log('Loading practice plans for user:', user.uid);
+      
+      // First try to load plans where user is the creator
       const plans = await practiceDataService.readMany<PracticePlan>('practicePlans', {
-        where: [{ field: 'teamId', operator: '==', value: user.uid }],
+        where: [{ field: 'createdBy', operator: '==', value: user.uid }],
         orderBy: [{ field: 'createdAt', direction: 'desc' }],
       });
+      
+      console.log('Loaded practice plans:', plans.length);
       
       // Set the most recent plan as current if available
       if (plans.length > 0) {
         setCurrentPlan(plans[0]);
+      } else {
+        // If no plans found, create a default one
+        console.log('No practice plans found, creating default plan');
+        const defaultPlan: PracticePlan = {
+          id: `plan_${Date.now()}`,
+          title: 'My First Practice Plan',
+          sport: 'football',
+          ageGroup: 'youth',
+          duration: 90,
+          goals: ['Basic Skills', 'Team Building'],
+          periods: [],
+          notes: 'This is a sample practice plan. Edit it to create your own!',
+          teamId: user.uid,
+          createdAt: new Date(),
+          lastModified: new Date(),
+          aiConfidence: 0,
+          tags: ['beginner'],
+          difficulty: 'beginner',
+        };
+        
+        // Save the default plan
+        try {
+          await practiceDataService.create('practicePlans', defaultPlan);
+          setCurrentPlan(defaultPlan);
+        } catch (createError) {
+          console.error('Failed to create default plan:', createError);
+          // Still set it locally even if we can't save it
+          setCurrentPlan(defaultPlan);
+        }
       }
     } catch (error) {
       console.error('Error loading practice plans:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to load practice plans. Please try again.';
+      
+      if (error.code === 'permission-denied') {
+        errorMessage = 'You do not have permission to access practice plans. Please check your authentication.';
+      } else if (error.code === 'unavailable') {
+        errorMessage = 'Service temporarily unavailable. Please check your internet connection.';
+      } else if (error.message?.includes('auth')) {
+        errorMessage = 'Authentication error. Please log in again.';
+      }
+      
       toast({
         title: 'Error Loading Plans',
-        description: 'Failed to load practice plans. Please try again.',
+        description: errorMessage,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -533,16 +603,29 @@ const ModernPracticePlanner: React.FC = () => {
 
   // Save plan
   const handleSavePlan = async () => {
-    if (!currentPlan || !user) return;
+    if (!currentPlan) return;
+
+    // Handle demo mode users
+    if (!user) {
+      toast({
+        title: 'Demo Mode',
+        description: 'Please sign up to save your practice plans permanently.',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
     try {
       const planData = {
         ...currentPlan,
         teamId: user.uid,
+        createdBy: user.uid,
       };
 
       let savedPlan: PracticePlan;
-      if (currentPlan.id) {
+      if (currentPlan.id && !currentPlan.id.startsWith('demo_')) {
         // Update existing plan
         await practiceDataService.update('practicePlans', currentPlan.id, planData);
         savedPlan = currentPlan;
@@ -564,9 +647,17 @@ const ModernPracticePlanner: React.FC = () => {
       });
     } catch (error) {
       console.error('Error saving practice plan:', error);
+      
+      let errorMessage = 'Failed to save practice plan. Please try again.';
+      if (error.code === 'permission-denied') {
+        errorMessage = 'You do not have permission to save practice plans. Please check your authentication.';
+      } else if (error.code === 'unavailable') {
+        errorMessage = 'Service temporarily unavailable. Please check your internet connection.';
+      }
+      
       toast({
         title: 'Save Failed',
-        description: 'Failed to save practice plan. Please try again.',
+        description: errorMessage,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -1277,7 +1368,7 @@ const ModernPracticePlanner: React.FC = () => {
                             </Badge>
                           </HStack>
                           <Text fontSize="sm" color="gray.600">
-                            {currentPlan.periods.length} practice periods
+                            {currentPlan.periods?.length || 0} practice periods
                           </Text>
                         </Box>
 

@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: Cypress.env('CYPRESS_BASE_URL') || 'http://localhost:3000',
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,
@@ -24,7 +24,11 @@ export default defineConfig({
       testTeamName: 'Test Team',
 
       // API endpoints
-      apiBaseUrl: 'http://localhost:5001/coach-core-ai/us-central1/api',
+      apiBaseUrl: Cypress.env('CYPRESS_API_URL') || 'http://localhost:5001/coach-core-ai/us-central1/api',
+      
+      // Environment URLs
+      stagingUrl: 'https://coach-core-ai-staging.web.app',
+      productionUrl: 'https://coach-core-ai.web.app',
 
       // Feature flags
       enableOfflineMode: true,

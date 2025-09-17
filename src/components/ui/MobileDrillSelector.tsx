@@ -3,7 +3,18 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { TouchableOpacity } from './TouchableOpacity';
 import { SwipeGesture } from './SwipeGesture';
-import { Haptics } from '@capacitor/haptics';
+// Optional haptics import for mobile devices
+let Haptics: any = null;
+try {
+  Haptics = require('@capacitor/haptics').Haptics;
+} catch (e) {
+  // Haptics not available, will use fallback
+  Haptics = {
+    impact: () => Promise.resolve(),
+    selection: () => Promise.resolve(),
+    notification: () => Promise.resolve()
+  };
+}
 
 interface Drill {
   id: string;

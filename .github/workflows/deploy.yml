@@ -1,0 +1,103 @@
+name: 🚀 Deploy to Firebase Hosting
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js v18
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Cache node_modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+          
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    - name: 🔍 Verify package.json and firebase.json
+      run: |
+        if [ ! -f "package.json" ]; then
+          echo "❌ package.json not found!"
+          exit 1
+        fi
+        if [ ! -f "firebase.json" ]; then
+          echo "❌ firebase.json not found!"
+          exit 1
+        fi
+        if [ ! -f "deploy.sh" ]; then
+          echo "❌ deploy.sh not found!"
+          exit 1
+        fi
+        echo "✅ All required files found"
+        
+    - name: 🔨 Build application
+      run: npm run build
+      
+    - name: 📁 Verify build output
+      run: |
+        if [ ! -d "dist" ]; then
+          echo "❌ Build failed - dist directory not created!"
+          exit 1
+        fi
+        if [ ! -f "dist/index.html" ]; then
+          echo "❌ Build failed - index.html not found in dist!"
+          exit 1
+        fi
+        echo "✅ Build output verified"
+        echo "📊 Build contents:"
+        ls -la dist/
+        
+    - name: 🔧 Setup Firebase CLI
+      run: npm install -g firebase-tools
+      
+    - name: 🔐 Authenticate with Firebase
+      run: |
+        echo "${{ secrets.FIREBASE_TOKEN }}" | firebase login --token
+        firebase use --add coach-core-ai --token ${{ secrets.FIREBASE_TOKEN }}
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        
+    - name: 🚀 Run deployment verification
+      run: ./deploy.sh --fast
+      
+    - name: 🌐 Deploy to Firebase Hosting
+      run: |
+        firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        
+    - name: ✅ Deployment success
+      run: |
+        echo "🎉 Deployment completed successfully!"
+        echo "🌐 Your app is live at: https://coach-core-ai.web.app"
+        
+    - name: 📊 Build summary
+      if: always()
+      run: |
+        echo "## 📊 Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Node.js Version**: $(node --version)" >> $GITHUB_STEP_SUMMARY
+        echo "- **NPM Version**: $(npm --version)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deployment URL**: https://coach-core-ai.web.app" >> $GITHUB_STEP_SUMMARY
+        if [ -d "dist" ]; then
+          echo "- **Build Size**: $(du -sh dist | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files Count**: $(find dist -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+        fi
+

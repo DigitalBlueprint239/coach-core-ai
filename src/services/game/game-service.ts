@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
 import { Game, Play, GameStatistics, TeamStats, PlayerGameStats, CreateGameData } from '../../types/game';
+import { trackUserAction, trackError } from '../monitoring';
 
 export class GameService {
   private db = db;
@@ -79,20 +80,45 @@ export class GameService {
   }
 
   async addPlay(gameId: string, play: Play): Promise<void> {
-    const game = await this.getGame(gameId);
-    if (!game) throw new Error('Game not found');
+    try {
+      // Track play creation attempt
+      trackUserAction('play_created', { 
+        gameId, 
+        playType: play.type,
+        quarter: play.quarter 
+      });
 
-    const updatedGame = {
-      ...game,
-      quarters: game.quarters.map(quarter => 
-        quarter.number === play.quarter 
-          ? { ...quarter, plays: [...quarter.plays, play] }
-          : quarter
-      ),
-      updatedAt: new Date(),
-    };
+      const game = await this.getGame(gameId);
+      if (!game) throw new Error('Game not found');
 
-    await this.updateGame(gameId, updatedGame);
+      const updatedGame = {
+        ...game,
+        quarters: game.quarters.map(quarter => 
+          quarter.number === play.quarter 
+            ? { ...quarter, plays: [...quarter.plays, play] }
+            : quarter
+        ),
+        updatedAt: new Date(),
+      };
+
+      await this.updateGame(gameId, updatedGame);
+
+      // Track successful play creation
+      trackUserAction('play_created_success', { 
+        gameId, 
+        playType: play.type,
+        quarter: play.quarter 
+      });
+    } catch (error: any) {
+      // Track play creation error
+      trackUserAction('play_created_error', { 
+        gameId, 
+        playType: play.type,
+        error: error.message 
+      });
+      trackError(error as Error, { action: 'play_created', gameId });
+      throw error;
+    }
   }
 
   async deleteGame(gameId: string): Promise<void> {

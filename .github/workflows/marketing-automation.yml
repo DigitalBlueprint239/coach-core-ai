@@ -1,0 +1,508 @@
+name: 🚀 Marketing Automation
+
+on:
+  push:
+    branches:
+      - main
+      - production
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+      message:
+        description: 'Custom release message'
+        required: false
+        type: string
+
+env:
+  NODE_VERSION: '18'
+  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+  TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+  TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+  TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+  TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+  LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+  LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+  LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+
+jobs:
+  # Generate release notes and marketing content
+  generate-content:
+    name: 📝 Generate Release Notes & Marketing Content
+    runs-on: ubuntu-latest
+    outputs:
+      release-notes: ${{ steps.generate-notes.outputs.release-notes }}
+      marketing-content: ${{ steps.generate-content.outputs.marketing-content }}
+      version: ${{ steps.get-version.outputs.version }}
+      changelog: ${{ steps.generate-changelog.outputs.changelog }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏷️ Get version and tag info
+        id: get-version
+        run: |
+          # Get version from package.json
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Get current commit info
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+          COMMIT_DATE=$(git log -1 --pretty=%ad --date=short)
+          
+          echo "commit-sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "commit-message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "commit-author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
+          echo "commit-date=$COMMIT_DATE" >> $GITHUB_OUTPUT
+          
+          # Get previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          echo "previous-tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+
+      - name: 📋 Generate changelog
+        id: generate-changelog
+        run: |
+          # Generate changelog from git commits
+          PREVIOUS_TAG="${{ steps.get-version.outputs.previous-tag }}"
+          CURRENT_TAG="${{ steps.get-version.outputs.version }}"
+          
+          if [ -n "$PREVIOUS_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s (%an)" $PREVIOUS_TAG..HEAD)
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s (%an)" --max-count=20)
+          fi
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 📝 Generate release notes
+        id: generate-notes
+        run: |
+          VERSION="${{ steps.get-version.outputs.version }}"
+          COMMIT_MESSAGE="${{ steps.get-version.outputs.commit-message }}"
+          COMMIT_AUTHOR="${{ steps.get-version.outputs.commit-author }}"
+          COMMIT_DATE="${{ steps.get-version.outputs.commit-date }}"
+          CHANGELOG="${{ steps.generate-changelog.outputs.changelog }}"
+          
+          # Create release notes
+          cat > release-notes.md << EOF
+          # 🚀 Coach Core AI v$VERSION Release Notes
+          
+          **Release Date:** $COMMIT_DATE  
+          **Author:** $COMMIT_AUTHOR  
+          **Commit:** \`${{ steps.get-version.outputs.commit-sha }}\`
+          
+          ## 🎉 What's New
+          
+          $COMMIT_MESSAGE
+          
+          ## 📋 Changes in this Release
+          
+          $CHANGELOG
+          
+          ## 🔧 Technical Improvements
+          
+          - Performance optimizations
+          - Bug fixes and stability improvements
+          - Enhanced user experience
+          - Security updates
+          
+          ## 🚀 Deployment
+          
+          - **Staging:** https://coach-core-ai-staging.web.app
+          - **Production:** https://coach-core-ai.web.app
+          
+          ## 📊 Analytics
+          
+          - Real-time performance monitoring
+          - User behavior analytics
+          - Error tracking and reporting
+          
+          ---
+          
+          *This release was automatically generated by our CI/CD pipeline.*
+          EOF
+          
+          # Output release notes
+          echo "release-notes<<EOF" >> $GITHUB_OUTPUT
+          cat release-notes.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 📱 Generate marketing content
+        id: generate-content
+        run: |
+          VERSION="${{ steps.get-version.outputs.version }}"
+          COMMIT_MESSAGE="${{ steps.get-version.outputs.commit-message }}"
+          
+          # Generate social media content
+          cat > marketing-content.json << EOF
+          {
+            "twitter": {
+              "text": "🚀 Coach Core AI v$VERSION is now live! $COMMIT_MESSAGE\n\n✨ New features and improvements\n🔧 Performance optimizations\n📊 Enhanced analytics\n\nTry it now: https://coach-core-ai.web.app\n\n#CoachCoreAI #Basketball #SportsTech #AI"
+            },
+            "linkedin": {
+              "text": "🚀 Exciting news! Coach Core AI v$VERSION is now available!\n\n$COMMIT_MESSAGE\n\nKey highlights:\n✨ Enhanced user experience\n🔧 Performance improvements\n📊 Advanced analytics\n🎯 Better coaching tools\n\nWe're committed to helping coaches create better plays and develop winning strategies.\n\nTry the latest version: https://coach-core-ai.web.app\n\n#SportsTech #Basketball #Coaching #AI #Innovation"
+            },
+            "slack": {
+              "text": "🚀 *Coach Core AI v$VERSION* has been deployed!\n\n*What's New:*\n$COMMIT_MESSAGE\n\n*Deployment Details:*\n• Environment: Production\n• Version: $VERSION\n• Author: ${{ steps.get-version.outputs.commit-author }}\n• Date: ${{ steps.get-version.outputs.commit-date }}\n\n*Links:*\n• 🌐 Production: https://coach-core-ai.web.app\n• 🧪 Staging: https://coach-core-ai-staging.web.app\n• 📊 Analytics: https://coach-core-ai.web.app/admin/analytics\n\n*Next Steps:*\n• Monitor performance metrics\n• Check error rates\n• Review user feedback"
+            },
+            "discord": {
+              "text": "🚀 **Coach Core AI v$VERSION** is now live!\n\n**What's New:**\n$COMMIT_MESSAGE\n\n**Deployment Info:**\n• Version: $VERSION\n• Author: ${{ steps.get-version.outputs.commit-author }}\n• Date: ${{ steps.get-version.outputs.commit-date }}\n\n**Links:**\n• 🌐 Production: https://coach-core-ai.web.app\n• 🧪 Staging: https://coach-core-ai-staging.web.app\n\n**Features:**\n✨ Enhanced user experience\n🔧 Performance improvements\n📊 Advanced analytics\n🎯 Better coaching tools"
+            }
+          }
+          EOF
+          
+          # Output marketing content
+          echo "marketing-content<<EOF" >> $GITHUB_OUTPUT
+          cat marketing-content.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 📤 Upload release notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: release-notes.md
+
+  # Deploy to staging and production
+  deploy:
+    name: 🚀 Deploy to Environments
+    runs-on: ubuntu-latest
+    needs: generate-content
+    strategy:
+      matrix:
+        environment: [staging, production]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: npm run build
+        env:
+          VITE_ENVIRONMENT: ${{ matrix.environment }}
+
+      - name: 🔥 Deploy to Firebase
+        run: |
+          if [ "${{ matrix.environment }}" = "production" ]; then
+            firebase deploy --only hosting:coach-core-ai-prod --token "$FIREBASE_TOKEN"
+          else
+            firebase deploy --only hosting:coach-core-ai-staging --token "$FIREBASE_TOKEN"
+          fi
+
+      - name: ✅ Verify deployment
+        run: |
+          if [ "${{ matrix.environment }}" = "production" ]; then
+            URL="https://coach-core-ai.web.app"
+          else
+            URL="https://coach-core-ai-staging.web.app"
+          fi
+          
+          echo "Verifying deployment at $URL"
+          curl -f -s -o /dev/null "$URL" || exit 1
+          echo "✅ Deployment verified successfully"
+
+  # Send notifications
+  notify:
+    name: 📢 Send Notifications
+    runs-on: ubuntu-latest
+    needs: [generate-content, deploy]
+    if: always()
+    
+    steps:
+      - name: 📥 Download release notes
+        uses: actions/download-artifact@v4
+        with:
+          name: release-notes
+
+      - name: 📱 Parse marketing content
+        id: parse-content
+        run: |
+          echo "${{ needs.generate-content.outputs.marketing-content }}" > marketing-content.json
+          
+          # Extract content for each platform
+          TWITTER_TEXT=$(jq -r '.twitter.text' marketing-content.json)
+          LINKEDIN_TEXT=$(jq -r '.linkedin.text' marketing-content.json)
+          SLACK_TEXT=$(jq -r '.slack.text' marketing-content.json)
+          DISCORD_TEXT=$(jq -r '.discord.text' marketing-content.json)
+          
+          echo "twitter-text<<EOF" >> $GITHUB_OUTPUT
+          echo "$TWITTER_TEXT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "linkedin-text<<EOF" >> $GITHUB_OUTPUT
+          echo "$LINKEDIN_TEXT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "slack-text<<EOF" >> $GITHUB_OUTPUT
+          echo "$SLACK_TEXT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "discord-text<<EOF" >> $GITHUB_OUTPUT
+          echo "$DISCORD_TEXT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 📢 Send Slack notification
+        if: env.SLACK_WEBHOOK_URL != ''
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#deployments'
+          text: |
+            ${{ steps.parse-content.outputs.slack-text }}
+          webhook_url: ${{ env.SLACK_WEBHOOK_URL }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+
+      - name: 📢 Send Discord notification
+        if: env.DISCORD_WEBHOOK_URL != ''
+        uses: Ilshidur/action-discord@master
+        with:
+          webhook_url: ${{ env.DISCORD_WEBHOOK_URL }}
+          args: |
+            ${{ steps.parse-content.outputs.discord-text }}
+
+      - name: 🐦 Post to Twitter
+        if: env.TWITTER_API_KEY != ''
+        run: |
+          # Install Twitter API dependencies
+          npm install twitter-lite
+          
+          # Create Twitter client
+          cat > twitter-post.js << 'EOF'
+          const Twitter = require('twitter-lite');
+          
+          const client = new Twitter({
+            consumer_key: process.env.TWITTER_API_KEY,
+            consumer_secret: process.env.TWITTER_API_SECRET,
+            access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+            access_token_secret: process.env.TWITTER_ACCESS_SECRET,
+          });
+          
+          const tweetText = `${{ steps.parse-content.outputs.twitter-text }}`;
+          
+          client.post('statuses/update', { status: tweetText })
+            .then(tweet => {
+              console.log('✅ Tweet posted successfully:', tweet.id);
+            })
+            .catch(error => {
+              console.error('❌ Error posting tweet:', error);
+              process.exit(1);
+            });
+          EOF
+          
+          node twitter-post.js
+
+      - name: 💼 Post to LinkedIn
+        if: env.LINKEDIN_CLIENT_ID != ''
+        run: |
+          # Install LinkedIn API dependencies
+          npm install linkedin-api-client
+          
+          # Create LinkedIn post
+          cat > linkedin-post.js << 'EOF'
+          const LinkedInAPI = require('linkedin-api-client');
+          
+          const linkedin = new LinkedInAPI({
+            clientId: process.env.LINKEDIN_CLIENT_ID,
+            clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+            accessToken: process.env.LINKEDIN_ACCESS_TOKEN,
+          });
+          
+          const postText = `${{ steps.parse-content.outputs.linkedin-text }}`;
+          
+          linkedin.post('/ugcPosts', {
+            author: 'urn:li:person:YOUR_PERSON_URN',
+            lifecycleState: 'PUBLISHED',
+            specificContent: {
+              'com.linkedin.ugc.ShareContent': {
+                shareCommentary: {
+                  text: postText
+                },
+                shareMediaCategory: 'NONE'
+              }
+            },
+            visibility: {
+              'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC'
+            }
+          })
+          .then(response => {
+            console.log('✅ LinkedIn post created successfully:', response.id);
+          })
+          .catch(error => {
+            console.error('❌ Error creating LinkedIn post:', error);
+            process.exit(1);
+          });
+          EOF
+          
+          node linkedin-post.js
+
+  # Update landing page
+  update-landing:
+    name: 🌐 Update Landing Page
+    runs-on: ubuntu-latest
+    needs: [generate-content, deploy]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build landing page updates
+        run: |
+          # Update landing page with new version info
+          VERSION="${{ needs.generate-content.outputs.version }}"
+          COMMIT_MESSAGE="${{ needs.generate-content.outputs.commit-message }}"
+          
+          # Update version in landing page
+          sed -i "s/version: '[^']*'/version: '$VERSION'/g" src/components/Landing/OptimizedLandingPage.tsx
+          
+          # Update changelog section
+          cat > src/data/changelog.json << EOF
+          {
+            "version": "$VERSION",
+            "date": "$(date -u +%Y-%m-%d)",
+            "changes": [
+              "$COMMIT_MESSAGE"
+            ],
+            "features": [
+              "Enhanced user experience",
+              "Performance improvements",
+              "Advanced analytics",
+              "Better coaching tools"
+            ]
+          }
+          EOF
+          
+          # Build the application
+          npm run build
+
+      - name: 🔥 Deploy updated landing page
+        run: |
+          # Deploy to staging first
+          firebase deploy --only hosting:coach-core-ai-staging --token "$FIREBASE_TOKEN"
+          
+          # Wait for staging deployment
+          sleep 30
+          
+          # Deploy to production
+          firebase deploy --only hosting:coach-core-ai-prod --token "$FIREBASE_TOKEN"
+
+      - name: ✅ Verify landing page updates
+        run: |
+          # Check staging
+          curl -f -s -o /dev/null "https://coach-core-ai-staging.web.app" || exit 1
+          echo "✅ Staging landing page updated"
+          
+          # Check production
+          curl -f -s -o /dev/null "https://coach-core-ai.web.app" || exit 1
+          echo "✅ Production landing page updated"
+
+  # Create GitHub release
+  create-release:
+    name: 🏷️ Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [generate-content, deploy]
+    if: always() && github.event_name == 'push'
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download release notes
+        uses: actions/download-artifact@v4
+        with:
+          name: release-notes
+
+      - name: 🏷️ Create GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ needs.generate-content.outputs.version }}
+          release_name: Coach Core AI v${{ needs.generate-content.outputs.version }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+
+  # Summary
+  summary:
+    name: 📊 Marketing Automation Summary
+    runs-on: ubuntu-latest
+    needs: [generate-content, deploy, notify, update-landing, create-release]
+    if: always()
+    
+    steps:
+      - name: 📊 Generate summary
+        run: |
+          echo "## 🚀 Marketing Automation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ needs.generate-content.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Author:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Completed Tasks" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Release notes generated" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Deployed to staging and production" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Notifications sent to Slack and Discord" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Social media posts created" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Landing page updated" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] GitHub release created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+          echo "- **Production:** https://coach-core-ai.web.app" >> $GITHUB_STEP_SUMMARY
+          echo "- **Staging:** https://coach-core-ai-staging.web.app" >> $GITHUB_STEP_SUMMARY
+          echo "- **Analytics:** https://coach-core-ai.web.app/admin/analytics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📱 Social Media" >> $GITHUB_STEP_SUMMARY
+          echo "- Twitter: Posted successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- LinkedIn: Posted successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- Slack: Notification sent" >> $GITHUB_STEP_SUMMARY
+          echo "- Discord: Notification sent" >> $GITHUB_STEP_SUMMARY

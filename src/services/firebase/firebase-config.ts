@@ -91,4 +91,5 @@ if (isDev && useEmulator) {
   }
 }
 
+export { firebaseConfig };
 export default app;

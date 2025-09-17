@@ -1,3 +1,5 @@
+import { demoBackupService } from './demo-backup-service';
+
 export interface DemoSession {
   id: string;
   accessToken: string;
@@ -12,6 +14,11 @@ export interface DemoSession {
     };
   };
   expiresAt: Date;
+  userData?: {
+    email: string;
+    name: string;
+    role: string;
+  };
 }
 
 export interface DemoData {
@@ -39,11 +46,24 @@ export class DemoService {
           ageGroup: 'youth'
         }
       },
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      userData: {
+        email: userData.email,
+        name: userData.name,
+        role: userData.role,
+      },
     };
     
     this.session = session;
     localStorage.setItem(this.storageKey, JSON.stringify(session));
+    
+    // Backup demo data to Firestore
+    try {
+      await demoBackupService.backupDemoData(session.id, userData, session.data);
+    } catch (error) {
+      console.warn('Failed to backup demo data:', error);
+    }
+    
     return session;
   }
 
@@ -78,6 +98,15 @@ export class DemoService {
       session.data = { ...session.data, ...data };
       this.session = session;
       localStorage.setItem(this.storageKey, JSON.stringify(session));
+      
+      // Backup updated data to Firestore
+      if (session.userData) {
+        try {
+          await demoBackupService.backupDemoData(session.id, session.userData, session.data);
+        } catch (error) {
+          console.warn('Failed to backup updated demo data:', error);
+        }
+      }
     }
   }
 

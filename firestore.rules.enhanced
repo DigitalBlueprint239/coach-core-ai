@@ -1,311 +1,115 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // ============================================================================
-    // HELPER FUNCTIONS
-    // ============================================================================
-    
-    // Authentication helpers
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
     
-    function isEmailVerified() {
-      return request.auth.token.email_verified == true;
-    }
-    
-    function isCoach() {
-      return isAuthenticated() && 
-        request.auth.token.role == 'coach';
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
     }
     
     function isAdmin() {
       return isAuthenticated() && 
-        request.auth.token.role == 'admin';
-    }
-    
-    function isPlayer() {
-      return isAuthenticated() && 
-        request.auth.token.role == 'player';
-    }
-    
-    // Team ownership helpers
-    function isTeamOwner(teamId) {
-      return isAuthenticated() && 
-        get(/databases/$(database)/documents/teams/$(teamId)).data.coachId == request.auth.uid;
+        request.auth.token.email in [
+          'admin@coachcore.ai',
+          'jones@coachcore.ai',
+          'support@coachcore.ai'
+        ];
     }
     
     function isTeamMember(teamId) {
       return isAuthenticated() && 
-        exists(/databases/$(database)/documents/teams/$(teamId)/players/$(request.auth.uid));
+        exists(/databases/$(database)/documents/teams/$(teamId)) &&
+        (get(/databases/$(database)/documents/teams/$(teamId)).data.headCoachId == request.auth.uid ||
+         request.auth.uid in get(/databases/$(database)/documents/teams/$(teamId)).data.assistantCoachIds);
     }
     
-    function isTeamCoach(teamId) {
+    function isTeamHeadCoach(teamId) {
       return isAuthenticated() && 
-        get(/databases/$(database)/documents/teams/$(teamId)).data.coachId == request.auth.uid;
+        exists(/databases/$(database)/documents/teams/$(teamId)) &&
+        get(/databases/$(database)/documents/teams/$(teamId)).data.headCoachId == request.auth.uid;
     }
     
-    // Data validation helpers
     function isValidEmail(email) {
-      return email.matches('^[^@]+@[^@]+\\.[^@]+$');
+      return email is string && email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
     }
     
-    function isValidPhone(phone) {
-      return phone.matches('^\\+?[1-9]\\d{1,14}$');
+    function isValidTimestamp(timestamp) {
+      return timestamp is timestamp;
     }
     
-    function isValidDate(date) {
-      return date is timestamp && 
-        date <= request.time && 
-        date > timestamp.date(2020, 1, 1);
+    function isValidString(str, maxLength) {
+      return str is string && str.size() <= maxLength;
     }
-    
-    function isValidAge(birthDate) {
-      return birthDate is timestamp && 
-        request.time.toMillis() - birthDate.toMillis() >= 13 * 365 * 24 * 60 * 60 * 1000; // 13 years minimum
-    }
-    
-    function isValidFileSize(size) {
-      return size <= 10 * 1024 * 1024; // 10MB max
-    }
-    
-    function isValidImageType(contentType) {
-      return contentType.matches('image/(jpeg|jpg|png|gif|webp)');
-    }
-    
-    function isValidDocumentType(contentType) {
-      return contentType.matches('application/(pdf|msword|vnd.openxmlformats-officedocument.wordprocessingml.document)');
-    }
-    
-    // Rate limiting helpers
-    function isWithinRateLimit(collection, userId, limit) {
-      let recentWrites = getAfter(/databases/$(database)/documents/$(collection)/$(userId)).data.recentWrites;
-      return recentWrites.size() <= limit;
-    }
-    
-    // ============================================================================
-    // USER PROFILES
-    // ============================================================================
+
+    // User profiles - users can only access their own profile
     match /users/{userId} {
-      allow read: if isAuthenticated() && 
-        (request.auth.uid == userId || isAdmin());
-      allow create: if isAuthenticated() && 
-        request.auth.uid == userId &&
-        isEmailVerified() &&
-        request.resource.data.keys().hasAll(['email', 'displayName', 'role', 'createdAt']) &&
-        request.resource.data.email == request.auth.token.email &&
-        isValidEmail(request.resource.data.email) &&
-        request.resource.data.displayName.size() >= 2 &&
-        request.resource.data.displayName.size() <= 50 &&
-        request.resource.data.role in ['coach', 'player', 'admin'] &&
-        request.resource.data.createdAt == request.time;
-      allow update: if isAuthenticated() && 
-        request.auth.uid == userId &&
-        request.resource.data.email == request.auth.token.email &&
-        isValidEmail(request.resource.data.email) &&
-        request.resource.data.displayName.size() >= 2 &&
-        request.resource.data.displayName.size() <= 50;
-      allow delete: if isAdmin() || 
-        (isAuthenticated() && request.auth.uid == userId);
-      
-      // User preferences subcollection
-      match /preferences/{prefId} {
-        allow read, write: if isAuthenticated() && 
-          request.auth.uid == userId;
-      }
-      
-      // User sessions subcollection
-      match /sessions/{sessionId} {
-        allow read, write: if isAuthenticated() && 
-          request.auth.uid == userId;
-      }
+      allow read, write: if isOwner(userId);
+      allow read: if isAdmin(); // Admins can read all profiles
     }
     
-    // ============================================================================
-    // TEAMS
-    // ============================================================================
+    // Teams - head coaches can manage their teams, members can read
     match /teams/{teamId} {
-      allow read: if isAuthenticated() && 
-        (isTeamMember(teamId) || isTeamCoach(teamId) || isAdmin());
-      allow create: if isCoach() &&
-        request.resource.data.keys().hasAll(['name', 'sport', 'level', 'coachId', 'createdAt']) &&
-        request.resource.data.coachId == request.auth.uid &&
-        request.resource.data.name.size() >= 2 &&
-        request.resource.data.name.size() <= 100 &&
-        request.resource.data.sport in ['football', 'basketball', 'soccer', 'baseball', 'volleyball'] &&
-        request.resource.data.level in ['youth', 'high-school', 'college', 'professional'] &&
-        request.resource.data.createdAt == request.time;
-      allow update: if isTeamCoach(teamId) &&
-        request.resource.data.coachId == request.auth.uid &&
-        request.resource.data.name.size() >= 2 &&
-        request.resource.data.name.size() <= 100;
-      allow delete: if isTeamCoach(teamId) || isAdmin();
-      
-      // Players subcollection
-      match /players/{playerId} {
-        allow read: if isAuthenticated() && 
-          (isTeamMember(teamId) || isTeamCoach(teamId) || request.auth.uid == playerId);
-        allow create: if isTeamCoach(teamId) &&
-          request.resource.data.keys().hasAll(['email', 'firstName', 'lastName', 'position', 'number', 'joinedAt']) &&
-          isValidEmail(request.resource.data.email) &&
-          request.resource.data.firstName.size() >= 1 &&
-          request.resource.data.firstName.size() <= 50 &&
-          request.resource.data.lastName.size() >= 1 &&
-          request.resource.data.lastName.size() <= 50 &&
-          request.resource.data.position in ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'] &&
-          request.resource.data.number >= 0 &&
-          request.resource.data.number <= 99 &&
-          request.resource.data.joinedAt == request.time;
-        allow update: if isTeamCoach(teamId) &&
-          request.resource.data.firstName.size() >= 1 &&
-          request.resource.data.firstName.size() <= 50 &&
-          request.resource.data.lastName.size() >= 1 &&
-          request.resource.data.lastName.size() <= 50 &&
-          request.resource.data.position in ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'] &&
-          request.resource.data.number >= 0 &&
-          request.resource.data.number <= 99;
-        allow delete: if isTeamCoach(teamId);
-        
-        // Player stats subcollection
-        match /stats/{statId} {
-          allow read: if isAuthenticated() && 
-            (isTeamMember(teamId) || isTeamCoach(teamId) || request.auth.uid == playerId);
-          allow write: if isTeamCoach(teamId);
-        }
-      }
-      
-      // Practices subcollection
-      match /practices/{practiceId} {
-        allow read: if isAuthenticated() && 
-          (isTeamMember(teamId) || isTeamCoach(teamId));
-        allow create: if isTeamCoach(teamId) &&
-          request.resource.data.keys().hasAll(['date', 'duration', 'focus', 'createdAt']) &&
-          isValidDate(request.resource.data.date) &&
-          request.resource.data.duration >= 30 &&
-          request.resource.data.duration <= 240 &&
-          request.resource.data.focus.size() >= 5 &&
-          request.resource.data.focus.size() <= 200 &&
-          request.resource.data.createdAt == request.time;
-        allow update: if isTeamCoach(teamId) &&
-          isValidDate(request.resource.data.date) &&
-          request.resource.data.duration >= 30 &&
-          request.resource.data.duration <= 240 &&
-          request.resource.data.focus.size() >= 5 &&
-          request.resource.data.focus.size() <= 200;
-        allow delete: if isTeamCoach(teamId);
-      }
-      
-      // Games subcollection
-      match /games/{gameId} {
-        allow read: if isAuthenticated() && 
-          (isTeamMember(teamId) || isTeamCoach(teamId));
-        allow create: if isTeamCoach(teamId) &&
-          request.resource.data.keys().hasAll(['date', 'opponent', 'location', 'createdAt']) &&
-          isValidDate(request.resource.data.date) &&
-          request.resource.data.opponent.size() >= 2 &&
-          request.resource.data.opponent.size() <= 100 &&
-          request.resource.data.location.size() >= 5 &&
-          request.resource.data.location.size() <= 200 &&
-          request.resource.data.createdAt == request.time;
-        allow update: if isTeamCoach(teamId) &&
-          isValidDate(request.resource.data.date) &&
-          request.resource.data.opponent.size() >= 2 &&
-          request.resource.data.opponent.size() <= 100 &&
-          request.resource.data.location.size() >= 5 &&
-          request.resource.data.location.size() <= 200;
-        allow delete: if isTeamCoach(teamId);
-      }
+      allow read: if isTeamMember(teamId);
+      allow write: if isTeamHeadCoach(teamId);
+      allow create: if isAuthenticated() && 
+        request.auth.uid == resource.data.headCoachId;
     }
     
-    // ============================================================================
-    // PLAYS
-    // ============================================================================
+    // Waitlist - anyone can create, only admins can read/update/delete
+    match /waitlist/{waitlistId} {
+      allow create: if isValidEmail(resource.data.email) &&
+        isValidString(resource.data.email, 100) &&
+        isValidTimestamp(resource.data.timestamp);
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Staging feedback - anyone can create, only admins can read/update/delete
+    match /staging_feedback/{feedbackId} {
+      allow create: if isValidString(resource.data.feedback, 1000) &&
+        resource.data.category in ['bug', 'feature', 'ui', 'performance', 'other'] &&
+        resource.data.priority in ['low', 'medium', 'high', 'critical'] &&
+        isValidTimestamp(resource.data.timestamp);
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Games - team members can access their team's games
+    match /games/{gameId} {
+      allow read, write: if isTeamMember(resource.data.teamId);
+      allow create: if isAuthenticated() && 
+        isTeamMember(request.resource.data.teamId);
+    }
+    
+    // Plays - team members can access their team's plays
     match /plays/{playId} {
-      allow read: if isAuthenticated() && 
-        (resource.data.coachId == request.auth.uid || 
-         isTeamMember(resource.data.teamId) || 
-         isAdmin());
-      allow create: if isCoach() &&
-        request.resource.data.keys().hasAll(['name', 'formation', 'description', 'coachId', 'teamId', 'createdAt']) &&
-        request.resource.data.coachId == request.auth.uid &&
-        request.resource.data.name.size() >= 3 &&
-        request.resource.data.name.size() <= 100 &&
-        request.resource.data.formation.size() >= 2 &&
-        request.resource.data.formation.size() <= 50 &&
-        request.resource.data.description.size() >= 10 &&
-        request.resource.data.description.size() <= 1000 &&
-        request.resource.data.createdAt == request.time;
-      allow update: if isAuthenticated() && 
-        resource.data.coachId == request.auth.uid &&
-        request.resource.data.name.size() >= 3 &&
-        request.resource.data.name.size() <= 100 &&
-        request.resource.data.formation.size() >= 2 &&
-        request.resource.data.formation.size() <= 50 &&
-        request.resource.data.description.size() >= 10 &&
-        request.resource.data.description.size() <= 1000;
-      allow delete: if isAuthenticated() && 
-        resource.data.coachId == request.auth.uid;
+      allow read, write: if isTeamMember(resource.data.teamId);
+      allow create: if isAuthenticated() && 
+        isTeamMember(request.resource.data.teamId);
     }
     
-    // ============================================================================
-    // ANALYTICS
-    // ============================================================================
-    match /analytics/{document=**} {
-      allow read: if isCoach() || isAdmin();
-      allow write: if false; // Only backend can write analytics
+    // Practice plans - team members can access their team's plans
+    match /practice_plans/{planId} {
+      allow read, write: if isTeamMember(resource.data.teamId);
+      allow create: if isAuthenticated() && 
+        isTeamMember(request.resource.data.teamId);
     }
     
-    // ============================================================================
-    // NOTIFICATIONS
-    // ============================================================================
-    match /notifications/{notificationId} {
-      allow read: if isAuthenticated() && 
-        resource.data.userId == request.auth.uid;
-      allow create: if isAuthenticated() &&
-        request.resource.data.userId == request.auth.uid &&
-        request.resource.data.keys().hasAll(['title', 'message', 'type', 'createdAt']) &&
-        request.resource.data.title.size() >= 1 &&
-        request.resource.data.title.size() <= 100 &&
-        request.resource.data.message.size() >= 1 &&
-        request.resource.data.message.size() <= 500 &&
-        request.resource.data.type in ['info', 'warning', 'error', 'success'] &&
-        request.resource.data.createdAt == request.time;
-      allow update: if isAuthenticated() && 
-        resource.data.userId == request.auth.uid &&
-        request.resource.data.readAt == request.time;
-      allow delete: if isAuthenticated() && 
-        resource.data.userId == request.auth.uid;
+    // Rate limits - system managed, no direct access
+    match /rate_limits/{rateLimitId} {
+      allow read, write: if false; // Only server-side access
     }
     
-    // ============================================================================
-    // SYSTEM CONFIGURATION
-    // ============================================================================
-    match /system/{configId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
-    }
-    
-    // ============================================================================
-    // AUDIT LOGS
-    // ============================================================================
-    match /audit/{logId} {
+    // Audit logs - only admins can read, no direct writes
+    match /audit_logs/{logId} {
       allow read: if isAdmin();
-      allow write: if false; // Only backend can write audit logs
+      allow write: if false; // Only server-side writes
     }
     
-    // ============================================================================
-    // RATE LIMITING
-    // ============================================================================
-    match /rateLimits/{userId} {
-      allow read, write: if isAuthenticated() && 
-        request.auth.uid == userId;
-    }
-    
-    // ============================================================================
-    // DEFAULT DENY
-    // ============================================================================
+    // Default deny all
     match /{document=**} {
       allow read, write: if false;
     }
   }
-} 
+}

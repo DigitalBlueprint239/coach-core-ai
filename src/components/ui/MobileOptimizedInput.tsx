@@ -62,6 +62,9 @@ const MobileOptimizedInput: React.FC<MobileOptimizedInputProps> = ({
   ...rest
 }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
+  
+  // Filter out leftIcon and rightIcon from rest props to prevent them from being passed to Input
+  const { leftIcon: _, rightIcon: __, ...inputProps } = rest as any;
 
   const borderColor = useColorModeValue('gray.300', 'gray.600');
   const focusBorderColor = useColorModeValue('blue.500', 'blue.400');
@@ -218,7 +221,7 @@ const MobileOptimizedInput: React.FC<MobileOptimizedInputProps> = ({
           pr={rightIcon ? (isMobile ? 12 : 10) : undefined}
           {...inputSize}
           {...getMobileFocusStates()}
-          {...rest}
+          {...inputProps}
         />
 
         {rightIcon && (

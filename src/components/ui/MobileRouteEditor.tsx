@@ -2,7 +2,19 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { TouchableOpacity } from './TouchableOpacity';
-import { Haptics } from '@capacitor/haptics';
+
+// Optional haptics import for mobile devices
+let Haptics: any = null;
+try {
+  Haptics = require('@capacitor/haptics').Haptics;
+} catch (e) {
+  // Haptics not available, will use fallback
+  Haptics = {
+    impact: () => Promise.resolve(),
+    selection: () => Promise.resolve(),
+    notification: () => Promise.resolve()
+  };
+}
 
 interface RoutePoint {
   id: string;
@@ -412,9 +424,18 @@ export const MobileRouteEditor: React.FC<MobileRouteEditorProps> = ({
     };
   }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
 
+  // Render canvas when routes or current route changes
   useEffect(() => {
     renderCanvas();
-  }, [renderCanvas]);
+  }, [routes, currentRoute, selectedPoint]);
+
+  // Render canvas when component mounts or canvas ref changes
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      renderCanvas();
+    }
+  }, [canvasRef.current]);
 
   // ============================================
   // RENDER

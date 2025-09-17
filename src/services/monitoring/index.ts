@@ -1,42 +1,63 @@
-import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
-import { db } from '../firebase/firebase-config';
-import { logEvent } from 'firebase/analytics';
+// Monitoring service exports
+export { initSentry, setSentryUser, addSentryBreadcrumb, captureSentryException, captureSentryMessage } from './sentry-config';
+export { initFirebasePerformance, PerformanceTracker, usePerformanceTracking } from './firebase-performance';
 
-const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
-const ENVIRONMENT = process.env.NODE_ENV || 'development';
+// Combined monitoring initialization
+export const initMonitoring = () => {
+  // Initialize Sentry
+  const { initSentry } = require('./sentry-config');
+  initSentry();
 
-export const initializeMonitoring = () => {
-  if (process.env.NODE_ENV === 'production' && SENTRY_DSN) {
-    Sentry.init({
-      dsn: SENTRY_DSN,
-      integrations: [new BrowserTracing() as any],
-      tracesSampleRate: 0.1,
-      environment: ENVIRONMENT,
-    });
+  // Initialize Firebase Performance
+  const { initFirebasePerformance } = require('./firebase-performance');
+  initFirebasePerformance();
+};
+
+// User action tracking utilities
+export const trackUserAction = (action: string, data?: any) => {
+  const { addSentryBreadcrumb } = require('./sentry-config');
+  const { PerformanceTracker } = require('./firebase-performance');
+  
+  // Add Sentry breadcrumb
+  addSentryBreadcrumb(`User action: ${action}`, 'user', data);
+  
+  // Track performance
+  PerformanceTracker.trackUserAction(action);
+};
+
+// Error tracking utilities
+export const trackError = (error: Error, context?: any) => {
+  const { captureSentryException } = require('./sentry-config');
+  
+  // Capture in Sentry
+  captureSentryException(error, context);
+  
+  // Log to console in development
+  if (import.meta.env.MODE === 'development') {
+    console.error('🚨 Error tracked:', error, context);
   }
 };
 
-// Performance monitoring
-export function trackPerformance(metricName: string, value: number) {
-  if ('sendBeacon' in navigator) {
-    navigator.sendBeacon(
-      '/api/metrics',
-      JSON.stringify({
-        metric: metricName,
-        value,
-        timestamp: Date.now(),
-      })
-    );
-  }
-}
+// Page navigation tracking
+export const trackPageNavigation = (pageName: string, data?: any) => {
+  const { addSentryBreadcrumb } = require('./sentry-config');
+  const { PerformanceTracker } = require('./firebase-performance');
+  
+  // Add Sentry breadcrumb
+  addSentryBreadcrumb(`Navigation: ${pageName}`, 'navigation', data);
+  
+  // Track performance
+  PerformanceTracker.trackPageLoad(pageName);
+};
 
-// User analytics
-export function trackEvent(
-  eventName: string,
-  properties?: Record<string, any>
-) {
-  // Analytics logging would be implemented here
-  // For now, just log to console
-  console.log('Analytics Event:', eventName, properties);
-}
+// API call tracking
+export const trackApiCall = (apiName: string, data?: any) => {
+  const { addSentryBreadcrumb } = require('./sentry-config');
+  const { PerformanceTracker } = require('./firebase-performance');
+  
+  // Add Sentry breadcrumb
+  addSentryBreadcrumb(`API call: ${apiName}`, 'http', data);
+  
+  // Track performance
+  return PerformanceTracker.trackApiCall(apiName);
+};

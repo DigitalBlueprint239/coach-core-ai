@@ -39,7 +39,7 @@ import {
   Clock,
   Target,
 } from 'lucide-react';
-import performanceMonitor from '../../services/monitoring/performance-monitor';
+import { performanceMonitor } from '../../services/monitoring/performance-monitor';
 
 interface PerformanceDashboardProps {
   showDetails?: boolean;

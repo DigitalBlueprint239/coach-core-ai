@@ -1,9 +1,7 @@
 import React, { useState, useEffect, Suspense, useContext, lazy } from 'react';
 import {
   ChakraProvider,
-  useToast,
   Spinner,
-  useDisclosure,
   Button,
   VStack,
   Box,
@@ -16,28 +14,53 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { unifiedTheme } from './theme/unified-theme';
+import { ErrorBoundary } from '@sentry/react';
+import ProductionErrorBoundary from './components/ErrorBoundary/ProductionErrorBoundary';
+import modernTheme from './theme/modern-design-system';
 import ModernNavigation from './components/navigation/ModernNavigation';
-import LoadingSpinner from './components/ui/LoadingSpinner';
 import { authService, AuthState } from './services/firebase/auth-service';
 import { AuthContext } from './hooks/useAuth';
+import { initMonitoring } from './services/monitoring';
+import { initAnalytics } from './services/analytics';
+import { performanceMonitor } from './services/monitoring/performance-monitor';
+import { featureFlagService } from './services/feature-flags/feature-flag-service';
+import { userBehaviorLogger } from './services/analytics/user-behavior-logger';
+import { ga4Service } from './services/analytics/ga4-config';
+import { bigQueryExportService } from './services/analytics/bigquery-export';
+import secureLogger from './utils/secure-logger';
+// Critical components - load immediately (no lazy loading)
+import LandingPage from './components/Landing/OptimizedLandingPage';
+import LoginPage from './components/auth/LoginPage';
+import Signup from './features/auth/Signup';
+import WaitlistPage from './components/Waitlist/WaitlistPage';
 
-// Lazy load components for better performance
-const MVPDashboard = lazy(() => import('./components/Dashboard/MVPDashboard'));
-const ModernPracticePlanner = lazy(() => import('./components/PracticePlanner/ModernPracticePlanner'));
-const PlaybookDesigner = lazy(() => import('./components/Playbook/PlaybookDesigner'));
-const PlayDesignerFunctional = lazy(() => import('./components/PlayDesigner/PlayDesignerFunctional'));
-const AIBrainDashboardOptimized = lazy(() => import('./components/AIBrain/AIBrainDashboardOptimized'));
-const AIPlayGenerator = lazy(() => import('./components/AI/AIPlayGenerator'));
-const TeamManagement = lazy(() => import('./components/Team/TeamManagement'));
-const LandingPage = lazy(() => import('./components/Landing/LandingPage'));
-const LoginPage = lazy(() => import('./components/auth/LoginPage'));
-const Signup = lazy(() => import('./features/auth/Signup'));
+// Lazy load heavy components for better performance
+import {
+  LazyModernPracticePlanner,
+  LazyPlaybookDesigner,
+  LazyPlayDesignerFunctional,
+  LazyAIBrainDashboard,
+  LazyAIPlayGenerator,
+  LazyTeamManagement,
+  LazyPerformanceDashboard,
+  LazyGameCalendar,
+  LazyEnhancedDemoMode,
+  LazyFeedbackDashboard,
+  LazyBetaTestingDashboard,
+  LazyAnalyticsDashboard,
+  LazyBetaEnrollmentForm,
+  LazyBetaFeedbackForm,
+  LazyFeatureGatedPlayDesigner,
+  LazyFeatureGatedDashboard,
+  LazyPricingPage,
+  LazySubscriptionManagement,
+  LazySubscriptionGatedPlayDesigner
+} from './components/LazyComponents';
+
+// Lazy load other components
+const ModernDashboard = lazy(() => import('./components/Dashboard/ModernDashboard'));
 const OnboardingFlow = lazy(() => import('./components/Onboarding/OnboardingFlow'));
 const AuthTest = lazy(() => import('./components/Testing/AuthTest'));
-const PerformanceDashboard = lazy(() => import('./components/Performance/PerformanceDashboard'));
-const GameCalendar = lazy(() => import('./components/GameManagement/GameCalendar'));
-const DemoMode = lazy(() => import('./components/Demo/DemoMode'));
 
 import './index.css';
 
@@ -63,11 +86,9 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   useEffect(() => {
     // Add auth state listener
     const unsubscribe = authService.addAuthStateListener(newAuthState => {
-      console.log('Auth state changed:', newAuthState);
+      secureLogger.debug('Auth state updated in App', { authState: newAuthState });
       setAuthState(newAuthState);
     });
-
-    // Cleanup listener on unmount
     return () => {
       unsubscribe();
     };
@@ -77,7 +98,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     try {
       await authService.signOut();
     } catch (error) {
-      console.error('Sign out error:', error);
+      secureLogger.error('Sign out error', { error: error instanceof Error ? error.message : String(error) });
     }
   };
 
@@ -97,18 +118,24 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useContext(AuthContext);
   
+  secureLogger.debug('ProtectedRoute - Auth state', { auth });
+  
   if (!auth) {
+    secureLogger.debug('ProtectedRoute - No auth context, showing loading...');
     return <EnhancedLoadingSpinner message="Initializing authentication..." />;
   }
 
   if (auth.isLoading) {
+    secureLogger.debug('ProtectedRoute - Auth loading, showing loading...');
     return <EnhancedLoadingSpinner message="Loading Coach Core AI..." />;
   }
 
   if (!auth.user) {
+    secureLogger.debug('ProtectedRoute - No user, redirecting to home...');
     return <Navigate to="/" replace />;
   }
 
+  secureLogger.debug('ProtectedRoute - User authenticated, rendering children');
   return <>{children}</>;
 };
 
@@ -123,10 +150,78 @@ const RouteWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 );
 
 function App() {
+  // Initialize monitoring (Sentry + Firebase Performance)
+  useEffect(() => {
+    initMonitoring();
+  }, []);
+
+  // Initialize analytics (Google Analytics)
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
+  // Initialize performance monitoring
+  useEffect(() => {
+    performanceMonitor.initialize();
+  }, []);
+
+  // Initialize feature flags
+  useEffect(() => {
+    // Feature flags are initialized automatically
+    secureLogger.info('Feature flags service initialized');
+  }, []);
+
+  // Initialize user behavior logging
+  useEffect(() => {
+    // User behavior logging is initialized automatically
+    secureLogger.info('User behavior logging initialized');
+  }, []);
+
+  // Initialize Google Analytics 4
+  useEffect(() => {
+    // GA4 is initialized automatically
+    secureLogger.info('Google Analytics 4 initialized');
+  }, []);
+
+  // Initialize BigQuery Export
+  useEffect(() => {
+    // BigQuery export is initialized automatically
+    secureLogger.info('BigQuery export service initialized');
+  }, []);
+
+  const environment = import.meta.env.VITE_ENVIRONMENT || 'development';
+
   return (
-    <ChakraProvider theme={unifiedTheme}>
-      <AuthProvider>
-        <Router>
+    <ProductionErrorBoundary
+      environment={environment as 'development' | 'staging' | 'production'}
+      showDetails={environment === 'development'}
+    >
+      <ErrorBoundary
+        fallback={({ error: _error, resetError }) => (
+          <Center h="100vh" p={8}>
+            <VStack spacing={4}>
+              <Text fontSize="2xl" color="red.500" textAlign="center">
+                Something went wrong
+              </Text>
+              <Text color="gray.600" textAlign="center">
+                We&apos;ve been notified about this error and are working to fix it.
+              </Text>
+              <Button colorScheme="blue" onClick={resetError}>
+                Try again
+              </Button>
+            </VStack>
+          </Center>
+        )}
+        beforeCapture={(scope, error, errorInfo) => {
+          scope.setTag('errorBoundary', true);
+          if (errorInfo && typeof errorInfo === 'object') {
+            scope.setContext('errorInfo', errorInfo);
+          }
+        }}
+      >
+      <ChakraProvider theme={modernTheme}>
+        <AuthProvider>
+          <Router>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={
@@ -142,6 +237,11 @@ function App() {
             <Route path="/signup" element={
               <Suspense fallback={<EnhancedLoadingSpinner message="Loading signup..." />}>
                 <Signup />
+              </Suspense>
+            } />
+            <Route path="/waitlist" element={
+              <Suspense fallback={<EnhancedLoadingSpinner message="Loading waitlist..." />}>
+                <WaitlistPage />
               </Suspense>
             } />
             
@@ -163,7 +263,7 @@ function App() {
               element={
                 <ProtectedRoute>
                   <RouteWrapper>
-                    <MVPDashboard />
+                    <ModernDashboard />
                   </RouteWrapper>
                 </ProtectedRoute>
               }
@@ -174,7 +274,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <TeamManagement />
+                      <LazyTeamManagement />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -186,7 +286,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <GameCalendar teamId="default-team" />
+                      <LazyGameCalendar teamId="default-team" />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -198,7 +298,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <ModernPracticePlanner />
+                      <LazyModernPracticePlanner />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -210,7 +310,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <PlayDesignerFunctional />
+                      <LazyPlayDesignerFunctional />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -222,7 +322,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <PlaybookDesigner />
+                      <LazyPlaybookDesigner />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -234,7 +334,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <AIBrainDashboardOptimized />
+                      <LazyAIBrainDashboard />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -248,7 +348,7 @@ function App() {
                 <ProtectedRoute>
                   <RouteWrapper>
                     <Box p={6}>
-                      <PerformanceDashboard />
+                      <LazyPerformanceDashboard />
                     </Box>
                   </RouteWrapper>
                 </ProtectedRoute>
@@ -261,7 +361,7 @@ function App() {
               element={
                 <RouteWrapper>
                   <Box p={6}>
-                    <AIPlayGenerator />
+                    <LazyAIPlayGenerator />
                   </Box>
                 </RouteWrapper>
               }
@@ -271,9 +371,7 @@ function App() {
             <Route
               path="/demo"
               element={
-                <Suspense fallback={<EnhancedLoadingSpinner message="Loading demo mode..." />}>
-                  <DemoMode />
-                </Suspense>
+                <LazyEnhancedDemoMode />
               }
             />
             
@@ -287,12 +385,125 @@ function App() {
               }
             />
             
+            {/* Admin Routes - Feedback Dashboard */}
+            <Route
+              path="/admin/feedback"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazyFeedbackDashboard />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Beta Testing Dashboard Route */}
+            <Route
+              path="/admin/beta-testing"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <Box p={6}>
+                      <LazyBetaTestingDashboard />
+                    </Box>
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Analytics Dashboard Route */}
+            <Route
+              path="/admin/analytics"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <Box p={6}>
+                      <LazyAnalyticsDashboard />
+                    </Box>
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            {/* Beta Testing Routes */}
+            <Route
+              path="/beta/enrollment"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazyBetaEnrollmentForm />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/beta/feedback"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazyBetaFeedbackForm />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            {/* Feature-Gated Routes */}
+            <Route
+              path="/play-designer"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazyFeatureGatedPlayDesigner />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazyFeatureGatedDashboard />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            {/* Subscription Routes */}
+            <Route
+              path="/pricing"
+              element={
+                <RouteWrapper>
+                  <LazyPricingPage />
+                </RouteWrapper>
+              }
+            />
+            <Route
+              path="/subscription"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazySubscriptionManagement />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/play-designer-subscription"
+              element={
+                <ProtectedRoute>
+                  <RouteWrapper>
+                    <LazySubscriptionGatedPlayDesigner />
+                  </RouteWrapper>
+                </ProtectedRoute>
+              }
+            />
+            
             {/* Default redirect for authenticated users */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </Router>
       </AuthProvider>
     </ChakraProvider>
+    </ErrorBoundary>
+    </ProductionErrorBoundary>
   );
 }
 

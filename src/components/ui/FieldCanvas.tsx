@@ -7,7 +7,18 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { Haptics } from '@capacitor/haptics';
+// Optional haptics import for mobile devices
+let Haptics: any = null;
+try {
+  Haptics = require('@capacitor/haptics').Haptics;
+} catch (e) {
+  // Haptics not available, will use fallback
+  Haptics = {
+    impact: () => Promise.resolve(),
+    selection: () => Promise.resolve(),
+    notification: () => Promise.resolve()
+  };
+}
 
 interface FieldCanvasProps {
   width: number;
@@ -143,9 +154,9 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
 
     ctx.restore();
 
-    // Schedule next frame
-    animationFrameRef.current = requestAnimationFrame(renderCanvas);
-  }, [canvasContext, width, height, drawingPoints]);
+    // DON'T schedule next frame here - this was causing infinite loop
+    // Animation should be controlled by external triggers, not automatic
+  }, [canvasContext, width, height, drawingPoints, drawFieldBackground, drawPlayers, drawRoutes, drawPath]);
 
   // ============================================
   // DRAWING FUNCTIONS
@@ -508,6 +519,12 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
   // EFFECTS
   // ============================================
 
+  // Controlled animation effect - only render when needed
+  useEffect(() => {
+    renderCanvas();
+  }, [canvasContext, width, height, drawingPoints, drawFieldBackground, drawPlayers, drawRoutes, drawPath]);
+
+  // Touch event listeners effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -531,9 +548,6 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
     canvas.addEventListener('touchmove', handleLongPressCancel);
     canvas.addEventListener('touchend', handleLongPressCancel);
 
-    // Start rendering loop
-    renderCanvas();
-
     // Cleanup
     return () => {
       canvas.removeEventListener('touchstart', handleTouchStart);
@@ -554,7 +568,6 @@ export const FieldCanvas: React.FC<FieldCanvasProps> = ({
     handleTouchMove,
     handleTouchEnd,
     handleLongPress,
-    renderCanvas,
   ]);
 
   // ============================================

@@ -1,7 +1,18 @@
 // src/components/ui/SwipeGesture.tsx
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Haptics } from '@capacitor/haptics';
+// Optional haptics import for mobile devices
+let Haptics: any = null;
+try {
+  Haptics = require('@capacitor/haptics').Haptics;
+} catch (e) {
+  // Haptics not available, will use fallback
+  Haptics = {
+    impact: () => Promise.resolve(),
+    selection: () => Promise.resolve(),
+    notification: () => Promise.resolve()
+  };
+}
 
 interface SwipeGestureProps {
   children: React.ReactNode;

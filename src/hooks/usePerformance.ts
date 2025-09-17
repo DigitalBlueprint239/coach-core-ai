@@ -23,7 +23,7 @@ export const usePerformance = (options: UsePerformanceOptions) => {
     trackRenders = true,
     trackInteractions = true,
     trackMountTime = true,
-    enableLogging = __DEV__,
+    enableLogging = process.env.NODE_ENV === 'development',
   } = options;
 
   const renderCount = useRef(0);
@@ -43,8 +43,8 @@ export const usePerformance = (options: UsePerformanceOptions) => {
     }
   }, [componentName, trackMountTime, enableLogging]);
 
-  // Track render performance
-  useEffect(() => {
+  // Track render performance - use ref to avoid dependency issues
+  const trackRenderPerformance = useCallback(() => {
     if (trackRenders) {
       const renderTime = Date.now() - lastRenderStart.current;
       if (renderTime > 0) {
@@ -63,12 +63,23 @@ export const usePerformance = (options: UsePerformanceOptions) => {
         }
       }
     }
-  });
+  }, [trackRenders, componentName, enableLogging]);
+
+  // Use a ref to track renders without causing re-renders
+  const renderTrackerRef = useRef<() => void>();
+  renderTrackerRef.current = trackRenderPerformance;
+
+  // Track renders using a separate effect that doesn't cause re-renders
+  useEffect(() => {
+    if (renderTrackerRef.current) {
+      renderTrackerRef.current();
+    }
+  }); // No dependency array - runs after every render but doesn't cause re-renders
 
   // Track render start time
   useEffect(() => {
     lastRenderStart.current = Date.now();
-  });
+  }, []); // Only run once on mount
 
   // Track user interactions
   const trackInteraction = useCallback((

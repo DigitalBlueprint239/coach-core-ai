@@ -25,10 +25,22 @@ class OfflineQueue {
   private readonly QUEUE_KEY = 'coach_core_offline_queue';
   private readonly MAX_RETRIES = 3;
   private readonly RETRY_DELAY = 1000; // 1 second base delay
+  private readonly MAX_QUEUE_SIZE = 100; // Maximum number of queued actions
+  private readonly MAX_QUEUE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
   private isProcessing = false;
 
   async addToQueue(action: Omit<QueuedAction, 'id' | 'timestamp' | 'retryCount'>): Promise<string> {
     const queue = await this.getQueue();
+    
+    // Clean up old and excess items before adding new one
+    await this.cleanupQueue(queue);
+    
+    // Check if queue is at capacity
+    if (queue.length >= this.MAX_QUEUE_SIZE) {
+      console.warn(`Queue is at capacity (${this.MAX_QUEUE_SIZE}). Removing oldest low-priority items.`);
+      this.removeOldestLowPriorityItems(queue);
+    }
+    
     const newAction: QueuedAction = {
       ...action,
       id: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -207,6 +219,84 @@ class OfflineQueue {
         this.processQueue();
       }
     }, 30000);
+  }
+
+  /**
+   * Clean up old and excess queue items
+   */
+  private async cleanupQueue(queue: QueuedAction[]): Promise<void> {
+    const now = Date.now();
+    const initialLength = queue.length;
+    
+    // Remove items older than MAX_QUEUE_AGE
+    const filteredQueue = queue.filter(action => {
+      const age = now - action.timestamp;
+      return age < this.MAX_QUEUE_AGE;
+    });
+    
+    // Remove excess items if still over limit
+    if (filteredQueue.length > this.MAX_QUEUE_SIZE) {
+      this.removeOldestLowPriorityItems(filteredQueue);
+    }
+    
+    const removedCount = initialLength - filteredQueue.length;
+    if (removedCount > 0) {
+      console.log(`Cleaned up ${removedCount} old/excess queue items`);
+      // Update the queue array in place
+      queue.splice(0, queue.length, ...filteredQueue);
+    }
+  }
+
+  /**
+   * Remove oldest low-priority items to make room
+   */
+  private removeOldestLowPriorityItems(queue: QueuedAction[]): void {
+    // Sort by priority (high first) then by timestamp (oldest first)
+    queue.sort((a, b) => {
+      const priorityOrder = { high: 3, medium: 2, low: 1 };
+      const aPriority = priorityOrder[a.priority] || 2;
+      const bPriority = priorityOrder[b.priority] || 2;
+      
+      if (aPriority !== bPriority) {
+        return bPriority - aPriority; // Higher priority first
+      }
+      return a.timestamp - b.timestamp; // Older first
+    });
+    
+    // Remove items from the end (lowest priority, oldest)
+    const toRemove = queue.length - this.MAX_QUEUE_SIZE + 1; // +1 to make room for new item
+    const removed = queue.splice(-toRemove, toRemove);
+    
+    console.log(`Removed ${removed.length} low-priority items from queue`);
+  }
+
+  /**
+   * Get detailed queue statistics
+   */
+  async getDetailedQueueStats(): Promise<{
+    total: number;
+    byPriority: { [key: string]: number };
+    oldest: number;
+    newest: number;
+  }> {
+    const queue = await this.getQueue();
+    const now = Date.now();
+    
+    const byPriority = queue.reduce((acc, action) => {
+      acc[action.priority] = (acc[action.priority] || 0) + 1;
+      return acc;
+    }, {} as { [key: string]: number });
+    
+    const timestamps = queue.map(action => action.timestamp);
+    const oldest = timestamps.length > 0 ? Math.min(...timestamps) : 0;
+    const newest = timestamps.length > 0 ? Math.max(...timestamps) : 0;
+    
+    return {
+      total: queue.length,
+      byPriority,
+      oldest: oldest > 0 ? now - oldest : 0,
+      newest: newest > 0 ? now - newest : 0,
+    };
   }
 }
 

@@ -13,6 +13,15 @@ import {
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './firebase-config';
 import { UserProfile, SubscriptionTier, UserRole, Permission } from '../../types/user';
+import { trackUserAction, setSentryUser, trackError } from '../monitoring';
+import { 
+  trackLogin, 
+  trackLogout, 
+  trackSignup, 
+  setUserContext, 
+  clearUserContext 
+} from '../analytics';
+import { createFirestoreHelper } from '../../utils/firestore-sanitization';
 
 export interface AuthState {
   user: FirebaseUser | null;
@@ -34,29 +43,47 @@ class AuthService {
   private authStateListeners: ((state: AuthState) => void)[] = [];
   private currentUser: FirebaseUser | null = null;
   private currentProfile: UserProfile | null = null;
+  private firestoreHelper = createFirestoreHelper('users');
 
   constructor() {
     // Set up auth state listener
     onAuthStateChanged(auth, async (user) => {
+      // eslint-disable-next-line no-console
+      console.log('Auth state changed:', user ? `User ${user.uid} (${user.email})` : 'No user');
       this.currentUser = user;
       if (user) {
+        // eslint-disable-next-line no-console
+        console.log('Loading user profile for:', user.uid);
         this.currentProfile = await this.getUserProfile(user.uid);
+        // eslint-disable-next-line no-console
+        console.log('User profile loaded:', this.currentProfile ? 'Success' : 'Failed');
       } else {
         this.currentProfile = null;
       }
       
-      this.notifyListeners({
+      const authState = {
         user: this.currentUser,
         profile: this.currentProfile,
         isLoading: false,
         error: null
-      });
+      };
+      
+      // eslint-disable-next-line no-console
+      console.log('Notifying auth state listeners:', authState);
+      this.notifyListeners(authState);
     });
   }
 
   // Enhanced signup with profile creation
   async signUp(data: SignUpData): Promise<{ user: FirebaseUser; profile: UserProfile }> {
     try {
+      // Track user action
+      trackUserAction('signup_attempt', { 
+        email: data.email, 
+        sport: data.sport, 
+        teamName: data.teamName 
+      });
+
       // Create Firebase user
       const userCredential = await createUserWithEmailAndPassword(
         auth, 
@@ -114,8 +141,32 @@ class AuthService {
         await this.updateUserProfile(user.uid, profile);
       }
       
+      // Track successful signup
+      trackUserAction('signup_success', { 
+        userId: user.uid, 
+        email: data.email,
+        teamId: profile.activeTeamId 
+      });
+
+      // Set user context in Sentry
+      setSentryUser({
+        id: user.uid,
+        email: user.email || '',
+        teamId: profile.activeTeamId
+      });
+      
+      // Track analytics events
+      trackSignup('email', user.uid, profile.activeTeamId);
+      setUserContext(user.uid, data.email, profile.activeTeamId, 'coach');
+
       return { user, profile };
     } catch (error: any) {
+      // Track signup error
+      trackUserAction('signup_error', { 
+        email: data.email, 
+        error: error.message 
+      });
+      trackError(error as Error, { action: 'signup', email: data.email });
       throw new Error(`Signup failed: ${error.message}`);
     }
   }
@@ -123,6 +174,9 @@ class AuthService {
   // Enhanced signin with profile loading
   async signIn(email: string, password: string): Promise<{ user: FirebaseUser; profile: UserProfile }> {
     try {
+      // Track login attempt
+      trackUserAction('login_attempt', { email });
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
@@ -134,9 +188,33 @@ class AuthService {
       
       // Update last login
       await this.updateLastLogin(user.uid);
+
+      // Track successful login
+      trackUserAction('login_success', { 
+        userId: user.uid, 
+        email: user.email,
+        teamId: profile.activeTeamId 
+      });
+
+      // Set user context in Sentry
+      setSentryUser({
+        id: user.uid,
+        email: user.email || '',
+        teamId: profile.activeTeamId
+      });
+      
+      // Track analytics events
+      trackLogin('email', user.uid);
+      setUserContext(user.uid, user.email || '', profile.activeTeamId, 'coach');
       
       return { user, profile };
     } catch (error: any) {
+      // Track login error
+      trackUserAction('login_error', { 
+        email, 
+        error: error.message 
+      });
+      trackError(error as Error, { action: 'login', email });
       throw new Error(`Signin failed: ${error.message}`);
     }
   }
@@ -144,21 +222,41 @@ class AuthService {
   // Google OAuth signin
   async signInWithGoogle(): Promise<{ user: FirebaseUser; profile: UserProfile }> {
     try {
+      // eslint-disable-next-line no-console
+      console.log('Starting Google sign-in process...');
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
       
+      // eslint-disable-next-line no-console
+      console.log('Google sign-in successful, user:', user.uid, user.email);
+      
       // Check if profile exists, create if not
       let profile = await this.getUserProfile(user.uid);
+      // eslint-disable-next-line no-console
+      console.log('Existing profile found:', !!profile);
+      
       if (!profile) {
+        // eslint-disable-next-line no-console
+        console.log('Creating new Google user profile...');
         profile = await this.createGoogleUserProfile(user);
+        // eslint-disable-next-line no-console
+        console.log('Google user profile created:', profile.uid, profile.activeTeamId);
       }
       
       // Update last login
       await this.updateLastLogin(user.uid);
       
+      // Track analytics events
+      trackLogin('google', user.uid);
+      setUserContext(user.uid, user.email || '', profile.activeTeamId, 'coach');
+      
+      // eslint-disable-next-line no-console
+      console.log('Google sign-in process completed successfully');
       return { user, profile };
     } catch (error: any) {
+      // eslint-disable-next-line no-console
+      console.error('Google sign-in error:', error);
       throw new Error(`Google signin failed: ${error.message}`);
     }
   }
@@ -175,7 +273,12 @@ class AuthService {
   // Sign out
   async signOut(): Promise<void> {
     try {
+      const userId = this.currentUser?.uid;
       await signOut(auth);
+      
+      // Track analytics events
+      trackLogout(userId);
+      clearUserContext();
     } catch (error: any) {
       throw new Error(`Sign out failed: ${error.message}`);
     }
@@ -191,10 +294,21 @@ class AuthService {
   async updateUserProfile(uid: string, updates: Partial<UserProfile>): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
-      await updateDoc(userRef, {
-        ...updates,
-        updatedAt: serverTimestamp(),
-      });
+      
+      // Sanitize update data for Firestore write
+      const { data: sanitizedUpdates, isValid, warnings } = this.firestoreHelper.prepareUpdate(
+        updates,
+        ['uid'] // uid is required for updates
+      );
+
+      if (!isValid) {
+        throw new Error('Invalid user profile update data');
+      }
+
+      await updateDoc(userRef, sanitizedUpdates);
+      
+      // Log result
+      this.firestoreHelper.logResult('update', true, uid, warnings);
       
       // Update local profile if it's the current user
       if (this.currentUser?.uid === uid && this.currentProfile) {
@@ -207,6 +321,7 @@ class AuthService {
         });
       }
     } catch (error: any) {
+      this.firestoreHelper.logResult('update', false, uid, [error.message]);
       throw new Error(`Profile update failed: ${error.message}`);
     }
   }
@@ -235,9 +350,9 @@ class AuthService {
     
     switch (feature) {
       case 'playsGeneratedThisMonth':
-        return (currentUsage || 0) < plan.limits.maxPlaysPerMonth;
+        return Number(currentUsage || 0) < plan.limits.maxPlaysPerMonth;
       case 'teamsCreated':
-        return (currentUsage || 0) < plan.limits.maxTeams;
+        return Number(currentUsage || 0) < plan.limits.maxTeams;
       default:
         return true;
     }
@@ -246,6 +361,14 @@ class AuthService {
   // Add auth state listener
   addAuthStateListener(listener: (state: AuthState) => void): () => void {
     this.authStateListeners.push(listener);
+    
+    // Immediately notify with current state
+    listener({
+      user: this.currentUser,
+      profile: this.currentProfile,
+      isLoading: this.currentUser === null, // null means still checking
+      error: null
+    });
     
     // Return unsubscribe function
     return () => {
@@ -264,11 +387,21 @@ class AuthService {
   // Private helper methods
   private async createUserProfile(profile: UserProfile): Promise<void> {
     const userRef = doc(db, 'users', profile.uid);
-    await setDoc(userRef, {
-      ...profile,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
+    
+    // Sanitize profile data for Firestore write
+    const { data: sanitizedProfile, isValid, warnings } = this.firestoreHelper.prepareCreate(
+      profile,
+      ['uid', 'email', 'displayName', 'createdAt', 'lastLoginAt', 'subscription', 'subscriptionStatus', 'role']
+    );
+
+    if (!isValid) {
+      throw new Error('Invalid user profile data');
+    }
+
+    await setDoc(userRef, sanitizedProfile);
+    
+    // Log result
+    this.firestoreHelper.logResult('create', true, profile.uid, warnings);
   }
 
   private async getUserProfile(uid: string): Promise<UserProfile | null> {
@@ -287,6 +420,9 @@ class AuthService {
   }
 
   private async createGoogleUserProfile(user: FirebaseUser): Promise<UserProfile> {
+    // Create a default team for Google users
+    const teamId = await this.createInitialTeam(user.uid, `${user.displayName || 'Coach'}'s Team`, 'football', 'adult');
+    
     const profile: UserProfile = {
       uid: user.uid,
       email: user.email!,
@@ -299,7 +435,7 @@ class AuthService {
       subscriptionStatus: 'active',
       usage: {
         playsGeneratedThisMonth: 0,
-        teamsCreated: 0,
+        teamsCreated: 1,
       },
       preferences: {
         sport: 'football',
@@ -314,7 +450,8 @@ class AuthService {
         },
         theme: 'auto',
       },
-      teams: [],
+      teams: [teamId],
+      activeTeamId: teamId,
       role: 'coach',
       permissions: this.getDefaultPermissions('coach'),
     };
@@ -331,9 +468,47 @@ class AuthService {
   }
 
   private async createInitialTeam(uid: string, teamName: string, sport: string, ageGroup: string): Promise<string> {
-    // This would create a team document and return the team ID
-    // Implementation depends on your team service
-    return `team_${Date.now()}`;
+    try {
+      const teamRef = doc(db, 'teams');
+      const teamId = teamRef.id;
+      
+      const teamData = {
+        id: teamId,
+        name: teamName,
+        sport: sport,
+        ageGroup: ageGroup,
+        headCoachId: uid,
+        assistantCoachIds: [],
+        players: [],
+        settings: {
+          season: new Date().getFullYear().toString(),
+          league: 'Local League',
+          division: 'Open'
+        }
+      };
+
+      // Sanitize team data for Firestore write
+      const { data: sanitizedTeam, isValid, warnings } = this.firestoreHelper.prepareCreate(
+        teamData,
+        ['id', 'name', 'sport', 'ageGroup', 'headCoachId']
+      );
+
+      if (!isValid) {
+        throw new Error('Invalid team data');
+      }
+
+      await setDoc(teamRef, sanitizedTeam);
+      
+      // Log result
+      this.firestoreHelper.logResult('create', true, teamId, warnings);
+      
+      return teamId;
+    } catch (error) {
+      console.error('Error creating initial team:', error);
+      this.firestoreHelper.logResult('create', false, 'unknown', [error instanceof Error ? error.message : 'Unknown error']);
+      // Return a fallback team ID if creation fails
+      return `team_${Date.now()}`;
+    }
   }
 
   private getDefaultPermissions(role: UserRole): Permission[] {

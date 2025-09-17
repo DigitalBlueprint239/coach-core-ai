@@ -52,26 +52,40 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Improved chunk splitting strategy
+        // Enhanced chunk splitting strategy for optimal performance
         manualChunks: {
-          // Core React libraries
+          // Core React libraries (keep small for initial load)
           'react-vendor': ['react', 'react-dom'],
-          // UI libraries
-          'ui-vendor': [
-            '@chakra-ui/react',
-            '@emotion/react',
-            '@emotion/styled',
-            'framer-motion',
-          ],
-          // Icons and utilities
-          'utils-vendor': ['lucide-react', 'react-router-dom'],
-          // Charts and visualization
-          'charts-vendor': ['recharts', 'd3', 'd3-soccer'],
-          // Canvas and graphics
-          'canvas-vendor': ['konva', 'react-konva'],
-          // AI vendor
-          'ai-vendor': ['@firebase/ai', '@firebase/vertexai'],
-          // Note: removed firebase-vendor to avoid empty chunk
+          
+          // UI Framework (split by usage to enable tree-shaking)
+          'chakra-core': ['@chakra-ui/react'],
+          'chakra-emotion': ['@emotion/react', '@emotion/styled'],
+          'framer-motion': ['framer-motion'],
+          
+          // Heavy libraries (lazy load when needed)
+          'canvas-libs': ['konva', 'react-konva'],
+          'd3-libs': ['d3', 'd3-soccer'],
+          'charts-libs': ['recharts'],
+          'ai-libs': ['@firebase/ai', '@firebase/vertexai'],
+          'sentry-libs': ['@sentry/react', '@sentry/tracing'],
+          
+          // Routing and utilities (keep in main bundle)
+          'router': ['react-router-dom'],
+          'utils': ['lucide-react', 'zod'],
+          
+      // Firebase (split by usage for better caching)
+      'firebase-auth': ['firebase/auth'],
+      'firebase-firestore': ['firebase/firestore'],
+      'firebase-storage': ['firebase/storage'],
+      'firebase-analytics': ['firebase/analytics'],
+      'firebase-performance': ['firebase/performance'],
+      
+      // Google Cloud (server-side only)
+      'google-cloud': ['@google-cloud/bigquery'],
+          
+          // Query and state management
+          'query-libs': ['@tanstack/react-query'],
+          'state-libs': ['zustand'],
         },
         // Optimize chunk naming
         chunkFileNames: (chunkInfo) => {

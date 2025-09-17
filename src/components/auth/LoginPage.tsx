@@ -7,6 +7,9 @@ import {
   Text,
   Button,
   Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -161,7 +164,7 @@ const LoginPage: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: 'Google sign in failed',
@@ -219,12 +222,14 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signInErrors.email}>
                         <FormLabel>Email</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={Mail} />
+                          </InputLeftElement>
                           <Input
                             type="email"
                             placeholder="Enter your email"
                             value={signInEmail}
                             onChange={e => setSignInEmail(e.target.value)}
-                            leftIcon={<Icon as={Mail} />}
                           />
                         </InputGroup>
                         <FormErrorMessage>
@@ -235,12 +240,14 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signInErrors.password}>
                         <FormLabel>Password</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={Lock} />
+                          </InputLeftElement>
                           <Input
                             type={showPassword ? 'text' : 'password'}
                             placeholder="Enter your password"
                             value={signInPassword}
                             onChange={e => setSignInPassword(e.target.value)}
-                            leftIcon={<Icon as={Lock} />}
                           />
                           <InputRightElement>
                             <Button
@@ -275,12 +282,14 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signUpErrors.displayName}>
                         <FormLabel>Full Name</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={User} />
+                          </InputLeftElement>
                           <Input
                             type="text"
                             placeholder="Enter your full name"
                             value={signUpDisplayName}
                             onChange={e => setSignUpDisplayName(e.target.value)}
-                            leftIcon={<Icon as={User} />}
                           />
                         </InputGroup>
                         <FormErrorMessage>
@@ -291,12 +300,14 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signUpErrors.email}>
                         <FormLabel>Email</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={Mail} />
+                          </InputLeftElement>
                           <Input
                             type="email"
                             placeholder="Enter your email"
                             value={signUpEmail}
                             onChange={e => setSignUpEmail(e.target.value)}
-                            leftIcon={<Icon as={Mail} />}
                           />
                         </InputGroup>
                         <FormErrorMessage>
@@ -307,12 +318,14 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signUpErrors.teamName}>
                         <FormLabel>Team Name</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={Users} />
+                          </InputLeftElement>
                           <Input
                             type="text"
                             placeholder="Enter your team name"
                             value={signUpTeamName}
                             onChange={e => setSignUpTeamName(e.target.value)}
-                            leftIcon={<Icon as={Users} />}
                           />
                         </InputGroup>
                         <FormErrorMessage>
@@ -357,12 +370,14 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signUpErrors.password}>
                         <FormLabel>Password</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={Lock} />
+                          </InputLeftElement>
                           <Input
                             type={showPassword ? 'text' : 'password'}
                             placeholder="Create a password"
                             value={signUpPassword}
                             onChange={e => setSignUpPassword(e.target.value)}
-                            leftIcon={<Icon as={Lock} />}
                           />
                           <InputRightElement>
                             <Button
@@ -382,6 +397,9 @@ const LoginPage: React.FC = () => {
                       <FormControl isInvalid={!!signUpErrors.confirmPassword}>
                         <FormLabel>Confirm Password</FormLabel>
                         <InputGroup>
+                          <InputLeftElement>
+                            <Icon as={Lock} />
+                          </InputLeftElement>
                           <Input
                             type={showConfirmPassword ? 'text' : 'password'}
                             placeholder="Confirm your password"
@@ -389,7 +407,6 @@ const LoginPage: React.FC = () => {
                             onChange={e =>
                               setSignUpConfirmPassword(e.target.value)
                             }
-                            leftIcon={<Icon as={Lock} />}
                           />
                           <InputRightElement>
                             <Button
