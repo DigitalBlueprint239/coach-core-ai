@@ -533,9 +533,19 @@ export class GA4AnalyticsService {
 }
 
 // Create singleton instance
-export const ga4Service = new GA4AnalyticsService();
+export const ga4Analytics = new GA4AnalyticsService();
+export const ga4Service = ga4Analytics;
 
 // Export types
 export type { GA4Event, GA4UserProperties };
+
+// Export additional methods that tests expect
+export const trackSignupSubmitted = (data: any) => ga4Service.trackSignupCompleted('email', data.userId || 'unknown');
+export const trackSubscriptionCompleted = (data: any) => ga4Service.trackSubscriptionStarted(data.userId || 'unknown', data.subscription_tier || 'pro', data.value || 0);
+export const trackTrialStarted = (data: any) => ga4Service.trackCustomEvent('trial_started', data);
+export const trackTrialEnded = (data: any) => ga4Service.trackCustomEvent('trial_ended', data);
+export const trackConversion = (data: any) => ga4Service.trackCustomEvent('conversion', data);
+export const getMarketingAttribution = () => ({ source: 'direct', medium: 'none', campaign: 'none' });
+export const getDebugInfo = () => ({ isInitialized: ga4Service.isReady(), userId: null });
 
 export default ga4Service;

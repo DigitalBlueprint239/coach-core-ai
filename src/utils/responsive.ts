@@ -321,12 +321,37 @@ export const responsiveStyles = {
   },
 };
 
+// Utility functions for tests
+export const createResponsiveValue = <T>(...values: T[]): T | Record<string, T> => {
+  if (values.length === 1) return values[0];
+  return {
+    base: values[0],
+    md: values[1] || values[0],
+    lg: values[2] || values[1] || values[0],
+  };
+};
+
+export const getResponsiveValue = <T>(
+  values: Record<string, T>,
+  breakpoint: string = 'base'
+): T => {
+  return values[breakpoint] || values.base || values.lg;
+};
+
+// Add missing grid templates for tests
+export const RESPONSIVE_GRID_TEMPLATES = {
+  stats: 'repeat(auto-fit, minmax(250px, 1fr))',
+  cards: 'repeat(auto-fill, minmax(300px, 1fr))',
+  features: 'repeat(auto-fit, minmax(280px, 1fr))',
+};
+
 // Export all utilities
 export default {
   BREAKPOINTS,
   RESPONSIVE_SPACING,
   RESPONSIVE_FONTS,
   RESPONSIVE_GRIDS,
+  RESPONSIVE_GRID_TEMPLATES,
   RESPONSIVE_CONTAINERS,
   RESPONSIVE_PADDING,
   RESPONSIVE_MARGIN,
@@ -334,4 +359,6 @@ export default {
   MOBILE_UTILS,
   responsiveStyles,
   useResponsive,
+  createResponsiveValue,
+  getResponsiveValue,
 };

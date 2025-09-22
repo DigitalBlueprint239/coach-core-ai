@@ -2,22 +2,21 @@
 export { initSentry, setSentryUser, addSentryBreadcrumb, captureSentryException, captureSentryMessage } from './sentry-config';
 export { initFirebasePerformance, PerformanceTracker, usePerformanceTracking } from './firebase-performance';
 
+// Import for internal use
+import { initSentry, addSentryBreadcrumb, captureSentryException } from './sentry-config';
+import { initFirebasePerformance, PerformanceTracker } from './firebase-performance';
+
 // Combined monitoring initialization
 export const initMonitoring = () => {
   // Initialize Sentry
-  const { initSentry } = require('./sentry-config');
   initSentry();
 
   // Initialize Firebase Performance
-  const { initFirebasePerformance } = require('./firebase-performance');
   initFirebasePerformance();
 };
 
 // User action tracking utilities
 export const trackUserAction = (action: string, data?: any) => {
-  const { addSentryBreadcrumb } = require('./sentry-config');
-  const { PerformanceTracker } = require('./firebase-performance');
-  
   // Add Sentry breadcrumb
   addSentryBreadcrumb(`User action: ${action}`, 'user', data);
   
@@ -27,8 +26,6 @@ export const trackUserAction = (action: string, data?: any) => {
 
 // Error tracking utilities
 export const trackError = (error: Error, context?: any) => {
-  const { captureSentryException } = require('./sentry-config');
-  
   // Capture in Sentry
   captureSentryException(error, context);
   
@@ -40,9 +37,6 @@ export const trackError = (error: Error, context?: any) => {
 
 // Page navigation tracking
 export const trackPageNavigation = (pageName: string, data?: any) => {
-  const { addSentryBreadcrumb } = require('./sentry-config');
-  const { PerformanceTracker } = require('./firebase-performance');
-  
   // Add Sentry breadcrumb
   addSentryBreadcrumb(`Navigation: ${pageName}`, 'navigation', data);
   
@@ -52,9 +46,6 @@ export const trackPageNavigation = (pageName: string, data?: any) => {
 
 // API call tracking
 export const trackApiCall = (apiName: string, data?: any) => {
-  const { addSentryBreadcrumb } = require('./sentry-config');
-  const { PerformanceTracker } = require('./firebase-performance');
-  
   // Add Sentry breadcrumb
   addSentryBreadcrumb(`API call: ${apiName}`, 'http', data);
   

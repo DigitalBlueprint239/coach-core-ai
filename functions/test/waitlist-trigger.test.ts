@@ -1,0 +1,46 @@
+import { describe, it, beforeAll, afterAll, expect } from 'vitest';
+import { initializeApp } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+
+// This test assumes you are running the Functions + Firestore emulators:
+//   cd functions && npm run build && npm run serve
+// Then, in another terminal: cd functions && npm test
+
+describe('onWaitlistCreate trigger (emulator)', () => {
+  const FIRESTORE_EMULATOR_HOST = process.env.FIRESTORE_EMULATOR_HOST || 'localhost:8080';
+  let db: ReturnType<typeof getFirestore>;
+
+  beforeAll(() => {
+    process.env.FIRESTORE_EMULATOR_HOST = FIRESTORE_EMULATOR_HOST;
+    initializeApp({ projectId: 'demo-test' });
+    db = getFirestore();
+  });
+
+  afterAll(async () => {
+    await db.terminate();
+  });
+
+  it('writes waitlistMetadata/{id} when waitlist/{id} is created', async () => {
+    const id = `test_${Date.now()}`;
+    const waitlistRef = db.collection('waitlist').doc(id);
+    await waitlistRef.set({
+      email: 'test@example.com',
+      createdAt: FieldValue.serverTimestamp(),
+    });
+
+    // Poll for metadata doc up to ~5s
+    const metaRef = db.collection('waitlistMetadata').doc(id);
+    const start = Date.now();
+    while (Date.now() - start < 5000) {
+      const snap = await metaRef.get();
+      if (snap.exists) {
+        const data = snap.data() || {};
+        expect(data.capturedAt).toBeDefined();
+        return;
+      }
+      await new Promise(r => setTimeout(r, 200));
+    }
+    throw new Error('waitlistMetadata doc not found within timeout');
+  });
+});
+
