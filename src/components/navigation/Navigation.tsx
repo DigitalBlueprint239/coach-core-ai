@@ -28,11 +28,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
         {/* Desktop Navigation */}
         <div className="nav-desktop">
           {navigationItems.map(item => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="nav-item"
-            >
+            <a key={item.href} href={item.href} className="nav-item">
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-label">{item.label}</span>
             </a>
@@ -62,8 +58,18 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
@@ -256,4 +262,4 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
       `}</style>
     </nav>
   );
-}; 
+};

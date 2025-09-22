@@ -24,7 +24,7 @@ interface PracticeStore {
   sessions: PracticeSession[];
   isLiveMode: boolean;
   elapsedTime: number;
-  
+
   // Actions
   createSession: (session: Omit<PracticeSession, 'id'>) => void;
   addDrill: (drill: Drill) => void;
@@ -37,14 +37,14 @@ interface PracticeStore {
 
 export const usePracticeStore = create<PracticeStore>()(
   persist(
-    (set) => ({
+    set => ({
       currentSession: null,
       sessions: [],
       isLiveMode: false,
       elapsedTime: 0,
 
-      createSession: (session) =>
-        set((state) => {
+      createSession: session =>
+        set(state => {
           const newSession = {
             ...session,
             id: `session_${Date.now()}`,
@@ -55,8 +55,8 @@ export const usePracticeStore = create<PracticeStore>()(
           };
         }),
 
-      addDrill: (drill) =>
-        set((state) => {
+      addDrill: drill =>
+        set(state => {
           if (!state.currentSession) return state;
           return {
             currentSession: {
@@ -66,19 +66,19 @@ export const usePracticeStore = create<PracticeStore>()(
           };
         }),
 
-      removeDrill: (drillId) =>
-        set((state) => {
+      removeDrill: drillId =>
+        set(state => {
           if (!state.currentSession) return state;
           return {
             currentSession: {
               ...state.currentSession,
-              drills: state.currentSession.drills.filter((d) => d.id !== drillId),
+              drills: state.currentSession.drills.filter(d => d.id !== drillId),
             },
           };
         }),
 
       reorderDrills: (startIndex, endIndex) =>
-        set((state) => {
+        set(state => {
           if (!state.currentSession) return state;
           const drills = [...state.currentSession.drills];
           const [removed] = drills.splice(startIndex, 1);
@@ -93,10 +93,10 @@ export const usePracticeStore = create<PracticeStore>()(
 
       startLiveMode: () => set({ isLiveMode: true, elapsedTime: 0 }),
       stopLiveMode: () => set({ isLiveMode: false }),
-      updateElapsedTime: (time) => set({ elapsedTime: time }),
+      updateElapsedTime: time => set({ elapsedTime: time }),
     }),
     {
       name: 'practice-storage',
     }
   )
-); 
+);

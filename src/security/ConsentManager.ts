@@ -1,28 +1,32 @@
 // src/security/ConsentManager.ts
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
   collection,
   addDoc,
   query,
   orderBy,
   limit,
   getDocs,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
-import { ConsentSettings, ConsentHistory, ConsentLevel } from '../types/privacy-schema';
+import {
+  ConsentSettings,
+  ConsentHistory,
+  ConsentLevel,
+} from '../types/privacy-schema';
 
 export class ConsentManager {
   private static readonly CONSENT_TYPES = [
     'aiTraining',
-    'analytics', 
+    'analytics',
     'dataCollection',
     'dataSharing',
     'marketing',
-    'thirdPartyIntegrations'
+    'thirdPartyIntegrations',
   ] as const;
 
   /**
@@ -47,10 +51,13 @@ export class ConsentManager {
       marketingReason: 'Initial setup - denied by default',
       thirdPartyIntegrations: 'denied',
       thirdPartyIntegrationsLastUpdated: serverTimestamp(),
-      thirdPartyIntegrationsReason: 'Initial setup - denied by default'
+      thirdPartyIntegrationsReason: 'Initial setup - denied by default',
     };
 
-    await setDoc(doc(db, 'users', userId, 'privacy', 'consent'), defaultConsent);
+    await setDoc(
+      doc(db, 'users', userId, 'privacy', 'consent'),
+      defaultConsent
+    );
     return defaultConsent;
   }
 
@@ -61,7 +68,7 @@ export class ConsentManager {
     try {
       const docRef = doc(db, 'users', userId, 'privacy', 'consent');
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return docSnap.data() as ConsentSettings;
       }
@@ -90,17 +97,27 @@ export class ConsentManager {
       if (!currentConsent) return false;
 
       const previousValue = currentConsent[consentType] as ConsentLevel;
-      
+
       const updateData = {
         [consentType]: newValue,
         [`${consentType}LastUpdated`]: serverTimestamp(),
-        [`${consentType}Reason`]: reason
+        [`${consentType}Reason`]: reason,
       };
 
-      await updateDoc(doc(db, 'users', userId, 'privacy', 'consent'), updateData);
+      await updateDoc(
+        doc(db, 'users', userId, 'privacy', 'consent'),
+        updateData
+      );
 
       // Log consent change
-      await this.logConsentChange(userId, consentType, previousValue, newValue, reason, metadata);
+      await this.logConsentChange(
+        userId,
+        consentType,
+        previousValue,
+        newValue,
+        reason,
+        metadata
+      );
 
       return true;
     } catch (error) {
@@ -112,17 +129,23 @@ export class ConsentManager {
   /**
    * Check if user has given consent for a specific type
    */
-  static async hasConsent(userId: string, consentType: keyof ConsentSettings): Promise<boolean> {
+  static async hasConsent(
+    userId: string,
+    consentType: keyof ConsentSettings
+  ): Promise<boolean> {
     const consent = await this.getConsent(userId);
     if (!consent) return false;
-    
+
     return consent[consentType] === 'granted';
   }
 
   /**
    * Get consent history for a user
    */
-  static async getConsentHistory(userId: string, limitCount: number = 50): Promise<ConsentHistory[]> {
+  static async getConsentHistory(
+    userId: string,
+    limitCount: number = 50
+  ): Promise<ConsentHistory[]> {
     try {
       const q = query(
         collection(db, 'users', userId, 'privacy', 'consentHistory'),
@@ -160,7 +183,7 @@ export class ConsentManager {
       reason,
       timestamp: serverTimestamp(),
       ipAddress: metadata?.ipAddress || 'unknown',
-      userAgent: metadata?.userAgent || 'unknown'
+      userAgent: metadata?.userAgent || 'unknown',
     };
 
     await addDoc(
@@ -172,19 +195,25 @@ export class ConsentManager {
   /**
    * Withdraw all consent
    */
-  static async withdrawAllConsent(userId: string, reason: string): Promise<boolean> {
+  static async withdrawAllConsent(
+    userId: string,
+    reason: string
+  ): Promise<boolean> {
     try {
       const consentTypes = this.CONSENT_TYPES;
 
       const updateData: Partial<ConsentSettings> = {};
-      
+
       consentTypes.forEach(type => {
         (updateData as any)[type] = 'withdrawn';
         (updateData as any)[`${type}LastUpdated`] = serverTimestamp();
         (updateData as any)[`${type}Reason`] = reason;
       });
 
-      await updateDoc(doc(db, 'users', userId, 'privacy', 'consent'), updateData);
+      await updateDoc(
+        doc(db, 'users', userId, 'privacy', 'consent'),
+        updateData
+      );
       return true;
     } catch (error) {
       console.error('Error withdrawing all consent:', error);
@@ -212,13 +241,14 @@ export class ConsentManager {
           deniedConsents: 0,
           pendingConsents: 0,
           withdrawnConsents: 0,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         };
       }
 
-      const consentValues = Object.values(consent).filter(value => 
-        typeof value === 'string' && 
-        ['granted', 'denied', 'pending', 'withdrawn'].includes(value)
+      const consentValues = Object.values(consent).filter(
+        value =>
+          typeof value === 'string' &&
+          ['granted', 'denied', 'pending', 'withdrawn'].includes(value)
       ) as ConsentLevel[];
 
       return {
@@ -227,7 +257,7 @@ export class ConsentManager {
         deniedConsents: consentValues.filter(v => v === 'denied').length,
         pendingConsents: consentValues.filter(v => v === 'pending').length,
         withdrawnConsents: consentValues.filter(v => v === 'withdrawn').length,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       };
     } catch (error) {
       console.error('Error getting consent summary:', error);
@@ -237,8 +267,8 @@ export class ConsentManager {
         deniedConsents: 0,
         pendingConsents: 0,
         withdrawnConsents: 0,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       };
     }
   }
-} 
+}

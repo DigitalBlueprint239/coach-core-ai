@@ -1,9 +1,9 @@
 // src/security/PrivacyManager.ts
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
   collection,
   addDoc,
   query,
@@ -11,21 +11,23 @@ import {
   orderBy,
   limit,
   getDocs,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
-import { 
-  ConsentSettings, 
-  EnhancedPrivacySettings, 
+import {
+  ConsentSettings,
+  EnhancedPrivacySettings,
   PrivacyCompliance,
-  ConsentLevel 
+  ConsentLevel,
 } from '../types/privacy-schema';
 
 export class PrivacyManager {
   /**
    * Initialize privacy settings for a new user
    */
-  static async initializePrivacy(userId: string): Promise<EnhancedPrivacySettings> {
+  static async initializePrivacy(
+    userId: string
+  ): Promise<EnhancedPrivacySettings> {
     const defaultSettings: EnhancedPrivacySettings = {
       profileVisibility: 'team_only',
       allowDataCollection: false,
@@ -49,7 +51,7 @@ export class PrivacyManager {
       deletionConfirmationRequired: true,
       showDataUsageHistory: true,
       showConsentHistory: true,
-      showDataAccessLogs: true
+      showDataAccessLogs: true,
     };
 
     await setDoc(doc(db, 'privacySettings', userId), defaultSettings);
@@ -59,11 +61,13 @@ export class PrivacyManager {
   /**
    * Get privacy settings for a user
    */
-  static async getPrivacySettings(userId: string): Promise<EnhancedPrivacySettings | null> {
+  static async getPrivacySettings(
+    userId: string
+  ): Promise<EnhancedPrivacySettings | null> {
     try {
       const docRef = doc(db, 'privacySettings', userId);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return docSnap.data() as EnhancedPrivacySettings;
       }
@@ -85,7 +89,7 @@ export class PrivacyManager {
       const docRef = doc(db, 'privacySettings', userId);
       await updateDoc(docRef, {
         ...updates,
-        lastUpdated: serverTimestamp()
+        lastUpdated: serverTimestamp(),
       });
       return true;
     } catch (error) {
@@ -97,7 +101,9 @@ export class PrivacyManager {
   /**
    * Initialize compliance settings
    */
-  static async initializeCompliance(userId: string): Promise<PrivacyCompliance> {
+  static async initializeCompliance(
+    userId: string
+  ): Promise<PrivacyCompliance> {
     const defaultCompliance: PrivacyCompliance = {
       gdpr: {
         dataProcessingBasis: 'consent',
@@ -107,33 +113,33 @@ export class PrivacyManager {
           rightToErasure: false,
           rightToPortability: false,
           rightToObject: false,
-          rightToRestriction: false
+          rightToRestriction: false,
         },
         dataProtectionOfficer: undefined,
-        dataBreachNotification: false
+        dataBreachNotification: false,
       },
       coppa: {
         under13Protection: false,
         parentalConsentRequired: false,
         limitedDataCollection: false,
         noPersonalizedAds: false,
-        parentalAccess: false
+        parentalAccess: false,
       },
       ferpa: {
         educationalInstitution: false,
         studentDataProtection: false,
         parentConsentRequired: false,
         directoryInformationOptOut: false,
-        annualNotification: false
+        annualNotification: false,
       },
       hipaa: {
         coveredEntity: false,
         phiProtection: false,
         minimumNecessary: true,
         accessControls: false,
-        auditTrail: false
+        auditTrail: false,
       },
-      lastUpdated: serverTimestamp()
+      lastUpdated: serverTimestamp(),
     };
 
     await setDoc(doc(db, 'privacyCompliance', userId), defaultCompliance);
@@ -143,11 +149,13 @@ export class PrivacyManager {
   /**
    * Get compliance settings
    */
-  static async getCompliance(userId: string): Promise<PrivacyCompliance | null> {
+  static async getCompliance(
+    userId: string
+  ): Promise<PrivacyCompliance | null> {
     try {
       const docRef = doc(db, 'privacyCompliance', userId);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return docSnap.data() as PrivacyCompliance;
       }
@@ -185,18 +193,24 @@ export class PrivacyManager {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
-    
+
     return age;
   }
 
   /**
    * Check if data collection is allowed
    */
-  static async canCollectData(userId: string, dataType: string): Promise<boolean> {
+  static async canCollectData(
+    userId: string,
+    dataType: string
+  ): Promise<boolean> {
     try {
       const settings = await this.getPrivacySettings(userId);
       if (!settings) return false;
@@ -255,11 +269,16 @@ export class PrivacyManager {
       if (!settings) return 90; // Default 90 days
 
       switch (settings.dataRetentionPeriod) {
-        case '30_days': return 30;
-        case '90_days': return 90;
-        case '1_year': return 365;
-        case '2_years': return 730;
-        default: return 90;
+        case '30_days':
+          return 30;
+        case '90_days':
+          return 90;
+        case '1_year':
+          return 365;
+        case '2_years':
+          return 730;
+        default:
+          return 90;
       }
     } catch (error) {
       console.error('Error getting data retention period:', error);

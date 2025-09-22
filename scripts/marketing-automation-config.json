@@ -1,0 +1,300 @@
+{
+  "version": "1.0.0",
+  "name": "Coach Core AI Marketing Automation",
+  "description": "Automated marketing content generation and social media posting",
+  "platforms": {
+    "twitter": {
+      "enabled": true,
+      "apiVersion": "1.1",
+      "characterLimit": 280,
+      "hashtags": ["#CoachCoreAI", "#Basketball", "#SportsTech", "#AI", "#Coaching"],
+      "mention": "@CoachCoreAI",
+      "url": "https://coach-core-ai.web.app"
+    },
+    "linkedin": {
+      "enabled": true,
+      "apiVersion": "v2",
+      "characterLimit": 3000,
+      "hashtags": ["#SportsTech", "#Basketball", "#Coaching", "#AI", "#Innovation"],
+      "company": "Coach Core AI",
+      "url": "https://coach-core-ai.web.app"
+    },
+    "slack": {
+      "enabled": true,
+      "channels": {
+        "deployments": "#deployments",
+        "marketing": "#marketing",
+        "general": "#general"
+      },
+      "botName": "Coach Core AI Bot",
+      "botIcon": ":basketball:"
+    },
+    "discord": {
+      "enabled": true,
+      "botName": "Coach Core AI Bot",
+      "botAvatar": "https://coach-core-ai.web.app/logo.png"
+    }
+  },
+  "content": {
+    "templates": {
+      "release": {
+        "title": "🚀 Coach Core AI v{version} is now live!",
+        "subtitle": "{commitMessage}",
+        "features": "✨ {features}",
+        "performance": "⚡ {performance}",
+        "bugFixes": "🐛 {bugFixes}",
+        "cta": "Try it now: {url}"
+      },
+      "feature": {
+        "title": "✨ New Feature: {featureName}",
+        "description": "{featureDescription}",
+        "benefits": "🎯 {benefits}",
+        "cta": "Learn more: {url}"
+      },
+      "update": {
+        "title": "🔄 Update: {updateType}",
+        "description": "{updateDescription}",
+        "impact": "📈 {impact}",
+        "cta": "See the changes: {url}"
+      }
+    },
+    "defaultFeatures": [
+      "Enhanced user experience",
+      "Performance improvements",
+      "Advanced analytics",
+      "Better coaching tools",
+      "Real-time collaboration",
+      "AI-powered insights"
+    ],
+    "defaultPerformance": [
+      "Faster page load times",
+      "Improved database queries",
+      "Enhanced caching",
+      "Better error handling",
+      "Optimized mobile experience",
+      "Reduced memory usage"
+    ],
+    "defaultBugFixes": [
+      "Fixed authentication issues",
+      "Resolved data sync problems",
+      "Improved error messages",
+      "Fixed mobile layout issues",
+      "Resolved performance bottlenecks",
+      "Fixed accessibility issues"
+    ]
+  },
+  "deployment": {
+    "environments": {
+      "staging": {
+        "url": "https://coach-core-ai-staging.web.app",
+        "name": "Staging",
+        "emoji": "🧪"
+      },
+      "production": {
+        "url": "https://coach-core-ai.web.app",
+        "name": "Production",
+        "emoji": "🌐"
+      }
+    },
+    "firebase": {
+      "project": "coach-core-ai",
+      "hosting": {
+        "staging": "coach-core-ai-staging",
+        "production": "coach-core-ai-prod"
+      }
+    }
+  },
+  "notifications": {
+    "channels": {
+      "deployments": {
+        "slack": "#deployments",
+        "discord": "deployments"
+      },
+      "marketing": {
+        "slack": "#marketing",
+        "discord": "marketing"
+      },
+      "alerts": {
+        "slack": "#alerts",
+        "discord": "alerts"
+      }
+    },
+    "templates": {
+      "deployment": {
+        "success": "✅ {environment} deployment successful",
+        "failure": "❌ {environment} deployment failed",
+        "started": "🚀 {environment} deployment started"
+      },
+      "marketing": {
+        "post_success": "📱 {platform} post successful",
+        "post_failure": "❌ {platform} post failed",
+        "content_generated": "📝 Marketing content generated"
+      }
+    }
+  },
+  "analytics": {
+    "tracking": {
+      "enabled": true,
+      "platforms": ["google-analytics", "mixpanel", "amplitude"],
+      "events": {
+        "deployment": "deployment_completed",
+        "marketing_post": "marketing_post_sent",
+        "content_generated": "content_generated",
+        "landing_page_updated": "landing_page_updated"
+      }
+    },
+    "metrics": {
+      "deployment_time": true,
+      "post_success_rate": true,
+      "content_generation_time": true,
+      "landing_page_update_time": true
+    }
+  },
+  "scheduling": {
+    "timezone": "UTC",
+    "deployment_notifications": {
+      "immediate": true,
+      "delayed": false
+    },
+    "marketing_posts": {
+      "immediate": true,
+      "scheduled": false
+    },
+    "content_generation": {
+      "on_deployment": true,
+      "scheduled": false
+    }
+  },
+  "security": {
+    "secrets": {
+      "required": [
+        "FIREBASE_TOKEN",
+        "SLACK_WEBHOOK_URL",
+        "DISCORD_WEBHOOK_URL"
+      ],
+      "optional": [
+        "TWITTER_API_KEY",
+        "TWITTER_API_SECRET",
+        "TWITTER_ACCESS_TOKEN",
+        "TWITTER_ACCESS_SECRET",
+        "LINKEDIN_CLIENT_ID",
+        "LINKEDIN_CLIENT_SECRET",
+        "LINKEDIN_ACCESS_TOKEN"
+      ]
+    },
+    "validation": {
+      "check_secrets": true,
+      "validate_urls": true,
+      "check_permissions": true
+    }
+  },
+  "monitoring": {
+    "health_checks": {
+      "enabled": true,
+      "endpoints": [
+        "https://coach-core-ai.web.app",
+        "https://coach-core-ai-staging.web.app"
+      ],
+      "timeout": 30,
+      "retries": 3
+    },
+    "alerts": {
+      "deployment_failure": true,
+      "post_failure": true,
+      "health_check_failure": true,
+      "secret_missing": true
+    },
+    "logging": {
+      "level": "info",
+      "format": "json",
+      "output": "console"
+    }
+  },
+  "templates": {
+    "release_notes": {
+      "title": "🚀 Coach Core AI v{version} Release Notes",
+      "sections": [
+        "What's New",
+        "Key Features",
+        "Performance Improvements",
+        "Bug Fixes",
+        "Technical Details",
+        "Deployment Info"
+      ]
+    },
+    "social_media": {
+      "twitter": {
+        "max_length": 280,
+        "include_hashtags": true,
+        "include_mention": true,
+        "include_url": true
+      },
+      "linkedin": {
+        "max_length": 3000,
+        "include_hashtags": true,
+        "include_company": true,
+        "include_url": true
+      }
+    },
+    "landing_page": {
+      "sections": [
+        "hero",
+        "features",
+        "testimonials",
+        "changelog",
+        "cta"
+      ],
+      "update_frequency": "on_deployment"
+    }
+  },
+  "workflows": {
+    "deployment": {
+      "steps": [
+        "generate_content",
+        "deploy_staging",
+        "deploy_production",
+        "update_landing_page",
+        "send_notifications",
+        "create_release"
+      ],
+      "parallel": false,
+      "timeout": 1800
+    },
+    "marketing": {
+      "steps": [
+        "generate_content",
+        "post_social_media",
+        "update_landing_page",
+        "send_notifications"
+      ],
+      "parallel": true,
+      "timeout": 600
+    }
+  },
+  "integrations": {
+    "github": {
+      "enabled": true,
+      "create_releases": true,
+      "update_readme": true,
+      "comment_on_pr": true
+    },
+    "firebase": {
+      "enabled": true,
+      "deploy_hosting": true,
+      "update_config": true,
+      "run_tests": true
+    },
+    "slack": {
+      "enabled": true,
+      "post_messages": true,
+      "update_status": true,
+      "send_alerts": true
+    },
+    "discord": {
+      "enabled": true,
+      "post_messages": true,
+      "update_status": true,
+      "send_alerts": true
+    }
+  }
+}

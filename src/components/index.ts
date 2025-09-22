@@ -8,7 +8,7 @@ export { default as ToastManager, useToast } from './ToastManager';
 
 // Export types
 export type { ToastProps } from './Toast';
-export type { ToastMessage } from './ToastManager'; 
+export type { ToastMessage } from './ToastManager';
 
 // New UI/UX components
 // export { EmptyState } from './EmptyState';
@@ -18,4 +18,4 @@ export type { ToastMessage } from './ToastManager';
 // export { Navigation } from './navigation/Navigation';
 
 // Enhanced loading states
-// export { LoadingState, Skeleton, Progress, LoadingWrapper } from './LoadingStates'; 
+// export { LoadingState, Skeleton, Progress, LoadingWrapper } from './LoadingStates';

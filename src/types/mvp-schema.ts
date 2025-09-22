@@ -2,9 +2,16 @@
 // These wrap our existing comprehensive models for easier MVP development
 
 import { Timestamp } from 'firebase/firestore';
-import { 
-  User, Team, Player, PracticePlan, Drill, Play,
-  TeamContext, GameContext, PlayerContext 
+import {
+  User,
+  Team,
+  Player,
+  PracticePlan,
+  Drill,
+  Play,
+  TeamContext,
+  GameContext,
+  PlayerContext,
 } from './firestore-schema';
 
 // ============================================
@@ -85,7 +92,7 @@ export const toMVPCoach = (user: User): MVPCoach => ({
   email: user.email,
   displayName: user.displayName,
   teams: user.teamIds,
-  subscription: user.subscription.tier
+  subscription: user.subscription.tier,
 });
 
 export const toMVPTeam = (team: Team): MVPTeam => ({
@@ -94,7 +101,7 @@ export const toMVPTeam = (team: Team): MVPTeam => ({
   sport: team.sport as 'football' | 'basketball' | 'soccer',
   level: team.level as 'youth' | 'highschool' | 'college',
   coachId: team.coachIds[0] || '',
-  players: [] // Will be populated separately
+  players: [], // Will be populated separately
 });
 
 export const toMVPPlayer = (player: Player): MVPPlayer => ({
@@ -102,27 +109,29 @@ export const toMVPPlayer = (player: Player): MVPPlayer => ({
   name: `${player.firstName} ${player.lastName}`,
   position: player.position,
   jerseyNumber: player.jerseyNumber,
-  status: 'active' // Default for MVP
+  status: 'active', // Default for MVP
 });
 
 export const toMVPPracticePlan = (plan: PracticePlan): MVPPracticePlan => ({
   id: plan.id || '',
   teamId: plan.teamId,
   title: plan.name,
-  date: (plan.date instanceof Timestamp ? plan.date.toDate() : plan.date) as Date,
+  date: (plan.date instanceof Timestamp
+    ? plan.date.toDate()
+    : plan.date) as Date,
   duration: plan.duration,
   objectives: plan.goals,
-  drills: plan.periods.flatMap(period => 
+  drills: plan.periods.flatMap(period =>
     period.drills.map(drill => ({
       drillId: drill.id,
       name: drill.name,
       duration: drill.duration,
       order: period.order,
-      modifications: ''
+      modifications: '',
     }))
   ),
   notes: plan.notes,
-  aiGenerated: true // Assume AI generated for MVP
+  aiGenerated: true, // Assume AI generated for MVP
 });
 
 export const toMVPDrill = (drill: Drill): MVPDrill => ({
@@ -135,7 +144,7 @@ export const toMVPDrill = (drill: Drill): MVPDrill => ({
   equipment: drill.equipment,
   description: drill.description,
   instructions: drill.instructions,
-  difficulty: drill.difficulty
+  difficulty: drill.difficulty,
 });
 
 // Convert MVP models back to our advanced models
@@ -143,24 +152,32 @@ export const fromMVPCoach = (mvpCoach: MVPCoach): Partial<User> => ({
   email: mvpCoach.email,
   displayName: mvpCoach.displayName,
   teamIds: mvpCoach.teams,
-  subscription: { tier: mvpCoach.subscription, status: 'active', expiresAt: Timestamp.fromDate(new Date()), features: [], billingCycle: 'monthly' }
+  subscription: {
+    tier: mvpCoach.subscription,
+    status: 'active',
+    expiresAt: Timestamp.fromDate(new Date()),
+    features: [],
+    billingCycle: 'monthly',
+  },
 });
 
 export const fromMVPTeam = (mvpTeam: MVPTeam): Partial<Team> => ({
   name: mvpTeam.name,
   sport: mvpTeam.sport,
   level: mvpTeam.level as any,
-  coachIds: [mvpTeam.coachId]
+  coachIds: [mvpTeam.coachId],
 });
 
 export const fromMVPPlayer = (mvpPlayer: MVPPlayer): Partial<Player> => ({
   firstName: mvpPlayer.name.split(' ')[0] || '',
   lastName: mvpPlayer.name.split(' ').slice(1).join(' ') || '',
   position: mvpPlayer.position as any,
-  jerseyNumber: mvpPlayer.jerseyNumber || 0
+  jerseyNumber: mvpPlayer.jerseyNumber || 0,
 });
 
-export const fromMVPPracticePlan = (mvpPlan: MVPPracticePlan): Partial<PracticePlan> => ({
+export const fromMVPPracticePlan = (
+  mvpPlan: MVPPracticePlan
+): Partial<PracticePlan> => ({
   name: mvpPlan.title,
   date: mvpPlan.date as any,
   duration: mvpPlan.duration,
@@ -173,6 +190,6 @@ export const fromMVPPracticePlan = (mvpPlan: MVPPracticePlan): Partial<PracticeP
     type: 'skill_development' as any,
     drills: [],
     notes: drill.modifications || '',
-    order: drill.order
-  }))
-}); 
+    order: drill.order,
+  })),
+});

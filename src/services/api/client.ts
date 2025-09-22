@@ -1,7 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 import axios, { AxiosInstance, AxiosHeaders } from 'axios';
-import { firebase } from '../firebase/config';
+import { db, auth } from '../firebase/firebase-config';
 import { appConfig } from '../../config/app.config';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({
@@ -10,11 +11,16 @@ export const apiClient: AxiosInstance = axios.create({
 });
 
 // Add auth interceptor
-apiClient.interceptors.request.use(async (config) => {
-  const token = await firebase.auth.currentUser?.getIdToken();
-  if (token) {
-    config.headers = config.headers ?? new AxiosHeaders();
-    config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.request.use(async config => {
+  const currentUser = auth.currentUser;
+  if (currentUser) {
+    try {
+      const token = await currentUser.getIdToken();
+      config.headers = config.headers ?? new AxiosHeaders();
+      config.headers.Authorization = `Bearer ${token}`;
+    } catch (error) {
+      console.error('Failed to get auth token:', error);
+    }
   }
   return config;
 });
@@ -34,4 +40,4 @@ export const queryClient = new QueryClient({
       retry: false,
     },
   },
-}); 
+});

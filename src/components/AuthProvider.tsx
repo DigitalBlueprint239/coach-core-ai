@@ -28,7 +28,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>({ uid: 'demo-user', email: 'demo@coachcore.ai' });
+  const [user, setUser] = useState<User | null>({
+    uid: 'demo-user',
+    email: 'demo@coachcore.ai',
+  });
   const [loading, setLoading] = useState(false);
 
   const signIn = async () => {
@@ -54,12 +57,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading,
     signIn,
     signOut,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-}; 
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

@@ -10,12 +10,12 @@ export const OfflinePersistenceManager = {
     lastSyncTime: Date.now(),
     pendingOperations: 0,
     failedOperations: 0,
-    syncInProgress: false
+    syncInProgress: false,
   }),
   subscribeToStatus: () => () => {},
   clearQueue: async () => {},
   retryFailedOperations: async () => {},
-  getQueueStats: () => ({ total: 0, pending: 0, failed: 0, byPriority: {} })
+  getQueueStats: () => ({ total: 0, pending: 0, failed: 0, byPriority: {} }),
 };
 
 export const useOfflinePersistence = () => ({
@@ -30,8 +30,8 @@ export const useOfflinePersistence = () => ({
     lastSyncTime: Date.now(),
     pendingOperations: 0,
     failedOperations: 0,
-    syncInProgress: false
-  }
+    syncInProgress: false,
+  },
 });
 
 export const OfflineFirestore = {
@@ -41,5 +41,5 @@ export const OfflineFirestore = {
   read: async () => ({}),
   query: async () => [],
   getSyncStatus: () => ({ isOnline: true, pendingOperations: 0 }),
-  subscribeToStatus: () => () => {}
-}; 
+  subscribeToStatus: () => () => {},
+};

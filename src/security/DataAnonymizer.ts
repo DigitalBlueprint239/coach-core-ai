@@ -4,22 +4,37 @@ import { AnonymizedData, AnonymizationMetadata } from '../types/privacy-schema';
 
 export class DataAnonymizer {
   private static readonly PII_FIELDS = [
-    'firstName', 'lastName', 'email', 'phone', 'address',
-    'playerNames', 'coachNames', 'teamNames', 'schoolNames',
-    'parentEmail', 'parentPhone', 'emergencyContact'
+    'firstName',
+    'lastName',
+    'email',
+    'phone',
+    'address',
+    'playerNames',
+    'coachNames',
+    'teamNames',
+    'schoolNames',
+    'parentEmail',
+    'parentPhone',
+    'emergencyContact',
   ];
 
   private static readonly SENSITIVE_FIELDS = [
-    'medicalInfo', 'insuranceInfo', 'allergies', 'medications',
-    'conditions', 'emergencyContact', 'parentEmail', 'parentPhone'
+    'medicalInfo',
+    'insuranceInfo',
+    'allergies',
+    'medications',
+    'conditions',
+    'emergencyContact',
+    'parentEmail',
+    'parentPhone',
   ];
 
   private static readonly ANONYMIZATION_METHODS = {
-    'hash': this.hashValue.bind(this),
-    'mask': this.maskValue.bind(this),
-    'generalize': this.generalizeValue.bind(this),
-    'remove': this.removeValue.bind(this),
-    'pseudonymize': this.pseudonymizeValue.bind(this)
+    hash: this.hashValue.bind(this),
+    mask: this.maskValue.bind(this),
+    generalize: this.generalizeValue.bind(this),
+    remove: this.removeValue.bind(this),
+    pseudonymize: this.pseudonymizeValue.bind(this),
   };
 
   /**
@@ -43,7 +58,10 @@ export class DataAnonymizer {
     const sensitiveFieldsMasked = this.maskSensitiveFields(dataCopy);
 
     // Apply level-specific anonymization
-    const anonymizedData = this.applyLevelAnonymization(dataCopy, anonymizationLevel);
+    const anonymizedData = this.applyLevelAnonymization(
+      dataCopy,
+      anonymizationLevel
+    );
 
     // Generate metadata
     const metadata: AnonymizationMetadata = {
@@ -52,11 +70,14 @@ export class DataAnonymizer {
       piiFieldsRemoved,
       sensitiveFieldsMasked,
       anonymizationVersion: '1.0',
-      complianceStandards: ['GDPR', 'FERPA', 'COPPA']
+      complianceStandards: ['GDPR', 'FERPA', 'COPPA'],
     };
 
     // Calculate retention period
-    const retentionPeriod = this.calculateRetentionPeriod(dataType, anonymizationLevel);
+    const retentionPeriod = this.calculateRetentionPeriod(
+      dataType,
+      anonymizationLevel
+    );
     const expiresAt = new Timestamp(
       Math.floor(Date.now() / 1000) + retentionPeriod,
       0
@@ -71,7 +92,7 @@ export class DataAnonymizer {
       retentionPeriod: this.formatRetentionPeriod(retentionPeriod),
       createdAt: Timestamp.now(),
       expiresAt,
-      metadata
+      metadata,
     };
   }
 
@@ -86,7 +107,7 @@ export class DataAnonymizer {
 
       for (const key in obj) {
         const currentPath = path ? `${path}.${key}` : key;
-        
+
         if (this.PII_FIELDS.includes(key)) {
           delete obj[key];
           removedFields.push(currentPath);
@@ -115,7 +136,7 @@ export class DataAnonymizer {
 
       for (const key in obj) {
         const currentPath = path ? `${path}.${key}` : key;
-        
+
         if (this.SENSITIVE_FIELDS.includes(key)) {
           obj[key] = this.maskValue(obj[key]);
           maskedFields.push(currentPath);
@@ -191,7 +212,8 @@ export class DataAnonymizer {
     // Only keep essential patterns and metrics
     if (data.sport) anonymized.sport = data.sport;
     if (data.level) anonymized.level = data.level;
-    if (data.duration) anonymized.duration = this.generalizeDuration(data.duration);
+    if (data.duration)
+      anonymized.duration = this.generalizeDuration(data.duration);
     if (data.difficulty) anonymized.difficulty = data.difficulty;
     if (data.category) anonymized.category = data.category;
 
@@ -217,7 +239,9 @@ export class DataAnonymizer {
 
   private static maskValue(value: any): string {
     if (typeof value === 'string') {
-      return value.length > 2 ? `${value[0]}***${value[value.length - 1]}` : '***';
+      return value.length > 2
+        ? `${value[0]}***${value[value.length - 1]}`
+        : '***';
     }
     return '***';
   }
@@ -274,7 +298,7 @@ export class DataAnonymizer {
 
   private static anonymizeStats(stats: any): any {
     const anonymized: any = {};
-    
+
     for (const [key, value] of Object.entries(stats)) {
       if (typeof value === 'number') {
         // Round to nearest 10% for privacy
@@ -283,7 +307,7 @@ export class DataAnonymizer {
         anonymized[key] = value;
       }
     }
-    
+
     return anonymized;
   }
 
@@ -292,7 +316,7 @@ export class DataAnonymizer {
     return {
       type: patterns.type,
       frequency: patterns.frequency,
-      category: patterns.category
+      category: patterns.category,
     };
   }
 
@@ -300,17 +324,22 @@ export class DataAnonymizer {
     return `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private static calculateRetentionPeriod(dataType: string, level: string): number {
+  private static calculateRetentionPeriod(
+    dataType: string,
+    level: string
+  ): number {
     // Return retention period in seconds
     const basePeriods = {
-      'practice_plan': 2 * 365 * 24 * 60 * 60, // 2 years
-      'player_data': 1 * 365 * 24 * 60 * 60,   // 1 year
-      'team_data': 2 * 365 * 24 * 60 * 60,     // 2 years
-      'analytics': 90 * 24 * 60 * 60,          // 90 days
-      'ai_training': 2 * 365 * 24 * 60 * 60    // 2 years
+      practice_plan: 2 * 365 * 24 * 60 * 60, // 2 years
+      player_data: 1 * 365 * 24 * 60 * 60, // 1 year
+      team_data: 2 * 365 * 24 * 60 * 60, // 2 years
+      analytics: 90 * 24 * 60 * 60, // 90 days
+      ai_training: 2 * 365 * 24 * 60 * 60, // 2 years
     };
 
-    return basePeriods[dataType as keyof typeof basePeriods] || 365 * 24 * 60 * 60;
+    return (
+      basePeriods[dataType as keyof typeof basePeriods] || 365 * 24 * 60 * 60
+    );
   }
 
   private static formatRetentionPeriod(seconds: number): string {
@@ -324,10 +353,12 @@ export class DataAnonymizer {
 
   private static getAnonymizationMethod(level: string): string {
     const methods = {
-      'low': 'hash_and_mask',
-      'medium': 'generalize_and_pseudonymize',
-      'high': 'comprehensive_anonymization'
+      low: 'hash_and_mask',
+      medium: 'generalize_and_pseudonymize',
+      high: 'comprehensive_anonymization',
     };
-    return methods[level as keyof typeof methods] || 'comprehensive_anonymization';
+    return (
+      methods[level as keyof typeof methods] || 'comprehensive_anonymization'
+    );
   }
-} 
+}

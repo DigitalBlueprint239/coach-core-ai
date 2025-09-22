@@ -5,7 +5,7 @@
 export const PerformanceTester = {
   runTest: async () => ({ success: true, duration: 0 }),
   runSuite: async () => ({ success: true, results: [] }),
-  generateReport: () => ({ summary: '', recommendations: [] })
+  generateReport: () => ({ summary: '', recommendations: [] }),
 };
 
 export const usePerformanceTesting = () => ({
@@ -13,11 +13,11 @@ export const usePerformanceTesting = () => ({
   runSuite: async () => ({ success: true, results: [] }),
   generateReport: () => ({ summary: '', recommendations: [] }),
   isRunning: false,
-  results: []
+  results: [],
 });
 
 export const PerformanceMonitor = {
   start: () => {},
   stop: () => ({ duration: 0 }),
-  measure: async (fn: () => any) => ({ result: await fn(), duration: 0 })
-}; 
+  measure: async (fn: () => any) => ({ result: await fn(), duration: 0 }),
+};

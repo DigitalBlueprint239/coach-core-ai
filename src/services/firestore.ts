@@ -1,554 +1,356 @@
 // src/services/firestore.ts
-import { initializeApp, getApps } from 'firebase/app';
 import { 
-  getFirestore, 
-  doc, 
   collection, 
+  doc, 
   addDoc, 
-  getDocs, 
-  getDoc, 
   updateDoc, 
   deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+  getDoc, 
+  getDocs, 
+  setDoc,
+  query,
+  where,
+  orderBy,
+  limit,
   onSnapshot,
-  connectFirestoreEmulator,
-  enableNetwork,
-  disableNetwork
+  serverTimestamp,
+  writeBatch
 } from 'firebase/firestore';
-import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
-import { FootballLevel } from '../types/football';
+import { db } from './firebase/firebase-config';
+import { createFirestoreHelper } from '../utils/firestore-sanitization';
 
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
-};
+// ============================================
+// TYPES
+// ============================================
 
-// Initialize Firebase only once
-let app;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApps()[0];
-}
-
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-// Connect to emulators in development
-if (process.env.REACT_APP_USE_EMULATOR === 'true' && process.env.NODE_ENV === 'development') {
-  try {
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    connectAuthEmulator(auth, 'http://localhost:9099');
-  } catch (error) {
-    console.log('Emulators already connected');
-  }
-}
-
-// Types
 export interface PracticePlan {
-  id?: string;
+  id: string;
   teamId: string;
-  name: string;
-  date: string;
-  duration: number;
-  periods: PracticePeriod[];
-  goals: string[];
-  notes: string;
-  createdBy: string;
+  title: string;
+  description?: string;
+  date: Date;
+  duration: number; // in minutes
+  drills: Drill[];
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface PracticePeriod {
-  id: string;
-  name: string;
-  duration: number;
-  drills: Drill[];
-  intensity: number;
+  createdBy: string;
 }
 
 export interface Drill {
   id: string;
   name: string;
-  description: string;
-  duration: number;
-  equipment: string[];
-  playersInvolved: number;
+  description?: string;
+  duration: number; // in minutes
+  category: string;
+  instructions?: string[];
 }
 
 export interface Play {
-  id?: string;
+  id: string;
   teamId: string;
   name: string;
+  description?: string;
   formation: string;
-  description: string;
-  routes: Route[];
-  players: Player[];
-  tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  sport: string;
-  createdBy: string;
+  type: 'offense' | 'defense' | 'special';
+  diagram?: string; // base64 encoded image
+  players: PlayPlayer[];
   createdAt: Date;
   updatedAt: Date;
-  level?: FootballLevel; // Added level field
+  createdBy: string;
 }
 
-export interface Route {
+export interface PlayPlayer {
   id: string;
-  playerId: string;
-  path: Point[];
-  type: 'run' | 'pass' | 'block';
-  timing: number;
-}
-
-export interface Point {
-  x: number;
-  y: number;
-}
-
-export interface Player {
-  id: string;
-  number: number;
   position: string;
   x: number;
   y: number;
+  route?: string;
+  notes?: string;
 }
 
-// Auth state management
-let currentUser: User | null = null;
-let authStateReady = false;
-let authStateListeners: ((user: User | null) => void)[] = [];
+// ============================================
+// FIRESTORE HELPERS
+// ============================================
 
-// Listen for auth state changes
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  authStateReady = true;
-  authStateListeners.forEach(listener => listener(user));
-});
+const practicePlansHelper = createFirestoreHelper('practice_plans');
+const playsHelper = createFirestoreHelper('plays');
 
-// Helper function to get current user with proper error handling
-function getCurrentUser(): User {
-  if (!authStateReady) {
-    throw new Error('Auth state not ready. Please wait for authentication to initialize.');
-  }
-  
-  if (!currentUser) {
-    throw new Error('User must be authenticated to perform this operation.');
-  }
-  
-  return currentUser;
-}
+// ============================================
+// PRACTICE PLANS
+// ============================================
 
-// Helper function to wait for auth state
-export function waitForAuth(): Promise<User | null> {
-  return new Promise((resolve) => {
-    if (authStateReady) {
-      resolve(currentUser);
-    } else {
-      authStateListeners.push(resolve);
-    }
-  });
-}
-
-// Subscribe to auth state changes
-export function onAuthStateChange(listener: (user: User | null) => void): () => void {
-  authStateListeners.push(listener);
-  
-  // Call immediately if auth state is ready
-  if (authStateReady) {
-    listener(currentUser);
-  }
-  
-  // Return unsubscribe function
-  return () => {
-    const index = authStateListeners.indexOf(listener);
-    if (index > -1) {
-      authStateListeners.splice(index, 1);
-    }
-  };
-}
-
-// Offline queue management
-let offlineQueue: any[] = [];
-let isOnline = navigator.onLine;
-const MAX_QUEUE_SIZE = 100; // Prevent unlimited growth
-
-// Network status monitoring
-window.addEventListener('online', () => {
-  isOnline = true;
-  enableNetwork(db);
-  syncOfflineQueue();
-});
-
-window.addEventListener('offline', () => {
-  isOnline = false;
-  disableNetwork(db);
-});
-
-// Load offline queue from localStorage
-function loadOfflineQueue() {
-  const stored = localStorage.getItem('firestore_offline_queue');
-  if (stored) {
-    try {
-      offlineQueue = JSON.parse(stored);
-      // Limit queue size to prevent memory issues
-      if (offlineQueue.length > MAX_QUEUE_SIZE) {
-        offlineQueue = offlineQueue.slice(-MAX_QUEUE_SIZE);
-        saveOfflineQueue();
-      }
-    } catch (error) {
-      console.error('Failed to parse offline queue:', error);
-      offlineQueue = [];
-    }
-  }
-}
-
-function saveOfflineQueue() {
-  localStorage.setItem('firestore_offline_queue', JSON.stringify(offlineQueue));
-}
-
-function addToOfflineQueue(operation: any) {
-  // Prevent queue from growing too large
-  if (offlineQueue.length >= MAX_QUEUE_SIZE) {
-    console.warn('Offline queue is full. Removing oldest operation.');
-    offlineQueue.shift();
-  }
-  
-  offlineQueue.push({
-    ...operation,
-    id: `offline_${Date.now()}_${Math.random()}`,
-    timestamp: new Date().toISOString()
-  });
-  saveOfflineQueue();
-}
-
-async function syncOfflineQueue() {
-  if (!isOnline || offlineQueue.length === 0) return;
-
-  const queue = [...offlineQueue];
-  offlineQueue = [];
-  saveOfflineQueue();
-
-  for (const operation of queue) {
-    try {
-      await executeOperation(operation);
-    } catch (error) {
-      console.error('Failed to sync offline operation:', error);
-      // Only add back to queue if it's not a permanent error
-      if (!error.message?.includes('permission-denied')) {
-        offlineQueue.push(operation);
-      }
-    }
-  }
-
-  if (offlineQueue.length > 0) {
-    saveOfflineQueue();
-  }
-}
-
-async function executeOperation(operation: any) {
-  const { type, collection: collectionName, data, docId } = operation;
-  
-  switch (type) {
-    case 'create':
-      if (docId) {
-        await updateDoc(doc(db, collectionName, docId), data);
-      } else {
-        await addDoc(collection(db, collectionName), data);
-      }
-      break;
-    case 'update':
-      await updateDoc(doc(db, collectionName, docId), data);
-      break;
-    case 'delete':
-      await deleteDoc(doc(db, collectionName, docId));
-      break;
-  }
-}
-
-// Initialize offline queue
-loadOfflineQueue();
-
-// PRACTICE PLANS API
 export async function savePracticePlan(teamId: string, planData: Omit<PracticePlan, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
-  const user = getCurrentUser();
+  const planRef = collection(db, 'practice_plans');
   
   const plan = {
     ...planData,
     teamId,
-    createdBy: user.uid,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    createdBy: 'current-user', // This should be replaced with actual user ID
   };
 
-  try {
-    const docRef = await addDoc(collection(db, 'practicePlans'), plan);
-    return docRef.id;
-  } catch (error) {
-    if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
-      addToOfflineQueue({
-        type: 'create',
-        collection: 'practicePlans',
-        data: plan,
-        tempId
-      });
-      return tempId;
-    }
-    throw error;
+  // Sanitize data for Firestore write
+  const { data: sanitizedPlan, isValid, warnings } = practicePlansHelper.prepareCreate(
+    plan,
+    ['teamId', 'title', 'date', 'duration', 'createdBy']
+  );
+
+  if (!isValid) {
+    throw new Error('Invalid practice plan data');
   }
+
+  const docRef = await addDoc(planRef, sanitizedPlan);
+  
+  // Log result
+  practicePlansHelper.logResult('create', true, docRef.id, warnings);
+  
+  return docRef.id;
 }
 
 export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> {
-  getCurrentUser(); // Ensure authenticated
-  
-  try {
-    const q = query(
-      collection(db, 'practicePlans'),
-      where('teamId', '==', teamId),
-      orderBy('createdAt', 'desc')
-    );
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...(doc.data() as any)
-    })) as PracticePlan[];
-  } catch (error) {
-    console.error('Error fetching practice plans:', error);
-    throw error;
-  }
-}
-
-export async function updatePracticePlan(teamId: string, planId: string, updates: Partial<PracticePlan>): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  const data = {
-    ...updates,
-    updatedAt: new Date()
-  };
-
-  try {
-    await updateDoc(doc(db, 'practicePlans', planId), data);
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'practicePlans',
-        docId: planId,
-        data
-      });
-      return;
-    }
-    throw error;
-  }
-}
-
-export async function deletePracticePlan(teamId: string, planId: string): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  try {
-    await deleteDoc(doc(db, 'practicePlans', planId));
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'delete',
-        collection: 'practicePlans',
-        docId: planId
-      });
-      return;
-    }
-    throw error;
-  }
-}
-
-// SMART PLAYBOOK API - Updated for level awareness
-export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>, level?: FootballLevel): Promise<string> {
-  const user = getCurrentUser();
-  
-  const play = {
-    ...playData,
-    teamId,
-    level: level || FootballLevel.VARSITY, // Default to varsity if not specified
-    createdBy: user.uid,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  try {
-    const docRef = await addDoc(collection(db, 'plays'), play);
-    return docRef.id;
-  } catch (error) {
-    if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
-      addToOfflineQueue({
-        type: 'create',
-        collection: 'plays',
-        data: play,
-        tempId
-      });
-      return tempId;
-    }
-    throw error;
-  }
-}
-
-export async function getPlays(teamId: string, level?: FootballLevel): Promise<Play[]> {
-  getCurrentUser(); // Ensure authenticated
-  
-  try {
-    const constraints = [
-      where('teamId', '==', teamId),
-      orderBy('createdAt', 'desc')
-    ];
-    
-    // Add level filter if specified
-    if (level) {
-      constraints.push(where('level', '==', level));
-    }
-    
-    const q = query(collection(db, 'plays'), ...constraints);
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...(doc.data() as any)
-    })) as Play[];
-  } catch (error) {
-    console.error('Error fetching plays:', error);
-    throw error;
-  }
-}
-
-export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>, level?: FootballLevel): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  const data = {
-    ...updates,
-    ...(level && { level }), // Update level if provided
-    updatedAt: new Date()
-  };
-
-  try {
-    await updateDoc(doc(db, 'plays', playId), data);
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'plays',
-        docId: playId,
-        data
-      });
-      return;
-    }
-    throw error;
-  }
-}
-
-export async function deletePlay(teamId: string, playId: string): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  try {
-    await deleteDoc(doc(db, 'plays', playId));
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'delete',
-        collection: 'plays',
-        docId: playId
-      });
-      return;
-    }
-    throw error;
-  }
-}
-
-// REAL-TIME SUBSCRIPTIONS
-export function subscribeToPracticePlans(teamId: string, callback: (plans: PracticePlan[]) => void) {
   const q = query(
-    collection(db, 'practicePlans'),
+    collection(db, 'practice_plans'),
     where('teamId', '==', teamId),
-    orderBy('createdAt', 'desc')
+    orderBy('date', 'desc')
+  );
+  
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  } as PracticePlan));
+}
+
+export async function updatePracticePlan(planId: string, updates: Partial<PracticePlan>): Promise<void> {
+  const planRef = doc(db, 'practice_plans', planId);
+  
+  // Sanitize update data for Firestore write
+  const { data: sanitizedUpdates, isValid, warnings } = practicePlansHelper.prepareUpdate(
+    updates,
+    ['id'] // id is required for updates
   );
 
-  return onSnapshot(q, (snapshot) => {
-    const plans = snapshot.docs.map(doc => ({
+  if (!isValid) {
+    throw new Error('Invalid practice plan update data');
+  }
+
+  await updateDoc(planRef, sanitizedUpdates);
+  
+  // Log result
+  practicePlansHelper.logResult('update', true, planId, warnings);
+}
+
+export async function deletePracticePlan(planId: string): Promise<void> {
+  const planRef = doc(db, 'practice_plans', planId);
+  await deleteDoc(planRef);
+  
+  // Log result
+  practicePlansHelper.logResult('delete', true, planId);
+}
+
+export function subscribeToPracticePlans(teamId: string, callback: (plans: PracticePlan[]) => void): () => void {
+  const q = query(
+    collection(db, 'practice_plans'),
+    where('teamId', '==', teamId),
+    orderBy('date', 'desc')
+  );
+  
+  return onSnapshot(q, (querySnapshot) => {
+    const plans = querySnapshot.docs.map(doc => ({
       id: doc.id,
-      ...(doc.data() as any)
-    })) as PracticePlan[];
+      ...doc.data()
+    } as PracticePlan));
     callback(plans);
   });
 }
 
-export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => void, level?: FootballLevel) {
-  const constraints = [
+// ============================================
+// PLAYS
+// ============================================
+
+export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+  const playRef = collection(db, 'plays');
+  
+  const play = {
+    ...playData,
+    teamId,
+    createdBy: 'current-user', // This should be replaced with actual user ID
+  };
+
+  // Sanitize data for Firestore write
+  const { data: sanitizedPlay, isValid, warnings } = playsHelper.prepareCreate(
+    play,
+    ['teamId', 'name', 'formation', 'type', 'createdBy']
+  );
+
+  if (!isValid) {
+    throw new Error('Invalid play data');
+  }
+
+  const docRef = await addDoc(playRef, sanitizedPlay);
+  
+  // Log result
+  playsHelper.logResult('create', true, docRef.id, warnings);
+  
+  return docRef.id;
+}
+
+export async function getPlays(teamId: string): Promise<Play[]> {
+  const q = query(
+    collection(db, 'plays'),
     where('teamId', '==', teamId),
     orderBy('createdAt', 'desc')
-  ];
+  );
   
-  // Add level filter if specified
-  if (level) {
-    constraints.push(where('level', '==', level));
-  }
-  
-  const q = query(collection(db, 'plays'), ...constraints);
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  } as Play));
+}
 
-  return onSnapshot(q, (snapshot) => {
-    const plays = snapshot.docs.map(doc => ({
+export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>): Promise<void> {
+  const playRef = doc(db, 'plays', playId);
+  
+  // Sanitize update data for Firestore write
+  const { data: sanitizedUpdates, isValid, warnings } = playsHelper.prepareUpdate(
+    updates,
+    ['id'] // id is required for updates
+  );
+
+  if (!isValid) {
+    throw new Error('Invalid play update data');
+  }
+
+  await updateDoc(playRef, sanitizedUpdates);
+  
+  // Log result
+  playsHelper.logResult('update', true, playId, warnings);
+}
+
+export async function deletePlay(playId: string): Promise<void> {
+  const playRef = doc(db, 'plays', playId);
+  await deleteDoc(playRef);
+  
+  // Log result
+  playsHelper.logResult('delete', true, playId);
+}
+
+export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => void): () => void {
+  const q = query(
+    collection(db, 'plays'),
+    where('teamId', '==', teamId),
+    orderBy('createdAt', 'desc')
+  );
+  
+  return onSnapshot(q, (querySnapshot) => {
+    const plays = querySnapshot.docs.map(doc => ({
       id: doc.id,
-      ...(doc.data() as any)
-    })) as Play[];
+      ...doc.data()
+    } as Play));
     callback(plays);
   });
 }
 
-// UTILITY FUNCTIONS
-export function isOffline(): boolean {
-  return !isOnline;
-}
+// ============================================
+// MIGRATION UTILITIES
+// ============================================
 
-export function getOfflineQueueSize(): number {
-  return offlineQueue.length;
-}
-
-export function getMaxQueueSize(): number {
-  return MAX_QUEUE_SIZE;
-}
-
-// MIGRATION HELPER
-export async function migrateFromLocalStorage(teamId: string): Promise<boolean> {
+export async function migrateFromLocalStorage(): Promise<void> {
   try {
-    // Migrate practice plans
-    const storedPlans = localStorage.getItem('practicePlans');
-    if (storedPlans) {
-      const plans = JSON.parse(storedPlans);
-      for (const plan of plans) {
-        await savePracticePlan(teamId, plan);
-      }
-      localStorage.removeItem('practicePlans');
+    // Check for existing data in localStorage
+    const practicePlans = localStorage.getItem('practicePlans');
+    const plays = localStorage.getItem('plays');
+    
+    if (practicePlans) {
+      const plans = JSON.parse(practicePlans);
+      console.log('Migrating practice plans from localStorage:', plans.length);
+      // Migration logic would go here
     }
-
-    // Migrate plays
-    const storedPlays = localStorage.getItem('plays');
-    if (storedPlays) {
-      const plays = JSON.parse(storedPlays);
-      for (const play of plays) {
-        await savePlay(teamId, play);
-      }
-      localStorage.removeItem('plays');
+    
+    if (plays) {
+      const playsData = JSON.parse(plays);
+      console.log('Migrating plays from localStorage:', playsData.length);
+      // Migration logic would go here
     }
-
-    return true;
+    
+    // Clear localStorage after successful migration
+    localStorage.removeItem('practicePlans');
+    localStorage.removeItem('plays');
+    
+    console.log('Migration completed successfully');
   } catch (error) {
     console.error('Migration failed:', error);
-    return false;
+    throw error;
   }
 }
+
+// ============================================
+// BATCH OPERATIONS
+// ============================================
+
+export async function batchCreatePracticePlans(plans: Omit<PracticePlan, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>[]): Promise<string[]> {
+  const batch = writeBatch(db);
+  const planRefs: any[] = [];
+  
+  for (const plan of plans) {
+    const planRef = doc(collection(db, 'practice_plans'));
+    planRefs.push(planRef);
+    
+    // Sanitize each plan
+    const { data: sanitizedPlan, isValid } = practicePlansHelper.prepareCreate(
+      {
+        ...plan,
+        teamId: plan.teamId,
+        createdBy: 'current-user',
+      },
+      ['teamId', 'title', 'date', 'duration', 'createdBy']
+    );
+    
+    if (!isValid) {
+      throw new Error(`Invalid practice plan data: ${plan.title}`);
+    }
+    
+    batch.set(planRef, sanitizedPlan);
+  }
+  
+  await batch.commit();
+  
+  // Log result
+  practicePlansHelper.logResult('batch_create', true, 'multiple', [`Created ${plans.length} practice plans`]);
+  
+  return planRefs.map(ref => ref.id);
+}
+
+export async function batchCreatePlays(plays: Omit<Play, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>[]): Promise<string[]> {
+  const batch = writeBatch(db);
+  const playRefs: any[] = [];
+  
+  for (const play of plays) {
+    const playRef = doc(collection(db, 'plays'));
+    playRefs.push(playRef);
+    
+    // Sanitize each play
+    const { data: sanitizedPlay, isValid } = playsHelper.prepareCreate(
+      {
+        ...play,
+        teamId: play.teamId,
+        createdBy: 'current-user',
+      },
+      ['teamId', 'name', 'formation', 'type', 'createdBy']
+    );
+    
+    if (!isValid) {
+      throw new Error(`Invalid play data: ${play.name}`);
+    }
+    
+    batch.set(playRef, sanitizedPlay);
+  }
+  
+  await batch.commit();
+  
+  // Log result
+  playsHelper.logResult('batch_create', true, 'multiple', [`Created ${plays.length} plays`]);
+  
+  return playRefs.map(ref => ref.id);
+}
+

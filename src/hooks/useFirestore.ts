@@ -1,9 +1,9 @@
 // src/hooks/useFirestore.ts
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  savePracticePlan, 
-  getPracticePlans, 
-  updatePracticePlan, 
+import {
+  savePracticePlan,
+  getPracticePlans,
+  updatePracticePlan,
   deletePracticePlan,
   savePlay,
   getPlays,
@@ -13,7 +13,7 @@ import {
   subscribeToPlays,
   migrateFromLocalStorage,
   type PracticePlan,
-  type Play
+  type Play,
 } from '../services/firestore';
 
 // Hook for managing practice plans
@@ -34,7 +34,7 @@ export const usePracticePlans = (teamId: string | undefined) => {
     setError(null);
 
     // Subscribe to real-time updates
-    const unsubscribe = subscribeToPracticePlans(teamId, (updatedPlans) => {
+    const unsubscribe = subscribeToPracticePlans(teamId, updatedPlans => {
       setPlans(updatedPlans);
       setLoading(false);
     });
@@ -42,44 +42,61 @@ export const usePracticePlans = (teamId: string | undefined) => {
     return () => unsubscribe();
   }, [teamId]);
 
-  const createPlan = useCallback(async (planData: Omit<PracticePlan, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>) => {
-    if (!teamId) throw new Error('No team selected');
-    
-    try {
-      setError(null);
-      await savePracticePlan(teamId, planData);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create practice plan';
-      setError(errorMessage);
-      throw err;
-    }
-  }, [teamId]);
+  const createPlan = useCallback(
+    async (
+      planData: Omit<
+        PracticePlan,
+        'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'
+      >
+    ) => {
+      if (!teamId) throw new Error('No team selected');
 
-  const updatePlan = useCallback(async (planId: string, updates: Partial<PracticePlan>) => {
-    if (!teamId) throw new Error('No team selected');
-    
-    try {
-      setError(null);
-      await updatePracticePlan(teamId, planId, updates);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update practice plan';
-      setError(errorMessage);
-      throw err;
-    }
-  }, [teamId]);
+      try {
+        setError(null);
+        await savePracticePlan(teamId, planData);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to create practice plan';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [teamId]
+  );
 
-  const removePlan = useCallback(async (planId: string) => {
-    if (!teamId) throw new Error('No team selected');
-    
-    try {
-      setError(null);
-      await deletePracticePlan(teamId, planId);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete practice plan';
-      setError(errorMessage);
-      throw err;
-    }
-  }, [teamId]);
+  const updatePlan = useCallback(
+    async (planId: string, updates: Partial<PracticePlan>) => {
+      if (!teamId) throw new Error('No team selected');
+
+      try {
+        setError(null);
+        await updatePracticePlan(teamId, planId, updates);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to update practice plan';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [teamId]
+  );
+
+  const removePlan = useCallback(
+    async (planId: string) => {
+      if (!teamId) throw new Error('No team selected');
+
+      try {
+        setError(null);
+        await deletePracticePlan(teamId, planId);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to delete practice plan';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [teamId]
+  );
 
   return {
     plans,
@@ -87,7 +104,7 @@ export const usePracticePlans = (teamId: string | undefined) => {
     error,
     createPlan,
     updatePlan,
-    removePlan
+    removePlan,
   };
 };
 
@@ -109,7 +126,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     setError(null);
 
     // Subscribe to real-time updates
-    const unsubscribe = subscribeToPlays(teamId, (updatedPlays) => {
+    const unsubscribe = subscribeToPlays(teamId, updatedPlays => {
       setPlays(updatedPlays);
       setLoading(false);
     });
@@ -117,43 +134,60 @@ export const usePlaybook = (teamId: string | undefined) => {
     return () => unsubscribe();
   }, [teamId]);
 
-  const createPlay = useCallback(async (playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>) => {
-    if (!teamId) throw new Error('No team selected');
-    
-    try {
-      setError(null);
-      await savePlay(teamId, playData);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create play';
-      setError(errorMessage);
-      throw err;
-    }
-  }, [teamId]);
+  const createPlay = useCallback(
+    async (
+      playData: Omit<
+        Play,
+        'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'
+      >
+    ) => {
+      if (!teamId) throw new Error('No team selected');
 
-  const updatePlayLocal = useCallback(async (playId: string, updates: Partial<Play>) => {
-    if (!teamId) throw new Error('No team selected');
-    
-    try {
-      setError(null);
-      await updatePlayService(teamId, playId, updates);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update play';
-      setError(errorMessage);
-      throw err;
-    }
-  }, [teamId]);
+      try {
+        setError(null);
+        await savePlay(teamId, playData);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to create play';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [teamId]
+  );
 
-  const removePlay = useCallback(async (playId: string) => {
-    if (!teamId) throw new Error('No team selected');
-    try {
-      setError(null);
-      await deletePlay(teamId, playId);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete play';
-      setError(errorMessage);
-      throw err;
-    }
-  }, [teamId]);
+  const updatePlayLocal = useCallback(
+    async (playId: string, updates: Partial<Play>) => {
+      if (!teamId) throw new Error('No team selected');
+
+      try {
+        setError(null);
+        await updatePlayService(teamId, playId, updates);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to update play';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [teamId]
+  );
+
+  const removePlay = useCallback(
+    async (playId: string) => {
+      if (!teamId) throw new Error('No team selected');
+      try {
+        setError(null);
+        await deletePlay(teamId, playId);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to delete play';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [teamId]
+  );
 
   return {
     plays,
@@ -161,7 +195,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     error,
     createPlay,
     updatePlay: updatePlayLocal,
-    removePlay
+    removePlay,
   };
 };
 
@@ -179,7 +213,7 @@ export const useMigration = (teamId: string | undefined) => {
 
   const migrateData = useCallback(async () => {
     if (!teamId) throw new Error('No team selected');
-    
+
     setIsMigrating(true);
     try {
       await migrateFromLocalStorage(teamId);
@@ -194,6 +228,6 @@ export const useMigration = (teamId: string | undefined) => {
   return {
     isMigrating,
     hasLocalData,
-    migrateData
+    migrateData,
   };
-}; 
+};

@@ -1,0 +1,139 @@
+name: 🚀 Multi-Environment Deploy
+
+# This workflow deploys to different environments based on branch
+# main -> production, staging -> staging
+on:
+  push:
+    branches: [ main, staging ]
+  pull_request:
+    branches: [ main, staging ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # Determine environment based on branch
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Determine Environment
+      id: env
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          echo "environment=prod" >> $GITHUB_OUTPUT
+          echo "target=coach-core-ai-prod" >> $GITHUB_OUTPUT
+          echo "url=https://coach-core-ai.web.app" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+          echo "environment=staging" >> $GITHUB_OUTPUT
+          echo "target=coach-core-ai-staging" >> $GITHUB_OUTPUT
+          echo "url=https://coach-core-ai-staging.web.app" >> $GITHUB_OUTPUT
+        else
+          echo "environment=staging" >> $GITHUB_OUTPUT
+          echo "target=coach-core-ai-staging" >> $GITHUB_OUTPUT
+          echo "url=https://coach-core-ai-staging.web.app" >> $GITHUB_OUTPUT
+        fi
+      
+    - name: 🔧 Setup Node.js v18
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Cache node_modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+          
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    - name: 🔍 Verify package.json and firebase.json
+      run: |
+        if [ ! -f "package.json" ]; then
+          echo "❌ package.json not found!"
+          exit 1
+        fi
+        if [ ! -f "firebase.json" ]; then
+          echo "❌ firebase.json not found!"
+          exit 1
+        fi
+        if [ ! -f "deploy.sh" ]; then
+          echo "❌ deploy.sh not found!"
+          exit 1
+        fi
+        echo "✅ All required files found"
+        
+    - name: 🔨 Build application
+      run: npm run build
+      
+    - name: 📁 Verify build output
+      run: |
+        if [ ! -d "dist" ]; then
+          echo "❌ Build failed - dist directory not created!"
+          exit 1
+        fi
+        if [ ! -f "dist/index.html" ]; then
+          echo "❌ Build failed - index.html not found in dist!"
+          exit 1
+        fi
+        echo "✅ Build output verified"
+        echo "📊 Build contents:"
+        ls -la dist/
+        
+    - name: 🔧 Setup Firebase CLI
+      run: npm install -g firebase-tools
+      
+    - name: 🔧 Setup Cypress
+      run: |
+        npm install cypress --save-dev
+        npx cypress verify
+      
+    - name: 🔐 Authenticate with Firebase
+      run: |
+        echo "${{ secrets.FIREBASE_TOKEN }}" | firebase login --token
+        firebase use --add coach-core-ai --token ${{ secrets.FIREBASE_TOKEN }}
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        
+    - name: 🚀 Run deployment verification
+      run: ./deploy.sh --fast --env=${{ steps.env.outputs.environment }}
+      
+    - name: 🧪 Run E2E Tests
+      run: |
+        if [[ "${{ steps.env.outputs.environment }}" == "staging" ]]; then
+          npm run test:e2e:staging
+        else
+          npm run test:e2e:production
+        fi
+      env:
+        CYPRESS_BASE_URL: ${{ steps.env.outputs.url }}
+        
+    - name: 🌐 Deploy to Firebase Hosting
+      run: |
+        firebase deploy --only hosting:${{ steps.env.outputs.target }} --token ${{ secrets.FIREBASE_TOKEN }}
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        
+    - name: ✅ Deployment success
+      run: |
+        echo "🎉 ${{ steps.env.outputs.environment }} deployment completed successfully!"
+        echo "🌐 Your app is live at: ${{ steps.env.outputs.url }}"
+        
+    - name: 📊 Build summary
+      if: always()
+      run: |
+        echo "## 📊 Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Environment**: ${{ steps.env.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Target**: ${{ steps.env.outputs.target }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Node.js Version**: $(node --version)" >> $GITHUB_STEP_SUMMARY
+        echo "- **NPM Version**: $(npm --version)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deployment URL**: ${{ steps.env.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+        if [ -d "dist" ]; then
+          echo "- **Build Size**: $(du -sh dist | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files Count**: $(find dist -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+        fi

@@ -15,7 +15,7 @@ import {
   WithFieldValue,
   DocumentReference,
 } from 'firebase/firestore';
-import { firebase } from '../firebase/config';
+import { db } from '../firebase/firebase-config';
 
 export abstract class BaseFirestoreService<T extends DocumentData> {
   protected collectionName: string;
@@ -25,19 +25,23 @@ export abstract class BaseFirestoreService<T extends DocumentData> {
   }
 
   protected get collection() {
-    return collection(firebase.db, this.collectionName);
+    return collection(db, this.collectionName);
   }
 
   async getAll(constraints: QueryConstraint[] = []): Promise<T[]> {
     const q = query(this.collection, ...constraints);
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as unknown as T));
+    return snapshot.docs.map(
+      doc => ({ id: doc.id, ...(doc.data() as any) }) as unknown as T
+    );
   }
 
   async getById(id: string): Promise<T | null> {
     const docRef = doc(this.collection, id);
     const snapshot = await getDoc(docRef);
-    return snapshot.exists() ? ({ id: snapshot.id, ...(snapshot.data() as any) } as unknown as T) : null;
+    return snapshot.exists()
+      ? ({ id: snapshot.id, ...(snapshot.data() as any) } as unknown as T)
+      : null;
   }
 
   async create(data: WithFieldValue<T>): Promise<string> {
@@ -55,4 +59,4 @@ export abstract class BaseFirestoreService<T extends DocumentData> {
     const docRef = doc(this.collection, id);
     await deleteDoc(docRef);
   }
-} 
+}

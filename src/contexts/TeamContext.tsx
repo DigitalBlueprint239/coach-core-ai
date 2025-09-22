@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 interface Team {
   id: string;
@@ -37,25 +43,36 @@ interface TeamProviderProps {
 }
 
 export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
-  const [currentTeam, setCurrentTeam] = useState<Team | null>({
-    id: 'demo-team',
-    name: 'Demo Team',
-    sport: 'football',
-    level: 'varsity',
-    code: 'DEMO123',
-    memberIds: ['user1', 'user2']
-  });
-  const [teams] = useState<Team[]>([
-    {
-      id: 'demo-team',
-      name: 'Demo Team',
-      sport: 'football',
-      level: 'varsity',
-      code: 'DEMO123',
-      memberIds: ['user1', 'user2']
+  const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load user's teams from Firestore
+  useEffect(() => {
+    loadUserTeams();
+  }, []);
+
+  const loadUserTeams = async () => {
+    setLoading(true);
+    try {
+      // TODO: Replace with actual API call to get user's teams from Firestore
+      // For now, we'll use empty arrays that will be populated when backend is ready
+      const fetchedTeams: Team[] = [];
+
+      setTeams(fetchedTeams);
+
+      // Set first team as current if available
+      if (fetchedTeams.length > 0) {
+        setCurrentTeam(fetchedTeams[0]);
+      }
+    } catch (error) {
+      console.error('Error loading user teams:', error);
+      setTeams([]);
+      setCurrentTeam(null);
+    } finally {
+      setLoading(false);
     }
-  ]);
-  const [loading, setLoading] = useState(false);
+  };
 
   const addTeam = (team: Team) => {
     // Implementation for adding teams
@@ -69,7 +86,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       sport: teamData.sport || 'football',
       level: teamData.level || 'varsity',
       code: teamData.code || `CODE${Date.now()}`,
-      memberIds: teamData.memberIds || []
+      memberIds: teamData.memberIds || [],
     };
     return newTeam;
   };
@@ -100,12 +117,8 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     addTeam,
     createTeam,
     joinTeam,
-    leaveTeam
+    leaveTeam,
   };
 
-  return (
-    <TeamContext.Provider value={value}>
-      {children}
-    </TeamContext.Provider>
-  );
-}; 
+  return <TeamContext.Provider value={value}>{children}</TeamContext.Provider>;
+};

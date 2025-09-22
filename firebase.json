@@ -1,54 +1,537 @@
 {
+  "hosting": [
+    {
+      "target": "coach-core-ai-prod",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "/js/**",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript; charset=utf-8"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "/css/**",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/css; charset=utf-8"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "/images/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "/fonts/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "/assets/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "**/*.webp",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "image/webp"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "**/*.avif",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "image/avif"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "**/*.woff2",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "font/woff2"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.woff",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "font/woff"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "/__/auth/**",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
+        },
+        {
+          "source": "/login",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
+        },
+        {
+          "source": "/signup",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
+        },
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "coach-core-ai-staging",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "/js/**",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript; charset=utf-8"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "/css/**",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/css; charset=utf-8"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "/images/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "/fonts/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "/assets/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "**/*.webp",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "image/webp"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "**/*.avif",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "image/avif"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            }
+          ]
+        },
+        {
+          "source": "**/*.woff2",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "font/woff2"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.woff",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "font/woff"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=3600, immutable"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip, br"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "/__/auth/**",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
+        },
+        {
+          "source": "/login",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
+        },
+        {
+          "source": "/signup",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
+        },
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "functions": {
-    "source": "functions"
-  },
-  "storage": {
-    "rules": "storage.rules"
-  },
-  "hosting": {
-    "public": "build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ],
-    "headers": [
-      {
-        "source": "**/*.@(js|css)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=31536000"
-          }
-        ]
-      },
-      {
-        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=31536000"
-          }
-        ]
-      }
-    ]
-  },
   "emulators": {
     "auth": {
       "port": 9099
-    },
-    "functions": {
-      "port": 5001
     },
     "firestore": {
       "port": 8080
@@ -60,7 +543,8 @@
       "port": 9199
     },
     "ui": {
-      "enabled": true
+      "enabled": true,
+      "port": 4000
     }
   }
 }

@@ -15,7 +15,7 @@ export const DrillPlanner: React.FC = () => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="drills">
-        {(provided) => (
+        {provided => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {currentSession.drills.map((drill, index) => (
               <Draggable key={drill.id} draggableId={drill.id} index={index}>
@@ -49,4 +49,4 @@ export const DrillPlanner: React.FC = () => {
       </Droppable>
     </DragDropContext>
   );
-}; 
+};

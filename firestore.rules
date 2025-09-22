@@ -1,47 +1,116 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper functions
-    function isAuthenticated() {
-      return request.auth != null;
+    // Waitlist - strict write-only rules for email collection
+    match /waitlist/{docId} {
+      allow create: if request.resource.data.email is string
+        && request.resource.data.email.size() < 200;
+      allow read, update, delete: if false;
     }
-    function isCoach() {
-      return isAuthenticated() && 
-        request.auth.token.role == 'coach';
+    
+    // Users can read/write their own profile
+    // Allow creation of new user profiles for authentication
+    match /users/{userId} {
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow read, write, update: if request.auth != null && request.auth.uid == userId;
+      // Allow reading other user profiles for team management (display names only)
+      allow read: if request.auth != null && 
+        (request.auth.uid == userId || 
+         (resource.data.teamId != null &&
+          exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
     }
-    function isTeamOwner(teamId) {
-      return isAuthenticated() && 
-        get(/databases/$(database)/documents/teams/$(teamId)).data.coachId == request.auth.uid;
-    }
-    function isPlayerInTeam(teamId) {
-      return isAuthenticated() && 
-        exists(/databases/$(database)/documents/teams/$(teamId)/players/$(request.auth.uid));
-    }
-    // Teams collection
+    
+    // Teams - allow creation by authenticated users
     match /teams/{teamId} {
-      allow read: if isAuthenticated() && 
-        (isTeamOwner(teamId) || isPlayerInTeam(teamId));
-      allow create: if isCoach();
-      allow update: if isTeamOwner(teamId);
-      allow delete: if isTeamOwner(teamId);
-      // Players subcollection
-      match /players/{playerId} {
-        allow read: if isAuthenticated() && 
-          (isTeamOwner(teamId) || request.auth.uid == playerId);
-        allow write: if isTeamOwner(teamId);
-      }
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.headCoachId == request.auth.uid || 
+         request.auth.uid in resource.data.assistantCoachIds ||
+         // Allow access during team creation
+         !exists(resource.data));
     }
-    // Practices collection
-    match /practices/{practiceId} {
-      allow read: if isAuthenticated() && 
-        isTeamOwner(resource.data.teamId);
-      allow write: if isAuthenticated() && 
-        isTeamOwner(request.resource.data.teamId);
+    
+    // Practice plans - team members can access
+    match /practicePlans/{planId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
     }
-    // Analytics collection (read-only for coaches)
-    match /analytics/{document=**} {
-      allow read: if isCoach();
-      allow write: if false; // Only backend can write
+    
+    // Plays - team members can access
+    match /plays/{playId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+    }
+    
+    // Player data - team members can access
+    match /players/{playerId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+    }
+    
+    // Attendance records - team members can access
+    match /attendance/{recordId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+    }
+    
+    // AI insights - team members can access
+    match /aiInsights/{insightId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+    }
+    
+    // Games - team members can access
+    match /games/{gameId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+    }
+    
+    // Assessments - team members can access
+    match /assessments/{assessmentId} {
+      allow create: if request.auth != null;
+      allow read, write: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid ||
+         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
+          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+    }
+    
+    // Staging feedback collection - allow anyone to submit feedback
+    match /staging_feedback/{feedbackId} {
+      allow create: if true; // Anyone can submit feedback
+      allow read, update, delete: if isAdmin(); // Only admins can read/update/delete
+    }
+    
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

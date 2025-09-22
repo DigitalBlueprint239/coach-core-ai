@@ -331,9 +331,9 @@ class ComprehensiveValidator {
       }
     });
 
-    // Check for react-scripts
-    if (!packageJson.dependencies['react-scripts'] && !packageJson.devDependencies['react-scripts']) {
-      issues.push('react-scripts not found in dependencies');
+    // Check for Vite (replacing react-scripts)
+    if (!packageJson.dependencies['vite'] && !packageJson.devDependencies['vite']) {
+      issues.push('vite not found in dependencies');
     }
 
     // Check for TypeScript
@@ -359,7 +359,7 @@ class ComprehensiveValidator {
       // Create a temporary build to analyze
       const result = await this.runCommand('npm run build', { stdio: 'pipe' });
       if (result.code === 0) {
-        const buildDir = path.join(process.cwd(), 'build');
+        const buildDir = path.join(process.cwd(), 'dist');
         if (fs.existsSync(buildDir)) {
           const files = fs.readdirSync(buildDir);
           let totalSize = 0;

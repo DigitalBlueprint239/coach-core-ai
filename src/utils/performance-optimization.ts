@@ -1,5 +1,12 @@
 // src/utils/performance-optimization.ts
-import React, { ComponentType, ReactNode, lazy, useCallback, useEffect, useState } from 'react';
+import React, {
+  ComponentType,
+  ReactNode,
+  lazy,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 // ============================================
 // PERFORMANCE TYPES
@@ -109,7 +116,7 @@ export class CodeSplittingManager {
       fallback: React.createElement('div', null, 'Loading...'),
       timeout: 10000,
       retryAttempts: 3,
-      preloadThreshold: 0.8
+      preloadThreshold: 0.8,
     };
 
     const finalConfig = { ...defaultConfig, ...config };
@@ -126,16 +133,19 @@ export class CodeSplittingManager {
 
       const attemptLoad = () => {
         attempts++;
-        
+
         const timeoutPromise = new Promise<never>((_, reject) => {
           setTimeout(() => reject(new Error('Load timeout')), config.timeout);
         });
 
         Promise.race([importFn(), timeoutPromise])
           .then(resolve)
-          .catch((error) => {
+          .catch(error => {
             if (attempts < config.retryAttempts) {
-              console.warn(`Lazy load attempt ${attempts} failed, retrying...`, error);
+              console.warn(
+                `Lazy load attempt ${attempts} failed, retrying...`,
+                error
+              );
               setTimeout(attemptLoad, 1000 * attempts); // Exponential backoff
             } else {
               reject(error);
@@ -157,10 +167,10 @@ export class CodeSplittingManager {
     config?: LazyLoadConfig
   ): ComponentType<any> {
     const component = this.createLazyComponent(importFn, config);
-    
+
     // Preload component when route is likely to be accessed
     this.setupRoutePreloading(route, importFn, config);
-    
+
     return component;
   }
 
@@ -179,7 +189,7 @@ export class CodeSplittingManager {
     };
 
     // Add event listeners for preloading
-    document.addEventListener('mouseover', (e) => {
+    document.addEventListener('mouseover', e => {
       const target = e.target as HTMLElement;
       if (target.closest(`[data-route="${route}"]`)) {
         preloadOnHover();
@@ -196,7 +206,7 @@ export class CodeSplittingManager {
   }
 
   async preloadChunk(
-    name: string, 
+    name: string,
     importFn: () => Promise<{ default: ComponentType<any> }>
   ): Promise<void> {
     if (this.loadedChunks.has(name) || this.loadingChunks.has(name)) {
@@ -240,7 +250,7 @@ export class CodeSplittingManager {
       chunkCount: this.chunks.size,
       chunks: [],
       dependencies: [],
-      recommendations: []
+      recommendations: [],
     };
 
     // Analyze chunks
@@ -249,7 +259,7 @@ export class CodeSplittingManager {
         name,
         size: this.estimateChunkSize(component),
         modules: [name],
-        dependencies: []
+        dependencies: [],
       };
       analysis.chunks.push(chunk);
       analysis.totalSize += chunk.size;
@@ -267,7 +277,9 @@ export class CodeSplittingManager {
     return new Blob([componentString]).size;
   }
 
-  private generateBundleRecommendations(analysis: BundleAnalysis): BundleRecommendation[] {
+  private generateBundleRecommendations(
+    analysis: BundleAnalysis
+  ): BundleRecommendation[] {
     const recommendations: BundleRecommendation[] = [];
 
     // Check for large chunks
@@ -278,7 +290,7 @@ export class CodeSplittingManager {
         title: 'Split large chunks',
         description: `Found ${largeChunks.length} chunks larger than 100KB`,
         impact: 'high',
-        savings: largeChunks.reduce((sum, chunk) => sum + chunk.size * 0.3, 0)
+        savings: largeChunks.reduce((sum, chunk) => sum + chunk.size * 0.3, 0),
       });
     }
 
@@ -290,14 +302,16 @@ export class CodeSplittingManager {
         title: 'Remove duplicate dependencies',
         description: `Found ${duplicateDeps.length} duplicate dependencies`,
         impact: 'medium',
-        savings: duplicateDeps.reduce((sum, dep) => sum + dep.size, 0)
+        savings: duplicateDeps.reduce((sum, dep) => sum + dep.size, 0),
       });
     }
 
     return recommendations;
   }
 
-  private findDuplicateDependencies(dependencies: BundleDependency[]): BundleDependency[] {
+  private findDuplicateDependencies(
+    dependencies: BundleDependency[]
+  ): BundleDependency[] {
     const seen = new Map<string, BundleDependency>();
     const duplicates: BundleDependency[] = [];
 
@@ -326,9 +340,9 @@ export class ImageOptimizer {
   // ============================================
 
   async compressImage(
-    file: File, 
-    quality: number = 0.8, 
-    maxWidth?: number, 
+    file: File,
+    quality: number = 0.8,
+    maxWidth?: number,
     maxHeight?: number
   ): Promise<Blob> {
     return new Promise((resolve, reject) => {
@@ -339,12 +353,12 @@ export class ImageOptimizer {
       img.onload = () => {
         // Calculate new dimensions
         let { width, height } = img;
-        
+
         if (maxWidth && width > maxWidth) {
           height = (height * maxWidth) / width;
           width = maxWidth;
         }
-        
+
         if (maxHeight && height > maxHeight) {
           width = (width * maxHeight) / height;
           height = maxHeight;
@@ -356,7 +370,7 @@ export class ImageOptimizer {
         // Draw and compress
         ctx?.drawImage(img, 0, 0, width, height);
         canvas.toBlob(
-          (blob) => {
+          blob => {
             if (blob) {
               resolve(blob);
             } else {
@@ -379,8 +393,8 @@ export class ImageOptimizer {
 
   setupLazyImages(selector: string = 'img[data-src]'): void {
     const images = document.querySelectorAll(selector);
-    
-    const imageObserver = new IntersectionObserver((entries) => {
+
+    const imageObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target as HTMLImageElement;
@@ -418,19 +432,17 @@ export class ImageOptimizer {
   // ============================================
 
   generateResponsiveSrcSet(
-    baseUrl: string, 
+    baseUrl: string,
     widths: number[] = [320, 640, 960, 1280, 1920]
   ): string {
-    return widths
-      .map(width => `${baseUrl}?w=${width} ${width}w`)
-      .join(', ');
+    return widths.map(width => `${baseUrl}?w=${width} ${width}w`).join(', ');
   }
 
   generateResponsiveSizes(
     breakpoints: { min: number; size: string }[] = [
       { min: 0, size: '100vw' },
       { min: 768, size: '50vw' },
-      { min: 1024, size: '33vw' }
+      { min: 1024, size: '33vw' },
     ]
   ): string {
     return breakpoints
@@ -480,22 +492,26 @@ export class PerformanceMonitor {
       memoryUsage: this.getMemoryUsage(),
       cpuUsage: 0, // Will be updated by continuous monitoring
       networkRequests: this.countNetworkRequests(),
-      cacheHitRate: this.calculateCacheHitRate()
+      cacheHitRate: this.calculateCacheHitRate(),
     };
 
     this.metrics.push(metrics);
   }
 
   private measureLoadTime(): number {
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const navigation = performance.getEntriesByType(
+      'navigation'
+    )[0] as PerformanceNavigationTiming;
     return navigation ? navigation.loadEventEnd - navigation.loadEventStart : 0;
   }
 
   private measureRenderTime(): number {
     const paint = performance.getEntriesByType('paint');
     const firstPaint = paint.find(entry => entry.name === 'first-paint');
-    const firstContentfulPaint = paint.find(entry => entry.name === 'first-contentful-paint');
-    
+    const firstContentfulPaint = paint.find(
+      entry => entry.name === 'first-contentful-paint'
+    );
+
     return firstContentfulPaint ? firstContentfulPaint.startTime : 0;
   }
 
@@ -503,14 +519,14 @@ export class PerformanceMonitor {
     // Estimate based on script tags
     const scripts = document.querySelectorAll('script[src]');
     let totalSize = 0;
-    
+
     scripts.forEach(script => {
       const src = script.getAttribute('src');
       if (src && src.includes('chunk')) {
         totalSize += 50000; // Rough estimate per chunk
       }
     });
-    
+
     return totalSize;
   }
 
@@ -527,8 +543,12 @@ export class PerformanceMonitor {
   }
 
   private calculateCacheHitRate(): number {
-    const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-    const cached = resources.filter(resource => resource.transferSize === 0).length;
+    const resources = performance.getEntriesByType(
+      'resource'
+    ) as PerformanceResourceTiming[];
+    const cached = resources.filter(
+      resource => resource.transferSize === 0
+    ).length;
     return resources.length > 0 ? (cached / resources.length) * 100 : 0;
   }
 
@@ -539,24 +559,25 @@ export class PerformanceMonitor {
   private setupContinuousMonitoring(): void {
     // Monitor long tasks
     this.setupLongTaskObserver();
-    
+
     // Monitor memory usage
     this.setupMemoryObserver();
-    
+
     // Monitor network performance
     this.setupNetworkObserver();
   }
 
   private setupLongTaskObserver(): void {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         list.getEntries().forEach(entry => {
-          if (entry.duration > 50) { // Tasks longer than 50ms
+          if (entry.duration > 50) {
+            // Tasks longer than 50ms
             console.warn('Long task detected:', entry);
           }
         });
       });
-      
+
       observer.observe({ entryTypes: ['longtask'] });
       this.observers.set('longtask', observer);
     }
@@ -567,9 +588,9 @@ export class PerformanceMonitor {
       setInterval(() => {
         const memory = (performance as any).memory;
         const usage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
-        
+
         if (usage > 0.8) {
-          console.warn('High memory usage detected:', usage * 100 + '%');
+          console.warn('High memory usage detected:', `${usage * 100}%`);
         }
       }, 5000);
     }
@@ -577,14 +598,15 @@ export class PerformanceMonitor {
 
   private setupNetworkObserver(): void {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         list.getEntries().forEach(entry => {
-          if (entry.duration > 3000) { // Requests longer than 3s
+          if (entry.duration > 3000) {
+            // Requests longer than 3s
             console.warn('Slow network request:', entry);
           }
         });
       });
-      
+
       observer.observe({ entryTypes: ['resource'] });
       this.observers.set('resource', observer);
     }
@@ -599,7 +621,9 @@ export class PerformanceMonitor {
   }
 
   getLatestMetrics(): PerformanceMetrics | null {
-    return this.metrics.length > 0 ? this.metrics[this.metrics.length - 1] : null;
+    return this.metrics.length > 0
+      ? this.metrics[this.metrics.length - 1]
+      : null;
   }
 
   generatePerformanceReport(): string {
@@ -623,7 +647,8 @@ Performance Report:
 // ============================================
 
 export class APIOptimizer {
-  private cache: Map<string, { data: any; timestamp: number; ttl: number }> = new Map();
+  private cache: Map<string, { data: any; timestamp: number; ttl: number }> =
+    new Map();
   private pendingRequests: Map<string, Promise<any>> = new Map();
   private requestQueue: Array<() => Promise<void>> = [];
   private maxConcurrentRequests: number = 5;
@@ -634,12 +659,12 @@ export class APIOptimizer {
   // ============================================
 
   async cachedRequest<T>(
-    url: string, 
-    options: RequestInit = {}, 
+    url: string,
+    options: RequestInit = {},
     ttl: number = 5 * 60 * 1000 // 5 minutes
   ): Promise<T> {
     const cacheKey = this.generateCacheKey(url, options);
-    
+
     // Check cache
     const cached = this.cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
@@ -657,14 +682,14 @@ export class APIOptimizer {
 
     try {
       const data = await requestPromise;
-      
+
       // Cache the result
       this.cache.set(cacheKey, {
         data,
         timestamp: Date.now(),
-        ttl
+        ttl,
       });
-      
+
       return data;
     } finally {
       this.pendingRequests.delete(cacheKey);
@@ -675,19 +700,22 @@ export class APIOptimizer {
     return `${url}_${JSON.stringify(options)}`;
   }
 
-  private async makeRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
+  private async makeRequest<T>(
+    url: string,
+    options: RequestInit = {}
+  ): Promise<T> {
     // Wait for available slot
     await this.waitForSlot();
-    
+
     this.activeRequests++;
-    
+
     try {
       const response = await fetch(url, options);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       return await response.json();
     } finally {
       this.activeRequests--;
@@ -707,7 +735,10 @@ export class APIOptimizer {
   }
 
   private processQueue(): void {
-    if (this.requestQueue.length > 0 && this.activeRequests < this.maxConcurrentRequests) {
+    if (
+      this.requestQueue.length > 0 &&
+      this.activeRequests < this.maxConcurrentRequests
+    ) {
       const nextRequest = this.requestQueue.shift();
       if (nextRequest) {
         nextRequest();
@@ -724,17 +755,17 @@ export class APIOptimizer {
     batchSize: number = 10
   ): Promise<T[]> {
     const results: T[] = [];
-    
+
     for (let i = 0; i < requests.length; i += batchSize) {
       const batch = requests.slice(i, i + batchSize);
-      const batchPromises = batch.map(req => 
+      const batchPromises = batch.map(req =>
         this.cachedRequest<T>(req.url, req.options)
       );
-      
+
       const batchResults = await Promise.all(batchPromises);
       results.push(...batchResults);
     }
-    
+
     return results;
   }
 
@@ -758,7 +789,7 @@ export class APIOptimizer {
   getCacheStats(): { size: number; hitRate: number } {
     return {
       size: this.cache.size,
-      hitRate: 0 // Would need to track hits/misses
+      hitRate: 0, // Would need to track hits/misses
     };
   }
 }
@@ -775,26 +806,32 @@ export const useCodeSplitting = (config?: CodeSplitConfig) => {
     setLoadedChunks(manager.getLoadedChunks());
   }, [manager]);
 
-  const createLazyComponent = useCallback((
-    importFn: () => Promise<{ default: ComponentType<any> }>,
-    config?: LazyLoadConfig
-  ) => {
-    return manager.createLazyComponent(importFn, config);
-  }, [manager]);
+  const createLazyComponent = useCallback(
+    (
+      importFn: () => Promise<{ default: ComponentType<any> }>,
+      config?: LazyLoadConfig
+    ) => {
+      return manager.createLazyComponent(importFn, config);
+    },
+    [manager]
+  );
 
-  const preloadChunk = useCallback((
-    name: string,
-    importFn: () => Promise<{ default: ComponentType<any> }>
-  ) => {
-    return manager.preloadChunk(name, importFn);
-  }, [manager]);
+  const preloadChunk = useCallback(
+    (
+      name: string,
+      importFn: () => Promise<{ default: ComponentType<any> }>
+    ) => {
+      return manager.preloadChunk(name, importFn);
+    },
+    [manager]
+  );
 
   return {
     manager,
     loadedChunks,
     createLazyComponent,
     preloadChunk,
-    analyzeBundle: () => manager.analyzeBundle()
+    analyzeBundle: () => manager.analyzeBundle(),
   };
 };
 
@@ -804,7 +841,7 @@ export const usePerformanceMonitoring = () => {
 
   useEffect(() => {
     monitor.startMonitoring();
-    
+
     const interval = setInterval(() => {
       const latest = monitor.getLatestMetrics();
       if (latest) {
@@ -822,33 +859,35 @@ export const usePerformanceMonitoring = () => {
     monitor,
     metrics,
     getMetrics: () => monitor.getMetrics(),
-    generateReport: () => monitor.generatePerformanceReport()
+    generateReport: () => monitor.generatePerformanceReport(),
   };
 };
 
 export const useAPIOptimization = () => {
   const [optimizer] = useState(() => new APIOptimizer());
 
-  const cachedRequest = useCallback(<T>(
-    url: string,
-    options?: RequestInit,
-    ttl?: number
-  ) => {
-    return optimizer.cachedRequest<T>(url, options, ttl);
-  }, [optimizer]);
+  const cachedRequest = useCallback(
+    <T>(url: string, options?: RequestInit, ttl?: number) => {
+      return optimizer.cachedRequest<T>(url, options, ttl);
+    },
+    [optimizer]
+  );
 
-  const batchRequests = useCallback(<T>(
-    requests: Array<{ url: string; options?: RequestInit }>,
-    batchSize?: number
-  ) => {
-    return optimizer.batchRequests<T>(requests, batchSize);
-  }, [optimizer]);
+  const batchRequests = useCallback(
+    <T>(
+      requests: Array<{ url: string; options?: RequestInit }>,
+      batchSize?: number
+    ) => {
+      return optimizer.batchRequests<T>(requests, batchSize);
+    },
+    [optimizer]
+  );
 
   return {
     optimizer,
     cachedRequest,
     batchRequests,
     clearCache: () => optimizer.clearCache(),
-    getCacheStats: () => optimizer.getCacheStats()
+    getCacheStats: () => optimizer.getCacheStats(),
   };
-}; 
+};

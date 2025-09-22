@@ -1,6 +1,10 @@
 // src/types/firestore-schema.ts
 import { Timestamp, FieldValue } from 'firebase/firestore';
-import { FootballLevel, BaseFootballEntity, LevelConstraints } from './football';
+import {
+  FootballLevel,
+  BaseFootballEntity,
+  LevelConstraints,
+} from './football';
 
 // ============================================
 // CORE DATA TYPES
@@ -33,8 +37,18 @@ export interface User extends BaseDocument {
   language: string;
 }
 
-export type UserRole = 'head_coach' | 'assistant_coach' | 'player' | 'parent' | 'admin';
-export type CoachPersona = 'first_time_coach' | 'experienced_coach' | 'youth_coach' | 'high_school_coach' | 'college_coach';
+export type UserRole =
+  | 'head_coach'
+  | 'assistant_coach'
+  | 'player'
+  | 'parent'
+  | 'admin';
+export type CoachPersona =
+  | 'first_time_coach'
+  | 'experienced_coach'
+  | 'youth_coach'
+  | 'high_school_coach'
+  | 'college_coach';
 
 export interface UserPreferences {
   notifications: NotificationPreferences;
@@ -52,7 +66,12 @@ export interface NotificationPreferences {
   types: NotificationType[];
 }
 
-export type NotificationType = 'practice_reminder' | 'game_reminder' | 'team_update' | 'ai_insight' | 'achievement';
+export type NotificationType =
+  | 'practice_reminder'
+  | 'game_reminder'
+  | 'team_update'
+  | 'ai_insight'
+  | 'achievement';
 
 export interface AIPreferences {
   autoSuggest: boolean;
@@ -97,8 +116,24 @@ export interface Team extends BaseDocument, BaseFootballEntity {
   level_extensions?: Record<string, any>;
 }
 
-export type Sport = 'football' | 'basketball' | 'soccer' | 'baseball' | 'volleyball' | 'hockey' | 'lacrosse' | 'track' | 'swimming' | 'tennis';
-export type AgeGroup = 'youth' | 'middle_school' | 'high_school' | 'college' | 'adult' | 'senior';
+export type Sport =
+  | 'football'
+  | 'basketball'
+  | 'soccer'
+  | 'baseball'
+  | 'volleyball'
+  | 'hockey'
+  | 'lacrosse'
+  | 'track'
+  | 'swimming'
+  | 'tennis';
+export type AgeGroup =
+  | 'youth'
+  | 'middle_school'
+  | 'high_school'
+  | 'college'
+  | 'adult'
+  | 'senior';
 
 export interface TeamSettings {
   isPublic: boolean;
@@ -182,11 +217,32 @@ export interface Player extends BaseDocument, BaseFootballEntity {
   level_extensions?: Record<string, any>;
 }
 
-export type PlayerPosition = 'quarterback' | 'running_back' | 'wide_receiver' | 'tight_end' | 'offensive_line' | 
-                           'defensive_line' | 'linebacker' | 'cornerback' | 'safety' | 'kicker' | 'punter' |
-                           'point_guard' | 'shooting_guard' | 'small_forward' | 'power_forward' | 'center' |
-                           'forward' | 'midfielder' | 'defender' | 'goalkeeper' | 'pitcher' | 'catcher' |
-                           'infielder' | 'outfielder' | 'utility';
+export type PlayerPosition =
+  | 'quarterback'
+  | 'running_back'
+  | 'wide_receiver'
+  | 'tight_end'
+  | 'offensive_line'
+  | 'defensive_line'
+  | 'linebacker'
+  | 'cornerback'
+  | 'safety'
+  | 'kicker'
+  | 'punter'
+  | 'point_guard'
+  | 'shooting_guard'
+  | 'small_forward'
+  | 'power_forward'
+  | 'center'
+  | 'forward'
+  | 'midfielder'
+  | 'defender'
+  | 'goalkeeper'
+  | 'pitcher'
+  | 'catcher'
+  | 'infielder'
+  | 'outfielder'
+  | 'utility';
 
 export interface PhysicalInfo {
   height: number; // inches
@@ -280,7 +336,12 @@ export interface PracticePlan extends BaseDocument {
   feedback: PracticeFeedback[];
 }
 
-export type PracticeStatus = 'draft' | 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+export type PracticeStatus =
+  | 'draft'
+  | 'scheduled'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled';
 
 export interface PracticePeriod {
   id: string;
@@ -292,7 +353,13 @@ export interface PracticePeriod {
   order: number;
 }
 
-export type PeriodType = 'warmup' | 'skill_development' | 'team_drill' | 'scrimmage' | 'conditioning' | 'cool_down';
+export type PeriodType =
+  | 'warmup'
+  | 'skill_development'
+  | 'team_drill'
+  | 'scrimmage'
+  | 'conditioning'
+  | 'cool_down';
 
 export interface Drill {
   id: string;
@@ -355,7 +422,13 @@ export interface Play extends BaseDocument, BaseFootballEntity {
   level_extensions?: Record<string, any>;
 }
 
-export type PlayCategory = 'offense' | 'defense' | 'special_teams' | 'situational' | 'red_zone' | 'two_minute';
+export type PlayCategory =
+  | 'offense'
+  | 'defense'
+  | 'special_teams'
+  | 'situational'
+  | 'red_zone'
+  | 'two_minute';
 
 export interface Route {
   id: string;
@@ -399,8 +472,15 @@ export interface AnalyticsEvent extends BaseDocument {
   timestamp: Timestamp;
 }
 
-export type AnalyticsEventType = 'page_view' | 'feature_used' | 'ai_interaction' | 'practice_created' | 
-                                'play_created' | 'player_added' | 'team_joined' | 'subscription_changed';
+export type AnalyticsEventType =
+  | 'page_view'
+  | 'feature_used'
+  | 'ai_interaction'
+  | 'practice_created'
+  | 'play_created'
+  | 'player_added'
+  | 'team_joined'
+  | 'subscription_changed';
 
 export interface Feedback extends BaseDocument {
   userId: string;
@@ -416,7 +496,11 @@ export interface Feedback extends BaseDocument {
   resolution?: string;
 }
 
-export type FeedbackType = 'bug_report' | 'feature_request' | 'general_feedback' | 'support_request';
+export type FeedbackType =
+  | 'bug_report'
+  | 'feature_request'
+  | 'general_feedback'
+  | 'support_request';
 export type FeedbackStatus = 'open' | 'in_progress' | 'resolved' | 'closed';
 
 // ============================================
@@ -495,37 +579,70 @@ export const ValidationSchemas = {
     email: { required: true, type: 'email', maxLength: 255 },
     displayName: { required: true, minLength: 2, maxLength: 100 },
     roles: { required: true, type: 'array', minLength: 1 },
-    persona: { required: true, type: 'enum', values: ['first_time_coach', 'experienced_coach', 'youth_coach', 'high_school_coach', 'college_coach'] }
+    persona: {
+      required: true,
+      type: 'enum',
+      values: [
+        'first_time_coach',
+        'experienced_coach',
+        'youth_coach',
+        'high_school_coach',
+        'college_coach',
+      ],
+    },
   },
-  
+
   team: {
     name: { required: true, minLength: 2, maxLength: 100 },
-    sport: { required: true, type: 'enum', values: ['football', 'basketball', 'soccer', 'baseball', 'volleyball', 'hockey', 'lacrosse', 'track', 'swimming', 'tennis'] },
-    level: { required: true, type: 'enum', values: Object.values(FootballLevel) },
+    sport: {
+      required: true,
+      type: 'enum',
+      values: [
+        'football',
+        'basketball',
+        'soccer',
+        'baseball',
+        'volleyball',
+        'hockey',
+        'lacrosse',
+        'track',
+        'swimming',
+        'tennis',
+      ],
+    },
+    level: {
+      required: true,
+      type: 'enum',
+      values: Object.values(FootballLevel),
+    },
     coachIds: { required: true, type: 'array', minLength: 1 },
     constraints: { required: false, type: 'object' },
-    level_extensions: { required: false, type: 'object' }
+    level_extensions: { required: false, type: 'object' },
   },
-  
+
   player: {
     firstName: { required: true, minLength: 1, maxLength: 50 },
     lastName: { required: true, minLength: 1, maxLength: 50 },
     jerseyNumber: { required: true, type: 'number', min: 0, max: 99 },
     position: { required: true, minLength: 1, maxLength: 50 },
     teamId: { required: true, type: 'string' },
-    level: { required: true, type: 'enum', values: Object.values(FootballLevel) },
+    level: {
+      required: true,
+      type: 'enum',
+      values: Object.values(FootballLevel),
+    },
     constraints: { required: false, type: 'object' },
-    level_extensions: { required: false, type: 'object' }
+    level_extensions: { required: false, type: 'object' },
   },
-  
+
   practicePlan: {
     name: { required: true, minLength: 1, maxLength: 200 },
     teamId: { required: true, type: 'string' },
     date: { required: true, type: 'timestamp' },
     duration: { required: true, type: 'number', min: 15, max: 480 },
-    periods: { required: true, type: 'array', minLength: 1 }
+    periods: { required: true, type: 'array', minLength: 1 },
   },
-  
+
   play: {
     name: { required: true, minLength: 1, maxLength: 100 },
     teamId: { required: true, type: 'string' },
@@ -533,10 +650,14 @@ export const ValidationSchemas = {
     description: { required: true, minLength: 10, maxLength: 1000 },
     routes: { required: true, type: 'array', minLength: 1 },
     players: { required: true, type: 'array', minLength: 1 },
-    level: { required: true, type: 'enum', values: Object.values(FootballLevel) },
+    level: {
+      required: true,
+      type: 'enum',
+      values: Object.values(FootballLevel),
+    },
     constraints: { required: false, type: 'object' },
-    level_extensions: { required: false, type: 'object' }
-  }
+    level_extensions: { required: false, type: 'object' },
+  },
 };
 
 // ============================================
@@ -563,7 +684,7 @@ export const COLLECTIONS = {
   ACHIEVEMENTS: 'achievements',
   BADGES: 'badges',
   EQUIPMENT: 'equipment',
-  DRILL_LIBRARY: 'drillLibrary'
+  DRILL_LIBRARY: 'drillLibrary',
 } as const;
 
 // ============================================
@@ -575,38 +696,68 @@ export const INDEX_CONFIGS = {
   users_email: { collection: 'users', fields: ['email', 'createdAt'] },
   users_roles: { collection: 'users', fields: ['roles', 'createdAt'] },
   users_teamIds: { collection: 'users', fields: ['teamIds', 'createdAt'] },
-  
+
   // Team indexes
   teams_coachIds: { collection: 'teams', fields: ['coachIds', 'createdAt'] },
-  teams_sport_ageGroup: { collection: 'teams', fields: ['sport', 'ageGroup', 'createdAt'] },
+  teams_sport_ageGroup: {
+    collection: 'teams',
+    fields: ['sport', 'ageGroup', 'createdAt'],
+  },
   teams_season: { collection: 'teams', fields: ['season', 'createdAt'] },
-  
+
   // Player indexes
   players_teamId: { collection: 'players', fields: ['teamId', 'createdAt'] },
   players_position: { collection: 'players', fields: ['position', 'teamId'] },
-  players_jerseyNumber: { collection: 'players', fields: ['jerseyNumber', 'teamId'] },
-  
+  players_jerseyNumber: {
+    collection: 'players',
+    fields: ['jerseyNumber', 'teamId'],
+  },
+
   // Practice plan indexes
-  practicePlans_teamId_date: { collection: 'practicePlans', fields: ['teamId', 'date', 'createdAt'] },
-  practicePlans_status: { collection: 'practicePlans', fields: ['status', 'teamId'] },
-  practicePlans_createdBy: { collection: 'practicePlans', fields: ['createdBy', 'createdAt'] },
-  
+  practicePlans_teamId_date: {
+    collection: 'practicePlans',
+    fields: ['teamId', 'date', 'createdAt'],
+  },
+  practicePlans_status: {
+    collection: 'practicePlans',
+    fields: ['status', 'teamId'],
+  },
+  practicePlans_createdBy: {
+    collection: 'practicePlans',
+    fields: ['createdBy', 'createdAt'],
+  },
+
   // Play indexes
-  plays_teamId_category: { collection: 'plays', fields: ['teamId', 'category', 'createdAt'] },
+  plays_teamId_category: {
+    collection: 'plays',
+    fields: ['teamId', 'category', 'createdAt'],
+  },
   plays_difficulty: { collection: 'plays', fields: ['difficulty', 'teamId'] },
   plays_tags: { collection: 'plays', fields: ['tags', 'teamId'] },
-  
+
   // Analytics indexes
-  analytics_userId_eventType: { collection: 'analyticsEvents', fields: ['userId', 'eventType', 'timestamp'] },
-  analytics_teamId: { collection: 'analyticsEvents', fields: ['teamId', 'timestamp'] },
-  
+  analytics_userId_eventType: {
+    collection: 'analyticsEvents',
+    fields: ['userId', 'eventType', 'timestamp'],
+  },
+  analytics_teamId: {
+    collection: 'analyticsEvents',
+    fields: ['teamId', 'timestamp'],
+  },
+
   // Notification indexes
-  notifications_userId_read: { collection: 'notifications', fields: ['userId', 'isRead', 'createdAt'] },
-  notifications_type: { collection: 'notifications', fields: ['type', 'userId'] }
+  notifications_userId_read: {
+    collection: 'notifications',
+    fields: ['userId', 'isRead', 'createdAt'],
+  },
+  notifications_type: {
+    collection: 'notifications',
+    fields: ['type', 'userId'],
+  },
 } as const;
 
-export type CollectionName = typeof COLLECTIONS[keyof typeof COLLECTIONS];
-export type IndexConfig = typeof INDEX_CONFIGS[keyof typeof INDEX_CONFIGS]; 
+export type CollectionName = (typeof COLLECTIONS)[keyof typeof COLLECTIONS];
+export type IndexConfig = (typeof INDEX_CONFIGS)[keyof typeof INDEX_CONFIGS];
 
 // Placeholder types for missing exports
 export interface AISuggestion {
@@ -654,4 +805,4 @@ export interface PlayerContext {
   lastName: string;
   position: PlayerPosition;
   availablePlayers?: any[];
-} 
+}

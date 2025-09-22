@@ -1193,4 +1193,4 @@ const getPlayTags = (level: FootballLevel): string[] => {
   
   return FeatureGating.isYouthLevel(level) ? youthTags : advancedTags;
 }; 
-*/ 
+*/

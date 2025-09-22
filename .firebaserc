@@ -1,5 +1,20 @@
 {
   "projects": {
-    "default": "coach-core-ai"
-  }
+    "default": "coach-core-ai",
+    "staging": "coach-core-ai",
+    "production": "coach-core-ai"
+  },
+  "targets": {
+    "coach-core-ai": {
+      "hosting": {
+        "coach-core-ai-prod": [
+          "coach-core-ai"
+        ],
+        "coach-core-ai-staging": [
+          "coach-core-ai-staging"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
