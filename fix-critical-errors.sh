@@ -60,3 +60,6 @@ echo "🎯 Next steps:"
 echo "1. Run: npm run build"
 echo "2. Run: ./deploy-production.sh"
 echo "3. Your app will be live at: https://coach-core-ai.web.app"
+
+
+

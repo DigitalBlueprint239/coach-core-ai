@@ -1,4 +1,4 @@
-import { getRemoteConfig, getValue, fetchAndActivate, getAll } from 'firebase/remote-config';
+import { getRemoteConfig, fetchAndActivate, getAll } from 'firebase/remote-config';
 import app from '../firebase/firebase-config';
 import secureLogger from '../../utils/secure-logger';
 
@@ -16,11 +16,19 @@ export interface FeatureFlag {
 
 // Beta user interface
 export interface BetaUser {
-  userId: string;
+  uid: string;
+  userId: string; // Keep for backward compatibility
   email: string;
   name: string;
+  displayName: string; // Add for component compatibility
+  role: 'admin' | 'coach' | 'tester';
+  teamId?: string;
+  sport?: string;
+  ageGroup?: string;
+  features: string[];
   enrolledAt: Date;
   lastActiveAt: Date;
+  joinedAt: Date; // Add for component compatibility
   feedbackCount: number;
   errorCount: number;
   featuresUsed: string[];
@@ -63,7 +71,7 @@ export interface BetaFeedback {
 
 // Feature flag service class
 class FeatureFlagService {
-  private remoteConfig: any = null;
+  private remoteConfig: ReturnType<typeof getRemoteConfig> | null = null;
   private isInitialized = false;
   private betaUsers: Map<string, BetaUser> = new Map();
   private featureFlags: Map<string, FeatureFlag> = new Map();
@@ -132,12 +140,16 @@ class FeatureFlagService {
       
       // Set minimum fetch interval (1 hour for production, 0 for development)
       this.remoteConfig.settings = {
-        minimumFetchIntervalMillis: process.env.NODE_ENV === 'production' ? 3600000 : 0,
+        minimumFetchIntervalMillis: (typeof window !== 'undefined' && (window as any).location?.hostname === 'localhost') ? 0 : 3600000,
         fetchTimeoutMillis: 60000,
       };
 
-      // Set default values
-      this.remoteConfig.defaultConfig = this.defaultFlags;
+      // Set default values - convert to simple key-value pairs
+      const defaultConfig: Record<string, boolean> = {};
+      Object.entries(this.defaultFlags).forEach(([key, flag]) => {
+        defaultConfig[key] = flag.value as boolean;
+      });
+      this.remoteConfig.defaultConfig = defaultConfig;
 
       // Fetch and activate
       await fetchAndActivate(this.remoteConfig);
@@ -245,19 +257,26 @@ class FeatureFlagService {
   }
 
   // Add beta user
-  addBetaUser(user: Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>): void {
+  addBetaUser(user: Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'joinedAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>): void {
+    const uid = user.uid || `beta_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const betaUser: BetaUser = {
       ...user,
+      uid,
+      userId: user.userId || uid, // Backward compatibility
+      displayName: user.displayName || user.name,
+      features: user.features || [],
       enrolledAt: new Date(),
       lastActiveAt: new Date(),
+      joinedAt: new Date(),
       feedbackCount: 0,
       errorCount: 0,
       featuresUsed: [],
       status: 'active',
     };
 
-    this.betaUsers.set(user.userId, betaUser);
-    secureLogger.info('Beta user added', { userId: user.userId, email: user.email });
+    this.betaUsers.set(uid, betaUser);
+    this.betaUsers.set(user.userId || uid, betaUser); // Store by both keys for compatibility
+    secureLogger.info('Beta user added', { uid, userId: user.userId || uid, email: user.email });
   }
 
   // Remove beta user
@@ -266,7 +285,23 @@ class FeatureFlagService {
     if (betaUser) {
       betaUser.status = 'inactive';
       this.betaUsers.set(userId, betaUser);
-      secureLogger.info('Beta user removed', { userId });
+      this.betaUsers.set(betaUser.uid, betaUser); // Update both keys
+      secureLogger.info('Beta user removed', { userId, uid: betaUser.uid });
+    }
+  }
+
+  // Update beta user
+  updateBetaUser(uid: string, updates: Partial<BetaUser>): void {
+    const betaUser = this.betaUsers.get(uid);
+    if (betaUser) {
+      const updatedUser = {
+        ...betaUser,
+        ...updates,
+        lastActiveAt: new Date(),
+      };
+      this.betaUsers.set(uid, updatedUser);
+      this.betaUsers.set(betaUser.userId, updatedUser); // Update both keys
+      secureLogger.info('Beta user updated', { uid, userId: betaUser.userId });
     }
   }
 
@@ -323,7 +358,7 @@ class FeatureFlagService {
   }
 
   // Log beta user error
-  logBetaError(userId: string, error: Error, feature: string, context?: any): void {
+  logBetaError(userId: string, error: Error, feature: string, context?: Record<string, unknown>): void {
     // Update beta user error count
     const betaUser = this.betaUsers.get(userId);
     if (betaUser) {

@@ -58,3 +58,6 @@ Your app will be live and working within 30 minutes!
 
 ## 🎉 **Bottom Line**
 Your app is ready to go live! The TypeScript errors are mostly cosmetic and don't affect functionality. Let's get it deployed and start getting users!
+
+
+

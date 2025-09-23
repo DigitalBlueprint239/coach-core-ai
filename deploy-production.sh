@@ -65,3 +65,6 @@ print_status "🔧 To fix TypeScript errors later, run: npm run typecheck"
 
 echo ""
 print_success "🎉 Coach Core AI is now live and ready for users!"
+
+
+

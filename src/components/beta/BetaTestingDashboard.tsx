@@ -41,32 +41,31 @@ import {
   StatHelpText,
   StatArrow,
   Grid,
-  GridItem,
   Divider,
   IconButton,
   Tooltip,
 } from '@chakra-ui/react';
-import { AddIcon, EditIcon, DeleteIcon, ViewIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { useBetaEnrollment, useFeatureFlags } from '../../hooks/useFeatureFlags';
+import { AddIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
+import { useFeatureFlags } from '../../hooks/useFeatureFlags';
 import { useBetaFeedback } from '../../hooks/useUserBehavior';
-import { BetaUser } from '../../services/feature-flags/feature-flag-service';
+import { BetaUser, featureFlagService } from '../../services/feature-flags/feature-flag-service';
 import secureLogger from '../../utils/secure-logger';
 
 // Beta testing dashboard component
 export const BetaTestingDashboard: React.FC = () => {
-  const { getAllBetaUsers, enrollUser, removeUser } = useBetaEnrollment();
   const { isFeatureEnabled } = useFeatureFlags();
-  const { submitFeedback, reportBug, requestFeature, rateFeature } = useBetaFeedback();
+  const { submitFeedback } = useBetaFeedback();
   
   const [selectedUser, setSelectedUser] = useState<BetaUser | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Partial<BetaUser>>({});
+  const [betaUsers, setBetaUsers] = useState<BetaUser[]>([]);
   const [feedbackData, setFeedbackData] = useState({
     feature: '',
     rating: 5,
     feedback: '',
-    category: 'general' as const,
-    priority: 'medium' as const,
+    category: 'general' as 'bug' | 'feature_request' | 'general' | 'improvement',
+    priority: 'medium' as 'low' | 'medium' | 'high' | 'urgent',
   });
   
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -82,6 +81,32 @@ export const BetaTestingDashboard: React.FC = () => {
     'enableGameCalendar',
     'enablePerformanceDashboard',
   ];
+
+  // Load beta users on component mount
+  useEffect(() => {
+    const loadBetaUsers = () => {
+      const users = featureFlagService.getAllBetaUsers();
+      setBetaUsers(users);
+    };
+    
+    loadBetaUsers();
+  }, []);
+
+  // Helper functions using featureFlagService
+  const addBetaUser = (userData: Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'joinedAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>) => {
+    featureFlagService.addBetaUser(userData);
+    setBetaUsers(featureFlagService.getAllBetaUsers());
+  };
+
+  const updateBetaUser = (uid: string, updates: Partial<BetaUser>) => {
+    featureFlagService.updateBetaUser(uid, updates);
+    setBetaUsers(featureFlagService.getAllBetaUsers());
+  };
+
+  const removeBetaUser = (uid: string) => {
+    featureFlagService.removeBetaUser(uid);
+    setBetaUsers(featureFlagService.getAllBetaUsers());
+  };
 
   // Handle add/edit user
   const handleSaveUser = () => {
@@ -179,7 +204,7 @@ export const BetaTestingDashboard: React.FC = () => {
 
   // Get feature status
   const getFeatureStatus = (feature: string) => {
-    return isFeatureEnabled(feature as any) ? 'Enabled' : 'Disabled';
+    return isFeatureEnabled(feature) ? 'Enabled' : 'Disabled';
   };
 
   // Get user role color
@@ -216,7 +241,7 @@ export const BetaTestingDashboard: React.FC = () => {
           <Stat>
             <StatLabel>Active Features</StatLabel>
             <StatNumber>
-              {availableFeatures.filter(feature => isFeatureEnabled(feature as any)).length}
+              {availableFeatures.filter(feature => isFeatureEnabled(feature)).length}
             </StatNumber>
             <StatHelpText>Out of {availableFeatures.length} features</StatHelpText>
           </Stat>
@@ -309,7 +334,7 @@ export const BetaTestingDashboard: React.FC = () => {
                         {getFeatureStatus(feature)}
                       </Text>
                     </VStack>
-                    <Badge colorScheme={isFeatureEnabled(feature as any) ? 'green' : 'red'}>
+                    <Badge colorScheme={isFeatureEnabled(feature) ? 'green' : 'red'}>
                       {getFeatureStatus(feature)}
                     </Badge>
                   </HStack>
@@ -361,7 +386,7 @@ export const BetaTestingDashboard: React.FC = () => {
                   <FormLabel>Category</FormLabel>
                   <Select
                     value={feedbackData.category}
-                    onChange={(e) => setFeedbackData({ ...feedbackData, category: e.target.value as any })}
+                    onChange={(e) => setFeedbackData({ ...feedbackData, category: e.target.value as 'bug' | 'feature_request' | 'general' | 'improvement' })}
                   >
                     <option value="general">General Feedback</option>
                     <option value="bug">Bug Report</option>
@@ -374,7 +399,7 @@ export const BetaTestingDashboard: React.FC = () => {
                   <FormLabel>Priority</FormLabel>
                   <Select
                     value={feedbackData.priority}
-                    onChange={(e) => setFeedbackData({ ...feedbackData, priority: e.target.value as any })}
+                    onChange={(e) => setFeedbackData({ ...feedbackData, priority: e.target.value as 'low' | 'medium' | 'high' | 'urgent' })}
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -434,7 +459,7 @@ export const BetaTestingDashboard: React.FC = () => {
                   <FormLabel>Role</FormLabel>
                   <Select
                     value={formData.role || ''}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'coach' | 'tester' })}
                   >
                     <option value="">Select role</option>
                     <option value="coach">Coach</option>

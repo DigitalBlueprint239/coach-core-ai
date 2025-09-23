@@ -13,3 +13,4 @@ find src -name "*.test.tsx" -exec sed -i '' 's/= null;$/= null as any;/g' {} \;
 find src -name "*.test.tsx" -exec sed -i '' 's/\.code =/\.code =/g' {} \;
 
 echo "✅ TypeScript errors fixed!"
+
