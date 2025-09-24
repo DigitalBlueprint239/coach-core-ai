@@ -122,14 +122,14 @@ const LoginPage: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await authService.signUp(
-        signUpEmail,
-        signUpPassword,
-        signUpDisplayName,
-        signUpTeamName,
-        signUpSport,
-        signUpAgeGroup
-      );
+      await authService.signUp({
+        email: signUpEmail,
+        password: signUpPassword,
+        displayName: signUpDisplayName,
+        teamName: signUpTeamName,
+        sport: signUpSport,
+        ageGroup: signUpAgeGroup,
+      });
       toast({
         title: 'Account created!',
         description: 'Welcome to Coach Core AI',

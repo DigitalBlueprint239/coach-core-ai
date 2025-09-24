@@ -17,7 +17,7 @@ import {
   Timestamp,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import { db } from '../services/firebase/firebase-config';
 
 // ============================================
 // SECURITY VERIFICATION TYPES

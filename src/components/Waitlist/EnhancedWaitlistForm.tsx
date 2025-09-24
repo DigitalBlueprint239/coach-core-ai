@@ -93,6 +93,17 @@ interface WaitlistEntry {
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  // Enhanced marketing fields
+  experience?: 'beginner' | 'intermediate' | 'advanced';
+  teamSize?: 'small' | 'medium' | 'large';
+  interests?: string[];
+  marketingConsent?: boolean;
+  newsletterConsent?: boolean;
+  betaInterest?: boolean;
+  referrerEmail?: string;
+  referralCode?: string;
+  leadScore?: number;
+  segment?: string;
 }
 
 interface EnhancedWaitlistFormProps {
@@ -101,6 +112,9 @@ interface EnhancedWaitlistFormProps {
   variant?: 'beta' | 'general';
   showFeatures?: boolean;
   autoInvite?: boolean;
+  showMarketingFields?: boolean;
+  showReferralField?: boolean;
+  enableLeadScoring?: boolean;
 }
 
 const ROLE_OPTIONS = [
@@ -149,12 +163,36 @@ const BETA_FEATURES = [
   },
 ];
 
+const EXPERIENCE_OPTIONS = [
+  { value: 'beginner', label: 'Beginner (0-2 years)', description: 'New to coaching' },
+  { value: 'intermediate', label: 'Intermediate (3-10 years)', description: 'Some coaching experience' },
+  { value: 'advanced', label: 'Advanced (10+ years)', description: 'Extensive coaching experience' },
+];
+
+const TEAM_SIZE_OPTIONS = [
+  { value: 'small', label: 'Small (1-15 players)', description: 'Youth or small teams' },
+  { value: 'medium', label: 'Medium (16-35 players)', description: 'High school or club teams' },
+  { value: 'large', label: 'Large (35+ players)', description: 'College or professional teams' },
+];
+
+const INTEREST_OPTIONS = [
+  { value: 'play-design', label: 'Play Design', description: 'Creating and designing plays' },
+  { value: 'practice-planning', label: 'Practice Planning', description: 'Structuring effective practices' },
+  { value: 'player-development', label: 'Player Development', description: 'Individual player growth' },
+  { value: 'game-strategy', label: 'Game Strategy', description: 'Tactical game planning' },
+  { value: 'analytics', label: 'Analytics', description: 'Performance data and insights' },
+  { value: 'team-management', label: 'Team Management', description: 'Roster and team organization' },
+];
+
 const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({ 
   onSuccess, 
   onError, 
   variant = 'beta',
   showFeatures = true,
   autoInvite = true,
+  showMarketingFields = true,
+  showReferralField = true,
+  enableLeadScoring = true,
 }) => {
   // Form state
   const [email, setEmail] = useState('');
@@ -167,6 +205,15 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
   const [error, setError] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const [inviteLink, setInviteLink] = useState('');
+  
+  // Enhanced marketing fields
+  const [experience, setExperience] = useState('');
+  const [teamSize, setTeamSize] = useState('');
+  const [interests, setInterests] = useState<string[]>([]);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [newsletterConsent, setNewsletterConsent] = useState(false);
+  const [betaInterest, setBetaInterest] = useState(false);
+  const [referrerEmail, setReferrerEmail] = useState('');
 
   const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.800');
@@ -184,8 +231,74 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
     if (!name.trim()) return 'Name is required';
     if (!role) return 'Please select your coaching role';
     if (!teamLevel) return 'Please select your team level';
+    if (showMarketingFields && !experience) return 'Please select your coaching experience';
+    if (showMarketingFields && !teamSize) return 'Please select your team size';
     if (!agreedToTerms) return 'Please agree to the terms and conditions';
     return null;
+  };
+
+  // Calculate lead score based on user data
+  const calculateLeadScore = (): number => {
+    if (!enableLeadScoring) return 50; // Default score
+    
+    let score = 10; // Base score
+
+    // Role scoring
+    const roleScores: Record<string, number> = {
+      'head-coach': 30,
+      'assistant-coach': 25,
+      'coordinator': 20,
+      'position-coach': 15,
+      'volunteer': 10,
+      'athletic-director': 35,
+      'other': 5,
+    };
+    score += roleScores[role] || 5;
+
+    // Team level scoring
+    const teamLevelScores: Record<string, number> = {
+      'professional': 40,
+      'college': 35,
+      'high-school': 25,
+      'semi-pro': 30,
+      'youth': 15,
+      'other': 10,
+    };
+    score += teamLevelScores[teamLevel] || 10;
+
+    // Experience scoring
+    const experienceScores: Record<string, number> = {
+      'advanced': 25,
+      'intermediate': 15,
+      'beginner': 5,
+    };
+    score += experienceScores[experience] || 5;
+
+    // Team size scoring
+    const teamSizeScores: Record<string, number> = {
+      'large': 20,
+      'medium': 15,
+      'small': 10,
+    };
+    score += teamSizeScores[teamSize] || 10;
+
+    // Interest scoring
+    score += interests.length * 5;
+
+    // Marketing consent bonus
+    if (marketingConsent) score += 10;
+    if (newsletterConsent) score += 5;
+    if (betaInterest) score += 15;
+
+    return Math.min(score, 100); // Cap at 100
+  };
+
+  // Determine user segment based on lead score
+  const determineSegment = (score: number): string => {
+    if (score >= 80) return 'high-value';
+    if (score >= 60) return 'medium-value';
+    if (score >= 40) return 'low-value';
+    return 'cold';
   };
 
   const checkDuplicateEmail = async (email: string): Promise<boolean> => {
@@ -204,6 +317,12 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
 
   const generateInviteToken = (): string => {
     return `beta_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  };
+
+  const generateReferralCode = (email: string): string => {
+    const emailHash = email.split('@')[0].toLowerCase();
+    const randomSuffix = Math.random().toString(36).substr(2, 6);
+    return `${emailHash}_${randomSuffix}`.toUpperCase();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -239,7 +358,11 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
       const inviteToken = autoInvite ? generateInviteToken() : undefined;
       const inviteLink = autoInvite ? `${window.location.origin}/beta?token=${inviteToken}` : undefined;
 
-      // Create waitlist entry
+      // Calculate lead score and segment
+      const leadScore = calculateLeadScore();
+      const segment = determineSegment(leadScore);
+
+      // Create waitlist entry with enhanced marketing data
       const waitlistEntry: WaitlistEntry = {
         email: email.trim().toLowerCase(),
         name: name.trim(),
@@ -255,6 +378,17 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
         utmSource: new URLSearchParams(window.location.search).get('utm_source') || undefined,
         utmMedium: new URLSearchParams(window.location.search).get('utm_medium') || undefined,
         utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign') || undefined,
+        // Enhanced marketing fields
+        experience: experience as 'beginner' | 'intermediate' | 'advanced',
+        teamSize: teamSize as 'small' | 'medium' | 'large',
+        interests: interests,
+        marketingConsent,
+        newsletterConsent,
+        betaInterest,
+        referrerEmail: referrerEmail.trim() || undefined,
+        referralCode: referrerEmail ? generateReferralCode(email) : undefined,
+        leadScore,
+        segment,
       };
 
       // Add to Firestore
@@ -318,7 +452,8 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
   };
 
   const nextStep = () => {
-    if (currentStep < 3) {
+    const maxSteps = showMarketingFields ? 4 : 3;
+    if (currentStep < maxSteps) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -327,6 +462,10 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const getMaxSteps = () => {
+    return showMarketingFields ? 4 : 3;
   };
 
   if (isSubmitted) {
@@ -344,6 +483,20 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
                 : 'We\'ll notify you as soon as Coach Core AI is ready for you.'
               }
             </Text>
+            
+            {enableLeadScoring && (
+              <Box p={3} bg="blue.50" borderRadius="md" mb={4}>
+                <Text fontSize="sm" color="blue.700" fontWeight="semibold" mb={1}>
+                  Your Lead Score: {calculateLeadScore()}/100
+                </Text>
+                <Text fontSize="xs" color="blue.600">
+                  Segment: {determineSegment(calculateLeadScore())} • 
+                  {calculateLeadScore() >= 80 ? ' High Priority' : 
+                   calculateLeadScore() >= 60 ? ' Medium Priority' : 
+                   calculateLeadScore() >= 40 ? ' Standard Priority' : ' Low Priority'}
+                </Text>
+              </Box>
+            )}
             
             {inviteLink && (
               <VStack spacing={4} mt={6}>
@@ -415,7 +568,7 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
       
       <CardBody pt={0}>
         {/* Progress indicator */}
-        <Progress value={(currentStep / 3) * 100} size="sm" colorScheme="blue" mb={6} />
+        <Progress value={(currentStep / getMaxSteps()) * 100} size="sm" colorScheme="blue" mb={6} />
         
         <form onSubmit={handleSubmit}>
           <VStack spacing={6}>
@@ -554,8 +707,122 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
               </Fade>
             )}
 
-            {/* Step 3: Confirmation & Submit */}
-            {currentStep === 3 && (
+            {/* Step 3: Marketing & Experience (if enabled) */}
+            {showMarketingFields && currentStep === 3 && (
+              <Fade in={currentStep === 3}>
+                <VStack spacing={4} w="full">
+                  <FormControl isRequired isInvalid={!!error && !experience}>
+                    <FormLabel fontSize="sm" fontWeight="medium">
+                      Coaching Experience
+                    </FormLabel>
+                    <Select
+                      value={experience}
+                      onChange={(e) => setExperience(e.target.value)}
+                      placeholder="Select your experience level"
+                      size="lg"
+                      borderRadius="xl"
+                    >
+                      {EXPERIENCE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                    {experience && (
+                      <FormHelperText>
+                        {EXPERIENCE_OPTIONS.find(e => e.value === experience)?.description}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+
+                  <FormControl isRequired isInvalid={!!error && !teamSize}>
+                    <FormLabel fontSize="sm" fontWeight="medium">
+                      Team Size
+                    </FormLabel>
+                    <Select
+                      value={teamSize}
+                      onChange={(e) => setTeamSize(e.target.value)}
+                      placeholder="Select your team size"
+                      size="lg"
+                      borderRadius="xl"
+                    >
+                      {TEAM_SIZE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                    {teamSize && (
+                      <FormHelperText>
+                        {TEAM_SIZE_OPTIONS.find(t => t.value === teamSize)?.description}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel fontSize="sm" fontWeight="medium">
+                      Areas of Interest (Optional)
+                    </FormLabel>
+                    <CheckboxGroup value={interests} onChange={setInterests}>
+                      <SimpleGrid columns={2} spacing={2} w="full">
+                        {INTEREST_OPTIONS.map((option) => (
+                          <Checkbox key={option.value} value={option.value} size="sm">
+                            <Text fontSize="sm">{option.label}</Text>
+                          </Checkbox>
+                        ))}
+                      </SimpleGrid>
+                    </CheckboxGroup>
+                    <FormHelperText>
+                      Select the areas you're most interested in learning about
+                    </FormHelperText>
+                  </FormControl>
+
+                  {showReferralField && (
+                    <FormControl>
+                      <FormLabel fontSize="sm" fontWeight="medium">
+                        Referred by (Optional)
+                      </FormLabel>
+                      <Input
+                        type="email"
+                        value={referrerEmail}
+                        onChange={(e) => setReferrerEmail(e.target.value)}
+                        placeholder="Enter referrer's email"
+                        size="lg"
+                        borderRadius="xl"
+                      />
+                      <FormHelperText>
+                        Did someone refer you to Coach Core AI? Enter their email here.
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+
+                  <HStack spacing={4} w="full">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="lg"
+                      flex={1}
+                      onClick={prevStep}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      type="button"
+                      colorScheme="blue"
+                      size="lg"
+                      flex={1}
+                      onClick={nextStep}
+                      rightIcon={<ArrowRight />}
+                    >
+                      Continue
+                    </Button>
+                  </HStack>
+                </VStack>
+              </Fade>
+            )}
+
+            {/* Final Step: Confirmation & Submit */}
+            {currentStep === (showMarketingFields ? 4 : 3) && (
               <Fade in={currentStep === 3}>
                 <VStack spacing={4} w="full">
                   {/* Review Info */}
@@ -584,6 +851,38 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
                           {TEAM_LEVEL_OPTIONS.find(t => t.value === teamLevel)?.label}
                         </Text>
                       </HStack>
+                      {showMarketingFields && (
+                        <>
+                          <HStack>
+                            <Text fontSize="sm" color="gray.600">Experience:</Text>
+                            <Text fontSize="sm" fontWeight="medium">
+                              {EXPERIENCE_OPTIONS.find(e => e.value === experience)?.label}
+                            </Text>
+                          </HStack>
+                          <HStack>
+                            <Text fontSize="sm" color="gray.600">Team Size:</Text>
+                            <Text fontSize="sm" fontWeight="medium">
+                              {TEAM_SIZE_OPTIONS.find(t => t.value === teamSize)?.label}
+                            </Text>
+                          </HStack>
+                          {interests.length > 0 && (
+                            <HStack align="start">
+                              <Text fontSize="sm" color="gray.600">Interests:</Text>
+                              <Text fontSize="sm" fontWeight="medium">
+                                {interests.map(interest => 
+                                  INTEREST_OPTIONS.find(i => i.value === interest)?.label
+                                ).join(', ')}
+                              </Text>
+                            </HStack>
+                          )}
+                          {referrerEmail && (
+                            <HStack>
+                              <Text fontSize="sm" color="gray.600">Referred by:</Text>
+                              <Text fontSize="sm" fontWeight="medium">{referrerEmail}</Text>
+                            </HStack>
+                          )}
+                        </>
+                      )}
                     </VStack>
                   </Box>
 
@@ -599,6 +898,47 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
                       </Text>
                     </Checkbox>
                   </FormControl>
+
+                  {/* Marketing Consent (if enabled) */}
+                  {showMarketingFields && (
+                    <VStack spacing={3} align="start" w="full">
+                      <FormControl>
+                        <Checkbox
+                          isChecked={newsletterConsent}
+                          onChange={(e) => setNewsletterConsent(e.target.checked)}
+                          colorScheme="blue"
+                        >
+                          <Text fontSize="sm" color="gray.600">
+                            I'd like to receive the Coach Core AI newsletter with tips and updates.
+                          </Text>
+                        </Checkbox>
+                      </FormControl>
+
+                      <FormControl>
+                        <Checkbox
+                          isChecked={marketingConsent}
+                          onChange={(e) => setMarketingConsent(e.target.checked)}
+                          colorScheme="blue"
+                        >
+                          <Text fontSize="sm" color="gray.600">
+                            I'm interested in receiving information about new features and special offers.
+                          </Text>
+                        </Checkbox>
+                      </FormControl>
+
+                      <FormControl>
+                        <Checkbox
+                          isChecked={betaInterest}
+                          onChange={(e) => setBetaInterest(e.target.checked)}
+                          colorScheme="blue"
+                        >
+                          <Text fontSize="sm" color="gray.600">
+                            I want to be notified about beta testing opportunities and early access features.
+                          </Text>
+                        </Checkbox>
+                      </FormControl>
+                    </VStack>
+                  )}
 
                   {error && (
                     <Alert status="error" borderRadius="md">

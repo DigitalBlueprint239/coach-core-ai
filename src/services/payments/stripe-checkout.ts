@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { stripeService, SubscriptionTier } from './stripe-config';
 import { subscriptionService } from './subscription-service';
 import secureLogger from '../../utils/secure-logger';

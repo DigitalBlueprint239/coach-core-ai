@@ -81,16 +81,16 @@ export class TestUtils {
    */
   static async testAuthService(): Promise<TestResult> {
     try {
-      const currentUser = authService.getCurrentUser();
-      const isAuth = authService.isAuthenticated();
+      const currentUser = auth.currentUser;
+      const profile = await authService.getCurrentProfile();
 
       return {
         service: 'Auth Service',
         status: 'success',
         message: 'Auth service working correctly',
         details: {
-          currentUser: currentUser ? currentUser.uid : 'null',
-          isAuthenticated: isAuth,
+          currentUser: currentUser ? currentUser.uid : null,
+          profileLoaded: !!profile,
         },
       };
     } catch (error: any) {

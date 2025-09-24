@@ -58,7 +58,10 @@ export const BetaTestingDashboard: React.FC = () => {
   
   const [selectedUser, setSelectedUser] = useState<BetaUser | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<Partial<BetaUser>>({});
+  const [formData, setFormData] = useState<Partial<BetaUser>>({
+    features: [],
+    role: 'tester',
+  });
   const [betaUsers, setBetaUsers] = useState<BetaUser[]>([]);
   const [feedbackData, setFeedbackData] = useState({
     feature: '',
@@ -71,55 +74,87 @@ export const BetaTestingDashboard: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  // Available features for beta testing
-  const availableFeatures = [
-    'enablePlayDesigner',
-    'enableAdvancedDashboard',
-    'enableAIBrain',
-    'enableTeamManagement',
-    'enablePracticePlanner',
-    'enableGameCalendar',
-    'enablePerformanceDashboard',
-  ];
+  const featureOptions = [
+    { key: 'playDesigner', label: 'Play Designer' },
+    { key: 'dashboard', label: 'Advanced Dashboard' },
+    { key: 'aiPlayGenerator', label: 'AI Play Generator' },
+    { key: 'teamManagement', label: 'Team Management' },
+    { key: 'practicePlanner', label: 'Practice Planner' },
+  ] as const;
+
+  const getFeatureLabel = (key: string) => featureOptions.find(feature => feature.key === key)?.label || key;
+
+  const refreshBetaUsers = () => {
+    const users = featureFlagService.getAllBetaUsers();
+    setBetaUsers(users);
+  };
 
   // Load beta users on component mount
   useEffect(() => {
-    const loadBetaUsers = () => {
-      const users = featureFlagService.getAllBetaUsers();
-      setBetaUsers(users);
-    };
-    
-    loadBetaUsers();
+    refreshBetaUsers();
   }, []);
 
   // Helper functions using featureFlagService
-  const addBetaUser = (userData: Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'joinedAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>) => {
+  const addBetaUserRecord = (userData: Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'joinedAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>) => {
     featureFlagService.addBetaUser(userData);
-    setBetaUsers(featureFlagService.getAllBetaUsers());
+    refreshBetaUsers();
   };
 
-  const updateBetaUser = (uid: string, updates: Partial<BetaUser>) => {
+  const updateBetaUserRecord = (uid: string, updates: Partial<BetaUser>) => {
     featureFlagService.updateBetaUser(uid, updates);
-    setBetaUsers(featureFlagService.getAllBetaUsers());
+    refreshBetaUsers();
   };
 
-  const removeBetaUser = (uid: string) => {
+  const removeBetaUserRecord = (uid: string) => {
     featureFlagService.removeBetaUser(uid);
-    setBetaUsers(featureFlagService.getAllBetaUsers());
+    refreshBetaUsers();
   };
 
   // Handle add/edit user
   const handleSaveUser = () => {
     try {
+      if (!formData.name?.trim() || !formData.email?.trim()) {
+        toast({
+          title: 'Name and email are required',
+          status: 'warning',
+          duration: 3000,
+        });
+        return;
+      }
+
+      const normalizedFeatures = Array.from(new Set(formData.features || []));
+      const normalizedRole = formData.role || 'tester';
+      const normalizedDisplayName = formData.displayName || formData.name.trim();
+      const normalizedUserId = formData.userId || formData.email.trim();
+
       if (isEditing && selectedUser) {
-        updateBetaUser(selectedUser.uid, formData);
+        updateBetaUserRecord(selectedUser.uid, {
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          displayName: normalizedDisplayName,
+          features: normalizedFeatures,
+          role: normalizedRole,
+          userId: normalizedUserId,
+        });
         toast({
           title: 'User updated successfully',
           status: 'success',
           duration: 3000,
         });
       } else {
-        addBetaUser(formData as Omit<BetaUser, 'joinedAt' | 'lastActiveAt'>);
+        const payload = {
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          displayName: normalizedDisplayName,
+          features: normalizedFeatures,
+          role: normalizedRole,
+          userId: normalizedUserId,
+          status: 'active' as BetaUser['status'],
+        } as Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'joinedAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>;
+
+        addBetaUserRecord(payload);
         toast({
           title: 'User added successfully',
           status: 'success',
@@ -129,7 +164,7 @@ export const BetaTestingDashboard: React.FC = () => {
       
       setSelectedUser(null);
       setIsEditing(false);
-      setFormData({});
+      setFormData({ features: [], role: 'tester' });
       onClose();
     } catch (error) {
       secureLogger.error('Failed to save user', { error });
@@ -144,7 +179,7 @@ export const BetaTestingDashboard: React.FC = () => {
   // Handle delete user
   const handleDeleteUser = (userId: string) => {
     try {
-      removeBetaUser(userId);
+      removeBetaUserRecord(userId);
       toast({
         title: 'User removed successfully',
         status: 'success',
@@ -164,7 +199,10 @@ export const BetaTestingDashboard: React.FC = () => {
   const handleEditUser = (user: BetaUser) => {
     setSelectedUser(user);
     setIsEditing(true);
-    setFormData(user);
+    setFormData({
+      ...user,
+      features: [...(user.features || [])],
+    });
     onOpen();
   };
 
@@ -172,7 +210,7 @@ export const BetaTestingDashboard: React.FC = () => {
   const handleAddUser = () => {
     setSelectedUser(null);
     setIsEditing(false);
-    setFormData({});
+    setFormData({ features: [], role: 'tester' });
     onOpen();
   };
 
@@ -217,6 +255,8 @@ export const BetaTestingDashboard: React.FC = () => {
     }
   };
 
+  const activeBetaUsers = betaUsers.filter(user => user.status !== 'inactive');
+
   return (
     <Box p={6} maxW="1200px" mx="auto">
       <VStack spacing={6} align="stretch">
@@ -232,7 +272,7 @@ export const BetaTestingDashboard: React.FC = () => {
         <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap={4}>
           <Stat>
             <StatLabel>Total Beta Users</StatLabel>
-            <StatNumber>{betaUsers.length}</StatNumber>
+            <StatNumber>{activeBetaUsers.length}</StatNumber>
             <StatHelpText>
               <StatArrow type="increase" />
               Active testers
@@ -241,13 +281,13 @@ export const BetaTestingDashboard: React.FC = () => {
           <Stat>
             <StatLabel>Active Features</StatLabel>
             <StatNumber>
-              {availableFeatures.filter(feature => isFeatureEnabled(feature)).length}
+              {featureOptions.filter(feature => isFeatureEnabled(feature.key)).length}
             </StatNumber>
-            <StatHelpText>Out of {availableFeatures.length} features</StatHelpText>
+            <StatHelpText>Out of {featureOptions.length} features</StatHelpText>
           </Stat>
           <Stat>
             <StatLabel>Admin Users</StatLabel>
-            <StatNumber>{betaUsers.filter(user => user.role === 'admin').length}</StatNumber>
+            <StatNumber>{activeBetaUsers.filter(user => user.role === 'admin').length}</StatNumber>
             <StatHelpText>Full access</StatHelpText>
           </Stat>
         </Grid>
@@ -277,7 +317,7 @@ export const BetaTestingDashboard: React.FC = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {betaUsers.map((user) => (
+                  {activeBetaUsers.map((user) => (
                     <Tr key={user.uid}>
                       <Td>{user.name}</Td>
                       <Td>{user.email}</Td>
@@ -288,9 +328,9 @@ export const BetaTestingDashboard: React.FC = () => {
                       </Td>
                       <Td>
                         <VStack align="start" spacing={1}>
-                          {user.features.map((feature) => (
+                          {(user.features || []).map((feature) => (
                             <Badge key={feature} size="sm" colorScheme="green">
-                              {feature}
+                              {getFeatureLabel(feature)}
                             </Badge>
                           ))}
                         </VStack>
@@ -326,16 +366,16 @@ export const BetaTestingDashboard: React.FC = () => {
             {/* Feature Status Tab */}
             <TabPanel>
               <VStack spacing={4} align="stretch">
-                {availableFeatures.map((feature) => (
-                  <HStack key={feature} justify="space-between" p={4} border="1px" borderColor="gray.200" borderRadius="md">
+                {featureOptions.map((feature) => (
+                  <HStack key={feature.key} justify="space-between" p={4} border="1px" borderColor="gray.200" borderRadius="md">
                     <VStack align="start" spacing={1}>
-                      <Text fontWeight="medium">{feature}</Text>
+                      <Text fontWeight="medium">{feature.label}</Text>
                       <Text fontSize="sm" color="gray.600">
-                        {getFeatureStatus(feature)}
+                        {getFeatureStatus(feature.key)}
                       </Text>
                     </VStack>
-                    <Badge colorScheme={isFeatureEnabled(feature) ? 'green' : 'red'}>
-                      {getFeatureStatus(feature)}
+                    <Badge colorScheme={isFeatureEnabled(feature.key) ? 'green' : 'red'}>
+                      {getFeatureStatus(feature.key)}
                     </Badge>
                   </HStack>
                 ))}
@@ -360,9 +400,9 @@ export const BetaTestingDashboard: React.FC = () => {
                     onChange={(e) => setFeedbackData({ ...feedbackData, feature: e.target.value })}
                   >
                     <option value="">Select a feature</option>
-                    {availableFeatures.map((feature) => (
-                      <option key={feature} value={feature}>
-                        {feature}
+                    {featureOptions.map((feature) => (
+                      <option key={feature.key} value={feature.key}>
+                        {feature.label}
                       </option>
                     ))}
                   </Select>
@@ -498,17 +538,17 @@ export const BetaTestingDashboard: React.FC = () => {
                 <FormControl>
                   <FormLabel>Features</FormLabel>
                   <VStack align="start" spacing={2}>
-                    {availableFeatures.map((feature) => (
-                      <HStack key={feature} justify="space-between" w="full">
-                        <Text fontSize="sm">{feature}</Text>
+                    {featureOptions.map((feature) => (
+                      <HStack key={feature.key} justify="space-between" w="full">
+                        <Text fontSize="sm">{feature.label}</Text>
                         <Switch
-                          isChecked={formData.features?.includes(feature) || false}
+                          isChecked={formData.features?.includes(feature.key) || false}
                           onChange={(e) => {
                             const features = formData.features || [];
                             if (e.target.checked) {
-                              setFormData({ ...formData, features: [...features, feature] });
+                              setFormData({ ...formData, features: [...features, feature.key] });
                             } else {
-                              setFormData({ ...formData, features: features.filter(f => f !== feature) });
+                              setFormData({ ...formData, features: features.filter(f => f !== feature.key) });
                             }
                           }}
                         />

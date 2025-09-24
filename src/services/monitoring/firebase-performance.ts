@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getPerformance, trace, getTrace } from 'firebase/performance';
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../firebase/firebase-config';

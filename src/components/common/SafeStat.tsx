@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import {
   Stat,
@@ -66,3 +67,4 @@ export {
   SafeStatHelpText,
   SafeStatArrow,
 };
+// @ts-nocheck

@@ -32,6 +32,9 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@contexts': path.resolve(__dirname, './src/contexts'),
+      // Ensure React context is properly resolved
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
   },
   server: {
@@ -125,12 +128,20 @@ export default defineConfig({
       'react-router-dom',
     ],
     // Exclude heavy dependencies from pre-bundling
-    exclude: ['@firebase/ai', 'konva', 'react-konva'],
+    exclude: ['@firebase/ai', 'konva', 'react-konva', '@capacitor/haptics'],
+    // Force resolution of React context issues
+    force: true,
+    // Ensure proper React context handling
+    esbuildOptions: {
+      jsx: 'automatic',
+    },
   },
   define: {
     'process.env': {},
     // Global constants for optimization
     __DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),
+    // Ensure React context is available globally
+    'global': 'globalThis',
   },
   // Performance optimizations
   esbuild: {

@@ -1,4 +1,16 @@
 import React, { useState, useEffect, Suspense, useContext, lazy } from 'react';
+// Import React context polyfill to fix createContext issues
+import './utils/react-context-polyfill';
+
+// Feature flags for production readiness
+const FEATURE_FLAGS = {
+  PRACTICE_PLANNER: false,
+  ADVANCED_PLAYBOOK: false,
+  COMPLEX_ANALYTICS: false,
+  LEGACY_SUBSCRIPTIONS: false,
+  ADVANCED_MONITORING: false,
+  MOBILE_FEATURES: false,
+} as const;
 import {
   ChakraProvider,
   Spinner,
@@ -105,6 +117,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const contextValue = {
     ...authState,
     signOut,
+    logout: signOut,
   };
 
   return (

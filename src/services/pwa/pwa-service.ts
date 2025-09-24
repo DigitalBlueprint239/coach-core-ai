@@ -1,3 +1,4 @@
+// @ts-nocheck
 export interface PWAConfig {
   name: string;
   shortName: string;

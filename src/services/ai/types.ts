@@ -8,6 +8,7 @@ export interface TeamProfile {
   ageGroup: string;
   strengths: string[];
   weaknesses: string[];
+  teamName: string;
 }
 
 export interface PlayRequirements {
@@ -15,6 +16,7 @@ export interface PlayRequirements {
   difficulty: string;
   timeOnShotClock: number;
   specialSituations: string[];
+  playerCount?: number;
 }
 
 export interface GeneratedPlay {
@@ -30,6 +32,19 @@ export interface GeneratedPlay {
   createdAt: Date;
   teamProfile?: TeamProfile;
   playRequirements?: PlayRequirements;
+}
+
+export interface PlayGenerationUsage {
+  tokensUsed: number;
+  cost: number;
+  remainingPlays: number;
+}
+
+export interface PlayGenerationResponse {
+  success: boolean;
+  data?: GeneratedPlay;
+  usage?: PlayGenerationUsage;
+  error?: string;
 }
 
 export interface PlayerPosition {
@@ -290,4 +305,3 @@ export interface AILimits {
   maxTokensPerRequest: number;
   dailyTokenLimit: number;
 }
-

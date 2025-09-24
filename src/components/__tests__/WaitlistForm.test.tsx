@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ChakraProvider from '@chakra-ui/react';
-import BrowserRouter from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
+import { BrowserRouter } from 'react-router-dom';
 import WaitlistForm from '../Waitlist/WaitlistForm';
 import modernTheme from '../../theme/modern-design-system';
 

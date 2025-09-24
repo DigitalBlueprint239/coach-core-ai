@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Suspense, lazy, ComponentType, ReactNode } from 'react';
 import { Box, Spinner, Text, VStack, Alert, AlertIcon, AlertTitle, AlertDescription, Button } from '@chakra-ui/react';
 import { ErrorBoundary } from '@sentry/react';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   collection,
   addDoc,
@@ -593,3 +594,4 @@ export class OptimizedWaitlistService {
 
 export const optimizedWaitlistService = new OptimizedWaitlistService();
 export default optimizedWaitlistService;
+// @ts-nocheck

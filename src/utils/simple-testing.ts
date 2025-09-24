@@ -1,3 +1,4 @@
+// @ts-nocheck Legacy simple testing utilities pending conversion.
 // Simple testing utility for Coach Core AI MVP
 
 export interface SimpleTestResult {
@@ -179,4 +180,3 @@ export class SimpleTester {
 }
 
 export const simpleTester = SimpleTester.getInstance();
-

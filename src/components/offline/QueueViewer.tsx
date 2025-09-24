@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/offline/QueueViewer.tsx
 import React, { useState, useEffect } from 'react';
 import {

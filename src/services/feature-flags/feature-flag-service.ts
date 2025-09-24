@@ -74,6 +74,7 @@ class FeatureFlagService {
   private remoteConfig: ReturnType<typeof getRemoteConfig> | null = null;
   private isInitialized = false;
   private betaUsers: Map<string, BetaUser> = new Map();
+  private betaUserIndex: Map<string, string> = new Map();
   private featureFlags: Map<string, FeatureFlag> = new Map();
   private feedbackLog: BetaFeedback[] = [];
 
@@ -139,8 +140,11 @@ class FeatureFlagService {
       this.remoteConfig = getRemoteConfig(app);
       
       // Set minimum fetch interval (1 hour for production, 0 for development)
+      const isLocalhost = typeof globalThis !== 'undefined' && 
+        globalThis.location?.hostname === 'localhost';
+      
       this.remoteConfig.settings = {
-        minimumFetchIntervalMillis: (typeof window !== 'undefined' && (window as any).location?.hostname === 'localhost') ? 0 : 3600000,
+        minimumFetchIntervalMillis: isLocalhost ? 0 : 3600000,
         fetchTimeoutMillis: 60000,
       };
 
@@ -250,21 +254,17 @@ class FeatureFlagService {
     };
   }
 
-  // Check if user is a beta user
-  isBetaUser(userId: string): boolean {
-    const betaUser = this.betaUsers.get(userId);
-    return betaUser ? betaUser.status === 'active' : false;
-  }
-
   // Add beta user
   addBetaUser(user: Omit<BetaUser, 'enrolledAt' | 'lastActiveAt' | 'joinedAt' | 'feedbackCount' | 'errorCount' | 'featuresUsed'>): void {
     const uid = user.uid || `beta_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const userId = user.userId || uid;
     const betaUser: BetaUser = {
       ...user,
       uid,
-      userId: user.userId || uid, // Backward compatibility
+      userId,
       displayName: user.displayName || user.name,
-      features: user.features || [],
+      features: Array.from(new Set(user.features || [])),
+      role: user.role || 'tester',
       enrolledAt: new Date(),
       lastActiveAt: new Date(),
       joinedAt: new Date(),
@@ -275,39 +275,45 @@ class FeatureFlagService {
     };
 
     this.betaUsers.set(uid, betaUser);
-    this.betaUsers.set(user.userId || uid, betaUser); // Store by both keys for compatibility
-    secureLogger.info('Beta user added', { uid, userId: user.userId || uid, email: user.email });
+    this.betaUserIndex.set(uid, uid);
+    this.betaUserIndex.set(userId, uid);
+    secureLogger.info('Beta user added', { uid, userId: betaUser.userId, email: user.email });
   }
 
   // Remove beta user
   removeBetaUser(userId: string): void {
-    const betaUser = this.betaUsers.get(userId);
+    const uid = this.resolveUid(userId);
+    if (!uid) return;
+    const betaUser = this.betaUsers.get(uid);
     if (betaUser) {
       betaUser.status = 'inactive';
-      this.betaUsers.set(userId, betaUser);
-      this.betaUsers.set(betaUser.uid, betaUser); // Update both keys
+      this.betaUsers.set(uid, betaUser);
+      this.betaUserIndex.set(betaUser.userId, uid);
       secureLogger.info('Beta user removed', { userId, uid: betaUser.uid });
     }
   }
 
   // Update beta user
   updateBetaUser(uid: string, updates: Partial<BetaUser>): void {
-    const betaUser = this.betaUsers.get(uid);
+    const resolvedUid = this.resolveUid(uid) || uid;
+    const betaUser = this.betaUsers.get(resolvedUid);
     if (betaUser) {
       const updatedUser = {
         ...betaUser,
         ...updates,
         lastActiveAt: new Date(),
       };
-      this.betaUsers.set(uid, updatedUser);
-      this.betaUsers.set(betaUser.userId, updatedUser); // Update both keys
-      secureLogger.info('Beta user updated', { uid, userId: betaUser.userId });
+      this.betaUsers.set(resolvedUid, updatedUser);
+      this.betaUserIndex.set(updatedUser.userId, resolvedUid);
+      this.betaUserIndex.set(resolvedUid, resolvedUid);
+      secureLogger.info('Beta user updated', { uid: resolvedUid, userId: updatedUser.userId });
     }
   }
 
   // Get beta user
   getBetaUser(userId: string): BetaUser | undefined {
-    return this.betaUsers.get(userId);
+    const uid = this.resolveUid(userId);
+    return uid ? this.betaUsers.get(uid) : undefined;
   }
 
   // Get all beta users
@@ -317,13 +323,15 @@ class FeatureFlagService {
 
   // Update beta user activity
   updateBetaUserActivity(userId: string, feature?: string): void {
-    const betaUser = this.betaUsers.get(userId);
+    const uid = this.resolveUid(userId);
+    if (!uid) return;
+    const betaUser = this.betaUsers.get(uid);
     if (betaUser) {
       betaUser.lastActiveAt = new Date();
       if (feature && !betaUser.featuresUsed.includes(feature)) {
         betaUser.featuresUsed.push(feature);
       }
-      this.betaUsers.set(userId, betaUser);
+      this.betaUsers.set(uid, betaUser);
     }
   }
 
@@ -340,10 +348,13 @@ class FeatureFlagService {
     this.feedbackLog.push(newFeedback);
 
     // Update beta user feedback count
-    const betaUser = this.betaUsers.get(feedback.userId);
-    if (betaUser) {
-      betaUser.feedbackCount++;
-      this.betaUsers.set(feedback.userId, betaUser);
+    const uid = this.resolveUid(feedback.userId);
+    if (uid) {
+      const betaUser = this.betaUsers.get(uid);
+      if (betaUser) {
+        betaUser.feedbackCount++;
+        this.betaUsers.set(uid, betaUser);
+      }
     }
 
     secureLogger.info('Beta feedback logged', { 
@@ -360,10 +371,13 @@ class FeatureFlagService {
   // Log beta user error
   logBetaError(userId: string, error: Error, feature: string, context?: Record<string, unknown>): void {
     // Update beta user error count
-    const betaUser = this.betaUsers.get(userId);
-    if (betaUser) {
-      betaUser.errorCount++;
-      this.betaUsers.set(userId, betaUser);
+    const uid = this.resolveUid(userId);
+    if (uid) {
+      const betaUser = this.betaUsers.get(uid);
+      if (betaUser) {
+        betaUser.errorCount++;
+        this.betaUsers.set(uid, betaUser);
+      }
     }
 
     secureLogger.error('Beta user error logged', { 
@@ -382,7 +396,7 @@ class FeatureFlagService {
 
   // Get feedback by feature
   getFeedbackByFeature(feature: string): BetaFeedback[] {
-    return this.feedbackLog.filter(feedback => feedback.feedback === feature);
+    return this.feedbackLog.filter(feedback => feedback.feature === feature);
   }
 
   // Get all feedback
@@ -390,11 +404,18 @@ class FeatureFlagService {
     return [...this.feedbackLog];
   }
 
+  // Check if user is a beta user
+  isBetaUser(userId: string): boolean {
+    const uid = this.resolveUid(userId);
+    if (!uid) return false;
+    const betaUser = this.betaUsers.get(uid);
+    return betaUser ? betaUser.status === 'active' : false;
+  }
+
   // Get user tier
   private getUserTier(userId?: string): string {
     if (!userId) return 'anonymous';
-    if (this.isBetaUser(userId)) return 'beta';
-    return 'standard';
+    return this.isBetaUser(userId) ? 'beta' : 'standard';
   }
 
   // Check if user is in rollout percentage
@@ -406,7 +427,8 @@ class FeatureFlagService {
 
   // Get beta user enrollment date
   private getBetaUserEnrollmentDate(userId: string): Date | undefined {
-    const betaUser = this.betaUsers.get(userId);
+    const uid = this.resolveUid(userId);
+    const betaUser = uid ? this.betaUsers.get(uid) : undefined;
     return betaUser?.enrolledAt;
   }
 
@@ -419,6 +441,13 @@ class FeatureFlagService {
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash);
+  }
+
+  private resolveUid(identifier: string): string | null {
+    if (this.betaUsers.has(identifier)) {
+      return identifier;
+    }
+    return this.betaUserIndex.get(identifier) || null;
   }
 
   // Refresh feature flags

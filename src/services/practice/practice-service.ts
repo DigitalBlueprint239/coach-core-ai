@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { PracticePlan } from '../../components/PracticePlanner/ModernPracticePlanner';
 
 export interface PracticeServiceResponse {

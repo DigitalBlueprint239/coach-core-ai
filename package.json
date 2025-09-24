@@ -8,6 +8,7 @@
     "start": "vite",
     "build": "vite build",
     "build:production": "REACT_APP_ENVIRONMENT=production vite build --mode production",
+    "build:minimal": "node scripts/build-production.js",
     "build:optimized": "npm run build && npm run optimize:assets",
     "optimize:assets": "node scripts/optimize-all-assets.js",
     "optimize:images": "node scripts/optimize-assets.js",

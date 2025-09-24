@@ -56,7 +56,7 @@ export const RESPONSIVE_CONTAINERS = {
 } as const;
 
 // Responsive padding scales
-export const RESPONSIVE_PADDING = {
+export const RESPONSIVE_PADDING: Record<string, Record<string, number | string>> = {
   page: { base: 4, sm: 6, md: 8, lg: 12, xl: 16 },
   section: { base: 6, sm: 8, md: 12, lg: 16, xl: 20 },
   card: { base: 4, sm: 5, md: 6, lg: 8, xl: 8 },
@@ -67,7 +67,7 @@ export const RESPONSIVE_PADDING = {
     lg: '18px 24px',
     xl: '18px 24px',
   },
-} as const;
+};
 
 // Responsive margin scales
 export const RESPONSIVE_MARGIN = {
@@ -105,12 +105,17 @@ export const MOBILE_UTILS = {
 // Responsive hook for easy usage
 export const useResponsive = () => {
   const getResponsiveValue = <T>(
-    responsiveObject: Record<string, T>,
+    responsiveObject: Record<string, T | undefined>,
     defaultValue?: T
   ): T => {
     // This would typically use a hook like useBreakpointValue
     // For now, return the base value
-    return responsiveObject.base || defaultValue || responsiveObject.lg;
+    return (
+      responsiveObject.base ??
+      responsiveObject.lg ??
+      defaultValue ??
+      Object.values(responsiveObject).find(value => value !== undefined)!
+    );
   };
 
   const getSpacing = (size: keyof typeof RESPONSIVE_SPACING) =>

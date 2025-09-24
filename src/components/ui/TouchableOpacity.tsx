@@ -1,18 +1,33 @@
 // src/components/ui/TouchableOpacity.tsx
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-// Optional haptics import for mobile devices
+
+// Optional haptics import for mobile devices - using dynamic import to avoid Vite scanning
 let Haptics: any = null;
-try {
-  Haptics = require('@capacitor/haptics').Haptics;
-} catch (e) {
-  // Haptics not available, will use fallback
-  Haptics = {
-    impact: () => Promise.resolve(),
-    selection: () => Promise.resolve(),
-    notification: () => Promise.resolve()
-  };
-}
+
+// Initialize haptics lazily to avoid dependency scanning issues
+const initializeHaptics = async () => {
+  if (Haptics) return Haptics;
+  
+  try {
+    // Only try to load haptics if we're in a mobile environment
+    if (typeof window !== 'undefined' && 'ontouchstart' in window) {
+      const hapticsModule = await import('@capacitor/haptics');
+      Haptics = hapticsModule.Haptics;
+    } else {
+      throw new Error('Not in mobile environment');
+    }
+  } catch (e) {
+    // Haptics not available, will use fallback
+    Haptics = {
+      impact: () => Promise.resolve(),
+      selection: () => Promise.resolve(),
+      notification: () => Promise.resolve()
+    };
+  }
+  
+  return Haptics;
+};
 
 interface TouchableOpacityProps {
   children: React.ReactNode;
@@ -73,27 +88,29 @@ export const TouchableOpacity: React.FC<TouchableOpacityProps> = ({
       if (!hapticFeedback) return;
 
       try {
+        const haptics = await initializeHaptics();
+        
         switch (type) {
           case 'light':
-            await Haptics.impact({ style: 'light' });
+            await haptics.impact({ style: 'light' });
             break;
           case 'medium':
-            await Haptics.impact({ style: 'medium' });
+            await haptics.impact({ style: 'medium' });
             break;
           case 'heavy':
-            await Haptics.impact({ style: 'heavy' });
+            await haptics.impact({ style: 'heavy' });
             break;
           case 'success':
-            await Haptics.notification({ type: 'success' });
+            await haptics.notification({ type: 'success' });
             break;
           case 'error':
-            await Haptics.notification({ type: 'error' });
+            await haptics.notification({ type: 'error' });
             break;
           case 'warning':
-            await Haptics.notification({ type: 'warning' });
+            await haptics.notification({ type: 'warning' });
             break;
           default:
-            await Haptics.impact({ style: 'light' });
+            await haptics.impact({ style: 'light' });
         }
       } catch (error) {
         console.warn('Haptic feedback not available:', error);

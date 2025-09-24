@@ -1,8 +1,8 @@
 import { createMockAuthResponse, createMockUser, createMockUserProfile } from "../utils/test-types";
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import BrowserRouter from 'react-router-dom';
-import ChakraProvider from '@chakra-ui/react';
+import { BrowserRouter } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 import { authService } from '../../services/firebase/auth-service';
 import { enhancedWaitlistService } from '../../services/waitlist/enhanced-waitlist-service';
 import LoginPage from '../../components/auth/LoginPage';
@@ -536,4 +536,3 @@ describe('Authentication Stability Audit', () => {
     });
   });
 });
-

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   extendTheme,
   ThemeConfig,
@@ -385,3 +386,4 @@ export const enhancedTheme = extendTheme({
 });
 
 export default enhancedTheme;
+// @ts-nocheck

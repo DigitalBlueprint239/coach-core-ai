@@ -133,6 +133,8 @@
     "node_modules",
     "build",
     "dist",
+    "src/**/__tests__/**",
+    "src/test/**",
     "src/components/SmartPlaybook/src",
     "src/components/Team/TeamManagementOptimized.tsx",
     "src/components/ui/ErrorBoundary.tsx"

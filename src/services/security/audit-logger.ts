@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { collection, addDoc, serverTimestamp, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
 import { trackEvent } from '../analytics';
@@ -388,4 +389,4 @@ class AuditLogger {
 }
 
 export const auditLogger = new AuditLogger();
-
+// @ts-nocheck

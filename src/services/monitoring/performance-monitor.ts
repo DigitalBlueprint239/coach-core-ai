@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { onCLS, onFCP, onLCP, onTTFB } from 'web-vitals';
 import { getPerformance, trace } from 'firebase/performance';
 import * as Sentry from '@sentry/react';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ChakraProvider from '@chakra-ui/react';
-import BrowserRouter from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
+import { BrowserRouter } from 'react-router-dom';
 import EnhancedWaitlistForm from '../Waitlist/EnhancedWaitlistForm';
 
 // Mock Firebase
@@ -202,5 +202,4 @@ describe('EnhancedWaitlistForm', () => {
     });
   });
 });
-
 

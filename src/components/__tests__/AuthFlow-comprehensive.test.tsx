@@ -1,12 +1,14 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ChakraProvider from '@chakra-ui/react';
-import BrowserRouter from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { vi } from 'vitest';
+import type { User as FirebaseUser } from 'firebase/auth';
+import type { UserProfile } from '../../types/user';
 import Login from '../../features/auth/Login';
-import SignUp from '../../features/auth/SignUp';
-import AuthProvider from '../../components/AuthProvider';
+import SignUp from '../../features/auth/Signup';
+import { AuthProvider } from '../../components/AuthProvider';
 import { authService } from '../../services/firebase/auth-service';
 
 // Mock Firebase Auth
@@ -85,17 +87,26 @@ describe('Authentication Flow - Comprehensive Tests', () => {
     });
 
     it('should handle successful email/password login', async () => {
-      const mockUser = {
+      const mockUser: FirebaseUser = {
         uid: 'test-uid',
         email: 'test@example.com',
         displayName: 'Test User'
-      };
+      } as unknown as FirebaseUser;
 
-      const mockProfile = {
-        id: 'test-uid',
+      const mockProfile: UserProfile = {
+        uid: 'test-uid',
         email: 'test@example.com',
         displayName: 'Test User',
-        subscription: { plan: 'free', status: 'active' }
+        createdAt: new Date(),
+        lastLoginAt: new Date(),
+        isEmailVerified: true,
+        subscription: 'free',
+        subscriptionStatus: 'active',
+        usage: { playsGeneratedThisMonth: 0, teamsCreated: 0 },
+        preferences: { sport: 'football', timezone: 'UTC', notifications: { email: true, push: false, sms: false, marketing: false, updates: true, reminders: true }, theme: 'auto' },
+        teams: [],
+        role: 'coach',
+        permissions: [],
       };
 
       vi.mocked(authService.signIn).mockResolvedValue({
@@ -152,17 +163,26 @@ describe('Authentication Flow - Comprehensive Tests', () => {
     });
 
     it('should handle Google sign in', async () => {
-      const mockUser = {
+      const mockUser: FirebaseUser = {
         uid: 'google-uid',
         email: 'test@gmail.com',
         displayName: 'Google User'
-      };
+      } as unknown as FirebaseUser;
 
-      const mockProfile = {
-        id: 'google-uid',
+      const mockProfile: UserProfile = {
+        uid: 'google-uid',
         email: 'test@gmail.com',
         displayName: 'Google User',
-        subscription: { plan: 'free', status: 'active' }
+        createdAt: new Date(),
+        lastLoginAt: new Date(),
+        isEmailVerified: true,
+        subscription: 'free',
+        subscriptionStatus: 'active',
+        usage: { playsGeneratedThisMonth: 0, teamsCreated: 0 },
+        preferences: { sport: 'football', timezone: 'UTC', notifications: { email: true, push: false, sms: false, marketing: false, updates: true, reminders: true }, theme: 'auto' },
+        teams: [],
+        role: 'coach',
+        permissions: [],
       };
 
       vi.mocked(authService.signInWithGoogle).mockResolvedValue({
@@ -526,5 +546,3 @@ describe('Authentication Flow - Comprehensive Tests', () => {
     });
   });
 });
-
-

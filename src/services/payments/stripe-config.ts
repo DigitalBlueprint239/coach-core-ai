@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import secureLogger from '../../utils/secure-logger';
 

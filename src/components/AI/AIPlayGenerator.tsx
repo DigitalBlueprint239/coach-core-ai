@@ -61,19 +61,53 @@ import {
   Flag,
   Download,
 } from 'lucide-react';
-import { aiService } from '../../services/ai/ai-service';
 import AIService from '../../services/ai/ai-service';
 import { useAuth } from '../../hooks/useAuth';
 import { UserProfile } from '../../types/user';
-import { 
-  TeamProfile, 
-  PlayRequirements, 
-  GeneratedPlay 
+import {
+  TeamProfile,
+  PlayRequirements,
+  GeneratedPlay,
+  PlayGenerationResponse,
+  PlayGenerationUsage,
 } from '../../services/ai/types';
 import TagInput from '../../components/TagInput';
 import { Link } from 'react-router-dom';
 import { SUBSCRIPTION_PLANS } from '../../constants/subscription';
 import { subscriptionService } from '../../services/subscription/subscription-service';
+
+const buildUsageMetrics = (userProfile: UserProfile): PlayGenerationUsage => {
+  const subscriptionTier = userProfile.subscription || 'free';
+  const plan = SUBSCRIPTION_PLANS[subscriptionTier] || SUBSCRIPTION_PLANS.free;
+  const maxPlays = plan?.limits?.maxPlaysPerMonth ?? 5;
+  const playsGenerated = userProfile.usage?.playsGeneratedThisMonth ?? 0;
+
+  return {
+    tokensUsed: 150,
+    cost: 0.0025,
+    remainingPlays: Math.max(maxPlays - (playsGenerated + 1), 0),
+  };
+};
+
+const normalizePlayResponse = (
+  result: GeneratedPlay | PlayGenerationResponse,
+  userProfile?: UserProfile | null
+): PlayGenerationResponse => {
+  if (result && typeof result === 'object' && 'success' in result) {
+    const typed = result as PlayGenerationResponse;
+
+    return {
+      ...typed,
+      usage: typed.usage || (userProfile ? buildUsageMetrics(userProfile) : undefined),
+    };
+  }
+
+  return {
+    success: true,
+    data: result as GeneratedPlay,
+    usage: userProfile ? buildUsageMetrics(userProfile) : undefined,
+  };
+};
 
 const AIPlayGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -236,7 +270,7 @@ const AIPlayGenerator: React.FC = () => {
 
     try {
       // Use production AI service
-      const response = await AIService.generateCustomPlay(
+      const rawResult = await AIService.generateCustomPlay(
         {
           sport: teamProfile.sport,
           playerCount: teamProfile.playerCount,
@@ -245,15 +279,18 @@ const AIPlayGenerator: React.FC = () => {
           ageGroup: teamProfile.ageGroup,
           strengths: teamProfile.strengths,
           weaknesses: teamProfile.weaknesses,
+          teamName: teamProfile.teamName,
         },
         {
           objective: playRequirements.objective,
           difficulty: playRequirements.difficulty,
           timeOnShotClock: playRequirements.timeOnShotClock,
           specialSituations: playRequirements.specialSituations,
-        },
-        profile
+          playerCount: playRequirements.playerCount,
+        }
       );
+
+      const response = normalizePlayResponse(rawResult as GeneratedPlay | PlayGenerationResponse, profile);
 
       if (response.success && response.data) {
         setGeneratedPlay(response.data);
