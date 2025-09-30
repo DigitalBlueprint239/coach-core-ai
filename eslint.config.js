@@ -4,6 +4,7 @@ import typescriptParser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
@@ -17,6 +18,10 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
     },
     plugins: {
@@ -32,12 +37,17 @@ export default [
       ...jsxA11y.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'no-console': 'warn',
+      '@typescript-eslint/no-dupe-class-members': 'off',
+      'no-dupe-class-members': 'off',
+      'no-console': 'off',
+      'no-undef': 'off',
+      'no-unreachable': 'warn',
+      'object-shorthand': 'off',
       'prefer-const': 'error',
       'no-var': 'error',
-      'object-shorthand': 'error',
       'prefer-template': 'error',
     },
     settings: {

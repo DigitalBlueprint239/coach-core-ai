@@ -108,7 +108,7 @@ class UserBehaviorLogger {
   // Set user ID for logging
   setUserId(userId: string | null) {
     this.userId = userId;
-    secureLogger.info('User ID set for behavior logging', { userId });
+    secureLogger.info('User ID set for behavior logging', { userId: userId ?? undefined });
   }
 
   // Enable/disable logging

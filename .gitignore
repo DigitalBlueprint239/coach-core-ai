@@ -16,6 +16,7 @@ build/
 dist/
 .next/
 out/
+stats.html
 
 # Runtime data
 pids

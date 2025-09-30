@@ -25,8 +25,6 @@ import {
   TabPanel,
   Divider,
   Icon,
-  InputGroup,
-  InputRightElement,
   Checkbox,
   Link as ChakraLink,
 } from '@chakra-ui/react';

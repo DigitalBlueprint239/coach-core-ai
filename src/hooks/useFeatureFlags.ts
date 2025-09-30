@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { featureFlagService, FeatureAccess, BetaUser, BetaFeedback } from '../services/feature-flags/feature-flag-service';
 import { useAuth } from './useAuth';
 import secureLogger from '../utils/secure-logger';
@@ -196,7 +196,10 @@ export function useBetaEnrollment() {
       setIsEnrolling(true);
       setEnrollmentError(null);
 
-      featureFlagService.addBetaUser(userData);
+      featureFlagService.addBetaUser({
+        ...userData,
+        status: 'active',
+      });
       
       secureLogger.info('User enrolled as beta user', { 
         userId: userData.userId, 

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Waitlist - Coach Core AI</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://coach-core-ai.web.app/waitlist">
+    <script>
+        // Prevent main app from loading
+        window.addEventListener('DOMContentLoaded', function() {
+            // Remove any main app scripts that might be injected
+            const scripts = document.querySelectorAll('script[src*="js/"]');
+            scripts.forEach(script => {
+                if (!script.src.includes('firebase') && !script.src.includes('gstatic')) {
+                    script.remove();
+                }
+            });
+        });
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Gradient waves animation */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            animation: wave 3s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(0) scaleY(1); }
+            50% { transform: translateX(-25%) scaleY(1.1); }
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .hero-section {
+            margin-bottom: 30px;
+        }
+
+        .tagline-container {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            position: absolute;
+        }
+
+        .tagline.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .social-proof {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .proof-item {
+            text-align: center;
+        }
+
+        .proof-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .proof-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #a0aec0;
+            background: white;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .value-proposition {
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .value-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .value-item {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .value-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .value-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .value-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .psychological-triggers {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .trigger-item {
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .trigger-highlight {
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .features {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .feature:hover {
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="particles" id="particles"></div>
+    <div class="wave"></div>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="logo">Coach Core AI</div>
+            
+            <div class="tagline-container">
+                <div class="tagline active" data-tagline="0">Transform Your Coaching with AI</div>
+                <div class="tagline" data-tagline="1">Save 10+ Hours Per Week</div>
+                <div class="tagline" data-tagline="2">Scale Your Practice Effortlessly</div>
+                <div class="tagline" data-tagline="3">Built by Coaches, for Coaches</div>
+            </div>
+
+            <div class="social-proof">
+                <div class="proof-item">
+                    <span class="proof-number" id="waitlistCount">500+</span>
+                    <span class="proof-label">Coaches Waiting</span>
+                </div>
+                <div class="proof-item">
+                    <span class="proof-number">50+</span>
+                    <span class="proof-label">Countries</span>
+                </div>
+                <div class="proof-item">
+                    <span class="proof-number">95%</span>
+                    <span class="proof-label">Time Saved</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="value-proposition">
+            <h2 class="value-title">Why Coach Core?</h2>
+            <div class="value-grid">
+                <div class="value-item">
+                    <span class="value-icon">⚡</span>
+                    <div class="value-heading">AI-Powered Planning</div>
+                    <div class="value-description">Generate personalized practice plans in minutes, not hours</div>
+                </div>
+                <div class="value-item">
+                    <span class="value-icon">🎯</span>
+                    <div class="value-heading">Smart Analytics</div>
+                    <div class="value-description">Track progress and optimize performance with data insights</div>
+                </div>
+                <div class="value-item">
+                    <span class="value-icon">🤝</span>
+                    <div class="value-heading">Client Management</div>
+                    <div class="value-description">Streamline scheduling, communication, and progress tracking</div>
+                </div>
+                <div class="value-item">
+                    <span class="value-icon">📈</span>
+                    <div class="value-heading">Scale Your Practice</div>
+                    <div class="value-description">Grow from 1-on-1 to group coaching with ease</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="psychological-triggers">
+            <div class="trigger-item">
+                <span class="trigger-highlight">Limited Early Access</span> - Only 100 spots available
+            </div>
+            <div class="trigger-item">
+                <span class="trigger-highlight">Exclusive Pricing</span> - 50% off for early adopters
+            </div>
+            <div class="trigger-item">
+                <span class="trigger-highlight">Priority Support</span> - Direct access to our team
+            </div>
+        </div>
+        
+        <form id="waitlistForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="coach@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="John Smith">
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Your Role</label>
+                <select id="role" name="role" required>
+                    <option value="">Select your role</option>
+                    <option value="head-coach">Head Coach</option>
+                    <option value="assistant-coach">Assistant Coach</option>
+                    <option value="parent">Parent</option>
+                    <option value="player">Player</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="referringCoach">Referring Coach (Optional)</label>
+                <input type="text" id="referringCoach" name="referringCoach" placeholder="Who referred you to Coach Core?">
+            </div>
+
+            <div class="form-group">
+                <label for="coachingChallenge">Biggest Coaching Challenge</label>
+                <textarea id="coachingChallenge" name="coachingChallenge" rows="3" placeholder="What's your biggest challenge as a coach? (e.g., client scheduling, progress tracking, practice planning)"></textarea>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">
+                <span class="loading">
+                    <span class="spinner"></span>
+                    Joining...
+                </span>
+                <span class="normal">Join Waitlist</span>
+            </button>
+        </form>
+        
+        <div class="success" id="successMessage">
+            <strong>Success!</strong> You're on the list! We'll notify you when Coach Core AI launches.
+        </div>
+        
+        <div class="error" id="errorMessage">
+            <strong>Error:</strong> <span id="errorText"></span>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div>
+                    <strong>Save Time</strong><br>
+                    Generate practice plans in minutes, not hours
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <div>
+                    <strong>Better Strategy</strong><br>
+                    AI-powered play design and game planning
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <div>
+                    <strong>Track Progress</strong><br>
+                    Monitor player development and team performance
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2iWL0UkuLJYpr-II9IpwGWDOMnLcfq_c",
+            authDomain: "coach-core-ai.firebaseapp.com",
+            projectId: "coach-core-ai",
+            storageBucket: "coach-core-ai.firebasestorage.app",
+            messagingSenderId: "384023691487",
+            appId: "1:384023691487:web:931094d7a0da903d6e696a",
+            measurementId: "G-02HW7QDJLY"
+        };
+
+        // Initialize Firebase
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Animated taglines
+        const taglines = document.querySelectorAll('.tagline');
+        let currentTagline = 0;
+
+        function rotateTaglines() {
+            taglines.forEach(tagline => tagline.classList.remove('active'));
+            currentTagline = (currentTagline + 1) % taglines.length;
+            taglines[currentTagline].classList.add('active');
+        }
+
+        setInterval(rotateTaglines, 3000);
+
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Update waitlist count (simulate real-time updates)
+        function updateWaitlistCount() {
+            const countElement = document.getElementById('waitlistCount');
+            const currentCount = parseInt(countElement.textContent);
+            const newCount = currentCount + Math.floor(Math.random() * 3);
+            countElement.textContent = newCount + '+';
+        }
+
+        setInterval(updateWaitlistCount, 10000); // Update every 10 seconds
+
+        const CHECK_EMAIL_URL = `https://${firebaseConfig.projectId ? `us-central1-${firebaseConfig.projectId}` : 'us-central1-coach-core-ai'}.cloudfunctions.net/checkWaitlistEmail`;
+
+        async function isDuplicateEmail(email) {
+            try {
+                const response = await fetch(CHECK_EMAIL_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Duplicate check failed with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                return !!data.exists;
+            } catch (error) {
+                console.warn('Waitlist duplicate check failed; allowing submission by default.', error);
+                return false;
+            }
+        }
+
+        // Form handling
+        const form = document.getElementById('waitlistForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = submitBtn.querySelector('.loading');
+        const normal = submitBtn.querySelector('.normal');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const role = document.getElementById('role').value;
+            const referringCoach = document.getElementById('referringCoach').value.trim();
+            const coachingChallenge = document.getElementById('coachingChallenge').value.trim();
+
+            // Show loading state
+            submitBtn.disabled = true;
+            loading.style.display = 'inline';
+            normal.style.display = 'none';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            try {
+                console.log('Attempting to add to waitlist:', {
+                    email: email.toLowerCase(),
+                    name: name,
+                    role: role,
+                    referringCoach: referringCoach || null,
+                    coachingChallenge: coachingChallenge || null,
+                    source: 'waitlist-page'
+                });
+
+                // Check if email already exists
+                const isDuplicate = await isDuplicateEmail(email.toLowerCase());
+                if (isDuplicate) {
+                    throw new Error('This email is already on our waitlist!');
+                }
+
+                // Add to waitlist
+                const docRef = await addDoc(collection(db, 'waitlist'), {
+                    email: email.toLowerCase(),
+                    name: name,
+                    role: role,
+                    referringCoach: referringCoach || null,
+                    coachingChallenge: coachingChallenge || null,
+                    source: 'waitlist-page',
+                    createdAt: serverTimestamp(),
+                    status: 'pending'
+                });
+                
+                console.log('Successfully added to waitlist with ID:', docRef.id);
+
+                // Show success
+                successMessage.style.display = 'block';
+                form.reset();
+                
+            } catch (error) {
+                console.error('Error adding to waitlist:', error);
+                errorText.textContent = error.message || 'Something went wrong. Please try again.';
+                errorMessage.style.display = 'block';
+            } finally {
+                // Hide loading state
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+                normal.style.display = 'inline';
+            }
+        });
+    </script>
+</body>
+</html>

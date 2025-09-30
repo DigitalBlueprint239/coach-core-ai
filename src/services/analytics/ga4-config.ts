@@ -74,6 +74,7 @@ export interface GA4UserProperties {
   team_members?: number;
   ai_generations?: number;
   storage_used?: number;
+  [key: string]: string | number | boolean | undefined;
 }
 
 // Funnel events
@@ -207,6 +208,34 @@ export class GA4AnalyticsService {
       this.trackEvent(event);
     } catch (error) {
       secureLogger.error('Failed to track signup completed', { error });
+    }
+  }
+
+  trackSignupSubmitted(params: {
+    email: string;
+    source?: string;
+    user_id?: string;
+    event_category?: string;
+    event_label?: string;
+  }): void {
+    if (!this.isInitialized) return;
+
+    try {
+      const event: GA4Event = {
+        event_name: 'waitlist_signup_submitted',
+        event_category: params.event_category || 'engagement',
+        event_label: params.event_label || params.source || 'waitlist',
+        custom_parameters: {
+          email: params.email,
+          source: params.source,
+          user_id: params.user_id,
+          timestamp: new Date().toISOString(),
+        },
+      };
+
+      this.trackEvent(event);
+    } catch (error) {
+      secureLogger.error('Failed to track signup submitted', { error, params });
     }
   }
 
@@ -536,6 +565,3 @@ export class GA4AnalyticsService {
 export const ga4Service = new GA4AnalyticsService();
 
 // Export types
-export type { GA4Event, GA4UserProperties };
-
-export default ga4Service;

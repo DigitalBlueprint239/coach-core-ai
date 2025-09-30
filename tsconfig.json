@@ -3,7 +3,7 @@
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
     // "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
     // "tsBuildInfoFile": "./.tsbuildinfo",              /* Specify the path to .tsbuildinfo incremental compilation file. */
@@ -16,9 +16,10 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "es6"
+      "es2020"
     ],
     "jsx": "react-jsx",                                      /* Specify what JSX code is generated. */
+    "jsxImportSource": "@emotion/react",
     // "libReplacement": true,                           /* Enable lib replacement. */
     // "experimentalDecorators": true,                   /* Enable experimental support for legacy experimental decorators. */
     // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
@@ -126,8 +127,32 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/App.tsx",
+    "src/index.tsx",
+    "src/emotion-setup.ts",
+    "src/hooks/useAuth.ts",
+    "src/pages/**/*.ts",
+    "src/pages/**/*.tsx",
+    "src/providers/**/*.ts",
+    "src/providers/**/*.tsx",
+    "src/components/Admin/WaitlistAdminDashboard.tsx",
+    "src/components/Auth/ProtectedRoute.tsx",
+    "src/components/Auth/LoginPage.tsx",
+    "src/components/Waitlist/**/*.ts",
+    "src/components/Waitlist/**/*.tsx",
+    "src/services/firebase/auth-service.ts",
+    "src/services/firebase/firebase-config.ts",
+    "src/services/waitlist/simple-waitlist-service.ts",
+    "src/services/waitlist/waitlist-service.ts",
+    "src/services/waitlist/waitlist-duplicate-checker.ts",
+    "src/services/analytics/analytics-events.ts",
+    "src/services/analytics/ga4-config.ts",
+    "src/services/monitoring/monitoring-lite.ts",
+    "src/types/**/*.ts",
+    "src/utils/firestore-sanitization.ts",
+    "src/utils/validation.ts",
+    "src/utils/error-handling.ts",
+    "src/tests/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -135,6 +160,7 @@
     "dist",
     "src/components/SmartPlaybook/src",
     "src/components/Team/TeamManagementOptimized.tsx",
-    "src/components/ui/ErrorBoundary.tsx"
+    "src/components/ui/ErrorBoundary.tsx",
+    "src/coach-core-ai/**"
   ]
 }

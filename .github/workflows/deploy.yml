@@ -31,6 +31,28 @@ jobs:
     - name: 📦 Install dependencies
       run: npm ci
       
+    - name: 🧹 Lint
+      run: npm run lint
+
+    - name: 🧪 Typecheck
+      run: npm run typecheck
+
+    - name: 📋 Unit tests (staging config)
+      env:
+        VITE_ENVIRONMENT: staging
+      run: npm run test:core
+
+    - name: ☕ Setup Java for emulators
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: 🔄 Emulator integration tests
+      env:
+        VITE_ENVIRONMENT: staging
+      run: npm run test:integration:firebase
+
     - name: 🔍 Verify package.json and firebase.json
       run: |
         if [ ! -f "package.json" ]; then
@@ -100,4 +122,3 @@ jobs:
           echo "- **Build Size**: $(du -sh dist | cut -f1)" >> $GITHUB_STEP_SUMMARY
           echo "- **Files Count**: $(find dist -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
         fi
-

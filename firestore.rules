@@ -1,114 +1,190 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Waitlist - strict write-only rules for email collection
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        request.auth.token.email in [
+          'admin@coachcore.ai',
+          'jones@coachcore.ai',
+          'support@coachcore.ai',
+          'digitalblueprint239@gmail.com'
+        ];
+    }
+
+    function teamDoc(teamId) {
+      return /databases/$(database)/documents/teams/$(teamId);
+    }
+
+    function teamExists(teamId) {
+      return exists(teamDoc(teamId));
+    }
+
+    function getTeam(teamId) {
+      return get(teamDoc(teamId));
+    }
+
+    function isTeamMember(teamId) {
+      return isAuthenticated() &&
+        teamExists(teamId) &&
+        (getTeam(teamId).data.headCoachId == request.auth.uid ||
+         request.auth.uid in getTeam(teamId).data.assistantCoachIds);
+    }
+
+    function isTeamHeadCoach(teamId) {
+      return isAuthenticated() &&
+        teamExists(teamId) &&
+        getTeam(teamId).data.headCoachId == request.auth.uid;
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() > 3 &&
+        email.size() <= 200 &&
+        email.matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$');
+    }
+
+    function hasOnlyAllowedWaitlistKeys(data) {
+      return data.keys().hasOnly([
+        'email',
+        'source',
+        'createdAt',
+        'timestamp',
+        'status',
+        'name',
+        'role',
+        'referringCoach',
+        'coachingChallenge',
+        'ipAddress',
+        'userAgent',
+        'batchProcessed',
+        'batchTimestamp',
+        'metadata',
+        'immediateAccess',
+        'utmSource',
+        'utmMedium',
+        'utmCampaign',
+        'utmId',
+        'utmTerm',
+        'utmContent',
+        'notes'
+      ]);
+    }
+
+    function isValidWaitlistSubmission(data) {
+      let hasCreatedAt = 'createdAt' in data;
+      let hasTimestamp = 'timestamp' in data;
+
+      return hasOnlyAllowedWaitlistKeys(data) &&
+        isValidEmail(data.email) &&
+        (!('source' in data) || (data.source is string && data.source.size() <= 100)) &&
+        (hasCreatedAt || hasTimestamp) &&
+        (!hasCreatedAt || data.createdAt is timestamp) &&
+        (!hasTimestamp || data.timestamp is timestamp) &&
+        (!('status' in data) || data.status == null || (data.status is string && data.status.size() <= 50)) &&
+        (!('name' in data) || data.name == null || (data.name is string && data.name.size() <= 200)) &&
+        (!('role' in data) || data.role == null || (data.role is string && data.role.size() <= 100)) &&
+        (!('referringCoach' in data) || data.referringCoach == null || (data.referringCoach is string && data.referringCoach.size() <= 200)) &&
+        (!('coachingChallenge' in data) || data.coachingChallenge == null || (data.coachingChallenge is string && data.coachingChallenge.size() <= 1000)) &&
+        (!('ipAddress' in data) || data.ipAddress == null || (data.ipAddress is string && data.ipAddress.size() <= 100)) &&
+        (!('userAgent' in data) || data.userAgent == null || (data.userAgent is string && data.userAgent.size() <= 1024)) &&
+        (!('batchProcessed' in data) || data.batchProcessed is bool) &&
+        (!('batchTimestamp' in data) || data.batchTimestamp is timestamp) &&
+        (!('metadata' in data) || data.metadata == null || data.metadata is map) &&
+        (!('immediateAccess' in data) || data.immediateAccess is bool) &&
+        (!('utmSource' in data) || data.utmSource == null || (data.utmSource is string && data.utmSource.size() <= 100)) &&
+        (!('utmMedium' in data) || data.utmMedium == null || (data.utmMedium is string && data.utmMedium.size() <= 100)) &&
+        (!('utmCampaign' in data) || data.utmCampaign == null || (data.utmCampaign is string && data.utmCampaign.size() <= 150)) &&
+        (!('utmId' in data) || data.utmId == null || (data.utmId is string && data.utmId.size() <= 100)) &&
+        (!('utmTerm' in data) || data.utmTerm == null || (data.utmTerm is string && data.utmTerm.size() <= 100)) &&
+        (!('utmContent' in data) || data.utmContent == null || (data.utmContent is string && data.utmContent.size() <= 150)) &&
+        (!('notes' in data) || data.notes == null || (data.notes is string && data.notes.size() <= 1000));
+    }
+
     match /waitlist/{docId} {
-      allow create: if request.resource.data.email is string
-        && request.resource.data.email.size() < 200;
-      allow read, update, delete: if false;
+      allow create: if isValidWaitlistSubmission(request.resource.data);
+      allow read: if isAdmin();
+      allow update, delete: if false;
     }
-    
-    // Users can read/write their own profile
-    // Allow creation of new user profiles for authentication
+
     match /users/{userId} {
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow read, write, update: if request.auth != null && request.auth.uid == userId;
-      // Allow reading other user profiles for team management (display names only)
-      allow read: if request.auth != null && 
-        (request.auth.uid == userId || 
-         (resource.data.teamId != null &&
-          exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+      allow read: if isOwner(userId) || isAdmin() || (
+        isAuthenticated() &&
+        resource.data.teamId != null &&
+        teamExists(resource.data.teamId) &&
+        (getTeam(resource.data.teamId).data.headCoachId == request.auth.uid ||
+         request.auth.uid in getTeam(resource.data.teamId).data.assistantCoachIds)
+      );
+      allow write: if isOwner(userId);
     }
-    
-    // Teams - allow creation by authenticated users
+
     match /teams/{teamId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
-        (resource.data.headCoachId == request.auth.uid || 
-         request.auth.uid in resource.data.assistantCoachIds ||
-         // Allow access during team creation
-         !exists(resource.data));
+      allow create: if isAuthenticated();
+      allow read: if isTeamMember(teamId) || isTeamHeadCoach(teamId);
+      allow update, delete: if isTeamHeadCoach(teamId);
     }
-    
-    // Practice plans - team members can access
+
     match /practicePlans/{planId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // Plays - team members can access
+
     match /plays/{playId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // Player data - team members can access
+
     match /players/{playerId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // Attendance records - team members can access
+
     match /attendance/{recordId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // AI insights - team members can access
+
     match /aiInsights/{insightId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // Games - team members can access
+
     match /games/{gameId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // Assessments - team members can access
+
     match /assessments/{assessmentId} {
-      allow create: if request.auth != null;
-      allow read, write: if request.auth != null && 
+      allow create: if isAuthenticated();
+      allow read, write: if isAuthenticated() &&
         (resource.data.createdBy == request.auth.uid ||
-         (exists(/databases/$(database)/documents/teams/$(resource.data.teamId)) &&
-          (get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.headCoachId == request.auth.uid ||
-           request.auth.uid in get(/databases/$(database)/documents/teams/$(resource.data.teamId)).data.assistantCoachIds)));
+         (resource.data.teamId != null && isTeamMember(resource.data.teamId)));
     }
-    
-    // Staging feedback collection - allow anyone to submit feedback
+
     match /staging_feedback/{feedbackId} {
-      allow create: if true; // Anyone can submit feedback
-      allow read, update, delete: if isAdmin(); // Only admins can read/update/delete
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
     }
-    
-    // Default deny all
+
     match /{document=**} {
       allow read, write: if false;
     }

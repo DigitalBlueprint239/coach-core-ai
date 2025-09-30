@@ -17,6 +17,10 @@ const {initializeApp} = require("firebase-admin/app");
 const {getFirestore, FieldValue} = require("firebase-admin/firestore");
 const {logger} = require("firebase-functions");
 
+// Import waitlist notification functions
+const waitlistNotifications = require('./src/waitlist-notifications');
+const dripCampaign = require('./src/drip-campaign');
+
 // Initialize Firebase Admin
 initializeApp();
 
@@ -271,3 +275,15 @@ exports.healthCheck = onRequest(async (req, res) => {
     });
   }
 });
+
+// ============================================
+// WAITLIST NOTIFICATION FUNCTIONS
+// ============================================
+
+// Export waitlist notification functions
+exports.onWaitlistSignup = waitlistNotifications.onWaitlistSignup;
+exports.getWaitlistStats = waitlistNotifications.getWaitlistStats;
+exports.checkWaitlistEmailCallable = waitlistNotifications.checkWaitlistEmailCallable;
+exports.checkWaitlistEmail = waitlistNotifications.checkWaitlistEmail;
+exports.scheduleWaitlistDrip = dripCampaign.scheduleWaitlistDrip;
+exports.processScheduledEmails = dripCampaign.processScheduledEmails;

@@ -6,7 +6,7 @@ import {
   OAuthProvider,
 } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getStorage, connectStorageEmulator, type FirebaseStorage } from 'firebase/storage';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 
 // Firebase configuration - support both Vite and Create React App environment variables
@@ -56,7 +56,15 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
+let storageInstance: FirebaseStorage | null = null;
+
+try {
+  storageInstance = getStorage(app);
+} catch (error) {
+  console.warn('Firebase Storage unavailable, continuing without storage support.', error);
+}
+
+export const storage = storageInstance;
 export const functions = getFunctions(app);
 
 // Initialize Auth Providers
@@ -83,7 +91,9 @@ if (isDev && useEmulator) {
   try {
     connectAuthEmulator(auth, 'http://localhost:9099');
     connectFirestoreEmulator(db, 'localhost', 8080);
-    connectStorageEmulator(storage, 'localhost', 9199);
+    if (storageInstance) {
+      connectStorageEmulator(storageInstance, 'localhost', 9199);
+    }
     connectFunctionsEmulator(functions, 'localhost', 5001);
     console.log('Connected to Firebase emulators');
   } catch (error) {

@@ -2,9 +2,20 @@ import { errorHandler } from '../../utils/error-handling';
 // Claude configuration - inline for now
 const claudeConfig = {
   apiKey: process.env.REACT_APP_CLAUDE_API_KEY || '',
-  model: 'claude-3-sonnet-20240229',
-  maxTokens: 4000,
-  temperature: 0.7,
+  baseUrl:
+    process.env.REACT_APP_CLAUDE_BASE_URL ||
+    process.env.VITE_CLAUDE_BASE_URL ||
+    'https://api.anthropic.com/v1/messages',
+  defaultModel:
+    process.env.REACT_APP_CLAUDE_MODEL ||
+    process.env.VITE_CLAUDE_MODEL ||
+    'claude-3-sonnet-20240229',
+  defaultOptions: {
+    maxTokens: Number(process.env.REACT_APP_CLAUDE_MAX_TOKENS || 4000),
+    temperature: Number(process.env.REACT_APP_CLAUDE_TEMPERATURE || 0.7),
+    topP: Number(process.env.REACT_APP_CLAUDE_TOP_P || 0.9),
+    topK: Number(process.env.REACT_APP_CLAUDE_TOP_K || 50),
+  },
 };
 
 // Claude API Types

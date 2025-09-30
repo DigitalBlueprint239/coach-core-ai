@@ -1,4 +1,8 @@
 {
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs22"
+  },
   "hosting": [
     {
       "target": "coach-core-ai-prod",
@@ -9,6 +13,10 @@
         "**/node_modules/**"
       ],
       "rewrites": [
+        {
+          "source": "/waitlist",
+          "destination": "/waitlist.html"
+        },
         {
           "source": "**",
           "destination": "/index.html"

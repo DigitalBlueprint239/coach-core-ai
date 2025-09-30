@@ -1,3 +1,28 @@
+export type SubscriptionTierName = 'free' | 'starter' | 'professional' | 'enterprise' | 'premium';
+
+export interface UserSubscription {
+  stripeCustomerId: string;
+  subscriptionId?: string;
+  subscriptionStatus: 'active' | 'canceled' | 'past_due' | 'trialing';
+  currentTier: SubscriptionTierName;
+  billing: {
+    paymentMethodId?: string;
+    lastPaymentDate?: Date;
+    nextBillingDate?: Date;
+    currency: string;
+  };
+  usage: {
+    aiGenerations: number;
+    resetDate: Date;
+    period: 'monthly';
+  };
+  specialPricing?: {
+    type: 'founding' | 'early_access' | 'beta';
+    discount: number;
+    validUntil?: Date;
+  };
+}
+
 export interface UserProfile {
   uid: string;
   email: string;
@@ -6,20 +31,21 @@ export interface UserProfile {
   createdAt: Date;
   lastLoginAt: Date;
   isEmailVerified: boolean;
-  
+
   // Subscription & Billing
   subscription: SubscriptionTier;
   subscriptionStatus: 'active' | 'canceled' | 'past_due' | 'trialing';
   subscriptionEndDate?: Date;
   stripeCustomerId?: string;
-  
+  subscriptionInfo?: UserSubscription;
+
   // Usage & Limits
   usage: {
     playsGeneratedThisMonth: number;
     teamsCreated: number;
     lastPlayGenerated?: Date;
   };
-  
+
   // Preferences
   preferences: {
     sport: 'football' | 'basketball' | 'soccer' | 'baseball';
@@ -27,17 +53,17 @@ export interface UserProfile {
     notifications: NotificationPreferences;
     theme: 'light' | 'dark' | 'auto';
   };
-  
+
   // Team Management
   teams: string[]; // Team IDs
   activeTeamId?: string;
-  
+
   // Permissions
   role: UserRole;
   permissions: Permission[];
 }
 
-export type SubscriptionTier = 'free' | 'premium' | 'enterprise';
+export type SubscriptionTier = 'free' | 'starter' | 'professional' | 'enterprise' | 'premium';
 
 export interface SubscriptionPlan {
   id: string;
@@ -56,7 +82,14 @@ export interface SubscriptionPlan {
   };
 }
 
-export type UserRole = 'user' | 'admin' | 'coach' | 'team-admin';
+export type UserRole =
+  | 'user'
+  | 'client'
+  | 'coach'
+  | 'assistant-coach'
+  | 'head-coach'
+  | 'team-admin'
+  | 'admin';
 
 export interface Permission {
   resource: string;
@@ -107,67 +140,79 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionTier, SubscriptionPlan> = {
     name: 'Free',
     price: 0,
     interval: 'month',
-    features: [
-      '5 AI plays per month',
-      'Basic team profile',
-      'Standard play templates',
-      'Email support'
-    ],
+    features: ['5 AI plays per month', 'Basic dashboards', 'Community support'],
     limits: {
-      maxPlaysPerMonth: 5,
+      maxPlaysPerMonth: 10,
       maxTeams: 1,
       maxCollaborators: 2,
       aiFeatures: true,
       analytics: false,
       apiAccess: false,
       whiteLabel: false,
-    }
+    },
   },
-  premium: {
-    id: 'premium',
-    name: 'Premium',
+  starter: {
+    id: 'starter',
+    name: 'Starter',
     price: 19,
     interval: 'month',
-    features: [
-      'Unlimited AI plays',
-      'Advanced AI features',
-      'Team collaboration',
-      'Analytics dashboard',
-      'Priority support',
-      'Custom play templates'
-    ],
+    features: ['Unlimited team access', 'Practice planner', 'Email support'],
     limits: {
-      maxPlaysPerMonth: 1000,
-      maxTeams: 5,
-      maxCollaborators: 10,
+      maxPlaysPerMonth: 200,
+      maxTeams: 3,
+      maxCollaborators: 5,
       aiFeatures: true,
       analytics: true,
       apiAccess: false,
       whiteLabel: false,
-    }
+    },
+  },
+  professional: {
+    id: 'professional',
+    name: 'Professional',
+    price: 49,
+    interval: 'month',
+    features: ['Advanced analytics', 'Priority support', 'Custom branding'],
+    limits: {
+      maxPlaysPerMonth: 1000,
+      maxTeams: 10,
+      maxCollaborators: 20,
+      aiFeatures: true,
+      analytics: true,
+      apiAccess: false,
+      whiteLabel: true,
+    },
   },
   enterprise: {
     id: 'enterprise',
     name: 'Enterprise',
-    price: 49,
+    price: 149,
     interval: 'month',
-    features: [
-      'Everything in Premium',
-      'Multiple teams',
-      'Advanced analytics',
-      'API access',
-      'White-label options',
-      'Dedicated support',
-      'Custom integrations'
-    ],
+    features: ['Dedicated success manager', 'API access', 'Custom integrations'],
     limits: {
-      maxPlaysPerMonth: 10000,
-      maxTeams: 20,
+      maxPlaysPerMonth: 5000,
+      maxTeams: 50,
       maxCollaborators: 50,
       aiFeatures: true,
       analytics: true,
       apiAccess: true,
       whiteLabel: true,
-    }
-  }
+    },
+  },
+  premium: {
+    id: 'premium',
+    name: 'Premium',
+    price: 49,
+    interval: 'month',
+    features: ['Advanced analytics', 'Priority support', 'Custom branding'],
+    limits: {
+      maxPlaysPerMonth: 1000,
+      maxTeams: 10,
+      maxCollaborators: 20,
+      aiFeatures: true,
+      analytics: true,
+      apiAccess: false,
+      whiteLabel: true,
+    },
+  },
 };

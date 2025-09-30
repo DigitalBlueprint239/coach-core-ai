@@ -17,7 +17,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { StarIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { FeatureGate } from '../../hooks/useFeatureFlags';
+import BetaGate from './BetaGate';
 import { useBetaUser } from '../../hooks/useFeatureFlags';
 import secureLogger from '../../utils/secure-logger';
 
@@ -131,10 +131,7 @@ const BetaAccessRequired: React.FC = () => {
 // Feature-gated Play Designer component
 export const FeatureGatedPlayDesigner: React.FC = () => {
   return (
-    <FeatureGate
-      feature="playDesigner"
-      fallback={<BetaAccessRequired />}
-    >
+    <BetaGate featureKey="playDesigner" fallback={<BetaAccessRequired />}>
       {/* This would be the actual Play Designer component */}
       <Box p={6}>
         <VStack spacing={6} align="stretch">
@@ -164,7 +161,7 @@ export const FeatureGatedPlayDesigner: React.FC = () => {
           </Card>
         </VStack>
       </Box>
-    </FeatureGate>
+    </BetaGate>
   );
 };
 

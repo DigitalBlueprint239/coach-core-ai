@@ -1,15 +1,6 @@
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  query,
-  where,
-  getDocs,
-  writeBatch,
-  doc,
-} from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, writeBatch, doc } from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
-import { validateWaitlistEmail, RateLimiter } from '../../utils/validation';
+import { RateLimiter } from '../../utils/validation';
 import { errorHandler, FirebaseErrorHandler } from '../../utils/error-handling';
 import { trackUserAction, trackError } from '../monitoring';
 import { 
@@ -22,6 +13,7 @@ import { rateLimiter } from '../security/rate-limiter';
 import { auditLogger } from '../security/audit-logger';
 import { ValidationService } from '../security/validation-rules';
 import { createFirestoreHelper } from '../../utils/firestore-sanitization';
+import { isEmailOnWaitlist as checkWaitlistDuplicate } from './waitlist-duplicate-checker';
 
 // ============================================
 // CACHING SYSTEM FOR WAITLIST
@@ -86,11 +78,11 @@ class WaitlistBatchProcessor {
   private pendingEntries: PendingWaitlistEntry[] = [];
   private readonly BATCH_SIZE = 10;
   private readonly BATCH_TIMEOUT = 5000; // 5 seconds
-  private batchTimer: NodeJS.Timeout | null = null;
+  private batchTimer: ReturnType<typeof setTimeout> | null = null;
   private isProcessing = false;
 
   addEntry(email: string, metadata?: Partial<WaitlistEntry>): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const entry: PendingWaitlistEntry = {
         email,
         metadata,
@@ -250,13 +242,13 @@ export class OptimizedWaitlistService {
         await auditLogger.logFailedAction(
           'waitlist_submission',
           'waitlist',
+          'Rate limit exceeded',
           undefined,
           email,
-          'Rate limit exceeded',
           {
             email,
             source: metadata?.source,
-            retryAfter: rateLimitResult.retryAfter
+            retryAfter: rateLimitResult.retryAfter,
           },
           'medium'
         );
@@ -424,14 +416,7 @@ export class OptimizedWaitlistService {
         return true;
       }
 
-      // Check Firestore
-      const q = query(
-        collection(db, this.collectionName),
-        where('email', '==', sanitizedEmail)
-      );
-
-      const querySnapshot = await getDocs(q);
-      const isDuplicate = !querySnapshot.empty;
+      const isDuplicate = await checkWaitlistDuplicate(sanitizedEmail);
 
       // Update cache
       if (isDuplicate) {

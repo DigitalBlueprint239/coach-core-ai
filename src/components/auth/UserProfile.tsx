@@ -40,7 +40,8 @@ import {
   Edit,
   Crown,
 } from 'lucide-react';
-import authService, { UserProfile } from '../../services/firebase/auth-service';
+import { authService } from '../../services/firebase/auth-service';
+import type { UserProfile } from '../../types/user';
 
 interface UserProfileProps {
   profile: UserProfile;

@@ -1,6 +1,6 @@
 import { collection, addDoc, serverTimestamp, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebase-config';
-import { trackEvent } from '../analytics';
+import { trackEvent } from '../analytics/analytics-config';
 
 export interface AuditLogEntry {
   id?: string;
@@ -14,7 +14,7 @@ export interface AuditLogEntry {
   timestamp: Date;
   details: Record<string, any>;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  environment: 'development' | 'staging' | 'production';
+  environment?: 'development' | 'staging' | 'production';
   success: boolean;
   errorMessage?: string;
   sessionId?: string;
@@ -139,9 +139,9 @@ class AuditLogger {
   async logFailedAction(
     action: string,
     resource: string,
+    errorMessage: string,
     userId?: string,
     userEmail?: string,
-    errorMessage: string,
     details: Record<string, any> = {},
     severity: AuditLogEntry['severity'] = 'medium'
   ): Promise<string> {
@@ -388,4 +388,3 @@ class AuditLogger {
 }
 
 export const auditLogger = new AuditLogger();
-

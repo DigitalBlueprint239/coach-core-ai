@@ -533,7 +533,27 @@ class SecureLogger {
     
     // Only log in development or if explicitly enabled
     if (this.isDevelopment || process.env.REACT_APP_ENABLE_LOGGING === 'true') {
-      const logMethod = console[level] || console.log;
+      let logMethod: (...args: unknown[]) => void;
+      switch (level) {
+        case 'debug':
+          logMethod = console.debug.bind(console);
+          break;
+        case 'info':
+          logMethod = console.info.bind(console);
+          break;
+        case 'warn':
+          logMethod = console.warn.bind(console);
+          break;
+        case 'error':
+          logMethod = console.error.bind(console);
+          break;
+        case 'fatal':
+          logMethod = console.error.bind(console);
+          break;
+        default:
+          logMethod = console.log.bind(console);
+      }
+
       logMethod(`[${entry.timestamp}] [${level.toUpperCase()}] ${entry.message}`, entry.context);
     }
 
@@ -683,7 +703,3 @@ export const {
   getStoredLogs,
   clearStoredLogs,
 } = secureLogger;
-
-// Export types
-export type { LogLevel, LogContext, LogEntry };
-

@@ -9,12 +9,11 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  Auth,
   UserCredential
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './firebase-config';
-import { UserProfile, SubscriptionTier, UserRole, Permission } from '../../types/user';
+import { UserProfile, SubscriptionTier, UserRole } from '../../types/user';
 import { trackUserAction, setSentryUser, trackError } from '../monitoring';
 import { 
   trackLogin, 
