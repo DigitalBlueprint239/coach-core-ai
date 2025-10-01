@@ -38,8 +38,8 @@ import {
 } from '@chakra-ui/react';
 import { Download, Filter, RefreshCw, UserPlus } from 'lucide-react';
 import dayjs from 'dayjs';
-import QuickActions from '../../../components/dashboard/QuickActions';
-import StatCard from '../../../components/dashboard/StatCard';
+import QuickActions from '../../../components/Dashboard/QuickActions';
+import StatCard from '../../../components/Dashboard/StatCard';
 import { waitlistAdminService, WaitlistAdminEntry, WaitlistFilters } from '../../../services/waitlist/waitlist-admin-service';
 import { UserRole } from '../../../types/user';
 

@@ -11,7 +11,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { ClipboardList, LineChart, Settings } from 'lucide-react';
-import DashboardLayout from '../../components/dashboard/DashboardLayout';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 import WaitlistManager from '../../features/admin/components/WaitlistManager';
 
 const AdminDashboard: React.FC = () => {
