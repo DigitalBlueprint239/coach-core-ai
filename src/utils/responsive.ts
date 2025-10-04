@@ -321,6 +321,34 @@ export const responsiveStyles = {
   },
 };
 
+// Utility functions for responsive values
+export const createResponsiveValue = <T>(
+  base: T,
+  ...values: T[]
+): T | Record<string, T> => {
+  if (values.length === 0) {
+    return base;
+  }
+  
+  const responsiveObject: Record<string, T> = { base };
+  const breakpoints = ['sm', 'md', 'lg', 'xl'] as const;
+  
+  values.forEach((value, index) => {
+    if (index < breakpoints.length) {
+      responsiveObject[breakpoints[index]] = value;
+    }
+  });
+  
+  return responsiveObject;
+};
+
+export const getResponsiveValue = <T>(
+  responsiveObject: Record<string, T>,
+  breakpoint: string = 'base'
+): T => {
+  return responsiveObject[breakpoint] || responsiveObject.base || Object.values(responsiveObject)[0];
+};
+
 // Export all utilities
 export default {
   BREAKPOINTS,
@@ -334,4 +362,6 @@ export default {
   MOBILE_UTILS,
   responsiveStyles,
   useResponsive,
+  createResponsiveValue,
+  getResponsiveValue,
 };

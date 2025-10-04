@@ -22,34 +22,34 @@ describe('Responsive Utilities', () => {
 
   describe('RESPONSIVE_SPACING', () => {
     it('should have consistent spacing values', () => {
-      expect(RESPONSIVE_SPACING.xs).toBe(2);
-      expect(RESPONSIVE_SPACING.sm).toBe(3);
-      expect(RESPONSIVE_SPACING.md).toBe(4);
-      expect(RESPONSIVE_SPACING.lg).toBe(6);
-      expect(RESPONSIVE_SPACING.xl).toBe(8);
-      expect(RESPONSIVE_SPACING['2xl']).toBe(12);
+      expect(RESPONSIVE_SPACING.xs).toEqual({ base: 2, sm: 3, md: 4, lg: 4, xl: 4 });
+      expect(RESPONSIVE_SPACING.sm).toEqual({ base: 3, sm: 4, md: 5, lg: 6, xl: 6 });
+      expect(RESPONSIVE_SPACING.md).toEqual({ base: 4, sm: 5, md: 6, lg: 8, xl: 8 });
+      expect(RESPONSIVE_SPACING.lg).toEqual({ base: 6, sm: 8, md: 10, lg: 12, xl: 12 });
+      expect(RESPONSIVE_SPACING.xl).toEqual({ base: 8, sm: 10, md: 12, lg: 16, xl: 16 });
+      expect(RESPONSIVE_SPACING['2xl']).toEqual({ base: 10, sm: 12, md: 16, lg: 20, xl: 24 });
     });
   });
 
   describe('RESPONSIVE_FONTS', () => {
     it('should have appropriate font sizes', () => {
-      expect(RESPONSIVE_FONTS.xs).toBe('xs');
-      expect(RESPONSIVE_FONTS.sm).toBe('sm');
-      expect(RESPONSIVE_FONTS.md).toBe('md');
-      expect(RESPONSIVE_FONTS.lg).toBe('lg');
-      expect(RESPONSIVE_FONTS.xl).toBe('xl');
-      expect(RESPONSIVE_FONTS['2xl']).toBe('2xl');
+      expect(RESPONSIVE_FONTS.xs).toEqual({ base: 'xs', sm: 'xs', md: 'sm', lg: 'sm', xl: 'sm' });
+      expect(RESPONSIVE_FONTS.sm).toEqual({ base: 'sm', sm: 'sm', md: 'md', lg: 'md', xl: 'md' });
+      expect(RESPONSIVE_FONTS.md).toEqual({ base: 'md', sm: 'md', md: 'lg', lg: 'lg', xl: 'lg' });
+      expect(RESPONSIVE_FONTS.lg).toEqual({ base: 'lg', sm: 'lg', md: 'xl', lg: 'xl', xl: 'xl' });
+      expect(RESPONSIVE_FONTS.xl).toEqual({ base: 'xl', sm: 'xl', md: '2xl', lg: '2xl', xl: '2xl' });
+      expect(RESPONSIVE_FONTS['2xl']).toEqual({ base: '2xl', sm: '2xl', md: '3xl', lg: '3xl', xl: '3xl' });
     });
   });
 
   describe('RESPONSIVE_GRIDS', () => {
     it('should have valid grid templates', () => {
-      expect(RESPONSIVE_GRIDS.stats).toBe(
-        'repeat(auto-fit, minmax(250px, 1fr))'
-      );
-      expect(RESPONSIVE_GRIDS.sidebar).toBe('1fr 300px');
-      expect(RESPONSIVE_GRIDS.twoColumn).toBe('repeat(2, 1fr)');
-      expect(RESPONSIVE_GRIDS.threeColumn).toBe('repeat(3, 1fr)');
+      expect(RESPONSIVE_GRIDS['1']).toEqual({ base: 1, sm: 1, md: 1, lg: 1, xl: 1 });
+      expect(RESPONSIVE_GRIDS['2']).toEqual({ base: 1, sm: 1, md: 2, lg: 2, xl: 2 });
+      expect(RESPONSIVE_GRIDS['3']).toEqual({ base: 1, sm: 2, md: 2, lg: 3, xl: 3 });
+      expect(RESPONSIVE_GRIDS['4']).toEqual({ base: 1, sm: 2, md: 2, lg: 4, xl: 4 });
+      expect(RESPONSIVE_GRIDS['6']).toEqual({ base: 2, sm: 2, md: 3, lg: 6, xl: 6 });
+      expect(RESPONSIVE_GRIDS['12']).toEqual({ base: 6, sm: 6, md: 12, lg: 12, xl: 12 });
     });
   });
 
