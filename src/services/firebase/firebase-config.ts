@@ -1,54 +1,21 @@
+// src/services/firebase/firebase-config.ts
 import { initializeApp } from 'firebase/app';
-import {
-  getAuth,
-  connectAuthEmulator,
-  GoogleAuthProvider,
-  OAuthProvider,
-} from 'firebase/auth';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import { getStorage, connectStorageEmulator, type FirebaseStorage } from 'firebase/storage';
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+import { getAnalytics, isSupported } from 'firebase/analytics';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { env } from '@/utils/env-validator';
 
-// Firebase configuration - support both Vite and Create React App environment variables
+// Firebase configuration using validated environment variables
 const firebaseConfig = {
-  apiKey:
-    import.meta.env?.VITE_FIREBASE_API_KEY ||
-    process.env.REACT_APP_FIREBASE_API_KEY ||
-    'demo-api-key',
-  authDomain:
-    import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN ||
-    process.env.REACT_APP_FIREBASE_AUTH_DOMAIN ||
-    'coach-core-demo.firebaseapp.com',
-  projectId:
-    import.meta.env?.VITE_FIREBASE_PROJECT_ID ||
-    process.env.REACT_APP_FIREBASE_PROJECT_ID ||
-    'coach-core-demo',
-  storageBucket:
-    import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET ||
-    process.env.REACT_APP_FIREBASE_STORAGE_BUCKET ||
-    'coach-core-demo.appspot.com',
-  messagingSenderId:
-    import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID ||
-    process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID ||
-    '123456789',
-  appId:
-    import.meta.env?.VITE_FIREBASE_APP_ID ||
-    process.env.REACT_APP_FIREBASE_APP_ID ||
-    'demo-app-id',
-  measurementId:
-    import.meta.env?.VITE_FIREBASE_MEASUREMENT_ID ||
-    process.env.REACT_APP_FIREBASE_MEASUREMENT_ID ||
-    'demo-measurement-id',
+  apiKey: env.firebaseApiKey,
+  authDomain: env.firebaseAuthDomain,
+  projectId: env.firebaseProjectId,
+  storageBucket: env.firebaseStorageBucket,
+  messagingSenderId: env.firebaseMessagingSenderId,
+  appId: env.firebaseAppId,
+  measurementId: env.firebaseMeasurementId, // Optional
 };
-
-// Log configuration for debugging (remove in production)
-if (process.env.NODE_ENV === 'development') {
-  console.log('Firebase Config:', {
-    projectId: firebaseConfig.projectId,
-    authDomain: firebaseConfig.authDomain,
-    hasApiKey: !!firebaseConfig.apiKey,
-  });
-}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -56,50 +23,39 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-let storageInstance: FirebaseStorage | null = null;
+export const storage = getStorage(app);
 
-try {
-  storageInstance = getStorage(app);
-} catch (error) {
-  console.warn('Firebase Storage unavailable, continuing without storage support.', error);
+// Initialize Analytics (only in browser and if supported)
+let analyticsInstance: ReturnType<typeof getAnalytics> | null = null;
+
+if (typeof window !== 'undefined') {
+  isSupported()
+    .then(yes => {
+      if (yes && env.firebaseMeasurementId) {
+        analyticsInstance = getAnalytics(app);
+      }
+    })
+    .catch(err => {
+      console.warn('Firebase Analytics not supported:', err);
+    });
 }
 
-export const storage = storageInstance;
-export const functions = getFunctions(app);
+export const analytics = analyticsInstance;
 
-// Initialize Auth Providers
-export const googleProvider = new GoogleAuthProvider();
-export const appleProvider = new OAuthProvider('apple.com');
+// Development emulator setup
+if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true') {
+  console.log('🔧 Connecting to Firebase Emulators...');
 
-// Configure Google Provider
-googleProvider.setCustomParameters({
-  prompt: 'select_account',
-});
+  // Connect to Auth Emulator
+  connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
 
-// Configure Apple Provider
-appleProvider.setCustomParameters({
-  locale: 'en_US',
-});
+  // Connect to Firestore Emulator
+  connectFirestoreEmulator(db, 'localhost', 8080);
 
-// Connect to emulators only in development and when explicitly enabled
-const isDev = import.meta.env?.DEV || process.env.NODE_ENV === 'development';
-const useEmulator =
-  import.meta.env?.VITE_USE_EMULATOR === 'true' ||
-  process.env.REACT_APP_USE_EMULATOR === 'true';
+  // Connect to Storage Emulator
+  connectStorageEmulator(storage, 'localhost', 9199);
 
-if (isDev && useEmulator) {
-  try {
-    connectAuthEmulator(auth, 'http://localhost:9099');
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    if (storageInstance) {
-      connectStorageEmulator(storageInstance, 'localhost', 9199);
-    }
-    connectFunctionsEmulator(functions, 'localhost', 5001);
-    console.log('Connected to Firebase emulators');
-  } catch (error) {
-    console.log('Firebase emulators already connected or not available');
-  }
+  console.log('✅ Connected to Firebase Emulators');
 }
 
-export { firebaseConfig };
 export default app;

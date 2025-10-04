@@ -152,8 +152,11 @@ class ErrorReportingService {
   private async sendErrorReport(errorReport: ErrorReport): Promise<void> {
     try {
       // Send to Sentry if configured
-      if (this.config.MONITORING.sentryDsn && window.Sentry) {
-        window.Sentry.captureException(errorReport.error, {
+      const sentry = (window as typeof window & {
+        Sentry?: { captureException?: (error: unknown, context?: unknown) => void };
+      }).Sentry;
+      if (this.config.MONITORING.sentryDsn && sentry?.captureException) {
+        sentry.captureException(errorReport.error, {
           tags: {
             component: errorReport.context.componentName,
             errorId: errorReport.errorId,

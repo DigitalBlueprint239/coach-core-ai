@@ -153,7 +153,7 @@ function validateEnvironment(): void {
 /**
  * Get environment-specific configuration
  */
-function getEnvironmentConfig(): EnvironmentConfig {
+function buildEnvironmentConfig(): EnvironmentConfig {
   const nodeEnv = (process.env.NODE_ENV ||
     'development') as EnvironmentConfig['NODE_ENV'];
 
@@ -283,7 +283,7 @@ let config: EnvironmentConfig | null = null;
 export function getEnvironmentConfig(): EnvironmentConfig {
   if (!config) {
     validateEnvironment();
-    config = getEnvironmentConfig();
+    config = buildEnvironmentConfig();
   }
   return config;
 }

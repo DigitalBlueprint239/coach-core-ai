@@ -1,5 +1,16 @@
 import { authService } from '../firebase/auth-service';
 
+class APIRequestError<T = unknown> extends Error {
+  constructor(
+    message: string,
+    public status?: number,
+    public payload?: T
+  ) {
+    super(message);
+    this.name = 'APIRequestError';
+  }
+}
+
 export interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -37,13 +48,14 @@ export interface APICache {
 class APIService {
   private config: APIConfig;
   private cache: Map<string, APICache>;
-  private requestQueue: Map<string, Promise<any>>;
+  private requestQueue: Map<string, Promise<APIResponse<any>>>;
   private authToken: string | null = null;
+  private isAuthenticated = false;
 
   constructor() {
     this.config = {
       baseURL:
-        process.env.REACT_APP_API_BASE_URL || 'https://api.coachcore.com/v1',
+        import.meta.env.VITE_API_BASE_URL || 'https://api.coachcore.com/v1',
       timeout: 30000,
       retryAttempts: 3,
       retryDelay: 1000,
@@ -65,8 +77,7 @@ class APIService {
         this.authToken = await user.getIdToken();
       }
 
-      // Listen for auth state changes
-            // Listen for auth state changes through the auth service
+      // Listen for auth state changes through the auth service
       const unsubscribe = authService.addAuthStateListener(async (state) => {
         if (state.user) {
           try {
@@ -117,10 +128,10 @@ class APIService {
     });
   }
 
-  private async makeRequest(
+  private async makeRequest<T = unknown>(
     request: APIRequest,
     attempt: number = 1
-  ): Promise<APIResponse> {
+  ): Promise<APIResponse<T>> {
     const { endpoint, method, data, params, headers, timeout } = request;
 
     try {
@@ -161,11 +172,23 @@ class APIService {
       // Make the request
       const response = await fetch(url.toString(), requestOptions);
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      const contentType = response.headers.get('content-type') ?? '';
+      let responseData: T | undefined;
+
+      if (contentType.includes('application/json')) {
+        responseData = (await response.json()) as T;
+      } else if (contentType.includes('text/')) {
+        const textPayload = await response.text();
+        responseData = textPayload as unknown as T;
       }
 
-      const responseData = await response.json();
+      if (!response.ok) {
+        const message =
+          typeof responseData === 'object' && responseData !== null && 'message' in (responseData as Record<string, unknown>)
+            ? String((responseData as Record<string, unknown>).message)
+            : `HTTP ${response.status}: ${response.statusText}`;
+        throw new APIRequestError(message, response.status, responseData);
+      }
 
       return {
         success: true,
@@ -173,28 +196,45 @@ class APIService {
         statusCode: response.status,
         timestamp: new Date(),
       };
-    } catch (error: any) {
-      // Handle timeout and abort errors
-      if (error.name === 'AbortError' || error.name === 'TimeoutError') {
-        throw new Error('Request timeout');
-      }
+    } catch (error: unknown) {
+      const normalizedError = (() => {
+        if (error instanceof APIRequestError) {
+          return error;
+        }
+        if (error instanceof DOMException && (error.name === 'AbortError' || error.name === 'TimeoutError')) {
+          return new APIRequestError('Request timeout');
+        }
+        if (error instanceof Error) {
+          return new APIRequestError(error.message);
+        }
+        return new APIRequestError('Request failed');
+      })();
 
       // Retry logic for network errors
-      if (attempt < this.config.retryAttempts && this.isRetryableError(error)) {
+      if (attempt < this.config.retryAttempts && this.isRetryableError(normalizedError)) {
         await this.delay(this.config.retryDelay * attempt);
-        return this.makeRequest(request, attempt + 1);
+        return this.makeRequest<T>(request, attempt + 1);
       }
 
       return {
         success: false,
-        error: error.message || 'Request failed',
-        statusCode: 500,
+        error: normalizedError.message,
+        statusCode: normalizedError.status ?? 0,
         timestamp: new Date(),
       };
     }
   }
 
-  private isRetryableError(error: any): boolean {
+  private isRetryableError(error: unknown): boolean {
+    if (error instanceof APIRequestError) {
+      return Boolean(error.status && error.status >= 500);
+    }
+
+    if (error instanceof DOMException && (error.name === 'AbortError' || error.name === 'TimeoutError')) {
+      return true;
+    }
+
+    const message = error instanceof Error ? error.message : '';
     const retryableErrors = [
       'Network Error',
       'Failed to fetch',
@@ -203,9 +243,7 @@ class APIService {
       'ENOTFOUND',
     ];
 
-    return retryableErrors.some(
-      msg => error.message?.includes(msg) || error.code === 'ECONNRESET'
-    );
+    return retryableErrors.some((msg) => message.includes(msg));
   }
 
   private delay(ms: number): Promise<void> {
@@ -222,7 +260,7 @@ class APIService {
 
     // Check if request is already in progress
     if (this.requestQueue.has(requestKey)) {
-      return this.requestQueue.get(requestKey)!;
+      return this.requestQueue.get(requestKey)! as Promise<APIResponse<T>>;
     }
 
     // Check cache for GET requests
@@ -239,8 +277,8 @@ class APIService {
     }
 
     // Execute request
-    const requestPromise = this.makeRequest(request);
-    this.requestQueue.set(requestKey, requestPromise);
+    const requestPromise = this.makeRequest<T>(request);
+    this.requestQueue.set(requestKey, requestPromise as Promise<APIResponse<any>>);
 
     try {
       const response = await requestPromise;

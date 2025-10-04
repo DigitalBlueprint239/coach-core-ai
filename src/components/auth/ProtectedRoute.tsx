@@ -1,5 +1,6 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Center, Spinner } from '@chakra-ui/react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 interface ProtectedRouteProps {
@@ -9,13 +10,18 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = false }) => {
   const { user, profile, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Center minH="60vh">
+        <Spinner size="lg" thickness="4px" speed="0.75s" color="blue.400" label="Loading protected content" />
+      </Center>
+    );
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (adminOnly) {

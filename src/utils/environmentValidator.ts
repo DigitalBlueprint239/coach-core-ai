@@ -456,7 +456,7 @@ export class EnvironmentValidator {
    */
   private getExampleValue(variable: string): string | undefined {
     const examples: Record<string, string> = {
-      REACT_APP_FIREBASE_API_KEY: 'AIzaSyB2iWL0UkuLJYpr-II9IpwGWDOMnLcfq_c',
+      REACT_APP_FIREBASE_API_KEY: 'AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       REACT_APP_FIREBASE_AUTH_DOMAIN: 'your-project.firebaseapp.com',
       REACT_APP_FIREBASE_PROJECT_ID: 'your-project-id',
       REACT_APP_FIREBASE_STORAGE_BUCKET: 'your-project.appspot.com',

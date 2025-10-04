@@ -65,7 +65,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
       if (result.success && result.data) {
         setPlans(result.data);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load plans:', error);
       toast({
         title: 'Error',

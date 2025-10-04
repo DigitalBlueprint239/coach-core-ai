@@ -117,7 +117,7 @@ import {
   Copy,
   ExternalLink,
 } from 'lucide-react';
-import AIService from '../../services/ai/ai-service';
+import aiService from '../../services/ai/ai-service';
 import { AIPracticePlanRequest } from '../../services/ai/enhanced-ai-service';
 import PracticeService from '../../services/practice/practice-service';
 import PracticePlanLibrary from './PracticePlanLibrary';
@@ -139,7 +139,7 @@ interface Drill {
   ageGroup: string;
 }
 
-interface PracticePeriod {
+export interface PracticePeriod {
   id: string;
   name: string;
   duration: number;
@@ -148,7 +148,7 @@ interface PracticePeriod {
   objectives: string[];
 }
 
-interface PracticePlan {
+export interface PracticePlan {
   id: string;
   teamId: string;
   title: string;
@@ -461,17 +461,18 @@ const ModernPracticePlanner: React.FC = () => {
           setCurrentPlan(defaultPlan);
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error loading practice plans:', error);
-      
+
+      const maybeError = error as { code?: string; message?: string };
       // Provide more specific error messages
       let errorMessage = 'Failed to load practice plans. Please try again.';
-      
-      if (error.code === 'permission-denied') {
+
+      if (maybeError.code === 'permission-denied') {
         errorMessage = 'You do not have permission to access practice plans. Please check your authentication.';
-      } else if (error.code === 'unavailable') {
+      } else if (maybeError.code === 'unavailable') {
         errorMessage = 'Service temporarily unavailable. Please check your internet connection.';
-      } else if (error.message?.includes('auth')) {
+      } else if (maybeError.message?.includes('auth')) {
         errorMessage = 'Authentication error. Please log in again.';
       }
       
@@ -523,7 +524,6 @@ const ModernPracticePlanner: React.FC = () => {
         recentPerformance: 'average', // Could be made configurable
       };
 
-      const aiService = new AIService();
       const response = await aiService.generatePracticePlan(request);
 
       if (response.success) {
@@ -545,7 +545,7 @@ const ModernPracticePlanner: React.FC = () => {
           isClosable: true,
         });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: 'AI Generation Failed',
         description: 'Please try again or create a plan manually.',
@@ -553,6 +553,7 @@ const ModernPracticePlanner: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
+      console.error('AI generation error:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -645,13 +646,14 @@ const ModernPracticePlanner: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving practice plan:', error);
-      
+
+      const maybeError = error as { code?: string };
       let errorMessage = 'Failed to save practice plan. Please try again.';
-      if (error.code === 'permission-denied') {
+      if (maybeError.code === 'permission-denied') {
         errorMessage = 'You do not have permission to save practice plans. Please check your authentication.';
-      } else if (error.code === 'unavailable') {
+      } else if (maybeError.code === 'unavailable') {
         errorMessage = 'Service temporarily unavailable. Please check your internet connection.';
       }
       
@@ -690,7 +692,7 @@ const ModernPracticePlanner: React.FC = () => {
           isClosable: true,
         });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Share failed:', error);
       toast({
         title: 'Share Failed',
@@ -737,7 +739,7 @@ const ModernPracticePlanner: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Export failed:', error);
       toast({
         title: 'Export Failed',

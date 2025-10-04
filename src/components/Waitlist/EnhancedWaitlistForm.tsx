@@ -28,7 +28,6 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { Mail, CheckCircle, Users, Share2, Copy, ArrowRight, Sparkles } from 'lucide-react';
-import { enhancedWaitlistService } from '../../services/waitlist/enhanced-waitlist-service';
 
 interface EnhancedWaitlistFormProps {
   onSuccess?: (data: { waitlistId: string; accessToken?: string }) => void;
@@ -108,30 +107,20 @@ const EnhancedWaitlistForm: React.FC<EnhancedWaitlistFormProps> = ({
         });
       }
 
-      let result;
-
-      if (variant === 'enhanced' && enableDemoAccess) {
-        // Use enhanced service with demo access
-        result = await enhancedWaitlistService.addToWaitlistWithAccess({
-          email: formData.email.trim(),
+      const { simpleWaitlistService } = await import('../../services/waitlist/simple-waitlist-service');
+      const waitlistId = await simpleWaitlistService.addToWaitlist(
+        formData.email.trim(),
+        'enhanced-form',
+        {
           name: formData.name.trim(),
           role: formData.role,
           immediateAccess: formData.immediateAccess,
-        });
-      } else {
-        // Use simple waitlist service
-        const { simpleWaitlistService } = await import('../../services/waitlist/simple-waitlist-service');
-        const waitlistId = await simpleWaitlistService.addToWaitlist(
-          formData.email.trim(),
-          'enhanced-form',
-          {
-            name: formData.name.trim(),
-            role: formData.role,
-            immediateAccess: formData.immediateAccess,
-          }
-        );
-        result = { waitlistId, accessToken: undefined };
-      }
+          requestedVariant: variant,
+          demoAccessRequested: enableDemoAccess,
+        }
+      );
+
+      const result = { waitlistId, accessToken: undefined };
 
       setSubmissionData(result);
       setSubmissionStep('success');

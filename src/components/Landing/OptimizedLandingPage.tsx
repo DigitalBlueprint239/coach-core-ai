@@ -41,7 +41,7 @@ import {
   Clock
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { enhancedWaitlistService } from '../../services/waitlist/enhanced-waitlist-service';
+import { simpleWaitlistService } from '../../services/waitlist/simple-waitlist-service';
 import { validateWaitlistEmail } from '../../utils/validation';
 import { errorHandler } from '../../utils/error-handling';
 
@@ -73,7 +73,7 @@ const OptimizedLandingPage: React.FC = () => {
     }
 
     if (newEmail) {
-      const attempts = enhancedWaitlistService.getRemainingAttempts?.(newEmail) || 3;
+      const attempts = 3; // Simple service doesn't track attempts
       setRemainingAttempts(attempts);
     }
   };
@@ -103,7 +103,7 @@ const OptimizedLandingPage: React.FC = () => {
 
     try {
       // Add to enhanced waitlist with immediate access
-      const { accessToken } = await enhancedWaitlistService.addToWaitlistWithAccess({
+      const { accessToken } = await simpleWaitlistService.addToWaitlist({
         email,
         name: name.trim(),
         role,

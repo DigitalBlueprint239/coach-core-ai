@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowRight, Users, Brain, Play, Trophy, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { enhancedWaitlistService } from '../../services/waitlist/enhanced-waitlist-service';
+import { simpleWaitlistService } from '../../services/waitlist/simple-waitlist-service';
 import { validateWaitlistEmail } from '../../utils/validation';
 import { errorHandler } from '../../utils/error-handling';
 
@@ -86,12 +86,15 @@ const LandingPage: React.FC = () => {
 
     try {
       // Add to enhanced waitlist with immediate access
-      const { accessToken } = await enhancedWaitlistService.addToWaitlistWithAccess({
+      const docId = await simpleWaitlistService.addToWaitlist(
         email,
-        name: name.trim(),
-        role,
-        immediateAccess: true,
-      });
+        'website',
+        {
+          name: name.trim(),
+          role,
+          immediateAccess: true,
+        }
+      );
 
       setIsSubmitted(true);
       toast({
