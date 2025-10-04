@@ -4,10 +4,11 @@ import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { env } from '@/utils/env-validator';
 
 // Firebase configuration using validated environment variables
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: env.firebaseApiKey,
   authDomain: env.firebaseAuthDomain,
   projectId: env.firebaseProjectId,
@@ -24,6 +25,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 
 // Initialize Analytics (only in browser and if supported)
 let analyticsInstance: ReturnType<typeof getAnalytics> | null = null;
@@ -54,6 +56,9 @@ if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true
 
   // Connect to Storage Emulator
   connectStorageEmulator(storage, 'localhost', 9199);
+
+  // Connect to Functions Emulator
+  connectFunctionsEmulator(functions, 'localhost', 5001);
 
   console.log('✅ Connected to Firebase Emulators');
 }

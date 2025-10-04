@@ -86,15 +86,12 @@ const LandingPage: React.FC = () => {
 
     try {
       // Add to enhanced waitlist with immediate access
-      const docId = await simpleWaitlistService.addToWaitlist(
+      const { accessToken } = await simpleWaitlistService.addToWaitlistWithAccess({
         email,
-        'website',
-        {
-          name: name.trim(),
-          role,
-          immediateAccess: true,
-        }
-      );
+        name: name.trim(),
+        role,
+        immediateAccess: true,
+      });
 
       setIsSubmitted(true);
       toast({

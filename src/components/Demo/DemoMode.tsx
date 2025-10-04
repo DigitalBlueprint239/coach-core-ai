@@ -52,8 +52,7 @@ const DemoMode: React.FC = () => {
       const token = urlParams.get('token') || localStorage.getItem('demo_access_token');
       
       if (token) {
-        // const userData = enhancedWaitlistService.getCurrentDemoData();
-        const userData = null; // Simple service doesn't have this method
+        const userData = simpleWaitlistService.getCurrentDemoData();
         if (userData) {
           const demoSession = await demoService.createDemoSession(token, userData);
           setSession(demoSession);
@@ -85,9 +84,10 @@ const DemoMode: React.FC = () => {
 
     setIsUpgrading(true);
     try {
-      // const { user, profile } = await enhancedWaitlistService.upgradeToFullAccount(
-      // Simple service doesn't have this method - would need to implement
-      const { user, profile } = { user: null, profile: null };
+      const { user, profile } = await simpleWaitlistService.upgradeToFullAccount(
+        session.accessToken,
+        password
+      );
 
       toast({
         title: 'Account Created! 🎉',

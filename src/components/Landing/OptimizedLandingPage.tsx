@@ -64,7 +64,7 @@ const OptimizedLandingPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
 
@@ -73,7 +73,7 @@ const OptimizedLandingPage: React.FC = () => {
     }
 
     if (newEmail) {
-      const attempts = 3; // Simple service doesn't track attempts
+      const attempts = await simpleWaitlistService.getRemainingAttempts(newEmail);
       setRemainingAttempts(attempts);
     }
   };
@@ -103,7 +103,7 @@ const OptimizedLandingPage: React.FC = () => {
 
     try {
       // Add to enhanced waitlist with immediate access
-      const { accessToken } = await simpleWaitlistService.addToWaitlist({
+      const { accessToken } = await simpleWaitlistService.addToWaitlistWithAccess({
         email,
         name: name.trim(),
         role,

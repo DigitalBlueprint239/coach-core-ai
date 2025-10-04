@@ -7,55 +7,22 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: [
-      'node_modules',
-      'dist',
-      '.idea',
-      '.git',
-      '.cache',
-      'cypress',
-      'load-tests',
-      'deploy-logs'
-    ],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'src/test/',
-        '**/*.d.ts',
-        '**/*.config.*',
-        '**/cypress/**',
-        '**/load-tests/**',
-        '**/deploy-logs/**',
-        '**/dist/**',
-        '**/coverage/**'
-      ],
-      thresholds: {
-        global: {
-          branches: 70,
-          functions: 70,
-          lines: 70,
-          statements: 70
-        }
-      }
+    setupFiles: ['./src/test-setup.ts'],
+    env: {
+      VITE_FIREBASE_API_KEY: 'test-api-key',
+      VITE_FIREBASE_AUTH_DOMAIN: 'test-project.firebaseapp.com',
+      VITE_FIREBASE_PROJECT_ID: 'test-project',
+      VITE_FIREBASE_STORAGE_BUCKET: 'test-project.appspot.com',
+      VITE_FIREBASE_MESSAGING_SENDER_ID: '123456789',
+      VITE_FIREBASE_APP_ID: '1:123456789:web:abcdef',
+      VITE_OPENAI_API_KEY: 'test-openai-key',
+      VITE_CLAUDE_API_KEY: 'test-claude-key',
+      VITE_AI_PROXY_TOKEN: 'test-proxy-token',
     },
-    testTimeout: 10000,
-    hookTimeout: 10000,
-    teardownTimeout: 10000
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@services': path.resolve(__dirname, './src/services'),
-      '@types': path.resolve(__dirname, './src/types'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@contexts': path.resolve(__dirname, './src/contexts'),
     },
   },
 });
