@@ -1,12 +1,12 @@
 import { db } from '../firebase/firebase-config';
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  getDoc, 
-  getDocs, 
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
   setDoc,
   query,
   where,
@@ -14,7 +14,9 @@ import {
   limit,
   onSnapshot,
   Timestamp,
-  writeBatch
+  writeBatch,
+  Query,
+  DocumentData,
 } from 'firebase/firestore';
 import { offlineQueue } from '../offline/offline-queue';
 import { conflictResolutionService, ConflictData } from './conflict-resolution';
@@ -105,7 +107,7 @@ export class DataService {
     options: QueryOptions = {}
   ): Promise<T[]> {
     try {
-      let q = collection(db, collectionName);
+      let q: Query<DocumentData> = collection(db, collectionName);
 
       // Apply where clauses
       if (options.where) {
@@ -250,7 +252,7 @@ export class DataService {
     options: QueryOptions = {}
   ): () => void {
     try {
-      let q = collection(db, collectionName);
+      let q: Query<DocumentData> = collection(db, collectionName);
 
       // Apply where clauses
       if (options.where) {

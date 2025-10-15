@@ -1,3 +1,15 @@
+export interface AIPracticePlanTeamContext {
+  teamId?: string;
+  teamName?: string;
+  sport?: string;
+  ageGroup?: string;
+  skillLevel?: string;
+  seasonPhase?: string;
+  strengths?: string[];
+  weaknesses?: string[];
+  equipment?: string[];
+}
+
 export interface AIPracticePlanRequest {
   sport: string;
   ageGroup: string;
@@ -8,6 +20,7 @@ export interface AIPracticePlanRequest {
   equipment?: string[];
   weather?: string;
   recentPerformance?: string;
+  teamContext?: AIPracticePlanTeamContext;
 }
 
 export default AIPracticePlanRequest;

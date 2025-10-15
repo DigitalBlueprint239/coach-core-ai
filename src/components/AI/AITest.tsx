@@ -29,9 +29,19 @@ const AITest: React.FC = () => {
         playerCount: 5,
       };
 
-      const play = await aiService.generateCustomPlay(demoTeamProfile, demoRequirements);
-      
-      setTestResult(`✅ AI Service Test Successful!\n\nGenerated Play: ${play.name}\n\nDescription: ${play.description.substring(0, 100)}...`);
+      const result = await aiService.generateCustomPlay(
+        demoTeamProfile,
+        demoRequirements
+      );
+
+      if (result.success && result.play) {
+        const { play } = result;
+        setTestResult(
+          `✅ AI Service Test Successful!\n\nGenerated Play: ${play.name}\n\nDescription: ${play.description.substring(0, 120)}...`
+        );
+      } else {
+        setTestResult('⚠️ AI service responded without a play suggestion.');
+      }
     } catch (error: any) {
       setTestResult(`❌ AI Service Test Failed: ${error.message}`);
     }
@@ -53,4 +63,3 @@ const AITest: React.FC = () => {
 };
 
 export default AITest;
-

@@ -17,7 +17,7 @@ const BIGQUERY_DATASET_ID = import.meta.env.VITE_BIGQUERY_DATASET_ID || 'coach_c
 const BIGQUERY_TABLE_ID = import.meta.env.VITE_BIGQUERY_TABLE_ID || 'events';
 
 // BigQuery client
-let bigquery: BigQuery | null = null;
+let bigquery: any = null;
 
 // Initialize BigQuery
 const initializeBigQuery = (): any => {

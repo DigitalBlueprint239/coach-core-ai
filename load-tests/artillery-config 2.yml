@@ -1,0 +1,141 @@
+config:
+  target: 'https://coach-core-ai-staging.web.app'
+  phases:
+    # Warm-up phase
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm-up"
+    # 100 concurrent users
+    - duration: 120
+      arrivalRate: 10
+      name: "100 users load"
+    # 500 concurrent users
+    - duration: 300
+      arrivalRate: 50
+      name: "500 users load"
+    # 1000 concurrent users
+    - duration: 300
+      arrivalRate: 100
+      name: "1000 users load"
+    # Cool-down phase
+    - duration: 60
+      arrivalRate: 5
+      name: "Cool-down"
+  defaults:
+    headers:
+      User-Agent: "Coach-Core-LoadTest/1.0"
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+      Accept-Language: "en-US,en;q=0.5"
+      Accept-Encoding: "gzip, deflate, br"
+      Connection: "keep-alive"
+      Upgrade-Insecure-Requests: "1"
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+  variables:
+    - email: "testuser{{ $randomInt(1, 10000) }}@example.com"
+    - password: "TestPassword123!"
+    - teamName: "TestTeam{{ $randomInt(1, 1000) }}"
+    - sport: "Football"
+    - ageGroup: "Youth"
+
+scenarios:
+  # Landing page load test
+  - name: "Landing Page Load"
+    weight: 30
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - json: "$.title"
+              as: "pageTitle"
+          expect:
+            - statusCode: 200
+            - hasHeader: "content-type"
+            - contentType: "text/html"
+      - think: 2
+      - get:
+          url: "/login"
+          expect:
+            - statusCode: 200
+      - think: 1
+
+  # Authentication flow test
+  - name: "Authentication Flow"
+    weight: 25
+    flow:
+      - get:
+          url: "/login"
+          expect:
+            - statusCode: 200
+      - think: 1
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          expect:
+            - statusCode: [200, 401] # 401 for invalid credentials is expected
+      - think: 2
+      - get:
+          url: "/signup"
+          expect:
+            - statusCode: 200
+      - think: 1
+
+  # Waitlist submission test
+  - name: "Waitlist Submission"
+    weight: 20
+    flow:
+      - get:
+          url: "/waitlist"
+          expect:
+            - statusCode: 200
+      - think: 2
+      - post:
+          url: "/api/waitlist"
+          json:
+            email: "{{ email }}"
+            source: "load-test"
+          expect:
+            - statusCode: [200, 201]
+      - think: 1
+
+  # Dashboard access test (simulated)
+  - name: "Dashboard Access"
+    weight: 15
+    flow:
+      - get:
+          url: "/dashboard"
+          expect:
+            - statusCode: [200, 302] # 302 for redirect to login
+      - think: 3
+      - get:
+          url: "/team"
+          expect:
+            - statusCode: [200, 302]
+      - think: 2
+      - get:
+          url: "/practice"
+          expect:
+            - statusCode: [200, 302]
+      - think: 1
+
+  # API endpoints test
+  - name: "API Endpoints"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/health"
+          expect:
+            - statusCode: [200, 404] # May not exist
+      - think: 1
+      - get:
+          url: "/api/version"
+          expect:
+            - statusCode: [200, 404] # May not exist
+      - think: 1
+      - get:
+          url: "/api/status"
+          expect:
+            - statusCode: [200, 404] # May not exist

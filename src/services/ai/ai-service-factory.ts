@@ -40,8 +40,8 @@ export interface AIServiceConfig {
 
 export class AIServiceFactory {
   private config: AIServiceConfig;
-  private modelCapabilities: Map<string, AIModelCapabilities>;
-  private taskServiceMapping: Map<string, AIServiceType>;
+  private modelCapabilities: Map<string, AIModelCapabilities> = new Map();
+  private taskServiceMapping: Map<string, AIServiceType> = new Map();
 
   constructor(config?: Partial<AIServiceConfig>) {
     // Try to get configuration from environment
@@ -168,10 +168,10 @@ export class AIServiceFactory {
       ['progress_tracking', 'claude'],
       
       // Quick tasks
-      ['simple_query', 'haiku'],
-      ['basic_question', 'haiku'],
-      ['quick_check', 'haiku'],
-      ['status_update', 'haiku']
+      ['simple_query', 'gemini'],
+      ['basic_question', 'gemini'],
+      ['quick_check', 'gemini'],
+      ['status_update', 'gemini']
     ]);
   }
 
@@ -230,9 +230,21 @@ export class AIServiceFactory {
     return {
       name: 'Auto AI Service',
       analyze: async (request: any) => {
-        const bestService = this.selectBestService(request);
-        const service = this.createService(bestService);
-        return service.analyze(request);
+        const task: AITask | undefined = request?.task || request?.metadata?.task;
+        const selected = task
+          ? this.selectBestService(task)
+          : this.config.defaultService !== 'auto'
+            ? this.config.defaultService
+            : 'claude';
+
+        const service = this.createService(selected);
+        const payload = { ...request, metadata: { ...request?.metadata, selectedService: selected } };
+
+        if (typeof service.analyze !== 'function') {
+          throw new Error(`Selected AI service ${selected} does not support analyze()`);
+        }
+
+        return service.analyze(payload);
       }
     };
   }
@@ -241,24 +253,32 @@ export class AIServiceFactory {
    * Select the best AI service for a given task
    */
   selectBestService(task: AITask): AIServiceType {
-    // Check if there's a specific mapping for this task type
     const mappedService = this.taskServiceMapping.get(task.type);
     if (mappedService) {
       return mappedService;
     }
 
-    // Auto-select based on task requirements
     if (task.requirements.analytical && task.requirements.structured) {
-      return 'claude'; // Claude is best for analytical, structured tasks
-    } else if (task.requirements.fast && task.requirements.costSensitive) {
-      return 'haiku'; // Haiku is best for fast, cost-sensitive tasks
-    } else if (task.requirements.creative && !task.requirements.costSensitive) {
-      return 'gpt-4'; // GPT-4 is best for creative tasks
-    } else if (task.requirements.fast && task.complexity === 'simple') {
-      return 'gemini'; // Gemini is good for fast, simple tasks
-    } else {
-      return 'claude'; // Default to Claude for balanced performance
+      return 'claude';
     }
+
+    if (task.requirements.fast && task.requirements.costSensitive) {
+      return 'gemini';
+    }
+
+    if (task.requirements.creative && !task.requirements.costSensitive) {
+      return 'openai';
+    }
+
+    if (task.requirements.fast && task.complexity === 'simple') {
+      return 'gemini';
+    }
+
+    if (this.config.defaultService !== 'auto') {
+      return this.config.defaultService;
+    }
+
+    return 'claude';
   }
 
   /**

@@ -235,44 +235,34 @@ const AIPlayGenerator: React.FC = () => {
     setError(null);
 
     try {
-      // Use production AI service
       const response = await AIService.generateCustomPlay(
         {
-          sport: teamProfile.sport,
-          playerCount: teamProfile.playerCount,
-          experienceLevel: teamProfile.experienceLevel,
-          preferredStyle: teamProfile.preferredStyle,
-          ageGroup: teamProfile.ageGroup,
-          strengths: teamProfile.strengths,
-          weaknesses: teamProfile.weaknesses,
+          ...teamProfile,
+          teamName: teamProfile.teamName || (profile?.teamName ?? 'My Team'),
         },
         {
-          objective: playRequirements.objective,
-          difficulty: playRequirements.difficulty,
-          timeOnShotClock: playRequirements.timeOnShotClock,
-          specialSituations: playRequirements.specialSituations,
-        },
-        profile
+          ...playRequirements,
+          playerCount: teamProfile.playerCount,
+        }
       );
 
-      if (response.success && response.data) {
-        setGeneratedPlay(response.data);
-        
-        // Show usage information
-        if (response.usage) {
-          toast({
-            title: 'Play Generated Successfully!',
-            description: `Tokens used: ${response.usage.tokensUsed}, Cost: $${response.usage.cost.toFixed(4)}, Remaining plays: ${response.usage.remainingPlays}`,
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-          });
-        }
+      if (response.success && response.play) {
+        setGeneratedPlay(response.play);
+        toast({
+          title: response.fallback ? 'Fallback Play Generated' : 'Play Generated!',
+          description: response.fallback
+            ? 'Delivered a structured fallback play while AI services recover.'
+            : 'Review the generated play and tailor it to your team context.',
+          status: response.fallback ? 'warning' : 'success',
+          duration: 5000,
+          isClosable: true,
+        });
       } else {
-        setError(response.error || 'Failed to generate play');
+        setGeneratedPlay(null);
+        setError('Failed to generate play. Please refine team details and try again.');
         toast({
           title: 'Generation Failed',
-          description: response.error || 'Failed to generate play',
+          description: 'Unable to generate a play with the provided context.',
           status: 'error',
           duration: 5000,
           isClosable: true,

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { AuthProvider } from './providers/AuthProvider';
+import { TeamProvider } from './contexts/TeamContext';
+import { AIProvider } from './ai-brain/AIContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +13,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <TeamProvider>
+        <AIProvider>
+          <App />
+        </AIProvider>
+      </TeamProvider>
     </AuthProvider>
   </React.StrictMode>
 );

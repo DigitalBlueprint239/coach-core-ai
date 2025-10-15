@@ -32,7 +32,7 @@ import {
   Target,
 } from 'lucide-react';
 import PracticeService from '../../services/practice/practice-service';
-import { PracticePlan } from './ModernPracticePlanner';
+import { PracticePlan } from '../../services/ai/ai-service';
 
 interface PracticePlanLibraryProps {
   onSelectPlan: (plan: PracticePlan) => void;
@@ -137,7 +137,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
           plan.title,
           plan.sport,
           plan.ageGroup,
-          `${plan.totalDuration} min`,
+          `${plan.duration} min`,
           plan.goals.join('; '),
           plan.notes,
         ];
@@ -251,7 +251,7 @@ const PracticePlanLibrary: React.FC<PracticePlanLibraryProps> = ({
                 <HStack spacing={4} fontSize="sm" color="gray.600">
                   <HStack spacing={1}>
                     <Icon as={Clock} boxSize={4} />
-                    <Text>{plan.totalDuration} min</Text>
+                    <Text>{plan.duration} min</Text>
                   </HStack>
                   <HStack spacing={1}>
                     <Icon as={Users} boxSize={4} />

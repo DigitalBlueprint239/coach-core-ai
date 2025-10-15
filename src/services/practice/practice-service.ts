@@ -1,4 +1,4 @@
-import { PracticePlan } from '../../components/PracticePlanner/ModernPracticePlanner';
+import { PracticePlan } from '../ai/ai-service';
 
 export interface PracticeServiceResponse {
   success: boolean;
@@ -43,21 +43,22 @@ class PracticeService {
     try {
       const existingIndex = this.plans.findIndex(p => p.id === plan.id);
 
+      let persistedPlan: PracticePlan;
+
       if (existingIndex >= 0) {
-        // Update existing plan
-        this.plans[existingIndex] = {
+        persistedPlan = {
           ...plan,
           updatedAt: new Date(),
         };
+        this.plans[existingIndex] = persistedPlan;
       } else {
-        // Create new plan
-        const newPlan = {
+        persistedPlan = {
           ...plan,
           id: this.generateId(),
           createdAt: new Date(),
           updatedAt: new Date(),
         };
-        this.plans.push(newPlan);
+        this.plans.push(persistedPlan);
       }
 
       this.savePlansToStorage();
@@ -65,7 +66,7 @@ class PracticeService {
       return {
         success: true,
         message: 'Practice plan saved successfully',
-        data: plan,
+        data: persistedPlan,
       };
     } catch (error) {
       console.error('Failed to save practice plan:', error);

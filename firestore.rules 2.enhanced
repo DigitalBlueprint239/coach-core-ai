@@ -1,0 +1,115 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        request.auth.token.email in [
+          'admin@coachcore.ai',
+          'jones@coachcore.ai',
+          'support@coachcore.ai'
+        ];
+    }
+    
+    function isTeamMember(teamId) {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/teams/$(teamId)) &&
+        (get(/databases/$(database)/documents/teams/$(teamId)).data.headCoachId == request.auth.uid ||
+         request.auth.uid in get(/databases/$(database)/documents/teams/$(teamId)).data.assistantCoachIds);
+    }
+    
+    function isTeamHeadCoach(teamId) {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/teams/$(teamId)) &&
+        get(/databases/$(database)/documents/teams/$(teamId)).data.headCoachId == request.auth.uid;
+    }
+    
+    function isValidEmail(email) {
+      return email is string && email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+    
+    function isValidTimestamp(timestamp) {
+      return timestamp is timestamp;
+    }
+    
+    function isValidString(str, maxLength) {
+      return str is string && str.size() <= maxLength;
+    }
+
+    // User profiles - users can only access their own profile
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+      allow read: if isAdmin(); // Admins can read all profiles
+    }
+    
+    // Teams - head coaches can manage their teams, members can read
+    match /teams/{teamId} {
+      allow read: if isTeamMember(teamId);
+      allow write: if isTeamHeadCoach(teamId);
+      allow create: if isAuthenticated() && 
+        request.auth.uid == resource.data.headCoachId;
+    }
+    
+    // Waitlist - anyone can create, only admins can read/update/delete
+    match /waitlist/{waitlistId} {
+      allow create: if isValidEmail(resource.data.email) &&
+        isValidString(resource.data.email, 100) &&
+        isValidTimestamp(resource.data.timestamp);
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Staging feedback - anyone can create, only admins can read/update/delete
+    match /staging_feedback/{feedbackId} {
+      allow create: if isValidString(resource.data.feedback, 1000) &&
+        resource.data.category in ['bug', 'feature', 'ui', 'performance', 'other'] &&
+        resource.data.priority in ['low', 'medium', 'high', 'critical'] &&
+        isValidTimestamp(resource.data.timestamp);
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Games - team members can access their team's games
+    match /games/{gameId} {
+      allow read, write: if isTeamMember(resource.data.teamId);
+      allow create: if isAuthenticated() && 
+        isTeamMember(request.resource.data.teamId);
+    }
+    
+    // Plays - team members can access their team's plays
+    match /plays/{playId} {
+      allow read, write: if isTeamMember(resource.data.teamId);
+      allow create: if isAuthenticated() && 
+        isTeamMember(request.resource.data.teamId);
+    }
+    
+    // Practice plans - team members can access their team's plans
+    match /practice_plans/{planId} {
+      allow read, write: if isTeamMember(resource.data.teamId);
+      allow create: if isAuthenticated() && 
+        isTeamMember(request.resource.data.teamId);
+    }
+    
+    // Rate limits - system managed, no direct access
+    match /rate_limits/{rateLimitId} {
+      allow read, write: if false; // Only server-side access
+    }
+    
+    // Audit logs - only admins can read, no direct writes
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only server-side writes
+    }
+    
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

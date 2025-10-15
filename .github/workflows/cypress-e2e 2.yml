@@ -1,0 +1,637 @@
+# .github/workflows/cypress-e2e.yml
+
+name: Cypress E2E Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  # Cypress configuration
+  CYPRESS_baseUrl: http://localhost:3000
+  CYPRESS_apiBaseUrl: http://localhost:5001/coach-core-ai/us-central1/api
+  
+  # Test environment
+  NODE_ENV: test
+  CI: true
+  
+  # Database configuration
+  FIRESTORE_EMULATOR_HOST: localhost:8080
+  FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+  
+  # Performance thresholds
+  MAX_LOAD_TIME: 3000
+  MAX_MEMORY_USAGE: 100
+  MAX_CANVAS_RENDER_TIME: 500
+
+jobs:
+  # Setup and build job
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.value }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          echo "value=${{ github.sha }}-${{ github.run_id }}" >> $GITHUB_OUTPUT
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+          retention-days: 1
+
+  # Database setup job
+  setup-database:
+    runs-on: ubuntu-latest
+    needs: setup
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Start Firebase emulators
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:start --only firestore,auth --project demo-project &
+          sleep 10
+      
+      - name: Seed test database
+        run: |
+          npm run db:seed:test
+          npm run db:migrate:test
+      
+      - name: Upload database state
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-state
+          path: .firebase/
+          retention-days: 1
+
+  # E2E Tests - Coach Onboarding
+  e2e-onboarding:
+    runs-on: ubuntu-latest
+    needs: [setup, setup-database]
+    strategy:
+      fail-fast: false
+      matrix:
+        # Parallel test execution
+        containers: [1, 2, 3, 4]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+      
+      - name: Download database state
+        uses: actions/download-artifact@v4
+        with:
+          name: database-state
+          path: .firebase/
+      
+      - name: Start Firebase emulators
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:start --only firestore,auth --project demo-project &
+          sleep 10
+      
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+      
+      - name: Run Cypress tests - Onboarding
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
+          record: true
+          parallel: true
+          group: 'Coach Onboarding Tests'
+          spec: 'cypress/e2e/coach-onboarding.cy.ts'
+          config-file: cypress.config.ts
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_CI_BUILD_ID: ${{ github.run_id }}-${{ matrix.containers }}
+      
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: onboarding-screenshots-${{ matrix.containers }}
+          path: cypress/screenshots/
+          retention-days: 7
+      
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: onboarding-videos-${{ matrix.containers }}
+          path: cypress/videos/
+          retention-days: 7
+
+  # E2E Tests - Play Creation with Conflicts
+  e2e-play-conflicts:
+    runs-on: ubuntu-latest
+    needs: [setup, setup-database]
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+      
+      - name: Download database state
+        uses: actions/download-artifact@v4
+        with:
+          name: database-state
+          path: .firebase/
+      
+      - name: Start Firebase emulators
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:start --only firestore,auth --project demo-project &
+          sleep 10
+      
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+      
+      - name: Run Cypress tests - Play Conflicts
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
+          record: true
+          parallel: true
+          group: 'Play Conflict Tests'
+          spec: 'cypress/e2e/play-creation-conflict.cy.ts'
+          config-file: cypress.config.ts
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_CI_BUILD_ID: ${{ github.run_id }}-${{ matrix.containers }}
+      
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: play-conflicts-screenshots-${{ matrix.containers }}
+          path: cypress/screenshots/
+          retention-days: 7
+      
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: play-conflicts-videos-${{ matrix.containers }}
+          path: cypress/videos/
+          retention-days: 7
+
+  # E2E Tests - Practice Planning
+  e2e-practice-planning:
+    runs-on: ubuntu-latest
+    needs: [setup, setup-database]
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+      
+      - name: Download database state
+        uses: actions/download-artifact@v4
+        with:
+          name: database-state
+          path: .firebase/
+      
+      - name: Start Firebase emulators
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:start --only firestore,auth --project demo-project &
+          sleep 10
+      
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+      
+      - name: Run Cypress tests - Practice Planning
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
+          record: true
+          parallel: true
+          group: 'Practice Planning Tests'
+          spec: 'cypress/e2e/practice-planning.cy.ts'
+          config-file: cypress.config.ts
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_CI_BUILD_ID: ${{ github.run_id }}-${{ matrix.containers }}
+      
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: practice-planning-screenshots-${{ matrix.containers }}
+          path: cypress/screenshots/
+          retention-days: 7
+      
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: practice-planning-videos-${{ matrix.containers }}
+          path: cypress/videos/
+          retention-days: 7
+
+  # E2E Tests - Offline/Online Sync
+  e2e-offline-sync:
+    runs-on: ubuntu-latest
+    needs: [setup, setup-database]
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+      
+      - name: Download database state
+        uses: actions/download-artifact@v4
+        with:
+          name: database-state
+          path: .firebase/
+      
+      - name: Start Firebase emulators
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:start --only firestore,auth --project demo-project &
+          sleep 10
+      
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+      
+      - name: Run Cypress tests - Offline Sync
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
+          record: true
+          parallel: true
+          group: 'Offline Sync Tests'
+          spec: 'cypress/e2e/offline-sync.cy.ts'
+          config-file: cypress.config.ts
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_CI_BUILD_ID: ${{ github.run_id }}-${{ matrix.containers }}
+      
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: offline-sync-screenshots-${{ matrix.containers }}
+          path: cypress/screenshots/
+          retention-days: 7
+      
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: offline-sync-videos-${{ matrix.containers }}
+          path: cypress/videos/
+          retention-days: 7
+
+  # Performance Tests
+  e2e-performance:
+    runs-on: ubuntu-latest
+    needs: [setup, setup-database]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+      
+      - name: Download database state
+        uses: actions/download-artifact@v4
+        with:
+          name: database-state
+          path: .firebase/
+      
+      - name: Start Firebase emulators
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:start --only firestore,auth --project demo-project &
+          sleep 10
+      
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+      
+      - name: Run Performance Tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
+          record: true
+          group: 'Performance Tests'
+          spec: 'cypress/e2e/performance.cy.ts'
+          config-file: cypress.config.ts
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_CI_BUILD_ID: ${{ github.run_id }}
+      
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-reports
+          path: cypress/reports/
+          retention-days: 30
+
+  # Test Reports and Analytics
+  test-reports:
+    runs-on: ubuntu-latest
+    needs: [e2e-onboarding, e2e-play-conflicts, e2e-practice-planning, e2e-offline-sync, e2e-performance]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download all test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: cypress/
+      
+      - name: Generate test reports
+        run: |
+          npm run test:reports
+          npm run test:analytics
+      
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            cypress/reports/
+            cypress/analytics/
+          retention-days: 30
+      
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'cypress/reports/summary.json';
+            
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              const comment = `## 🧪 E2E Test Results
+              
+              ### Summary
+              - **Total Tests**: ${report.totalTests}
+              - **Passed**: ${report.passedTests}
+              - **Failed**: ${report.failedTests}
+              - **Skipped**: ${report.skippedTests}
+              - **Success Rate**: ${((report.passedTests / report.totalTests) * 100).toFixed(1)}%
+              
+              ### Performance Metrics
+              - **Average Load Time**: ${report.performance.averageLoadTime}ms
+              - **Memory Usage**: ${report.performance.memoryUsage}MB
+              - **Canvas Render Time**: ${report.performance.canvasRenderTime}ms
+              
+              ### Test Categories
+              ${Object.entries(report.categories).map(([category, stats]) => 
+                `- **${category}**: ${stats.passed}/${stats.total} (${((stats.passed / stats.total) * 100).toFixed(1)}%)`
+              ).join('\n')}
+              
+              [View detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  # Failure Notifications
+  notify-failure:
+    runs-on: ubuntu-latest
+    needs: [e2e-onboarding, e2e-play-conflicts, e2e-practice-planning, e2e-offline-sync, e2e-performance]
+    if: failure()
+    
+    steps:
+      - name: Notify Slack on failure
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#coach-core-tests'
+          text: |
+            🚨 E2E Tests Failed
+            
+            **Repository**: ${{ github.repository }}
+            **Branch**: ${{ github.ref }}
+            **Commit**: ${{ github.sha }}
+            **Run ID**: ${{ github.run_id }}
+            
+            [View failed run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+      - name: Notify Discord on failure
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          title: "Coach Core AI E2E Tests"
+          description: "E2E test suite failed for ${{ github.repository }}"
+          color: ${{ job.status == 'success' && '0x00ff00' || '0xff0000' }}
+      
+      - name: Create GitHub issue for test failures
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'cypress/reports/summary.json';
+            
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              if (report.failedTests > 0) {
+                const issueBody = `## 🚨 E2E Test Failures Detected
+                
+                **Repository**: ${{ github.repository }}
+                **Branch**: ${{ github.ref }}
+                **Commit**: ${{ github.sha }}
+                **Run ID**: ${{ github.run_id }}
+                
+                ### Test Results
+                - **Total Tests**: ${report.totalTests}
+                - **Failed Tests**: ${report.failedTests}
+                - **Success Rate**: ${((report.passedTests / report.totalTests) * 100).toFixed(1)}%
+                
+                ### Failed Test Categories
+                ${Object.entries(report.categories)
+                  .filter(([category, stats]) => stats.failed > 0)
+                  .map(([category, stats]) => 
+                    `- **${category}**: ${stats.failed} failed, ${stats.passed} passed`
+                  ).join('\n')}
+                
+                ### Next Steps
+                1. Review test artifacts and videos
+                2. Check for flaky tests
+                3. Investigate performance regressions
+                4. Update test data if needed
+                
+                [View test run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+                `;
+                
+                github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `E2E Test Failures - Run #${{ github.run_id }}`,
+                  body: issueBody,
+                  labels: ['bug', 'e2e-tests', 'high-priority']
+                });
+              }
+            } 

@@ -4,6 +4,46 @@
 
 Coach Core AI is a comprehensive coaching platform that combines AI-powered play generation, practice planning, team management, and real-time collaboration tools. The MVP is now production-ready with a clean, optimized codebase.
 
+## 🗂️ Documentation Navigation
+- **Play Export Spec:** `docs/PlayExportSpec.md` – Rendering requirements, metadata schema, and test plan.
+- **Investor Materials:** `docs/InvestorMemo.md`, `docs/PitchOutline.md` – Fundraising narrative and slide blueprint.
+- **Operational Guides:** `docs/Runbooks.md`, `docs/ComplianceChecklist.md` – Incident response, rollback, and privacy compliance status.
+- **Execution Plans:** `docs/30-60-90.md`, `docs/NextSteps.md` – Milestone tracking and weekly action items.
+- **Additional Context:** Explore `/docs` for feature specs, backlog references, and GTM artifacts aligned with the roadmap.
+
+_Tip:_ Each document ends with actionable checklists to convert directly into tickets.
+
+## ⚙️ Quickstart for Developers
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+2. **Bootstrap Local Environment**
+   ```bash
+   cp env.example .env.local
+   npm run firebase:emulators
+   ```
+3. **Run Quality Gates**
+   ```bash
+   npm run lint
+   npm run typecheck
+   npm run test
+   ```
+4. **Launch Web & Mobile Clients**
+   ```bash
+   npm run dev          # Web
+   npm run mobile:start # Expo mobile
+   ```
+5. **Explore Docs**
+   - Review `docs/PlayExportSpec.md` before working on export features.
+   - Follow `docs/Runbooks.md` for incident handling and rollbacks.
+
+## 💼 Quickstart for Founders & Investors
+1. Read `docs/InvestorMemo.md` for the one-page narrative and key metrics snapshot.
+2. Use `docs/PitchOutline.md` to spin up updated pitch decks (sections aligned to Phase roadmap).
+3. Confirm compliance posture in `docs/ComplianceChecklist.md` before external conversations.
+4. Reference `docs/30-60-90.md` and `docs/NextSteps.md` for execution status during board updates.
+
 ## 📊 Build Stats
 
 - **Bundle Size**: 522.74 kB (gzipped: 122.70 kB)

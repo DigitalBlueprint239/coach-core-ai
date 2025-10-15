@@ -78,9 +78,9 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import {
-  RESPONSIVE_GRIDS,
   RESPONSIVE_SPACING,
   RESPONSIVE_FONTS,
+  responsiveStyles,
   useResponsive,
 } from '../../utils/responsive';
 import {
@@ -117,7 +117,12 @@ import {
   Copy,
   ExternalLink,
 } from 'lucide-react';
-import aiService from '../../services/ai/ai-service';
+import aiService, {
+  PracticePlan,
+  PracticePeriod,
+  PracticePlanDrill,
+  AIPracticePlanResponse,
+} from '../../services/ai/ai-service';
 import { AIPracticePlanRequest } from '../../services/ai/enhanced-ai-service';
 import PracticeService from '../../services/practice/practice-service';
 import PracticePlanLibrary from './PracticePlanLibrary';
@@ -125,45 +130,8 @@ import { practiceDataService } from '../../services/data/data-service';
 import { syncService } from '../../services/data/sync-service';
 import { useAuth } from '../../hooks/useAuth';
 
-interface Drill {
-  id: string;
-  name: string;
-  category: string;
-  duration: number;
-  intensity: 'low' | 'medium' | 'high';
-  description: string;
-  equipment: string[];
-  objectives: string[];
-  skillLevel: 'beginner' | 'intermediate' | 'advanced';
-  sport: string;
-  ageGroup: string;
-}
+type Drill = PracticePlanDrill;
 
-export interface PracticePeriod {
-  id: string;
-  name: string;
-  duration: number;
-  drills: Drill[];
-  notes: string;
-  objectives: string[];
-}
-
-export interface PracticePlan {
-  id: string;
-  teamId: string;
-  title: string;
-  sport: string;
-  ageGroup: string;
-  duration: number;
-  goals: string[];
-  periods: PracticePeriod[];
-  notes: string;
-  createdAt: Date;
-  lastModified: Date;
-  aiConfidence: number;
-  tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-}
 
 interface WorkflowStep {
   title: string;
@@ -400,7 +368,7 @@ const ModernPracticePlanner: React.FC = () => {
         notes: 'This is a demo plan. Create an account to save your practice plans.',
         teamId: 'demo',
         createdAt: new Date(),
-        lastModified: new Date(),
+        updatedAt: new Date(),
         aiConfidence: 0,
         tags: ['demo'],
         difficulty: 'beginner',
@@ -445,7 +413,7 @@ const ModernPracticePlanner: React.FC = () => {
           notes: 'This is a sample practice plan. Edit it to create your own!',
           teamId: user.uid,
           createdAt: new Date(),
-          lastModified: new Date(),
+          updatedAt: new Date(),
           aiConfidence: 0,
           tags: ['beginner'],
           difficulty: 'beginner',
@@ -518,29 +486,45 @@ const ModernPracticePlanner: React.FC = () => {
         duration,
         goals,
         difficulty,
-        teamSize: 20, // Default, could be made configurable
-        equipment: [], // Could be made configurable
-        weather: 'indoor', // Could be made configurable
-        recentPerformance: 'average', // Could be made configurable
+        teamSize: 20,
+        equipment: [],
+        weather: 'indoor',
+        recentPerformance: 'steady',
+        teamContext: {
+          teamId: currentPlan?.teamId ?? user?.uid ?? 'demo-team',
+          teamName:
+            planTitle.trim() || currentPlan?.title || `${sport} ${ageGroup}`,
+          sport,
+          ageGroup,
+          skillLevel: difficulty,
+        },
       };
 
-      const response = await aiService.generatePracticePlan(request);
+      const response: AIPracticePlanResponse = await aiService.generatePracticePlan(
+        request
+      );
 
       if (response.success) {
-        setAiConfidence(response.confidence || 85);
-        setAiSuggestions(response.suggestions || []);
+        setAiConfidence(response.confidence ?? 85);
+        setAiSuggestions(response.suggestions ?? response.insights ?? []);
 
-        // Auto-populate plan with AI suggestions
         if (response.plan) {
           setCurrentPlan(response.plan);
+          if (!planTitle) {
+            setPlanTitle(response.plan.title);
+          }
           updateWorkflowProgress(2, true);
           updateWorkflowProgress(3, true);
         }
 
         toast({
-          title: 'AI Plan Generated!',
-          description: `Confidence: ${response.confidence}% - Review and customize as needed.`,
-          status: 'success',
+          title: response.fallback
+            ? 'Fallback Plan Generated'
+            : 'AI Plan Generated!',
+          description: response.confidence
+            ? `Confidence: ${response.confidence}% - Review and customize as needed.`
+            : 'Review and customize the generated plan before saving.',
+          status: response.fallback ? 'warning' : 'success',
           duration: 5000,
           isClosable: true,
         });
@@ -629,11 +613,12 @@ const ModernPracticePlanner: React.FC = () => {
       if (currentPlan.id && !currentPlan.id.startsWith('demo_')) {
         // Update existing plan
         await practiceDataService.update('practicePlans', currentPlan.id, planData);
-        savedPlan = currentPlan;
+        savedPlan = { ...currentPlan, updatedAt: new Date() };
       } else {
         // Create new plan
         const planId = await practiceDataService.create('practicePlans', planData);
-        savedPlan = { ...currentPlan, id: planId };
+        const timestamp = new Date();
+        savedPlan = { ...currentPlan, id: planId, createdAt: timestamp, updatedAt: timestamp };
       }
 
       setCurrentPlan(savedPlan);
@@ -897,7 +882,7 @@ const ModernPracticePlanner: React.FC = () => {
           {/* Create Plan Tab */}
           <TabPanel>
             <Grid
-              templateColumns={RESPONSIVE_GRIDS['2']}
+              templateColumns={responsiveStyles.grid['2'].gridTemplateColumns}
               gap={useBreakpointValue(RESPONSIVE_SPACING.xl)}
             >
               {/* Main Form */}
@@ -942,7 +927,7 @@ const ModernPracticePlanner: React.FC = () => {
                   </CardHeader>
                   <CardBody>
                     <SimpleGrid
-                      columns={RESPONSIVE_GRIDS['2']}
+                      templateColumns={responsiveStyles.grid['2'].gridTemplateColumns}
                       spacing={useBreakpointValue(RESPONSIVE_SPACING.md)}
                     >
                       {quickStartTemplates.map((template, index) => (
@@ -1039,10 +1024,10 @@ const ModernPracticePlanner: React.FC = () => {
                     </Stack>
                   </CardHeader>
                   <CardBody>
-                    <Grid
-                      templateColumns={RESPONSIVE_GRIDS['3']}
-                      gap={useBreakpointValue(RESPONSIVE_SPACING.lg)}
-                    >
+                <Grid
+                  templateColumns={responsiveStyles.grid['3'].gridTemplateColumns}
+                  gap={useBreakpointValue(RESPONSIVE_SPACING.lg)}
+                >
                       <FormControl>
                         <FormLabel
                           fontWeight="semibold"

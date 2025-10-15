@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Auth Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Authentication Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Google Sign-In</h2>
+        <p>Click the button below to test Google authentication:</p>
+        <button onclick="testGoogleAuth()">Test Google Sign-In</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="log" class="log">Ready to test...</div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js';
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js';
+        
+        // Firebase config (replace with your actual config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvOkBwJqXJqXJqXJqXJqXJqXJqXJqXJqX",
+            authDomain: "coach-core-ai.firebaseapp.com",
+            projectId: "coach-core-ai",
+            storageBucket: "coach-core-ai.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        window.testGoogleAuth = async function() {
+            const log = document.getElementById('log');
+            log.textContent = 'Starting Google authentication test...\n';
+            
+            try {
+                log.textContent += 'Initializing Google provider...\n';
+                const provider = new GoogleAuthProvider();
+                
+                log.textContent += 'Opening Google sign-in popup...\n';
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                log.textContent += `✅ SUCCESS!\n`;
+                log.textContent += `User ID: ${user.uid}\n`;
+                log.textContent += `Email: ${user.email}\n`;
+                log.textContent += `Display Name: ${user.displayName}\n`;
+                log.textContent += `Email Verified: ${user.emailVerified}\n`;
+                log.textContent += `Photo URL: ${user.photoURL}\n`;
+                
+                // Test if user can access protected routes
+                log.textContent += `\n🔍 Testing access to protected routes...\n`;
+                log.textContent += `User should now be able to access /dashboard\n`;
+                
+            } catch (error) {
+                log.textContent += `❌ ERROR: ${error.message}\n`;
+                log.textContent += `Error Code: ${error.code}\n`;
+                log.textContent += `Full Error: ${JSON.stringify(error, null, 2)}\n`;
+            }
+        };
+        
+        window.clearLog = function() {
+            document.getElementById('log').textContent = 'Ready to test...';
+        };
+        
+        // Listen for auth state changes
+        auth.onAuthStateChanged((user) => {
+            const log = document.getElementById('log');
+            if (user) {
+                log.textContent += `\n🔄 Auth state changed: User signed in (${user.email})\n`;
+            } else {
+                log.textContent += `\n🔄 Auth state changed: User signed out\n`;
+            }
+        });
+    </script>
+</body>
+</html>
+

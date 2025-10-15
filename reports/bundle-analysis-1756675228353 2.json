@@ -1,0 +1,234 @@
+{
+  "timestamp": "2025-08-31T21:20:28.353Z",
+  "stats": {
+    "timestamp": "2025-08-31T21:20:28.280Z",
+    "totalSize": 1845416,
+    "gzipSize": 553625,
+    "brotliSize": 369083,
+    "chunks": [
+      {
+        "name": "js/chunk-l0sNRNKZ.js",
+        "size": 44,
+        "sizeKB": "0.04",
+        "sizeMB": "0.000"
+      },
+      {
+        "name": "js/chunk-C-D8oJ3u.js",
+        "size": 100,
+        "sizeKB": "0.10",
+        "sizeMB": "0.000"
+      },
+      {
+        "name": "js/chunk-D6IqKc8f.js",
+        "size": 100,
+        "sizeKB": "0.10",
+        "sizeMB": "0.000"
+      },
+      {
+        "name": "js/chunk-C7_PKRBb.js",
+        "size": 351,
+        "sizeKB": "0.34",
+        "sizeMB": "0.000"
+      },
+      {
+        "name": "js/chunk-CYijJ9Fp.js",
+        "size": 4151,
+        "sizeKB": "4.05",
+        "sizeMB": "0.004"
+      },
+      {
+        "name": "js/claude-service.ts-BuoByMx_.js",
+        "size": 9532,
+        "sizeKB": "9.31",
+        "sizeMB": "0.009"
+      },
+      {
+        "name": "js/PlayDesignerFunctional-BVo-9Xp3.js",
+        "size": 11111,
+        "sizeKB": "10.85",
+        "sizeMB": "0.011"
+      },
+      {
+        "name": "js/MVPDashboard-B5r0rbbq.js",
+        "size": 11268,
+        "sizeKB": "11.00",
+        "sizeMB": "0.011"
+      },
+      {
+        "name": "js/chunk-BAKaXBvw.js",
+        "size": 11990,
+        "sizeKB": "11.71",
+        "sizeMB": "0.011"
+      },
+      {
+        "name": "sw.js",
+        "size": 12552,
+        "sizeKB": "12.26",
+        "sizeMB": "0.012"
+      },
+      {
+        "name": "js/AuthTest-BMqEOif6.js",
+        "size": 12760,
+        "sizeKB": "12.46",
+        "sizeMB": "0.012"
+      },
+      {
+        "name": "js/Signup-BFJOKsHd.js",
+        "size": 15530,
+        "sizeKB": "15.17",
+        "sizeMB": "0.015"
+      },
+      {
+        "name": "js/LandingPage-CIVmZRTe.js",
+        "size": 17012,
+        "sizeKB": "16.61",
+        "sizeMB": "0.016"
+      },
+      {
+        "name": "js/OnboardingFlow-B03nLqT5.js",
+        "size": 18211,
+        "sizeKB": "17.78",
+        "sizeMB": "0.017"
+      },
+      {
+        "name": "js/LoginPage-DPrECLJH.js",
+        "size": 20476,
+        "sizeKB": "20.00",
+        "sizeMB": "0.020"
+      },
+      {
+        "name": "js/PerformanceDashboard-u1Axs7VG.js",
+        "size": 26859,
+        "sizeKB": "26.23",
+        "sizeMB": "0.026"
+      },
+      {
+        "name": "js/PlaybookDesigner-CEWfO6N0.js",
+        "size": 42921,
+        "sizeKB": "41.92",
+        "sizeMB": "0.041"
+      },
+      {
+        "name": "js/AIBrainDashboardOptimized-7HaW0xN_.js",
+        "size": 43429,
+        "sizeKB": "42.41",
+        "sizeMB": "0.041"
+      },
+      {
+        "name": "js/chunk-DJH17P3U.js",
+        "size": 43597,
+        "sizeKB": "42.58",
+        "sizeMB": "0.042"
+      },
+      {
+        "name": "js/AIPlayGenerator-uN_WZjKi.js",
+        "size": 44418,
+        "sizeKB": "43.38",
+        "sizeMB": "0.042"
+      },
+      {
+        "name": "js/TeamManagement-DwJF0TbS.js",
+        "size": 45347,
+        "sizeKB": "44.28",
+        "sizeMB": "0.043"
+      },
+      {
+        "name": "js/ModernPracticePlanner-BGTk4oX5.js",
+        "size": 70267,
+        "sizeKB": "68.62",
+        "sizeMB": "0.067"
+      },
+      {
+        "name": "js/chunk-BQwwyjxa.js",
+        "size": 75496,
+        "sizeKB": "73.73",
+        "sizeMB": "0.072"
+      },
+      {
+        "name": "js/chunk-DS8ok-LS.js",
+        "size": 301820,
+        "sizeKB": "294.75",
+        "sizeMB": "0.288"
+      },
+      {
+        "name": "js/chunk-DaxACUal.js",
+        "size": 440137,
+        "sizeKB": "429.82",
+        "sizeMB": "0.420"
+      },
+      {
+        "name": "js/index-kSbtu8UY.js",
+        "size": 516469,
+        "sizeKB": "504.36",
+        "sizeMB": "0.493"
+      }
+    ],
+    "assets": [
+      {
+        "name": "css/index-RCXZ1E9i.css",
+        "size": 49468,
+        "sizeKB": "48.31",
+        "sizeMB": "0.047"
+      }
+    ],
+    "dependencies": [],
+    "analysis": {
+      "totalChunks": 26,
+      "smallestChunk": {
+        "name": "js/chunk-l0sNRNKZ.js",
+        "size": 44,
+        "sizeKB": "0.04",
+        "sizeMB": "0.000"
+      },
+      "averageChunkSize": 69074.92307692308,
+      "chunkSizeDistribution": {
+        "small": 23,
+        "medium": 2,
+        "large": 1,
+        "xlarge": 0
+      }
+    },
+    "totalSizeKB": "1802.16",
+    "totalSizeMB": "1.760",
+    "gzipSizeKB": "540.65",
+    "brotliSizeKB": "360.43"
+  },
+  "recommendations": [
+    {
+      "type": "info",
+      "category": "Bundle Size",
+      "message": "Bundle size is moderate. Consider lazy loading for better performance.",
+      "priority": "medium"
+    },
+    {
+      "type": "info",
+      "category": "Chunk Count",
+      "message": "High chunk count. Consider consolidating small chunks.",
+      "priority": "low"
+    },
+    {
+      "type": "warning",
+      "category": "Performance",
+      "message": "Gzipped size is large. Focus on reducing bundle size.",
+      "priority": "high"
+    },
+    {
+      "type": "success",
+      "category": "Best Practices",
+      "message": "Use React.lazy() for route-based code splitting.",
+      "priority": "medium"
+    },
+    {
+      "type": "success",
+      "category": "Best Practices",
+      "message": "Implement tree shaking to remove unused code.",
+      "priority": "medium"
+    }
+  ],
+  "summary": {
+    "totalSize": "1.760MB",
+    "chunkCount": 26,
+    "gzipSize": "540.65KB",
+    "brotliSize": "360.43KB"
+  }
+}

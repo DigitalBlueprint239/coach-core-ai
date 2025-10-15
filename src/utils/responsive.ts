@@ -12,7 +12,7 @@ export const BREAKPOINTS = {
 } as const;
 
 // Responsive spacing scale
-export const RESPONSIVE_SPACING = {
+export const RESPONSIVE_SPACING: Record<string, Record<string, number>> = {
   xs: { base: 2, sm: 3, md: 4, lg: 4, xl: 4 },
   sm: { base: 3, sm: 4, md: 5, lg: 6, xl: 6 },
   md: { base: 4, sm: 5, md: 6, lg: 8, xl: 8 },
@@ -21,7 +21,7 @@ export const RESPONSIVE_SPACING = {
   '2xl': { base: 10, sm: 12, md: 16, lg: 20, xl: 24 },
   '3xl': { base: 12, sm: 16, md: 20, lg: 24, xl: 32 },
   '4xl': { base: 16, sm: 20, md: 24, lg: 32, xl: 40 },
-} as const;
+};
 
 // Responsive typography scale
 export const RESPONSIVE_FONTS = {
@@ -56,7 +56,7 @@ export const RESPONSIVE_CONTAINERS = {
 } as const;
 
 // Responsive padding scales
-export const RESPONSIVE_PADDING = {
+export const RESPONSIVE_PADDING: Record<string, Record<string, string | number>> = {
   page: { base: 4, sm: 6, md: 8, lg: 12, xl: 16 },
   section: { base: 6, sm: 8, md: 12, lg: 16, xl: 20 },
   card: { base: 4, sm: 5, md: 6, lg: 8, xl: 8 },
@@ -67,22 +67,22 @@ export const RESPONSIVE_PADDING = {
     lg: '18px 24px',
     xl: '18px 24px',
   },
-} as const;
+};
 
 // Responsive margin scales
-export const RESPONSIVE_MARGIN = {
+export const RESPONSIVE_MARGIN: Record<string, Record<string, number>> = {
   section: { base: 8, sm: 10, md: 12, lg: 16, xl: 20 },
   component: { base: 4, sm: 5, md: 6, lg: 8, xl: 8 },
   element: { base: 2, sm: 3, md: 4, lg: 4, xl: 4 },
-} as const;
+};
 
 // Touch-friendly sizing for mobile
-export const TOUCH_SIZES = {
+export const TOUCH_SIZES: Record<string, Record<string, string>> = {
   button: { base: '44px', sm: '44px', md: '40px', lg: '40px', xl: '40px' },
   icon: { base: '20px', sm: '20px', md: '18px', lg: '18px', xl: '18px' },
   input: { base: '48px', sm: '48px', md: '44px', lg: '44px', xl: '44px' },
   avatar: { base: '48px', sm: '48px', md: '40px', lg: '40px', xl: '40px' },
-} as const;
+};
 
 // Mobile-specific utilities
 export const MOBILE_UTILS = {

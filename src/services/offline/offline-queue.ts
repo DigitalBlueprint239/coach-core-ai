@@ -90,7 +90,7 @@ class OfflineQueue {
     try {
       // Sort by priority and timestamp
       const sortedQueue = queue.sort((a, b) => {
-        const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+        const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 } as const;
         if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
           return priorityOrder[a.priority] - priorityOrder[b.priority];
         }
@@ -253,7 +253,12 @@ class OfflineQueue {
   private removeOldestLowPriorityItems(queue: QueuedAction[]): void {
     // Sort by priority (high first) then by timestamp (oldest first)
     queue.sort((a, b) => {
-      const priorityOrder = { high: 3, medium: 2, low: 1 };
+      const priorityOrder: Record<string, number> = {
+        critical: 4,
+        high: 3,
+        medium: 2,
+        low: 1,
+      };
       const aPriority = priorityOrder[a.priority] || 2;
       const bPriority = priorityOrder[b.priority] || 2;
       
