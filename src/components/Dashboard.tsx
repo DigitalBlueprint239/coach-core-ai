@@ -9,18 +9,72 @@ import ErrorBoundary from './common/ErrorBoundary';
 import { addBreadcrumb } from '../utils/breadcrumbs';
 import { completeScreenRenderTiming, getRecentScreenTimings, startScreenRenderTiming } from '../utils/performanceInstrumentation';
 import { env } from '../config/env';
+import { generateHealthSignals } from '../health/generateHealthSignals';
+import SeasonHealthDashboard from '../health/SeasonHealthDashboard';
+import { dispatchHealthAction, filterResolvedSignals } from '../health/healthActions';
+import { HealthSignal, HealthSignalAction, HealthTeam } from '../health/healthTypes';
+
+type TeamLike = { id: string; name: string; updatedAt?: Date | number };
+
+const buildHealthSignals = (currentTeam?: TeamLike): HealthSignal[] => {
+  const updatedAt = currentTeam?.updatedAt instanceof Date ? currentTeam.updatedAt.getTime() : currentTeam?.updatedAt;
+  const team: HealthTeam = currentTeam
+    ? { id: currentTeam.id, name: currentTeam.name, expectedRosterSize: 20, updatedAt: updatedAt ?? Date.now() }
+    : { id: 'team-demo', name: 'Varsity', expectedRosterSize: 20, updatedAt: Date.now() };
+
+  const generated = generateHealthSignals({
+    teams: [team],
+    roster: [
+      { playerId: 'p1', teamId: team.id, playerName: 'Alex Carter', hasWaiver: false, hasPaymentMethod: true, updatedAt: Date.now() - 90_000 },
+      { playerId: 'p2', teamId: team.id, playerName: 'Jordan Lee', hasWaiver: true, hasPaymentMethod: false, updatedAt: Date.now() - 180_000 },
+      { playerId: 'p3', teamId: team.id, playerName: 'Sam Brooks', hasWaiver: true, hasPaymentMethod: true, updatedAt: Date.now() - 280_000 }
+    ],
+    attendance: [
+      {
+        teamId: team.id,
+        eventId: 'event-1',
+        eventDate: new Date().toISOString(),
+        attendedCount: 8,
+        rosterCount: 20,
+        updatedAt: Date.now() - 70_000
+      }
+    ],
+    schedule: [
+      {
+        teamId: team.id,
+        eventId: 'practice-1',
+        title: 'Field Practice',
+        startsAt: '2026-01-10T17:00:00.000Z',
+        endsAt: '2026-01-10T18:00:00.000Z',
+        updatedAt: Date.now() - 60_000
+      },
+      {
+        teamId: team.id,
+        eventId: 'practice-2',
+        title: 'Film Room',
+        startsAt: '2026-01-10T17:30:00.000Z',
+        endsAt: '2026-01-10T18:15:00.000Z',
+        updatedAt: Date.now() - 50_000
+      }
+    ]
+  });
+
+  return filterResolvedSignals(generated);
+};
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
   const { currentTeam } = useTeam();
-  const { showSuccess } = useToast();
+  const { showSuccess, showError } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   const [diagnosticsVersion, setDiagnosticsVersion] = useState(0);
+  const [composerDraft, setComposerDraft] = useState<{ teamId?: string; message: string } | null>(null);
+  const [refreshSignalsVersion, setRefreshSignalsVersion] = useState(0);
 
   useEffect(() => {
     addBreadcrumb({ at: Date.now(), category: 'navigation', message: `dashboard_tab:${activeTab}` });
 
-    if (!['schedule', 'chat', 'practice'].includes(activeTab)) return;
+    if (!['schedule', 'chat', 'practice', 'season-health'].includes(activeTab)) return;
 
     const marker = startScreenRenderTiming(activeTab);
     const frame = requestAnimationFrame(() => {
@@ -32,6 +86,19 @@ const Dashboard: React.FC = () => {
   }, [activeTab]);
 
   const recentTimings = useMemo(() => getRecentScreenTimings().slice(0, 6), [diagnosticsVersion]);
+
+  const healthSignals = useMemo(() => buildHealthSignals(currentTeam || undefined), [currentTeam, refreshSignalsVersion]);
+
+  const handleHealthAction = (signal: HealthSignal, action: HealthSignalAction) => {
+    const ok = dispatchHealthAction(action, signal, {
+      navigate: (target) => setActiveTab(target),
+      setComposerDraft,
+      showSuccess,
+      showError
+    });
+
+    if (ok) setRefreshSignalsVersion((x) => x + 1);
+  };
 
   if (authLoading) {
     return <LoadingSpinner text="Loading your coaching dashboard..." />;
@@ -59,6 +126,7 @@ const Dashboard: React.FC = () => {
     { id: 'schedule', name: 'Schedule', icon: '🗓️' },
     { id: 'chat', name: 'Chat', icon: '💬' },
     { id: 'practice', name: 'Practice Plans', icon: '📋' },
+    { id: 'season-health', name: 'Season Health', icon: '🩺' },
     { id: 'attendance', name: 'Attendance', icon: '✅' },
     { id: 'teams', name: 'Teams', icon: '👥' },
     { id: 'playbook', name: 'Smart Playbook', icon: '🏈' }
@@ -102,7 +170,7 @@ const Dashboard: React.FC = () => {
           <div className="px-4 sm:px-0">
             <div className="mt-2">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <button data-testid="qa-schedule" onClick={() => setActiveTab('schedule')} className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors text-left">
                   <div className="text-2xl mb-2">🗓️</div><div className="font-medium">Today's Schedule</div><div className="text-sm opacity-90">View and adjust sessions</div>
                 </button>
@@ -115,11 +183,14 @@ const Dashboard: React.FC = () => {
                 <button data-testid="qa-attendance" onClick={() => setActiveTab('attendance')} className="bg-emerald-600 text-white p-4 rounded-lg hover:bg-emerald-700 transition-colors text-left">
                   <div className="text-2xl mb-2">✅</div><div className="font-medium">Take Attendance</div><div className="text-sm opacity-90">Check players in fast</div>
                 </button>
+                <button data-testid="qa-season-health" onClick={() => setActiveTab('season-health')} className="bg-rose-600 text-white p-4 rounded-lg hover:bg-rose-700 transition-colors text-left">
+                  <div className="text-2xl mb-2">🩺</div><div className="font-medium">Season Health</div><div className="text-sm opacity-90">Find and fix anomalies</div>
+                </button>
               </div>
 
               <div className="mt-6 bg-white rounded-lg shadow p-4" data-testid="diagnostics-panel">
                 <h3 className="font-semibold text-gray-900 mb-2">Diagnostics</h3>
-                <p className="text-xs text-gray-500 mb-2">Latest Schedule/Chat/Practice render timings.</p>
+                <p className="text-xs text-gray-500 mb-2">Latest Schedule/Chat/Practice/Season Health render timings.</p>
                 {recentTimings.length === 0 ? (
                   <p className="text-sm text-gray-500">No timings recorded yet.</p>
                 ) : (
@@ -141,10 +212,22 @@ const Dashboard: React.FC = () => {
         )}
 
         {activeTab === 'schedule' && <div className="px-4 sm:px-0"><div className="bg-white rounded-lg shadow p-6"><h2 className="text-lg font-semibold mb-2">Today's Schedule</h2><p className="text-gray-600">No sessions scheduled yet. Add your first session to get started.</p></div></div>}
-        {activeTab === 'chat' && <div className="px-4 sm:px-0"><div className="bg-white rounded-lg shadow p-6"><h2 className="text-lg font-semibold mb-2">Team Chat</h2><p className="text-gray-600">Messaging is ready. Start a team update in one tap.</p></div></div>}
+        {activeTab === 'chat' && (
+          <div className="px-4 sm:px-0">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-semibold mb-2">Team Chat</h2>
+              {composerDraft ? (
+                <p className="text-gray-700 text-sm" data-testid="chat-draft-preview">Draft ready: {composerDraft.message}</p>
+              ) : (
+                <p className="text-gray-600">Messaging is ready. Start a team update in one tap.</p>
+              )}
+            </div>
+          </div>
+        )}
         {activeTab === 'attendance' && <div className="px-4 sm:px-0"><div className="bg-white rounded-lg shadow p-6"><h2 className="text-lg font-semibold mb-2">Attendance</h2><p className="text-gray-600">Attendance check-in will appear here for today's roster.</p></div></div>}
         {activeTab === 'teams' && <TeamManagement />}
         {activeTab === 'practice' && <PracticePlanner />}
+        {activeTab === 'season-health' && <SeasonHealthDashboard signals={healthSignals} onAction={handleHealthAction} />}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
             <SmartPlaybook />

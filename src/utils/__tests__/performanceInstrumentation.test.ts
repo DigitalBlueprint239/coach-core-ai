@@ -4,7 +4,8 @@ import {
   clearScreenTimings,
   completeScreenRenderTiming,
   getRecentScreenTimings,
-  startScreenRenderTiming
+  startScreenRenderTiming,
+  getTargetForScreen
 } from '../performanceInstrumentation';
 
 describe('performanceInstrumentation', () => {
@@ -29,5 +30,9 @@ describe('performanceInstrumentation', () => {
     expect(classifyTiming(300, 300)).toBe('green');
     expect(classifyTiming(360, 300)).toBe('yellow');
     expect(classifyTiming(400, 300)).toBe('red');
+  });
+
+  it('includes season health target timing', () => {
+    expect(getTargetForScreen('season-health')).toBe(350);
   });
 });

@@ -14,7 +14,8 @@ const timings: ScreenTiming[] = [];
 const TARGETS: Record<string, number> = {
   schedule: 300,
   chat: 300,
-  practice: 350
+  practice: 350,
+  'season-health': 350
 };
 
 export interface ScreenTimingMarker {

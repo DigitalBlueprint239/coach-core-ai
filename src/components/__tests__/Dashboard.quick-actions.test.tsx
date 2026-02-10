@@ -27,5 +27,6 @@ describe('Dashboard quick actions', () => {
     expect(screen.getByTestId('qa-message')).toBeTruthy();
     expect(screen.getByTestId('qa-practice')).toBeTruthy();
     expect(screen.getByTestId('qa-attendance')).toBeTruthy();
+    expect(screen.getByTestId('qa-season-health')).toBeTruthy();
   });
 });
