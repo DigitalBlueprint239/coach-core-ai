@@ -6,7 +6,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "typecheck": "tsc --noEmit --pretty false",
+    "verify": "npm run build && npm run typecheck && npm test -- --watch=false"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.22.0",
@@ -29,6 +31,7 @@
     "@storybook/addon-links": "^9.0.16",
     "@storybook/react": "^9.0.16",
     "@storybook/testing-library": "^0.2.1",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

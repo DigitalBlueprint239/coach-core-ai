@@ -21,6 +21,7 @@
     "src/components/coach-core-backend.ts",
     "src/utils/offline-persistence.ts",
     "src/components/coach-core-integration.ts",
-    "src/utils/**"
+    "src/utils/**",
+    "archive/**"
   ]
 }

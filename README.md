@@ -2,6 +2,8 @@
 
 A comprehensive AI-powered coaching platform built with React, TypeScript, and Firebase. Coach Core AI provides intelligent practice planning, team management, and analytics for sports coaches.
 
+> **Canonical App Notice:** This repository contains a single canonical application located at the repository root (`package.json` + `src/`). Other app surfaces are archived and are not part of the active build.
+
 ## 🚀 Features
 
 ### AI-Powered Practice Planning
