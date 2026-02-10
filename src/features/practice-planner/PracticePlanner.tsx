@@ -7,6 +7,7 @@ import {
   PracticeSuggestionOutput,
   validatePracticeSuggestionOutput
 } from '../../ai/contract/practiceSuggestion';
+import { persistValidatedPracticePlan, persistValidatedSegmentUpdate } from './persistence';
 
 const defaultGoals = [
   { label: 'Game Prep', value: 'game_prep' },
@@ -83,14 +84,14 @@ const PracticePlanner: React.FC = () => {
         throw new Error(`Invalid AI response: ${validation.errors.join(' ')}`);
       }
 
-      setAIResult({
-        plan: structured,
-        metadata: {
-          input,
-          generatedAt: new Date().toISOString(),
-          source: 'practice_planner'
-        }
-      });
+      const metadata = {
+        input,
+        generatedAt: new Date().toISOString(),
+        source: 'practice_planner'
+      };
+
+      setAIResult({ plan: structured, metadata });
+      persistValidatedPracticePlan(structured, metadata);
     } catch (err: any) {
       setError(err?.message || 'AI generation failed. Please retry.');
     } finally {
@@ -98,15 +99,56 @@ const PracticePlanner: React.FC = () => {
     }
   };
 
-  const regenerateSegment = (segmentId: string) => {
+  const regenerateSegment = async (segmentId: string) => {
     if (!aiResult) return;
-    const updated = {
-      ...aiResult.plan,
-      segments: aiResult.plan.segments.map((s) =>
-        s.id === segmentId ? { ...s, variations: [...s.variations, 'Regenerated with alternate spacing'] } : s
-      )
-    };
-    setAIResult({ ...aiResult, plan: updated });
+
+    try {
+      const input = aiResult.metadata.input as PracticeSuggestionInput;
+      const teamContext = {
+        teamId: 'demo-team',
+        teamName: 'Demo Team',
+        sport: input.sport as any,
+        ageGroup: input.ageGroup as any,
+        skillLevel: input.skillLevel,
+        playerCount: input.rosterSize
+      };
+
+      const raw = await ai.generatePracticePlan(teamContext, input.focusGoals, input.durationMinutes, {
+        equipmentAvailable: input.equipmentAvailable,
+        coachStyleProfile: input.coachStyleProfile,
+        regenerateSegmentId: segmentId,
+        regeneratePurpose: `Regenerate segment ${segmentId}`
+      });
+
+      const structured = adaptToPracticeSuggestionOutput(raw, input);
+      const validation = validatePracticeSuggestionOutput(structured);
+      if (!validation.valid) {
+        setError(`Regeneration rejected: ${validation.errors.join(' ')}`);
+        return;
+      }
+
+      const replacement = structured.segments.find((s) => s.id === segmentId) || structured.segments[0];
+      const markedReplacement = { ...replacement, id: segmentId, regenerated: true };
+      const nextPlan: PracticeSuggestionOutput = {
+        ...aiResult.plan,
+        segments: aiResult.plan.segments.map((s) => (s.id === segmentId ? markedReplacement : s))
+      };
+
+      const persisted = persistValidatedSegmentUpdate(nextPlan, markedReplacement, {
+        ...aiResult.metadata,
+        regeneratedAt: new Date().toISOString(),
+        regeneratedSegmentId: segmentId
+      });
+
+      if (!persisted) {
+        setError('Regenerated segment failed validation and was not saved.');
+        return;
+      }
+
+      setAIResult({ ...aiResult, plan: nextPlan });
+    } catch (err: any) {
+      setError(err?.message || 'Failed to regenerate segment.');
+    }
   };
 
   const updateSegmentPoint = (segmentId: string, text: string) => {
@@ -188,7 +230,7 @@ const PracticePlanner: React.FC = () => {
                   value={segment.coachingPoints[0] || ''}
                   onChange={(e) => updateSegmentPoint(segment.id, e.target.value)}
                 />
-                <div className="text-xs text-gray-600 mt-2">Variations: {segment.variations.join(' • ')}</div>
+                <div className="text-xs text-gray-600 mt-2">Status: {segment.regenerated ? 'Regenerated' : 'Original'} • Variations: {segment.variations.join(' • ')}</div>
                 <button onClick={() => regenerateSegment(segment.id)} className="mt-2 text-xs text-blue-700 underline">Regenerate this segment</button>
               </li>
             ))}

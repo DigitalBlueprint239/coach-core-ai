@@ -18,6 +18,7 @@ export interface PracticeSuggestionSegment {
   setup: string;
   coachingPoints: string[];
   variations: string[];
+  regenerated?: boolean;
 }
 
 export interface PracticeSuggestionOutput {

@@ -8,6 +8,7 @@ import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
 import { addBreadcrumb } from '../utils/breadcrumbs';
 import { completeScreenRenderTiming, getRecentScreenTimings, startScreenRenderTiming } from '../utils/performanceInstrumentation';
+import { env } from '../config/env';
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
@@ -124,11 +125,17 @@ const Dashboard: React.FC = () => {
                 ) : (
                   <ul className="space-y-1 text-sm">
                     {recentTimings.map((t, idx) => (
-                      <li key={`${t.screen}-${idx}`} className="flex justify-between"><span className="capitalize">{t.screen}</span><span>{t.durationMs.toFixed(1)}ms</span></li>
+                      <li key={`${t.screen}-${idx}`} className="flex items-center justify-between">
+                        <span className="capitalize">{t.screen}</span>
+                        <span className="text-xs text-gray-500">target {t.targetMs}ms</span>
+                        <span className={`px-2 py-0.5 rounded text-xs font-semibold ${t.status === 'green' ? 'bg-green-100 text-green-700' : t.status === 'yellow' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>{t.status.toUpperCase()}</span>
+                        <span>{t.durationMs.toFixed(1)}ms</span>
+                      </li>
                     ))}
                   </ul>
                 )}
               </div>
+              <p className="mt-2 text-[11px] text-gray-400">commit: {env.VITE_COMMIT_HASH || 'local'} • {new Date().toLocaleTimeString()}</p>
             </div>
           </div>
         )}
