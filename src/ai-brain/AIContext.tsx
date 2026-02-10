@@ -5,6 +5,7 @@ import {
   AISuggestion, AIConversation, AIInsight,
   TeamContext, GameContext, PlayerContext, User
 } from '../types/firestore-schema';
+import { env } from '../config/env';
 
 // ============================================
 // AI CONTEXT TYPES
@@ -70,7 +71,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 }) => {
   // Initialize AI service configuration
   const defaultConfig: AIServiceConfig = {
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
+    apiKey: env.VITE_OPENAI_API_KEY || '',
     model: 'gpt-4',
     maxTokens: 2000,
     temperature: 0.7,
@@ -79,7 +80,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 
   // Initialize proxy configuration
   const proxyConfig: AIProxyConfig = {
-    endpoint: import.meta.env.VITE_AI_PROXY_ENDPOINT || '/api/ai',
+    endpoint: env.VITE_AI_PROXY_ENDPOINT || '/api/ai',
     timeout: 30000,
     retries: 3
   };

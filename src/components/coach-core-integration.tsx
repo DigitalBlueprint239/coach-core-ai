@@ -4,6 +4,7 @@
 // ============================================
 
 import React, { useState, useEffect } from 'react';
+import { env } from '../config/env';
 // STUBS for missing imports (replace with real implementations)
 export const CoachCoreAIComplete = () => null;
 export const RosterUpload = (props: any) => <div>RosterUpload</div>;
@@ -57,7 +58,7 @@ class CoachCoreApplication {
 
     // Initialize database service
     this.database = new DatabaseService({
-      provider: import.meta.env.VITE_DATABASE_PROVIDER as 'firebase' | 'supabase' || 'firebase',
+      provider: env.VITE_DATABASE_PROVIDER as 'firebase' | 'supabase' || 'firebase',
       config: this.getDatabaseConfig(),
       offlineEnabled: true
     });
@@ -68,7 +69,7 @@ class CoachCoreApplication {
     // Initialize AI brain
     this.aiBrain = new AIBrainService({
       model: 'gpt-4',
-      apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
+      apiKey: env.VITE_OPENAI_API_KEY || '',
       maxTokens: 2000,
       temperature: 0.7,
       safetyLevel: 'strict'
@@ -94,11 +95,11 @@ class CoachCoreApplication {
     this.feedback = new FeedbackService();
 
     // Initialize Hudl integration (if enabled)
-    if (import.meta.env.VITE_ENABLE_HUDL_INTEGRATION === 'true') {
+    if (env.VITE_ENABLE_HUDL_INTEGRATION === 'true') {
       this.hudl = new HudlIntegrationService({
-        clientId: import.meta.env.VITE_HUDL_CLIENT_ID || '',
-        clientSecret: import.meta.env.VITE_HUDL_CLIENT_SECRET || '',
-        redirectUri: import.meta.env.VITE_HUDL_REDIRECT_URI || '',
+        clientId: env.VITE_HUDL_CLIENT_ID || '',
+        clientSecret: env.VITE_HUDL_CLIENT_SECRET || '',
+        redirectUri: env.VITE_HUDL_REDIRECT_URI || '',
         scope: ['read', 'write']
       });
     }
@@ -110,22 +111,22 @@ class CoachCoreApplication {
   }
 
   private getDatabaseConfig() {
-    const provider = import.meta.env.VITE_DATABASE_PROVIDER || 'firebase';
+    const provider = env.VITE_DATABASE_PROVIDER || 'firebase';
     
     if (provider === 'firebase') {
       return {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APP_ID,
-        measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+        apiKey: env.VITE_FIREBASE_API_KEY,
+        authDomain: env.VITE_FIREBASE_AUTH_DOMAIN,
+        projectId: env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: env.VITE_FIREBASE_APP_ID,
+        measurementId: env.VITE_FIREBASE_MEASUREMENT_ID
       };
     } else {
       return {
-        url: import.meta.env.VITE_SUPABASE_URL,
-        anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY
+        url: env.VITE_SUPABASE_URL,
+        anonKey: env.VITE_SUPABASE_ANON_KEY
       };
     }
   }
@@ -170,17 +171,17 @@ class CoachCoreApplication {
 
   private startApplication() {
     console.log('🏈 Coach Core AI Application Started');
-    console.log('Environment:', import.meta.env.VITE_ENVIRONMENT);
+    console.log('Environment:', env.VITE_ENVIRONMENT);
     console.log('Features enabled:', this.getEnabledFeatures());
   }
 
   private getEnabledFeatures() {
     return {
-      ai: import.meta.env.VITE_ENABLE_AI_FEATURES === 'true',
-      hudl: import.meta.env.VITE_ENABLE_HUDL_INTEGRATION === 'true',
-      analytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
-      twoFactor: import.meta.env.VITE_ENABLE_2FA === 'true',
-      offline: import.meta.env.VITE_ENABLE_OFFLINE_MODE === 'true'
+      ai: env.VITE_ENABLE_AI_FEATURES === 'true',
+      hudl: env.VITE_ENABLE_HUDL_INTEGRATION === 'true',
+      analytics: env.VITE_ENABLE_ANALYTICS === 'true',
+      twoFactor: env.VITE_ENABLE_2FA === 'true',
+      offline: env.VITE_ENABLE_OFFLINE_MODE === 'true'
     };
   }
 
@@ -741,7 +742,7 @@ export const MONITORING_CONFIG = {
   },
 
   logging: {
-    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+    level: env.PROD ? 'info' : 'debug',
     format: 'json',
     destinations: ['console', 'file', 'elasticsearch']
   },
@@ -779,7 +780,7 @@ export const MONITORING_CONFIG = {
 
 export const SECURITY_CONFIG = {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
+    origin: env.PROD 
       ? ['https://coachcore.ai', 'https://www.coachcore.ai']
       : ['http://localhost:3000', 'http://localhost:3001'],
     credentials: true,

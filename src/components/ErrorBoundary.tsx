@@ -1,5 +1,6 @@
 // src/components/ErrorBoundary.tsx
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { env } from '../config/env';
 
 // ============================================
 // ERROR BOUNDARY TYPES
@@ -97,7 +98,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (env.DEV) {
       console.error('Error caught by boundary:', error, errorInfo);
     }
   }
@@ -125,9 +126,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           timestamp: Date.now()
         },
         appInfo: {
-          version: import.meta.env.VITE_VERSION || '1.0.0',
-          environment: process.env.NODE_ENV || 'development',
-          buildNumber: import.meta.env.VITE_BUILD_NUMBER
+          version: env.VITE_VERSION || '1.0.0',
+          environment: env.MODE || 'development',
+          buildNumber: env.VITE_BUILD_NUMBER
         },
         context: {
           componentName: this.getComponentName(errorInfo.componentStack || ''),
@@ -436,7 +437,7 @@ class ErrorReportingService {
   private isProcessing: boolean = false;
 
   constructor() {
-    this.endpoint = import.meta.env.VITE_ERROR_REPORTING_ENDPOINT || '/api/errors';
+    this.endpoint = env.VITE_ERROR_REPORTING_ENDPOINT || '/api/errors';
   }
 
   async reportError(errorReport: ErrorReport): Promise<void> {

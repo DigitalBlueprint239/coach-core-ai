@@ -1,6 +1,8 @@
 // src/services/push-notifications.ts
 
-const PUBLIC_VAPID_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || '';
+import { env } from '../config/env';
+
+const PUBLIC_VAPID_KEY = env.VITE_VAPID_PUBLIC_KEY || '';
 
 export const isPushSupported = () => {
   return 'serviceWorker' in navigator && 'PushManager' in window;

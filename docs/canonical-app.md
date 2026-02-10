@@ -18,8 +18,9 @@ From repository root:
 
 ```bash
 npm install --legacy-peer-deps
-npm start
+npm run dev
 npm run build
+npm run preview
 npm run typecheck
 npm run verify
 ```
@@ -36,3 +37,9 @@ Canonical validation is run from repository root:
 - `npm run build`
 - `npm run typecheck`
 - `npm run verify`
+
+
+## Environment variables (Vite)
+- Canonical frontend env vars use the `VITE_` prefix.
+- Access env values through `src/config/env.ts` instead of reading `process.env` directly in browser code.
+- Legacy names are mapped where needed for compatibility during transition.

@@ -104,7 +104,7 @@ See [SETUP.md](SETUP.md) for detailed instructions.
 
 5. **Start the development server**
    ```bash
-   npm start
+   npm run dev
    ```
 
 ## 🔧 Configuration
@@ -127,11 +127,10 @@ See [SETUP.md](SETUP.md) for detailed instructions.
 
 ## 📦 Available Scripts
 
-- `npm start` - Start development server
-- `npm build` - Build for production
+- `npm run dev` - Start development server
+- `npm run build` - Build for production (Vite)
 - `npm test` - Run tests
-- Ensure you've run `npm install` to install `react-scripts` and all other
-  testing dependencies before executing the test suite.
+- Ensure you've run `npm install --legacy-peer-deps` before executing build/test commands.
 - `npm run deploy` - Deploy to Firebase
 - `npm run storybook` - Start Storybook
 - `npm run test:ai` - Test AI functionality
