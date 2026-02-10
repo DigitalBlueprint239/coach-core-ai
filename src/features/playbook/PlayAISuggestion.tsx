@@ -16,7 +16,7 @@ const PlayAISuggestion: React.FC<PlayAISuggestionProps> = ({ playContext }) => {
     setError(null);
     setSuggestion(null);
     try {
-      const result = await ai.getRealtimeInsight(playContext);
+      const result = await (ai as any).getRealtimeInsight(playContext);
       setSuggestion(result);
     } catch (err: any) {
       setError('Failed to get AI suggestion.');

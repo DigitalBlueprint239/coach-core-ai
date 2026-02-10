@@ -29,7 +29,7 @@ const PracticePlanner: React.FC = () => {
     setAIResult(null);
     setFeedback(null);
     try {
-      const result = await ai.generateSmartPractice({
+      const result = await (ai as any).generateSmartPractice({
         duration,
         goals,
         teamId: 'demo-team', // Replace with real teamId if available

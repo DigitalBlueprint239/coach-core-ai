@@ -56,7 +56,7 @@ const SmartPlaybook = () => {
   const [routes, setRoutes] = useState([]);
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [selectedRouteId, setSelectedRouteId] = useState(null);
-  const [mode, setMode] = useState('view'); // view, player, route, delete
+  const [mode, setMode] = useState<'view' | 'player' | 'route' | 'delete'>('view');
   const [savedPlays, setSavedPlays] = useState([]);
   const [currentPlayName, setCurrentPlayName] = useState('');
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
@@ -246,7 +246,7 @@ const SmartPlaybook = () => {
     }
 
     // Handle player selection
-    if (mode === 'view' || mode === 'player') {
+    if (mode === 'view' || mode === 'player' || mode === 'delete') {
       const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
       
       if (clickedPlayer) {

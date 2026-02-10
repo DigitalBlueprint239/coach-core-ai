@@ -372,6 +372,10 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
     setIsLoading(true);
     try {
       const gameContext = {
+        gameId: 'demo-game',
+        opponent: 'Practice Squad',
+        date: new Date() as any,
+        location: 'Home Field',
         down: 3,
         distance: 7,
         fieldPosition: 'midfield',
@@ -506,7 +510,7 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .touch-optimized-playbook {
           display: flex;
           flex-direction: column;

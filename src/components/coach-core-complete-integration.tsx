@@ -298,7 +298,23 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
 // ============================================
 // SECTION 3: PLAYER FEEDBACK COMPONENT
 // ============================================
-const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = true, isModerated = true }) => {
+interface PlayerFeedbackProps {
+  playId: string;
+  drillId?: string | null;
+  playerId: string;
+  onSubmit: (feedback: any) => void;
+  allowComments?: boolean;
+  isModerated?: boolean;
+}
+
+const PlayerFeedback = ({
+  playId,
+  drillId = null,
+  playerId,
+  onSubmit,
+  allowComments = true,
+  isModerated = true
+}: PlayerFeedbackProps) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -306,7 +322,7 @@ const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = t
   const [showCommentBox, setShowCommentBox] = useState(false);
 
   const handleSubmit = () => {
-    if (rating === 0) return;
+    if (rating === 0 || !drillId) return;
     
     const feedback = {
       playId,
@@ -341,11 +357,18 @@ const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = t
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
       <h4 className="text-sm font-medium text-gray-700 mb-3">How was this drill?</h4>
+
+      {!drillId && (
+        <div className="mb-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+          Select a drill to enable feedback submission.
+        </div>
+      )}
       
       <div className="flex items-center gap-1 mb-3">
         {[1, 2, 3, 4, 5].map((value) => (
           <button
             key={value}
+            disabled={!drillId}
             onClick={() => {
               setRating(value);
               if (allowComments && value >= 4) {
@@ -354,7 +377,7 @@ const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = t
             }}
             onMouseEnter={() => setHoveredRating(value)}
             onMouseLeave={() => setHoveredRating(0)}
-            className="transition-all"
+            className="transition-all disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Star
               size={24}
@@ -388,7 +411,8 @@ const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = t
       {rating > 0 && (
         <button
           onClick={handleSubmit}
-          className="w-full px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+          disabled={!drillId}
+          className="w-full px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           Submit Feedback
         </button>

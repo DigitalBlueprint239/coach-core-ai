@@ -19,6 +19,8 @@
     "src/components/Coach's Corner/**",
     "src/components/Coach Core AI Brain /**",
     "src/components/coach-core-backend.ts",
-    "src/utils/offline-persistence.ts"
+    "src/utils/offline-persistence.ts",
+    "src/components/coach-core-integration.ts",
+    "src/utils/**"
   ]
 }
