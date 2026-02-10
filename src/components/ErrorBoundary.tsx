@@ -1,5 +1,7 @@
 // src/components/ErrorBoundary.tsx
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { env } from '../config/env';
+import { addBreadcrumb, getBreadcrumbs } from '../utils/breadcrumbs';
 
 // ============================================
 // ERROR BOUNDARY TYPES
@@ -46,11 +48,15 @@ export interface ErrorReport {
     version: string;
     environment: string;
     buildNumber?: string;
+    commitHash?: string;
   };
   context: {
     componentName?: string;
     props?: Record<string, any>;
     state?: Record<string, any>;
+    routeName?: string;
+    teamId?: string;
+    breadcrumbs?: Array<{ at: number; category: string; message: string }>;
   };
 }
 
@@ -85,6 +91,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({ errorInfo });
+    addBreadcrumb({ at: Date.now(), category: 'error', message: error.message, data: { name: error.name } });
 
     // Call custom error handler
     if (this.props.onError) {
@@ -97,7 +104,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (env.DEV) {
       console.error('Error caught by boundary:', error, errorInfo);
     }
   }
@@ -125,14 +132,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           timestamp: Date.now()
         },
         appInfo: {
-          version: import.meta.env.VITE_VERSION || '1.0.0',
-          environment: process.env.NODE_ENV || 'development',
-          buildNumber: import.meta.env.VITE_BUILD_NUMBER
+          version: env.VITE_VERSION || '1.0.0',
+          environment: env.MODE || 'development',
+          buildNumber: env.VITE_BUILD_NUMBER,
+          commitHash: env.VITE_COMMIT_HASH
         },
         context: {
           componentName: this.getComponentName(errorInfo.componentStack || ''),
           props: this.props,
-          state: this.state
+          state: this.state,
+          routeName: window.location.pathname,
+          teamId: this.getTeamId(),
+          breadcrumbs: getBreadcrumbs().slice(0, 10).map((b) => ({ at: b.at, category: b.category, message: b.message }))
         }
       };
 
@@ -147,6 +158,15 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       return user.id;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private getTeamId(): string | undefined {
+    try {
+      const team = JSON.parse(localStorage.getItem('currentTeam') || '{}');
+      return team.id || team.teamId;
     } catch {
       return undefined;
     }
@@ -436,7 +456,7 @@ class ErrorReportingService {
   private isProcessing: boolean = false;
 
   constructor() {
-    this.endpoint = import.meta.env.VITE_ERROR_REPORTING_ENDPOINT || '/api/errors';
+    this.endpoint = env.VITE_ERROR_REPORTING_ENDPOINT || '/api/errors';
   }
 
   async reportError(errorReport: ErrorReport): Promise<void> {

@@ -1,6 +1,8 @@
 // src/services/ai-proxy.ts
 // Server-side proxy for OpenAI API calls to prevent API key exposure
 
+import { env } from '../config/env';
+
 export interface AIProxyConfig {
   endpoint: string;
   timeout?: number;
@@ -50,7 +52,7 @@ export class AIProxyService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_AI_PROXY_TOKEN || ''}`
+            'Authorization': `Bearer ${env.VITE_AI_PROXY_TOKEN || ''}`
           },
           body: JSON.stringify(request),
           signal: AbortSignal.timeout(this.config.timeout!)
@@ -78,16 +80,16 @@ export class AIProxyService {
       } catch (error) {
         lastError = error as Error;
         console.warn(`AI proxy attempt ${attempt} failed:`, error);
-        
+
         if (attempt < this.config.retries!) {
-          await this.delay(1000 * attempt); // Exponential backoff
+          await this.delay(Math.pow(2, attempt) * 1000);
         }
       }
     }
 
     return {
       success: false,
-      error: lastError?.message || 'All AI proxy attempts failed'
+      error: lastError?.message || 'Unknown AI proxy error'
     };
   }
 
@@ -96,40 +98,12 @@ export class AIProxyService {
   }
 }
 
-// ============================================
-// REACT HOOKS
-// ============================================
-
-import { useState, useCallback } from 'react';
-
 export const useAIProxy = (config: AIProxyConfig) => {
-  const [service] = useState(() => new AIProxyService(config));
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const makeRequest = useCallback(async (request: AIProxyRequest) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const result = await service.makeRequest(request);
-      if (!result.success) {
-        throw new Error(result.error || 'AI request failed');
-      }
-      return result;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to make AI request';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [service]);
+  const proxyService = new AIProxyService(config);
 
   return {
-    service,
-    loading,
-    error,
-    makeRequest
+    makeRequest: proxyService.makeRequest.bind(proxyService),
+    loading: false,
+    error: null
   };
-}; 
+};

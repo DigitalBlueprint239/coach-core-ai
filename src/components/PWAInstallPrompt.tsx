@@ -229,7 +229,7 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
         </button>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .pwa-install-prompt {
           position: fixed;
           bottom: 20px;

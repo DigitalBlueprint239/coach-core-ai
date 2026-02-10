@@ -7,7 +7,7 @@ import {
   deletePracticePlan,
   savePlay,
   getPlays,
-  updatePlay,
+  updatePlay as updatePlayDoc,
   deletePlay,
   subscribeToPracticePlans,
   subscribeToPlays,
@@ -135,7 +135,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     
     try {
       setError(null);
-      await updatePlay(teamId, playId, updates);
+      await updatePlayDoc(teamId, playId, updates);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update play';
       setError(errorMessage);
