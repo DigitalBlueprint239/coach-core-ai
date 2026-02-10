@@ -43,6 +43,6 @@ describe('Dashboard season health', () => {
 
     expect(screen.getByTestId('season-health-panel')).toBeTruthy();
     expect(screen.getByTestId('season-health-data-status')).toBeTruthy();
-    expect(screen.getByText(/Payments: Connected/)).toBeTruthy();
+    expect(screen.getByText(/Payments: Not Connected/)).toBeTruthy();
   });
 });

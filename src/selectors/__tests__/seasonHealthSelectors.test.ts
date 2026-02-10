@@ -50,8 +50,8 @@ describe('seasonHealthSelectors', () => {
     const rosterResult = getRosterByTeam('t1', teams, aux);
     const scheduleResult = getScheduleByTeam('t1', aux);
     const attendanceResult = getAttendanceByTeam('t1', aux);
-    const paymentsResult = getPaymentsStatusByTeam('t1', rosterResult.data);
-    const waiversResult = getWaiversStatusByTeam('t1', rosterResult.data);
+    const paymentsResult = getPaymentsStatusByTeam('t1', rosterResult.data, aux);
+    const waiversResult = getWaiversStatusByTeam('t1', rosterResult.data, aux);
 
     expect(teamResult.meta.available).toBe(true);
     expect(rosterResult.data).toHaveLength(2);

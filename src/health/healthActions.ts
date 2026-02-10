@@ -68,12 +68,14 @@ export const dispatchHealthAction = (
       case 'NAVIGATE_TO_ROSTER': {
         const playerId = typeof action.payload?.playerId === 'string' ? action.payload.playerId : signal.entityId;
         context.navigate('teams', { teamId: signal.teamId, playerId, from: 'season-health' });
+        addBreadcrumb({ at: Date.now(), category: 'action', message: 'health_navigate_roster', data: { signalId: signal.id, teamId: signal.teamId, playerId } });
         context.showSuccess('Opened roster management.');
         return true;
       }
       case 'NAVIGATE_TO_SCHEDULE_ITEM': {
         const eventId = typeof action.payload?.eventId === 'string' ? action.payload.eventId : signal.entityId;
         context.navigate('schedule', { teamId: signal.teamId, eventId, from: 'season-health' });
+        addBreadcrumb({ at: Date.now(), category: 'action', message: 'health_navigate_schedule', data: { signalId: signal.id, teamId: signal.teamId, eventId } });
         context.showSuccess('Opened schedule details.');
         return true;
       }

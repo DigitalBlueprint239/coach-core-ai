@@ -64,6 +64,8 @@ describe('healthActions', () => {
 
     expect(navigate).toHaveBeenCalledWith('schedule', expect.objectContaining({ eventId: 'event-77' }));
     expect(navigate).toHaveBeenCalledWith('teams', expect.objectContaining({ playerId: 'player-42' }));
+    expect(getBreadcrumbs().some((crumb) => crumb.message === 'health_navigate_schedule')).toBe(true);
+    expect(getBreadcrumbs().some((crumb) => crumb.message === 'health_navigate_roster')).toBe(true);
   });
 
   it('exposes reminder template by signal type', () => {

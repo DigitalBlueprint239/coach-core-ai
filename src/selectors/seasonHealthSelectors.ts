@@ -133,35 +133,55 @@ export const getAttendanceByTeam = (teamId: string, auxData: TeamHealthAuxData):
 
 export const getPaymentsStatusByTeam = (
   teamId: string,
-  roster: HealthRosterEntry[]
-): SelectorResult<{ playerId: string; hasPaymentMethod: boolean; updatedAt?: number }[]> => ({
-  data: roster.filter((entry) => entry.teamId === teamId).map((entry) => ({
+  roster: HealthRosterEntry[],
+  auxData: TeamHealthAuxData
+): SelectorResult<{ playerId: string; hasPaymentMethod: boolean; updatedAt?: number }[]> => {
+  const teamRoster = roster.filter((entry) => entry.teamId === teamId);
+  const records = teamRoster.map((entry) => ({
     playerId: entry.playerId,
     hasPaymentMethod: entry.hasPaymentMethod,
     updatedAt: entry.updatedAt
-  })),
-  meta: {
-    available: roster.some((entry) => entry.teamId === teamId && typeof entry.hasPaymentMethod === 'boolean'),
-    lastUpdatedAt: roster.filter((entry) => entry.teamId === teamId).reduce((max, entry) => Math.max(max, entry.updatedAt || 0), 0) || null,
-    source: roster.length > 0 ? 'firestore' : 'unavailable'
-  }
-});
+  }));
+
+  const hasSourceData = teamRoster.some((entry) => Boolean(auxData.paymentByPlayerId[entry.playerId]));
+
+  return {
+    data: records,
+    meta: {
+      available: hasSourceData,
+      lastUpdatedAt: hasSourceData
+        ? records.reduce((max, entry) => Math.max(max, entry.updatedAt || 0), 0) || auxData.updatedAt || null
+        : null,
+      source: hasSourceData ? 'local_storage' : 'unavailable'
+    }
+  };
+};
 
 export const getWaiversStatusByTeam = (
   teamId: string,
-  roster: HealthRosterEntry[]
-): SelectorResult<{ playerId: string; hasWaiver: boolean; updatedAt?: number }[]> => ({
-  data: roster.filter((entry) => entry.teamId === teamId).map((entry) => ({
+  roster: HealthRosterEntry[],
+  auxData: TeamHealthAuxData
+): SelectorResult<{ playerId: string; hasWaiver: boolean; updatedAt?: number }[]> => {
+  const teamRoster = roster.filter((entry) => entry.teamId === teamId);
+  const records = teamRoster.map((entry) => ({
     playerId: entry.playerId,
     hasWaiver: entry.hasWaiver,
     updatedAt: entry.updatedAt
-  })),
-  meta: {
-    available: roster.some((entry) => entry.teamId === teamId && typeof entry.hasWaiver === 'boolean'),
-    lastUpdatedAt: roster.filter((entry) => entry.teamId === teamId).reduce((max, entry) => Math.max(max, entry.updatedAt || 0), 0) || null,
-    source: roster.length > 0 ? 'firestore' : 'unavailable'
-  }
-});
+  }));
+
+  const hasSourceData = teamRoster.some((entry) => Boolean(auxData.waiverByPlayerId[entry.playerId]));
+
+  return {
+    data: records,
+    meta: {
+      available: hasSourceData,
+      lastUpdatedAt: hasSourceData
+        ? records.reduce((max, entry) => Math.max(max, entry.updatedAt || 0), 0) || auxData.updatedAt || null
+        : null,
+      source: hasSourceData ? 'local_storage' : 'unavailable'
+    }
+  };
+};
 
 
 export interface SeasonHealthDataStatus {
@@ -213,8 +233,8 @@ export const getSeasonHealthSelectorBundle = (
   const rosterResult = getRosterByTeam(teamId, teams, auxDataResult.data);
   const scheduleResult = getScheduleByTeam(teamId, auxDataResult.data);
   const attendanceResult = getAttendanceByTeam(teamId, auxDataResult.data);
-  const paymentsResult = getPaymentsStatusByTeam(teamId, rosterResult.data);
-  const waiversResult = getWaiversStatusByTeam(teamId, rosterResult.data);
+  const paymentsResult = getPaymentsStatusByTeam(teamId, rosterResult.data, auxDataResult.data);
+  const waiversResult = getWaiversStatusByTeam(teamId, rosterResult.data, auxDataResult.data);
 
   const freshness = [
     teamsResult.meta.lastUpdatedAt,
