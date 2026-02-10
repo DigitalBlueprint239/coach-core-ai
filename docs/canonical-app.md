@@ -43,3 +43,17 @@ Canonical validation is run from repository root:
 - Canonical frontend env vars use the `VITE_` prefix.
 - Access env values through `src/config/env.ts` instead of reading `process.env` directly in browser code.
 - Legacy names are mapped where needed for compatibility during transition.
+- Required frontend keys (set in `.env.local`):
+  - `VITE_FIREBASE_API_KEY`
+  - `VITE_FIREBASE_AUTH_DOMAIN`
+  - `VITE_FIREBASE_PROJECT_ID`
+  - `VITE_FIREBASE_STORAGE_BUCKET`
+  - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+  - `VITE_FIREBASE_APP_ID`
+- Optional keys:
+  - `VITE_FIREBASE_MEASUREMENT_ID`
+  - `VITE_OPENAI_API_KEY`
+  - `VITE_AI_PROXY_ENDPOINT`
+  - `VITE_AI_PROXY_TOKEN`
+  - `VITE_VAPID_PUBLIC_KEY`
+
