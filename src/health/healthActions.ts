@@ -40,7 +40,7 @@ export const filterResolvedSignals = (
   return signals.filter((signal) => !resolved.has(signal.id));
 };
 
-const reminderMessageFromSignal = (signal: HealthSignal): string => {
+export const createReminderTemplate = (signal: HealthSignal): string => {
   if (signal.type === 'WAIVER_MISSING') {
     return `Reminder: please complete your waiver for ${signal.title.replace('Waiver missing: ', '')}.`;
   }
@@ -59,19 +59,21 @@ export const dispatchHealthAction = (
     switch (action.type) {
       case 'SEND_REMINDER_MESSAGE': {
         const teamId = typeof action.payload?.teamId === 'string' ? action.payload.teamId : signal.teamId;
-        context.setComposerDraft({ teamId, message: reminderMessageFromSignal(signal) });
+        context.setComposerDraft({ teamId, message: createReminderTemplate(signal) });
         context.navigate('chat', { teamId, from: 'season-health' });
         addBreadcrumb({ at: Date.now(), category: 'action', message: 'health_send_reminder', data: { signalId: signal.id, teamId } });
         context.showSuccess('Reminder drafted in Team Chat.');
         return true;
       }
       case 'NAVIGATE_TO_ROSTER': {
-        context.navigate('teams', { teamId: signal.teamId, from: 'season-health' });
+        const playerId = typeof action.payload?.playerId === 'string' ? action.payload.playerId : signal.entityId;
+        context.navigate('teams', { teamId: signal.teamId, playerId, from: 'season-health' });
         context.showSuccess('Opened roster management.');
         return true;
       }
       case 'NAVIGATE_TO_SCHEDULE_ITEM': {
-        context.navigate('schedule', { teamId: signal.teamId, eventId: signal.entityId, from: 'season-health' });
+        const eventId = typeof action.payload?.eventId === 'string' ? action.payload.eventId : signal.entityId;
+        context.navigate('schedule', { teamId: signal.teamId, eventId, from: 'season-health' });
         context.showSuccess('Opened schedule details.');
         return true;
       }

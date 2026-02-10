@@ -12,59 +12,12 @@ import { env } from '../config/env';
 import { generateHealthSignals } from '../health/generateHealthSignals';
 import SeasonHealthDashboard from '../health/SeasonHealthDashboard';
 import { dispatchHealthAction, filterResolvedSignals } from '../health/healthActions';
-import { HealthSignal, HealthSignalAction, HealthTeam } from '../health/healthTypes';
-
-type TeamLike = { id: string; name: string; updatedAt?: Date | number };
-
-const buildHealthSignals = (currentTeam?: TeamLike): HealthSignal[] => {
-  const updatedAt = currentTeam?.updatedAt instanceof Date ? currentTeam.updatedAt.getTime() : currentTeam?.updatedAt;
-  const team: HealthTeam = currentTeam
-    ? { id: currentTeam.id, name: currentTeam.name, expectedRosterSize: 20, updatedAt: updatedAt ?? Date.now() }
-    : { id: 'team-demo', name: 'Varsity', expectedRosterSize: 20, updatedAt: Date.now() };
-
-  const generated = generateHealthSignals({
-    teams: [team],
-    roster: [
-      { playerId: 'p1', teamId: team.id, playerName: 'Alex Carter', hasWaiver: false, hasPaymentMethod: true, updatedAt: Date.now() - 90_000 },
-      { playerId: 'p2', teamId: team.id, playerName: 'Jordan Lee', hasWaiver: true, hasPaymentMethod: false, updatedAt: Date.now() - 180_000 },
-      { playerId: 'p3', teamId: team.id, playerName: 'Sam Brooks', hasWaiver: true, hasPaymentMethod: true, updatedAt: Date.now() - 280_000 }
-    ],
-    attendance: [
-      {
-        teamId: team.id,
-        eventId: 'event-1',
-        eventDate: new Date().toISOString(),
-        attendedCount: 8,
-        rosterCount: 20,
-        updatedAt: Date.now() - 70_000
-      }
-    ],
-    schedule: [
-      {
-        teamId: team.id,
-        eventId: 'practice-1',
-        title: 'Field Practice',
-        startsAt: '2026-01-10T17:00:00.000Z',
-        endsAt: '2026-01-10T18:00:00.000Z',
-        updatedAt: Date.now() - 60_000
-      },
-      {
-        teamId: team.id,
-        eventId: 'practice-2',
-        title: 'Film Room',
-        startsAt: '2026-01-10T17:30:00.000Z',
-        endsAt: '2026-01-10T18:15:00.000Z',
-        updatedAt: Date.now() - 50_000
-      }
-    ]
-  });
-
-  return filterResolvedSignals(generated);
-};
+import { HealthSignal, HealthSignalAction } from '../health/healthTypes';
+import { getSeasonHealthSelectorBundle, readHealthAuxData } from '../selectors/seasonHealthSelectors';
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
-  const { currentTeam } = useTeam();
+  const { currentTeam, userTeams } = useTeam();
   const { showSuccess, showError } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   const [diagnosticsVersion, setDiagnosticsVersion] = useState(0);
@@ -87,7 +40,22 @@ const Dashboard: React.FC = () => {
 
   const recentTimings = useMemo(() => getRecentScreenTimings().slice(0, 6), [diagnosticsVersion]);
 
-  const healthSignals = useMemo(() => buildHealthSignals(currentTeam || undefined), [currentTeam, refreshSignalsVersion]);
+  const seasonHealth = useMemo(() => {
+    const auxDataResult = readHealthAuxData();
+    const bundle = getSeasonHealthSelectorBundle(currentTeam?.id, userTeams, auxDataResult);
+
+    const rawSignals = generateHealthSignals({
+      teams: bundle.teams,
+      roster: bundle.roster,
+      attendance: bundle.attendance,
+      schedule: bundle.schedule
+    });
+
+    return {
+      signals: filterResolvedSignals(rawSignals),
+      dataStatus: bundle.dataStatus
+    };
+  }, [currentTeam?.id, userTeams, refreshSignalsVersion]);
 
   const handleHealthAction = (signal: HealthSignal, action: HealthSignalAction) => {
     const ok = dispatchHealthAction(action, signal, {
@@ -227,7 +195,13 @@ const Dashboard: React.FC = () => {
         {activeTab === 'attendance' && <div className="px-4 sm:px-0"><div className="bg-white rounded-lg shadow p-6"><h2 className="text-lg font-semibold mb-2">Attendance</h2><p className="text-gray-600">Attendance check-in will appear here for today's roster.</p></div></div>}
         {activeTab === 'teams' && <TeamManagement />}
         {activeTab === 'practice' && <PracticePlanner />}
-        {activeTab === 'season-health' && <SeasonHealthDashboard signals={healthSignals} onAction={handleHealthAction} />}
+        {activeTab === 'season-health' && (
+          <SeasonHealthDashboard
+            signals={seasonHealth.signals}
+            dataStatus={seasonHealth.dataStatus}
+            onAction={handleHealthAction}
+          />
+        )}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
             <SmartPlaybook />

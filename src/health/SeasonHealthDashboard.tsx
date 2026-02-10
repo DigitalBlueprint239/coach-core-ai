@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from 'react';
+import { SeasonHealthDataStatus } from '../selectors/seasonHealthSelectors';
 import { HealthSignal, HealthSignalAction } from './healthTypes';
 
 export type HealthFilter = 'all' | 'critical' | 'week';
 
 interface SeasonHealthDashboardProps {
   signals: HealthSignal[];
+  dataStatus: SeasonHealthDataStatus;
   onAction: (signal: HealthSignal, action: HealthSignalAction) => void;
 }
 
@@ -14,7 +16,9 @@ const severityBadgeClass: Record<HealthSignal['severity'], string> = {
   critical: 'bg-red-100 text-red-700'
 };
 
-export const SeasonHealthDashboard: React.FC<SeasonHealthDashboardProps> = ({ signals, onAction }) => {
+const statusText = (available: boolean): string => (available ? 'Connected' : 'Not Connected');
+
+export const SeasonHealthDashboard: React.FC<SeasonHealthDashboardProps> = ({ signals, dataStatus, onAction }) => {
   const [filter, setFilter] = useState<HealthFilter>('all');
 
   const visibleSignals = useMemo(() => {
@@ -28,6 +32,22 @@ export const SeasonHealthDashboard: React.FC<SeasonHealthDashboardProps> = ({ si
 
   return (
     <section className="bg-white rounded-lg shadow p-4" data-testid="season-health-panel">
+      <div className="bg-gray-50 border rounded p-3 mb-3" data-testid="season-health-data-status">
+        <h3 className="font-semibold text-sm text-gray-900">Data status</h3>
+        <p className="text-xs text-gray-600 mt-1">
+          Freshness:{' '}
+          {dataStatus.freshnessTimestamp ? new Date(dataStatus.freshnessTimestamp).toLocaleString() : 'No recent sync'}
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-gray-700 mt-2">
+          <span>Teams: {statusText(dataStatus.completeness.teamsAvailable)}</span>
+          <span>Roster: {statusText(dataStatus.completeness.rosterAvailable)}</span>
+          <span>Schedule: {statusText(dataStatus.completeness.scheduleAvailable)}</span>
+          <span>Attendance: {statusText(dataStatus.completeness.attendanceAvailable)}</span>
+          <span>Payments: {statusText(dataStatus.completeness.paymentsAvailable)}</span>
+          <span>Waivers: {statusText(dataStatus.completeness.waiversAvailable)}</span>
+        </div>
+      </div>
+
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">Season Health</h2>

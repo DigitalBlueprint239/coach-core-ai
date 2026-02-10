@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { clearBreadcrumbs, getBreadcrumbs } from '../../utils/breadcrumbs';
-import { dispatchHealthAction, filterResolvedSignals, getResolvedSignals, persistResolvedSignal } from '../healthActions';
+import { createReminderTemplate, dispatchHealthAction, filterResolvedSignals, getResolvedSignals, persistResolvedSignal } from '../healthActions';
 import { HealthSignal } from '../healthTypes';
 
 const signal: HealthSignal = {
@@ -42,9 +42,33 @@ describe('healthActions', () => {
 
     expect(ok).toBe(true);
     expect(navigate).toHaveBeenCalledWith('chat', expect.any(Object));
-    expect(setComposerDraft).toHaveBeenCalled();
+    expect(setComposerDraft).toHaveBeenCalledWith(expect.objectContaining({ message: expect.stringContaining('complete your waiver') }));
     expect(showSuccess).toHaveBeenCalled();
     expect(getBreadcrumbs().some((crumb) => crumb.message === 'health_send_reminder')).toBe(true);
+  });
+
+  it('supports payload-aware deep link navigation', () => {
+    const navigate = vi.fn();
+
+    dispatchHealthAction(
+      { type: 'NAVIGATE_TO_SCHEDULE_ITEM', label: 'Review schedule', payload: { eventId: 'event-77' } },
+      { ...signal, type: 'SCHEDULE_CONFLICT', entityId: 'event-default' },
+      { navigate, setComposerDraft: vi.fn(), showSuccess: vi.fn(), showError: vi.fn() }
+    );
+
+    dispatchHealthAction(
+      { type: 'NAVIGATE_TO_ROSTER', label: 'View roster', payload: { playerId: 'player-42' } },
+      signal,
+      { navigate, setComposerDraft: vi.fn(), showSuccess: vi.fn(), showError: vi.fn() }
+    );
+
+    expect(navigate).toHaveBeenCalledWith('schedule', expect.objectContaining({ eventId: 'event-77' }));
+    expect(navigate).toHaveBeenCalledWith('teams', expect.objectContaining({ playerId: 'player-42' }));
+  });
+
+  it('exposes reminder template by signal type', () => {
+    expect(createReminderTemplate(signal)).toContain('complete your waiver');
+    expect(createReminderTemplate({ ...signal, type: 'PAYMENT_MISSING', title: 'Payment missing: Alex' })).toContain('payment method');
   });
 
   it('persists resolved signal and filters it out', () => {

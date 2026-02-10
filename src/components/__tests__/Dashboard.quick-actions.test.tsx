@@ -8,11 +8,11 @@ vi.mock('../../hooks/useAuth', () => ({
 }));
 
 vi.mock('../../contexts/TeamContext', () => ({
-  useTeam: () => ({ currentTeam: { name: 'Varsity' } })
+  useTeam: () => ({ currentTeam: { id: 't1', name: 'Varsity' }, userTeams: [{ id: 't1', name: 'Varsity', memberDetails: [], updatedAt: new Date() }] })
 }));
 
 vi.mock('../index', () => ({
-  useToast: () => ({ showSuccess: vi.fn() }),
+  useToast: () => ({ showSuccess: vi.fn(), showError: vi.fn() }),
   LoadingSpinner: () => <div>loading</div>
 }));
 
