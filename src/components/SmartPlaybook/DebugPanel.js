@@ -68,59 +68,58 @@ const DebugPanel = memo(({
   style = {},
   'data-testid': testId = 'debug-panel'
 }) => {
-  // Validate props
+  const safeResults = Array.isArray(results) ? results : [];
+  const canRunAll = typeof onRunAll === 'function';
+  const canTogglePassed = typeof onTogglePassed === 'function';
+
   if (!Array.isArray(results)) {
     console.error('DebugPanel: results must be an array');
-    return null;
   }
 
-  if (typeof onRunAll !== 'function') {
+  if (!canRunAll) {
     console.error('DebugPanel: onRunAll must be a function');
-    return null;
   }
 
-  if (typeof onTogglePassed !== 'function') {
+  if (!canTogglePassed) {
     console.error('DebugPanel: onTogglePassed must be a function');
-    return null;
   }
 
   if (typeof showPassed !== 'boolean') {
     console.error('DebugPanel: showPassed must be a boolean');
-    return null;
   }
 
   // Memoized event handlers for better performance
   const handleRunAll = useCallback((event) => {
     try {
       event.preventDefault();
-      onRunAll();
+      if (canRunAll) onRunAll();
     } catch (error) {
       console.error('Error running all tests:', error);
     }
-  }, [onRunAll]);
+  }, [canRunAll, onRunAll]);
 
   const handleTogglePassed = useCallback((event) => {
     try {
       event.preventDefault();
-      onTogglePassed();
+      if (canTogglePassed) onTogglePassed();
     } catch (error) {
       console.error('Error toggling passed results:', error);
     }
-  }, [onTogglePassed]);
+  }, [canTogglePassed, onTogglePassed]);
 
   // Memoized filtered results
   const filteredResults = useMemo(() => {
-    return showPassed ? results : results.filter(result => !result.passed);
-  }, [results, showPassed]);
+    return showPassed ? safeResults : safeResults.filter(result => !result.passed);
+  }, [safeResults, showPassed]);
 
   // Memoized statistics
   const stats = useMemo(() => {
-    const total = results.length;
-    const passed = results.filter(r => r.passed).length;
+    const total = safeResults.length;
+    const passed = safeResults.filter(r => r.passed).length;
     const failed = total - passed;
     
     return { total, passed, failed };
-  }, [results]);
+  }, [safeResults]);
 
   // Memoized panel styles
   const panelStyle = useMemo(() => ({
@@ -153,7 +152,7 @@ const DebugPanel = memo(({
           onClick={handleRunAll}
           className={BUTTON_STYLES.runAll}
           aria-label="Run all tests"
-          disabled={results.length === 0}
+          disabled={safeResults.length === 0 || !canRunAll}
         >
           <Play size={14} className="inline mr-1" aria-hidden="true" />
           Run All
@@ -181,7 +180,7 @@ const DebugPanel = memo(({
       <div className="space-y-1">
         {filteredResults.length === 0 ? (
           <div className="text-gray-500 text-sm italic py-2 text-center">
-            {results.length === 0 ? 'No tests available.' : 'No results to display.'}
+            {safeResults.length === 0 ? 'No tests available.' : 'No results to display.'}
           </div>
         ) : (
           <ul role="list" aria-label="Test results">
