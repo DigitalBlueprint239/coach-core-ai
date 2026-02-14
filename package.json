@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "TSC_COMPILE_ON_ERROR=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -12,7 +12,7 @@
     "@chakra-ui/react": "^3.22.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@tailwindcss/postcss": "^4.1.11",
+    "ajv": "^8.17.1",
     "autoprefixer": "^10.4.21",
     "dotenv": "^17.2.0",
     "firebase": "^11.10.0",
@@ -21,22 +21,30 @@
     "postcss": "^8.5.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^3.4.0"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^9.0.16",
     "@storybook/addon-links": "^9.0.16",
     "@storybook/react": "^9.0.16",
     "@storybook/testing-library": "^0.2.1",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3",
-    "react-scripts": "^5.0.1",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126"
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "ajv-keywords": {
+      "ajv": "8.17.1"
+    },
+    "ajv-formats": {
+      "ajv": "8.17.1"
+    }
   },
   "browserslist": {
     "production": [

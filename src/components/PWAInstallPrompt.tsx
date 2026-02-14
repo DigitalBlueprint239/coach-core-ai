@@ -49,7 +49,7 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
     // Check if PWA is already installed
     const checkInstallation = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      const isInApp = window.navigator.standalone === true;
+      const isInApp = (window.navigator as any).standalone === true;
       const isInstalled = isStandalone || isInApp;
       
       setIsInstalled(isInstalled);
@@ -229,7 +229,7 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
         </button>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .pwa-install-prompt {
           position: fixed;
           bottom: 20px;
@@ -423,7 +423,7 @@ export const usePWAInstall = () => {
   useEffect(() => {
     const checkInstallation = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      const isInApp = window.navigator.standalone === true;
+      const isInApp = (window.navigator as any).standalone === true;
       setIsInstalled(isStandalone || isInApp);
       setIsSupported('serviceWorker' in navigator && 'PushManager' in window);
     };

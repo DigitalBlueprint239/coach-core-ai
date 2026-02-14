@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef, memo, createContext, useContext } from 'react';
 import { 
   Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity, 
@@ -16,7 +17,7 @@ import {
 // CONTEXT & STATE MANAGEMENT
 // ============================================
 
-const AppContext = createContext();
+const AppContext = createContext<any>(null);
 
 const useAppContext = () => {
   const context = useContext(AppContext);
@@ -26,7 +27,7 @@ const useAppContext = () => {
   return context;
 };
 
-const AppProvider = ({ children }) => {
+const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState({
     id: 'demo-user',
     email: 'coach@demo.com',

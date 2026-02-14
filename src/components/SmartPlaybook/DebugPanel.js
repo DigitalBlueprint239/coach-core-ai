@@ -68,27 +68,6 @@ const DebugPanel = memo(({
   style = {},
   'data-testid': testId = 'debug-panel'
 }) => {
-  // Validate props
-  if (!Array.isArray(results)) {
-    console.error('DebugPanel: results must be an array');
-    return null;
-  }
-
-  if (typeof onRunAll !== 'function') {
-    console.error('DebugPanel: onRunAll must be a function');
-    return null;
-  }
-
-  if (typeof onTogglePassed !== 'function') {
-    console.error('DebugPanel: onTogglePassed must be a function');
-    return null;
-  }
-
-  if (typeof showPassed !== 'boolean') {
-    console.error('DebugPanel: showPassed must be a boolean');
-    return null;
-  }
-
   // Memoized event handlers for better performance
   const handleRunAll = useCallback((event) => {
     try {
@@ -110,15 +89,17 @@ const DebugPanel = memo(({
 
   // Memoized filtered results
   const filteredResults = useMemo(() => {
+    if (!Array.isArray(results)) return [];
     return showPassed ? results : results.filter(result => !result.passed);
   }, [results, showPassed]);
 
   // Memoized statistics
   const stats = useMemo(() => {
+    if (!Array.isArray(results)) return { total: 0, passed: 0, failed: 0 };
     const total = results.length;
     const passed = results.filter(r => r.passed).length;
     const failed = total - passed;
-    
+
     return { total, passed, failed };
   }, [results]);
 
@@ -127,6 +108,27 @@ const DebugPanel = memo(({
     ...PANEL_STYLES,
     ...style
   }), [style]);
+
+  // Validate props (after hooks to satisfy rules-of-hooks)
+  if (!Array.isArray(results)) {
+    console.error('DebugPanel: results must be an array');
+    return null;
+  }
+
+  if (typeof onRunAll !== 'function') {
+    console.error('DebugPanel: onRunAll must be a function');
+    return null;
+  }
+
+  if (typeof onTogglePassed !== 'function') {
+    console.error('DebugPanel: onTogglePassed must be a function');
+    return null;
+  }
+
+  if (typeof showPassed !== 'boolean') {
+    console.error('DebugPanel: showPassed must be a boolean');
+    return null;
+  }
 
   return (
     <div 
