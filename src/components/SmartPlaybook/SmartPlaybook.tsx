@@ -40,6 +40,7 @@ import SaveLoadPanel from './components/SaveLoadPanel';
 import Toolbar from './components/Toolbar';
 import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
+import AISuggestionsPanel from './components/AISuggestionsPanel';
 import { AIProvider } from '../../ai-brain/AIContext';
 
 // Constants
@@ -455,6 +456,17 @@ const SmartPlaybook = () => {
     }
   }, [saveToUndoStack]);
 
+  // Apply AI suggestion to field
+  const handleApplySuggestion = useCallback((newPlayers: any[], newRoutes: any[], playName: string) => {
+    saveToUndoStack('apply_ai_suggestion');
+    setPlayers(newPlayers);
+    setRoutes(newRoutes);
+    setSelectedPlayerId(null);
+    setSelectedRouteId(null);
+    setCurrentPlayName(playName);
+    addNotification('success', `AI suggestion "${playName}" applied to field`);
+  }, [saveToUndoStack, addNotification]);
+
   // Run debug tests
   const runDebugTests = useCallback(() => {
     const tests = [
@@ -632,8 +644,15 @@ const SmartPlaybook = () => {
             )}
           </div>
 
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
+          {/* Right Sidebar - AI Suggestions & Library */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* AI Suggestions Panel */}
+            <AISuggestionsPanel
+              onApplySuggestion={handleApplySuggestion}
+              fieldWidth={FIELD_DIMENSIONS.width}
+              fieldHeight={FIELD_DIMENSIONS.height}
+            />
+
             {showLibrary && (
               <PlayLibrary
                 savedPlays={savedPlays}
