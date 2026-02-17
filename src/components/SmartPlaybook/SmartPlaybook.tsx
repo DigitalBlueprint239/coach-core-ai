@@ -43,6 +43,8 @@ import Onboarding from './components/Onboarding';
 import { AIProvider } from '../../ai-brain/AIContext';
 import SpacingWarnings from './components/SpacingWarnings';
 import { useSpacingWarnings } from './hooks/useSpacingWarnings';
+import { useRoutePreview, generatePreviewPoints } from './hooks/useRoutePreview';
+import { routes as routeDefinitions } from '../../engine/offense/data.moderate';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -88,6 +90,17 @@ const SmartPlaybook = () => {
 
   // Spacing warnings (memoized, updates when routes change)
   const spacingWarnings = useSpacingWarnings(players, routes);
+
+  // Route hover preview
+  const { previewRoute, previewPlayerId, setPreview, clearPreview } = useRoutePreview();
+
+  // Generate preview points for the canvas when a route is being previewed
+  const previewCanvasPoints = React.useMemo(() => {
+    if (!previewRoute || !previewPlayerId) return null;
+    const player = players.find((p: any) => p.id === previewPlayerId);
+    if (!player) return null;
+    return generatePreviewPoints(previewRoute, { x: player.x, y: player.y }, FIELD_DIMENSIONS.width / 2);
+  }, [previewRoute, previewPlayerId, players]);
 
   // Load saved plays from localStorage on mount
   useEffect(() => {
@@ -584,6 +597,17 @@ const SmartPlaybook = () => {
                 onDeleteRoute={handleRouteDelete}
                 onApplyPreset={handleApplyPreset}
                 onClearSelection={() => setSelectedRouteId(null)}
+                onPreviewRoute={(presetId: string) => {
+                  if (!selectedPlayerId) return;
+                  // Map preset ID to a route definition for the preview
+                  const routeDef = routeDefinitions.find(r =>
+                    r.route_id.startsWith(presetId) || r.route_name.toLowerCase().replace(/[\s/]/g, '_') === presetId
+                  );
+                  if (routeDef) {
+                    setPreview(routeDef, selectedPlayerId);
+                  }
+                }}
+                onClearPreview={clearPreview}
               />
             </ErrorBoundary>
 
@@ -608,6 +632,7 @@ const SmartPlaybook = () => {
                 canvasRef={canvasRef}
                 players={players}
                 routes={routes}
+                previewPoints={previewCanvasPoints}
                 onCanvasEvent={handleCanvasEvent}
                 onPlayerDrag={handlePlayerDrag}
               />

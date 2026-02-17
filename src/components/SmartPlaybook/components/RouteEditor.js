@@ -52,7 +52,9 @@ const RouteEditor = memo(({
   onUpdateRoute,
   onDeleteRoute,
   onApplyPreset,
-  onClearSelection
+  onClearSelection,
+  onPreviewRoute,
+  onClearPreview
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editType, setEditType] = useState('');
@@ -247,13 +249,16 @@ const RouteEditor = memo(({
       {/* Preset Routes */}
       <div className="mt-4 pt-3 border-t border-gray-200">
         <h4 className="text-xs font-medium text-gray-700 mb-2">Preset Routes</h4>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-1.5">
           {PRESET_ROUTES.map(preset => (
             <button
               key={preset.id}
               onClick={() => handleApplyPreset(preset)}
-              className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              onMouseEnter={() => onPreviewRoute && onPreviewRoute(preset.id)}
+              onMouseLeave={() => onClearPreview && onClearPreview()}
+              className="px-2 py-1.5 text-xs bg-gray-100 text-gray-700 rounded hover:bg-blue-50 hover:text-blue-700 transition-colors"
               title={preset.name}
+              aria-label={`Assign ${preset.name} route`}
             >
               {preset.name}
             </button>

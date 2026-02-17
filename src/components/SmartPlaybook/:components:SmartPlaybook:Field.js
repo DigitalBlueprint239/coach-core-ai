@@ -279,9 +279,44 @@ const drawDebugInfo = (ctx, mode, width, height) => {
   }
 };
 
+// Utility: Draw a ghost/preview route (dashed, semi-transparent)
+const drawPreviewRoute = (ctx, previewPoints) => {
+  if (!ctx || !previewPoints || previewPoints.length < 2) return;
+
+  try {
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([6, 4]);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(previewPoints[0].x, previewPoints[0].y);
+    for (let i = 1; i < previewPoints.length; i++) {
+      ctx.lineTo(previewPoints[i].x, previewPoints[i].y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Terminal dot at endpoint
+    const endpoint = previewPoints[previewPoints.length - 1];
+    ctx.beginPath();
+    ctx.arc(endpoint.x, endpoint.y, 4, 0, 2 * Math.PI);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fill();
+
+    ctx.restore();
+  } catch (error) {
+    console.error('Error drawing preview route:', error);
+  }
+};
+
 const Field = memo(({
   players = [],
   routes = [],
+  previewPoints = null,
   onCanvasEvent = () => {},
   onPlayerDrag = () => {},
   onRouteSelect = () => {},
@@ -441,6 +476,9 @@ const Field = memo(({
 
     drawField(ctx, width, height);
     drawRoutes(ctx, routes, selectedRouteId);
+    if (previewPoints) {
+      drawPreviewRoute(ctx, previewPoints);
+    }
     drawPlayers(ctx, players);
     
     // Draw dragging feedback
@@ -461,7 +499,7 @@ const Field = memo(({
     if (debug) {
       drawDebugInfo(ctx, mode, width, height);
     }
-  }, [players, routes, width, height, mode, debug, isDragging, draggedPlayerId, selectedRouteId]);
+  }, [players, routes, previewPoints, width, height, mode, debug, isDragging, draggedPlayerId, selectedRouteId]);
 
   // Effect to redraw canvas when dependencies change
   useEffect(() => {

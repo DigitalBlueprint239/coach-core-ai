@@ -5,6 +5,7 @@ interface CanvasAreaProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   players: any[];
   routes: any[];
+  previewPoints?: Array<{ x: number; y: number }> | null;
   onCanvasEvent: (e: any) => void;
   onPlayerDrag: (id: string, x: number, y: number) => void;
 }
@@ -13,6 +14,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   canvasRef,
   players,
   routes,
+  previewPoints = null,
   onCanvasEvent,
   onPlayerDrag
 }) => {
@@ -22,6 +24,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         ref={canvasRef}
         players={players}
         routes={routes}
+        previewPoints={previewPoints}
         onCanvasEvent={onCanvasEvent}
         onPlayerDrag={onPlayerDrag}
       />
