@@ -45,6 +45,7 @@ import SpacingWarnings from './components/SpacingWarnings';
 import { useSpacingWarnings } from './hooks/useSpacingWarnings';
 import { useRoutePreview, generatePreviewPoints } from './hooks/useRoutePreview';
 import { routes as routeDefinitions } from '../../engine/offense/data.moderate';
+import SmartRoutePanel from './components/SmartRoutePanel';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -586,6 +587,30 @@ const SmartPlaybook = () => {
               onCancelDrawing={cancelRouteDrawing}
               onRouteTypeChange={setRouteType}
               onRouteColorChange={setRouteColor}
+            />
+
+            {/* Smart Route Recommendations */}
+            <SmartRoutePanel
+              selectedPlayer={players.find((p: any) => p.id === selectedPlayerId)}
+              onApplyRoute={(routeId: string, presetPoints: Array<{x: number; y: number}>) => {
+                if (!selectedPlayerId) return;
+                const player = players.find((p: any) => p.id === selectedPlayerId);
+                if (!player) return;
+                // Convert preset points (relative) to absolute canvas coordinates
+                const absolutePoints = presetPoints.map((pt: {x: number; y: number}) => ({
+                  x: player.x + pt.x,
+                  y: player.y + pt.y
+                }));
+                const newRoute = createRoute(selectedPlayerId, absolutePoints, routeId.replace(/_\d+$/, ''), routeColor);
+                saveToUndoStack('apply_smart_route');
+                setRoutes((prev: any) => addRoute(prev, newRoute));
+              }}
+              onPreviewRoute={(routeDef: any) => {
+                if (selectedPlayerId) {
+                  setPreview(routeDef, selectedPlayerId);
+                }
+              }}
+              onClearPreview={clearPreview}
             />
 
             {/* Route Editor */}

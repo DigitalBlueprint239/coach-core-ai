@@ -32,3 +32,7 @@ export { checkVerticalSpacing, checkHorizontalSpacing, checkAllSpacing } from '.
 
 // Validators
 export { isRouteAllowedForDrop, getRoutesForDrop, getTimingRule, validateRouteDef } from './validators';
+
+// Smart routing
+export { getSmartRouteRecommendations } from './smartRouting';
+export type { RecommendedRoute } from './smartRouting';
