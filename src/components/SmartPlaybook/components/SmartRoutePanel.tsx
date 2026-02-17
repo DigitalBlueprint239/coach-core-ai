@@ -10,6 +10,7 @@ import React, { memo, useMemo } from 'react';
 import { Star, Route } from 'lucide-react';
 import { getSmartRouteRecommendations, RecommendedRoute } from '../../../engine/offense/smartRouting';
 import { routes as routeDefinitions } from '../../../engine/offense/data.moderate';
+import { RouteIcon } from './icons/RouteIcons';
 
 // Preset route point data (matches RouteEditor PRESET_ROUTES)
 const PRESET_POINTS: Record<string, Array<{ x: number; y: number }>> = {
@@ -78,7 +79,7 @@ const SmartRoutePanel: React.FC<SmartRoutePanelProps> = memo(({
             <Star size={12} className="text-blue-500" />
             <span className="text-xs font-medium text-blue-700">Recommended</span>
           </div>
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-4 gap-1.5">
             {recommendedRoutes.map(route => (
               <button
                 key={route.route_id}
@@ -94,8 +95,8 @@ const SmartRoutePanel: React.FC<SmartRoutePanelProps> = memo(({
                 title={route.reason}
                 aria-label={`Assign ${route.route_name} route - ${route.reason}`}
               >
-                <span className="font-medium text-[11px]">{route.route_name}</span>
-                <span className="text-[9px] text-blue-500">{route.depth_yards}yd</span>
+                <RouteIcon routeId={route.route_id} />
+                <span className="font-medium text-[10px]">{route.route_name}</span>
               </button>
             ))}
           </div>
@@ -106,7 +107,7 @@ const SmartRoutePanel: React.FC<SmartRoutePanelProps> = memo(({
       {otherRoutes.length > 0 && (
         <div>
           <span className="text-xs font-medium text-gray-500 mb-2 block">All Routes</span>
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-4 gap-1.5">
             {otherRoutes.map(route => (
               <button
                 key={route.route_id}
@@ -121,8 +122,8 @@ const SmartRoutePanel: React.FC<SmartRoutePanelProps> = memo(({
                   hover:bg-gray-100 transition-colors"
                 aria-label={`Assign ${route.route_name} route`}
               >
-                <span className="font-medium text-[11px]">{route.route_name}</span>
-                <span className="text-[9px] text-gray-400">{route.depth_yards}yd</span>
+                <RouteIcon routeId={route.route_id} />
+                <span className="font-medium text-[10px]">{route.route_name}</span>
               </button>
             ))}
           </div>

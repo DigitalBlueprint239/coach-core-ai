@@ -7,6 +7,7 @@
 
 import React, { memo, useState } from 'react';
 import { Route, Trash2, Edit3, Palette, Save, X } from 'lucide-react';
+import { RouteIcon } from './icons/RouteIcons';
 
 const PRESET_ROUTES = [
   // 0 - Screen: lateral release
@@ -249,18 +250,19 @@ const RouteEditor = memo(({
       {/* Preset Routes */}
       <div className="mt-4 pt-3 border-t border-gray-200">
         <h4 className="text-xs font-medium text-gray-700 mb-2">Preset Routes</h4>
-        <div className="grid grid-cols-3 gap-1.5">
+        <div className="grid grid-cols-4 gap-1.5">
           {PRESET_ROUTES.map(preset => (
             <button
               key={preset.id}
               onClick={() => handleApplyPreset(preset)}
               onMouseEnter={() => onPreviewRoute && onPreviewRoute(preset.id)}
               onMouseLeave={() => onClearPreview && onClearPreview()}
-              className="px-2 py-1.5 text-xs bg-gray-100 text-gray-700 rounded hover:bg-blue-50 hover:text-blue-700 transition-colors"
+              className="flex flex-col items-center gap-0.5 p-1.5 text-xs bg-gray-100 text-gray-700 rounded hover:bg-blue-50 hover:text-blue-700 transition-colors"
               title={preset.name}
               aria-label={`Assign ${preset.name} route`}
             >
-              {preset.name}
+              <RouteIcon routeId={preset.id} />
+              <span className="text-[10px]">{preset.name}</span>
             </button>
           ))}
         </div>
