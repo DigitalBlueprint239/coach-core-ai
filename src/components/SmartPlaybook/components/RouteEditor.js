@@ -9,13 +9,30 @@ import React, { memo, useState } from 'react';
 import { Route, Trash2, Edit3, Palette, Save, X } from 'lucide-react';
 
 const PRESET_ROUTES = [
-  { id: 'slant', name: 'Slant', points: [{ x: 0, y: 0 }, { x: 30, y: -20 }] },
-  { id: 'post', name: 'Post', points: [{ x: 0, y: 0 }, { x: 20, y: -10 }, { x: 40, y: -30 }] },
-  { id: 'corner', name: 'Corner', points: [{ x: 0, y: 0 }, { x: 30, y: -10 }, { x: 50, y: -20 }] },
-  { id: 'out', name: 'Out', points: [{ x: 0, y: 0 }, { x: 20, y: 0 }, { x: 40, y: 0 }] },
-  { id: 'in', name: 'In', points: [{ x: 0, y: 0 }, { x: 20, y: 0 }, { x: 40, y: -20 }] },
-  { id: 'hitch', name: 'Hitch', points: [{ x: 0, y: 0 }, { x: 15, y: 0 }, { x: 15, y: -10 }, { x: 0, y: -10 }] },
-  { id: 'go', name: 'Go', points: [{ x: 0, y: 0 }, { x: 0, y: -50 }] }
+  // 0 - Screen: lateral release
+  { id: 'screen', name: 'Screen', points: [{ x: 0, y: 0 }, { x: 25, y: 2 }] },
+  // 1 - Flat: immediate outside break, shallow
+  { id: 'flat', name: 'Flat', points: [{ x: 0, y: 0 }, { x: 5, y: -3 }, { x: 30, y: -6 }] },
+  // 2 - Slant: 3-step vertical then inside break
+  { id: 'slant', name: 'Slant', points: [{ x: 0, y: 0 }, { x: 0, y: -10 }, { x: -25, y: -25 }] },
+  // 3 - Comeback: deep vertical then break back to sideline
+  { id: 'comeback', name: 'Comeback', points: [{ x: 0, y: 0 }, { x: 0, y: -45 }, { x: 12, y: -38 }] },
+  // 4 - Curl: vertical then stop and come back
+  { id: 'curl', name: 'Curl', points: [{ x: 0, y: 0 }, { x: 0, y: -35 }, { x: 0, y: -30 }] },
+  // 5 - Out: vertical stem then 90-degree outside break
+  { id: 'out', name: 'Out', points: [{ x: 0, y: 0 }, { x: 0, y: -30 }, { x: 30, y: -30 }] },
+  // 6 - Dig/In: vertical stem then inside break across field
+  { id: 'dig', name: 'Dig', points: [{ x: 0, y: 0 }, { x: 0, y: -35 }, { x: -30, y: -35 }] },
+  // 7 - Corner: vertical stem then outside-deep break
+  { id: 'corner', name: 'Corner', points: [{ x: 0, y: 0 }, { x: 0, y: -25 }, { x: 25, y: -45 }] },
+  // 8 - Post: vertical stem then inside-deep break
+  { id: 'post', name: 'Post', points: [{ x: 0, y: 0 }, { x: 0, y: -28 }, { x: -20, y: -50 }] },
+  // 9 - Go: straight vertical
+  { id: 'go', name: 'Go', points: [{ x: 0, y: 0 }, { x: 0, y: -60 }] },
+  // Hitch: short vertical then stop
+  { id: 'hitch', name: 'Hitch', points: [{ x: 0, y: 0 }, { x: 0, y: -15 }, { x: 0, y: -12 }] },
+  // Shallow Cross: lateral across formation
+  { id: 'shallow_cross', name: 'Shallow Cross', points: [{ x: 0, y: 0 }, { x: -5, y: -8 }, { x: -40, y: -10 }] },
 ];
 
 const ROUTE_COLORS = [
@@ -138,13 +155,18 @@ const RouteEditor = memo(({
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="custom">Custom</option>
+              <option value="screen">Screen</option>
+              <option value="flat">Flat</option>
               <option value="slant">Slant</option>
-              <option value="post">Post</option>
-              <option value="corner">Corner</option>
+              <option value="comeback">Comeback</option>
+              <option value="curl">Curl</option>
               <option value="out">Out</option>
-              <option value="in">In</option>
-              <option value="hitch">Hitch</option>
+              <option value="dig">Dig/In</option>
+              <option value="corner">Corner</option>
+              <option value="post">Post</option>
               <option value="go">Go</option>
+              <option value="hitch">Hitch</option>
+              <option value="shallow_cross">Shallow Cross</option>
             </select>
           </div>
           

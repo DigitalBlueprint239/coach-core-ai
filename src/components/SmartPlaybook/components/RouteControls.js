@@ -10,13 +10,18 @@ import { Route, Palette, Play, Square, X } from 'lucide-react';
 
 const ROUTE_TYPES = [
   { id: 'custom', name: 'Custom', description: 'Draw your own route' },
-  { id: 'slant', name: 'Slant', description: 'Diagonal route inward' },
-  { id: 'post', name: 'Post', description: 'Deep route to middle' },
-  { id: 'corner', name: 'Corner', description: 'Deep route to corner' },
-  { id: 'out', name: 'Out', description: 'Route toward sideline' },
-  { id: 'in', name: 'In', description: 'Route toward middle' },
-  { id: 'hitch', name: 'Hitch', description: 'Short route with return' },
-  { id: 'go', name: 'Go', description: 'Straight deep route' }
+  { id: 'screen', name: 'Screen', description: 'Lateral release, 0 depth' },
+  { id: 'flat', name: 'Flat', description: 'Quick outside, 2 yds' },
+  { id: 'slant', name: 'Slant', description: '3-step inside break, 5 yds' },
+  { id: 'comeback', name: 'Comeback', description: 'Deep stem, break back, 14 yds' },
+  { id: 'curl', name: 'Curl', description: 'Vertical stop & settle, 12 yds' },
+  { id: 'out', name: 'Out', description: '90-degree outside break, 10 yds' },
+  { id: 'dig', name: 'Dig/In', description: 'Inside crosser, 12 yds' },
+  { id: 'corner', name: 'Corner', description: 'Outside-deep break, 12 yds' },
+  { id: 'post', name: 'Post', description: 'Inside-deep break, 16 yds' },
+  { id: 'go', name: 'Go', description: 'Straight vertical, 20+ yds' },
+  { id: 'hitch', name: 'Hitch', description: 'Quick stop & turn, 5 yds' },
+  { id: 'shallow_cross', name: 'Shallow Cross', description: 'Lateral cross, 4 yds' },
 ];
 
 const ROUTE_COLORS = [

@@ -11,8 +11,11 @@ export const PLAYER_POSITIONS = {
   DEFENSE: ['DE', 'DT', 'NT', 'MLB', 'OLB', 'CB', 'FS', 'SS', 'NB', 'LB']
 };
 
-// Route types for validation
-export const ROUTE_TYPES = ['custom', 'slant', 'post', 'corner', 'out', 'in', 'hitch', 'go'];
+// Route types for validation (all 12 core routes + custom + freehand)
+export const ROUTE_TYPES = [
+  'custom', 'screen', 'flat', 'slant', 'comeback', 'curl', 'out', 'in',
+  'dig', 'corner', 'post', 'go', 'hitch', 'shallow_cross'
+];
 
 // Default colors for routes
 export const ROUTE_COLORS = {
