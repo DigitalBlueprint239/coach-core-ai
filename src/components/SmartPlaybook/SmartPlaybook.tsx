@@ -41,6 +41,8 @@ import Toolbar from './components/Toolbar';
 import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
 import { AIProvider } from '../../ai-brain/AIContext';
+import SpacingWarnings from './components/SpacingWarnings';
+import { useSpacingWarnings } from './hooks/useSpacingWarnings';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -83,6 +85,9 @@ const SmartPlaybook = () => {
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastTouchRef = useRef<TouchEvent | null>(null);
+
+  // Spacing warnings (memoized, updates when routes change)
+  const spacingWarnings = useSpacingWarnings(players, routes);
 
   // Load saved plays from localStorage on mount
   useEffect(() => {
@@ -632,8 +637,8 @@ const SmartPlaybook = () => {
             )}
           </div>
 
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
+          {/* Right Sidebar - Library & Spacing Warnings */}
+          <div className="lg:col-span-1 space-y-4">
             {showLibrary && (
               <PlayLibrary
                 savedPlays={savedPlays}
@@ -642,6 +647,9 @@ const SmartPlaybook = () => {
                 onClose={() => setShowLibrary(false)}
               />
             )}
+
+            {/* Spacing Warnings - shown when routes have convergence issues */}
+            <SpacingWarnings warnings={spacingWarnings} />
           </div>
         </div>
       </div>
