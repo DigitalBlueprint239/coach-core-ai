@@ -42,6 +42,9 @@ import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
 import AISuggestionsPanel from './components/AISuggestionsPanel';
 import { AIProvider } from '../../ai-brain/AIContext';
+import { useAuth } from '../AuthProvider';
+import { useFirestoreSync } from './hooks/useFirestoreSync';
+import SyncStatusIndicator from './components/SyncStatusIndicator';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -85,23 +88,45 @@ const SmartPlaybook = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastTouchRef = useRef<TouchEvent | null>(null);
 
-  // Load saved plays from localStorage on mount
+  // Auth
+  const { user: authUser, isAuthenticated: authIsAuthenticated } = useAuth();
+
+  const syncNotify = useCallback((type: string, message: string) => {
+    const id = Date.now() + Math.random();
+    setNotifications(prev => [...prev, { id, type, message, duration: 3000 }]);
+  }, []);
+
+  const {
+    syncStatus,
+    isMigrationAvailable,
+    migrateLocalPlays,
+    savePlayToFirestore,
+    deletePlayFromFirestore
+  } = useFirestoreSync({
+    user: authUser,
+    savedPlays,
+    setSavedPlays,
+    addNotification: syncNotify
+  });
+
+  // Load saved plays from localStorage on mount (guest mode only)
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('smartPlaybook_plays');
-      if (saved) {
-        setSavedPlays(JSON.parse(saved));
+    if (!authUser) {
+      try {
+        const saved = localStorage.getItem('smartPlaybook_plays');
+        if (saved) {
+          setSavedPlays(JSON.parse(saved));
+        }
+      } catch (error) {
+        console.error('Error loading saved plays:', error);
       }
-    } catch (error) {
-      console.error('Error loading saved plays:', error);
     }
 
-    // Check if onboarding is needed
     const onboardingComplete = localStorage.getItem('smartPlaybook_onboarding_complete');
     if (!onboardingComplete) {
       setShowOnboarding(true);
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   // Handle window resize
   useEffect(() => {
@@ -153,14 +178,8 @@ const SmartPlaybook = () => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
-  // Save plays to localStorage when they change
-  useEffect(() => {
-    try {
-      localStorage.setItem('smartPlaybook_plays', JSON.stringify(savedPlays));
-    } catch (error) {
-      console.error('Error saving plays:', error);
-    }
-  }, [savedPlays]);
+  // Note: localStorage sync is handled by useFirestoreSync hook
+  // (saves to localStorage as offline fallback for both guest and authenticated users)
 
   // Save current state to undo stack
   const saveToUndoStack = useCallback((action) => {
@@ -422,7 +441,9 @@ const SmartPlaybook = () => {
     setShowSaveDialog(false);
     setCurrentPlayName('');
     addNotification('success', `Play "${name}" saved successfully`);
-  }, [players, routes, currentPlayPhase, currentPlayType, addNotification]);
+    // Persist to Firestore if authenticated
+    savePlayToFirestore(play);
+  }, [players, routes, currentPlayPhase, currentPlayType, addNotification, savePlayToFirestore]);
 
   // Load play
   const loadPlay = useCallback((play) => {
@@ -442,8 +463,10 @@ const SmartPlaybook = () => {
     if (window.confirm('Are you sure you want to delete this play?')) {
       setSavedPlays(prev => prev.filter(play => play.id !== playId));
       addNotification('success', 'Play deleted successfully');
+      // Remove from Firestore if authenticated
+      deletePlayFromFirestore(playId);
     }
-  }, [addNotification]);
+  }, [addNotification, deletePlayFromFirestore]);
 
   // Clear field
   const clearField = useCallback(() => {
@@ -518,6 +541,7 @@ const SmartPlaybook = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-gray-900">Smart Playbook</h1>
             <div className="flex items-center gap-2">
+              <SyncStatusIndicator status={syncStatus} isAuthenticated={!!authUser} />
               <button
                 onClick={toggleDebugMode}
                 className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
@@ -528,6 +552,23 @@ const SmartPlaybook = () => {
           </div>
         </div>
       </header>
+
+      {/* Migration Banner */}
+      {isMigrationAvailable && (
+        <div className="max-w-7xl mx-auto px-4 pt-4">
+          <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+            <p className="text-sm text-blue-800">
+              You have locally saved plays. Would you like to sync them to your account?
+            </p>
+            <button
+              onClick={migrateLocalPlays}
+              className="ml-4 px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
+            >
+              Sync to Cloud
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -651,6 +692,7 @@ const SmartPlaybook = () => {
               onApplySuggestion={handleApplySuggestion}
               fieldWidth={FIELD_DIMENSIONS.width}
               fieldHeight={FIELD_DIMENSIONS.height}
+              userId={authUser?.uid || null}
             />
 
             {showLibrary && (

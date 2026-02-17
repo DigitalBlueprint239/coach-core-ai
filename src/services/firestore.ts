@@ -507,6 +507,401 @@ export function getMaxQueueSize(): number {
   return MAX_QUEUE_SIZE;
 }
 
+// ============================================
+// USER PLAYBOOK API (user-scoped, for SmartPlaybook)
+// ============================================
+
+export interface UserPlay {
+  id?: string;
+  userId: string;
+  name: string;
+  phase: string;
+  type: string;
+  players: Player[];
+  routes: UserPlayRoute[];
+  aiGenerated: boolean;
+  aiContext?: {
+    down: number;
+    distance: number;
+    fieldPosition: number;
+    confidence: number;
+  };
+  tags: string[];
+  notes: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UserPlayRoute {
+  id: string;
+  playerId: string;
+  points: Point[];
+  type: string;
+  color: string;
+}
+
+export async function saveUserPlay(
+  userId: string,
+  playData: Omit<UserPlay, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
+): Promise<string> {
+  const play = {
+    ...playData,
+    userId,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  try {
+    const docRef = await addDoc(collection(db, 'userPlays'), play);
+    return docRef.id;
+  } catch (error) {
+    if (!isOnline) {
+      const tempId = `offline_${Date.now()}`;
+      addToOfflineQueue({
+        type: 'create',
+        collection: 'userPlays',
+        data: play,
+        tempId
+      });
+      return tempId;
+    }
+    throw error;
+  }
+}
+
+export async function getUserPlays(userId: string): Promise<UserPlay[]> {
+  try {
+    const q = query(
+      collection(db, 'userPlays'),
+      where('userId', '==', userId),
+      orderBy('updatedAt', 'desc')
+    );
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    })) as UserPlay[];
+  } catch (error) {
+    console.error('Error fetching user plays:', error);
+    throw error;
+  }
+}
+
+export async function updateUserPlay(
+  playId: string,
+  updates: Partial<UserPlay>
+): Promise<void> {
+  const data = {
+    ...updates,
+    updatedAt: new Date()
+  };
+
+  // Strip id and userId from updates to avoid overwriting
+  delete (data as any).id;
+  delete (data as any).userId;
+
+  try {
+    await updateDoc(doc(db, 'userPlays', playId), data);
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'update',
+        collection: 'userPlays',
+        docId: playId,
+        data
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+export async function deleteUserPlay(playId: string): Promise<void> {
+  try {
+    await deleteDoc(doc(db, 'userPlays', playId));
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'delete',
+        collection: 'userPlays',
+        docId: playId
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+export function subscribeToUserPlays(
+  userId: string,
+  callback: (plays: UserPlay[]) => void
+) {
+  const q = query(
+    collection(db, 'userPlays'),
+    where('userId', '==', userId),
+    orderBy('updatedAt', 'desc')
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const plays = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    })) as UserPlay[];
+    callback(plays);
+  }, (error) => {
+    console.error('User plays subscription error:', error);
+  });
+}
+
+// ============================================
+// AI SUGGESTION HISTORY API
+// ============================================
+
+export interface AISuggestionRecord {
+  id?: string;
+  userId: string;
+  situation: {
+    down: number;
+    distance: number;
+    fieldPosition: number;
+    quarter: number;
+    scoreDifferential: number;
+    timeRemaining: number;
+  };
+  suggestion: {
+    name: string;
+    formation: string;
+    type: string;
+    confidence: number;
+    description: string;
+  };
+  applied: boolean;
+  savedAsPlayId?: string;
+  createdAt: Date;
+}
+
+export async function saveAISuggestion(
+  userId: string,
+  record: Omit<AISuggestionRecord, 'id' | 'userId' | 'createdAt'>
+): Promise<string> {
+  const data = {
+    ...record,
+    userId,
+    createdAt: new Date()
+  };
+
+  try {
+    const docRef = await addDoc(collection(db, 'aiSuggestions'), data);
+    return docRef.id;
+  } catch (error) {
+    if (!isOnline) {
+      const tempId = `offline_${Date.now()}`;
+      addToOfflineQueue({
+        type: 'create',
+        collection: 'aiSuggestions',
+        data,
+        tempId
+      });
+      return tempId;
+    }
+    throw error;
+  }
+}
+
+export async function getAISuggestions(userId: string): Promise<AISuggestionRecord[]> {
+  try {
+    const q = query(
+      collection(db, 'aiSuggestions'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc')
+    );
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    })) as AISuggestionRecord[];
+  } catch (error) {
+    console.error('Error fetching AI suggestions:', error);
+    throw error;
+  }
+}
+
+export function subscribeToAISuggestions(
+  userId: string,
+  callback: (suggestions: AISuggestionRecord[]) => void
+) {
+  const q = query(
+    collection(db, 'aiSuggestions'),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc')
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const suggestions = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    })) as AISuggestionRecord[];
+    callback(suggestions);
+  }, (error) => {
+    console.error('AI suggestions subscription error:', error);
+  });
+}
+
+// ============================================
+// PLAYBOOK COLLECTION (folders of plays)
+// ============================================
+
+export interface PlaybookCollection {
+  id?: string;
+  userId: string;
+  name: string;
+  description: string;
+  playIds: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export async function savePlaybookCollection(
+  userId: string,
+  collectionData: Omit<PlaybookCollection, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
+): Promise<string> {
+  const data = {
+    ...collectionData,
+    userId,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  try {
+    const docRef = await addDoc(collection(db, 'playbookCollections'), data);
+    return docRef.id;
+  } catch (error) {
+    if (!isOnline) {
+      const tempId = `offline_${Date.now()}`;
+      addToOfflineQueue({
+        type: 'create',
+        collection: 'playbookCollections',
+        data,
+        tempId
+      });
+      return tempId;
+    }
+    throw error;
+  }
+}
+
+export async function getUserPlaybookCollections(userId: string): Promise<PlaybookCollection[]> {
+  try {
+    const q = query(
+      collection(db, 'playbookCollections'),
+      where('userId', '==', userId),
+      orderBy('updatedAt', 'desc')
+    );
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    })) as PlaybookCollection[];
+  } catch (error) {
+    console.error('Error fetching playbook collections:', error);
+    throw error;
+  }
+}
+
+export async function updatePlaybookCollection(
+  collectionId: string,
+  updates: Partial<PlaybookCollection>
+): Promise<void> {
+  const data = {
+    ...updates,
+    updatedAt: new Date()
+  };
+  delete (data as any).id;
+  delete (data as any).userId;
+
+  try {
+    await updateDoc(doc(db, 'playbookCollections', collectionId), data);
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'update',
+        collection: 'playbookCollections',
+        docId: collectionId,
+        data
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+export async function deletePlaybookCollection(collectionId: string): Promise<void> {
+  try {
+    await deleteDoc(doc(db, 'playbookCollections', collectionId));
+  } catch (error) {
+    if (!isOnline) {
+      addToOfflineQueue({
+        type: 'delete',
+        collection: 'playbookCollections',
+        docId: collectionId
+      });
+      return;
+    }
+    throw error;
+  }
+}
+
+// ============================================
+// SMART PLAYBOOK MIGRATION (localStorage → Firestore)
+// ============================================
+
+export async function migrateSmartPlaybookPlays(userId: string): Promise<number> {
+  const stored = localStorage.getItem('smartPlaybook_plays');
+  if (!stored) return 0;
+
+  try {
+    const plays = JSON.parse(stored);
+    if (!Array.isArray(plays) || plays.length === 0) return 0;
+
+    let migrated = 0;
+    for (const play of plays) {
+      await saveUserPlay(userId, {
+        name: play.name || 'Untitled Play',
+        phase: play.phase || 'offense',
+        type: play.type || 'pass',
+        players: (play.players || []).map((p: any) => ({
+          id: p.id,
+          number: p.number,
+          position: p.position,
+          x: p.x,
+          y: p.y
+        })),
+        routes: (play.routes || []).map((r: any) => ({
+          id: r.id,
+          playerId: r.playerId,
+          points: r.points || [],
+          type: r.type || 'custom',
+          color: r.color || '#ef4444'
+        })),
+        aiGenerated: false,
+        tags: [],
+        notes: ''
+      });
+      migrated++;
+    }
+
+    // Mark migration as done, but keep localStorage as backup
+    localStorage.setItem('smartPlaybook_migrated', userId);
+    return migrated;
+  } catch (error) {
+    console.error('SmartPlaybook migration failed:', error);
+    throw error;
+  }
+}
+
 // MIGRATION HELPER
 export async function migrateFromLocalStorage(teamId: string): Promise<boolean> {
   try {

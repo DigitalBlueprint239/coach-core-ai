@@ -6,13 +6,15 @@
  * - Allows coach to apply suggestions directly to the field
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useAI } from '../../../ai-brain/AIContext';
 import {
   createPlayer,
   createRoute,
   ROUTE_COLORS
 } from '../PlayController';
+import type { AISuggestionRecord } from '../../../services/firestore';
+import { saveAISuggestion, subscribeToAISuggestions } from '../../../services/firestore';
 
 // ============================================
 // TYPES
@@ -43,6 +45,7 @@ interface AISuggestionsPanelProps {
   onApplySuggestion: (players: any[], routes: any[], playName: string) => void;
   fieldWidth: number;
   fieldHeight: number;
+  userId?: string | null;
 }
 
 // ============================================
@@ -373,7 +376,8 @@ function buildSuggestionRoutes(
 const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
   onApplySuggestion,
   fieldWidth,
-  fieldHeight
+  fieldHeight,
+  userId
 }) => {
   const ai = useAI();
 
@@ -390,6 +394,22 @@ const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(true);
   const [appliedId, setAppliedId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'suggest' | 'history'>('suggest');
+  const [history, setHistory] = useState<AISuggestionRecord[]>([]);
+
+  // Subscribe to AI suggestion history when authenticated
+  useEffect(() => {
+    if (!userId) {
+      setHistory([]);
+      return;
+    }
+
+    const unsubscribe = subscribeToAISuggestions(userId, (records) => {
+      setHistory(records);
+    });
+
+    return () => unsubscribe();
+  }, [userId]);
 
   const updateSituation = useCallback((field: keyof GameSituation, value: number) => {
     setSituation(prev => ({ ...prev, [field]: value }));
@@ -462,7 +482,22 @@ const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
 
     onApplySuggestion(players, routes, suggestion.name);
     setAppliedId(suggestion.id);
-  }, [fieldWidth, fieldHeight, onApplySuggestion]);
+
+    // Save to Firestore history if authenticated
+    if (userId) {
+      saveAISuggestion(userId, {
+        situation: { ...situation },
+        suggestion: {
+          name: suggestion.name,
+          formation: suggestion.formation,
+          type: suggestion.type,
+          confidence: suggestion.confidence,
+          description: suggestion.description
+        },
+        applied: true
+      }).catch(err => console.error('Failed to save AI suggestion:', err));
+    }
+  }, [fieldWidth, fieldHeight, onApplySuggestion, userId, situation]);
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.75) return 'text-green-700 bg-green-100';
@@ -502,7 +537,72 @@ const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
         </svg>
       </button>
 
-      {expanded && (
+      {expanded && userId && (
+        <div className="flex border-b">
+          <button
+            onClick={() => setActiveTab('suggest')}
+            className={`flex-1 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'suggest'
+                ? 'text-blue-600 border-b-2 border-blue-600'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Suggest
+          </button>
+          <button
+            onClick={() => setActiveTab('history')}
+            className={`flex-1 py-2 text-xs font-medium transition-colors ${
+              activeTab === 'history'
+                ? 'text-blue-600 border-b-2 border-blue-600'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            History ({history.length})
+          </button>
+        </div>
+      )}
+
+      {expanded && activeTab === 'history' && userId && (
+        <div className="px-3 pb-3 space-y-2 max-h-96 overflow-y-auto">
+          {history.length === 0 ? (
+            <p className="text-xs text-gray-500 text-center py-4">
+              No suggestion history yet. Apply a suggestion to see it here.
+            </p>
+          ) : (
+            history.map((record) => (
+              <div key={record.id} className="border border-gray-200 rounded-lg p-2.5">
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <h4 className="text-sm font-semibold text-gray-900 leading-tight">
+                    {record.suggestion.name}
+                  </h4>
+                  <span className={`text-xs font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap ${
+                    record.suggestion.confidence >= 0.75 ? 'text-green-700 bg-green-100' :
+                    record.suggestion.confidence >= 0.55 ? 'text-yellow-700 bg-yellow-100' :
+                    'text-red-700 bg-red-100'
+                  }`}>
+                    {Math.round(record.suggestion.confidence * 100)}%
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 mb-1">
+                  {ordinal(record.situation.down)} & {record.situation.distance} at own {record.situation.fieldPosition}
+                  {' | '}Q{record.situation.quarter}
+                </p>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  {record.suggestion.description}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  {record.createdAt instanceof Date
+                    ? record.createdAt.toLocaleDateString()
+                    : new Date((record.createdAt as any)?.seconds * 1000 || Date.now()).toLocaleDateString()
+                  }
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {expanded && (activeTab === 'suggest' || !userId) && (
         <div className="px-3 pb-3 space-y-3">
           {/* Game Situation Form */}
           <div className="space-y-2">

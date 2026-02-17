@@ -74,5 +74,35 @@ service cloud.firestore {
       allow delete: if isTeamOwner(resource.data.teamId)
         else error('permission-denied', 'Only the coach can delete plays.');
     }
+
+    // ============================================
+    // USER PLAYS (SmartPlaybook — user-scoped)
+    // ============================================
+    match /userPlays/{playId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ============================================
+    // AI SUGGESTION HISTORY (user-scoped)
+    // ============================================
+    match /aiSuggestions/{suggestionId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ============================================
+    // PLAYBOOK COLLECTIONS (folders — user-scoped)
+    // ============================================
+    match /playbookCollections/{collectionId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
   }
 }
