@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { BookOpen } from 'lucide-react';
 import Field from './Field';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
@@ -46,6 +47,8 @@ import { useSpacingWarnings } from './hooks/useSpacingWarnings';
 import { useRoutePreview, generatePreviewPoints } from './hooks/useRoutePreview';
 import { routes as routeDefinitions } from '../../engine/offense/data.moderate';
 import SmartRoutePanel from './components/SmartRoutePanel';
+import ConceptPanel from './components/ConceptPanel';
+import { detectConcept } from '../../engine/offense/conceptDetection';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -102,6 +105,18 @@ const SmartPlaybook = () => {
     if (!player) return null;
     return generatePreviewPoints(previewRoute, { x: player.x, y: player.y }, FIELD_DIMENSIONS.width / 2);
   }, [previewRoute, previewPlayerId, players]);
+
+  // Concept detection - identifies known concepts from current route assignments
+  const detectedConcept = React.useMemo(() => {
+    if (routes.length < 2) return null;
+    const playRoutes = routes.map((r: any) => ({
+      playerId: r.playerId,
+      routeId: r.id,
+      routeName: r.type || 'custom',
+      depth: 0,
+    }));
+    return detectConcept(playRoutes);
+  }, [routes]);
 
   // Load saved plays from localStorage on mount
   useEffect(() => {
@@ -698,8 +713,47 @@ const SmartPlaybook = () => {
               />
             )}
 
+            {/* Detected Concept Banner */}
+            {detectedConcept && (
+              <div className="bg-white rounded-lg shadow-sm p-4">
+                <div className="flex items-center gap-1.5 text-blue-700 text-sm font-semibold mb-1">
+                  <BookOpen size={14} />
+                  <span>Detected: {detectedConcept.concept_name}</span>
+                </div>
+                <p className="text-xs text-gray-600 italic">{detectedConcept.coaching_cue}</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {detectedConcept.best_vs.slice(0, 3).map((cov: string) => (
+                    <span key={cov} className="px-1.5 py-0.5 text-[10px] bg-green-50 text-green-700 rounded">
+                      {cov.replace(/_/g, ' ')}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Spacing Warnings - shown when routes have convergence issues */}
             <SpacingWarnings warnings={spacingWarnings} />
+
+            {/* Concept Panel - batch route assignment */}
+            <ConceptPanel
+              players={players}
+              onApplyConcept={(assignments: Array<{ playerId: string; routeId: string; points: Array<{ x: number; y: number }> }>, conceptId: string) => {
+                saveToUndoStack('apply_concept');
+                const newRoutes = [...routes];
+                for (const assignment of assignments) {
+                  const routeType = assignment.routeId.replace(/_\d+$/, '').replace(/_/g, ' ');
+                  const newRoute = createRoute(
+                    assignment.playerId,
+                    assignment.points,
+                    routeType,
+                    routeColor
+                  );
+                  newRoutes.push(newRoute);
+                }
+                setRoutes(newRoutes);
+                addNotification('success', `Applied concept with ${assignments.length} routes`);
+              }}
+            />
           </div>
         </div>
       </div>
