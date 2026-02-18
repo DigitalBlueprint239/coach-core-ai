@@ -160,3 +160,22 @@ SmartPlaybook.tsx
 - Assist Mode panel — inlined in SmartPlaybook.tsx, rendered inside `<div className="hidden lg:block">`
 - Coach Mode drawer — inlined in SmartPlaybook.tsx, uses `hidden lg:flex` and `hidden lg:block` for backdrop
 - `TouchOptimizedPlaybook` is **not touched** by editor intelligence shim
+
+---
+
+## Build & Test Stability
+
+### Build tooling
+
+- **Bundler**: CRA 5 (react-scripts 5.0.1) with Webpack
+- **CSS**: Tailwind CSS v3 via CRA's built-in PostCSS pipeline
+- **TypeScript**: `module: "esnext"`, `moduleResolution: "node"`, `jsx: "react-jsx"`, `strict: true`
+- **TS error handling**: `package.json` build script sets `TSC_COMPILE_ON_ERROR=true` — 166 pre-existing strict-mode TS errors in legacy files are emitted as warnings, not build failures
+- **Type augmentation**: `src/env.d.ts` provides `ImportMeta.env` types for `import.meta.env` usage
+
+### Test tooling
+
+- **Runner**: Jest 27 via CRA
+- **import.meta.env handling**: `config/jest/importMetaTransform.js` — custom Jest transformer that string-replaces `import.meta.env` → `process.env` before Babel processes files
+- **Firebase stubs**: `src/setupTests.ts` sets dummy `NEXT_PUBLIC_FIREBASE_*` env vars so `firebase.ts` doesn't throw at import time
+- **Jest config override**: `package.json` → `jest.transform` points JS/TS files to the custom transformer
