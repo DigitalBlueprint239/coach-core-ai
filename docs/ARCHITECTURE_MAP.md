@@ -21,8 +21,6 @@ src/
 │       │   ├── analyzePlay.ts         # Heuristic analysis pipeline
 │       │   └── useCommitAnalysis.ts   # React hook: analysisRevision + commit()
 │       └── components/
-│           ├── AssistModePanel.tsx     # ← Minimal CCIL surface (NEW)
-│           ├── CoachModeDrawer.tsx     # ← Full diagnostics drawer (NEW)
 │           ├── CanvasArea.tsx
 │           ├── SavePlayDialog.tsx
 │           ├── PlayerControls.js
@@ -116,8 +114,8 @@ SmartPlaybook.tsx
   │                               ▼
   │                     AnalysisResult { issues, score }
   │                               │
-  ├─ AssistModePanel ◄────────────┘  (right sidebar, desktop)
-  └─ CoachModeDrawer ◄───────────    (overlay drawer, desktop)
+  ├─ [inline] Assist Mode panel ◄─┘  (right sidebar, desktop, hidden lg:block)
+  └─ [inline] Coach Mode drawer ◄─  (overlay drawer, desktop, hidden lg:flex)
 ```
 
 **Commit trigger**: Every `saveToUndoStack()` call is followed by `commit()`, which bumps `analysisRevision` and causes `useMemo` to re-derive the canonical play and analysis.
@@ -130,6 +128,6 @@ SmartPlaybook.tsx
 
 ## Desktop-only constraints
 
-- `AssistModePanel` — rendered inside `<div className="hidden lg:block">`
-- `CoachModeDrawer` — uses `hidden lg:flex` and `hidden lg:block` for backdrop
+- Assist Mode panel — inlined in SmartPlaybook.tsx, rendered inside `<div className="hidden lg:block">`
+- Coach Mode drawer — inlined in SmartPlaybook.tsx, uses `hidden lg:flex` and `hidden lg:block` for backdrop
 - `TouchOptimizedPlaybook` is **not touched** by CCIL integration
