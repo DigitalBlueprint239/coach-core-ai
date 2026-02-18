@@ -44,8 +44,7 @@ import { AIProvider } from '../../ai-brain/AIContext';
 
 // CCIL Integration (commit-based analysis)
 import { useCommitAnalysis } from './ccil/useCommitAnalysis';
-import AssistModePanel from './components/AssistModePanel';
-import CoachModeDrawer from './components/CoachModeDrawer';
+import type { AnalysisResult, IntelligenceIssue, IssueCategory } from './ccil/types';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -665,13 +664,64 @@ const SmartPlaybook = () => {
 
           {/* Right Sidebar - Assist Mode + Library */}
           <div className="lg:col-span-1 space-y-4">
-            {/* CCIL Assist Mode Panel (desktop only) */}
+            {/* CCIL Assist Mode Panel — inline, desktop only */}
             <div className="hidden lg:block">
-              <AssistModePanel
-                analysisResult={analysisResult}
-                revision={analysisRevision}
-                onOpenCoachMode={() => setCoachModeOpen(true)}
-              />
+              <div className="bg-white rounded-lg border shadow-sm p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-gray-700">Assist Mode</h3>
+                  <span className="text-xs text-gray-400">rev {analysisRevision}</span>
+                </div>
+                <div className={`flex items-center justify-between rounded-lg border px-3 py-2 ${
+                  analysisResult.score >= 80 ? 'bg-green-50 border-green-200' :
+                  analysisResult.score >= 50 ? 'bg-yellow-50 border-yellow-200' :
+                  'bg-red-50 border-red-200'
+                }`}>
+                  <span className="text-xs font-medium text-gray-600">Play Score</span>
+                  <span className={`text-lg font-bold ${
+                    analysisResult.score >= 80 ? 'text-green-600' :
+                    analysisResult.score >= 50 ? 'text-yellow-600' :
+                    'text-red-600'
+                  }`}>{analysisResult.score}</span>
+                </div>
+                {analysisResult.issues.length > 0 ? (
+                  <div className="space-y-1.5">
+                    {[...analysisResult.issues]
+                      .sort((a, b) => {
+                        const ord: Record<string, number> = { critical: 0, warning: 1, info: 2 };
+                        return (ord[a.severity] ?? 9) - (ord[b.severity] ?? 9);
+                      })
+                      .slice(0, 3)
+                      .map(issue => (
+                        <div key={issue.id} className={`flex items-start gap-2 px-3 py-2 rounded ${
+                          issue.severity === 'critical' ? 'bg-red-50' :
+                          issue.severity === 'warning' ? 'bg-yellow-50' : 'bg-blue-50'
+                        }`}>
+                          <span className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${
+                            issue.severity === 'critical' ? 'bg-red-500' :
+                            issue.severity === 'warning' ? 'bg-yellow-500' : 'bg-blue-400'
+                          }`} />
+                          <div className="min-w-0">
+                            <p className={`text-xs font-medium truncate ${
+                              issue.severity === 'critical' ? 'text-red-800' :
+                              issue.severity === 'warning' ? 'text-yellow-800' : 'text-blue-800'
+                            }`}>{issue.title}</p>
+                            <p className="text-xs text-gray-500 truncate">{issue.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400 text-center py-2">No issues detected.</p>
+                )}
+                <button
+                  onClick={() => setCoachModeOpen(true)}
+                  className="w-full mt-1 px-3 py-2 text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+                >
+                  {analysisResult.issues.length > 3
+                    ? `Open Coach Mode (+${analysisResult.issues.length - 3} more)`
+                    : 'Open Coach Mode'}
+                </button>
+              </div>
             </div>
 
             {showLibrary && (
@@ -730,15 +780,110 @@ const SmartPlaybook = () => {
         onSkip={() => setShowOnboarding(false)}
       />
 
-      {/* CCIL Coach Mode Drawer (desktop only) */}
-      <CoachModeDrawer
-        isOpen={coachModeOpen}
-        onClose={() => setCoachModeOpen(false)}
-        analysisResult={analysisResult}
-        revision={analysisRevision}
-        playerCount={players.length}
-        routeCount={routes.length}
-      />
+      {/* CCIL Coach Mode Drawer — inline, desktop only */}
+      {coachModeOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 z-40 hidden lg:block"
+          onClick={() => setCoachModeOpen(false)}
+        />
+      )}
+      <div
+        className={`fixed top-0 right-0 h-full w-96 bg-white shadow-xl z-50 transform transition-transform duration-300 hidden lg:flex flex-col ${
+          coachModeOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between px-5 py-4 border-b">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">Coach Mode</h2>
+            <p className="text-xs text-gray-500">
+              Revision {analysisRevision} &middot; {new Date(analysisResult.analyzedAt).toLocaleTimeString()}
+            </p>
+          </div>
+          <button
+            onClick={() => setCoachModeOpen(false)}
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500"
+            aria-label="Close Coach Mode"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-6">
+          {/* Score + stats */}
+          <div className="text-center">
+            <span className={`text-4xl font-bold ${
+              analysisResult.score >= 80 ? 'text-green-600' :
+              analysisResult.score >= 50 ? 'text-yellow-600' : 'text-red-600'
+            }`}>{analysisResult.score}</span>
+            <p className="text-xs text-gray-500 mt-1">Play Quality Score</p>
+          </div>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="bg-gray-50 rounded-lg p-2">
+              <p className="text-lg font-bold text-gray-800">{players.length}</p>
+              <p className="text-xs text-gray-500">Players</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-2">
+              <p className="text-lg font-bold text-gray-800">{routes.length}</p>
+              <p className="text-xs text-gray-500">Routes</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-2">
+              <p className="text-lg font-bold text-gray-800">{analysisResult.issues.length}</p>
+              <p className="text-xs text-gray-500">Issues</p>
+            </div>
+          </div>
+          {/* Issues grouped by category */}
+          {analysisResult.issues.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-8">No issues found. Play design looks clean.</p>
+          ) : (
+            (() => {
+              const grouped = new Map<IssueCategory, IntelligenceIssue[]>();
+              for (const issue of analysisResult.issues) {
+                const list = grouped.get(issue.category) ?? [];
+                list.push(issue);
+                grouped.set(issue.category, list);
+              }
+              const labels: Record<string, string> = {
+                alignment: 'Alignment', spacing: 'Spacing', route_conflict: 'Route Conflicts',
+                coverage_gap: 'Coverage Gaps', personnel: 'Personnel', formation: 'Formation', general: 'General',
+              };
+              return Array.from(grouped.entries()).map(([cat, issues]) => (
+                <div key={cat}>
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                    {labels[cat] ?? cat} ({issues.length})
+                  </h3>
+                  <div className="space-y-2">
+                    {issues.map(issue => (
+                      <div key={issue.id} className="border rounded-lg p-3 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                            issue.severity === 'critical' ? 'bg-red-100 text-red-800' :
+                            issue.severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>{issue.severity}</span>
+                          <span className="text-sm font-medium text-gray-800">{issue.title}</span>
+                        </div>
+                        <p className="text-xs text-gray-600">{issue.description}</p>
+                        {issue.suggestion && (
+                          <p className="text-xs text-indigo-600 italic">{issue.suggestion}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()
+          )}
+        </div>
+        <div className="border-t px-5 py-3">
+          <button
+            onClick={() => setCoachModeOpen(false)}
+            className="w-full px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-gray-700"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
     </ErrorBoundary>
   );
