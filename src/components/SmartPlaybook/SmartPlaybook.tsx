@@ -42,6 +42,11 @@ import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
 import { AIProvider } from '../../ai-brain/AIContext';
 
+// CCIL Integration (commit-based analysis)
+import { useCommitAnalysis } from './ccil/useCommitAnalysis';
+import AssistModePanel from './components/AssistModePanel';
+import CoachModeDrawer from './components/CoachModeDrawer';
+
 // Constants
 const FIELD_DIMENSIONS = {
   width: 600,
@@ -79,6 +84,18 @@ const SmartPlaybook = () => {
   const [debugResults, setDebugResults] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Coach Mode UI state
+  const [coachModeOpen, setCoachModeOpen] = useState(false);
+
+  // CCIL commit-based analysis hook
+  const { commit, analysisRevision, analysisResult } = useCommitAnalysis({
+    players,
+    routes,
+    phase: currentPlayPhase,
+    playType: currentPlayType,
+    playName: currentPlayName,
+  });
 
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -187,23 +204,25 @@ const SmartPlaybook = () => {
     setRoutes(newState.routes);
     setUndoStack(newUndoStack);
     setRedoStack(newRedoStack);
-  }, [undoStack, redoStack, players, routes]);
+    commit();
+  }, [undoStack, redoStack, players, routes, commit]);
 
   // Handle redo
   const handleRedo = useCallback(() => {
     if (redoStack.length === 0) return;
-    
+
     const [newState, newUndoStack, newRedoStack] = redo(
-      undoStack, 
-      redoStack, 
+      undoStack,
+      redoStack,
       { players, routes }
     );
-    
+
     setPlayers(newState.players);
     setRoutes(newState.routes);
     setUndoStack(newUndoStack);
     setRedoStack(newRedoStack);
-  }, [undoStack, redoStack, players, routes]);
+    commit();
+  }, [undoStack, redoStack, players, routes, commit]);
 
   // Get canvas coordinates from event
   const getCanvasCoordinates = useCallback((event) => {
@@ -256,6 +275,7 @@ const SmartPlaybook = () => {
           setPlayers(prev => removePlayer(prev, clickedPlayer.id));
           setRoutes(prev => prev.filter(route => route.playerId !== clickedPlayer.id));
           setSelectedPlayerId(null);
+          commit();
         } else {
           // Select player
           setSelectedPlayerId(clickedPlayer.id);
@@ -273,8 +293,9 @@ const SmartPlaybook = () => {
       const newPlayer = createPlayer(coords.x, coords.y, 'WR', Math.floor(Math.random() * 99) + 1);
       saveToUndoStack('add_player');
       setPlayers(prev => addPlayer(prev, newPlayer));
+      commit();
     }
-  }, [mode, isDrawingRoute, players, getCanvasCoordinates, saveToUndoStack]);
+  }, [mode, isDrawingRoute, players, getCanvasCoordinates, saveToUndoStack, commit]);
 
   // Handle player drag
   const handlePlayerDrag = useCallback((playerId, newX, newY) => {
@@ -289,7 +310,8 @@ const SmartPlaybook = () => {
   const handlePlayerDragEnd = useCallback((playerId) => {
     saveToUndoStack('move_player');
     addNotification('success', 'Player moved successfully');
-  }, [saveToUndoStack]);
+    commit();
+  }, [saveToUndoStack, commit]);
 
   // Add notification helper
   const addNotification = useCallback((type, message, duration = 3000) => {
@@ -311,17 +333,19 @@ const SmartPlaybook = () => {
   // Handle route update
   const handleRouteUpdate = useCallback((routeId, updates) => {
     saveToUndoStack('update_route');
-    setRoutes(prev => prev.map(route => 
+    setRoutes(prev => prev.map(route =>
       route.id === routeId ? { ...route, ...updates } : route
     ));
-  }, [saveToUndoStack]);
+    commit();
+  }, [saveToUndoStack, commit]);
 
   // Handle route deletion
   const handleRouteDelete = useCallback((routeId) => {
     saveToUndoStack('delete_route');
     setRoutes(prev => removeRoute(prev, routeId));
     setSelectedRouteId(null);
-  }, [saveToUndoStack]);
+    commit();
+  }, [saveToUndoStack, commit]);
 
   // Handle preset route application
   const handleApplyPreset = useCallback((routeId, preset) => {
@@ -338,10 +362,11 @@ const SmartPlaybook = () => {
       y: player.y + point.y
     }));
 
-    setRoutes(prev => prev.map(r => 
+    setRoutes(prev => prev.map(r =>
       r.id === routeId ? { ...r, points: newPoints, type: preset.id } : r
     ));
-  }, [routes, players, saveToUndoStack]);
+    commit();
+  }, [routes, players, saveToUndoStack, commit]);
 
   // Start route drawing
   const startRouteDrawing = useCallback((playerId) => {
@@ -366,11 +391,12 @@ const SmartPlaybook = () => {
     const newRoute = createRoute(selectedPlayerId, routePoints, routeType, routeColor);
     saveToUndoStack('add_route');
     setRoutes(prev => addRoute(prev, newRoute));
-    
+
     setIsDrawingRoute(false);
     setRoutePoints([]);
     setMode('view');
-  }, [routePoints, selectedPlayerId, routeType, routeColor, saveToUndoStack]);
+    commit();
+  }, [routePoints, selectedPlayerId, routeType, routeColor, saveToUndoStack, commit]);
 
   // Cancel route drawing
   const cancelRouteDrawing = useCallback(() => {
@@ -400,7 +426,8 @@ const SmartPlaybook = () => {
     setPlayers(newPlayers);
     setRoutes([]);
     setSelectedPlayerId(null);
-  }, [saveToUndoStack]);
+    commit();
+  }, [saveToUndoStack, commit]);
 
   // Save current play
   const saveCurrentPlay = useCallback((name, phase, type) => {
@@ -434,7 +461,8 @@ const SmartPlaybook = () => {
     setSelectedPlayerId(null);
     setShowLibrary(false);
     addNotification('success', `Play "${play.name}" loaded successfully`);
-  }, [saveToUndoStack, addNotification]);
+    commit();
+  }, [saveToUndoStack, addNotification, commit]);
 
   // Delete play
   const deletePlay = useCallback((playId) => {
@@ -452,8 +480,9 @@ const SmartPlaybook = () => {
       setRoutes([]);
       setSelectedPlayerId(null);
       setSelectedRouteId(null);
+      commit();
     }
-  }, [saveToUndoStack]);
+  }, [saveToUndoStack, commit]);
 
   // Run debug tests
   const runDebugTests = useCallback(() => {
@@ -543,9 +572,10 @@ const SmartPlaybook = () => {
               players={players}
               onUpdatePlayer={(updates) => {
                 saveToUndoStack('update_player');
-                setPlayers(prev => prev.map(p => 
+                setPlayers(prev => prev.map(p =>
                   p.id === selectedPlayerId ? { ...p, ...updates } : p
                 ));
+                commit();
               }}
               onDeletePlayer={() => {
                 if (selectedPlayerId) {
@@ -553,6 +583,7 @@ const SmartPlaybook = () => {
                   setPlayers(prev => removePlayer(prev, selectedPlayerId));
                   setRoutes(prev => prev.filter(route => route.playerId !== selectedPlayerId));
                   setSelectedPlayerId(null);
+                  commit();
                 }
               }}
             />
@@ -632,8 +663,17 @@ const SmartPlaybook = () => {
             )}
           </div>
 
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
+          {/* Right Sidebar - Assist Mode + Library */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* CCIL Assist Mode Panel (desktop only) */}
+            <div className="hidden lg:block">
+              <AssistModePanel
+                analysisResult={analysisResult}
+                revision={analysisRevision}
+                onOpenCoachMode={() => setCoachModeOpen(true)}
+              />
+            </div>
+
             {showLibrary && (
               <PlayLibrary
                 savedPlays={savedPlays}
@@ -688,6 +728,16 @@ const SmartPlaybook = () => {
         isVisible={showOnboarding}
         onComplete={() => setShowOnboarding(false)}
         onSkip={() => setShowOnboarding(false)}
+      />
+
+      {/* CCIL Coach Mode Drawer (desktop only) */}
+      <CoachModeDrawer
+        isOpen={coachModeOpen}
+        onClose={() => setCoachModeOpen(false)}
+        analysisResult={analysisResult}
+        revision={analysisRevision}
+        playerCount={players.length}
+        routeCount={routes.length}
       />
     </div>
     </ErrorBoundary>
