@@ -68,7 +68,44 @@ const DebugPanel = memo(({
   style = {},
   'data-testid': testId = 'debug-panel'
 }) => {
-  // Validate props
+  // Hooks must be called unconditionally (before any early returns)
+  const handleRunAll = useCallback((event) => {
+    try {
+      event.preventDefault();
+      if (typeof onRunAll === 'function') onRunAll();
+    } catch (error) {
+      console.error('Error running all tests:', error);
+    }
+  }, [onRunAll]);
+
+  const handleTogglePassed = useCallback((event) => {
+    try {
+      event.preventDefault();
+      if (typeof onTogglePassed === 'function') onTogglePassed();
+    } catch (error) {
+      console.error('Error toggling passed results:', error);
+    }
+  }, [onTogglePassed]);
+
+  const safeResults = Array.isArray(results) ? results : [];
+
+  const filteredResults = useMemo(() => {
+    return showPassed ? safeResults : safeResults.filter(result => !result.passed);
+  }, [safeResults, showPassed]);
+
+  const stats = useMemo(() => {
+    const total = safeResults.length;
+    const passed = safeResults.filter(r => r.passed).length;
+    const failed = total - passed;
+    return { total, passed, failed };
+  }, [safeResults]);
+
+  const panelStyle = useMemo(() => ({
+    ...PANEL_STYLES,
+    ...style
+  }), [style]);
+
+  // Validate props (after hooks)
   if (!Array.isArray(results)) {
     console.error('DebugPanel: results must be an array');
     return null;
@@ -88,45 +125,6 @@ const DebugPanel = memo(({
     console.error('DebugPanel: showPassed must be a boolean');
     return null;
   }
-
-  // Memoized event handlers for better performance
-  const handleRunAll = useCallback((event) => {
-    try {
-      event.preventDefault();
-      onRunAll();
-    } catch (error) {
-      console.error('Error running all tests:', error);
-    }
-  }, [onRunAll]);
-
-  const handleTogglePassed = useCallback((event) => {
-    try {
-      event.preventDefault();
-      onTogglePassed();
-    } catch (error) {
-      console.error('Error toggling passed results:', error);
-    }
-  }, [onTogglePassed]);
-
-  // Memoized filtered results
-  const filteredResults = useMemo(() => {
-    return showPassed ? results : results.filter(result => !result.passed);
-  }, [results, showPassed]);
-
-  // Memoized statistics
-  const stats = useMemo(() => {
-    const total = results.length;
-    const passed = results.filter(r => r.passed).length;
-    const failed = total - passed;
-    
-    return { total, passed, failed };
-  }, [results]);
-
-  // Memoized panel styles
-  const panelStyle = useMemo(() => ({
-    ...PANEL_STYLES,
-    ...style
-  }), [style]);
 
   return (
     <div 
