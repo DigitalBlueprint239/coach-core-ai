@@ -1,9 +1,13 @@
 /**
- * Canonical Adapter — Transforms SmartPlaybook UI state into CanonicalPlay
+ * @temporary-shim SmartPlaybook-only
  *
- * This is the single translation boundary between the playbook component's
- * internal state shape and the intelligence layer's canonical input type.
- * All analysis consumers receive CanonicalPlay — never raw UI state.
+ * TEMPORARY SHIM (SmartPlaybook-only)
+ * This is NOT the platform CCIL/OIM.
+ * Planned extraction target: src/modules/intelligence (future).
+ * Do not import this directory outside SmartPlaybook.
+ *
+ * Canonical Adapter — Transforms SmartPlaybook UI state into CanonicalPlay.
+ * Single translation boundary between playbook component state and analysis types.
  */
 
 import type { CanonicalPlay, CanonicalPlayer, CanonicalRoute } from './types';

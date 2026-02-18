@@ -42,9 +42,9 @@ import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
 import { AIProvider } from '../../ai-brain/AIContext';
 
-// CCIL Integration (commit-based analysis)
-import { useCommitAnalysis } from './ccil/useCommitAnalysis';
-import type { AnalysisResult, IntelligenceIssue, IssueCategory } from './ccil/types';
+// Editor Intelligence Shim (commit-based analysis — temporary, SmartPlaybook-only)
+import { useEditorCommitAnalysis } from './editorIntelligenceShim/useEditorCommitAnalysis';
+import type { AnalysisResult, IntelligenceIssue, IssueCategory } from './editorIntelligenceShim/types';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -87,8 +87,8 @@ const SmartPlaybook = () => {
   // Coach Mode UI state
   const [coachModeOpen, setCoachModeOpen] = useState(false);
 
-  // CCIL commit-based analysis hook
-  const { commit, analysisRevision, analysisResult } = useCommitAnalysis({
+  // Editor intelligence shim — commit-based analysis hook
+  const { commit, analysisRevision, analysisResult } = useEditorCommitAnalysis({
     players,
     routes,
     phase: currentPlayPhase,

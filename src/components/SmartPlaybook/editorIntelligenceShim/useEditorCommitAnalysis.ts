@@ -1,14 +1,21 @@
 /**
- * useCommitAnalysis — React hook for commit-triggered CCIL analysis
+ * @temporary-shim SmartPlaybook-only
+ *
+ * TEMPORARY SHIM (SmartPlaybook-only)
+ * This is NOT the platform CCIL/OIM.
+ * Planned extraction target: src/modules/intelligence (future).
+ * Do not import this directory outside SmartPlaybook.
+ *
+ * useEditorCommitAnalysis — React hook for commit-triggered editor analysis.
  *
  * This hook owns the `analysisRevision` counter and exposes a `commit()`
  * wrapper. Each call to `commit()` increments the revision, which triggers
- * a memoised re-run of the canonical adapter + analyzePlay pipeline.
+ * a memoised re-run of the canonical adapter + analyzeEditorPlay pipeline.
  *
  * Usage in SmartPlaybook:
- *   const { commit, analysisResult, analysisRevision } = useCommitAnalysis(
- *     players, routes, currentPlayPhase, currentPlayType, currentPlayName
- *   );
+ *   const { commit, analysisResult, analysisRevision } = useEditorCommitAnalysis({
+ *     players, routes, phase, playType, playName,
+ *   });
  *
  *   // Wrap every state-mutating handler:
  *   saveToUndoStack('add_player');
@@ -18,7 +25,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { toCanonicalPlay } from './canonicalAdapter';
-import { analyzePlay } from './analyzePlay';
+import { analyzeEditorPlay } from './analyzeEditorPlay';
 import type { AnalysisResult } from './types';
 
 const FIELD_DIMENSIONS = { width: 600, height: 300 };
@@ -46,7 +53,7 @@ interface UseCommitAnalysisOptions {
   playName: string;
 }
 
-export function useCommitAnalysis({
+export function useEditorCommitAnalysis({
   players,
   routes,
   phase,
@@ -87,7 +94,7 @@ export function useCommitAnalysis({
    * which itself depends on analysisRevision.
    */
   const analysisResult: AnalysisResult = useMemo(
-    () => analyzePlay(canonicalPlay),
+    () => analyzeEditorPlay(canonicalPlay),
     [canonicalPlay]
   );
 

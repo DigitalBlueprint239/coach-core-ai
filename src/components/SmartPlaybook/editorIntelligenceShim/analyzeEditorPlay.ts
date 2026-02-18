@@ -1,9 +1,13 @@
 /**
- * analyzePlay — CCIL + OIM analysis pipeline entry point
+ * @temporary-shim SmartPlaybook-only
  *
- * Runs heuristic checks against a CanonicalPlay and returns IntelligenceIssue[].
- * This is the integration surface; deeper OIM logic will be delegated to
- * modules/intelligence and modules/oim when they are built out.
+ * TEMPORARY SHIM (SmartPlaybook-only)
+ * This is NOT the platform CCIL/OIM.
+ * Planned extraction target: src/modules/intelligence (future).
+ * Do not import this directory outside SmartPlaybook.
+ *
+ * analyzeEditorPlay — Temporary heuristic checks for editor play quality.
+ * Replace/extend once platform intelligence module exists.
  *
  * Current checks (heuristic, no ML):
  *   1. Empty field (no players)
@@ -192,10 +196,10 @@ function checkRouteCrossings(play: CanonicalPlay): IntelligenceIssue[] {
 // ── Main analysis entry point ───────────────────────────────────────
 
 /**
- * analyzePlay — Run the full CCIL heuristic pipeline on a CanonicalPlay.
+ * analyzeEditorPlay — Run heuristic checks on a CanonicalPlay (editor shim).
  * Returns an AnalysisResult containing all IntelligenceIssues and a score.
  */
-export function analyzePlay(play: CanonicalPlay): AnalysisResult {
+export function analyzeEditorPlay(play: CanonicalPlay): AnalysisResult {
   // Reset counter per analysis run
   issueCounter = 0;
 

@@ -1,7 +1,13 @@
 /**
- * CCIL Types — Core Coach Intelligence Layer
+ * @temporary-shim SmartPlaybook-only
  *
- * Canonical types used at the SmartPlaybook ↔ intelligence boundary.
+ * TEMPORARY SHIM (SmartPlaybook-only)
+ * This is NOT the platform CCIL/OIM.
+ * Planned extraction target: src/modules/intelligence (future).
+ * Do not import this directory outside SmartPlaybook.
+ *
+ * Editor Intelligence Types — Canonical types used at the
+ * SmartPlaybook ↔ editor-intelligence boundary.
  * These types decouple the playbook UI state from the analysis pipeline.
  */
 
