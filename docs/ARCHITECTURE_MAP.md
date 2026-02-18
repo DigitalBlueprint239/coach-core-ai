@@ -15,11 +15,11 @@ src/
 │       ├── PlayLibrary.js             # Saved plays list UI
 │       ├── Field.js                   # Canvas rendering
 │       ├── DebugPanel.js              # Debug overlay
-│       ├── ccil/                      # ← CCIL integration boundary (NEW)
+│       ├── editorIntelligenceShim/    # ← TEMPORARY SHIM (SmartPlaybook-only)
 │       │   ├── types.ts               # CanonicalPlay, IntelligenceIssue, AnalysisResult
 │       │   ├── canonicalAdapter.ts    # toCanonicalPlay — UI state → CanonicalPlay
-│       │   ├── analyzePlay.ts         # Heuristic analysis pipeline
-│       │   └── useCommitAnalysis.ts   # React hook: analysisRevision + commit()
+│       │   ├── analyzeEditorPlay.ts   # Heuristic editor analysis pipeline
+│       │   └── useEditorCommitAnalysis.ts  # React hook: analysisRevision + commit()
 │       └── components/
 │           ├── CanvasArea.tsx
 │           ├── SavePlayDialog.tsx
@@ -44,9 +44,36 @@ src/
 
 ---
 
+## SmartPlaybook Intelligence Shim
+
+> **STATUS: TEMPORARY SHIM — Do not import outside SmartPlaybook.**
+
+The `editorIntelligenceShim/` directory provides SmartPlaybook-local play analysis heuristics. It is **NOT** the platform-level CCIL/OIM module. It exists to give the editor real-time quality feedback until the platform intelligence layer is built.
+
+### Boundary rules
+
+- Only `SmartPlaybook.tsx` may import from `editorIntelligenceShim/`
+- No other component or module should depend on these types or functions
+- When the platform `src/modules/intelligence/` is created, this shim should be migrated
+
+### Extraction Plan (future)
+
+When platform intelligence is built, the shim contents should migrate to:
+
+| Shim file | Extraction target |
+|-----------|-------------------|
+| `types.ts` | `src/modules/intelligence/types.ts` |
+| `canonicalAdapter.ts` | `src/modules/oim/adapters/smartPlaybookAdapter.ts` |
+| `analyzeEditorPlay.ts` | `src/modules/intelligence/analyzePlay.ts` (platform-level) |
+| `useEditorCommitAnalysis.ts` | `src/modules/oim/hooks/useCommitAnalysis.ts` |
+
+After extraction, SmartPlaybook imports switch from `./editorIntelligenceShim/*` to `../../modules/oim/*` and the shim directory is deleted.
+
+---
+
 ## Contracts / Types
 
-### CCIL Types (`SmartPlaybook/ccil/types.ts`)
+### Editor Intelligence Types (`SmartPlaybook/editorIntelligenceShim/types.ts`)
 
 | Type | Purpose |
 |------|---------|
@@ -71,19 +98,21 @@ src/
 
 ## Public APIs
 
-### `analyzePlay(play: CanonicalPlay): AnalysisResult`
-- **Location**: `SmartPlaybook/ccil/analyzePlay.ts`
+### `analyzeEditorPlay(play: CanonicalPlay): AnalysisResult`
+- **Location**: `SmartPlaybook/editorIntelligenceShim/analyzeEditorPlay.ts`
 - Runs 6 heuristic checks, returns issues + score (0–100)
 - Pure function, no side effects
+- **Scope**: SmartPlaybook-only (temporary shim)
 
 ### `toCanonicalPlay(state): CanonicalPlay`
-- **Location**: `SmartPlaybook/ccil/canonicalAdapter.ts`
+- **Location**: `SmartPlaybook/editorIntelligenceShim/canonicalAdapter.ts`
 - Transforms SmartPlaybook internal state → CanonicalPlay
 - Single translation boundary between UI and intelligence
 
-### `useCommitAnalysis(opts): { commit, analysisRevision, analysisResult, canonicalPlay }`
-- **Location**: `SmartPlaybook/ccil/useCommitAnalysis.ts`
+### `useEditorCommitAnalysis(opts): { commit, analysisRevision, analysisResult, canonicalPlay }`
+- **Location**: `SmartPlaybook/editorIntelligenceShim/useEditorCommitAnalysis.ts`
 - React hook; `commit()` increments revision, memoised pipeline re-runs on `[analysisRevision]`
+- **Scope**: SmartPlaybook-only (temporary shim)
 
 ### PlayController exports (`SmartPlaybook/PlayController.js`)
 - `createPlayer`, `createRoute`, `addPlayer`, `removePlayer`
@@ -98,31 +127,31 @@ src/
 
 ## Integration Points
 
-### SmartPlaybook ↔ CCIL
+### SmartPlaybook ↔ Editor Intelligence Shim
 
 ```
 SmartPlaybook.tsx
   │
-  ├─ useCommitAnalysis hook ─────┐
-  │   (analysisRevision state)    │
-  │                               ▼
+  ├─ useEditorCommitAnalysis hook ──┐
+  │   (analysisRevision state)      │
+  │                                 ▼
   │                     canonicalAdapter.toCanonicalPlay()
-  │                               │
-  │                               ▼
-  │                     analyzePlay.analyzePlay()
-  │                               │
-  │                               ▼
+  │                                 │
+  │                                 ▼
+  │                     analyzeEditorPlay()
+  │                                 │
+  │                                 ▼
   │                     AnalysisResult { issues, score }
-  │                               │
-  ├─ [inline] Assist Mode panel ◄─┘  (right sidebar, desktop, hidden lg:block)
-  └─ [inline] Coach Mode drawer ◄─  (overlay drawer, desktop, hidden lg:flex)
+  │                                 │
+  ├─ [inline] Assist Mode panel ◄───┘  (right sidebar, desktop, hidden lg:block)
+  └─ [inline] Coach Mode drawer ◄──    (overlay drawer, desktop, hidden lg:flex)
 ```
 
 **Commit trigger**: Every `saveToUndoStack()` call is followed by `commit()`, which bumps `analysisRevision` and causes `useMemo` to re-derive the canonical play and analysis.
 
 ### SmartPlaybook ↔ AIProvider
 - `SmartPlaybook` is wrapped in `<AIProvider>` via `WrappedSmartPlaybook`
-- No direct coupling with CCIL layer (separate concerns)
+- No direct coupling with editor intelligence shim (separate concerns)
 
 ---
 
@@ -130,4 +159,4 @@ SmartPlaybook.tsx
 
 - Assist Mode panel — inlined in SmartPlaybook.tsx, rendered inside `<div className="hidden lg:block">`
 - Coach Mode drawer — inlined in SmartPlaybook.tsx, uses `hidden lg:flex` and `hidden lg:block` for backdrop
-- `TouchOptimizedPlaybook` is **not touched** by CCIL integration
+- `TouchOptimizedPlaybook` is **not touched** by editor intelligence shim

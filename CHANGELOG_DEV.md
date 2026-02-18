@@ -4,6 +4,49 @@ Development changelog for coach-core-ai. Maintained by agents for cross-session 
 
 ---
 
+## 2026-02-18 — sp/commit-based-ccil-integration (shim isolation)
+
+- **Branch**: `claude/setup-session-guidelines-CYPWq` (task ref: `sp/commit-based-ccil-integration`)
+- **Agent**: Claude Code (Opus 4.6)
+
+### Summary — Rename & Isolate (PATH B)
+
+Architectural audit identified that `SmartPlaybook/ccil/` used platform-level names (`CCIL`, `analyzePlay`, `useCommitAnalysis`) for what is a SmartPlaybook-local temporary shim. This creates namespace collision risk when the real platform CCIL/OIM module is built.
+
+This pass renames the directory and symbols to make the temporary nature explicit. **ZERO logic changes.**
+
+### Changes
+
+- Renamed directory: `ccil/` → `editorIntelligenceShim/`
+- Renamed file: `analyzePlay.ts` → `analyzeEditorPlay.ts`
+- Renamed file: `useCommitAnalysis.ts` → `useEditorCommitAnalysis.ts`
+- Renamed export: `analyzePlay()` → `analyzeEditorPlay()`
+- Renamed export: `useCommitAnalysis()` → `useEditorCommitAnalysis()`
+- Added `@temporary-shim` JSDoc banners to all 4 shim files
+- Updated all imports in `SmartPlaybook.tsx`
+- Updated `ARCHITECTURE_MAP.md` with shim boundary docs + extraction plan
+
+### Files touched
+
+| File | Action |
+|------|--------|
+| `src/components/SmartPlaybook/ccil/` | **Deleted** (entire directory) |
+| `src/components/SmartPlaybook/editorIntelligenceShim/types.ts` | **Created** (moved from ccil/) + shim banner |
+| `src/components/SmartPlaybook/editorIntelligenceShim/canonicalAdapter.ts` | **Created** (moved from ccil/) + shim banner |
+| `src/components/SmartPlaybook/editorIntelligenceShim/analyzeEditorPlay.ts` | **Created** (moved + renamed from ccil/analyzePlay.ts) + shim banner |
+| `src/components/SmartPlaybook/editorIntelligenceShim/useEditorCommitAnalysis.ts` | **Created** (moved + renamed from ccil/useCommitAnalysis.ts) + shim banner |
+| `src/components/SmartPlaybook/SmartPlaybook.tsx` | **Modified** — updated 2 import paths + 1 hook call site |
+| `CHANGELOG_DEV.md` | **Updated** — this entry |
+| `docs/ARCHITECTURE_MAP.md` | **Updated** — shim boundary + extraction plan |
+
+### Tests run + results
+
+- `npx tsc --noEmit` (scoped) — **0 errors in SmartPlaybook/editorIntelligenceShim files**
+- `CI=true npm test -- --watch=false` — **Pre-existing failure**: `import.meta.env` in AIContext.tsx. Not caused by rename.
+- `npm run build` — **Pre-existing failure**: Tailwind v4 PostCSS plugin. Not caused by rename.
+
+---
+
 ## 2026-02-18 — sp/commit-based-ccil-integration (corrective pass)
 
 - **Branch**: `claude/setup-session-guidelines-CYPWq` (task ref: `sp/commit-based-ccil-integration`)
