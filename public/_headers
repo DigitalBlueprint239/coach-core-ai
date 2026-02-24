@@ -1,3 +1,11 @@
+# Hashed JS/CSS bundles — filenames change on every build, so they can be
+# cached indefinitely. The `immutable` directive tells browsers never to
+# revalidate these until the URL itself changes.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Everything else (HTML shell, service worker, manifest, robots.txt, etc.)
+# must revalidate on every request so that deployments take effect immediately.
 /*
   Cache-Control: public, max-age=0, must-revalidate
   X-Robots-Tag: all

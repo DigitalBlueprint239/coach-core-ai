@@ -1,3 +1,8 @@
+# Allow all crawlers by default
+User-agent: *
+Allow: /
+
+# Explicitly allow major AI crawlers
 User-agent: PerplexityBot
 Allow: /
 
@@ -10,4 +15,5 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
+# Update the Sitemap URL below if the production domain ever changes.
 Sitemap: https://magical-starlight-0c1207.netlify.app/sitemap.xml
