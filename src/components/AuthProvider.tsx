@@ -1,87 +1,14 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, signInAnonymously, signOut, onAuthStateChanged, User } from 'firebase/auth';
-import { LoadingSpinner, useToast } from './index';
+// src/components/AuthProvider.tsx
+//
+// WHY THIS FILE EXISTS AS A RE-EXPORT:
+// App.tsx imports AuthProvider from this path. hooks/useAuth.tsx is the real
+// implementation (email/password auth, browserLocalPersistence). Rather than
+// changing every import site, this file re-exports from the canonical location.
+//
+// PREVIOUS BUG: This file used to contain a second AuthProvider using
+// signInAnonymously, creating a separate React context. Dashboard.tsx used
+// hooks/useAuth.tsx's context — so useAuth() threw "must be used within an
+// AuthProvider" because the anonymous context was never the one provided.
+// That file has been replaced with this re-export to close the conflict.
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  signIn: () => Promise<void>;
-  signOut: () => Promise<void>;
-  isAuthenticated: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | null>(null);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { showSuccess, showError } = useToast();
-  const auth = getAuth();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  }, [auth]);
-
-  const signIn = async () => {
-    try {
-      setLoading(true);
-      await signInAnonymously(auth);
-      showSuccess('Signed in successfully!');
-    } catch (error: any) {
-      showError(error.message || 'Failed to sign in');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      setLoading(true);
-      await signOut(auth);
-      showSuccess('Signed out successfully!');
-    } catch (error: any) {
-      showError(error.message || 'Failed to sign out');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const value: AuthContextType = {
-    user,
-    loading,
-    signIn,
-    signOut: handleSignOut,
-    isAuthenticated: !!user
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner text="Loading authentication..." />
-      </div>
-    );
-  }
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-}; 
+export { AuthProvider, useAuth } from '../hooks/useAuth';
