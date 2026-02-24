@@ -6,6 +6,7 @@ import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
 import { AuthProvider } from './components/AuthProvider';
 import { TeamProvider } from './contexts/TeamContext';
+import { RosterProvider } from './contexts/RosterContext';
 import { TeamSelector } from './components/TeamManagement';
 import { MigrationBanner } from './components/MigrationBanner';
 import { OnboardingModal } from './components/OnboardingModal';
@@ -83,6 +84,7 @@ const App: React.FC = () => {
       <ToastManager>
         <AuthProvider>
           <TeamProvider>
+            <RosterProvider>
             <AIProvider>
               <div className="min-h-screen bg-gray-50">
                 <nav className="bg-white shadow-sm border-b">
@@ -114,6 +116,7 @@ const App: React.FC = () => {
                 />
               </div>
             </AIProvider>
+            </RosterProvider>
           </TeamProvider>
         </AuthProvider>
       </ToastManager>
