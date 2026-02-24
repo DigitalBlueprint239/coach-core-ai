@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
+import { useTeam } from '../../contexts/TeamContext';
+import { savePracticePlan, getPracticePlans, type PracticePlan } from '../../services/firestore';
 
 const defaultGoals = [
   { label: 'Game Prep', value: 'game_prep' },
@@ -10,12 +12,26 @@ const defaultGoals = [
 
 const PracticePlanner: React.FC = () => {
   const ai = useAI();
+  const { currentTeam } = useTeam();
   const [duration, setDuration] = useState(90);
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [aiResult, setAIResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'helpful' | 'not_helpful' | null>(null);
+  const [savedPlans, setSavedPlans] = useState<PracticePlan[]>([]);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Load saved plans when team changes
+  useEffect(() => {
+    if (!currentTeam) return;
+    let cancelled = false;
+    getPracticePlans(currentTeam.id)
+      .then((plans) => { if (!cancelled) setSavedPlans(plans); })
+      .catch((err) => console.error('Failed to load saved plans:', err));
+    return () => { cancelled = true; };
+  }, [currentTeam]);
 
   const handleGoalChange = (goal: string) => {
     setGoals((prev) =>
@@ -24,21 +40,54 @@ const PracticePlanner: React.FC = () => {
   };
 
   const handleAIGenerate = async () => {
+    if (!currentTeam) {
+      setError('Please create or join a team first.');
+      return;
+    }
     setLoading(true);
     setError(null);
     setAIResult(null);
     setFeedback(null);
+    setSaveSuccess(false);
     try {
-      const result = await ai.generateSmartPractice({
-        duration,
-        goals,
-        teamId: 'demo-team', // Replace with real teamId if available
-      });
+      const teamContext = {
+        teamId: currentTeam.id,
+        teamName: currentTeam.name,
+        sport: 'football' as const,
+        ageGroup: 'high_school' as const,
+      };
+      const result = await ai.generatePracticePlan(teamContext, goals, duration);
       setAIResult(result);
-    } catch (err: any) {
+    } catch {
       setError('AI generation failed. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!currentTeam || !aiResult) return;
+    setSaving(true);
+    setError(null);
+    setSaveSuccess(false);
+    try {
+      const planData = {
+        name: `Practice - ${new Date().toLocaleDateString()}`,
+        date: new Date().toISOString().split('T')[0],
+        duration,
+        periods: aiResult.plan?.periods ?? [],
+        goals,
+        notes: aiResult.insights?.join('; ') ?? '',
+      };
+      await savePracticePlan(currentTeam.id, planData);
+      setSaveSuccess(true);
+      // Refresh saved plans list
+      const plans = await getPracticePlans(currentTeam.id);
+      setSavedPlans(plans);
+    } catch {
+      setError('Failed to save plan. Please try again.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -50,6 +99,13 @@ const PracticePlanner: React.FC = () => {
   return (
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md mt-6">
       <h2 className="text-2xl font-bold mb-4 text-center">Practice Plan Generator (AI)</h2>
+
+      {!currentTeam && (
+        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-lg">
+          Create or join a team to generate and save practice plans.
+        </div>
+      )}
+
       <div className="mb-4">
         <label className="block mb-1 font-medium">Duration (minutes)</label>
         <input
@@ -78,7 +134,7 @@ const PracticePlanner: React.FC = () => {
       </div>
       <button
         onClick={handleAIGenerate}
-        disabled={loading || goals.length === 0}
+        disabled={loading || goals.length === 0 || !currentTeam}
         className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition mb-4 disabled:opacity-50"
       >
         {loading ? 'Generating...' : 'Generate with AI'}
@@ -119,6 +175,16 @@ const PracticePlanner: React.FC = () => {
               </ul>
             </div>
           )}
+
+          {/* Save button */}
+          <button
+            onClick={handleSave}
+            disabled={saving || saveSuccess}
+            className="w-full mt-3 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+          >
+            {saving ? 'Saving...' : saveSuccess ? 'Saved!' : 'Save Plan'}
+          </button>
+
           {/* Feedback */}
           <div className="mt-3 flex items-center gap-3">
             <span className="text-xs text-gray-500">Was this helpful?</span>
@@ -126,16 +192,36 @@ const PracticePlanner: React.FC = () => {
               onClick={() => handleFeedback('helpful')}
               className={`p-1 rounded ${feedback === 'helpful' ? 'bg-green-100 text-green-600' : 'text-gray-400 hover:text-green-600'}`}
               disabled={!!feedback}
-            >👍</button>
+            >thumbs up</button>
             <button
               onClick={() => handleFeedback('not_helpful')}
               className={`p-1 rounded ${feedback === 'not_helpful' ? 'bg-red-100 text-red-600' : 'text-gray-400 hover:text-red-600'}`}
               disabled={!!feedback}
-            >👎</button>
+            >thumbs down</button>
             {feedback && (
               <span className="text-xs ml-2 text-gray-600">Thank you for your feedback!</span>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Saved plans list */}
+      {savedPlans.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-3">Saved Plans</h3>
+          <ul className="space-y-2">
+            {savedPlans.map((plan) => (
+              <li key={plan.id} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">{plan.name}</span>
+                  <span className="text-xs text-gray-500">{plan.date}</span>
+                </div>
+                <div className="text-sm text-gray-600 mt-1">
+                  {plan.duration} min &middot; {plan.goals.join(', ')}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
