@@ -1,55 +1,22 @@
 // src/services/firestore.ts
-import { initializeApp, getApps } from 'firebase/app';
-import { 
-  getFirestore, 
-  doc, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  getDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+// Uses the shared Firebase instance from firebase.ts (single initialization)
+import {
+  doc,
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
   onSnapshot,
-  connectFirestoreEmulator,
   enableNetwork,
   disableNetwork
 } from 'firebase/firestore';
-import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
-
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
-};
-
-// Initialize Firebase only once
-let app;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApps()[0];
-}
-
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-// Connect to emulators in development
-if (import.meta.env.VITE_USE_EMULATOR === 'true' && process.env.NODE_ENV === 'development') {
-  try {
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    connectAuthEmulator(auth, 'http://localhost:9099');
-  } catch (error) {
-    console.log('Emulators already connected');
-  }
-}
+import { onAuthStateChanged, type User } from 'firebase/auth';
+import { db, auth } from './firebase';
 
 // Types
 export interface PracticePlan {
@@ -238,10 +205,11 @@ async function syncOfflineQueue() {
   for (const operation of queue) {
     try {
       await executeOperation(operation);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to sync offline operation:', error);
       // Only add back to queue if it's not a permanent error
-      if (!error.message?.includes('permission-denied')) {
+      const msg = error instanceof Error ? error.message : '';
+      if (!msg.includes('permission-denied')) {
         offlineQueue.push(operation);
       }
     }
