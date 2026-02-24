@@ -208,6 +208,10 @@ export class AIService {
     duration: number,
     constraints?: any
   ): string {
+    const rosterBlock = teamContext.rosterSummary
+      ? `\nRoster:\n${teamContext.rosterSummary}\nAccount for player availability and any injury limitations when designing drills and groupings.\n`
+      : '';
+
     return `You are an expert sports coach assistant. Generate a comprehensive practice plan for a ${teamContext.ageGroup} ${teamContext.sport} team.
 
 Team Context:
@@ -216,7 +220,7 @@ Team Context:
 - Skill Level: ${teamContext.skillLevel || 'intermediate'}
 - Team Size: ${teamContext.playerCount || 'unknown'} players
 - Season Phase: ${teamContext.seasonPhase || 'regular'}
-
+${rosterBlock}
 Practice Goals: ${goals.join(', ')}
 Duration: ${duration} minutes
 Constraints: ${constraints ? JSON.stringify(constraints) : 'None'}

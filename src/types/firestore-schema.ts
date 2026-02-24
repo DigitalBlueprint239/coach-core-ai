@@ -529,7 +529,8 @@ export const ValidationSchemas = {
 export const COLLECTIONS = {
   USERS: 'users',
   TEAMS: 'teams',
-  PLAYERS: 'players',
+  PLAYERS: 'players', // legacy top-level; roster uses subcollection
+  TEAM_PLAYERS: (teamId: string) => `teams/${teamId}/players` as const,
   PRACTICE_PLANS: 'practicePlans',
   PLAYS: 'plays',
   ANALYTICS_EVENTS: 'analyticsEvents',
@@ -615,6 +616,7 @@ export interface TeamContext {
   skillLevel?: string;
   playerCount?: number;
   seasonPhase?: string;
+  rosterSummary?: string; // Structured roster summary for AI consumption
 }
 
 export interface GameContext {
