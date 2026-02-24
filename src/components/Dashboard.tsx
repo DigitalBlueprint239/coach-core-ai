@@ -2,42 +2,34 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
-import { LoadingSpinner, useToast } from './index';
+import { LoadingSpinner } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
+// WHY: usePracticePlans subscribes to Firestore in real-time via onSnapshot so the
+// count stays accurate without needing a manual refresh.
+import { usePracticePlans } from '../hooks/useFirestore';
 // TODO: Fix import path for AnalyticsDashboard if file exists
 // import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
   const { currentTeam } = useTeam();
-  const { showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Connect Practice Plans count to real Firestore data.
+  // Pass undefined when no team is selected so the hook skips the query.
+  const { plans } = usePracticePlans(currentTeam?.id);
 
   if (authLoading) {
     return <LoadingSpinner text="Loading your coaching dashboard..." />;
   }
 
+  // This guard is a safety net. App.tsx's auth gate means this component only
+  // mounts when user is authenticated. If it somehow renders without a user,
+  // return null rather than a misleading sign-in stub.
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
-          <h1 className="text-3xl font-bold text-center text-gray-900 mb-6">
-            Coach Core AI
-          </h1>
-          <p className="text-gray-600 text-center mb-8">
-            The ultimate sports coaching platform. Sign in to get started.
-          </p>
-          <button
-            onClick={() => showSuccess('Authentication coming soon!')}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const tabs = [
@@ -134,7 +126,10 @@ const Dashboard: React.FC = () => {
                         <dt className="text-sm font-medium text-gray-500 truncate">
                           Practice Plans
                         </dt>
-                        <dd className="text-lg font-medium text-gray-900">0</dd>
+                        {/* Real count from Firestore — updates live as plans are saved/deleted */}
+                        <dd className="text-lg font-medium text-gray-900">
+                          {currentTeam ? plans.length : '—'}
+                        </dd>
                       </dl>
                     </div>
                   </div>
