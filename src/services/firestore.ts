@@ -1,48 +1,44 @@
 // src/services/firestore.ts
 import { initializeApp, getApps } from 'firebase/app';
-import { 
-  getFirestore, 
-  doc, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  getDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  getFirestore,
+  type Firestore,
+  doc,
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
   onSnapshot,
   connectFirestoreEmulator,
   enableNetwork,
   disableNetwork
 } from 'firebase/firestore';
-import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
+import { getAuth, connectAuthEmulator, onAuthStateChanged, type Auth, type User } from 'firebase/auth';
+import { firebaseConfig, USE_EMULATOR, validateFirebaseConfig } from '../config/env';
 
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
-};
+// Only initialize if Firebase is properly configured — prevents auth/invalid-api-key crash
+// in test environments or when env vars are missing.
+const _isConfigured = validateFirebaseConfig();
 
-// Initialize Firebase only once
-let app;
+let _app;
 if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
+  if (_isConfigured) {
+    _app = initializeApp(firebaseConfig);
+  }
 } else {
-  app = getApps()[0];
+  _app = getApps()[0];
 }
 
-const db = getFirestore(app);
-const auth = getAuth(app);
+const db: Firestore = (_app ? getFirestore(_app) : null) as unknown as Firestore;
+const auth: Auth = (_app ? getAuth(_app) : null) as unknown as Auth;
 
 // Connect to emulators in development
-if (import.meta.env.VITE_USE_EMULATOR === 'true' && process.env.NODE_ENV === 'development') {
+if (_app && USE_EMULATOR && process.env.NODE_ENV === 'development') {
   try {
     connectFirestoreEmulator(db, 'localhost', 8080);
     connectAuthEmulator(auth, 'http://localhost:9099');
@@ -125,12 +121,17 @@ let currentUser: User | null = null;
 let authStateReady = false;
 let authStateListeners: ((user: User | null) => void)[] = [];
 
-// Listen for auth state changes
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
+// Listen for auth state changes (only if auth is available)
+if (auth) {
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    authStateReady = true;
+    authStateListeners.forEach(listener => listener(user));
+  });
+} else {
+  // Firebase not configured — mark auth as ready with no user
   authStateReady = true;
-  authStateListeners.forEach(listener => listener(user));
-});
+}
 
 // Helper function to get current user with proper error handling
 function getCurrentUser(): User {
@@ -241,7 +242,7 @@ async function syncOfflineQueue() {
     } catch (error) {
       console.error('Failed to sync offline operation:', error);
       // Only add back to queue if it's not a permanent error
-      if (!error.message?.includes('permission-denied')) {
+      if (!(error instanceof Error) || !error.message?.includes('permission-denied')) {
         offlineQueue.push(operation);
       }
     }

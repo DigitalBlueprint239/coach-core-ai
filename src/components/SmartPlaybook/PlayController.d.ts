@@ -1,0 +1,16 @@
+export declare function createPlayer(x: number, y: number, position?: string, number?: number): any;
+export declare function createRoute(playerId: string, points?: any[], routeType?: string, color?: string): any;
+export declare function addPlayer(state: any, player: any): any;
+export declare function removePlayer(state: any, playerId: string): any;
+export declare function selectPlayer(state: any, playerId: string): any;
+export declare function deselectAll(state: any): any;
+export declare function updatePlayerPosition(state: any, playerId: string, x: number, y: number): any;
+export declare function addRoute(state: any, route: any): any;
+export declare function removeRoute(state: any, routeId: string): any;
+export declare function savePlay(state: any): any;
+export declare function undo(undoStack: any[], redoStack: any[], currentState: any): [any, any[], any[]];
+export declare function redo(undoStack: any[], redoStack: any[], currentState: any): [any, any[], any[]];
+export declare function shotgunFormation(centerX?: number, centerY?: number): any[];
+export declare function fourThreeFormation(centerX?: number, centerY?: number): any[];
+export declare function findPlayerAtPosition(players: any[], x: number, y: number, threshold?: number): any;
+export declare function calculateDistance(p1: any, p2: any): number;

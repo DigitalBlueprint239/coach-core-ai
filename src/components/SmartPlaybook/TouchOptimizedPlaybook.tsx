@@ -322,14 +322,14 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
       route: []
     };
 
-    setCurrentPlay(prev => ({
+    setCurrentPlay((prev: any) => ({
       ...prev,
       players: [...(prev?.players || []), newPlayer]
     }));
   }, [currentPlay]);
 
   const updatePlayerPosition = useCallback((playerId: string, x: number, y: number) => {
-    setCurrentPlay(prev => ({
+    setCurrentPlay((prev: any) => ({
       ...prev,
       players: prev?.players?.map((player: any) =>
         player.id === playerId ? { ...player, x, y } : player
@@ -372,6 +372,10 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
     setIsLoading(true);
     try {
       const gameContext = {
+        gameId: '',
+        opponent: '',
+        date: null as any,
+        location: '',
         down: 3,
         distance: 7,
         fieldPosition: 'midfield',
@@ -506,7 +510,7 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .touch-optimized-playbook {
           display: flex;
           flex-direction: column;
