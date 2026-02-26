@@ -134,7 +134,11 @@
     "src/components/fixed-core-functionality.tsx",
     // features/playbook — uses getRealtimeInsight which is not in AIContextType.
     // Not imported by the active application.
-    "src/features",
+    "src/features/playbook",
+    // features/analytics — not wired into the active app, references missing deps.
+    "src/features/analytics",
+    // features/auth — legacy Login/Signup, replaced by src/components/auth/LoginPage.tsx.
+    "src/features/auth",
     // Nested SmartPlaybook sub-app — separate package, not part of this build.
     "src/components/SmartPlaybook/src",
     // Nested coach-core-ai sub-project skeleton — empty scaffolding, not part of this build.

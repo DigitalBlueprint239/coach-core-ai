@@ -17,6 +17,7 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
 import { TeamProvider } from './contexts/TeamContext';
+import { RosterProvider } from './contexts/RosterContext';
 import { AIProvider } from './ai-brain/AIContext';
 import { MigrationBanner } from './components/MigrationBanner';
 import { PWAInstallPrompt, registerServiceWorker } from './components/PWAInstallPrompt';
@@ -77,23 +78,26 @@ const AppContent: React.FC = () => {
     return <LoginPage />;
   }
 
-  // Authenticated: mount TeamProvider and AIProvider only after auth is confirmed
+  // Authenticated: mount providers only after auth is confirmed
   // so TeamContext can safely call auth.currentUser on mount (it will be set).
+  // Provider order: TeamProvider → RosterProvider → AIProvider
   return (
     <TeamProvider>
-      <AIProvider>
-        <div className="min-h-screen bg-gray-50">
-          <MigrationBanner />
-          <Dashboard />
-          <PWAInstallPrompt showOnLoad={true} />
-          <OnboardingModal
-            open={showOnboarding}
-            onClose={handleOnboardingClose}
-            onDemoMode={() => {}}
-            onComplete={handleOnboardingClose}
-          />
-        </div>
-      </AIProvider>
+      <RosterProvider>
+        <AIProvider>
+          <div className="min-h-screen bg-gray-50">
+            <MigrationBanner />
+            <Dashboard />
+            <PWAInstallPrompt showOnLoad={true} />
+            <OnboardingModal
+              open={showOnboarding}
+              onClose={handleOnboardingClose}
+              onDemoMode={() => {}}
+              onComplete={handleOnboardingClose}
+            />
+          </div>
+        </AIProvider>
+      </RosterProvider>
     </TeamProvider>
   );
 };

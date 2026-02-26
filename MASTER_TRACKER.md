@@ -200,3 +200,4 @@ src/components/OfflineFallbacks.tsx       — imports from excluded src/utils
 - npm vulnerabilities: 11 (8 high, 3 moderate) — remaining in webpack-dev-server
 
 - 2026-02-26: Merged auth-hardening-firestore-consolidation — real auth wired, Firestore consolidated, LoginPage created
+- 2026-02-26: Merged player-roster — AI-connected roster, depth chart UI, Firestore persistence
