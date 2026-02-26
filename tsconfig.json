@@ -113,5 +113,37 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    // Legacy AI brain file — space in directory name causes parse failures;
+    // JSX in a .ts file generates 104 TypeScript errors. Not imported by active app.
+    "src/components/Coach Core AI Brain ",
+    // Legacy integration files — malformed JSX/template literals and missing deps.
+    // Neither is imported by the active application.
+    "src/components/coach-core-integration.ts",
+    "src/components/coach-core-integration.tsx",
+    // Legacy backend file — imports @supabase/supabase-js which is not installed.
+    // Not imported by the active application.
+    "src/components/coach-core-backend.ts",
+    // Legacy complete integration file — imports recharts which is not installed.
+    // Not imported by the active application.
+    "src/components/coach-core-complete-integration.tsx",
+    // Legacy standalone implementation — not imported by the active application.
+    "src/components/fixed-core-functionality.tsx",
+    // features/playbook — uses getRealtimeInsight which is not in AIContextType.
+    // Not imported by the active application.
+    "src/features",
+    // Nested SmartPlaybook sub-app — separate package, not part of this build.
+    "src/components/SmartPlaybook/src",
+    // Nested coach-core-ai sub-project skeleton — empty scaffolding, not part of this build.
+    "src/coach-core-ai",
+    // Utility/testing scripts — use Firestore/Firebase directly without null-safety wrappers,
+    // and are not imported by the active application. Excluded to avoid TS2769 errors.
+    "src/utils",
+    // OfflineFallbacks.tsx imports from src/utils/offline-persistence (above) and is not
+    // imported anywhere in the active application.
+    "src/components/OfflineFallbacks.tsx"
   ]
 }
