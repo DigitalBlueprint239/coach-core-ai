@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import React, { useState, useEffect, useContext, createContext, ReactNode } from 'react';
 import { auth } from '../services/firebase';
 import {
   createUserWithEmailAndPassword,
@@ -39,6 +39,11 @@ function useProvideAuth(): AuthContextType {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      // Firebase not configured — mark as not loading, no user
+      setLoading(false);
+      return;
+    }
     setPersistence(auth, browserLocalPersistence);
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
@@ -48,6 +53,7 @@ function useProvideAuth(): AuthContextType {
   }, []);
 
   const signup = async (email: string, password: string) => {
+    if (!auth) throw new Error('Firebase not configured. Check your REACT_APP_FIREBASE_* environment variables.');
     setLoading(true);
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -62,6 +68,7 @@ function useProvideAuth(): AuthContextType {
   };
 
   const login = async (email: string, password: string) => {
+    if (!auth) throw new Error('Firebase not configured. Check your REACT_APP_FIREBASE_* environment variables.');
     setLoading(true);
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
@@ -76,6 +83,7 @@ function useProvideAuth(): AuthContextType {
   };
 
   const loginWithGoogle = async () => {
+    if (!auth) throw new Error('Firebase not configured. Check your REACT_APP_FIREBASE_* environment variables.');
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
@@ -91,6 +99,7 @@ function useProvideAuth(): AuthContextType {
   };
 
   const logout = async () => {
+    if (!auth) return;
     setLoading(true);
     try {
       await signOut(auth);

@@ -29,11 +29,12 @@ const PracticePlanner: React.FC = () => {
     setAIResult(null);
     setFeedback(null);
     try {
-      const result = await ai.generateSmartPractice({
-        duration,
+      // generateSmartPractice maps to generatePracticePlan — see AIContextType
+      const result = await ai.generatePracticePlan(
+        { teamId: 'demo-team' } as any,
         goals,
-        teamId: 'demo-team', // Replace with real teamId if available
-      });
+        duration
+      );
       setAIResult(result);
     } catch (err: any) {
       setError('AI generation failed. Please try again.');

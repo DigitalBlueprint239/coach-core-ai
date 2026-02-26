@@ -12,7 +12,10 @@ import {
   onSnapshot,
   serverTimestamp 
 } from 'firebase/firestore';
-import { db, auth } from '../services/firebase';
+import { db as _db, auth as _auth } from '../services/firebase';
+// These will be null if Firebase is not configured — all functions below guard against this
+const db = _db as NonNullable<typeof _db>;
+const auth = _auth as NonNullable<typeof _auth>;
 
 // Types
 export interface Team {
@@ -80,7 +83,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const createTeam = async (name: string): Promise<string> => {
     try {
       setError(null);
-      const user = auth.currentUser;
+      const user = auth?.currentUser;
       if (!user) throw new Error('User must be authenticated');
 
       // Generate unique team code
@@ -120,7 +123,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const joinTeam = async (code: string): Promise<void> => {
     try {
       setError(null);
-      const user = auth.currentUser;
+      const user = auth?.currentUser;
       if (!user) throw new Error('User must be authenticated');
 
       // Find team by code
@@ -176,7 +179,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const leaveTeam = async (teamId: string): Promise<void> => {
     try {
       setError(null);
-      const user = auth.currentUser;
+      const user = auth?.currentUser;
       if (!user) throw new Error('User must be authenticated');
 
       const teamDoc = await getDoc(doc(db, 'teams', teamId));
@@ -275,7 +278,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   // Load user's teams
   useEffect(() => {
-    const user = auth.currentUser;
+    const user = auth?.currentUser;
     if (!user) {
       setLoading(false);
       return;

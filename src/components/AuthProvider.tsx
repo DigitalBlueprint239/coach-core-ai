@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, signInAnonymously, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { signInAnonymously, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { auth as firebaseAuth } from '../services/firebase';
 import { LoadingSpinner, useToast } from './index';
 
 interface AuthContextType {
@@ -28,9 +29,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { showSuccess, showError } = useToast();
-  const auth = getAuth();
+  const auth = firebaseAuth;
 
   useEffect(() => {
+    if (!auth) {
+      // Firebase not configured — no user, done loading
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
@@ -40,6 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [auth]);
 
   const signIn = async () => {
+    if (!auth) { showError('Firebase is not configured.'); return; }
     try {
       setLoading(true);
       await signInAnonymously(auth);
@@ -52,6 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const handleSignOut = async () => {
+    if (!auth) return;
     try {
       setLoading(true);
       await signOut(auth);
