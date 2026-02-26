@@ -104,7 +104,7 @@
 
 ### MED-005 — `src/services/firestore.ts` Second Firebase Initialization
 - **Detail:** `src/services/firestore.ts` previously initialized Firebase separately with wrong env var syntax
-- **Fix Applied:** Now uses `firebaseConfig` from `src/config/env.ts` and guards initialization behind `validateFirebaseConfig()`. Added null-safe `onAuthStateChanged` call.
+- **Fix Applied:** Now imports `db` and `auth` from shared `./firebase.ts`. No duplicate `initializeApp()` call.
 - **Status:** ✅ RESOLVED
 
 ---
@@ -198,3 +198,5 @@ src/components/OfflineFallbacks.tsx       — imports from excluded src/utils
 - `npm test`: ✅ PASS (1/1)
 - App renders: ✅ YES (with Firebase-not-configured warning in console)
 - npm vulnerabilities: 11 (8 high, 3 moderate) — remaining in webpack-dev-server
+
+- 2026-02-26: Merged auth-hardening-firestore-consolidation — real auth wired, Firestore consolidated, LoginPage created
