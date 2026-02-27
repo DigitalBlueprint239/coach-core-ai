@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTeam } from '../contexts/TeamContext';
+import { useRoster } from '../contexts/RosterContext';
 import { TeamManagement } from './TeamManagement';
 import { LoadingSpinner, useToast } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
+import PlayerRoster from '../features/roster/PlayerRoster';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
-// TODO: Fix import path for AnalyticsDashboard if file exists
-// import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
   const { currentTeam } = useTeam();
+  const { summary } = useRoster();
   const { showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -43,9 +44,9 @@ const Dashboard: React.FC = () => {
   const tabs = [
     { id: 'overview', name: 'Overview', icon: '📊' },
     { id: 'teams', name: 'Teams', icon: '👥' },
+    { id: 'roster', name: 'Roster', icon: '🏈' },
     { id: 'practice', name: 'Practice Plans', icon: '📋' },
-    { id: 'playbook', name: 'Smart Playbook', icon: '🏈' },
-    { id: 'analytics', name: 'Analytics', icon: '📈' },
+    { id: 'playbook', name: 'Smart Playbook', icon: '📖' },
   ];
 
   return (
@@ -71,15 +72,15 @@ const Dashboard: React.FC = () => {
         </div>
       </header>
 
-      {/* Navigation */}
+      {/* Navigation — horizontal scroll on mobile */}
       <nav className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          <div className="flex space-x-6 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -97,8 +98,8 @@ const Dashboard: React.FC = () => {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {activeTab === 'overview' && (
           <div className="px-4 sm:px-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Active Teams */}
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="p-5">
                   <div className="flex items-center">
@@ -121,6 +122,38 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
 
+              {/* Roster — real data */}
+              <button
+                onClick={() => setActiveTab('roster')}
+                className="bg-white overflow-hidden shadow rounded-lg text-left hover:shadow-md transition-shadow"
+              >
+                <div className="p-5">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 bg-orange-500 rounded-md flex items-center justify-center">
+                        <span className="text-white text-sm">🏈</span>
+                      </div>
+                    </div>
+                    <div className="ml-5 w-0 flex-1">
+                      <dl>
+                        <dt className="text-sm font-medium text-gray-500 truncate">
+                          Roster
+                        </dt>
+                        <dd className="text-lg font-medium text-gray-900">
+                          {summary.totalPlayers}
+                          {summary.totalPlayers > 0 && (
+                            <span className="text-sm font-normal text-green-600 ml-1">
+                              {summary.availableCount} avail
+                            </span>
+                          )}
+                        </dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </button>
+
+              {/* Practice Plans */}
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="p-5">
                   <div className="flex items-center">
@@ -141,12 +174,13 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
 
+              {/* Plays Created */}
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="p-5">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                        <span className="text-white text-sm">🏈</span>
+                        <span className="text-white text-sm">📖</span>
                       </div>
                     </div>
                     <div className="ml-5 w-0 flex-1">
@@ -165,7 +199,7 @@ const Dashboard: React.FC = () => {
             {/* Quick Actions */}
             <div className="mt-8">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <button
                   onClick={() => setActiveTab('teams')}
                   className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors"
@@ -173,6 +207,15 @@ const Dashboard: React.FC = () => {
                   <div className="text-2xl mb-2">👥</div>
                   <div className="font-medium">Manage Teams</div>
                   <div className="text-sm opacity-90">Create or join teams</div>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('roster')}
+                  className="bg-orange-600 text-white p-4 rounded-lg hover:bg-orange-700 transition-colors"
+                >
+                  <div className="text-2xl mb-2">🏈</div>
+                  <div className="font-medium">Player Roster</div>
+                  <div className="text-sm opacity-90">Manage your players</div>
                 </button>
 
                 <button
@@ -188,7 +231,7 @@ const Dashboard: React.FC = () => {
                   onClick={() => setActiveTab('playbook')}
                   className="bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition-colors"
                 >
-                  <div className="text-2xl mb-2">🏈</div>
+                  <div className="text-2xl mb-2">📖</div>
                   <div className="font-medium">Smart Playbook</div>
                   <div className="text-sm opacity-90">Design plays visually</div>
                 </button>
@@ -198,13 +241,13 @@ const Dashboard: React.FC = () => {
         )}
 
         {activeTab === 'teams' && <TeamManagement />}
+        {activeTab === 'roster' && <PlayerRoster />}
         {activeTab === 'practice' && <PracticePlanner />}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
             <SmartPlaybook />
           </ErrorBoundary>
         )}
-        {/* {activeTab === 'analytics' && <AnalyticsDashboard />} */}
       </main>
     </div>
   );
