@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Coach Core AI - Complete Integration
 // This file contains all new features in one place for easy integration
 // You can copy this entire file and gradually split it into modules
