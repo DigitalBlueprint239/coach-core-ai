@@ -5,10 +5,10 @@ import {
   getPracticePlans, 
   updatePracticePlan, 
   deletePracticePlan,
-  savePlay,
-  getPlays,
-  updatePlay,
-  deletePlay,
+  savePlay as firestoreAddPlay,
+  getPlays as firestoreGetPlays,
+  updatePlay as firestoreUpdatePlay,
+  deletePlay as firestoreDeletePlay,
   subscribeToPracticePlans,
   subscribeToPlays,
   migrateFromLocalStorage,
@@ -122,7 +122,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     
     try {
       setError(null);
-      await savePlay(teamId, playData);
+      await firestoreAddPlay(teamId, playData);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create play';
       setError(errorMessage);
@@ -135,7 +135,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     
     try {
       setError(null);
-      await updatePlay(teamId, playId, updates);
+      await firestoreUpdatePlay(teamId, playId, updates);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update play';
       setError(errorMessage);
@@ -148,7 +148,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     
     try {
       setError(null);
-      await deletePlay(teamId, playId);
+      await firestoreDeletePlay(teamId, playId);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete play';
       setError(errorMessage);

@@ -1,40 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { AIProvider } from './ai-brain/AIContext';
-import Dashboard from './components/Dashboard';
+// src/App.tsx
+// Application shell. Responsibilities:
+//   1. Provide all React contexts (Auth, Toast).
+//   2. Gate the main UI behind authentication — unauthenticated users always
+//      see LoginPage, never a partial or broken dashboard.
+//   3. Show a loading spinner during the initial auth state resolution so
+//      the user never sees a flash of the login screen on page refresh.
+//
+// State-based routing: Dashboard owns its own tab navigation internally.
+// App.tsx does NOT use React Router — that decision is intentional and unchanged.
+// The only routing concern here is "authenticated vs not authenticated".
+
+import React from 'react';
+import { AuthProvider } from './components/AuthProvider';  // re-exports from hooks/useAuth
+import { useAuth } from './hooks/useAuth';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
-import { AuthProvider } from './components/AuthProvider';
 import { TeamProvider } from './contexts/TeamContext';
-import { TeamSelector } from './components/TeamManagement';
+import { RosterProvider } from './contexts/RosterContext';
+import { AIProvider } from './ai-brain/AIContext';
 import { MigrationBanner } from './components/MigrationBanner';
-import { OnboardingModal } from './components/OnboardingModal';
 import { PWAInstallPrompt, registerServiceWorker } from './components/PWAInstallPrompt';
+import { OnboardingModal } from './components/OnboardingModal';
 import { requestNotificationPermission, subscribeUserToPush } from './services/push-notifications';
-const SmartPlaybook = React.lazy(() => import('./components/SmartPlaybook/SmartPlaybook'));
+import LoginPage from './components/auth/LoginPage';
+import Dashboard from './components/Dashboard';
 
-const FirebaseTest = React.lazy(() => import('./components/FirebaseTest'));
+// AppContent reads the auth state and decides what to render.
+// It must be a child of AuthProvider so useAuth() has a context to read from.
+const AppContent: React.FC = () => {
+  const { user, loading: authLoading } = useAuth();
+  const [showOnboarding, setShowOnboarding] = React.useState(false);
+  const [onboardingComplete, setOnboardingComplete] = React.useState(false);
 
-const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'playbook' | 'test'>('dashboard');
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showPWAInstall, setShowPWAInstall] = useState(false);
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
-  const [demoMode, setDemoMode] = useState(false);
-
-  useEffect(() => {
-    // Register service worker for PWA
+  React.useEffect(() => {
     registerServiceWorker();
-    // Show onboarding for new users (or if not completed)
-    const onboardingDone = localStorage.getItem('onboardingComplete');
-    if (!onboardingDone) {
-      setShowOnboarding(true);
-    }
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
+    // Only check onboarding after auth is resolved and user is present.
+    if (!authLoading && user) {
+      const onboardingDone = localStorage.getItem('onboardingComplete');
+      if (!onboardingDone) {
+        setShowOnboarding(true);
+      }
+    }
+  }, [authLoading, user]);
+
+  React.useEffect(() => {
     if (onboardingComplete) {
-      // Request push notification permission after onboarding
       requestNotificationPermission().then((permission) => {
         if (permission === 'granted') {
           subscribeUserToPush();
@@ -49,75 +63,55 @@ const App: React.FC = () => {
     localStorage.setItem('onboardingComplete', 'true');
   };
 
-  const handleDemoMode = async () => {
-    // Load sample data for demo mode
-    setDemoMode(true);
-    // ...populate state with demo data as needed
-  };
+  // While Firebase resolves the persisted session, show a neutral loading screen.
+  // This prevents the flash: authenticated user → brief login screen → dashboard.
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <LoadingSpinner text="Loading..." />
+      </div>
+    );
+  }
 
-  const renderContent = () => {
-    switch (currentView) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'playbook':
-        return (
-          <React.Suspense fallback={<LoadingSpinner text="Loading Smart Playbook..." />}>
-            <ErrorBoundary>
-              <SmartPlaybook />
-            </ErrorBoundary>
-          </React.Suspense>
-        );
-      case 'test':
-        return (
-          <React.Suspense fallback={<LoadingSpinner text="Loading Firebase Test..." />}>
-            <FirebaseTest />
-          </React.Suspense>
-        );
-      default:
-        return <Dashboard />;
-    }
-  };
+  // Unauthenticated: show login only, no app shell visible.
+  if (!user) {
+    return <LoginPage />;
+  }
 
+  // Authenticated: mount providers only after auth is confirmed
+  // so TeamContext can safely call auth.currentUser on mount (it will be set).
+  // Provider order: TeamProvider → RosterProvider → AIProvider
   return (
-    <ErrorBoundary children={
+    <TeamProvider>
+      <RosterProvider>
+        <AIProvider>
+          <div className="min-h-screen bg-gray-50">
+            <MigrationBanner />
+            <Dashboard />
+            <PWAInstallPrompt showOnLoad={true} />
+            <OnboardingModal
+              open={showOnboarding}
+              onClose={handleOnboardingClose}
+              onDemoMode={() => {}}
+              onComplete={handleOnboardingClose}
+            />
+          </div>
+        </AIProvider>
+      </RosterProvider>
+    </TeamProvider>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <ErrorBoundary>
       <ToastManager>
+        {/* AuthProvider must be the outermost context so AppContent can read it. */}
         <AuthProvider>
-          <TeamProvider>
-            <AIProvider>
-              <div className="min-h-screen bg-gray-50">
-                <nav className="bg-white shadow-sm border-b">
-                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                      <div className="flex items-center space-x-8">
-                        <div className="flex items-center space-x-1">
-                          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                          </div>
-                          <span className="text-xl font-bold text-gray-900">Coach Core</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </nav>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                  <MigrationBanner />
-                  {renderContent()}
-                </div>
-                <PWAInstallPrompt showOnLoad={true} />
-                <OnboardingModal
-                  open={showOnboarding}
-                  onClose={handleOnboardingClose}
-                  onDemoMode={handleDemoMode}
-                  onComplete={handleOnboardingClose}
-                />
-              </div>
-            </AIProvider>
-          </TeamProvider>
+          <AppContent />
         </AuthProvider>
       </ToastManager>
-    } />
+    </ErrorBoundary>
   );
 };
 
