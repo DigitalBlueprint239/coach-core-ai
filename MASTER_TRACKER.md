@@ -4,128 +4,87 @@
 **Build Status:** ✅ PASSING (`npm run build` — zero errors, ESLint warnings only)
 **TypeScript Status:** ✅ CLEAN (`npx tsc --noEmit` — zero errors in active code)
 **Test Status:** ✅ PASSING (1/1 tests pass)
-**Session Goal:** Zero critical blockers, clean build, secure env vars
+**Overall Completion:** ~45% — Infrastructure, auth, roster complete. AI Brain is the next critical milestone.
 
 ---
 
 ## 🚨 Critical Issues (Build Blockers)
 
 ### CRIT-001 — PostCSS/Tailwind v4 Misconfiguration
-- **Severity:** Critical — app will not build at all
-- **Root Cause:** `react-scripts` v5 auto-detects `tailwind.config.js` and injects `require('tailwindcss')` as a PostCSS plugin. Tailwind v4 throws when used directly as a PostCSS plugin (v4 requires `@tailwindcss/postcss`).
-- **Files:** `tailwind.config.js`, `postcss.config.js`, `src/index.css`
-- **Fix Applied:**
-  - Deleted `tailwind.config.js` (removes react-scripts auto-detection trigger)
-  - Rewrote `src/index.css` from v3 `@tailwind` directives to v4 `@import "tailwindcss"`
-- **Status:** ✅ RESOLVED
+- **Status:** ✅ RESOLVED (2026-02-26)
 
 ### CRIT-002 — Firebase Crash on Startup
-- **Severity:** Critical — app renders blank white screen
-- **Root Cause:** `src/services/firebase.ts` used `NEXT_PUBLIC_*` env prefix (Next.js) instead of `REACT_APP_*` (CRA). All vars resolved to `undefined` and the file threw at module load.
-- **Fix Applied:**
-  - Rewrote `src/services/firebase.ts` with graceful null handling (`isConfigured` guard)
-  - Created `src/config/env.ts` with all vars using `REACT_APP_*` prefix
-  - App now renders with a console warning instead of crashing when env vars are missing
-- **Status:** ✅ RESOLVED
+- **Status:** ✅ RESOLVED (2026-02-26)
 
 ### CRIT-003 — TypeScript Compilation: 166 Errors in Legacy Files
-- **Severity:** Critical — 166 TS errors, two completely broken files
-- **Root Cause:** Orphaned legacy files with JSX in .ts files, spaces in directory names, missing dependencies
-- **Fix Applied:** Added orphaned files/directories to `tsconfig.json` `exclude` array
-- **Status:** ✅ RESOLVED
+- **Status:** ✅ RESOLVED (2026-02-26)
 
 ---
 
 ## 🔴 High Severity Issues
 
 ### HIGH-001 — API Key Exposure: Real Firebase Credentials in .env.local.example
-- **Severity:** High — real API key committed to source
-- **Detail:** `.env.local.example` line 13 contains what appears to be a real Firebase API key. This file is NOT in `.gitignore`.
-- **Action Required:** Key must be rotated in Firebase console. Git history cleanup requires separate `git filter-branch` or BFG Repo Cleaner operation.
-- **Status:** ⚠️ DEFERRED — Key rotation required by repo owner. Cannot rewrite git history in this session.
+- **Status:** ⚠️ DEFERRED — Key rotation required by repo owner
 
 ### HIGH-002 — Wrong Environment Variable Prefix Throughout Codebase
-- **Severity:** High — all AI and secondary Firebase services use wrong env var syntax
-- **Files Fixed:**
-  - `src/ai-brain/AIContext.tsx` — `import.meta.env.VITE_*` → `process.env.REACT_APP_*`
-  - `src/services/ai-proxy.ts` — fixed
-  - `src/services/push-notifications.ts` — fixed
-  - `src/components/ErrorBoundary.tsx` — fixed
-  - `src/components/FirebaseTest.tsx` — fixed
-  - `src/components/IntegrationTest.tsx` — fixed
-  - `src/services/firestore.ts` — fixed (now uses `src/config/env.ts`)
-- **Status:** ✅ RESOLVED
+- **Status:** ✅ RESOLVED (2026-02-26)
 
 ### HIGH-003 — No Centralized Environment Variable Validation
-- **Severity:** High — missing vars fail silently or crash at unexpected times
-- **Fix Applied:** Created `src/config/env.ts` with all `REACT_APP_*` vars and `validateFirebaseConfig()` function
-- **Status:** ✅ RESOLVED
+- **Status:** ✅ RESOLVED (2026-02-26)
 
 ### HIGH-004 — Jest/Test Configuration Failures
-- **Severity:** High — cannot verify any feature works
-- **Fix Applied:**
-  - Fixed `src/services/firestore.ts` to guard `getAuth()` behind `validateFirebaseConfig()` (prevented `auth/invalid-api-key` crash in tests)
-  - Fixed `src/components/AuthProvider.tsx` to use `auth` from `services/firebase` instead of calling `getAuth()` unconditionally (prevented `useAuth must be used within AuthProvider` error)
-  - Fixed `src/App.tsx` to use `AuthProvider` from `hooks/useAuth` (fixed context mismatch)
-  - Added `window.matchMedia` mock to `src/setupTests.ts` (fixed `matchMedia is not a function` in jsdom)
-  - Updated `src/App.test.tsx` to use `getAllByText` (multiple elements match `/Coach Core/i`)
-- **Status:** ✅ RESOLVED
+- **Status:** ✅ RESOLVED (2026-02-26)
 
 ### HIGH-005 — npm Vulnerabilities
-- **Severity:** High — 24 total (1 critical, 14 high, 6 moderate, 3 low) at session start
-- **Fix Applied:** Ran `npm audit fix --legacy-peer-deps`
-- **Remaining:** 11 vulnerabilities (8 high, 3 moderate) — all in `webpack-dev-server` which can only be fixed by `npm audit fix --force` (installs `react-scripts@0.0.0`, a breaking change)
-- **Status:** ⚠️ PARTIALLY RESOLVED — 13 vulns fixed; remaining 11 require react-scripts upgrade
+- **Status:** ⚠️ PARTIALLY RESOLVED — remaining 11 vulns require react-scripts upgrade
 
 ---
 
-## 🟡 Medium Severity Issues
+## ✅ Confirmed Complete
 
-### MED-001 — Illegal Filenames (Spaces in Paths)
-- **Detail:** Files with spaces/colons in directory/file names:
-  - `src/components/Coach Core AI Brain /` (excluded from TS compilation)
-  - `src/components/Coach's Corner/` (excluded from TS compilation)
-  - `src/components/SmartPlaybook/:components:SmartPlaybook:Field.js` (colon in filename)
-- **Fix Applied:** Colon-named Field.js copied to properly-named `Field.js`; directories excluded from tsconfig
-- **Status:** ⚠️ PARTIALLY RESOLVED — Excluded from compilation; physical files still exist
-
-### MED-002 — Python Files in React src/
-- **Detail:** Python files do not belong in a React TypeScript project's `src/`
-- **Status:** ⚠️ DEFERRED — Files excluded from TS compilation; physical cleanup deferred
-
-### MED-003 — .jsx.txt Files (Wrong Extension)
-- **Detail:** `src/components/Coach's Corner/` contains `.jsx.txt` files — not importable
-- **Status:** ⚠️ DEFERRED — Not in active import chain; physical cleanup deferred
-
-### MED-004 — Duplicate/Nested React App Inside src/
-- **Detail:** `src/coach-core-ai/`, `src/components/SmartPlaybook/src/` — never imported by main app
-- **Fix Applied:** Both added to `tsconfig.json` exclude array
-- **Status:** ✅ RESOLVED (compilation) / ⚠️ DEFERRED (physical file cleanup)
-
-### MED-005 — `src/services/firestore.ts` Second Firebase Initialization
-- **Detail:** `src/services/firestore.ts` previously initialized Firebase separately with wrong env var syntax
-- **Fix Applied:** Now imports `db` and `auth` from shared `./firebase.ts`. No duplicate `initializeApp()` call.
-- **Status:** ✅ RESOLVED
+- [x] React app builds with zero errors (`npm run build`)
+- [x] TypeScript clean — zero errors (`npx tsc --noEmit`)
+- [x] Tests pass — 1/1 (`npm test`)
+- [x] Single Firebase initialization (`firebase.ts` is the only `initializeApp` call)
+- [x] `firestore.ts` imports from shared `firebase.ts` — no duplicate initialization
+- [x] All active code uses `REACT_APP_*` env prefix — no `NEXT_PUBLIC_*` or `VITE_*`
+- [x] Centralized env validation via `src/config/env.ts`
+- [x] Email/password sign in and sign up (via `hooks/useAuth.tsx`)
+- [x] Auth persists across page refresh (`browserLocalPersistence`)
+- [x] Auth errors show human-readable messages (not raw Firebase error codes)
+- [x] Protected routing: unauthenticated users always see LoginPage
+- [x] No flash of content: loading spinner during auth state resolution
+- [x] Dashboard Practice Plans stat reads from real Firestore (via `usePracticePlans`)
+- [x] Player Roster with CRUD (add/edit/delete players)
+- [x] Roster stored in Firestore (`teams/{teamId}/players/{playerId}`)
+- [x] Roster integrated with AI: `getRosterContextForAI()` passes player data to practice plan generation
+- [x] Empty roster prompt: "Add your players to get AI-personalized practice plans"
+- [x] Roster tab in Dashboard with real player count from `RosterContext`
+- [x] Depth chart UI with position groups
+- [x] Provider hierarchy: `ErrorBoundary > AuthProvider > TeamProvider > RosterProvider > AIProvider`
 
 ---
 
-## ✅ Resolved Issues Summary
+## ✅ Resolved Issues
 
-| Issue | Root Cause | Fix |
-|-------|-----------|-----|
-| CRIT-001 | Tailwind v4 + react-scripts auto-detection | Deleted tailwind.config.js; updated index.css to v4 @import |
-| CRIT-002 | NEXT_PUBLIC_* prefix in CRA project | Rewrote firebase.ts with REACT_APP_* and graceful null handling |
-| CRIT-003 | 166 TS errors in orphaned legacy files | Added 9 entries to tsconfig.json exclude array |
-| HIGH-002 | import.meta.env (Vite) in 7 CRA files | Replaced all with process.env.REACT_APP_* via env.ts |
-| HIGH-003 | No env validation | Created src/config/env.ts with validateFirebaseConfig() |
-| HIGH-004 | Tests crash due to Firebase init | Fixed firestore.ts guard, AuthProvider context, matchMedia mock |
-| MED-005 | firestore.ts dual Firebase init | Unified initialization with same config and null guard |
+| Date | Severity | Issue | Fix |
+|------|----------|-------|-----|
+| 2026-02-26 | CRITICAL | PostCSS/Tailwind v4 crash | Deleted tailwind.config.js; updated index.css to v4 @import |
+| 2026-02-26 | CRITICAL | NEXT_PUBLIC_* prefix crash | Rewrote firebase.ts with REACT_APP_* and graceful null handling |
+| 2026-02-26 | CRITICAL | 166 TS errors in legacy files | Added entries to tsconfig.json exclude array |
+| 2026-02-26 | HIGH | import.meta.env (Vite) in CRA | Replaced all with process.env.REACT_APP_* via env.ts |
+| 2026-02-26 | HIGH | No env validation | Created src/config/env.ts with validateFirebaseConfig() |
+| 2026-02-26 | HIGH | Tests crash | Fixed firestore.ts guard, AuthProvider context, matchMedia mock |
+| 2026-02-26 | CRITICAL | Dual AuthContext conflict | Replaced anonymous auth with re-export of hooks/useAuth.tsx |
+| 2026-02-26 | CRITICAL | No LoginPage | Created src/components/auth/LoginPage.tsx with error translation |
+| 2026-02-26 | CRITICAL | No auth gate in App.tsx | Rewrote App.tsx with AppContent auth gate |
+| 2026-02-26 | MEDIUM | firestore.ts dual Firebase init | Imports db/auth from shared firebase.ts |
+| 2026-02-26 | MEDIUM | Practice Plans stat hardcoded 0 | Wired to usePracticePlans real Firestore count |
+| 2026-02-26 | MEDIUM | PracticePlanner hardcoded 'demo-team' | Uses currentTeam?.id from TeamContext |
 
 ---
 
 ## Files Excluded from TypeScript Compilation (Technical Debt)
-
-Added to `tsconfig.json` `exclude` array — orphaned or broken files not in active import chain:
 
 ```
 src/components/Coach Core AI Brain       — space in name; 104 TS errors; not imported
@@ -136,48 +95,22 @@ src/components/coach-core-complete-integration.tsx — uses recharts (not instal
 src/components/fixed-core-functionality.tsx         — orphaned legacy
 src/components/SmartPlaybook/src          — nested sub-app, not the active SmartPlaybook
 src/coach-core-ai                         — empty scaffolding
-src/features                              — uses missing AIContextType methods
+src/features/playbook                     — uses getRealtimeInsight (not in AIContextType)
+src/features/analytics                    — not wired into active app
+src/features/auth                         — legacy Login/Signup, replaced by LoginPage.tsx
 src/utils                                 — dev/test scripts, use Firestore without null guards
 src/components/OfflineFallbacks.tsx       — imports from excluded src/utils
 ```
 
 ---
 
-## New Files Created This Session
-
-| File | Purpose |
-|------|---------|
-| `MASTER_TRACKER.md` | This file — infrastructure audit and tracking |
-| `src/config/env.ts` | Centralized REACT_APP_* env var access and validation |
-| `src/components/SmartPlaybook/Field.js` | Copy of colon-named file with valid filename |
-| `src/components/SmartPlaybook/Field.d.ts` | TypeScript declaration for Field.js |
-| `src/components/SmartPlaybook/DebugPanel.d.ts` | TypeScript declaration stub |
-| `src/components/SmartPlaybook/PlayLibrary.d.ts` | TypeScript declaration stub |
-| `src/components/SmartPlaybook/PlayController.d.ts` | TypeScript declaration with correct signatures |
-| `src/components/SmartPlaybook/components/*.d.ts` | Declaration stubs for 8 JS components |
-
----
-
-## Confirmed Working (Post-Repair)
-
-- `npm run build` — ✅ PASSES (ESLint warnings only, no errors)
-- `npx tsc --noEmit` — ✅ PASSES (zero errors in active code)
-- `npm test` — ✅ PASSES (1/1 tests pass)
-- App shell renders without crashing when Firebase is not configured
-- Auth hook (`src/hooks/useAuth.tsx`) — null-safe
-- SmartPlaybook canvas (`src/components/SmartPlaybook/SmartPlaybook.tsx`) — compiles
-- Error boundaries (`src/components/common/ErrorBoundary.tsx`) — working
-- env.ts validation warns to console without crashing app
-
----
-
 ## Remaining Work (Next Session)
 
-1. **HIGH-001** — Rotate Firebase API key leaked in `.env.local.example` (requires Firebase Console access)
-2. **HIGH-005** — Upgrade react-scripts to fix webpack-dev-server vulnerabilities (breaking change, needs testing)
-3. **MED-001/002/003** — Physical cleanup of Python files, illegal filenames, .jsx.txt files
-4. **Technical Debt** — Fix excluded files so they can be re-included in TypeScript compilation
-5. **Tests** — Add more test coverage beyond the smoke test
+1. **AI Brain Implementation** — `src/ai-brain/core/AIBrain.ts` has 8 methods that are all TODO stubs. The AI is the entire product differentiator and it does not exist yet. The next session must implement real AI methods using the existing OpenAI proxy infrastructure (`src/services/ai-proxy.ts`), starting with `generatePracticePlan` and `getPlaySuggestions`. The proxy endpoint and token are configured via `REACT_APP_AI_PROXY_ENDPOINT` and `REACT_APP_AI_PROXY_TOKEN`.
+2. **HIGH-001** — Rotate Firebase API key leaked in `.env.local.example`
+3. **HIGH-005** — Upgrade react-scripts to fix webpack-dev-server vulnerabilities
+4. **Tests** — Add test coverage beyond the smoke test
+5. **SmartPlaybook Firestore** — Wire play saves to Firestore (infrastructure ready via `savePlay`)
 
 ---
 
@@ -190,14 +123,37 @@ src/components/OfflineFallbacks.tsx       — imports from excluded src/utils
 - `npx tsc --noEmit`: 166 errors in 2 files
 - `npm test`: FAIL — Firebase crash at module load
 - App renders: NO — crashes on firebase.ts module load
-- npm vulnerabilities: 24 (1 critical, 14 high, 6 moderate, 3 low)
 
 **Post-repair:**
 - `npm run build`: ✅ PASS
 - `npx tsc --noEmit`: ✅ PASS (0 errors)
 - `npm test`: ✅ PASS (1/1)
-- App renders: ✅ YES (with Firebase-not-configured warning in console)
-- npm vulnerabilities: 11 (8 high, 3 moderate) — remaining in webpack-dev-server
+- App renders: ✅ YES
 
-- 2026-02-26: Merged auth-hardening-firestore-consolidation — real auth wired, Firestore consolidated, LoginPage created
-- 2026-02-26: Merged player-roster — AI-connected roster, depth chart UI, Firestore persistence
+### Session 2: 2026-02-26 — Three-Branch Merge
+
+**Branches merged (in order):**
+1. `claude/infrastructure-repair-Uz0uG` (5 commits, 39 files) — build/TypeScript/test fixes
+2. `claude/auth-hardening-firestore-consolidation-E8Wrh` (1 commit, 9 files) — real auth, Firestore consolidation, LoginPage
+3. `claude/review-project-docs-XUB49` (1 commit, 14 files) — player roster with AI connection
+
+**Files manually reconciled (touched by multiple branches):**
+- `src/App.tsx` — All 3 branches. Merged auth-hardening's auth gate with roster's RosterProvider. Final hierarchy: ErrorBoundary > AuthProvider > [auth check] > TeamProvider > RosterProvider > AIProvider > Dashboard.
+- `MASTER_TRACKER.md` — All 3 branches. Kept infrastructure-repair's version as base, appended session log entries for each merge.
+- `src/services/firebase.ts` — infrastructure-repair + auth-hardening. Kept infrastructure-repair's null-safe version with config/env.ts imports.
+- `src/services/firestore.ts` — infrastructure-repair + auth-hardening. Used auth-hardening's shared import approach (`import { db, auth } from './firebase'`) with infrastructure-repair's null-safety guards.
+- `src/components/AuthProvider.tsx` — infrastructure-repair + auth-hardening. Clean re-export of hooks/useAuth.
+- `src/components/Dashboard.tsx` — auth-hardening + roster. Merged both: practice plans from Firestore (auth-hardening) AND roster tab/stats (roster).
+- `src/features/practice-planner/PracticePlanner.tsx` — infrastructure-repair + roster. Used roster's version with real team ID (removed 'demo-team' fallback), roster context for AI, and empty roster prompt.
+
+**Additional fixes during merge:**
+- `tsconfig.json` — Narrowed `"src/features"` exclusion to only `src/features/playbook`, `src/features/analytics`, `src/features/auth` so roster and practice-planner files are compiled.
+- `src/services/roster-service.ts` — Added null guards for `db` (typed as `Firestore | null` in infrastructure-repair's firebase.ts).
+
+**Before/After:**
+- Build: FAIL → ✅ PASS
+- TypeScript: 166 errors → ✅ 0 errors
+- Tests: FAIL → ✅ 1/1 pass
+- No hardcoded 'demo-team' in active code
+- No NEXT_PUBLIC_ or VITE_ in active code
+- Single Firebase initialization
