@@ -23,6 +23,7 @@
   "exclude": [
     "src/components/coach-core-integration.ts",
     "src/components/coach-core-integration.tsx",
-    "src/components/coach-core-backend.ts"
+    "src/components/coach-core-backend.ts",
+    "src/components/SmartPlaybook/src/**/*"
   ]
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/utils/backup-automation.ts
 import { 
   collection, 

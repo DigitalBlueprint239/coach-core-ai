@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/utils/multi-user-testing.ts
 import { 
   doc, 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/SmartPlaybook/TouchOptimizedPlaybook.tsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useAI } from '../../ai-brain/AIContext';

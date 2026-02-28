@@ -28,21 +28,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { showSuccess, showError } = useToast();
-  const auth = getAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    let auth;
+    try {
+      auth = getAuth();
+    } catch {
+      setLoading(false);
+      return;
+    }
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
       setLoading(false);
     });
 
     return unsubscribe;
-  }, [auth]);
+  }, []);
 
   const signIn = async () => {
     try {
       setLoading(true);
-      await signInAnonymously(auth);
+      const a = getAuth();
+      await signInAnonymously(a);
       showSuccess('Signed in successfully!');
     } catch (error: any) {
       showError(error.message || 'Failed to sign in');
@@ -54,7 +65,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const handleSignOut = async () => {
     try {
       setLoading(true);
-      await signOut(auth);
+      const a = getAuth();
+      await signOut(a);
       showSuccess('Signed out successfully!');
     } catch (error: any) {
       showError(error.message || 'Failed to sign out');

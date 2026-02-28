@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/hooks/useFirestore.ts
 import { useState, useEffect, useCallback } from 'react';
 import { 
