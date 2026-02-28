@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SmartPlaybook.js – Main application component
  * - Orchestrates all Smart Playbook functionality

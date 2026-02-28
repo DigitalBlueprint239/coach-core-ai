@@ -311,3 +311,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Backup files from build fixes
+*.bak
+*.v3-backup

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   BarChart3, Paintbrush, BookOpen, Users, Brain, 

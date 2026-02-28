@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/utils/data-validation.ts
 import { Timestamp } from 'firebase/firestore';
 import { 

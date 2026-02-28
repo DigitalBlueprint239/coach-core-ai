@@ -137,7 +137,7 @@ const IntegrationTest: React.FC = () => {
           <div className="space-y-2">
             <p><strong>Online:</strong> {navigator.onLine ? 'Yes' : 'No'}</p>
             <p><strong>Environment:</strong> {process.env.NODE_ENV}</p>
-            <p><strong>Firebase Project:</strong> {import.meta.env.VITE_FIREBASE_PROJECT_ID}</p>
+            <p><strong>Firebase Project:</strong> {process.env.REACT_APP_FIREBASE_PROJECT_ID}</p>
           </div>
         </div>
       </div>

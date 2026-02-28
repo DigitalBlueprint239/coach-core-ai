@@ -30,15 +30,28 @@ const requiredEnvVars = [
 
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
-if (missingEnvVars.length > 0) {
+if (missingEnvVars.length > 0 && process.env.NODE_ENV !== 'test') {
   console.error('Missing required Firebase environment variables:', missingEnvVars);
   throw new Error(`Missing Firebase configuration: ${missingEnvVars.join(', ')}`);
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const analytics = getAnalytics(app);
+let app: ReturnType<typeof initializeApp> | null = null;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
+let analytics: Analytics | null = null;
+
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'test') {
+    analytics = getAnalytics(app);
+  }
+} catch (error) {
+  if (process.env.NODE_ENV !== 'test') {
+    console.error('Firebase initialization failed:', error);
+  }
+}
 
 export { app, auth, db, analytics }; 

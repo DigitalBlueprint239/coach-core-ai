@@ -1,38 +1,49 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { AIService, useAIService, AIServiceConfig } from '../services/ai-service';
 import { AIProxyService, useAIProxy, AIProxyConfig } from '../services/ai-proxy';
-import { 
+import {
   AISuggestion, AIConversation, AIInsight,
   TeamContext, GameContext, PlayerContext, User
 } from '../types/firestore-schema';
+import { AIBrain } from './core/AIBrain';
 
 // ============================================
 // AI CONTEXT TYPES
 // ============================================
 
 interface AIContextType {
-  // Core AI functionality
+  // Existing AI service methods (kept for backward compatibility)
   generatePracticePlan: (teamContext: TeamContext, goals: string[], duration: number, constraints?: any) => Promise<any>;
   generatePlaySuggestion: (gameContext: GameContext, teamContext: TeamContext, playerContext?: PlayerContext) => Promise<any>;
   analyzeTeamPerformance: (teamContext: TeamContext, performanceData: any, timeRange: string) => Promise<any>;
   generateDrillSuggestions: (teamContext: TeamContext, focusAreas: string[], duration: number, skillLevel: string) => Promise<any>;
   processConversation: (message: string, conversationHistory: AIConversation[], userContext: User, teamContext?: TeamContext) => Promise<any>;
   validateSafety: (suggestion: AISuggestion, teamContext: TeamContext, ageGroup: string) => Promise<any>;
-  
+
+  // AI Brain methods — football-specific intelligence
+  generateSmartPractice: (input: { duration: number; goals: string[]; teamId: string; rosterContext?: any; focusAreas?: string[]; experienceLevel?: string }) => Promise<any>;
+  getRealtimeInsight: (context: any) => Promise<any>;
+  analyzeFormation: (formation: any) => Promise<any>;
+  getCoverageRecommendation: (situation: any) => Promise<any>;
+  generateDrillSuggestionsForFocus: (focus: string, playerLevel: string) => Promise<any>;
+  assessPlayerDevelopment: (playerData: any) => Promise<any>;
+  generateGamePlan: (opponentTendencies: any, teamStrengths: any) => Promise<any>;
+  getMotivationalInsight: (teamContext: any) => Promise<any>;
+
   // State management
   loading: boolean;
   error: string | null;
   suggestions: AISuggestion[];
   conversations: AIConversation[];
   insights: AIInsight[];
-  
+
   // Utility methods
   clearError: () => void;
   clearSuggestions: () => void;
   addSuggestion: (suggestion: AISuggestion) => void;
   removeSuggestion: (suggestionId: string) => void;
   recordOutcome: (suggestionId: string, outcome: 'success' | 'failure' | 'partial') => void;
-  
+
   // Configuration
   updateConfig: (config: Partial<AIServiceConfig>) => void;
   getCacheStats: () => { size: number; keys: string[] };
@@ -63,14 +74,14 @@ export const useAI = () => {
 // AI PROVIDER
 // ============================================
 
-export const AIProvider: React.FC<AIProviderProps> = ({ 
-  children, 
+export const AIProvider: React.FC<AIProviderProps> = ({
+  children,
   config = {},
-  useProxy = false 
+  useProxy = false
 }) => {
   // Initialize AI service configuration
   const defaultConfig: AIServiceConfig = {
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
+    apiKey: process.env.REACT_APP_OPENAI_API_KEY || '',
     model: 'gpt-4',
     maxTokens: 2000,
     temperature: 0.7,
@@ -79,7 +90,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 
   // Initialize proxy configuration
   const proxyConfig: AIProxyConfig = {
-    endpoint: import.meta.env.VITE_AI_PROXY_ENDPOINT || '/api/ai',
+    endpoint: process.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
     timeout: 30000,
     retries: 3
   };
@@ -87,7 +98,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
   // Use appropriate service based on configuration
   const aiService = useAIService(defaultConfig);
   const aiProxy = useAIProxy(proxyConfig);
-  
+
   const service = useProxy ? aiProxy : aiService;
   const { loading, error } = service;
 
@@ -97,7 +108,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
   const [insights, setInsights] = useState<AIInsight[]>([]);
 
   // ============================================
-  // CORE AI METHODS
+  // EXISTING AI SERVICE METHODS (backward compat)
   // ============================================
 
   const generatePracticePlan = useCallback(async (
@@ -236,16 +247,55 @@ export const AIProvider: React.FC<AIProviderProps> = ({
   }, [useProxy, aiProxy, aiService]);
 
   // ============================================
+  // AI BRAIN METHODS — Football Intelligence
+  // ============================================
+
+  const generateSmartPractice = useCallback(async (input: {
+    duration: number;
+    goals: string[];
+    teamId: string;
+    rosterContext?: any;
+    focusAreas?: string[];
+    experienceLevel?: string;
+  }) => {
+    return AIBrain.generatePracticePlan(input);
+  }, []);
+
+  const getRealtimeInsight = useCallback(async (context: any) => {
+    return AIBrain.getPlaySuggestions(context);
+  }, []);
+
+  const analyzeFormation = useCallback(async (formation: any) => {
+    return AIBrain.analyzeFormation(formation);
+  }, []);
+
+  const getCoverageRecommendation = useCallback(async (situation: any) => {
+    return AIBrain.getCoverageRecommendation(situation);
+  }, []);
+
+  const generateDrillSuggestionsForFocus = useCallback(async (focus: string, playerLevel: string) => {
+    return AIBrain.generateDrillSuggestions(focus, playerLevel);
+  }, []);
+
+  const assessPlayerDevelopment = useCallback(async (playerData: any) => {
+    return AIBrain.assessPlayerDevelopment(playerData);
+  }, []);
+
+  const generateGamePlan = useCallback(async (opponentTendencies: any, teamStrengths: any) => {
+    return AIBrain.generateGamePlan(opponentTendencies, teamStrengths);
+  }, []);
+
+  const getMotivationalInsight = useCallback(async (teamContext: any) => {
+    return AIBrain.getMotivationalInsight(teamContext);
+  }, []);
+
+  // ============================================
   // STATE MANAGEMENT
   // ============================================
 
   const clearError = useCallback(() => {
-    if (useProxy) {
-      // Proxy doesn't have clearError, so we'll handle it locally
-    } else {
-      // AI service error is managed by the hook
-    }
-  }, [useProxy]);
+    // Error state is managed by the service hooks
+  }, []);
 
   const clearSuggestions = useCallback(() => {
     setSuggestions([]);
@@ -260,9 +310,12 @@ export const AIProvider: React.FC<AIProviderProps> = ({
   }, []);
 
   const recordOutcome = useCallback((suggestionId: string, outcome: 'success' | 'failure' | 'partial') => {
+    // Record in AIBrain for analytics
+    AIBrain.recordOutcome(suggestionId, outcome === 'partial' ? 'neutral' : outcome);
+
     // Update suggestion with outcome
-    setSuggestions(prev => prev.map(s => 
-      s.id === suggestionId 
+    setSuggestions(prev => prev.map(s =>
+      s.id === suggestionId
         ? { ...s, outcome, lastUsed: new Date().toISOString() }
         : s
     ));
@@ -270,7 +323,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
     // Add to insights
     const insight: AIInsight = {
       id: `insight_${Date.now()}`,
-      userId: 'current-user', // This should come from auth context
+      userId: 'current-user',
       type: 'suggestion_outcome',
       title: `Suggestion ${outcome}`,
       description: `AI suggestion "${suggestionId}" resulted in ${outcome}`,
@@ -279,7 +332,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
       recommendations: [],
       isActionable: false,
       isRead: false,
-      createdAt: new Date() as any, // Using any for now since we don't have Timestamp import
+      createdAt: new Date() as any,
       updatedAt: new Date() as any,
       createdBy: 'current-user'
     };
@@ -315,28 +368,38 @@ export const AIProvider: React.FC<AIProviderProps> = ({
   // ============================================
 
   const value: AIContextType = {
-    // Core AI functionality
+    // Existing AI service methods
     generatePracticePlan,
     generatePlaySuggestion,
     analyzeTeamPerformance,
     generateDrillSuggestions,
     processConversation,
     validateSafety,
-    
+
+    // AI Brain football intelligence methods
+    generateSmartPractice,
+    getRealtimeInsight,
+    analyzeFormation,
+    getCoverageRecommendation,
+    generateDrillSuggestionsForFocus,
+    assessPlayerDevelopment,
+    generateGamePlan,
+    getMotivationalInsight,
+
     // State management
     loading,
     error,
     suggestions,
     conversations,
     insights,
-    
+
     // Utility methods
     clearError,
     clearSuggestions,
     addSuggestion,
     removeSuggestion,
     recordOutcome,
-    
+
     // Configuration
     updateConfig,
     getCacheStats,

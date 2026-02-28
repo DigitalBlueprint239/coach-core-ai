@@ -125,9 +125,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           timestamp: Date.now()
         },
         appInfo: {
-          version: import.meta.env.VITE_VERSION || '1.0.0',
+          version: process.env.REACT_APP_VERSION || '1.0.0',
           environment: process.env.NODE_ENV || 'development',
-          buildNumber: import.meta.env.VITE_BUILD_NUMBER
+          buildNumber: process.env.REACT_APP_BUILD_NUMBER
         },
         context: {
           componentName: this.getComponentName(errorInfo.componentStack || ''),
@@ -436,7 +436,7 @@ class ErrorReportingService {
   private isProcessing: boolean = false;
 
   constructor() {
-    this.endpoint = import.meta.env.VITE_ERROR_REPORTING_ENDPOINT || '/api/errors';
+    this.endpoint = process.env.REACT_APP_ERROR_REPORTING_ENDPOINT || '/api/errors';
   }
 
   async reportError(errorReport: ErrorReport): Promise<void> {
