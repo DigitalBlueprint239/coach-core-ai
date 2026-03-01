@@ -29,14 +29,12 @@ class DatabaseService {
   private async initializeProvider(config: DatabaseConfig) {
     if (config.provider === 'firebase') {
       // Firebase implementation
-      const { initializeApp } = await import('firebase/app');
-      const { getFirestore, enableNetwork, disableNetwork } = await import('firebase/firestore');
-      const { getAuth } = await import('firebase/auth');
-      const { getStorage } = await import('firebase/storage');
+      const { app, db, auth } = await import("../../firebase");
+      const { enableNetwork, disableNetwork } = await import("firebase/firestore");
+      const { getStorage } = await import("firebase/storage");
 
-      const app = initializeApp(config.config);
-      this.db = getFirestore(app);
-      this.auth = getAuth(app);
+      this.db = db;
+      this.auth = auth;
       this.storage = getStorage(app);
 
       if (config.offlineEnabled) {

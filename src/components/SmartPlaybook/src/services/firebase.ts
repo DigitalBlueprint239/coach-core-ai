@@ -1,6 +1,4 @@
-import { initializeApp } from 'firebase/app';
 import { 
-  getAuth, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -11,7 +9,6 @@ import {
   User
 } from 'firebase/auth';
 import { 
-  getFirestore, 
   collection, 
   doc, 
   setDoc, 
@@ -28,24 +25,9 @@ import {
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const analytics = getAnalytics(app);
+import { app, auth, db, analytics } from "../../../../src/firebase";
 
 // Auth providers
 const googleProvider = new GoogleAuthProvider();
@@ -385,22 +367,29 @@ export const playSuggestionService = {
     }
   },
 
-  // Real-time subscription
-  subscribeToUserSuggestions: (userId: string, callback: (suggestions: PlaySuggestion[]) => void) => {
-    const q = query(
-      collection(db, 'playSuggestions'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(20)
-    );
-    
-    return onSnapshot(q, (querySnapshot) => {
-      const suggestions = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as PlaySuggestion[];
-      callback(suggestions);
-    });
+  update: async (id: string, updates: Partial<PlaySuggestion>) => {
+    try {
+      const docRef = doc(db, 'playSuggestions', id);
+      await updateDoc(docRef, {
+        ...updates,
+        updatedAt: serverTimestamp(),
+      });
+      
+      logEvent(analytics, 'play_suggestion_updated');
+    } catch (error) {
+      console.error('Update play suggestion error:', error);
+      throw error;
+    }
+  },
+
+  delete: async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'playSuggestions', id));
+      logEvent(analytics, 'play_suggestion_deleted');
+    } catch (error) {
+      console.error('Delete play suggestion error:', error);
+      throw error;
+    }
   },
 };
 
@@ -427,7 +416,7 @@ export const playerProgressService = {
       const q = query(
         collection(db, 'playerProgress'),
         where('userId', '==', userId),
-        orderBy('updatedAt', 'desc')
+        orderBy('createdAt', 'desc')
       );
       
       const querySnapshot = await getDocs(q);
@@ -455,13 +444,39 @@ export const playerProgressService = {
       throw error;
     }
   },
+
+  delete: async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'playerProgress', id));
+      logEvent(analytics, 'player_progress_deleted');
+    } catch (error) {
+      console.error('Delete player progress error:', error);
+      throw error;
+    }
+  },
 };
 
 // Coach Profile Services
 export const coachProfileService = {
+  create: async (profile: Omit<CoachProfile, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const docRef = await setDoc(doc(db, 'coachProfiles', profile.userId), {
+        ...profile,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      
+      logEvent(analytics, 'coach_profile_created');
+      return profile.userId;
+    } catch (error) {
+      console.error('Create coach profile error:', error);
+      throw error;
+    }
+  },
+
   getById: async (userId: string): Promise<CoachProfile | null> => {
     try {
-      const docRef = doc(db, 'coaches', userId);
+      const docRef = doc(db, 'coachProfiles', userId);
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
@@ -476,7 +491,7 @@ export const coachProfileService = {
 
   update: async (userId: string, updates: Partial<CoachProfile>) => {
     try {
-      const docRef = doc(db, 'coaches', userId);
+      const docRef = doc(db, 'coachProfiles', userId);
       await updateDoc(docRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -489,24 +504,13 @@ export const coachProfileService = {
     }
   },
 
-  getAll: async (): Promise<CoachProfile[]> => {
+  delete: async (userId: string) => {
     try {
-      const q = query(
-        collection(db, 'coaches'),
-        orderBy('rating', 'desc')
-      );
-      
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as CoachProfile[];
+      await deleteDoc(doc(db, 'coachProfiles', userId));
+      logEvent(analytics, 'coach_profile_deleted');
     } catch (error) {
-      console.error('Get all coaches error:', error);
+      console.error('Delete coach profile error:', error);
       throw error;
     }
   },
 };
-
-export { auth, db, analytics };
-export default app; 
