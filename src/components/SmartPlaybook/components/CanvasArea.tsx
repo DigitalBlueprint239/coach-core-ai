@@ -1,12 +1,11 @@
-// @ts-nocheck
 import React from 'react';
-import Field from '../:components:SmartPlaybook:Field.js';
+import Field from '../Field';
 
 interface CanvasAreaProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  players: any[];
-  routes: any[];
-  onCanvasEvent: (e: any) => void;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  players: unknown[];
+  routes: unknown[];
+  onCanvasEvent: (e: React.MouseEvent | React.TouchEvent) => void;
   onPlayerDrag: (id: string, x: number, y: number) => void;
 }
 

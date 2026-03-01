@@ -1,24 +1,24 @@
-// @ts-nocheck
 // src/services/firestore.ts
-import { initializeApp, getApps } from 'firebase/app';
-import { 
-  getFirestore, 
-  doc, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  getDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
+import {
+  getFirestore,
+  doc,
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
   onSnapshot,
   connectFirestoreEmulator,
   enableNetwork,
-  disableNetwork
+  disableNetwork,
+  type Firestore
 } from 'firebase/firestore';
-import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
+import { getAuth, connectAuthEmulator, onAuthStateChanged, type User, type Auth } from 'firebase/auth';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -32,9 +32,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only once
-let app;
-let db;
-let auth;
+let app: FirebaseApp | null = null;
+let db: Firestore | null = null;
+let auth: Auth | null = null;
 
 try {
   if (!getApps().length) {
@@ -51,7 +51,7 @@ try {
     try {
       connectFirestoreEmulator(db, 'localhost', 8080);
       connectAuthEmulator(auth, 'http://localhost:9099');
-    } catch (error) {
+    } catch (emulatorError) {
       console.log('Emulators already connected');
     }
   }
@@ -130,6 +130,12 @@ export interface Player {
   y: number;
 }
 
+// Helper to get db with null check — throws if Firestore not initialized
+function getDb(): Firestore {
+  if (!db) throw new Error('Firestore not initialized');
+  return db;
+}
+
 // Auth state management
 let currentUser: User | null = null;
 let authStateReady = false;
@@ -194,13 +200,13 @@ const MAX_QUEUE_SIZE = 100; // Prevent unlimited growth
 // Network status monitoring
 window.addEventListener('online', () => {
   isOnline = true;
-  enableNetwork(db);
+  if (db) enableNetwork(db);
   syncOfflineQueue();
 });
 
 window.addEventListener('offline', () => {
   isOnline = false;
-  disableNetwork(db);
+  if (db) disableNetwork(db);
 });
 
 // Load offline queue from localStorage
@@ -253,7 +259,8 @@ async function syncOfflineQueue() {
     } catch (error) {
       console.error('Failed to sync offline operation:', error);
       // Only add back to queue if it's not a permanent error
-      if (!error.message?.includes('permission-denied')) {
+      const message = error instanceof Error ? error.message : '';
+      if (!message.includes('permission-denied')) {
         offlineQueue.push(operation);
       }
     }
@@ -265,21 +272,22 @@ async function syncOfflineQueue() {
 }
 
 async function executeOperation(operation: any) {
+  const firestore = getDb();
   const { type, collection: collectionName, data, docId } = operation;
-  
+
   switch (type) {
     case 'create':
       if (docId) {
-        await updateDoc(doc(db, collectionName, docId), data);
+        await updateDoc(doc(firestore, collectionName, docId), data);
       } else {
-        await addDoc(collection(db, collectionName), data);
+        await addDoc(collection(firestore, collectionName), data);
       }
       break;
     case 'update':
-      await updateDoc(doc(db, collectionName, docId), data);
+      await updateDoc(doc(firestore, collectionName, docId), data);
       break;
     case 'delete':
-      await deleteDoc(doc(db, collectionName, docId));
+      await deleteDoc(doc(firestore, collectionName, docId));
       break;
   }
 }
@@ -300,7 +308,7 @@ export async function savePracticePlan(teamId: string, planData: Omit<PracticePl
   };
 
   try {
-    const docRef = await addDoc(collection(db, 'practicePlans'), plan);
+    const docRef = await addDoc(collection(getDb(), 'practicePlans'), plan);
     return docRef.id;
   } catch (error) {
     if (!isOnline) {
@@ -322,15 +330,15 @@ export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> 
   
   try {
     const q = query(
-      collection(db, 'practicePlans'),
+      collection(getDb(), 'practicePlans'),
       where('teamId', '==', teamId),
       orderBy('createdAt', 'desc')
     );
-    
+
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    return querySnapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
     })) as PracticePlan[];
   } catch (error) {
     console.error('Error fetching practice plans:', error);
@@ -347,7 +355,7 @@ export async function updatePracticePlan(teamId: string, planId: string, updates
   };
 
   try {
-    await updateDoc(doc(db, 'practicePlans', planId), data);
+    await updateDoc(doc(getDb(), 'practicePlans', planId), data);
   } catch (error) {
     if (!isOnline) {
       addToOfflineQueue({
@@ -364,9 +372,9 @@ export async function updatePracticePlan(teamId: string, planId: string, updates
 
 export async function deletePracticePlan(teamId: string, planId: string): Promise<void> {
   getCurrentUser(); // Ensure authenticated
-  
+
   try {
-    await deleteDoc(doc(db, 'practicePlans', planId));
+    await deleteDoc(doc(getDb(), 'practicePlans', planId));
   } catch (error) {
     if (!isOnline) {
       addToOfflineQueue({
@@ -393,7 +401,7 @@ export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'team
   };
 
   try {
-    const docRef = await addDoc(collection(db, 'plays'), play);
+    const docRef = await addDoc(collection(getDb(), 'plays'), play);
     return docRef.id;
   } catch (error) {
     if (!isOnline) {
@@ -415,15 +423,15 @@ export async function getPlays(teamId: string): Promise<Play[]> {
   
   try {
     const q = query(
-      collection(db, 'plays'),
+      collection(getDb(), 'plays'),
       where('teamId', '==', teamId),
       orderBy('createdAt', 'desc')
     );
-    
+
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    return querySnapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
     })) as Play[];
   } catch (error) {
     console.error('Error fetching plays:', error);
@@ -440,7 +448,7 @@ export async function updatePlay(teamId: string, playId: string, updates: Partia
   };
 
   try {
-    await updateDoc(doc(db, 'plays', playId), data);
+    await updateDoc(doc(getDb(), 'plays', playId), data);
   } catch (error) {
     if (!isOnline) {
       addToOfflineQueue({
@@ -457,9 +465,9 @@ export async function updatePlay(teamId: string, playId: string, updates: Partia
 
 export async function deletePlay(teamId: string, playId: string): Promise<void> {
   getCurrentUser(); // Ensure authenticated
-  
+
   try {
-    await deleteDoc(doc(db, 'plays', playId));
+    await deleteDoc(doc(getDb(), 'plays', playId));
   } catch (error) {
     if (!isOnline) {
       addToOfflineQueue({
@@ -476,15 +484,15 @@ export async function deletePlay(teamId: string, playId: string): Promise<void> 
 // REAL-TIME SUBSCRIPTIONS
 export function subscribeToPracticePlans(teamId: string, callback: (plans: PracticePlan[]) => void) {
   const q = query(
-    collection(db, 'practicePlans'),
+    collection(getDb(), 'practicePlans'),
     where('teamId', '==', teamId),
     orderBy('createdAt', 'desc')
   );
 
   return onSnapshot(q, (snapshot) => {
-    const plans = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    const plans = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
     })) as PracticePlan[];
     callback(plans);
   });
@@ -492,15 +500,15 @@ export function subscribeToPracticePlans(teamId: string, callback: (plans: Pract
 
 export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => void) {
   const q = query(
-    collection(db, 'plays'),
+    collection(getDb(), 'plays'),
     where('teamId', '==', teamId),
     orderBy('createdAt', 'desc')
   );
 
   return onSnapshot(q, (snapshot) => {
-    const plays = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    const plays = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
     })) as Play[];
     callback(plays);
   });
