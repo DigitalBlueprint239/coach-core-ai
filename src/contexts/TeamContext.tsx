@@ -1,17 +1,17 @@
-// @ts-nocheck
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  getDoc, 
-  getDocs, 
-  query, 
-  where, 
+import {
+  collection,
+  doc,
+  addDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
   updateDoc,
   deleteDoc,
   onSnapshot,
-  serverTimestamp 
+  serverTimestamp,
+  type Firestore
 } from 'firebase/firestore';
 import { db, auth } from '../services/firebase';
 
@@ -45,6 +45,18 @@ interface TeamContextType {
   leaveTeam: (teamId: string) => Promise<void>;
   updateTeamMember: (teamId: string, memberId: string, updates: Partial<TeamMember>) => Promise<void>;
   removeTeamMember: (teamId: string, memberId: string) => Promise<void>;
+}
+
+function getDb(): Firestore {
+  if (!db) throw new Error('Firestore not initialized');
+  return db;
+}
+
+function requireCurrentUser() {
+  if (!auth) throw new Error('Firebase Auth not initialized');
+  const user = auth.currentUser;
+  if (!user) throw new Error('User must be authenticated');
+  return user;
 }
 
 const TeamContext = createContext<TeamContextType | undefined>(undefined);
@@ -81,15 +93,15 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const createTeam = async (name: string): Promise<string> => {
     try {
       setError(null);
-      const user = auth.currentUser;
-      if (!user) throw new Error('User must be authenticated');
+      const firestore = getDb();
+      const user = requireCurrentUser();
 
       // Generate unique team code
       let code: string;
       let isUnique = false;
       do {
         code = generateTeamCode();
-        const existingTeam = await getDocs(query(collection(db, 'teams'), where('code', '==', code)));
+        const existingTeam = await getDocs(query(collection(firestore, 'teams'), where('code', '==', code)));
         isUnique = existingTeam.empty;
       } while (!isUnique);
 
@@ -108,7 +120,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
         updatedAt: serverTimestamp()
       };
 
-      const docRef = await addDoc(collection(db, 'teams'), teamData);
+      const docRef = await addDoc(collection(firestore, 'teams'), teamData);
       return docRef.id;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create team';
@@ -121,11 +133,11 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const joinTeam = async (code: string): Promise<void> => {
     try {
       setError(null);
-      const user = auth.currentUser;
-      if (!user) throw new Error('User must be authenticated');
+      const firestore = getDb();
+      const user = requireCurrentUser();
 
       // Find team by code
-      const teamQuery = query(collection(db, 'teams'), where('code', '==', code));
+      const teamQuery = query(collection(firestore, 'teams'), where('code', '==', code));
       const teamSnapshot = await getDocs(teamQuery);
       
       if (teamSnapshot.empty) {
@@ -152,7 +164,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
       const updatedMemberIds = [...teamData.memberIds, user.uid];
       const updatedMemberDetails = [...teamData.memberDetails, newMember];
-      await updateDoc(doc(db, 'teams', teamId), {
+      await updateDoc(doc(firestore, 'teams', teamId), {
         memberIds: updatedMemberIds,
         memberDetails: updatedMemberDetails,
         updatedAt: serverTimestamp()
@@ -177,10 +189,10 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const leaveTeam = async (teamId: string): Promise<void> => {
     try {
       setError(null);
-      const user = auth.currentUser;
-      if (!user) throw new Error('User must be authenticated');
+      const firestore = getDb();
+      const user = requireCurrentUser();
 
-      const teamDoc = await getDoc(doc(db, 'teams', teamId));
+      const teamDoc = await getDoc(doc(firestore, 'teams', teamId));
       if (!teamDoc.exists()) {
         throw new Error('Team not found');
       }
@@ -191,10 +203,10 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
       if (updatedMemberIds.length === 0) {
         // If no members left, delete the team
-        await deleteDoc(doc(db, 'teams', teamId));
+        await deleteDoc(doc(firestore, 'teams', teamId));
       } else {
         // Update team with remaining members
-        await updateDoc(doc(db, 'teams', teamId), {
+        await updateDoc(doc(firestore, 'teams', teamId), {
           memberIds: updatedMemberIds,
           memberDetails: updatedMemberDetails,
           updatedAt: serverTimestamp()
@@ -222,17 +234,18 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const updateTeamMember = async (teamId: string, memberId: string, updates: Partial<TeamMember>): Promise<void> => {
     try {
       setError(null);
-      const teamDoc = await getDoc(doc(db, 'teams', teamId));
-      if (!teamDoc.exists()) {
+      const firestore = getDb();
+      const teamDocSnap = await getDoc(doc(firestore, 'teams', teamId));
+      if (!teamDocSnap.exists()) {
         throw new Error('Team not found');
       }
 
-      const teamData = teamDoc.data() as Team;
-      const updatedMemberDetails = teamData.memberDetails.map(member => 
+      const teamData = teamDocSnap.data() as Team;
+      const updatedMemberDetails = teamData.memberDetails.map(member =>
         member.id === memberId ? { ...member, ...updates } : member
       );
 
-      await updateDoc(doc(db, 'teams', teamId), {
+      await updateDoc(doc(firestore, 'teams', teamId), {
         memberDetails: updatedMemberDetails,
         updatedAt: serverTimestamp()
       });
@@ -247,21 +260,22 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const removeTeamMember = async (teamId: string, memberId: string): Promise<void> => {
     try {
       setError(null);
-      const teamDoc = await getDoc(doc(db, 'teams', teamId));
-      if (!teamDoc.exists()) {
+      const firestore = getDb();
+      const teamDocSnap = await getDoc(doc(firestore, 'teams', teamId));
+      if (!teamDocSnap.exists()) {
         throw new Error('Team not found');
       }
 
-      const teamData = teamDoc.data() as Team;
+      const teamData = teamDocSnap.data() as Team;
       const updatedMemberIds = teamData.memberIds.filter(id => id !== memberId);
       const updatedMemberDetails = teamData.memberDetails.filter(member => member.id !== memberId);
 
       if (updatedMemberIds.length === 0) {
         // If no members left, delete the team
-        await deleteDoc(doc(db, 'teams', teamId));
+        await deleteDoc(doc(firestore, 'teams', teamId));
       } else {
         // Update team with remaining members
-        await updateDoc(doc(db, 'teams', teamId), {
+        await updateDoc(doc(firestore, 'teams', teamId), {
           memberIds: updatedMemberIds,
           memberDetails: updatedMemberDetails,
           updatedAt: serverTimestamp()
@@ -276,6 +290,10 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   // Load user's teams
   useEffect(() => {
+    if (!auth || !db) {
+      setLoading(false);
+      return;
+    }
     const user = auth.currentUser;
     if (!user) {
       setLoading(false);

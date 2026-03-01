@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SmartPlaybook.js – Main application component
  * - Orchestrates all Smart Playbook functionality
@@ -42,6 +41,33 @@ import Toolbar from './components/Toolbar';
 import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
 import { AIProvider } from '../../ai-brain/AIContext';
+import type {
+  PlayControllerPlayer,
+  PlayControllerPoint,
+  PlayControllerRoute,
+  PlayControllerState,
+  PlayControllerSavedPlay
+} from './PlayController';
+
+// Additional types for SmartPlaybook UI state
+interface DebugResult {
+  name: string;
+  category: string;
+  passed: boolean;
+  duration: number;
+}
+
+interface PlaybookNotification {
+  id: number;
+  type: string;
+  message: string;
+  duration: number;
+}
+
+interface RoutePreset {
+  id: string;
+  points: PlayControllerPoint[];
+}
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -53,32 +79,32 @@ const TOUCH_THRESHOLD = 20; // pixels for touch detection
 
 const SmartPlaybook = () => {
   // Core state
-  const [players, setPlayers] = useState([]);
-  const [routes, setRoutes] = useState([]);
-  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
-  const [selectedRouteId, setSelectedRouteId] = useState(null);
-  const [mode, setMode] = useState('view'); // view, player, route, delete
-  const [savedPlays, setSavedPlays] = useState([]);
+  const [players, setPlayers] = useState<PlayControllerPlayer[]>([]);
+  const [routes, setRoutes] = useState<PlayControllerRoute[]>([]);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
+  const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
+  const [mode, setMode] = useState<string>('view');
+  const [savedPlays, setSavedPlays] = useState<PlayControllerSavedPlay[]>([]);
   const [currentPlayName, setCurrentPlayName] = useState('');
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
   const [currentPlayType, setCurrentPlayType] = useState('pass');
 
   // Route drawing state
   const [isDrawingRoute, setIsDrawingRoute] = useState(false);
-  const [routePoints, setRoutePoints] = useState([]);
+  const [routePoints, setRoutePoints] = useState<PlayControllerPoint[]>([]);
   const [routeType, setRouteType] = useState('custom');
   const [routeColor, setRouteColor] = useState('#ef4444');
 
   // Undo/Redo state
-  const [undoStack, setUndoStack] = useState([]);
-  const [redoStack, setRedoStack] = useState([]);
+  const [undoStack, setUndoStack] = useState<PlayControllerState[]>([]);
+  const [redoStack, setRedoStack] = useState<PlayControllerState[]>([]);
 
   // UI state
   const [showLibrary, setShowLibrary] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
-  const [debugResults, setDebugResults] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [debugResults, setDebugResults] = useState<DebugResult[]>([]);
+  const [notifications, setNotifications] = useState<PlaybookNotification[]>([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Refs
@@ -123,7 +149,7 @@ const SmartPlaybook = () => {
 
   // Prevent double-tap zoom on mobile
   useEffect(() => {
-    const preventDoubleTapZoom = (event) => {
+    const preventDoubleTapZoom = (event: TouchEvent) => {
       if (event.touches.length > 1) {
         event.preventDefault();
       }
@@ -163,7 +189,7 @@ const SmartPlaybook = () => {
   }, [savedPlays]);
 
   // Save current state to undo stack
-  const saveToUndoStack = useCallback((action) => {
+  const saveToUndoStack = useCallback((action: string) => {
     const currentState = {
       players: [...players],
       routes: [...routes],
@@ -207,7 +233,7 @@ const SmartPlaybook = () => {
   }, [undoStack, redoStack, players, routes]);
 
   // Get canvas coordinates from event
-  const getCanvasCoordinates = useCallback((event) => {
+  const getCanvasCoordinates = useCallback((event: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
 
@@ -215,14 +241,17 @@ const SmartPlaybook = () => {
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
-    let clientX, clientY;
-    
-    if (event.touches && event.touches[0]) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
+    let clientX: number, clientY: number;
+
+    const nativeEvent = 'nativeEvent' in event ? event.nativeEvent : event;
+    if ('touches' in nativeEvent && nativeEvent.touches && nativeEvent.touches[0]) {
+      clientX = nativeEvent.touches[0].clientX;
+      clientY = nativeEvent.touches[0].clientY;
+    } else if ('clientX' in nativeEvent) {
+      clientX = nativeEvent.clientX;
+      clientY = nativeEvent.clientY;
     } else {
-      clientX = event.clientX;
-      clientY = event.clientY;
+      return null;
     }
 
     return {
@@ -232,7 +261,7 @@ const SmartPlaybook = () => {
   }, []);
 
   // Handle canvas click/touch
-  const handleCanvasEvent = useCallback((event) => {
+  const handleCanvasEvent = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
 
     if (!canvasRef.current) return;
@@ -246,22 +275,26 @@ const SmartPlaybook = () => {
       return;
     }
 
+    // Handle delete mode
+    if (mode === 'delete') {
+      const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
+      if (clickedPlayer) {
+        saveToUndoStack('delete_player');
+        setPlayers(prev => removePlayer(prev, clickedPlayer.id));
+        setRoutes(prev => prev.filter(route => route.playerId !== clickedPlayer.id));
+        setSelectedPlayerId(null);
+      }
+      return;
+    }
+
     // Handle player selection
     if (mode === 'view' || mode === 'player') {
       const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
-      
+
       if (clickedPlayer) {
-        if (mode === 'delete') {
-          // Delete player
-          saveToUndoStack('delete_player');
-          setPlayers(prev => removePlayer(prev, clickedPlayer.id));
-          setRoutes(prev => prev.filter(route => route.playerId !== clickedPlayer.id));
-          setSelectedPlayerId(null);
-        } else {
-          // Select player
-          setSelectedPlayerId(clickedPlayer.id);
-          setPlayers(prev => selectPlayer(prev, clickedPlayer.id));
-        }
+        // Select player
+        setSelectedPlayerId(clickedPlayer.id);
+        setPlayers(prev => selectPlayer(prev, clickedPlayer.id));
       } else {
         // Deselect if clicking empty space
         setSelectedPlayerId(null);
@@ -278,7 +311,7 @@ const SmartPlaybook = () => {
   }, [mode, isDrawingRoute, players, getCanvasCoordinates, saveToUndoStack]);
 
   // Handle player drag
-  const handlePlayerDrag = useCallback((playerId, newX, newY) => {
+  const handlePlayerDrag = useCallback((playerId: string, newX: number, newY: number) => {
     // Constrain to field boundaries
     const constrainedX = Math.max(20, Math.min(FIELD_DIMENSIONS.width - 20, newX));
     const constrainedY = Math.max(20, Math.min(FIELD_DIMENSIONS.height - 20, newY));
@@ -287,30 +320,30 @@ const SmartPlaybook = () => {
   }, [FIELD_DIMENSIONS.width, FIELD_DIMENSIONS.height]);
 
   // Handle player drag end (save to undo stack)
-  const handlePlayerDragEnd = useCallback((playerId) => {
+  const handlePlayerDragEnd = useCallback((playerId: string) => {
     saveToUndoStack('move_player');
     addNotification('success', 'Player moved successfully');
   }, [saveToUndoStack]);
 
   // Add notification helper
-  const addNotification = useCallback((type, message, duration = 3000) => {
+  const addNotification = useCallback((type: string, message: string, duration = 3000) => {
     const id = Date.now() + Math.random();
     setNotifications(prev => [...prev, { id, type, message, duration }]);
   }, []);
 
   // Remove notification helper
-  const removeNotification = useCallback((id) => {
+  const removeNotification = useCallback((id: number) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   }, []);
 
   // Handle route selection
-  const handleRouteSelect = useCallback((routeId) => {
+  const handleRouteSelect = useCallback((routeId: string) => {
     setSelectedRouteId(routeId);
     setSelectedPlayerId(null); // Deselect player when selecting route
   }, []);
 
   // Handle route update
-  const handleRouteUpdate = useCallback((routeId, updates) => {
+  const handleRouteUpdate = useCallback((routeId: string, updates: Partial<PlayControllerRoute>) => {
     saveToUndoStack('update_route');
     setRoutes(prev => prev.map(route => 
       route.id === routeId ? { ...route, ...updates } : route
@@ -318,14 +351,14 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack]);
 
   // Handle route deletion
-  const handleRouteDelete = useCallback((routeId) => {
+  const handleRouteDelete = useCallback((routeId: string) => {
     saveToUndoStack('delete_route');
     setRoutes(prev => removeRoute(prev, routeId));
     setSelectedRouteId(null);
   }, [saveToUndoStack]);
 
   // Handle preset route application
-  const handleApplyPreset = useCallback((routeId, preset) => {
+  const handleApplyPreset = useCallback((routeId: string, preset: RoutePreset) => {
     saveToUndoStack('apply_preset_route');
     const route = routes.find(r => r.id === routeId);
     if (!route) return;
@@ -345,7 +378,7 @@ const SmartPlaybook = () => {
   }, [routes, players, saveToUndoStack]);
 
   // Start route drawing
-  const startRouteDrawing = useCallback((playerId) => {
+  const startRouteDrawing = useCallback((playerId: string) => {
     const player = players.find(p => p.id === playerId);
     if (!player) return;
 
@@ -358,7 +391,7 @@ const SmartPlaybook = () => {
 
   // Finish route drawing
   const finishRouteDrawing = useCallback(() => {
-    if (routePoints.length < 2) {
+    if (routePoints.length < 2 || !selectedPlayerId) {
       setIsDrawingRoute(false);
       setRoutePoints([]);
       return;
@@ -381,7 +414,7 @@ const SmartPlaybook = () => {
   }, []);
 
   // Load formation
-  const loadFormation = useCallback((formationType) => {
+  const loadFormation = useCallback((formationType: string) => {
     const centerX = FIELD_DIMENSIONS.width / 2;
     const centerY = FIELD_DIMENSIONS.height / 2;
     
@@ -404,7 +437,7 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack]);
 
   // Save current play
-  const saveCurrentPlay = useCallback((name, phase, type) => {
+  const saveCurrentPlay = useCallback((name: string, phase: string, type: string) => {
     if (!name.trim() || players.length === 0) {
       addNotification('error', 'Please enter a play name and add at least one player.');
       return;
@@ -425,7 +458,7 @@ const SmartPlaybook = () => {
   }, [players, routes, currentPlayPhase, currentPlayType, addNotification]);
 
   // Load play
-  const loadPlay = useCallback((play) => {
+  const loadPlay = useCallback((play: PlayControllerSavedPlay) => {
     saveToUndoStack('load_play');
     setPlayers([...play.players]);
     setRoutes([...play.routes]);
@@ -438,7 +471,7 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack, addNotification]);
 
   // Delete play
-  const deletePlay = useCallback((playId) => {
+  const deletePlay = useCallback((playId: string) => {
     if (window.confirm('Are you sure you want to delete this play?')) {
       setSavedPlays(prev => prev.filter(play => play.id !== playId));
       addNotification('success', 'Play deleted successfully');
@@ -542,7 +575,7 @@ const SmartPlaybook = () => {
             <PlayerControls
               selectedPlayer={players.find(p => p.id === selectedPlayerId)}
               players={players}
-              onUpdatePlayer={(updates) => {
+              onUpdatePlayer={(updates: Record<string, unknown>) => {
                 saveToUndoStack('update_player');
                 setPlayers(prev => prev.map(p => 
                   p.id === selectedPlayerId ? { ...p, ...updates } : p
@@ -640,7 +673,6 @@ const SmartPlaybook = () => {
                 savedPlays={savedPlays}
                 onLoadPlay={loadPlay}
                 onDeletePlay={deletePlay}
-                onClose={() => setShowLibrary(false)}
               />
             )}
           </div>

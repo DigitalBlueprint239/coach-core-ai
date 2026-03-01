@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/security-verification.ts
 import { 
   doc, 

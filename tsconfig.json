@@ -24,6 +24,12 @@
     "src/components/coach-core-integration.ts",
     "src/components/coach-core-integration.tsx",
     "src/components/coach-core-backend.ts",
-    "src/components/SmartPlaybook/src/**/*"
+    "src/components/coach-core-complete-integration.tsx",
+    "src/components/fixed-core-functionality.tsx",
+    "src/components/OfflineFallbacks.tsx",
+    "src/components/SmartPlaybook/src/**/*",
+    "src/coach-core-ai/**/*",
+    "src/utils/**/*",
+    "src/components/Coach Core AI Brain /**/*"
   ]
 }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
 import { auth } from '../services/firebase';
 import {
@@ -35,6 +34,11 @@ export const useAuth = () => {
   return context;
 };
 
+function getAuth_(): NonNullable<typeof auth> {
+  if (!auth) throw new Error('Firebase Auth not initialized');
+  return auth;
+}
+
 function useProvideAuth(): AuthContextType {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,9 +57,10 @@ function useProvideAuth(): AuthContextType {
   }, []);
 
   const signup = async (email: string, password: string) => {
+    const firebaseAuth = getAuth_();
     setLoading(true);
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(firebaseAuth, email, password);
       setUser(result.user);
       return result.user;
     } catch (error) {
@@ -67,9 +72,10 @@ function useProvideAuth(): AuthContextType {
   };
 
   const login = async (email: string, password: string) => {
+    const firebaseAuth = getAuth_();
     setLoading(true);
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(firebaseAuth, email, password);
       setUser(result.user);
       return result.user;
     } catch (error) {
@@ -81,10 +87,11 @@ function useProvideAuth(): AuthContextType {
   };
 
   const loginWithGoogle = async () => {
+    const firebaseAuth = getAuth_();
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(firebaseAuth, provider);
       setUser(result.user);
       return result.user;
     } catch (error) {
@@ -96,9 +103,10 @@ function useProvideAuth(): AuthContextType {
   };
 
   const logout = async () => {
+    const firebaseAuth = getAuth_();
     setLoading(true);
     try {
-      await signOut(auth);
+      await signOut(firebaseAuth);
       setUser(null);
     } finally {
       setLoading(false);

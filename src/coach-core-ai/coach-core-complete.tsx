@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef, memo, createContext, useContext } from 'react';
 import { 
   Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity, 
