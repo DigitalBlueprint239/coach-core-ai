@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import StartupErrorBoundary from './components/StartupErrorBoundary';
 import { AIProvider } from './ai-brain/AIContext';
 import Dashboard from './components/Dashboard';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -79,45 +80,47 @@ const App: React.FC = () => {
   };
 
   return (
-    <ErrorBoundary children={
-      <ToastManager>
-        <AuthProvider>
-          <TeamProvider>
-            <AIProvider>
-              <div className="min-h-screen bg-gray-50">
-                <nav className="bg-white shadow-sm border-b">
-                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                      <div className="flex items-center space-x-8">
-                        <div className="flex items-center space-x-1">
-                          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
+    <StartupErrorBoundary>
+      <ErrorBoundary children={
+        <ToastManager>
+          <AuthProvider>
+            <TeamProvider>
+              <AIProvider>
+                <div className="min-h-screen bg-gray-50">
+                  <nav className="bg-white shadow-sm border-b">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                      <div className="flex items-center justify-between h-16">
+                        <div className="flex items-center space-x-8">
+                          <div className="flex items-center space-x-1">
+                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                              </svg>
+                            </div>
+                            <span className="text-xl font-bold text-gray-900">Coach Core</span>
                           </div>
-                          <span className="text-xl font-bold text-gray-900">Coach Core</span>
                         </div>
                       </div>
                     </div>
+                  </nav>
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <MigrationBanner />
+                    {renderContent()}
                   </div>
-                </nav>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                  <MigrationBanner />
-                  {renderContent()}
+                  <PWAInstallPrompt showOnLoad={true} />
+                  <OnboardingModal
+                    open={showOnboarding}
+                    onClose={handleOnboardingClose}
+                    onDemoMode={handleDemoMode}
+                    onComplete={handleOnboardingClose}
+                  />
                 </div>
-                <PWAInstallPrompt showOnLoad={true} />
-                <OnboardingModal
-                  open={showOnboarding}
-                  onClose={handleOnboardingClose}
-                  onDemoMode={handleDemoMode}
-                  onComplete={handleOnboardingClose}
-                />
-              </div>
-            </AIProvider>
-          </TeamProvider>
-        </AuthProvider>
-      </ToastManager>
-    } />
+              </AIProvider>
+            </TeamProvider>
+          </AuthProvider>
+        </ToastManager>
+      } />
+    </StartupErrorBoundary>
   );
 };
 
