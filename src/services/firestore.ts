@@ -1,65 +1,6 @@
-// @ts-nocheck
-// src/services/firestore.ts
-import { initializeApp, getApps } from 'firebase/app';
-import { 
-  getFirestore, 
-  doc, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  getDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  onSnapshot,
-  connectFirestoreEmulator,
-  enableNetwork,
-  disableNetwork
-} from 'firebase/firestore';
-import { getAuth, connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
-
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
-};
-
-// Initialize Firebase only once
-let app;
-let db;
-let auth;
-
-try {
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApps()[0];
-  }
-
-  db = getFirestore(app);
-  auth = getAuth(app);
-
-  // Connect to emulators in development
-  if (process.env.REACT_APP_USE_EMULATOR === 'true' && process.env.NODE_ENV === 'development') {
-    try {
-      connectFirestoreEmulator(db, 'localhost', 8080);
-      connectAuthEmulator(auth, 'http://localhost:9099');
-    } catch (error) {
-      console.log('Emulators already connected');
-    }
-  }
-} catch (error) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.error('Firestore initialization failed:', error);
-  }
-}
+import { doc, collection, addDoc, getDocs, getDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, connectFirestoreEmulator, enableNetwork, disableNetwork } from 'firebase/firestore';
+import { connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
+import { db, auth } from "../firebase";
 
 // Types
 export interface PracticePlan {
@@ -130,34 +71,30 @@ export interface Player {
   y: number;
 }
 
-// Auth state management
-let currentUser: User | null = null;
-let authStateReady = false;
-let authStateListeners: ((user: User | null) => void)[] = [];
-
-// Listen for auth state changes
-if (auth) {
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    authStateReady = true;
-    authStateListeners.forEach(listener => listener(user));
-  });
+// Firebase Emulators (for local development)
+if (process.env.NODE_ENV === 'development') {
+  // connectAuthEmulator(auth, 'http://localhost:9099');
+  // connectFirestoreEmulator(db, 'localhost', 8080);
 }
 
-// Helper function to get current user with proper error handling
-function getCurrentUser(): User {
-  if (!authStateReady) {
-    throw new Error('Auth state not ready. Please wait for authentication to initialize.');
-  }
-  
+// Auth State Management
+let currentUser: User | null = null;
+let authStateReady = false;
+const authStateListeners: ((user: User | null) => void)[] = [];
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  authStateReady = true;
+  authStateListeners.forEach(listener => listener(user));
+});
+
+export function getCurrentUser(): User {
   if (!currentUser) {
-    throw new Error('User must be authenticated to perform this operation.');
+    throw new Error('No authenticated user found. Please log in.');
   }
-  
   return currentUser;
 }
 
-// Helper function to wait for auth state
 export function waitForAuth(): Promise<User | null> {
   return new Promise((resolve) => {
     if (authStateReady) {
@@ -168,7 +105,6 @@ export function waitForAuth(): Promise<User | null> {
   });
 }
 
-// Subscribe to auth state changes
 export function onAuthStateChange(listener: (user: User | null) => void): () => void {
   authStateListeners.push(listener);
   
@@ -176,8 +112,7 @@ export function onAuthStateChange(listener: (user: User | null) => void): () => 
   if (authStateReady) {
     listener(currentUser);
   }
-  
-  // Return unsubscribe function
+
   return () => {
     const index = authStateListeners.indexOf(listener);
     if (index > -1) {
@@ -186,62 +121,34 @@ export function onAuthStateChange(listener: (user: User | null) => void): () => 
   };
 }
 
-// Offline queue management
-let offlineQueue: any[] = [];
+// Offline Persistence (for Firestore)
 let isOnline = navigator.onLine;
-const MAX_QUEUE_SIZE = 100; // Prevent unlimited growth
+let offlineQueue: any[] = [];
 
-// Network status monitoring
 window.addEventListener('online', () => {
   isOnline = true;
-  enableNetwork(db);
   syncOfflineQueue();
 });
 
 window.addEventListener('offline', () => {
   isOnline = false;
-  disableNetwork(db);
 });
 
-// Load offline queue from localStorage
-function loadOfflineQueue() {
-  const stored = localStorage.getItem('firestore_offline_queue');
-  if (stored) {
-    try {
-      offlineQueue = JSON.parse(stored);
-      // Limit queue size to prevent memory issues
-      if (offlineQueue.length > MAX_QUEUE_SIZE) {
-        offlineQueue = offlineQueue.slice(-MAX_QUEUE_SIZE);
-        saveOfflineQueue();
-      }
-    } catch (error) {
-      console.error('Failed to parse offline queue:', error);
-      offlineQueue = [];
-    }
-  }
-}
-
 function saveOfflineQueue() {
-  localStorage.setItem('firestore_offline_queue', JSON.stringify(offlineQueue));
+  localStorage.setItem('offline_operations', JSON.stringify(offlineQueue));
 }
 
-function addToOfflineQueue(operation: any) {
-  // Prevent queue from growing too large
-  if (offlineQueue.length >= MAX_QUEUE_SIZE) {
-    console.warn('Offline queue is full. Removing oldest operation.');
-    offlineQueue.shift();
+function loadOfflineQueue() {
+  const storedQueue = localStorage.getItem('offline_operations');
+  if (storedQueue) {
+    offlineQueue = JSON.parse(storedQueue);
   }
-  
-  offlineQueue.push({
-    ...operation,
-    id: `offline_${Date.now()}_${Math.random()}`,
-    timestamp: new Date().toISOString()
-  });
-  saveOfflineQueue();
 }
 
 async function syncOfflineQueue() {
-  if (!isOnline || offlineQueue.length === 0) return;
+  if (!isOnline || offlineQueue.length === 0) {
+    return;
+  }
 
   const queue = [...offlineQueue];
   offlineQueue = [];
@@ -250,10 +157,10 @@ async function syncOfflineQueue() {
   for (const operation of queue) {
     try {
       await executeOperation(operation);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to sync offline operation:', error);
       // Only add back to queue if it's not a permanent error
-      if (!error.message?.includes('permission-denied')) {
+      if (!(error instanceof Error && error.message?.includes('permission-denied'))) {
         offlineQueue.push(operation);
       }
     }
@@ -506,45 +413,48 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
   });
 }
 
-// UTILITY FUNCTIONS
-export function isOffline(): boolean {
-  return !isOnline;
-}
-
-export function getOfflineQueueSize(): number {
-  return offlineQueue.length;
-}
-
-export function getMaxQueueSize(): number {
-  return MAX_QUEUE_SIZE;
-}
-
-// MIGRATION HELPER
-export async function migrateFromLocalStorage(teamId: string): Promise<boolean> {
-  try {
-    // Migrate practice plans
-    const storedPlans = localStorage.getItem('practicePlans');
-    if (storedPlans) {
-      const plans = JSON.parse(storedPlans);
-      for (const plan of plans) {
-        await savePracticePlan(teamId, plan);
+export async function migrateFromLocalStorage(teamId: string): Promise<void> {
+  // Migrate any data from localStorage to Firestore
+  const localStorageKey = `coach-core-ai-${teamId}`;
+  const localData = localStorage.getItem(localStorageKey);
+  
+  if (localData) {
+    try {
+      const data = JSON.parse(localData);
+      // Migrate plays
+      if (data.plays && Array.isArray(data.plays)) {
+        for (const play of data.plays) {
+          await savePlay(teamId, {
+            name: play.name,
+            formation: play.formation,
+            description: play.description || '',
+            routes: play.routes || [],
+            players: play.players || [],
+            tags: play.tags || [],
+            difficulty: play.difficulty || 'beginner',
+            sport: play.sport || 'football'
+          });
+        }
       }
-      localStorage.removeItem('practicePlans');
-    }
-
-    // Migrate plays
-    const storedPlays = localStorage.getItem('plays');
-    if (storedPlays) {
-      const plays = JSON.parse(storedPlays);
-      for (const play of plays) {
-        await savePlay(teamId, play);
+      // Migrate practice plans
+      if (data.plans && Array.isArray(data.plans)) {
+        for (const plan of data.plans) {
+          await savePracticePlan(teamId, {
+            name: plan.name,
+            date: plan.date,
+            duration: plan.duration,
+            periods: plan.periods || [],
+            goals: plan.goals || [],
+            notes: plan.notes || ''
+          });
+        }
       }
-      localStorage.removeItem('plays');
+      // Clear localStorage after successful migration
+      localStorage.removeItem(localStorageKey);
+    } catch (error) {
+      console.error('Error migrating from localStorage:', error);
     }
-
-    return true;
-  } catch (error) {
-    console.error('Migration failed:', error);
-    return false;
   }
 }
+
+export { db, auth };
