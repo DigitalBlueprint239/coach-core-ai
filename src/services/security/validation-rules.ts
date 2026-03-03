@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { ZodIssue } from 'zod';
 
 // Base validation schemas
 export const emailSchema = z.string()
@@ -19,14 +20,22 @@ export const teamIdSchema = z.string()
 export const timestampSchema = z.date()
   .refine((date) => date instanceof Date && !isNaN(date.getTime()), 'Invalid timestamp');
 
+export const ipAddressSchema = z.string().refine(
+  (value) =>
+    /^(?:(?:\d{1,3}\.){3}\d{1,3}|(?:[a-fA-F0-9]{0,4}:){2,7}[a-fA-F0-9]{0,4})$/.test(
+      value.trim()
+    ),
+  'Invalid IP address'
+);
+
 // Waitlist validation
 export const waitlistEntrySchema = z.object({
   email: emailSchema,
   timestamp: timestampSchema,
   source: z.string().max(50).optional(),
-  ipAddress: z.string().ip().optional(),
+  ipAddress: ipAddressSchema.optional(),
   userAgent: z.string().max(500).optional(),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.string(), z.unknown()).optional()
 });
 
 // Staging feedback validation
@@ -161,7 +170,7 @@ export const rateLimitSchema = z.object({
   lastAttempt: timestampSchema.optional(),
   blocked: z.boolean(),
   blockExpiry: timestampSchema.optional(),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.string(), z.unknown()).optional()
 });
 
 // Audit log validation
@@ -176,17 +185,26 @@ export const auditLogSchema = z.object({
   userId: userIdSchema.optional(),
   userEmail: emailSchema.optional(),
   userAgent: z.string().max(500).optional(),
-  ipAddress: z.string().ip().optional(),
+  ipAddress: ipAddressSchema.optional(),
   timestamp: timestampSchema,
-  details: z.record(z.any()),
+  details: z.record(z.string(), z.unknown()),
   severity: z.enum(['low', 'medium', 'high', 'critical']),
   environment: z.enum(['development', 'staging', 'production']),
   success: z.boolean(),
   errorMessage: z.string().max(1000).optional(),
   sessionId: z.string().max(100).optional(),
   teamId: teamIdSchema.optional(),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.string(), z.unknown()).optional()
 });
+
+export type WaitlistEntry = z.infer<typeof waitlistEntrySchema>;
+export type StagingFeedback = z.infer<typeof stagingFeedbackSchema>;
+export type UserProfile = z.infer<typeof userProfileSchema>;
+export type Team = z.infer<typeof teamSchema>;
+export type Play = z.infer<typeof playSchema>;
+export type Game = z.infer<typeof gameSchema>;
+export type RateLimit = z.infer<typeof rateLimitSchema>;
+export type AuditLog = z.infer<typeof auditLogSchema>;
 
 // Validation helper functions
 export class ValidationService {
@@ -199,7 +217,9 @@ export class ValidationService {
       return { success: true, data: result };
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errorMessage = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+        const errorMessage = error.issues
+          .map((issue: ZodIssue) => `${issue.path.join('.')}: ${issue.message}`)
+          .join(', ');
         return { success: false, error: errorMessage };
       }
       return { success: false, error: 'Validation failed' };
@@ -303,4 +323,3 @@ export class ValidationService {
 }
 
 export default ValidationService;
-

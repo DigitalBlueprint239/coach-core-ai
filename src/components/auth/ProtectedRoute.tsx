@@ -11,6 +11,11 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = false }) => {
   const { user, profile, isLoading } = useAuth();
   const location = useLocation();
+  const bypassAuth = (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_E2E_BYPASS_AUTH === 'true';
+
+  if (bypassAuth) {
+    return <>{children}</>;
+  }
 
   if (isLoading) {
     return (

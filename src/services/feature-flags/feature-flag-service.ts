@@ -119,6 +119,14 @@ class FeatureFlagService {
       enabledFor: 'beta_users' as const,
       lastModified: new Date(),
     },
+    recruitingHub: {
+      key: 'recruitingHub',
+      value: false,
+      description: 'Enable Recruiting Intelligence Hub feature set',
+      category: 'beta' as const,
+      enabledFor: 'beta_users' as const,
+      lastModified: new Date(),
+    },
   };
 
   constructor() {

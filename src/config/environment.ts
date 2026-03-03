@@ -59,6 +59,7 @@ export interface EnvironmentConfig {
     enableOfflineMode: boolean;
     enableHudlIntegration: boolean;
     enableStripeIntegration: boolean;
+    enableRecruitingHub: boolean;
   };
 
   // Development
@@ -103,6 +104,7 @@ const optionalEnvVars = {
   REACT_APP_ENABLE_OFFLINE_MODE: 'Enable Offline Mode',
   REACT_APP_ENABLE_HUDL_INTEGRATION: 'Enable Hudl Integration',
   REACT_APP_ENABLE_STRIPE_INTEGRATION: 'Enable Stripe Integration',
+  VITE_FEATURE_RECRUITING: 'Enable Recruiting Hub Feature Flag',
 
   // Security (optional)
   REACT_APP_ENABLE_CSP: 'Enable Content Security Policy',
@@ -222,6 +224,9 @@ function buildEnvironmentConfig(): EnvironmentConfig {
         process.env.REACT_APP_ENABLE_HUDL_INTEGRATION === 'true',
       enableStripeIntegration:
         process.env.REACT_APP_ENABLE_STRIPE_INTEGRATION === 'true',
+      enableRecruitingHub:
+        process.env.VITE_FEATURE_RECRUITING === 'true' ||
+        process.env.REACT_APP_FEATURE_RECRUITING === 'true',
     },
 
     DEVELOPMENT: {

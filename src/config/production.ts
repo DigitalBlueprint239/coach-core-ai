@@ -43,5 +43,6 @@ export const productionConfig = {
     analytics: true,
     whiteLabel: false,
     apiAccess: false,
+    recruitingHub: process.env.VITE_FEATURE_RECRUITING === 'true',
   },
 };

@@ -15,6 +15,15 @@ const AIBrainDashboard = React.lazy(() => import('@components/AIBrain/AIBrainDas
 const PracticePlanner = React.lazy(() => import('@components/PracticePlanner/ModernPracticePlanner'));
 const PlaybookDesigner = React.lazy(() => import('@components/Playbook/PlaybookDesigner'));
 const AnalyticsDashboard = React.lazy(() => import('@components/analytics/AnalyticsDashboard'));
+const RecruitingLayout = React.lazy(() => import('@/pages/recruiting/RecruitingLayout'));
+const RecruitingHubHomePage = React.lazy(() => import('@/pages/recruiting/RecruitingHubHomePage'));
+const RecruitingProfilePage = React.lazy(() => import('@/pages/recruiting/RecruitingProfilePage'));
+const RecruitingHighlightsPage = React.lazy(() => import('@/pages/recruiting/RecruitingHighlightsPage'));
+const RecruitingOpportunitiesPage = React.lazy(() => import('@/pages/recruiting/RecruitingOpportunitiesPage'));
+const RecruitingDiscoverPage = React.lazy(() => import('@/pages/recruiting/RecruitingDiscoverPage'));
+const RecruitingAthleteDetailPage = React.lazy(() => import('@/pages/recruiting/RecruitingAthleteDetailPage'));
+const ProgramPortalPage = React.lazy(() => import('@/pages/recruiting/ProgramPortalPage'));
+const PublicAthleteProfilePage = React.lazy(() => import('@/pages/recruiting/PublicAthleteProfilePage'));
 
 const RouteLoader = () => (
   <Center minH="60vh">
@@ -81,6 +90,87 @@ function App() {
                       <AnalyticsDashboard />
                     </Suspense>
                   </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/recruiting"
+                element={
+                  <ProtectedRoute>
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingLayout />
+                    </Suspense>
+                  </ProtectedRoute>
+                }
+              >
+                <Route
+                  index
+                  element={
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingHubHomePage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="profile"
+                  element={
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingProfilePage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="highlights"
+                  element={
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingHighlightsPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="opportunities"
+                  element={
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingOpportunitiesPage />
+                    </Suspense>
+                  }
+                />
+              </Route>
+              <Route
+                path="/discover"
+                element={
+                  <ProtectedRoute>
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingDiscoverPage />
+                    </Suspense>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/athletes/:id"
+                element={
+                  <ProtectedRoute>
+                    <Suspense fallback={<RouteLoader />}>
+                      <RecruitingAthleteDetailPage />
+                    </Suspense>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/programs/portal"
+                element={
+                  <ProtectedRoute>
+                    <Suspense fallback={<RouteLoader />}>
+                      <ProgramPortalPage />
+                    </Suspense>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/u/:handle"
+                element={
+                  <Suspense fallback={<RouteLoader />}>
+                    <PublicAthleteProfilePage />
+                  </Suspense>
                 }
               />
               <Route

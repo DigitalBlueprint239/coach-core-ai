@@ -12,6 +12,7 @@ export interface FeatureFlags {
   enablePracticePlanner: boolean;
   enableGameCalendar: boolean;
   enablePerformanceDashboard: boolean;
+  enableRecruitingHub: boolean;
   
   // UI features
   enableDarkMode: boolean;
@@ -47,6 +48,7 @@ const DEFAULT_FEATURE_FLAGS: FeatureFlags = {
   enablePracticePlanner: false,
   enableGameCalendar: false,
   enablePerformanceDashboard: false,
+  enableRecruitingHub: false,
   
   // UI features - enabled by default
   enableDarkMode: true,

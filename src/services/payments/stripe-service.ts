@@ -31,8 +31,9 @@ const resolveEnv = (key: string): string | undefined => {
   if (typeof process !== 'undefined' && process.env) {
     return process.env[key];
   }
-  if (typeof import !== 'undefined' && (import.meta as any)?.env) {
-    return (import.meta as any).env[key];
+  const meta = (import.meta as unknown as { env?: Record<string, string | undefined> }) ?? {};
+  if (typeof meta.env !== 'undefined') {
+    return meta.env[key];
   }
   return undefined;
 };

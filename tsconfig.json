@@ -102,7 +102,7 @@
 
     /* Type Checking */
     "strict": true,                                       /* Enable all strict type-checking options. */
-    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
@@ -140,6 +140,10 @@
     "src/components/Auth/LoginPage.tsx",
     "src/components/Waitlist/**/*.ts",
     "src/components/Waitlist/**/*.tsx",
+    "src/features/recruiting/**/*.ts",
+    "src/features/recruiting/**/*.tsx",
+    "src/integrations/**/*.ts",
+    "src/integrations/**/*.tsx",
     "src/services/firebase/auth-service.ts",
     "src/services/firebase/firebase-config.ts",
     "src/services/waitlist/simple-waitlist-service.ts",
@@ -148,7 +152,9 @@
     "src/services/analytics/analytics-events.ts",
     "src/services/analytics/ga4-config.ts",
     "src/services/monitoring/monitoring-lite.ts",
+    "src/services/security/validation-rules.ts",
     "src/types/**/*.ts",
+    "src/types/**/*.d.ts",
     "src/utils/firestore-sanitization.ts",
     "src/utils/validation.ts",
     "src/utils/error-handling.ts",
@@ -161,6 +167,8 @@
     "src/components/SmartPlaybook/src",
     "src/components/Team/TeamManagementOptimized.tsx",
     "src/components/ui/ErrorBoundary.tsx",
-    "src/coach-core-ai/**"
+    "src/coach-core-ai/**",
+    "src/legacy/**",
+    "**/* 2.*"
   ]
 }
