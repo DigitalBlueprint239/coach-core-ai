@@ -13,6 +13,12 @@ service cloud.firestore {
         get(/databases/$(database)/documents/teams/$(teamId)).data.ownerId == request.auth.uid;
     }
 
+    // Users collection
+    match /users/{userId} {
+      // Users can only read and write their own profile
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
     // Teams collection
     match /teams/{teamId} {
       // Only the coach (owner) can read the team
@@ -73,6 +79,28 @@ service cloud.firestore {
       // Only the coach can delete plays
       allow delete: if isTeamOwner(resource.data.teamId)
         else error('permission-denied', 'Only the coach can delete plays.');
+    }
+
+    // Players collection
+    match /players/{playerId} {
+      // Only the coach can read/write player data in their team
+      allow read, write: if isTeamOwner(resource.data.teamId || request.resource.data.teamId);
+    }
+
+    // Staging Feedback collection
+    match /staging_feedback/{feedbackId} {
+      // Only authenticated users can create feedback
+      allow create: if isAuthenticated();
+      // Only admins or owners can read feedback (assuming admin role exists or restricting to self)
+      allow read: if isAuthenticated() && (request.auth.token.admin == true || resource.data.userId == request.auth.uid);
+      // No public updates or deletes
+      allow update, delete: if false;
+    }
+
+    // Waitlist collection (Public access allowed for signup)
+    match /waitlist/{entryId} {
+      allow create: if true; // Public can join waitlist
+      allow read, update, delete: if false; // But cannot read or modify
     }
   }
 }
