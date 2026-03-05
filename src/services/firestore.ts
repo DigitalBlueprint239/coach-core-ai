@@ -145,6 +145,11 @@ function loadOfflineQueue() {
   }
 }
 
+function addToOfflineQueue(operation: { type: string; collection: string; data?: any; docId?: string; tempId?: string }) {
+  offlineQueue.push(operation);
+  saveOfflineQueue();
+}
+
 async function syncOfflineQueue() {
   if (!isOnline || offlineQueue.length === 0) {
     return;

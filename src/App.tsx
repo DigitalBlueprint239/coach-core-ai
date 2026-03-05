@@ -4,7 +4,7 @@ import Dashboard from './components/Dashboard';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
-import { AuthProvider } from './components/AuthProvider';
+import { AuthProvider } from './hooks/useAuth';
 import { TeamProvider } from './contexts/TeamContext';
 import { TeamSelector } from './components/TeamManagement';
 import { MigrationBanner } from './components/MigrationBanner';

@@ -154,7 +154,7 @@ export function createRoute(playerId, points, type = 'custom', color = ROUTE_COL
   return {
     id: generateId(),
     playerId,
-    points: [...points], // Create a copy to prevent mutation
+    points: points.map(p => ({ ...p })), // Deep copy points to prevent mutation
     type,
     color,
     createdAt: new Date().toISOString()
