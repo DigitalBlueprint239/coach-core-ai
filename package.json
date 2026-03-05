@@ -28,15 +28,16 @@
     "@storybook/addon-links": "^9.0.16",
     "@storybook/react": "^9.0.16",
     "@storybook/testing-library": "^0.2.1",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3",
-    "react-scripts": "^5.0.1",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126"
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.18"
   },
   "browserslist": {
     "production": [
