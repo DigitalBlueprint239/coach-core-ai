@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/performance-testing.ts
 import { 
   doc, 
@@ -52,7 +51,7 @@ export interface TestScenario {
 }
 
 export interface TestOperation {
-  type: 'read' | 'write' | 'update' | 'delete' | 'query' | 'custom';
+  type: 'read' | 'write' | 'create' | 'update' | 'delete' | 'query' | 'custom';
   collection: string;
   documentId?: string;
   data?: any;
@@ -74,6 +73,7 @@ export interface TestResult {
   endTime: number;
   duration: number;
   summary: TestSummary;
+  expectedResults: ExpectedResults;
   metrics: PerformanceMetrics[];
   errors: TestError[];
   recommendations: TestRecommendation[];
@@ -164,6 +164,7 @@ export class PerformanceTestingManager {
         peakMemoryUsage: 0,
         peakCPUUsage: 0
       },
+      expectedResults: test.expectedResults,
       metrics: [],
       errors: [],
       recommendations: []
@@ -662,7 +663,7 @@ class VirtualUser {
       }
       
       const responseTime = Date.now() - startTime;
-      this.recordMetric(result, responseTime, true, operation.type);
+      this.recordMetric(result, responseTime, true, scenario.operations[scenario.operations.length - 1]?.type ?? 'custom');
       
     } catch (error) {
       const responseTime = Date.now() - startTime;
@@ -720,17 +721,18 @@ class VirtualUser {
     await deleteDoc(docRef);
   }
 
-  private async executeQueryOperation(operation: TestOperation): Promise<any> {
-    let q = collection(db, operation.collection);
-    
+  private async executeQueryOperation(operation: TestOperation): Promise<unknown[]> {
+    const collectionRef = collection(db, operation.collection);
+    let q: ReturnType<typeof query> = query(collectionRef);
+
     if (operation.filters) {
       Object.entries(operation.filters).forEach(([field, value]) => {
         q = query(q, where(field, '==', value));
       });
     }
-    
+
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snapshot.docs.map(d => ({ id: d.id, ...(d.data() as Record<string, unknown>) }));
   }
 
   private generateDocumentId(): string {

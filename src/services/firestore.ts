@@ -134,6 +134,11 @@ window.addEventListener('offline', () => {
   isOnline = false;
 });
 
+function addToOfflineQueue(operation: { type: string; collection: string; data?: Record<string, unknown>; docId?: string; tempId?: string }) {
+  offlineQueue.push(operation);
+  saveOfflineQueue();
+}
+
 function saveOfflineQueue() {
   localStorage.setItem('offline_operations', JSON.stringify(offlineQueue));
 }

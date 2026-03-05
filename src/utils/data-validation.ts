@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/data-validation.ts
 import { Timestamp } from 'firebase/firestore';
 import { 
@@ -13,14 +12,15 @@ import {
 
 export interface ValidationRule {
   required?: boolean;
-  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'timestamp' | 'email';
+  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'timestamp' | 'email' | 'enum';
   minLength?: number;
   maxLength?: number;
   min?: number;
   max?: number;
   pattern?: RegExp;
-  enum?: string[];
-  custom?: (value: any) => boolean;
+  enum?: readonly string[];
+  values?: readonly string[];
+  custom?: (value: unknown) => boolean;
   message?: string;
 }
 

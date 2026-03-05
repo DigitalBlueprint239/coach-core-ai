@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/performance-optimization.ts
 import React, { ComponentType, ReactNode, lazy, useCallback, useEffect, useState } from 'react';
 
@@ -749,7 +748,7 @@ export class APIOptimizer {
 
   clearExpiredCache(): void {
     const now = Date.now();
-    for (const [key, value] of this.cache.entries()) {
+    for (const [key, value] of Array.from(this.cache.entries())) {
       if (now - value.timestamp > value.ttl) {
         this.cache.delete(key);
       }

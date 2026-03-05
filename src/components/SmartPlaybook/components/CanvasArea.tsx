@@ -1,6 +1,5 @@
-// @ts-nocheck
 import React from 'react';
-import Field from '../:components:SmartPlaybook:Field.js';
+import Field from '../Field';
 
 interface CanvasAreaProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
