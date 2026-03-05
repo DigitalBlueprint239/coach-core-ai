@@ -2,7 +2,7 @@ import React from 'react';
 import Field from '../Field';
 
 interface CanvasAreaProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
   players: any[];
   routes: any[];
   onCanvasEvent: (e: any) => void;

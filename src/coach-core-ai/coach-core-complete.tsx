@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef, memo, createContext, useContext } from 'react';
 import { 
   Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity, 
@@ -64,7 +63,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     subscription: 'pro'
   });
 
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<unknown[]>([]);
   const [offline, setOffline] = useState(false);
 
   return (
@@ -83,7 +82,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 // PERSONA-BASED ONBOARDING SYSTEM
 // ============================================
 
-const PersonaPicker = ({ onPersonaSelect }) => {
+const PersonaPicker = ({ onPersonaSelect }: { onPersonaSelect: (id: string) => void }) => {
   const personas = [
     {
       id: 'first_time_coach',
@@ -129,7 +128,7 @@ const PersonaPicker = ({ onPersonaSelect }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {personas.map(persona => {
           const Icon = persona.icon;
-          const colorClasses = {
+          const colorClasses: Record<string, string> = {
             blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-900',
             green: 'bg-green-50 border-green-200 hover:bg-green-100 text-green-900',
             purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100 text-purple-900',
@@ -167,7 +166,24 @@ const PersonaPicker = ({ onPersonaSelect }) => {
 // VISUAL TEMPLATE GALLERY
 // ============================================
 
-const TemplateGallery = ({ sport = 'football', onSelectTemplate, onStartFromScratch }) => {
+interface PlayTemplate {
+  id: string;
+  name: string;
+  category: string;
+  preview: string;
+  description: string;
+  complexity: string;
+  successRate: number;
+  usage: string;
+  players: number;
+  thumbnail: string;
+}
+
+const TemplateGallery = ({ sport = 'football', onSelectTemplate, onStartFromScratch }: {
+  sport?: string;
+  onSelectTemplate: (template: PlayTemplate) => void;
+  onStartFromScratch: () => void;
+}) => {
   const [viewMode, setViewMode] = useState('grid');
   const [category, setCategory] = useState('all');
 
@@ -301,8 +317,8 @@ const TemplateGallery = ({ sport = 'football', onSelectTemplate, onStartFromScra
   );
 };
 
-const TemplateCard = ({ template, onSelect }) => {
-  const complexityColors = {
+const TemplateCard = ({ template, onSelect }: { template: PlayTemplate; onSelect: () => void }) => {
+  const complexityColors: Record<string, string> = {
     beginner: 'text-green-600 bg-green-50',
     intermediate: 'text-yellow-600 bg-yellow-50',
     advanced: 'text-red-600 bg-red-50'
@@ -313,7 +329,7 @@ const TemplateCard = ({ template, onSelect }) => {
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <div className="text-4xl">{template.preview}</div>
       </div>
-      
+
       <div className="p-4">
         <div className="flex items-start justify-between mb-2">
           <h3 className="font-semibold text-gray-900">{template.name}</h3>
@@ -340,7 +356,7 @@ const TemplateCard = ({ template, onSelect }) => {
   );
 };
 
-const TemplateListItem = ({ template, onSelect }) => (
+const TemplateListItem = ({ template, onSelect }: { template: PlayTemplate; onSelect: () => void }) => (
   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center justify-between hover:shadow-md transition-shadow">
     <div className="flex items-center gap-4">
       <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
@@ -370,13 +386,44 @@ const TemplateListItem = ({ template, onSelect }) => (
 // AI SUGGESTION SYSTEM WITH SAFETY GUARDRAILS
 // ============================================
 
-const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
-  const [suggestion, setSuggestion] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [safetyWarnings, setSafetyWarnings] = useState([]);
+interface AISuggestionData {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  reasoning: string[];
+  confidence: number;
+  formation: string;
+  players: { id: number; position: string; x: number; y: number; number: number }[];
+  routes: { playerId: number; points: { x: number; y: number }[]; type: string; color: string }[];
+  alternatives: { name: string; confidence: number }[];
+  metadata: { situational: string; personnel: string; risk: string };
+}
 
-  const SAFETY_RULES = {
+interface SafetyWarningItem {
+  type: string;
+  severity: string;
+  message: string;
+}
+
+interface SafetyRuleSet {
+  maxContactDrills: number;
+  prohibitedPlays: string[];
+  maxPracticeIntensity: number;
+  requiredBreaks: number;
+}
+
+const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }: {
+  teamContext: { ageGroup: string; id: string };
+  gameContext: Record<string, unknown>;
+  onApplySuggestion: (suggestion: AISuggestionData) => void;
+}) => {
+  const [suggestion, setSuggestion] = useState<AISuggestionData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [safetyWarnings, setSafetyWarnings] = useState<SafetyWarningItem[]>([]);
+
+  const SAFETY_RULES: Record<string, SafetyRuleSet> = {
     youth: {
       maxContactDrills: 2,
       prohibitedPlays: ['full_contact_tackling', 'oklahoma_drill'],
@@ -447,24 +494,24 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
     }
   };
 
-  const validateSafety = (suggestion, rules) => {
-    const warnings = [];
-    
-    if (rules.prohibitedPlays.some(play => suggestion.title.toLowerCase().includes(play))) {
+  const validateSafety = (suggestion: AISuggestionData, rules: SafetyRuleSet): SafetyWarningItem[] => {
+    const warnings: SafetyWarningItem[] = [];
+
+    if (rules.prohibitedPlays.some((play: string) => suggestion.title.toLowerCase().includes(play))) {
       warnings.push({
         type: 'prohibited',
         severity: 'high',
         message: `This play type is not recommended for ${teamContext.ageGroup} level`
       });
     }
-    
+
     return warnings;
   };
 
-  const handleFeedback = (type) => {
+  const handleFeedback = (type: string) => {
     setFeedback(type);
     // Track feedback for AI learning
-    console.log('AI Feedback:', { suggestionId: suggestion.id, feedback: type });
+    console.log('AI Feedback:', { suggestionId: suggestion?.id, feedback: type });
   };
 
   const handleApply = () => {
@@ -472,7 +519,9 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
       alert('Cannot apply play due to safety concerns');
       return;
     }
-    onApplySuggestion(suggestion);
+    if (suggestion) {
+      onApplySuggestion(suggestion);
+    }
   };
 
   return (
@@ -646,7 +695,12 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
 // PLAYER FEEDBACK SYSTEM
 // ============================================
 
-const PlayerFeedbackSystem = ({ drillId, playId, allowComments = true, moderated = true }) => {
+const PlayerFeedbackSystem = ({ drillId, playId, allowComments = true, moderated = true }: {
+  drillId?: string;
+  playId?: string;
+  allowComments?: boolean;
+  moderated?: boolean;
+}) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -762,7 +816,7 @@ const PlayerFeedbackSystem = ({ drillId, playId, allowComments = true, moderated
 // COMPREHENSIVE DASHBOARD SYSTEM
 // ============================================
 
-const DashboardSelector = ({ userRole, onRoleChange }) => {
+const DashboardSelector = ({ userRole, onRoleChange }: { userRole: string; onRoleChange: (role: string) => void }) => {
   const dashboards = {
     head_coach: { icon: Award, label: 'Head Coach', color: 'blue' },
     assistant_coach: { icon: Users, label: 'Assistant Coach', color: 'green' },
@@ -776,7 +830,7 @@ const DashboardSelector = ({ userRole, onRoleChange }) => {
       <div className="flex gap-2 flex-wrap">
         {Object.entries(dashboards).map(([role, { icon: Icon, label, color }]) => {
           const isActive = userRole === role;
-          const colorClasses = {
+          const colorClasses: Record<string, string> = {
             blue: isActive ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-gray-100 text-gray-600',
             green: isActive ? 'bg-green-100 text-green-700 border-green-300' : 'bg-gray-100 text-gray-600',
             purple: isActive ? 'bg-purple-100 text-purple-700 border-purple-300' : 'bg-gray-100 text-gray-600',
@@ -966,8 +1020,19 @@ const PlayerDashboard = () => {
 // NOTIFICATION SYSTEM
 // ============================================
 
+interface NotificationItem {
+  id: number;
+  type: string;
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  priority: string;
+  actions?: { label: string; action: string }[];
+}
+
 const NotificationCenter = () => {
-  const [notifications, setNotifications] = useState([
+  const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: 1,
       type: 'practice_reminder',
@@ -1003,15 +1068,15 @@ const NotificationCenter = () => {
       scheduleChanges: true,
       emergencyAlerts: true
     }
-  });
+  } as Record<string, unknown> & { categories: Record<string, boolean> });
 
-  const markAsRead = (id) => {
-    setNotifications(prev => 
+  const markAsRead = (id: number) => {
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
 
-  const handleAction = (notificationId, action) => {
+  const handleAction = (notificationId: number, action: string) => {
     console.log('Notification action:', { notificationId, action });
     markAsRead(notificationId);
   };
@@ -1035,7 +1100,7 @@ const NotificationCenter = () => {
                 <label key={key} className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={preferences[key]}
+                    checked={Boolean(preferences[key])}
                     onChange={(e) => setPreferences(prev => ({
                       ...prev,
                       [key]: e.target.checked
@@ -1150,7 +1215,7 @@ const CoachCoreAIComplete = () => {
     { id: 'feedback', label: 'Feedback', icon: MessageSquare }
   ];
 
-  const handlePersonaSelect = (persona) => {
+  const handlePersonaSelect = (persona: string) => {
     console.log('Selected persona:', persona);
     setShowOnboarding(false);
     // Customize experience based on persona
