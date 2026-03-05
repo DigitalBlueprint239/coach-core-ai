@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Coach Core AI - Complete Integration
 // This file contains all new features in one place for easy integration
 // You can copy this entire file and gradually split it into modules
@@ -23,13 +22,13 @@ const mockFirebase = {
   auth: {
     currentUser: { uid: 'demo-user', email: 'demo@coachcore.ai', teamId: 'demo-team' }
   },
-  
+
   teamService: {
-    async createTeam(teamData) {
+    async createTeam(teamData: Record<string, unknown>) {
       console.log('Creating team:', teamData);
       return 'new-team-id';
     },
-    async getTeam(teamId) {
+    async getTeam(teamId: string) {
       return {
         id: teamId,
         name: 'Demo Team',
@@ -38,25 +37,25 @@ const mockFirebase = {
       };
     }
   },
-  
+
   playService: {
-    async savePlay(teamId, playData) {
+    async savePlay(teamId: string, playData: Record<string, unknown>) {
       console.log('Saving play:', playData);
       return 'new-play-id';
     },
-    async getPlays(teamId) {
+    async getPlays(teamId: string) {
       return [
         { id: '1', name: 'Shotgun Pass Right', type: 'pass', successRate: 0.75 },
         { id: '2', name: 'I-Form Run', type: 'run', successRate: 0.68 }
       ];
     }
   },
-  
+
   analyticsService: {
-    async trackPlayUsage(teamId, playId, result) {
+    async trackPlayUsage(teamId: string, playId: string, result: Record<string, unknown>) {
       console.log('Tracking play usage:', { teamId, playId, result });
     },
-    async getTeamAnalytics(teamId, dateRange) {
+    async getTeamAnalytics(teamId: string, dateRange: { start: Date; end: Date }) {
       return {
         attendance: 0.85,
         playSuccess: 0.72,
@@ -69,13 +68,43 @@ const mockFirebase = {
 // ============================================
 // SECTION 2: AI PLAY SUGGESTION SYSTEM
 // ============================================
-const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPlay, ageGroup = 'youth' }) => {
-  const [suggestion, setSuggestion] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [safetyWarnings, setSafetyWarnings] = useState([]);
+interface AISuggestion {
+  id: string;
+  name: string;
+  type: string;
+  formation: string;
+  confidence: number;
+  reasoning: string[];
+  players: { id: number; position: string; x: number; y: number; number: number }[];
+  routes: { playerId: number; points: { x: number; y: number }[]; type: string }[];
+  alternativeOptions: { name: string; confidence: number }[];
+}
 
-  const SAFETY_RULES = {
+interface SafetyWarning {
+  type: string;
+  message: string;
+}
+
+interface SafetyRules {
+  maxPlayers: number;
+  prohibitedPlays: string[];
+  maxRouteDepth: number;
+  requiredRest: boolean;
+}
+
+const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPlay, ageGroup = 'youth' }: {
+  teamData: Record<string, unknown>;
+  currentSituation: Record<string, unknown>;
+  playerRoster: unknown[];
+  onApplyPlay: (play: AISuggestion) => void;
+  ageGroup?: string;
+}) => {
+  const [suggestion, setSuggestion] = useState<AISuggestion | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [safetyWarnings, setSafetyWarnings] = useState<SafetyWarning[]>([]);
+
+  const SAFETY_RULES: Record<string, SafetyRules> = {
     youth: {
       maxPlayers: 11,
       prohibitedPlays: ['blitz_all', 'quarterback_sneak'],
@@ -136,18 +165,18 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
     }
   };
 
-  const validatePlaySafety = (play, rules) => {
-    const warnings = [];
-    
+  const validatePlaySafety = (play: AISuggestion, rules: SafetyRules): SafetyWarning[] => {
+    const warnings: SafetyWarning[] = [];
+
     if (rules.prohibitedPlays.includes(play.type)) {
       warnings.push({
         type: 'prohibited',
         message: `${play.type} plays are not allowed for ${ageGroup} level`
       });
     }
-    
-    play.routes?.forEach(route => {
-      const maxY = Math.max(...route.points.map(p => Math.abs(p.y - route.points[0].y)));
+
+    play.routes?.forEach((route) => {
+      const maxY = Math.max(...route.points.map((p) => Math.abs(p.y - route.points[0].y)));
       if (maxY > rules.maxRouteDepth) {
         warnings.push({
           type: 'depth',
@@ -155,13 +184,13 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
         });
       }
     });
-    
+
     return warnings;
   };
 
-  const handleFeedback = (type) => {
+  const handleFeedback = (type: string) => {
     setFeedback(type);
-    console.log('AI feedback:', { suggestionId: suggestion.id, feedback: type });
+    console.log('AI feedback:', { suggestionId: suggestion?.id, feedback: type });
   };
 
   return (
@@ -299,7 +328,14 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
 // ============================================
 // SECTION 3: PLAYER FEEDBACK COMPONENT
 // ============================================
-const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = true, isModerated = true }) => {
+const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = true, isModerated = true }: {
+  playId?: string;
+  drillId?: string;
+  playerId?: string;
+  onSubmit: (feedback: Record<string, unknown>) => void;
+  allowComments?: boolean;
+  isModerated?: boolean;
+}) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -401,7 +437,10 @@ const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = t
 // ============================================
 // SECTION 4: COACH ANALYTICS DASHBOARD
 // ============================================
-const CoachDashboard = ({ teamId, dateRange = { start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), end: new Date() } }) => {
+const CoachDashboard = ({ teamId, dateRange = { start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), end: new Date() } }: {
+  teamId: string;
+  dateRange?: { start: Date; end: Date };
+}) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [analytics, setAnalytics] = useState({
     attendance: { rate: 0.85, trend: 0.05 },
@@ -569,12 +608,24 @@ const CoachDashboard = ({ teamId, dateRange = { start: new Date(Date.now() - 30 
 // ============================================
 // SECTION 5: NOTIFICATION CENTER
 // ============================================
-const NotificationCenter = ({ userId, userRole }) => {
-  const [notifications, setNotifications] = useState([]);
+interface AppNotification {
+  id: number;
+  type: string;
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  priority: string;
+  icon: React.FC<{ size?: number; className?: string }>;
+  iconColor: string;
+}
+
+const NotificationCenter = ({ userId, userRole }: { userId: string; userRole: string }) => {
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [filter, setFilter] = useState('all');
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState({
-    channels: { email: true, sms: true, push: true, inApp: true },
+    channels: { email: true, sms: true, push: true, inApp: true } as Record<string, boolean>,
     categories: {
       practiceReminders: true,
       scheduleChanges: true,
@@ -615,7 +666,7 @@ const NotificationCenter = ({ userId, userRole }) => {
     ? notifications 
     : notifications.filter(n => !n.read);
 
-  const markAsRead = (notificationId) => {
+  const markAsRead = (notificationId: number) => {
     setNotifications(prev => 
       prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
     );
@@ -762,7 +813,7 @@ const NotificationCenter = ({ userId, userRole }) => {
 const CoachCoreAIComplete = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [userRole, setUserRole] = useState('coach');
-  const [notifications, setNotifications] = useState([]);
+  const [notifications] = useState<unknown[]>([]);
 
   // Mock user data
   const mockUser = {

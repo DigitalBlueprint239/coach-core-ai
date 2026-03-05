@@ -520,7 +520,7 @@ export const ValidationSchemas = {
     routes: { required: true, type: 'array', minLength: 1 },
     players: { required: true, type: 'array', minLength: 1 }
   }
-};
+} as const;
 
 // ============================================
 // COLLECTION NAMES

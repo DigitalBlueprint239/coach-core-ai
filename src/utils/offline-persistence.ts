@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/offline-persistence.ts
 import { 
   doc, 
@@ -253,7 +252,7 @@ export class OfflinePersistenceManager {
     // Handle arrays by combining unique items
     Object.keys(merged).forEach(key => {
       if (Array.isArray(localData[key]) && Array.isArray(serverData[key])) {
-        merged[key] = [...new Set([...localData[key], ...serverData[key]])];
+        merged[key] = Array.from(new Set([...localData[key], ...serverData[key]]));
       }
     });
 
@@ -285,7 +284,7 @@ export class OfflinePersistenceManager {
       const snapshot = await getDocs(q);
       const documents = snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...(doc.data() as Record<string, unknown>)
       }));
 
       // Store in local cache
@@ -499,9 +498,9 @@ export class OfflineFirestore {
     }
   }
 
-  async query(collection: string, filters?: any, orderByField?: string, limitCount?: number): Promise<any[]> {
+  async query(collectionName: string, filters?: Record<string, unknown>, orderByField?: string, limitCount?: number): Promise<unknown[]> {
     try {
-      let q: any = collection(db, collection);
+      let q: ReturnType<typeof query> | ReturnType<typeof collection> = collection(db, collectionName);
       
       if (filters) {
         Object.entries(filters).forEach(([field, value]) => {

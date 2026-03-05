@@ -1,8 +1,9 @@
-// @ts-nocheck
 // src/components/SmartPlaybook/TouchOptimizedPlaybook.tsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
 import { LoadingState } from '../LoadingStates';
+import { Timestamp } from 'firebase/firestore';
+import type { GameContext } from '../../types/firestore-schema';
 
 // ============================================
 // TOUCH OPTIMIZATION TYPES
@@ -323,18 +324,18 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
       route: []
     };
 
-    setCurrentPlay(prev => ({
+    setCurrentPlay((prev: Record<string, unknown> | null) => ({
       ...prev,
-      players: [...(prev?.players || []), newPlayer]
+      players: [...((prev?.players as unknown[]) || []), newPlayer]
     }));
   }, [currentPlay]);
 
   const updatePlayerPosition = useCallback((playerId: string, x: number, y: number) => {
-    setCurrentPlay(prev => ({
+    setCurrentPlay((prev: Record<string, unknown> | null) => ({
       ...prev,
-      players: prev?.players?.map((player: any) =>
+      players: ((prev?.players as Array<Record<string, unknown>>) || []).map((player) =>
         player.id === playerId ? { ...player, x, y } : player
-      ) || []
+      )
     }));
   }, []);
 
@@ -372,7 +373,11 @@ export const TouchOptimizedPlaybook: React.FC<TouchOptimizedPlaybookProps> = ({
 
     setIsLoading(true);
     try {
-      const gameContext = {
+      const gameContext: GameContext = {
+        gameId: '',
+        opponent: '',
+        date: Timestamp.now(),
+        location: '',
         down: 3,
         distance: 7,
         fieldPosition: 'midfield',
