@@ -1,0 +1,306 @@
+import type { EngineData, EngineRoute, EngineConcept, SpacingRule } from './types';
+
+// 18 routes organized by the route tree (0-9) + specialty (-1)
+const routes: EngineRoute[] = [
+  // ── Quick Routes (0-2) ─────────────────────────────────────────
+  {
+    route_id: 'r0',
+    route_name: 'Flat',
+    route_number: 0,
+    depth_yards: 2,
+    break_direction: 'outside',
+    tags: ['quick', 'short', 'boundary'],
+    description: 'Quick release to the flat, 2 yards depth',
+  },
+  {
+    route_id: 'r1',
+    route_name: 'Quick Out',
+    route_number: 1,
+    depth_yards: 3,
+    break_direction: 'outside',
+    tags: ['quick', 'short'],
+    description: 'Stem 3 yards then break sharply to the sideline',
+  },
+  {
+    route_id: 'r2',
+    route_name: 'Slant',
+    route_number: 2,
+    depth_yards: 4,
+    break_direction: 'inside',
+    tags: ['quick', 'short', 'crossing'],
+    description: '2-step slant cutting at 45° toward the middle',
+  },
+
+  // ── Intermediate Routes (3-6) ──────────────────────────────────
+  {
+    route_id: 'r3',
+    route_name: 'Out',
+    route_number: 3,
+    depth_yards: 8,
+    break_direction: 'outside',
+    tags: ['intermediate', 'comeback'],
+    description: 'Stem 8 yards then break at 90° toward the sideline',
+  },
+  {
+    route_id: 'r4',
+    route_name: 'Curl',
+    route_number: 4,
+    depth_yards: 8,
+    break_direction: 'stop',
+    tags: ['intermediate', 'hook'],
+    description: 'Stem 8 yards then curl back toward the QB',
+  },
+  {
+    route_id: 'r5',
+    route_name: 'Dig',
+    route_number: 5,
+    depth_yards: 10,
+    break_direction: 'inside',
+    tags: ['intermediate', 'crossing', 'in'],
+    description: 'Stem 10 yards then break 90° toward the middle',
+  },
+  {
+    route_id: 'r6',
+    route_name: 'Comeback',
+    route_number: 6,
+    depth_yards: 12,
+    break_direction: 'outside',
+    tags: ['intermediate', 'comeback', 'boundary'],
+    description: 'Stem 12 yards then break back toward the sideline at a downward angle',
+  },
+
+  // ── Deep Routes (7-9) ─────────────────────────────────────────
+  {
+    route_id: 'r7',
+    route_name: 'Corner',
+    route_number: 7,
+    depth_yards: 14,
+    break_direction: 'diagonal-out',
+    tags: ['deep', 'shot'],
+    description: 'Stem 8-10 yards then break at 45° toward the corner of the endzone',
+  },
+  {
+    route_id: 'r8',
+    route_name: 'Post',
+    route_number: 8,
+    depth_yards: 14,
+    break_direction: 'diagonal-in',
+    tags: ['deep', 'shot', 'crossing'],
+    description: 'Stem 8-10 yards then break at 45° toward the near upright',
+  },
+  {
+    route_id: 'r9',
+    route_name: 'Go',
+    route_number: 9,
+    depth_yards: 20,
+    break_direction: 'vertical',
+    tags: ['deep', 'shot', 'vertical'],
+    description: 'Full-speed vertical route, no break — stress the safety',
+  },
+
+  // ── Specialty Routes (route_number: -1) ───────────────────────
+  {
+    route_id: 'rs1',
+    route_name: 'Hitch',
+    route_number: -1,
+    depth_yards: 5,
+    break_direction: 'stop',
+    tags: ['quick', 'specialty', 'rhythm'],
+    description: 'Stem 5 yards, plant, and stop — high-percentage throw',
+  },
+  {
+    route_id: 'rs2',
+    route_name: 'Screen',
+    route_number: -1,
+    depth_yards: 1,
+    break_direction: 'outside',
+    tags: ['specialty', 'screen', 'quick'],
+    description: 'Release to the flat behind the line of scrimmage',
+  },
+  {
+    route_id: 'rs3',
+    route_name: 'Bubble',
+    route_number: -1,
+    depth_yards: 1,
+    break_direction: 'outside',
+    tags: ['specialty', 'screen', 'quick', 'bubble'],
+    description: 'Motion-based bubble screen — outside receiver creates space',
+  },
+  {
+    route_id: 'rs4',
+    route_name: 'Wheel',
+    route_number: -1,
+    depth_yards: 15,
+    break_direction: 'vertical',
+    tags: ['specialty', 'deep', 'back'],
+    description: 'Flat release that arcs upfield into a vertical route',
+  },
+  {
+    route_id: 'rs5',
+    route_name: 'Shallow Cross',
+    route_number: -1,
+    depth_yards: 3,
+    break_direction: 'inside',
+    tags: ['specialty', 'crossing', 'quick'],
+    description: '2-3 yard crossing route from one side of the field to the other',
+  },
+  {
+    route_id: 'rs6',
+    route_name: 'Seam',
+    route_number: -1,
+    depth_yards: 16,
+    break_direction: 'vertical',
+    tags: ['specialty', 'deep', 'te'],
+    description: 'Vertical route splitting the seam between LB and safety',
+  },
+  {
+    route_id: 'rs7',
+    route_name: 'Stick',
+    route_number: -1,
+    depth_yards: 6,
+    break_direction: 'stop',
+    tags: ['specialty', 'intermediate', 'rhythm'],
+    description: 'Abbreviated out or hitch that "sticks" in the zone window',
+  },
+  {
+    route_id: 'rs8',
+    route_name: 'Choice',
+    route_number: -1,
+    depth_yards: 6,
+    break_direction: 'inside',
+    tags: ['specialty', 'option', 'coverage-based'],
+    description: 'Coverage-read route — break inside vs. man, outside vs. zone',
+  },
+];
+
+// 15 passing concepts defined by route combinations
+const concepts: EngineConcept[] = [
+  {
+    concept_id: 'c1',
+    concept_name: 'Smash',
+    required_routes: ['Hitch', 'Corner'],
+    description: 'Hi-lo concept — Hitch underneath stresses corner, Corner threatens over top',
+    coaching_cue: 'Read the corner: if he sits on the Hitch, throw the Corner. If he plays deep, fire the Hitch.',
+  },
+  {
+    concept_id: 'c2',
+    concept_name: 'Four Verticals',
+    required_routes: ['Go', 'Go', 'Seam', 'Seam'],
+    min_match: 3,
+    description: 'Four receivers run verticals, stressing every deep defender',
+    coaching_cue: 'Find the open seam — identify pre-snap whether the safety is single-high or 2-deep.',
+  },
+  {
+    concept_id: 'c3',
+    concept_name: 'Curl-Flat',
+    required_routes: ['Curl', 'Flat'],
+    description: 'Classic two-man route combo — Curl sits in zone window, Flat stresses the underneath defender',
+    coaching_cue: 'LB chases the flat, throw the curl. LB stays, dump to the flat.',
+  },
+  {
+    concept_id: 'c4',
+    concept_name: 'Triangle',
+    required_routes: ['Post', 'Flat', 'Curl'],
+    description: 'Three-man triangle stretches both horizontally and vertically',
+    coaching_cue: 'Safety middle-field? Hit the Post. Safety outside? Read Curl-Flat.',
+  },
+  {
+    concept_id: 'c5',
+    concept_name: 'Dragon',
+    required_routes: ['Post', 'Corner'],
+    description: 'Inside-outside vertical combination from the same side — stresses the CB and safety',
+    coaching_cue: 'Post takes the safety, Corner beats the CB. Double-move if CB is pressing.',
+  },
+  {
+    concept_id: 'c6',
+    concept_name: 'Mesh',
+    required_routes: ['Shallow Cross', 'Dig'],
+    description: 'Two crossing routes at different depths create natural rubs vs. man coverage',
+    coaching_cue: 'Vs. man: let them clear each other. Vs. zone: find the window between LBs.',
+  },
+  {
+    concept_id: 'c7',
+    concept_name: 'Flood',
+    required_routes: ['Flat', 'Out', 'Go'],
+    description: 'Three receivers on the same side at three different depths — floods the zone',
+    coaching_cue: 'Read high-to-low: Go clears, Out occupies, Flat is the checkdown.',
+  },
+  {
+    concept_id: 'c8',
+    concept_name: 'Spot',
+    required_routes: ['Shallow Cross', 'Seam', 'Flat'],
+    description: 'Three-level concept with crossing, vertical, and flat threats',
+    coaching_cue: "Read the inside linebacker: he can't cover all three levels. Find the void.",
+  },
+  {
+    concept_id: 'c9',
+    concept_name: 'Sail',
+    required_routes: ['Go', 'Out', 'Flat'],
+    description: 'Vertical stretches safety, Out holds corner, Flat is the hot route',
+    coaching_cue: 'Corner stays deep? Throw the Out. Safety crashes? The Go is there.',
+  },
+  {
+    concept_id: 'c10',
+    concept_name: 'Drive',
+    required_routes: ['Dig', 'Shallow Cross'],
+    description: 'Two crossing routes from opposite sides — creates natural traffic vs. man',
+    coaching_cue: 'Shallow clears under the Dig. QB reads the safety — if he follows the shallow, take the Dig.',
+  },
+  {
+    concept_id: 'c11',
+    concept_name: 'Switch',
+    required_routes: ['Go', 'Slant'],
+    description: 'Inside receiver runs Go, outside receiver crosses under — beats Cover-2 man',
+    coaching_cue: 'Outside receiver establishes position in the flat. Inside Go clears the safety.',
+  },
+  {
+    concept_id: 'c12',
+    concept_name: 'Spacing',
+    required_routes: ['Hitch', 'Hitch', 'Flat'],
+    min_match: 2,
+    description: 'Multiple receivers spread across the field at the same depth — stresses zone coverage',
+    coaching_cue: 'Find the open window. Every zone has a void — attack where there are two defenders covering three routes.',
+  },
+  {
+    concept_id: 'c13',
+    concept_name: 'Yankee',
+    required_routes: ['Post', 'Go'],
+    description: 'Deep shot — Post occupies the safety, Go runs the boundary',
+    coaching_cue: 'If the safety cheats to the Post, the Go is single-covered on the boundary.',
+  },
+  {
+    concept_id: 'c14',
+    concept_name: 'Hi-Lo',
+    required_routes: ['Dig', 'Curl'],
+    description: 'Inside linebackers must choose between two levels — high Dig or low Curl',
+    coaching_cue: 'If the linebacker drops back, the Curl is open. If he stays shallow, the Dig opens.',
+  },
+  {
+    concept_id: 'c15',
+    concept_name: 'Stick-Flat',
+    required_routes: ['Stick', 'Flat'],
+    description: 'Quick two-man concept: Stick settles in zone, Flat creates width',
+    coaching_cue: 'Read the defender: if he widens to the Flat, hit the Stick in the window.',
+  },
+];
+
+const spacingRules: SpacingRule[] = [
+  {
+    rule_id: 'sp1',
+    min_yards_apart: 5,
+    context: 'horizontal-separation',
+    message: 'Routes are converging horizontally — receivers less than 5 yards apart at the break point will clog the throwing lane.',
+  },
+  {
+    rule_id: 'sp2',
+    min_yards_apart: 4,
+    context: 'vertical-stack',
+    message: 'Route endpoints are stacked vertically — less than 4 yards apart reduces the hi-lo stretch.',
+  },
+];
+
+export const engineData: EngineData = { routes, concepts, spacingRules };
+
+export function loadOffensiveEngineData(): EngineData {
+  return engineData;
+}

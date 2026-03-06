@@ -36,6 +36,9 @@ import {
 import PlayerControls from './components/PlayerControls';
 import RouteControls from './components/RouteControls';
 import RouteEditor from './components/RouteEditor';
+import RouteLibrary from './components/RouteLibrary';
+import ConceptBanner from './components/ConceptBanner';
+import SpacingWarnings from './components/SpacingWarnings';
 import FormationTemplates from './components/FormationTemplates';
 import SaveLoadPanel from './components/SaveLoadPanel';
 import Toolbar from './components/Toolbar';
@@ -380,6 +383,17 @@ const SmartPlaybook = () => {
     setMode('view');
   }, []);
 
+  // Assign a labeled route from the Route Library to the selected player
+  const handleAssignRoute = useCallback((newRoute) => {
+    saveToUndoStack('assign_library_route');
+    // Remove any existing routes for this player, then add the labeled one
+    setRoutes(prev => [
+      ...prev.filter(r => r.playerId !== newRoute.playerId),
+      newRoute,
+    ]);
+    addNotification('success', `Assigned ${newRoute.label} to player`);
+  }, [saveToUndoStack, addNotification]);
+
   // Load formation
   const loadFormation = useCallback((formationType) => {
     const centerX = FIELD_DIMENSIONS.width / 2;
@@ -570,6 +584,18 @@ const SmartPlaybook = () => {
               onRouteTypeChange={setRouteType}
               onRouteColorChange={setRouteColor}
             />
+
+            {/* Route Library — click a route name to assign it to the selected player */}
+            <RouteLibrary
+              selectedPlayer={players.find(p => p.id === selectedPlayerId)}
+              onAssignRoute={handleAssignRoute}
+            />
+
+            {/* Concept Detection Banner */}
+            <ConceptBanner routes={routes} />
+
+            {/* Spacing Warnings */}
+            <SpacingWarnings routes={routes} />
 
             {/* Route Editor */}
             <ErrorBoundary>
