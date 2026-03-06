@@ -1,19 +1,85 @@
-// @ts-nocheck
+
 // Coach Core AI - Complete Integration
 // This file contains all new features in one place for easy integration
 // You can copy this entire file and gradually split it into modules
 
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
-import { 
-  Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity, 
+import {
+  Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity,
   BarChart3, Target, Clock, ThumbsUp, Filter, Download, Share2,
   Bell, Mail, Settings, Check, X, AlertTriangle, Info, Smartphone,
-  Sparkles, Shield, Route, Play, Square, ChevronLeft, ChevronRight
+  Sparkles, Shield, Route, Play, Square, ChevronLeft, ChevronRight,
+  LucideProps
 } from 'lucide-react';
-import { 
-  LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, 
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+import {
+  LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
+// ============================================
+// TYPE DEFINITIONS
+// ============================================
+
+interface SafetyWarning {
+  type: string;
+  message: string;
+}
+
+interface PlayerPosition {
+  id: number;
+  position: string;
+  x: number;
+  y: number;
+  number: number;
+}
+
+interface RoutePoint {
+  x: number;
+  y: number;
+}
+
+interface PlayRoute {
+  playerId: number;
+  points: RoutePoint[];
+  type: string;
+}
+
+interface AlternativeOption {
+  name: string;
+  confidence: number;
+}
+
+interface AISuggestion {
+  id: string;
+  name: string;
+  type: string;
+  formation: string;
+  confidence: number;
+  reasoning: string[];
+  players: PlayerPosition[];
+  routes: PlayRoute[];
+  alternativeOptions: AlternativeOption[];
+}
+
+interface SafetyRules {
+  maxPlayers: number;
+  prohibitedPlays: string[];
+  maxRouteDepth: number;
+  requiredRest: boolean;
+}
+
+type LucideIcon = React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
+
+interface Notification {
+  id: number;
+  type: string;
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  priority: string;
+  icon: LucideIcon;
+  iconColor: string;
+}
 
 // ============================================
 // SECTION 1: FIREBASE SERVICE (Mock Version)
@@ -25,11 +91,11 @@ const mockFirebase = {
   },
   
   teamService: {
-    async createTeam(teamData) {
+    async createTeam(teamData: unknown) {
       console.log('Creating team:', teamData);
       return 'new-team-id';
     },
-    async getTeam(teamId) {
+    async getTeam(teamId: string) {
       return {
         id: teamId,
         name: 'Demo Team',
@@ -38,25 +104,25 @@ const mockFirebase = {
       };
     }
   },
-  
+
   playService: {
-    async savePlay(teamId, playData) {
+    async savePlay(teamId: string, playData: unknown) {
       console.log('Saving play:', playData);
       return 'new-play-id';
     },
-    async getPlays(teamId) {
+    async getPlays(teamId: string) {
       return [
         { id: '1', name: 'Shotgun Pass Right', type: 'pass', successRate: 0.75 },
         { id: '2', name: 'I-Form Run', type: 'run', successRate: 0.68 }
       ];
     }
   },
-  
+
   analyticsService: {
-    async trackPlayUsage(teamId, playId, result) {
+    async trackPlayUsage(teamId: string, playId: string, result: unknown) {
       console.log('Tracking play usage:', { teamId, playId, result });
     },
-    async getTeamAnalytics(teamId, dateRange) {
+    async getTeamAnalytics(teamId: string, dateRange: unknown) {
       return {
         attendance: 0.85,
         playSuccess: 0.72,
@@ -69,11 +135,17 @@ const mockFirebase = {
 // ============================================
 // SECTION 2: AI PLAY SUGGESTION SYSTEM
 // ============================================
-const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPlay, ageGroup = 'youth' }) => {
-  const [suggestion, setSuggestion] = useState(null);
+const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPlay, ageGroup = 'youth' }: {
+  teamData: unknown;
+  currentSituation: unknown;
+  playerRoster: unknown[];
+  onApplyPlay: (play: AISuggestion) => void;
+  ageGroup?: string;
+}) => {
+  const [suggestion, setSuggestion] = useState<AISuggestion | null>(null);
   const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [safetyWarnings, setSafetyWarnings] = useState([]);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [safetyWarnings, setSafetyWarnings] = useState<SafetyWarning[]>([]);
 
   const SAFETY_RULES = {
     youth: {
@@ -126,7 +198,7 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
         ]
       };
       
-      const warnings = validatePlaySafety(mockSuggestion, SAFETY_RULES[ageGroup]);
+      const warnings = validatePlaySafety(mockSuggestion, SAFETY_RULES[ageGroup as keyof typeof SAFETY_RULES]);
       setSafetyWarnings(warnings);
       setSuggestion(mockSuggestion);
     } catch (error) {
@@ -136,18 +208,18 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
     }
   };
 
-  const validatePlaySafety = (play, rules) => {
-    const warnings = [];
-    
+  const validatePlaySafety = (play: AISuggestion, rules: SafetyRules): SafetyWarning[] => {
+    const warnings: SafetyWarning[] = [];
+
     if (rules.prohibitedPlays.includes(play.type)) {
       warnings.push({
         type: 'prohibited',
         message: `${play.type} plays are not allowed for ${ageGroup} level`
       });
     }
-    
-    play.routes?.forEach(route => {
-      const maxY = Math.max(...route.points.map(p => Math.abs(p.y - route.points[0].y)));
+
+    play.routes?.forEach((route: PlayRoute) => {
+      const maxY = Math.max(...route.points.map((p: RoutePoint) => Math.abs(p.y - route.points[0].y)));
       if (maxY > rules.maxRouteDepth) {
         warnings.push({
           type: 'depth',
@@ -155,13 +227,13 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
         });
       }
     });
-    
+
     return warnings;
   };
 
-  const handleFeedback = (type) => {
+  const handleFeedback = (type: string) => {
     setFeedback(type);
-    console.log('AI feedback:', { suggestionId: suggestion.id, feedback: type });
+    console.log('AI feedback:', { suggestionId: suggestion?.id, feedback: type });
   };
 
   return (
@@ -299,7 +371,14 @@ const AIPlaySuggestion = ({ teamData, currentSituation, playerRoster, onApplyPla
 // ============================================
 // SECTION 3: PLAYER FEEDBACK COMPONENT
 // ============================================
-const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = true, isModerated = true }) => {
+const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = true, isModerated = true }: {
+  playId: string;
+  drillId?: string;
+  playerId: string;
+  onSubmit: (feedback: unknown) => void;
+  allowComments?: boolean;
+  isModerated?: boolean;
+}) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -401,7 +480,10 @@ const PlayerFeedback = ({ playId, drillId, playerId, onSubmit, allowComments = t
 // ============================================
 // SECTION 4: COACH ANALYTICS DASHBOARD
 // ============================================
-const CoachDashboard = ({ teamId, dateRange = { start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), end: new Date() } }) => {
+const CoachDashboard = ({ teamId, dateRange = { start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), end: new Date() } }: {
+  teamId: string;
+  dateRange?: { start: Date; end: Date };
+}) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [analytics, setAnalytics] = useState({
     attendance: { rate: 0.85, trend: 0.05 },
@@ -569,8 +651,8 @@ const CoachDashboard = ({ teamId, dateRange = { start: new Date(Date.now() - 30 
 // ============================================
 // SECTION 5: NOTIFICATION CENTER
 // ============================================
-const NotificationCenter = ({ userId, userRole }) => {
-  const [notifications, setNotifications] = useState([]);
+const NotificationCenter = ({ userId, userRole }: { userId: string; userRole: string }) => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [filter, setFilter] = useState('all');
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState({
@@ -615,8 +697,8 @@ const NotificationCenter = ({ userId, userRole }) => {
     ? notifications 
     : notifications.filter(n => !n.read);
 
-  const markAsRead = (notificationId) => {
-    setNotifications(prev => 
+  const markAsRead = (notificationId: number) => {
+    setNotifications(prev =>
       prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
     );
   };
@@ -653,10 +735,10 @@ const NotificationCenter = ({ userId, userRole }) => {
                   </div>
                   <input
                     type="checkbox"
-                    checked={preferences.channels[key]}
+                    checked={preferences.channels[key as keyof typeof preferences.channels]}
                     onChange={() => setPreferences(prev => ({
                       ...prev,
-                      channels: { ...prev.channels, [key]: !prev.channels[key] }
+                      channels: { ...prev.channels, [key]: !prev.channels[key as keyof typeof prev.channels] }
                     }))}
                     className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
                   />
@@ -897,15 +979,16 @@ const CoachCoreAIComplete = () => {
                 teamData={{ id: mockUser.teamId }}
                 currentSituation={{}}
                 playerRoster={[]}
-                onApplyPlay={(play) => console.log('Apply play:', play)}
+                onApplyPlay={(play: AISuggestion) => console.log('Apply play:', play)}
                 ageGroup="youth"
               />
             </div>
             <div>
               <PlayerFeedback
                 playId="demo-play"
+                drillId="demo-drill"
                 playerId={mockUser.uid}
-                onSubmit={(feedback) => console.log('Feedback submitted:', feedback)}
+                onSubmit={(feedback: unknown) => console.log('Feedback submitted:', feedback)}
               />
             </div>
           </div>

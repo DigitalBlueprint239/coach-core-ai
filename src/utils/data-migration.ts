@@ -1,11 +1,12 @@
-// @ts-nocheck
+
 // src/utils/data-migration.ts
-import { 
-  doc, 
-  getDoc, 
-  getDocs, 
-  collection, 
-  writeBatch, 
+import {
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  collection,
+  writeBatch,
   runTransaction,
   query,
   where,

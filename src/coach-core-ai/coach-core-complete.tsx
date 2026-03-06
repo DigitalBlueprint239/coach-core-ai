@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import React, { useState, useEffect, useCallback, useRef, memo, createContext, useContext } from 'react';
 import { 
   Star, MessageSquare, TrendingUp, Users, Calendar, Award, Activity, 
@@ -83,7 +83,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 // PERSONA-BASED ONBOARDING SYSTEM
 // ============================================
 
-const PersonaPicker = ({ onPersonaSelect }) => {
+const PersonaPicker = ({ onPersonaSelect }: { onPersonaSelect: (id: string) => void }) => {
   const personas = [
     {
       id: 'first_time_coach',
@@ -140,7 +140,7 @@ const PersonaPicker = ({ onPersonaSelect }) => {
             <button
               key={persona.id}
               onClick={() => onPersonaSelect(persona.id)}
-              className={`p-6 rounded-lg border-2 transition-all text-left ${colorClasses[persona.color]}`}
+              className={`p-6 rounded-lg border-2 transition-all text-left ${colorClasses[persona.color as keyof typeof colorClasses]}`}
             >
               <div className="flex items-center gap-3 mb-4">
                 <Icon size={24} />
@@ -167,11 +167,24 @@ const PersonaPicker = ({ onPersonaSelect }) => {
 // VISUAL TEMPLATE GALLERY
 // ============================================
 
-const TemplateGallery = ({ sport = 'football', onSelectTemplate, onStartFromScratch }) => {
+type TemplateType = {
+  id: string;
+  name: string;
+  category: string;
+  preview: string;
+  description: string;
+  complexity: 'beginner' | 'intermediate' | 'advanced';
+  successRate: number;
+  usage: string;
+  players: number;
+  thumbnail: string;
+};
+
+const TemplateGallery = ({ sport = 'football', onSelectTemplate, onStartFromScratch }: { sport?: string; onSelectTemplate: (template: TemplateType) => void; onStartFromScratch: () => void }) => {
   const [viewMode, setViewMode] = useState('grid');
   const [category, setCategory] = useState('all');
 
-  const templates = [
+  const templates: TemplateType[] = [
     {
       id: 'shotgun_spread',
       name: 'Shotgun Spread',
@@ -301,7 +314,7 @@ const TemplateGallery = ({ sport = 'football', onSelectTemplate, onStartFromScra
   );
 };
 
-const TemplateCard = ({ template, onSelect }) => {
+const TemplateCard = ({ template, onSelect }: { template: TemplateType; onSelect: () => void }) => {
   const complexityColors = {
     beginner: 'text-green-600 bg-green-50',
     intermediate: 'text-yellow-600 bg-yellow-50',
@@ -340,7 +353,7 @@ const TemplateCard = ({ template, onSelect }) => {
   );
 };
 
-const TemplateListItem = ({ template, onSelect }) => (
+const TemplateListItem = ({ template, onSelect }: { template: TemplateType; onSelect: () => void }) => (
   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center justify-between hover:shadow-md transition-shadow">
     <div className="flex items-center gap-4">
       <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
@@ -370,11 +383,44 @@ const TemplateListItem = ({ template, onSelect }) => (
 // AI SUGGESTION SYSTEM WITH SAFETY GUARDRAILS
 // ============================================
 
-const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
-  const [suggestion, setSuggestion] = useState(null);
+type SafetyWarning = {
+  type: string;
+  severity: string;
+  message: string;
+};
+
+type SafetyRules = {
+  maxContactDrills: number;
+  prohibitedPlays: string[];
+  maxPracticeIntensity: number;
+  requiredBreaks: number;
+};
+
+type AISuggestion = {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  reasoning: string[];
+  confidence: number;
+  formation: string;
+  players: { id: number; position: string; x: number; y: number; number: number }[];
+  routes: { playerId: number; points: { x: number; y: number }[]; type: string; color: string }[];
+  alternatives: { name: string; confidence: number }[];
+  metadata: { situational: string; personnel: string; risk: string };
+};
+
+type AISuggestionPanelProps = {
+  teamContext: { ageGroup: string; id: string; [key: string]: unknown };
+  gameContext: Record<string, unknown>;
+  onApplySuggestion: (suggestion: AISuggestion) => void;
+};
+
+const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }: AISuggestionPanelProps) => {
+  const [suggestion, setSuggestion] = useState<AISuggestion | null>(null);
   const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [safetyWarnings, setSafetyWarnings] = useState([]);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [safetyWarnings, setSafetyWarnings] = useState<SafetyWarning[]>([]);
 
   const SAFETY_RULES = {
     youth: {
@@ -436,7 +482,8 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
       };
       
       // Check safety rules
-      const warnings = validateSafety(mockSuggestion, SAFETY_RULES[teamContext.ageGroup]);
+      const safetyRules = SAFETY_RULES[teamContext.ageGroup as keyof typeof SAFETY_RULES];
+      const warnings = safetyRules ? validateSafety(mockSuggestion, safetyRules) : [];
       setSafetyWarnings(warnings);
       setSuggestion(mockSuggestion);
       
@@ -447,24 +494,24 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
     }
   };
 
-  const validateSafety = (suggestion, rules) => {
-    const warnings = [];
-    
-    if (rules.prohibitedPlays.some(play => suggestion.title.toLowerCase().includes(play))) {
+  const validateSafety = (suggestionArg: AISuggestion, rules: SafetyRules): SafetyWarning[] => {
+    const warnings: SafetyWarning[] = [];
+
+    if (rules.prohibitedPlays.some((play: string) => suggestionArg.title.toLowerCase().includes(play))) {
       warnings.push({
         type: 'prohibited',
         severity: 'high',
         message: `This play type is not recommended for ${teamContext.ageGroup} level`
       });
     }
-    
+
     return warnings;
   };
 
-  const handleFeedback = (type) => {
+  const handleFeedback = (type: string) => {
     setFeedback(type);
     // Track feedback for AI learning
-    console.log('AI Feedback:', { suggestionId: suggestion.id, feedback: type });
+    console.log('AI Feedback:', { suggestionId: suggestion?.id, feedback: type });
   };
 
   const handleApply = () => {
@@ -472,7 +519,9 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
       alert('Cannot apply play due to safety concerns');
       return;
     }
-    onApplySuggestion(suggestion);
+    if (suggestion) {
+      onApplySuggestion(suggestion);
+    }
   };
 
   return (
@@ -646,7 +695,7 @@ const AISuggestionPanel = ({ teamContext, gameContext, onApplySuggestion }) => {
 // PLAYER FEEDBACK SYSTEM
 // ============================================
 
-const PlayerFeedbackSystem = ({ drillId, playId, allowComments = true, moderated = true }) => {
+const PlayerFeedbackSystem = ({ drillId, playId, allowComments = true, moderated = true }: { drillId: string; playId: string; allowComments?: boolean; moderated?: boolean }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -762,7 +811,7 @@ const PlayerFeedbackSystem = ({ drillId, playId, allowComments = true, moderated
 // COMPREHENSIVE DASHBOARD SYSTEM
 // ============================================
 
-const DashboardSelector = ({ userRole, onRoleChange }) => {
+const DashboardSelector = ({ userRole, onRoleChange }: { userRole: string; onRoleChange: (role: string) => void }) => {
   const dashboards = {
     head_coach: { icon: Award, label: 'Head Coach', color: 'blue' },
     assistant_coach: { icon: Users, label: 'Assistant Coach', color: 'green' },
@@ -788,7 +837,7 @@ const DashboardSelector = ({ userRole, onRoleChange }) => {
             <button
               key={role}
               onClick={() => onRoleChange(role)}
-              className={`px-3 py-2 rounded-lg border text-sm flex items-center gap-2 transition-colors ${colorClasses[color]}`}
+              className={`px-3 py-2 rounded-lg border text-sm flex items-center gap-2 transition-colors ${colorClasses[color as keyof typeof colorClasses]}`}
             >
               <Icon size={16} />
               {label}
@@ -1005,13 +1054,13 @@ const NotificationCenter = () => {
     }
   });
 
-  const markAsRead = (id) => {
-    setNotifications(prev => 
+  const markAsRead = (id: number) => {
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
 
-  const handleAction = (notificationId, action) => {
+  const handleAction = (notificationId: number, action: string) => {
     console.log('Notification action:', { notificationId, action });
     markAsRead(notificationId);
   };
@@ -1035,7 +1084,7 @@ const NotificationCenter = () => {
                 <label key={key} className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={preferences[key]}
+                    checked={preferences[key as keyof typeof preferences] as boolean}
                     onChange={(e) => setPreferences(prev => ({
                       ...prev,
                       [key]: e.target.checked
@@ -1061,7 +1110,7 @@ const NotificationCenter = () => {
                 <label key={key} className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={preferences.categories[key]}
+                    checked={preferences.categories[key as keyof typeof preferences.categories]}
                     onChange={(e) => setPreferences(prev => ({
                       ...prev,
                       categories: { ...prev.categories, [key]: e.target.checked }
@@ -1150,7 +1199,7 @@ const CoachCoreAIComplete = () => {
     { id: 'feedback', label: 'Feedback', icon: MessageSquare }
   ];
 
-  const handlePersonaSelect = (persona) => {
+  const handlePersonaSelect = (persona: string) => {
     console.log('Selected persona:', persona);
     setShowOnboarding(false);
     // Customize experience based on persona
@@ -1232,7 +1281,7 @@ const CoachCoreAIComplete = () => {
           {currentView === 'templates' && (
             <TemplateGallery
               sport="football"
-              onSelectTemplate={(template) => console.log('Selected template:', template)}
+              onSelectTemplate={(template: TemplateType) => console.log('Selected template:', template)}
               onStartFromScratch={() => console.log('Starting from scratch')}
             />
           )}
@@ -1242,7 +1291,7 @@ const CoachCoreAIComplete = () => {
               <AISuggestionPanel
                 teamContext={{ ageGroup: 'high_school', id: 'demo-team' }}
                 gameContext={{}}
-                onApplySuggestion={(suggestion) => console.log('Applied suggestion:', suggestion)}
+                onApplySuggestion={(suggestion: AISuggestion) => console.log('Applied suggestion:', suggestion)}
               />
               <div className="space-y-6">
                 <PlayerFeedbackSystem

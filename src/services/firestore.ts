@@ -145,6 +145,11 @@ function loadOfflineQueue() {
   }
 }
 
+function addToOfflineQueue(operation: any) {
+  offlineQueue.push(operation);
+  saveOfflineQueue();
+}
+
 async function syncOfflineQueue() {
   if (!isOnline || offlineQueue.length === 0) {
     return;

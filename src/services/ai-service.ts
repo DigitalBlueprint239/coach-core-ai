@@ -511,7 +511,7 @@ Format the response as a JSON object with the structure:
           implementation: parsed.insights?.recommendations || [],
           estimatedImpact: 'high',
           prerequisites: [],
-          createdAt: new Date() as any
+          createdAt: new Date()
         }] : [],
         confidence: parsed.confidence || 0.8,
         reasoning: parsed.reasoning || [],
@@ -541,7 +541,7 @@ Format the response as a JSON object with the structure:
           implementation: ['Review play diagram', 'Practice with team', 'Adjust based on feedback'],
           estimatedImpact: 'moderate',
           prerequisites: [],
-          createdAt: new Date() as any
+          createdAt: new Date()
         }] : [],
         confidence: parsed.confidence || 0.8,
         reasoning: parsed.reasoning || [],
@@ -572,7 +572,7 @@ Format the response as a JSON object with the structure:
           implementation: parsed.analysis.recommendations || [],
           estimatedImpact: 'moderate',
           prerequisites: [],
-          createdAt: new Date() as any
+          createdAt: new Date()
         }] : [],
         confidence: parsed.confidence || 0.8,
         reasoning: parsed.reasoning || [],
@@ -602,7 +602,7 @@ Format the response as a JSON object with the structure:
           implementation: drill.coachingPoints || [],
           estimatedImpact: 'moderate',
           prerequisites: drill.equipment || [],
-          createdAt: new Date() as any
+          createdAt: new Date()
         })) : [],
         confidence: parsed.confidence || 0.8,
         reasoning: parsed.reasoning || [],

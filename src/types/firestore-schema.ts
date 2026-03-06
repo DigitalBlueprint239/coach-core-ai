@@ -7,8 +7,8 @@ import { Timestamp, FieldValue } from 'firebase/firestore';
 
 export interface BaseDocument {
   id?: string;
-  createdAt: Timestamp | FieldValue;
-  updatedAt: Timestamp | FieldValue;
+  createdAt: Timestamp | FieldValue | Date;
+  updatedAt: Timestamp | FieldValue | Date;
   createdBy: string;
 }
 
@@ -603,7 +603,7 @@ export interface AISuggestion {
   implementation?: any;
   estimatedImpact?: string;
   prerequisites?: any[];
-  createdAt: Timestamp | FieldValue;
+  createdAt: Timestamp | FieldValue | Date;
 }
 
 export interface TeamContext {

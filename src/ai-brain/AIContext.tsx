@@ -332,8 +332,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({
       recommendations: [],
       isActionable: false,
       isRead: false,
-      createdAt: new Date() as any,
-      updatedAt: new Date() as any,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: 'current-user'
     };
 

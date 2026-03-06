@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // src/utils/offline-persistence.ts
 import { 
   doc, 
@@ -285,7 +285,7 @@ export class OfflinePersistenceManager {
       const snapshot = await getDocs(q);
       const documents = snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...(doc.data() as Record<string, unknown>)
       }));
 
       // Store in local cache
@@ -499,9 +499,9 @@ export class OfflineFirestore {
     }
   }
 
-  async query(collection: string, filters?: any, orderByField?: string, limitCount?: number): Promise<any[]> {
+  async query(collectionName: string, filters?: any, orderByField?: string, limitCount?: number): Promise<any[]> {
     try {
-      let q: any = collection(db, collection);
+      let q: any = collection(db, collectionName);
       
       if (filters) {
         Object.entries(filters).forEach(([field, value]) => {

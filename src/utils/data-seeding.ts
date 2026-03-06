@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // src/utils/data-seeding.ts
 import { 
   doc, 
@@ -13,10 +13,11 @@ import {
   serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
-import { 
-  User, Team, Player, PracticePlan, Play, 
+import {
+  User, Team, Player, PracticePlan, Play,
   Sport, AgeGroup, PlayerPosition, UserRole,
-  COLLECTIONS, NotificationType
+  COLLECTIONS, NotificationType,
+  CoachPersona, SubscriptionTier, SubscriptionStatus
 } from '../types/firestore-schema';
 
 // ============================================
@@ -37,7 +38,7 @@ export interface SeedingConfig {
 export interface UserSeedConfig {
   count: number;
   roles: UserRole[];
-  personas: string[];
+  personas: CoachPersona[];
   includeSubscriptions: boolean;
 }
 
@@ -68,8 +69,8 @@ export interface PracticePlanSeedConfig {
 
 export interface PlaySeedConfig {
   perTeam: number;
-  categories: string[];
-  difficulties: string[];
+  categories: import('../types/firestore-schema').PlayCategory[];
+  difficulties: ('beginner' | 'intermediate' | 'advanced')[];
   includeDiagrams: boolean;
 }
 
@@ -223,7 +224,7 @@ export class DataSeeder {
         photoURL: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random`,
         roles: [role],
         teamIds: [],
-        persona: persona as any,
+        persona,
         preferences: this.generateUserPreferences(),
         subscription: this.generateSubscription(),
         lastActiveAt: Timestamp.now(),
@@ -249,18 +250,18 @@ export class DataSeeder {
         sms: Math.random() > 0.7,
         push: Math.random() > 0.2,
         inApp: true,
-        frequency: ['immediate', 'daily', 'weekly'][Math.floor(Math.random() * 3)] as any,
+        frequency: (['immediate', 'daily', 'weekly'] as const)[Math.floor(Math.random() * 3)],
         types: ['practice_reminder', 'game_reminder', 'team_update'] as NotificationType[]
       },
       ai: {
         autoSuggest: Math.random() > 0.3,
         confidenceThreshold: 0.6 + Math.random() * 0.3,
-        aiPersonality: ['conservative', 'balanced', 'aggressive'][Math.floor(Math.random() * 3)] as any,
+        aiPersonality: (['conservative', 'balanced', 'aggressive'] as const)[Math.floor(Math.random() * 3)],
         enableVoiceCommands: Math.random() > 0.8
       },
-      theme: ['light', 'dark', 'auto'][Math.floor(Math.random() * 3)] as any,
+      theme: (['light', 'dark', 'auto'] as const)[Math.floor(Math.random() * 3)],
       privacy: {
-        profileVisibility: ['public', 'team_only', 'private'][Math.floor(Math.random() * 3)] as any,
+        profileVisibility: (['public', 'team_only', 'private'] as const)[Math.floor(Math.random() * 3)],
         shareAnalytics: Math.random() > 0.4,
         allowDataCollection: Math.random() > 0.3
       }
@@ -268,15 +269,15 @@ export class DataSeeder {
   }
 
   private generateSubscription() {
-    const tiers = ['free', 'pro', 'enterprise'];
-    const tier = tiers[Math.floor(Math.random() * tiers.length)] as any;
-    
+    const tiers: SubscriptionTier[] = ['free', 'pro', 'enterprise'];
+    const tier: SubscriptionTier = tiers[Math.floor(Math.random() * tiers.length)];
+
     return {
       tier,
-      status: 'active' as any,
+      status: 'active' as SubscriptionStatus,
       expiresAt: Timestamp.fromDate(new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)),
       features: this.getSubscriptionFeatures(tier),
-      billingCycle: Math.random() > 0.5 ? 'monthly' : 'yearly' as any
+      billingCycle: (Math.random() > 0.5 ? 'monthly' : 'yearly') as 'monthly' | 'yearly'
     };
   }
 
@@ -510,8 +511,8 @@ export class DataSeeder {
             height: 60 + Math.floor(Math.random() * 24), // 5'0" to 6'11"
             weight: 120 + Math.floor(Math.random() * 80), // 120-200 lbs
             age: 14 + Math.floor(Math.random() * 4), // 14-17 years old
-            dominantHand: ['left', 'right', 'ambidextrous'][Math.floor(Math.random() * 3)] as any,
-            dominantFoot: ['left', 'right', 'ambidextrous'][Math.floor(Math.random() * 3)] as any
+            dominantHand: (['left', 'right', 'ambidextrous'] as const)[Math.floor(Math.random() * 3)],
+            dominantFoot: (['left', 'right', 'ambidextrous'] as const)[Math.floor(Math.random() * 3)]
           },
           medicalInfo: this.config.players.includeMedicalInfo ? this.generateMedicalInfo() : {
             allergies: [],
@@ -644,7 +645,7 @@ export class DataSeeder {
           periods: this.config.practicePlans.includeDrills ? this.generatePracticePeriods() : [],
           goals: ['Improve teamwork', 'Build endurance', 'Practice fundamentals'],
           notes: 'Focus on player development and team cohesion.',
-          status: ['draft', 'scheduled', 'completed'][Math.floor(Math.random() * 3)] as any,
+          status: (['draft', 'scheduled', 'completed'] as const)[Math.floor(Math.random() * 3)],
           weather: {
             temperature: 65 + Math.random() * 20,
             condition: ['Sunny', 'Cloudy', 'Rainy'][Math.floor(Math.random() * 3)],
@@ -667,11 +668,11 @@ export class DataSeeder {
   }
 
   private generatePracticePeriods() {
-    const periods = [
-      { name: 'Warm-up', duration: 15, type: 'warmup' as any },
-      { name: 'Skill Development', duration: 30, type: 'skill_development' as any },
-      { name: 'Team Drills', duration: 25, type: 'team_drill' as any },
-      { name: 'Cool-down', duration: 10, type: 'cool_down' as any }
+    const periods: { name: string; duration: number; type: import('../types/firestore-schema').PeriodType }[] = [
+      { name: 'Warm-up', duration: 15, type: 'warmup' },
+      { name: 'Skill Development', duration: 30, type: 'skill_development' },
+      { name: 'Team Drills', duration: 25, type: 'team_drill' },
+      { name: 'Cool-down', duration: 10, type: 'cool_down' }
     ];
 
     return periods.map((period, index) => ({
@@ -695,7 +696,7 @@ export class DataSeeder {
       duration: 10 + Math.floor(Math.random() * 15),
       equipment: ['Cones', 'Balls'],
       playersInvolved: 5 + Math.floor(Math.random() * 10),
-      difficulty: ['beginner', 'intermediate', 'advanced'][Math.floor(Math.random() * 3)] as any,
+      difficulty: (['beginner', 'intermediate', 'advanced'] as const)[Math.floor(Math.random() * 3)],
       category: 'skill_development',
       instructions: ['Set up equipment', 'Demonstrate technique', 'Practice with partner'],
       variations: ['Increase difficulty', 'Add time pressure', 'Include competition'],
@@ -706,7 +707,7 @@ export class DataSeeder {
   private generateAttendanceRecords(team: Team) {
     return team.playerIds.map(playerId => ({
       playerId,
-      status: ['present', 'absent', 'late', 'excused'][Math.floor(Math.random() * 4)] as any,
+      status: (['present', 'absent', 'late', 'excused'] as const)[Math.floor(Math.random() * 4)],
       checkInTime: Math.random() > 0.3 ? Timestamp.now() : undefined,
       notes: Math.random() > 0.8 ? 'Player note' : undefined
     }));
@@ -767,9 +768,9 @@ export class DataSeeder {
           routes: this.generateRoutes(team),
           players: this.generatePlayPlayers(team),
           tags: ['offense', 'passing', 'running'].filter(() => Math.random() > 0.5),
-          difficulty: this.config.plays.difficulties[Math.floor(Math.random() * this.config.plays.difficulties.length)] as any,
+          difficulty: this.config.plays.difficulties[Math.floor(Math.random() * this.config.plays.difficulties.length)],
           sport: team.sport,
-          category: this.config.plays.categories[Math.floor(Math.random() * this.config.plays.categories.length)] as any,
+          category: this.config.plays.categories[Math.floor(Math.random() * this.config.plays.categories.length)],
           successRate: Math.random() * 100,
           usageCount: Math.floor(Math.random() * 20),
           lastUsed: Math.random() > 0.5 ? Timestamp.now() : undefined,
@@ -789,14 +790,14 @@ export class DataSeeder {
 
   private generateRoutes(team: Team) {
     const routes = [];
-    const routeTypes = ['run', 'pass', 'block', 'defend', 'cover', 'blitz'];
+    const routeTypes: import('../types/firestore-schema').RouteType[] = ['run', 'pass', 'block', 'defend', 'cover', 'blitz'];
     
     for (let i = 0; i < 3; i++) {
       routes.push({
         id: `route_${i + 1}`,
         playerId: team.playerIds[i] || `player_${i + 1}`,
         path: this.generatePath(),
-        type: routeTypes[Math.floor(Math.random() * routeTypes.length)] as any,
+        type: routeTypes[Math.floor(Math.random() * routeTypes.length)],
         timing: Math.random() * 5,
         description: `Route ${i + 1} description`,
         keyPoints: ['Start position', 'Movement pattern', 'End position']

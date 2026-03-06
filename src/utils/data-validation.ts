@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // src/utils/data-validation.ts
 import { Timestamp } from 'firebase/firestore';
 import { 
@@ -13,14 +13,15 @@ import {
 
 export interface ValidationRule {
   required?: boolean;
-  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'timestamp' | 'email';
+  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'timestamp' | 'email' | 'enum';
   minLength?: number;
   maxLength?: number;
   min?: number;
   max?: number;
   pattern?: RegExp;
   enum?: string[];
-  custom?: (value: any) => boolean;
+  values?: string[];
+  custom?: (value: unknown) => boolean;
   message?: string;
 }
 
@@ -241,7 +242,7 @@ export class DataValidator {
 
     // Validate required fields
     Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof User], field, rules);
+      const fieldErrors = this.validateField(data[field as keyof User], field, rules as ValidationRule);
       errors.push(...fieldErrors);
     });
 
@@ -274,7 +275,7 @@ export class DataValidator {
 
     // Validate required fields
     Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof Team], field, rules);
+      const fieldErrors = this.validateField(data[field as keyof Team], field, rules as ValidationRule);
       errors.push(...fieldErrors);
     });
 
@@ -307,7 +308,7 @@ export class DataValidator {
 
     // Validate required fields
     Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof Player], field, rules);
+      const fieldErrors = this.validateField(data[field as keyof Player], field, rules as ValidationRule);
       errors.push(...fieldErrors);
     });
 
@@ -340,7 +341,7 @@ export class DataValidator {
 
     // Validate required fields
     Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof PracticePlan], field, rules);
+      const fieldErrors = this.validateField(data[field as keyof PracticePlan], field, rules as ValidationRule);
       errors.push(...fieldErrors);
     });
 
@@ -377,7 +378,7 @@ export class DataValidator {
 
     // Validate required fields
     Object.entries(schema).forEach(([field, rules]) => {
-      const fieldErrors = this.validateField(data[field as keyof Play], field, rules);
+      const fieldErrors = this.validateField(data[field as keyof Play], field, rules as ValidationRule);
       errors.push(...fieldErrors);
     });
 

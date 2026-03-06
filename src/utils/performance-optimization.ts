@@ -1,6 +1,16 @@
-// @ts-nocheck
+
 // src/utils/performance-optimization.ts
 import React, { ComponentType, ReactNode, lazy, useCallback, useEffect, useState } from 'react';
+
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+interface PerformanceWithMemory extends Performance {
+  memory?: PerformanceMemory;
+}
 
 // ============================================
 // PERFORMANCE TYPES
@@ -517,7 +527,7 @@ export class PerformanceMonitor {
 
   private getMemoryUsage(): number {
     if ('memory' in performance) {
-      return (performance as any).memory.usedJSHeapSize;
+      return (performance as PerformanceWithMemory).memory?.usedJSHeapSize ?? 0;
     }
     return 0;
   }
@@ -566,8 +576,8 @@ export class PerformanceMonitor {
   private setupMemoryObserver(): void {
     if ('memory' in performance) {
       setInterval(() => {
-        const memory = (performance as any).memory;
-        const usage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
+        const memory = (performance as PerformanceWithMemory).memory;
+        const usage = memory ? memory.usedJSHeapSize / memory.jsHeapSizeLimit : 0;
         
         if (usage > 0.8) {
           console.warn('High memory usage detected:', usage * 100 + '%');

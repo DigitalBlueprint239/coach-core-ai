@@ -15,6 +15,10 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
+interface NavigatorWithStandalone extends Navigator {
+  standalone?: boolean;
+}
+
 interface PWAInstallPromptProps {
   onInstall?: () => void;
   onDismiss?: () => void;
@@ -49,7 +53,7 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
     // Check if PWA is already installed
     const checkInstallation = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      const isInApp = (window.navigator as any).standalone === true;
+      const isInApp = (window.navigator as NavigatorWithStandalone).standalone === true;
       const isInstalled = isStandalone || isInApp;
       
       setIsInstalled(isInstalled);
@@ -423,7 +427,7 @@ export const usePWAInstall = () => {
   useEffect(() => {
     const checkInstallation = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      const isInApp = (window.navigator as any).standalone === true;
+      const isInApp = (window.navigator as NavigatorWithStandalone).standalone === true;
       setIsInstalled(isStandalone || isInApp);
       setIsSupported('serviceWorker' in navigator && 'PushManager' in window);
     };

@@ -1,9 +1,19 @@
-// @ts-nocheck
+
 // src/utils/performance-testing.ts
-import { 
-  doc, 
-  setDoc, 
-  getDoc, 
+
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+interface PerformanceWithMemory extends Performance {
+  memory?: PerformanceMemory;
+}
+import {
+  doc,
+  setDoc,
+  getDoc,
   getDocs,
   collection,
   query,
@@ -15,7 +25,10 @@ import {
   Timestamp,
   serverTimestamp,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  Query,
+  CollectionReference,
+  DocumentData
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
@@ -538,7 +551,8 @@ export class PerformanceTestingManager {
 
   private generateRecommendations(result: TestResult, test: PerformanceTest): TestRecommendation[] {
     const recommendations: TestRecommendation[] = [];
-    const { summary, expectedResults } = result;
+    const { summary } = result;
+    const { expectedResults } = test;
     
     // Check response time
     if (summary.averageResponseTime > expectedResults.maxResponseTime) {
@@ -662,7 +676,7 @@ class VirtualUser {
       }
       
       const responseTime = Date.now() - startTime;
-      this.recordMetric(result, responseTime, true, operation.type);
+      this.recordMetric(result, responseTime, true, 'scenario');
       
     } catch (error) {
       const responseTime = Date.now() - startTime;
@@ -675,7 +689,6 @@ class VirtualUser {
       case 'read':
         return this.executeReadOperation(operation);
       case 'write':
-      case 'create':
         return this.executeCreateOperation(operation);
       case 'update':
         return this.executeUpdateOperation(operation);
@@ -721,8 +734,8 @@ class VirtualUser {
   }
 
   private async executeQueryOperation(operation: TestOperation): Promise<any> {
-    let q = collection(db, operation.collection);
-    
+    let q: Query<DocumentData> | CollectionReference<DocumentData> = collection(db, operation.collection);
+
     if (operation.filters) {
       Object.entries(operation.filters).forEach(([field, value]) => {
         q = query(q, where(field, '==', value));
@@ -786,7 +799,7 @@ class MetricsCollector {
 
     // Update memory usage
     if ('memory' in performance) {
-      this.memoryUsage = (performance as any).memory.usedJSHeapSize / 1024 / 1024; // Convert to MB
+      this.memoryUsage = ((performance as PerformanceWithMemory).memory?.usedJSHeapSize ?? 0) / 1024 / 1024; // Convert to MB
     }
 
     // Update CPU usage (simplified)
