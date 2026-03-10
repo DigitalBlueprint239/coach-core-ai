@@ -138,6 +138,12 @@ function saveOfflineQueue() {
   localStorage.setItem('offline_operations', JSON.stringify(offlineQueue));
 }
 
+// Exported for testing
+export function addToOfflineQueue(operation: any) {
+  offlineQueue.push(operation);
+  saveOfflineQueue();
+}
+
 function loadOfflineQueue() {
   const storedQueue = localStorage.getItem('offline_operations');
   if (storedQueue) {
