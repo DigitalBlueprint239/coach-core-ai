@@ -27,22 +27,11 @@ import {
   findPlayerAtPosition,
 } from './PlayController';
 import { AIProvider } from '../../ai-brain/AIContext';
+import { PlaybookDataProvider } from '../../contexts/PlaybookDataContext';
+import InstallListPanel from '../InstallListPanel';
 
-// JS UI Components — typed as FC<any> since they are untyped JS modules
-/* eslint-disable @typescript-eslint/no-var-requires */
-const DebugPanel: React.FC<any> = require('./DebugPanel').default;
-const PlayLibrary: React.FC<any> = require('./PlayLibrary').default;
-const PlayerControls: React.FC<any> = require('./components/PlayerControls').default;
-const RouteControls: React.FC<any> = require('./components/RouteControls').default;
-const RouteEditor: React.FC<any> = require('./components/RouteEditor').default;
-const FormationTemplates: React.FC<any> = require('./components/FormationTemplates').default;
-const SaveLoadPanel: React.FC<any> = require('./components/SaveLoadPanel').default;
-const Toolbar: React.FC<any> = require('./components/Toolbar').default;
-const Notification: React.FC<any> = require('./components/Notification').default;
-const Onboarding: React.FC<any> = require('./components/Onboarding').default;
-/* eslint-enable @typescript-eslint/no-var-requires */
+// --- Base types ---
 
-// Types
 interface PlayerData {
   id: string;
   x: number;
@@ -98,6 +87,120 @@ interface NotificationData {
   message: string;
   duration: number;
 }
+
+// --- Props interfaces for untyped JS components ---
+
+interface DebugPanelProps {
+  results: DebugResult[];
+  onRunAll: () => void;
+  onTogglePassed: () => void;
+  showPassed: boolean;
+}
+
+interface PlayLibraryProps {
+  savedPlays: SavedPlay[];
+  onLoadPlay: (play: SavedPlay) => void;
+  onDeletePlay: (playId: string) => void;
+  onClose: () => void;
+}
+
+interface PlayerControlsProps {
+  selectedPlayer: PlayerData | undefined;
+  players: PlayerData[];
+  onUpdatePlayer: (updates: Partial<PlayerData>) => void;
+  onDeletePlayer: () => void;
+}
+
+interface RouteControlsProps {
+  selectedPlayer: PlayerData | undefined;
+  isDrawingRoute: boolean;
+  routeType: string;
+  routeColor: string;
+  onStartDrawing: (playerId: string) => void;
+  onFinishDrawing: () => void;
+  onCancelDrawing: () => void;
+  onRouteTypeChange: (type: string) => void;
+  onRouteColorChange: (color: string) => void;
+}
+
+interface RoutePreset {
+  id: string;
+  name: string;
+  points: RoutePoint[];
+}
+
+interface RouteEditorProps {
+  selectedRoute: RouteData | undefined;
+  players: PlayerData[];
+  onUpdateRoute: (routeId: string, updates: Partial<RouteData>) => void;
+  onDeleteRoute: (routeId: string) => void;
+  onApplyPreset: (routeId: string, preset: RoutePreset) => void;
+  onClearSelection: () => void;
+}
+
+interface FormationTemplatesProps {
+  onLoadFormation: (formationId: string) => void;
+}
+
+interface SaveLoadPanelProps {
+  currentPlayName: string;
+  currentPlayPhase: string;
+  currentPlayType: string;
+  onPlayNameChange: (name: string) => void;
+  onPlayPhaseChange: (phase: string) => void;
+  onPlayTypeChange: (type: string) => void;
+  onSave: () => void;
+  onLoad: () => void;
+  canSave: boolean;
+}
+
+interface UndoState {
+  players: PlayerData[];
+  routes: RouteData[];
+  action: string;
+  timestamp: number;
+}
+
+interface ToolbarProps {
+  mode: string;
+  onModeChange: (mode: string) => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  undoStack: UndoState[];
+  onClear: () => void;
+  onShowHelp: () => void;
+  onNewPlay: () => void;
+}
+
+interface NotificationProps {
+  type: string;
+  message: string;
+  duration: number;
+  onDismiss: (id: number) => void;
+  id: number;
+}
+
+interface OnboardingProps {
+  isVisible: boolean;
+  onComplete: () => void;
+  onSkip: () => void;
+}
+
+// JS UI Components — typed with proper interfaces
+/* eslint-disable @typescript-eslint/no-var-requires */
+const DebugPanel: React.FC<DebugPanelProps> = require('./DebugPanel').default;
+const PlayLibrary: React.FC<PlayLibraryProps> = require('./PlayLibrary').default;
+const PlayerControls: React.FC<PlayerControlsProps> = require('./components/PlayerControls').default;
+const RouteControls: React.FC<RouteControlsProps> = require('./components/RouteControls').default;
+const RouteEditor: React.FC<RouteEditorProps> = require('./components/RouteEditor').default;
+const FormationTemplates: React.FC<FormationTemplatesProps> = require('./components/FormationTemplates').default;
+const SaveLoadPanel: React.FC<SaveLoadPanelProps> = require('./components/SaveLoadPanel').default;
+const Toolbar: React.FC<ToolbarProps> = require('./components/Toolbar').default;
+const Notification: React.FC<NotificationProps> = require('./components/Notification').default;
+const Onboarding: React.FC<OnboardingProps> = require('./components/Onboarding').default;
+/* eslint-enable @typescript-eslint/no-var-requires */
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -726,8 +829,9 @@ const SmartPlaybook = () => {
             )}
           </div>
 
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
+          {/* Right Sidebar - Install List & Library */}
+          <div className="lg:col-span-1 space-y-4">
+            <InstallListPanel />
             {showLibrary && (
               <PlayLibrary
                 savedPlays={savedPlays}
@@ -790,8 +894,10 @@ const SmartPlaybook = () => {
 
 const WrappedSmartPlaybook = () => (
   <AIProvider>
-    <SmartPlaybook />
+    <PlaybookDataProvider>
+      <SmartPlaybook />
+    </PlaybookDataProvider>
   </AIProvider>
 );
 
-export default WrappedSmartPlaybook; 
+export default WrappedSmartPlaybook;
