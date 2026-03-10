@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/performance-testing.ts
 import { 
   doc, 

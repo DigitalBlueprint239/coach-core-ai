@@ -1,9 +1,10 @@
-// @ts-nocheck
 import React from 'react';
-import Field from '../:components:SmartPlaybook:Field.js';
+
+// The Field component is a JS module with canvas rendering
+const Field: React.FC<any> = require('../:components:SmartPlaybook:Field.js').default;
 
 interface CanvasAreaProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
   players: any[];
   routes: any[];
   onCanvasEvent: (e: any) => void;

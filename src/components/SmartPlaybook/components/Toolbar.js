@@ -6,16 +6,17 @@
  */
 
 import React, { memo } from 'react';
-import { 
-  Eye, 
-  UserPlus, 
-  Route, 
-  Trash2, 
-  RotateCcw, 
-  RotateCw, 
+import {
+  Eye,
+  UserPlus,
+  Route,
+  Trash2,
+  RotateCcw,
+  RotateCw,
   Trash,
   MousePointer,
-  HelpCircle
+  HelpCircle,
+  FilePlus
 } from 'lucide-react';
 
 const TOOLBAR_MODES = [
@@ -34,7 +35,8 @@ const Toolbar = memo(({
   canRedo = false,
   undoStack = [],
   onClear,
-  onShowHelp
+  onShowHelp,
+  onNewPlay
 }) => {
   // Keyboard shortcuts
   React.useEffect(() => {
@@ -112,6 +114,15 @@ const Toolbar = memo(({
           {canUndo ? `${undoStack.length} actions available` : 'No actions to undo'}
         </div>
         
+        <button
+          onClick={onNewPlay}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+          title="Create a new empty play"
+        >
+          <FilePlus size={14} />
+          <span className="text-sm">New Play</span>
+        </button>
+
         <button
           onClick={onClear}
           className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"

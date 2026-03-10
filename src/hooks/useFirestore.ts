@@ -1,14 +1,13 @@
-// @ts-nocheck
 // src/hooks/useFirestore.ts
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  savePracticePlan, 
-  getPracticePlans, 
-  updatePracticePlan, 
+import {
+  savePracticePlan,
+  getPracticePlans,
+  updatePracticePlan,
   deletePracticePlan,
   savePlay,
   getPlays,
-  updatePlay,
+  updatePlay as updatePlayService,
   deletePlay,
   subscribeToPracticePlans,
   subscribeToPlays,
@@ -136,7 +135,7 @@ export const usePlaybook = (teamId: string | undefined) => {
     
     try {
       setError(null);
-      await updatePlay(teamId, playId, updates);
+      await updatePlayService(teamId, playId, updates);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to update play';
       setError(errorMessage);

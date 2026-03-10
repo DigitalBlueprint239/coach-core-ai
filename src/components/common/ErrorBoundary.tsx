@@ -22,7 +22,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error('Coach Core AI crashed:', error, errorInfo);
     
     this.setState({
       error,
@@ -37,70 +37,100 @@ class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      // Default fallback UI
+      // Default fallback UI — dark/athletic theme matching Coach Core
       return (
-        <div className="error-boundary-container bg-red-50 border border-red-200 rounded-lg p-6 m-4">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-red-100 rounded-full p-3">
-              <svg 
-                className="w-8 h-8 text-red-600" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" 
+        <div
+          className="error-boundary-container"
+          style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+            padding: '2rem',
+          }}
+        >
+          <div
+            style={{
+              maxWidth: 480,
+              width: '100%',
+              background: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: 16,
+              padding: '2.5rem',
+              textAlign: 'center',
+              boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+            }}
+          >
+            <div
+              style={{
+                width: 64,
+                height: 64,
+                margin: '0 auto 1.5rem',
+                background: '#dc2626',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <svg width="32" height="32" fill="none" stroke="#fff" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
                 />
               </svg>
             </div>
-          </div>
-          
-          <div className="text-center">
-            <h2 className="text-lg font-semibold text-red-800 mb-2">
+
+            <h2 style={{ color: '#f1f5f9', fontSize: '1.25rem', fontWeight: 700, marginBottom: 8 }}>
               Something went wrong
             </h2>
-            <p className="text-red-600 mb-4">
-              Something went wrong. Please try again later.
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+              Coach Core encountered an unexpected error. Your saved plays are safe.
             </p>
-            
+
             <button
               onClick={() => window.location.reload()}
-              className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              style={{
+                background: '#2563eb',
+                color: '#fff',
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                padding: '0.625rem 1.5rem',
+                borderRadius: 8,
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseOver={(e) => { (e.target as HTMLButtonElement).style.background = '#1d4ed8'; }}
+              onMouseOut={(e) => { (e.target as HTMLButtonElement).style.background = '#2563eb'; }}
             >
-              Reload Page
+              Reload
             </button>
-          </div>
 
-          {/* Development error details */}
-          {process.env.NODE_ENV === 'development' && this.state.error && (
-            <details className="mt-6 bg-red-100 rounded-lg p-4">
-              <summary className="cursor-pointer font-medium text-red-800 mb-2">
-                Error Details (Development Only)
-              </summary>
-              <div className="text-sm text-red-700 space-y-2">
-                <div>
-                  <strong>Error:</strong> {this.state.error.message}
-                </div>
-                <div>
-                  <strong>Stack:</strong>
-                  <pre className="mt-1 text-xs bg-red-200 p-2 rounded overflow-auto">
+            {process.env.NODE_ENV === 'development' && this.state.error && (
+              <details style={{ marginTop: '1.5rem', textAlign: 'left' }}>
+                <summary style={{ color: '#94a3b8', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600 }}>
+                  Error Details (Development Only)
+                </summary>
+                <div style={{ marginTop: 8, color: '#cbd5e1', fontSize: '0.75rem' }}>
+                  <div style={{ marginBottom: 8 }}>
+                    <strong>Error:</strong> {this.state.error.message}
+                  </div>
+                  <pre style={{ background: '#0f172a', padding: 12, borderRadius: 8, overflow: 'auto', fontSize: '0.625rem', color: '#94a3b8' }}>
                     {this.state.error.stack}
                   </pre>
-                </div>
-                {this.state.errorInfo && (
-                  <div>
-                    <strong>Component Stack:</strong>
-                    <pre className="mt-1 text-xs bg-red-200 p-2 rounded overflow-auto">
+                  {this.state.errorInfo && (
+                    <pre style={{ background: '#0f172a', padding: 12, borderRadius: 8, overflow: 'auto', fontSize: '0.625rem', color: '#94a3b8', marginTop: 8 }}>
                       {this.state.errorInfo.componentStack}
                     </pre>
-                  </div>
-                )}
-              </div>
-            </details>
-          )}
+                  )}
+                </div>
+              </details>
+            )}
+          </div>
         </div>
       );
     }

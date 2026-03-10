@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/performance-optimization.ts
 import React, { ComponentType, ReactNode, lazy, useCallback, useEffect, useState } from 'react';
 

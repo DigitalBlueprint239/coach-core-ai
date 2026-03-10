@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/data-migration.ts
 import { 
   doc, 

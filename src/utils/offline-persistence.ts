@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/utils/offline-persistence.ts
 import { 
   doc, 
