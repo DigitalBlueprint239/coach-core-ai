@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SmartPlaybook.js – Main application component
  * - Orchestrates all Smart Playbook functionality
@@ -7,9 +6,6 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import Field from './Field';
-import DebugPanel from './DebugPanel';
-import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
 import SavePlayDialog from './components/SavePlayDialog';
 import ErrorBoundary from '../common/ErrorBoundary';
@@ -29,19 +25,182 @@ import {
   shotgunFormation,
   fourThreeFormation,
   findPlayerAtPosition,
-  calculateDistance
 } from './PlayController';
-
-// UI Components
-import PlayerControls from './components/PlayerControls';
-import RouteControls from './components/RouteControls';
-import RouteEditor from './components/RouteEditor';
-import FormationTemplates from './components/FormationTemplates';
-import SaveLoadPanel from './components/SaveLoadPanel';
-import Toolbar from './components/Toolbar';
-import Notification from './components/Notification';
-import Onboarding from './components/Onboarding';
 import { AIProvider } from '../../ai-brain/AIContext';
+import { PlaybookDataProvider } from '../../contexts/PlaybookDataContext';
+import InstallListPanel from '../InstallListPanel';
+
+// --- Base types ---
+
+interface PlayerData {
+  id: string;
+  x: number;
+  y: number;
+  position: string;
+  number?: number;
+  selected: boolean;
+  createdAt: string;
+}
+
+interface RoutePoint {
+  x: number;
+  y: number;
+}
+
+interface RouteData {
+  id: string;
+  playerId: string;
+  points: RoutePoint[];
+  type: string;
+  color: string;
+  createdAt: string;
+}
+
+interface SavedPlay {
+  id: string;
+  name: string;
+  phase: string;
+  type: string;
+  players: PlayerData[];
+  routes: RouteData[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface UndoState {
+  players: PlayerData[];
+  routes: RouteData[];
+  action: string;
+  timestamp: number;
+}
+
+interface DebugResult {
+  name: string;
+  category: string;
+  passed: boolean;
+  duration: number;
+}
+
+interface NotificationData {
+  id: number;
+  type: string;
+  message: string;
+  duration: number;
+}
+
+// --- Props interfaces for untyped JS components ---
+
+interface DebugPanelProps {
+  results: DebugResult[];
+  onRunAll: () => void;
+  onTogglePassed: () => void;
+  showPassed: boolean;
+}
+
+interface PlayLibraryProps {
+  savedPlays: SavedPlay[];
+  onLoadPlay: (play: SavedPlay) => void;
+  onDeletePlay: (playId: string) => void;
+  onClose: () => void;
+}
+
+interface PlayerControlsProps {
+  selectedPlayer: PlayerData | undefined;
+  players: PlayerData[];
+  onUpdatePlayer: (updates: Partial<PlayerData>) => void;
+  onDeletePlayer: () => void;
+}
+
+interface RouteControlsProps {
+  selectedPlayer: PlayerData | undefined;
+  isDrawingRoute: boolean;
+  routeType: string;
+  routeColor: string;
+  onStartDrawing: (playerId: string) => void;
+  onFinishDrawing: () => void;
+  onCancelDrawing: () => void;
+  onRouteTypeChange: (type: string) => void;
+  onRouteColorChange: (color: string) => void;
+}
+
+interface RoutePreset {
+  id: string;
+  name: string;
+  points: RoutePoint[];
+}
+
+interface RouteEditorProps {
+  selectedRoute: RouteData | undefined;
+  players: PlayerData[];
+  onUpdateRoute: (routeId: string, updates: Partial<RouteData>) => void;
+  onDeleteRoute: (routeId: string) => void;
+  onApplyPreset: (routeId: string, preset: RoutePreset) => void;
+  onClearSelection: () => void;
+}
+
+interface FormationTemplatesProps {
+  onLoadFormation: (formationId: string) => void;
+}
+
+interface SaveLoadPanelProps {
+  currentPlayName: string;
+  currentPlayPhase: string;
+  currentPlayType: string;
+  onPlayNameChange: (name: string) => void;
+  onPlayPhaseChange: (phase: string) => void;
+  onPlayTypeChange: (type: string) => void;
+  onSave: () => void;
+  onLoad: () => void;
+  canSave: boolean;
+}
+
+interface UndoState {
+  players: PlayerData[];
+  routes: RouteData[];
+  action: string;
+  timestamp: number;
+}
+
+interface ToolbarProps {
+  mode: string;
+  onModeChange: (mode: string) => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  undoStack: UndoState[];
+  onClear: () => void;
+  onShowHelp: () => void;
+  onNewPlay: () => void;
+}
+
+interface NotificationProps {
+  type: string;
+  message: string;
+  duration: number;
+  onDismiss: (id: number) => void;
+  id: number;
+}
+
+interface OnboardingProps {
+  isVisible: boolean;
+  onComplete: () => void;
+  onSkip: () => void;
+}
+
+// JS UI Components — typed with proper interfaces
+/* eslint-disable @typescript-eslint/no-var-requires */
+const DebugPanel: React.FC<DebugPanelProps> = require('./DebugPanel').default;
+const PlayLibrary: React.FC<PlayLibraryProps> = require('./PlayLibrary').default;
+const PlayerControls: React.FC<PlayerControlsProps> = require('./components/PlayerControls').default;
+const RouteControls: React.FC<RouteControlsProps> = require('./components/RouteControls').default;
+const RouteEditor: React.FC<RouteEditorProps> = require('./components/RouteEditor').default;
+const FormationTemplates: React.FC<FormationTemplatesProps> = require('./components/FormationTemplates').default;
+const SaveLoadPanel: React.FC<SaveLoadPanelProps> = require('./components/SaveLoadPanel').default;
+const Toolbar: React.FC<ToolbarProps> = require('./components/Toolbar').default;
+const Notification: React.FC<NotificationProps> = require('./components/Notification').default;
+const Onboarding: React.FC<OnboardingProps> = require('./components/Onboarding').default;
+/* eslint-enable @typescript-eslint/no-var-requires */
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -53,32 +212,32 @@ const TOUCH_THRESHOLD = 20; // pixels for touch detection
 
 const SmartPlaybook = () => {
   // Core state
-  const [players, setPlayers] = useState([]);
-  const [routes, setRoutes] = useState([]);
-  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
-  const [selectedRouteId, setSelectedRouteId] = useState(null);
-  const [mode, setMode] = useState('view'); // view, player, route, delete
-  const [savedPlays, setSavedPlays] = useState([]);
+  const [players, setPlayers] = useState<PlayerData[]>([]);
+  const [routes, setRoutes] = useState<RouteData[]>([]);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
+  const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
+  const [mode, setMode] = useState<string>('view');
+  const [savedPlays, setSavedPlays] = useState<SavedPlay[]>([]);
   const [currentPlayName, setCurrentPlayName] = useState('');
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
   const [currentPlayType, setCurrentPlayType] = useState('pass');
 
   // Route drawing state
   const [isDrawingRoute, setIsDrawingRoute] = useState(false);
-  const [routePoints, setRoutePoints] = useState([]);
+  const [routePoints, setRoutePoints] = useState<RoutePoint[]>([]);
   const [routeType, setRouteType] = useState('custom');
   const [routeColor, setRouteColor] = useState('#ef4444');
 
   // Undo/Redo state
-  const [undoStack, setUndoStack] = useState([]);
-  const [redoStack, setRedoStack] = useState([]);
+  const [undoStack, setUndoStack] = useState<UndoState[]>([]);
+  const [redoStack, setRedoStack] = useState<UndoState[]>([]);
 
   // UI state
   const [showLibrary, setShowLibrary] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
-  const [debugResults, setDebugResults] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [debugResults, setDebugResults] = useState<DebugResult[]>([]);
+  const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Refs
@@ -123,7 +282,7 @@ const SmartPlaybook = () => {
 
   // Prevent double-tap zoom on mobile
   useEffect(() => {
-    const preventDoubleTapZoom = (event) => {
+    const preventDoubleTapZoom = (event: TouchEvent) => {
       if (event.touches.length > 1) {
         event.preventDefault();
       }
@@ -162,15 +321,15 @@ const SmartPlaybook = () => {
     }
   }, [savedPlays]);
 
-  // Save current state to undo stack
-  const saveToUndoStack = useCallback((action) => {
+  // Save current state to undo stack (capped at 50 entries)
+  const saveToUndoStack = useCallback((action: string) => {
     const currentState = {
       players: [...players],
       routes: [...routes],
       action,
       timestamp: Date.now()
     };
-    setUndoStack(prev => [...prev, currentState]);
+    setUndoStack(prev => [...prev, currentState].slice(-50));
     setRedoStack([]); // Clear redo stack when new action is performed
   }, [players, routes]);
 
@@ -207,7 +366,7 @@ const SmartPlaybook = () => {
   }, [undoStack, redoStack, players, routes]);
 
   // Get canvas coordinates from event
-  const getCanvasCoordinates = useCallback((event) => {
+  const getCanvasCoordinates = useCallback((event: any) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
 
@@ -232,7 +391,7 @@ const SmartPlaybook = () => {
   }, []);
 
   // Handle canvas click/touch
-  const handleCanvasEvent = useCallback((event) => {
+  const handleCanvasEvent = useCallback((event: any) => {
     event.preventDefault();
 
     if (!canvasRef.current) return;
@@ -246,10 +405,10 @@ const SmartPlaybook = () => {
       return;
     }
 
-    // Handle player selection
-    if (mode === 'view' || mode === 'player') {
-      const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
-      
+    // Handle player interactions
+    if (mode === 'view' || mode === 'player' || mode === 'delete') {
+      const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD) as PlayerData | null;
+
       if (clickedPlayer) {
         if (mode === 'delete') {
           // Delete player
@@ -262,7 +421,7 @@ const SmartPlaybook = () => {
           setSelectedPlayerId(clickedPlayer.id);
           setPlayers(prev => selectPlayer(prev, clickedPlayer.id));
         }
-      } else {
+      } else if (mode !== 'delete') {
         // Deselect if clicking empty space
         setSelectedPlayerId(null);
         setPlayers(prev => deselectAll(prev));
@@ -278,7 +437,7 @@ const SmartPlaybook = () => {
   }, [mode, isDrawingRoute, players, getCanvasCoordinates, saveToUndoStack]);
 
   // Handle player drag
-  const handlePlayerDrag = useCallback((playerId, newX, newY) => {
+  const handlePlayerDrag = useCallback((playerId: string, newX: number, newY: number) => {
     // Constrain to field boundaries
     const constrainedX = Math.max(20, Math.min(FIELD_DIMENSIONS.width - 20, newX));
     const constrainedY = Math.max(20, Math.min(FIELD_DIMENSIONS.height - 20, newY));
@@ -287,30 +446,30 @@ const SmartPlaybook = () => {
   }, [FIELD_DIMENSIONS.width, FIELD_DIMENSIONS.height]);
 
   // Handle player drag end (save to undo stack)
-  const handlePlayerDragEnd = useCallback((playerId) => {
+  const handlePlayerDragEnd = useCallback((_playerId: string) => {
     saveToUndoStack('move_player');
     addNotification('success', 'Player moved successfully');
   }, [saveToUndoStack]);
 
   // Add notification helper
-  const addNotification = useCallback((type, message, duration = 3000) => {
+  const addNotification = useCallback((type: string, message: string, duration = 3000) => {
     const id = Date.now() + Math.random();
     setNotifications(prev => [...prev, { id, type, message, duration }]);
   }, []);
 
   // Remove notification helper
-  const removeNotification = useCallback((id) => {
+  const removeNotification = useCallback((id: number) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   }, []);
 
   // Handle route selection
-  const handleRouteSelect = useCallback((routeId) => {
+  const handleRouteSelect = useCallback((routeId: string) => {
     setSelectedRouteId(routeId);
     setSelectedPlayerId(null); // Deselect player when selecting route
   }, []);
 
   // Handle route update
-  const handleRouteUpdate = useCallback((routeId, updates) => {
+  const handleRouteUpdate = useCallback((routeId: string, updates: Partial<RouteData>) => {
     saveToUndoStack('update_route');
     setRoutes(prev => prev.map(route => 
       route.id === routeId ? { ...route, ...updates } : route
@@ -318,14 +477,14 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack]);
 
   // Handle route deletion
-  const handleRouteDelete = useCallback((routeId) => {
+  const handleRouteDelete = useCallback((routeId: string) => {
     saveToUndoStack('delete_route');
     setRoutes(prev => removeRoute(prev, routeId));
     setSelectedRouteId(null);
   }, [saveToUndoStack]);
 
   // Handle preset route application
-  const handleApplyPreset = useCallback((routeId, preset) => {
+  const handleApplyPreset = useCallback((routeId: string, preset: { id: string; name: string; points: RoutePoint[] }) => {
     saveToUndoStack('apply_preset_route');
     const route = routes.find(r => r.id === routeId);
     if (!route) return;
@@ -334,18 +493,26 @@ const SmartPlaybook = () => {
     const player = players.find(p => p.id === route.playerId);
     if (!player) return;
 
+    const fieldCenterX = FIELD_DIMENSIONS.width / 2;
+    const isRightOfCenter = player.x > fieldCenterX;
+
+    // Routes that break "inside" (toward center) need to be mirrored
+    // for players on the right side of the field
+    const insideRoutes = ['slant', 'in', 'post'];
+    const shouldMirrorX = isRightOfCenter && insideRoutes.includes(preset.id);
+
     const newPoints = preset.points.map(point => ({
-      x: player.x + point.x,
+      x: player.x + (shouldMirrorX ? -point.x : point.x),
       y: player.y + point.y
     }));
 
-    setRoutes(prev => prev.map(r => 
+    setRoutes(prev => prev.map(r =>
       r.id === routeId ? { ...r, points: newPoints, type: preset.id } : r
     ));
   }, [routes, players, saveToUndoStack]);
 
   // Start route drawing
-  const startRouteDrawing = useCallback((playerId) => {
+  const startRouteDrawing = useCallback((playerId: string) => {
     const player = players.find(p => p.id === playerId);
     if (!player) return;
 
@@ -364,6 +531,7 @@ const SmartPlaybook = () => {
       return;
     }
 
+    if (!selectedPlayerId) return;
     const newRoute = createRoute(selectedPlayerId, routePoints, routeType, routeColor);
     saveToUndoStack('add_route');
     setRoutes(prev => addRoute(prev, newRoute));
@@ -381,7 +549,7 @@ const SmartPlaybook = () => {
   }, []);
 
   // Load formation
-  const loadFormation = useCallback((formationType) => {
+  const loadFormation = useCallback((formationType: string) => {
     const centerX = FIELD_DIMENSIONS.width / 2;
     const centerY = FIELD_DIMENSIONS.height / 2;
     
@@ -404,7 +572,7 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack]);
 
   // Save current play
-  const saveCurrentPlay = useCallback((name, phase, type) => {
+  const saveCurrentPlay = useCallback((name: string, phase: string, type: string) => {
     if (!name.trim() || players.length === 0) {
       addNotification('error', 'Please enter a play name and add at least one player.');
       return;
@@ -418,14 +586,14 @@ const SmartPlaybook = () => {
       routes
     });
 
-    setSavedPlays(prev => [...prev, play]);
+    setSavedPlays(prev => [...prev, play as SavedPlay]);
     setShowSaveDialog(false);
     setCurrentPlayName('');
     addNotification('success', `Play "${name}" saved successfully`);
   }, [players, routes, currentPlayPhase, currentPlayType, addNotification]);
 
   // Load play
-  const loadPlay = useCallback((play) => {
+  const loadPlay = useCallback((play: SavedPlay) => {
     saveToUndoStack('load_play');
     setPlayers([...play.players]);
     setRoutes([...play.routes]);
@@ -438,12 +606,39 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack, addNotification]);
 
   // Delete play
-  const deletePlay = useCallback((playId) => {
+  const deletePlay = useCallback((playId: string) => {
     if (window.confirm('Are you sure you want to delete this play?')) {
       setSavedPlays(prev => prev.filter(play => play.id !== playId));
       addNotification('success', 'Play deleted successfully');
     }
   }, [addNotification]);
+
+  // New play counter for unique naming
+  const newPlayCounterRef = useRef(1);
+
+  // Create a new play
+  const handleNewPlay = useCallback(() => {
+    // Save current work if there are players on the field
+    if (players.length > 0) {
+      const shouldSave = window.confirm('Save current play before creating a new one?');
+      if (shouldSave && currentPlayName.trim()) {
+        saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType);
+      }
+    }
+
+    // Reset field for a new play
+    saveToUndoStack('new_play');
+    setPlayers([]);
+    setRoutes([]);
+    setSelectedPlayerId(null);
+    setSelectedRouteId(null);
+    setCurrentPlayName(`Untitled Play ${newPlayCounterRef.current}`);
+    newPlayCounterRef.current += 1;
+    setCurrentPlayPhase('offense');
+    setCurrentPlayType('pass');
+    setUndoStack([]);
+    setRedoStack([]);
+  }, [players, currentPlayName, currentPlayPhase, currentPlayType, saveToUndoStack, saveCurrentPlay]);
 
   // Clear field
   const clearField = useCallback(() => {
@@ -533,6 +728,7 @@ const SmartPlaybook = () => {
               undoStack={undoStack}
               onClear={clearField}
               onShowHelp={() => setShowOnboarding(true)}
+              onNewPlay={handleNewPlay}
             />
 
             {/* Formation Templates */}
@@ -542,7 +738,7 @@ const SmartPlaybook = () => {
             <PlayerControls
               selectedPlayer={players.find(p => p.id === selectedPlayerId)}
               players={players}
-              onUpdatePlayer={(updates) => {
+              onUpdatePlayer={(updates: Partial<PlayerData>) => {
                 saveToUndoStack('update_player');
                 setPlayers(prev => prev.map(p => 
                   p.id === selectedPlayerId ? { ...p, ...updates } : p
@@ -633,8 +829,9 @@ const SmartPlaybook = () => {
             )}
           </div>
 
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
+          {/* Right Sidebar - Install List & Library */}
+          <div className="lg:col-span-1 space-y-4">
+            <InstallListPanel />
             {showLibrary && (
               <PlayLibrary
                 savedPlays={savedPlays}
@@ -697,8 +894,10 @@ const SmartPlaybook = () => {
 
 const WrappedSmartPlaybook = () => (
   <AIProvider>
-    <SmartPlaybook />
+    <PlaybookDataProvider>
+      <SmartPlaybook />
+    </PlaybookDataProvider>
   </AIProvider>
 );
 
-export default WrappedSmartPlaybook; 
+export default WrappedSmartPlaybook;
