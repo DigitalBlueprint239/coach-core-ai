@@ -35,13 +35,17 @@ import {
 // UI Components
 import PlayerControls from './components/PlayerControls';
 import RouteControls from './components/RouteControls';
+import RouteLibrary from './components/RouteLibrary';
 import RouteEditor from './components/RouteEditor';
 import FormationTemplates from './components/FormationTemplates';
 import SaveLoadPanel from './components/SaveLoadPanel';
 import Toolbar from './components/Toolbar';
 import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
+import ExportMenu from './components/ExportMenu';
+import ConceptPanel from './components/ConceptPanel';
 import { AIProvider } from '../../ai-brain/AIContext';
+import { buildConceptRoutes } from './utils/conceptAssignment';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -380,6 +384,17 @@ const SmartPlaybook = () => {
     setMode('view');
   }, []);
 
+  // Apply a named concept (e.g. "smash") — clears existing routes and assigns new ones
+  const applyConcept = useCallback((conceptId) => {
+    if (players.length === 0) return;
+    saveToUndoStack('apply_concept');
+    const fieldCenterX = FIELD_DIMENSIONS.width / 2;
+    const newRoutes = buildConceptRoutes(conceptId, players, fieldCenterX);
+    // Clear previous routes then set the new concept routes
+    setRoutes(newRoutes);
+    addNotification('success', `Concept applied`);
+  }, [players, saveToUndoStack, addNotification]);
+
   // Load formation
   const loadFormation = useCallback((formationType) => {
     const centerX = FIELD_DIMENSIONS.width / 2;
@@ -558,6 +573,14 @@ const SmartPlaybook = () => {
               }}
             />
 
+            {/* Route Library — icon grid with ghost preview */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <RouteLibrary
+                selectedRouteType={routeType}
+                onRouteTypeChange={setRouteType}
+              />
+            </div>
+
             {/* Route Controls */}
             <RouteControls
               selectedPlayer={players.find(p => p.id === selectedPlayerId)}
@@ -569,6 +592,12 @@ const SmartPlaybook = () => {
               onCancelDrawing={cancelRouteDrawing}
               onRouteTypeChange={setRouteType}
               onRouteColorChange={setRouteColor}
+            />
+
+            {/* Concept Batching */}
+            <ConceptPanel
+              onApplyConcept={applyConcept}
+              disabled={players.length === 0}
             />
 
             {/* Route Editor */}
@@ -594,6 +623,14 @@ const SmartPlaybook = () => {
               onSave={() => setShowSaveDialog(true)}
               onLoad={() => setShowLibrary(true)}
               canSave={players.length > 0}
+            />
+
+            {/* Export Menu */}
+            <ExportMenu
+              players={players}
+              routes={routes}
+              playName={currentPlayName || 'Play'}
+              savedPlays={savedPlays}
             />
           </div>
 

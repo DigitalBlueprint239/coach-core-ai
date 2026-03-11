@@ -1,6 +1,6 @@
 # Coach Core AI — Master Tracker
 
-## Overall Completion: 80%
+## Overall Completion: 96%
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -13,9 +13,14 @@
 | Dashboard | ✅ Complete | Stats cards, quick actions, tab navigation |
 | PWA Support | ✅ Complete | Service worker, install prompt, offline detection |
 | Onboarding | ✅ Complete | Modal flow, persona selection, demo mode |
+| Play Export PNG | ✅ Complete | Single-play download at 2× resolution via offscreen canvas |
+| Play Export PDF | ✅ Complete | Multi-play landscape call sheet (4 plays/page) via jsPDF |
+| Ghost Previews | ✅ Complete | Route hover tooltip with instant preview, no state mutation |
+| Concept Batching | ✅ Complete | 5 concepts (Smash/Mesh/4-Verts/Flood/Spacing), single undo entry |
+| Route Micro-Icons | ✅ Complete | SVG icons for all route types in 4-col icon grid |
 | Firestore Integration | ⚠️ Partial | Schema defined, services built, plays save to localStorage only |
 | Analytics Dashboard | ❌ Not Started | ProgressAnalytics component exists but not wired |
-| Test Suite | ✅ Complete | 122 tests across 6 files — all passing |
+| Test Suite | ✅ Complete | 209 tests across 10 files — all passing |
 
 ---
 
@@ -97,12 +102,56 @@ All 8 methods in `src/ai-brain/core/AIBrain.ts` are fully implemented:
 
 ---
 
-## Next Session Starts Here
+---
 
-1. **Firestore Play Persistence** — Plays currently save to localStorage only. Wire `savePlay` to Firestore using the existing `src/services/firestore.ts` infrastructure. The schema is defined in `src/types/firestore-schema.ts`.
+## Session 9 — 2026-03-11 — Tier 2 Professional Features
 
-2. **Analytics Dashboard** — Wire the ProgressAnalytics component to real data. The component exists at `src/features/analytics/ProgressAnalytics.tsx` but isn't connected to the dashboard tabs.
+### Features Added
 
-3. **Environment Variable Cleanup** — Migrate remaining `import.meta.env.VITE_*` references to `process.env.REACT_APP_*` for full CRA compatibility.
+**Task 1: Play Export (PNG + PDF)**
+- `src/components/SmartPlaybook/utils/drawUtils.js` — Canvas rendering pipeline: `drawField`, `drawPlayer`, `drawRoute`, `drawPlay`, `renderPlayToDataURL`
+- `src/components/SmartPlaybook/utils/exportUtils.js` — `exportPlayAsPNG` (triggers download) and `exportCallSheetPDF` (jsPDF landscape letter, 2×2 grid)
+- `src/components/SmartPlaybook/components/ExportMenu.js` — Dropdown with PNG + PDF export options, integrated into SmartPlaybook sidebar
+- Installed: `jspdf` package
 
-4. **Legacy File Cleanup** — Remove nested `coach-core-ai/` directories and fix `@ts-nocheck` suppressions in utility files.
+**Task 2: Ghost Previews (Route Hover Preview)**
+- Implemented in `RouteLibrary.js` — hover over any route button shows a tooltip with enlarged icon + route description
+- Preview dismisses on mouse leave, no state mutation occurs on hover
+
+**Task 3: Concept Batching**
+- `src/components/SmartPlaybook/utils/conceptAssignment.js` — `assignConcept`, `buildConceptRoutes`, `generateRoutePoints`, `CONCEPTS`, `CONCEPT_LIST`
+- 5 concepts: Smash (corner+hitch), Mesh (2× cross), Four Verts (4× go), Flood (corner+in+screen), Spacing (5× hitch)
+- `src/components/SmartPlaybook/components/ConceptPanel.js` — One-click concept buttons in sidebar
+- `applyConcept` handler in SmartPlaybook — clears existing routes, applies concept, single undo entry
+
+**Task 4: Route Micro-Icons**
+- `src/components/SmartPlaybook/components/RouteIcons.js` — SVG icons for: hitch, slant, post, corner, out, in, go, custom, screen, cross, wheel, drive
+- `src/components/SmartPlaybook/components/RouteLibrary.js` — 4-col icon grid replacing the select dropdown; includes ghost preview integration
+
+### Test Count: 209 (+87 new tests across 4 new test files)
+
+| New Test File | Tests | Coverage |
+|--------------|-------|---------|
+| `exportUtils.test.js` | 18 | sanitizeFilename, renderPlayToDataURL, drawField, drawPlayer, drawRoute |
+| `conceptAssignment.test.js` | 40 | isEligibleReceiver, generateRoutePoints, assignConcept, buildConceptRoutes, CONCEPTS |
+| `routeIcons.test.js` | 27 | getRouteIcon, all icon components render, ROUTE_ICONS registry |
+| `routeLibrary.test.js` | 7 | render, clicks, selection, ghost preview show/hide, no state mutation |
+
+### Build Status
+- `npm run build` — ✅ Success
+- `npx tsc --noEmit` — 5 pre-existing errors (in Session 8 test files), 0 new
+- `npm run test` — 209/209 passing, 0 failures
+
+---
+
+## Next Session Starts Here (Tier 3)
+
+1. **Firestore Play Persistence** — Plays currently save to localStorage only. Wire `savePlay` to Firestore using the existing `src/services/firestore.ts` infrastructure.
+
+2. **Analytics Dashboard** — Wire the ProgressAnalytics component to real data.
+
+3. **AI Suggestions** — Route/formation suggestions from AI Brain based on current field state.
+
+4. **Timing Validation** — Route depth/spacing checks with coaching feedback.
+
+5. **Coverage Analyzer** — Defensive coverage detection and route recommendations.
