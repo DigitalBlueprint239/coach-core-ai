@@ -1,0 +1,21 @@
+{
+  "id": "mesh-play",
+  "phase": "offense",
+  "formation": { "family": "gun", "variation": "doubles" },
+  "personnel": { "runningBacks": 1, "tightEnds": 1, "wideReceivers": 3, "quarterbacks": 1 },
+  "alignments": [
+    { "entityId": "X", "role": "WR", "x": 8, "y": 0 },
+    { "entityId": "Z", "role": "WR", "x": 10, "y": 0 },
+    { "entityId": "Y", "role": "TE", "x": 20, "y": 0 }
+  ],
+  "assignments": [],
+  "routeDefinitions": [
+    { "entityId": "X", "conceptRole": "cross1", "routeType": "drag", "breakDepth": 3 },
+    { "entityId": "Z", "conceptRole": "cross2", "routeType": "drag", "breakDepth": 4 },
+    { "entityId": "Y", "conceptRole": "sit", "routeType": "sit", "breakDepth": 6 }
+  ],
+  "motion": { "type": "none", "actorIds": [] },
+  "fieldContext": { "hash": "middle", "yardLine": 40, "down": 2, "distance": 6, "redZone": false },
+  "tags": ["3rd-down"],
+  "metadata": {}
+}
