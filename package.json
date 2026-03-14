@@ -17,6 +17,7 @@
     "dotenv": "^17.2.0",
     "firebase": "^11.10.0",
     "framer-motion": "^12.23.3",
+    "jspdf": "^4.2.0",
     "lucide-react": "^0.525.0",
     "postcss": "^8.5.6",
     "react": "^19.1.0",
@@ -28,15 +29,15 @@
     "@storybook/addon-links": "^9.0.16",
     "@storybook/react": "^9.0.16",
     "@storybook/testing-library": "^0.2.1",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3",
-    "react-scripts": "^5.0.1",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126"
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.8.3"
   },
   "browserslist": {
     "production": [
