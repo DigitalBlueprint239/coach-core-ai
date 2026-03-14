@@ -15,7 +15,7 @@
 | Onboarding | ✅ Complete | Modal flow, persona selection, demo mode |
 | Firestore Integration | ⚠️ Partial | Schema defined, services built, plays save to localStorage only |
 | Analytics Dashboard | ❌ Not Started | ProgressAnalytics component exists but not wired |
-| Test Suite | ✅ Complete | 191 tests across 14 files — all passing |
+| Test Suite | ✅ Complete | 209 tests across 18 files — all passing |
 | **Flip / Mirror Play** | ✅ Complete | `mirrorPlay()` utility, undoable via PlaybookContext, 7 tests |
 | **Concept Detection Engine** | ✅ Complete | `detectConcepts()` with disambiguation, `useConceptDetection` hook, 14 tests |
 | **Wristband PDF Export** | ✅ Complete | `exportWristbandPDF()` with dynamic jsPDF, B&W mode, 6 tests |
@@ -160,14 +160,61 @@ All 8 methods in `src/ai-brain/core/AIBrain.ts` are fully implemented:
 
 ---
 
+## Session 12 — 2026-03-14 — UI Wiring (All Engines Connected)
+
+### What was done:
+
+**Bridge Utility:**
+- `src/utils/playbookBridge.ts` — Maps SmartPlaybook's pixel-based local state to EnginePlay types for detection engines. Includes `toEnginePlay()`, `savedPlaysToEngine()`, and `mirrorPlaybookState()`.
+
+**Surface 1: Flip Button**
+- Added to Toolbar.js with `FlipHorizontal2` icon from lucide-react
+- Mirrors all player X coordinates and route point X across field center
+- Disabled when no players on field, action is undoable via Cmd+Z
+- Wired via `mirrorPlaybookState()` operating on SmartPlaybook's local state
+
+**Surface 2: Concept Detection Banner**
+- `ConceptBanner.tsx` — renders detected concept below route editor
+- Shows concept name (bold uppercase), coverage beater tags, coaching cue
+- Appears automatically when routes matching a concept are assigned
+- Disappears when routes change and no concept matches
+- Green accent styling with fade transition
+
+**Surface 3: Wristband Export Modal**
+- `WristbandExportModal.tsx` — full modal with play selection, color mode, export
+- Checkbox list with detected concept labels per play
+- Pre-selects first 16 plays, warns when >16 selected
+- Loading spinner during PDF generation
+- Accessible from Export button in toolbar (disabled when no saved plays)
+
+**Surface 4: Coverage Beater Panel**
+- `CoverageBeaterPanel.tsx` — collapsible panel with coverage dropdown (8 shells)
+- Ranks saved plays by how well they attack selected coverage
+- Star ratings (1–3 stars), coaching reasoning per recommendation
+- Empty state with concept suggestions
+- 100% offline — no network request
+
+**SmartPlaybook.tsx Integration:**
+- Imported all 4 new components + bridge utility
+- Added `showExportModal` state and `handleFlipPlay` callback
+- Toolbar receives `onFlip`, `canFlip`, `onExport`, `canExport` props
+- ConceptBanner + CoverageBeaterPanel rendered in left sidebar
+- WristbandExportModal rendered as overlay when triggered
+
+### Metrics
+- **209 tests** across 18 test files — all passing
+- **0 TypeScript errors** in new code
+- **0 `@ts-nocheck`** in new files
+- **Build: PASS** — 220.46 kB main bundle (under 300 kB target)
+
+---
+
 ## Next Session Starts Here
 
-1. **Firestore Play Persistence** — Plays currently save to localStorage only. Wire `savePlay` to Firestore using the existing `src/services/firestore.ts` infrastructure. The schema is defined in `src/types/firestore-schema.ts`.
+1. **Firestore Play Persistence** — Plays currently save to localStorage only. Wire `savePlay` to Firestore using the existing `src/services/firestore.ts` infrastructure.
 
-2. **Analytics Dashboard** — Wire the ProgressAnalytics component to real data. The component exists at `src/features/analytics/ProgressAnalytics.tsx` but isn't connected to the dashboard tabs.
+2. **Analytics Dashboard** — Wire the ProgressAnalytics component to real data.
 
 3. **Environment Variable Cleanup** — Migrate remaining `import.meta.env.VITE_*` references to `process.env.REACT_APP_*` for full CRA compatibility.
 
 4. **Legacy File Cleanup** — Remove nested `coach-core-ai/` directories and fix `@ts-nocheck` suppressions in utility files.
-
-5. **Wire UI Components** — Connect concept detection banner, coverage beater panel, flip button, and wristband export to SmartPlaybook UI.
