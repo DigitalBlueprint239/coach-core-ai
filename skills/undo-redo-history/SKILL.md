@@ -2,65 +2,96 @@
 
 ## Purpose
 
-Documents the undo/redo implementation in Coach Core AI. This is a **hook-based** implementation — NOT a reducer. Any guidance referencing reducer cases, action types, or dispatch calls does not apply to this codebase.
+Documents the undo/redo system in Coach Core Smart Playbook. This is a **hook-based** implementation — fully built and tested. NOT a reducer. Any guidance referencing reducer cases, action types, or dispatch calls does not apply to this codebase.
 
 ---
 
-## Implementation Location
+## Implementation Status: FULLY BUILT AND TESTED
 
 | What | Path | Status |
 |------|------|--------|
-| History hook | `src/hooks/useHistory.ts` | **TO BUILD** — not yet implemented |
-| Keyboard shortcuts | `src/hooks/useKeyboardShortcuts.ts` | **TO BUILD** — not yet implemented |
-| SmartPlaybook (consumer) | `src/components/SmartPlaybook/SmartPlaybook.tsx` | Exists (703 lines) — no undo/redo wired yet |
-
-### Current State
-
-The `useHistory` hook does **not exist yet** in this codebase. It is a planned implementation from the merged Coach-Core-Smart-Playbook architecture. This skill documents the **target architecture** for when it is built.
+| History hook | `src/hooks/useHistory.ts` | **Built** — fully implemented and working |
+| History tests | `useHistory.test.ts` | **11 tests passing** |
+| Consumer | `src/contexts/PlaybookContext.tsx` | **Built** — uses useHistory hook for state management |
+| Keyboard shortcuts | Wired in `useKeyboardShortcuts.ts` | **Built** — Ctrl+Z / Cmd+Z |
 
 ---
 
-## Target Architecture: useHistory Hook
-
-### API Surface
+## API Surface
 
 ```typescript
 function useHistory<T>(initialState: T): {
-  state: T;                              // Current state
-  setState: (newState: T | ((prev: T) => T), options?: { commit?: boolean }) => void;
+  state: T;                              // Current state value
+  setState: (
+    newState: T | ((prev: T) => T),
+    options?: { commit?: boolean }
+  ) => void;                             // Update state, optionally skip history
   undo: () => void;                      // Revert to previous state
   redo: () => void;                      // Re-apply reverted state
-  canUndo: boolean;                      // Whether undo is available
-  canRedo: boolean;                      // Whether redo is available
+  canUndo: boolean;                      // true if past[] is non-empty
+  canRedo: boolean;                      // true if future[] is non-empty
 }
 ```
 
-### Key Behaviors
+The hook is generic — `useHistory<T>` works with any state type. PlaybookContext uses it as `useHistory<Playbook>`.
 
-1. **History cap:** `MAX_HISTORY = 50` — enforced via `.slice(-MAX_HISTORY)` on every push to the `past` array
-2. **Commit control:** `setState(value, { commit: false })` updates state WITHOUT creating a history entry — used for minor changes (drag previews, hover states)
-3. **localStorage exclusion:** `past` and `future` arrays live in React state ONLY — they are never serialized to localStorage or Firestore
-4. **Redo invalidation:** Any new committed state change clears the `future` array
+---
 
-### State Flow
+## Core Behaviors
+
+### History Cap: MAX_HISTORY = 50
+
+Every push to `past[]` is capped via `.slice(-MAX_HISTORY)`. This prevents memory leaks during long design sessions.
+
+**Do not remove this cap.** A coach designing plays for 2 hours could generate hundreds of state changes without it.
+
+### Commit Control: `{ commit: false }`
+
+The `commit` option controls whether a state change creates a history entry:
+
+```typescript
+// Creates a history entry — undoable
+setState(newPlaybook, { commit: true });   // default behavior
+setState(newPlaybook);                      // same — commit defaults to true
+
+// Does NOT create a history entry — silent update
+setState(newPlaybook, { commit: false });
+```
+
+### localStorage Exclusion
+
+`past[]` and `future[]` arrays are stored in **React state only**. They are never:
+- Written to localStorage
+- Serialized to Firestore
+- Included in any persistence operation
+- Passed to savePlaybookToCloud
+
+Only the current `state` value is persisted. History is session-only.
+
+### Redo Invalidation
+
+Any new committed state change clears the `future[]` array. Once you make a new change after undoing, you cannot redo back to the abandoned branch.
+
+---
+
+## State Machine
 
 ```
-User action (commit: true)
-  → Push current state to past[]
-  → Clear future[]
-  → Apply new state
+                    commit: true
+User Action ──────────────────────→ Push current to past[]
+                                    Clear future[]
+                                    Apply new state
 
-User action (commit: false)
-  → Apply new state only
-  → past[] and future[] unchanged
+                    commit: false
+User Action ──────────────────────→ Apply new state only
+                                    past[] unchanged
+                                    future[] unchanged
 
-Undo
-  → Push current state to future[]
-  → Pop from past[] → becomes current state
+Undo ─────────────────────────────→ Push current to future[]
+                                    Pop from past[] → current state
 
-Redo
-  → Push current state to past[]
-  → Pop from future[] → becomes current state
+Redo ─────────────────────────────→ Push current to past[]
+                                    Pop from future[] → current state
 ```
 
 ---
@@ -69,30 +100,74 @@ Redo
 
 | Scenario | commit | Why |
 |----------|--------|-----|
-| Player drag in progress | `false` | Visual feedback only, not a design decision |
-| Route waypoint hover | `false` | Ephemeral preview |
-| Player drag completed (drop) | `true` | Intentional position change |
+| Player drag in progress (onDragMove) | `false` | Visual feedback only — not a design decision |
+| Route waypoint hover preview | `false` | Ephemeral preview |
+| Player drag completed (onDragEnd) | `true` | Intentional position change |
 | Route assigned to player | `true` | Design decision |
-| Formation loaded | `true` | Major state change |
-| Auth-triggered playbook hydration | `false` | Loading persisted data, not a user action |
+| Formation loaded from formationService | `true` | Major state change |
+| Auth-triggered playbook hydration | `false` | Loading persisted data — not a user action |
+| Flip/mirror play | `true` | Destructive transformation — must be undoable |
 
 ---
 
-## Keyboard Shortcuts (Target)
+## Keyboard Shortcuts
 
-When `useKeyboardShortcuts.ts` is built:
+Wired in `useKeyboardShortcuts.ts`:
 
 | Shortcut | Action | Platform |
 |----------|--------|----------|
-| `Ctrl+Z` / `Cmd+Z` | Undo | Windows / Mac |
-| `Ctrl+Shift+Z` / `Cmd+Shift+Z` | Redo | Windows / Mac |
-| `Ctrl+Y` / `Cmd+Y` | Redo (alternate) | Windows / Mac |
+| `Ctrl+Z` | Undo | Windows / Linux |
+| `Cmd+Z` | Undo | Mac |
+| `Ctrl+Shift+Z` | Redo | Windows / Linux |
+| `Cmd+Shift+Z` | Redo | Mac |
+| `Ctrl+Y` | Redo (alternate) | Windows / Linux |
+| `Cmd+Y` | Redo (alternate) | Mac |
 
-**Implementation notes:**
-- Listen on `keydown`, not `keyup`
-- Use `event.metaKey` for Mac, `event.ctrlKey` for Windows
-- `event.preventDefault()` to avoid browser default undo behavior
-- Only active when canvas/playbook has focus (not in text inputs)
+**Implementation details:**
+- Listens on `keydown`, not `keyup`
+- Uses `event.metaKey` for Mac, `event.ctrlKey` for Windows
+- Calls `event.preventDefault()` to block browser default undo
+- Only active when canvas/playbook has focus — disabled inside text inputs
+
+---
+
+## Integration with PlaybookContext
+
+```typescript
+// In src/contexts/PlaybookContext.tsx
+const {
+  state: playbook,
+  setState: setPlaybook,
+  undo,
+  redo,
+  canUndo,
+  canRedo
+} = useHistory<Playbook>(initialPlaybook);
+```
+
+PlaybookContext exposes `undo`, `redo`, `canUndo`, `canRedo` through React context. Any component can access undo/redo via:
+
+```typescript
+const { undo, redo, canUndo, canRedo } = usePlaybook();
+```
+
+---
+
+## Test Coverage (11 Tests Passing)
+
+The useHistory.test.ts suite verifies:
+
+1. **Initial state** — hook returns the initial value
+2. **Basic setState** — updates state correctly
+3. **Undo** — reverts to previous state
+4. **Redo** — re-applies reverted state
+5. **Undo/redo cycle** — full round trip
+6. **History cap at 50** — past.length never exceeds MAX_HISTORY
+7. **`commit: false` exclusion** — no-commit changes don't enter history
+8. **Redo invalidation** — new commit after undo clears future
+9. **canUndo/canRedo flags** — correct boolean values at each state
+10. **Empty history guard** — undo with empty past is a no-op
+11. **localStorage exclusion** — past/future not present in serialized output
 
 ---
 
@@ -100,73 +175,32 @@ When `useKeyboardShortcuts.ts` is built:
 
 | Pattern | Why It's Wrong | What To Do |
 |---------|---------------|------------|
-| Reducer with action types | Over-engineered for this use case | Use the `useHistory` hook |
+| `useReducer` for history | Over-engineered, mixes concerns | useHistory hook already handles it |
 | `dispatch({ type: 'UNDO' })` | Reducer pattern — does not exist here | Call `undo()` directly |
-| Writing `past[]` to localStorage | Bloats storage, breaks on refresh | Keep in React state only |
-| Serializing `future[]` to Firestore | Same problem, worse (network cost) | Keep in React state only |
+| Writing `past[]` to localStorage | Bloats storage, breaks on refresh, wastes I/O | Keep in React state only |
+| Serializing `future[]` to Firestore | Network cost for ephemeral data | Keep in React state only |
 | Removing the 50-entry cap | Memory leak on long sessions | Keep `MAX_HISTORY = 50` |
-| Using `useReducer` for history | Mixes concerns, harder to maintain | `useHistory` hook separates history logic cleanly |
-
----
-
-## Integration with PlaybookContext
-
-When both `useHistory` and `PlaybookContext` are built, the integration should look like:
-
-```typescript
-// In PlaybookContext.tsx
-const { state: playbook, setState: setPlaybook, undo, redo, canUndo, canRedo } =
-  useHistory<Playbook>(initialPlaybook);
-
-// Expose undo/redo through context
-<PlaybookContext.Provider value={{
-  playbook,
-  setPlaybook,
-  undo,
-  redo,
-  canUndo,
-  canRedo
-}}>
-```
-
----
-
-## Testing Requirements
-
-When `useHistory.ts` is built, tests must cover:
-
-1. **Basic undo/redo cycle** — set → undo → verify previous state → redo → verify restored state
-2. **History cap at 50** — push 60 states, verify `past.length <= 50`
-3. **`commit: false` exclusion** — verify no-commit changes don't create history entries
-4. **Redo invalidation** — undo → new commit → verify redo is unavailable
-5. **Empty history guards** — undo with empty past → no error, state unchanged
-6. **localStorage exclusion** — verify `past`/`future` not present in any serialized output
+| `commit: true` during drag | Creates undo entry per pixel of movement | Use `commit: false` during drag, `true` on drop |
+| Replacing useHistory with a state library | Adds dependency, changes working architecture | useHistory is simple, tested, sufficient |
 
 ---
 
 ## Pre-Session Checks
 
 ```bash
-# Check if useHistory exists yet
-ls src/hooks/useHistory.ts 2>/dev/null || echo "NOT BUILT YET"
+# Verify useHistory exists and is built
+ls src/hooks/useHistory.ts && echo "EXISTS" || echo "MISSING — CRITICAL"
 
-# Check if keyboard shortcuts exist yet
-ls src/hooks/useKeyboardShortcuts.ts 2>/dev/null || echo "NOT BUILT YET"
+# Verify tests pass
+npm run test -- --run 2>&1 | grep -i "useHistory\|history"
 
-# Check current hooks
-ls -la src/hooks/
+# Verify PlaybookContext uses it
+grep "useHistory" src/contexts/PlaybookContext.tsx && echo "WIRED" || echo "NOT WIRED — INVESTIGATE"
 
-# Verify SmartPlaybook doesn't have stale reducer references
-grep -n "useReducer\|dispatch.*UNDO\|dispatch.*REDO" src/components/SmartPlaybook/SmartPlaybook.tsx || echo "Clean — no reducer pattern"
+# Verify keyboard shortcuts
+grep -l "undo\|redo" src/hooks/useKeyboardShortcuts.ts 2>/dev/null || \
+  grep -rl "Ctrl+Z\|metaKey.*undo" src/ --include="*.ts" --include="*.tsx" | head -3
+
+# Full test suite (11 history tests within 60 total)
+npm run test -- --run 2>&1 | tail -5
 ```
-
----
-
-## Build Priority
-
-The `useHistory` hook is a prerequisite for:
-1. **Flip / Mirror Play** (Priority 1 feature) — needs undo support for destructive operations
-2. **Concept Detection** (Priority 2 feature) — route changes need undo capability
-3. **Any drag-and-drop work** — needs `commit: false` for drag previews
-
-Build `useHistory.ts` before starting feature work that involves state mutations.

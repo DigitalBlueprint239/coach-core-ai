@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Guides the expansion of Coach Core AI's football engine — formations, routes, concepts, timing rules, and spacing rules. Documents current counts, file locations, and the correct patterns for adding new engine data.
+Guides the expansion of Coach Core Smart Playbook's football engine — formations, routes, concepts, timing rules, and spacing rules. Documents current counts, file locations, and the correct patterns for adding new engine data.
 
 ---
 
@@ -10,74 +10,70 @@ Guides the expansion of Coach Core AI's football engine — formations, routes, 
 
 ### File Locations
 
-| Data | File Path | Format |
-|------|-----------|--------|
-| Formations | `src/components/SmartPlaybook/components/FormationTemplates.js` | JS array of formation objects |
-| Routes (presets) | `src/components/SmartPlaybook/components/RouteEditor.js` | PRESET_ROUTES array |
-| Firestore Schema | `src/types/firestore-schema.ts` (639 lines) | TypeScript interfaces |
-| AI Analysis | `src/ai-brain/core/AIBrain.ts` (1,188 lines) | AIBrain singleton service |
+| Data | File Path | Lines | Format |
+|------|-----------|-------|--------|
+| Formations | `src/services/formationService.ts` | — | TypeScript service, 53 formations |
+| Routes | `src/services/routeDefinitions.ts` | — | TypeScript definitions, 13 routes |
+| Concepts | `src/services/conceptService.ts` | — | TypeScript service, 7 concepts |
+| Firestore Schema | `src/services/firebase/schema.ts` | 639 | TypeScript interfaces |
+| AI Analysis | `src/services/ai/AIBrain.ts` | 1,188 | AIBrain singleton service |
 
 ### Current Counts
 
 | Category | Current | Target | Gap |
 |----------|---------|--------|-----|
-| Formations | 4 (Shotgun, 4-3, I-Formation, 3-4) | 53 (34 OFF / 17 DEF / 2 ST) | 49 |
-| Routes | 7 (Slant, Post, Corner, Out, In, Hitch, Go) | 18 | 11 |
-| Concepts | 0 | 15 | 15 |
-| Timing rules | 0 | TBD | All |
-| Spacing rules | 0 | TBD | All |
+| Formations | **53** (34 OFF / 17 DEF / 2 ST) | 53 | 0 — Complete |
+| Routes | **13** | 18 | 5 |
+| Concepts | **7** | 15 | 8 |
+| Timing rules | **0** | TBD | All |
+| Spacing rules | **0** | TBD | All |
+| Concept detection | **0** | 1 engine | Not built |
 
-### Current Routes (7 of 18)
+---
 
-Present in `RouteEditor.js` PRESET_ROUTES:
-1. Slant
-2. Post
-3. Corner
-4. Out
-5. In
-6. Hitch
-7. Go
+## Routes: Current 13 and 5 Missing
 
-### Missing Routes (11 — Next Expansion Targets)
+### Existing Routes (in `src/services/routeDefinitions.ts`)
 
-1. Curl
-2. Comeback
-3. Drag
-4. Wheel
-5. Flat
-6. Seam
-7. Shallow Cross
-8. Option
-9. Bubble Screen
-10. Dig
-11. Fade
+Verified by routeService.test.ts (7 tests passing). All 13 routes have required fields.
 
-### Current Formations (4 of 53)
+### Missing Routes (5 — Next Expansion Targets)
 
-Present in `FormationTemplates.js`:
-1. Shotgun (OFF)
-2. I-Formation (OFF)
-3. 4-3 Defense (DEF)
-4. 3-4 Defense (DEF)
+1. **Hitch** — Short comeback route, 5-yard depth
+2. **Seam** — Vertical route between hash and numbers
+3. **Shallow Cross** — Underneath crosser, 3-5 yard depth
+4. **Option** — Stem route with read-based break
+5. **Bubble Screen** — Lateral throw behind LOS
 
-### Missing Concepts (15 — All TO BUILD)
+---
 
-No concept detection engine exists yet. Target concepts:
-1. Smash
-2. Mesh
-3. Flood
-4. Y-Cross
-5. Mills
-6. Drive
-7. Spacing
-8. Four Verts
-9. Curl-Flat
-10. Sail
-11. Snag
-12. Levels
-13. Dagger
-14. Hoss
-15. Seattle
+## Concepts: Current 7 and 8 Missing
+
+### Existing Concepts (in `src/services/conceptService.ts`)
+
+7 passing concepts verified by tests.
+
+### Missing Concepts (8 — Next Expansion Targets)
+
+1. **Y-Cross** — Deep crosser with underneath clear-out
+2. **Mills** — Two-man concept: post + dig
+3. **Drive** — Three-level concept: deep out, dig, drag
+4. **Spacing** — Five-man horizontal stretch
+5. **Four Verts** — Four vertical stems with option breaks
+6. **Curl-Flat** — High-low concept: curl + flat
+7. **Sail** — Three-level: go, corner, flat
+8. **Snag** — Triangle concept: corner, snag, flat
+
+---
+
+## Formations: Current 53 (Complete)
+
+**In `src/services/formationService.ts`:**
+- 34 Offensive formations
+- 17 Defensive formations
+- 2 Special Teams formations
+
+Verified by formationService.test.ts (9 tests passing). All 53 formations load with clean types.
 
 ---
 
@@ -86,106 +82,102 @@ No concept detection engine exists yet. Target concepts:
 | File | Purpose | Priority |
 |------|---------|----------|
 | `src/services/conceptDetection.ts` | Detect passing concepts from route combinations | P2 — Moat feature foundation |
-| `src/services/formationService.ts` | Typed formation data service (replace JS array) | P4 |
-| `src/services/routeDefinitions.ts` | Typed route definitions service | P4 |
-| `src/services/conceptService.ts` | Concept data and metadata | P4 |
 | `src/services/spacingEngine.ts` | Spacing rule validation | Future |
 | `src/services/timingEngine.ts` | Timing rule validation | Future |
 
-These files are confirmed gaps — not broken features, just not built yet. Do not reference them as existing.
+These are confirmed gaps — not bugs, not broken features, just not built. Do not reference them as existing files.
 
 ---
 
-## Route Definition Pattern
+## Adding Routes — Correct Pattern
 
-When adding routes, follow the existing pattern in `RouteEditor.js`:
-
-```javascript
-{
-  id: 'route-name',        // lowercase kebab-case
-  name: 'Route Name',      // Display name
-  points: [                // Waypoints in relative coordinates
-    { x: 0, y: 0 },       // Origin (player position)
-    { x: 20, y: -10 },    // Intermediate waypoint
-    { x: 40, y: -30 }     // Terminal waypoint
-  ]
-}
-```
+New routes must be added to `src/services/routeDefinitions.ts` following the existing pattern:
 
 **Rules:**
+- Every route must have all required fields verified by routeService.test.ts
 - Points use relative coordinates from the player's starting position
 - Negative Y = upfield (toward opponent's end zone)
 - Positive X = toward the right sideline
-- Routes must have at least 2 points (origin + terminal)
-- Breaking routes (Post, Corner, Comeback) have 3+ points
+- Routes must have at least 2 waypoints (origin + terminal)
+- Breaking routes (Post, Corner, Comeback) have 3+ waypoints
+- Add corresponding test coverage in routeService.test.ts
 
 ---
 
-## Formation Definition Pattern
+## Adding Concepts — Correct Pattern
 
-When adding formations, follow the existing pattern in `FormationTemplates.js`:
-
-```javascript
-{
-  id: 'formation-id',           // lowercase kebab-case
-  name: 'Formation Name',       // Display name
-  description: 'Brief description',
-  icon: Users,                   // lucide-react icon (Users for OFF, Shield for DEF)
-  color: 'blue',                 // Theme color
-  positions: ['QB', 'RB', ...]  // 11 position labels
-}
-```
+New concepts must be added to `src/services/conceptService.ts` following the existing pattern:
 
 **Rules:**
-- Every formation must have exactly 11 positions
-- Offensive formations use `Users` icon, defensive use `Shield`
-- Position labels must match standard football abbreviations
+- Each concept defines the route combination that triggers it
+- Concepts reference routes by their ID from routeDefinitions.ts
+- Must include formation context (which formations the concept applies to)
+- Add corresponding test coverage
 
 ---
 
-## Concept Detection Pattern (TO BUILD)
+## Concept Detection Engine (TO BUILD — Priority 2)
 
 When `conceptDetection.ts` is built, it should:
-1. Accept an array of assigned routes
-2. Match route combinations against known concept templates
+1. Accept an array of assigned routes from the current play
+2. Match route combinations against known concept templates from conceptService.ts
 3. Return detected concept(s) with confidence score
 4. Account for formation context (e.g., trips vs. spread)
 
-**Architecture constraint:** Concept detection is the foundation for AI coverage recommendations. Build it as a pure function — no side effects, no API calls.
+**Architecture constraint:** Concept detection is the foundation for AI coverage recommendations (Priority 5). Build it as a pure function — no side effects, no API calls. AIBrain.ts will consume it.
+
+**Dependency chain:**
+```
+conceptService.ts (data, EXISTS)
+    → conceptDetection.ts (engine, TO BUILD)
+        → AIBrain.ts coverage recommendations (Priority 5)
+```
 
 ---
 
 ## Schema Integration
 
-The Firestore schema (`src/types/firestore-schema.ts`, 639 lines) defines types for plays, formations, and routes. Any new engine data types must be added here to maintain type safety across persistence.
+The Firestore schema at `src/services/firebase/schema.ts` (639 lines) defines types for plays, formations, and routes. Any new engine data types must be consistent with this schema to maintain type safety across persistence.
+
+The whole-document pattern means no field-level adapters are needed — the local Playbook type maps directly to the Firestore document structure.
 
 ---
 
 ## Pre-Session Checks for Engine Work
 
 ```bash
-# Verify current formation count
-grep -c "id:" src/components/SmartPlaybook/components/FormationTemplates.js
+# Verify correct repo first
+ls src/hooks/useHistory.ts && echo "CORRECT REPO" || echo "WRONG REPO — STOP"
 
-# Verify current route count
-grep -c "id:" src/components/SmartPlaybook/components/RouteEditor.js | head -1
+# Formation count — must be 53 formations across service
+grep -c "formation" src/services/formationService.ts || echo "CHECK MANUALLY"
 
-# Verify schema integrity
-wc -l src/types/firestore-schema.ts
+# Route definitions exist
+ls src/services/routeDefinitions.ts && echo "EXISTS" || echo "MISSING"
 
-# Check for concept detection (should not exist yet)
-ls src/services/conceptDetection.ts 2>/dev/null || echo "NOT BUILT YET"
+# Concept service exists
+ls src/services/conceptService.ts && echo "EXISTS" || echo "MISSING"
+
+# Concept detection engine (should not exist yet)
+ls src/services/conceptDetection.ts 2>/dev/null || echo "NOT BUILT YET — Expected"
+
+# Run engine-related tests
+npm run test -- --run 2>&1 | grep -E "formation|route|concept"
+
+# Full test suite baseline
+npm run test -- --run 2>&1 | tail -5
 ```
 
 ---
 
 ## Expansion Priority Order
 
-1. **Routes to 18** — Add 11 missing routes to PRESET_ROUTES in RouteEditor.js
-2. **Formations to 53** — Expand FormationTemplates.js (34 OFF / 17 DEF / 2 ST)
-3. **Concept detection engine** — New file: `src/services/conceptDetection.ts`
-4. **Concepts to 15** — New file: `src/services/conceptService.ts`
-5. **Timing rules** — New file: `src/services/timingEngine.ts`
-6. **Spacing rules** — New file: `src/services/spacingEngine.ts`
+| Priority | Task | Files Involved | Tests Required |
+|----------|------|---------------|----------------|
+| 1 | Add 5 missing routes to reach 18 | `src/services/routeDefinitions.ts` | Update routeService.test.ts |
+| 2 | Build concept detection engine | New: `src/services/conceptDetection.ts` | New test suite |
+| 3 | Add 8 missing concepts to reach 15 | `src/services/conceptService.ts` | Update concept tests |
+| 4 | Implement timing rules | New: `src/services/timingEngine.ts` | New test suite |
+| 5 | Implement spacing rules | New: `src/services/spacingEngine.ts` | New test suite |
 
-Each expansion must include corresponding test coverage. Test count must never decrease.
+**Invariant:** Test count must never decrease below 60. Every expansion adds tests.
