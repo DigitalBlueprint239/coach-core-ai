@@ -41,7 +41,11 @@ import SaveLoadPanel from './components/SaveLoadPanel';
 import Toolbar from './components/Toolbar';
 import Notification from './components/Notification';
 import Onboarding from './components/Onboarding';
+import ConceptBanner from './components/ConceptBanner';
+import CoverageBeaterPanel from './components/CoverageBeaterPanel';
+import WristbandExportModal from './components/WristbandExportModal';
 import { AIProvider } from '../../ai-brain/AIContext';
+import { mirrorPlaybookState } from '../../utils/playbookBridge';
 
 // Constants
 const FIELD_DIMENSIONS = {
@@ -76,6 +80,7 @@ const SmartPlaybook = () => {
   // UI state
   const [showLibrary, setShowLibrary] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [debugResults, setDebugResults] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -456,6 +461,16 @@ const SmartPlaybook = () => {
     }
   }, [saveToUndoStack]);
 
+  // Flip / mirror play horizontally
+  const handleFlipPlay = useCallback(() => {
+    if (players.length === 0) return;
+    saveToUndoStack('flip_play');
+    const mirrored = mirrorPlaybookState(players, routes, FIELD_DIMENSIONS.width);
+    setPlayers(mirrored.players);
+    setRoutes(mirrored.routes);
+    addNotification('success', 'Play mirrored');
+  }, [players, routes, saveToUndoStack, addNotification]);
+
   // Run debug tests
   const runDebugTests = useCallback(() => {
     const tests = [
@@ -533,6 +548,10 @@ const SmartPlaybook = () => {
               undoStack={undoStack}
               onClear={clearField}
               onShowHelp={() => setShowOnboarding(true)}
+              onFlip={handleFlipPlay}
+              canFlip={players.length > 0}
+              onExport={() => setShowExportModal(true)}
+              canExport={savedPlays.length > 0}
             />
 
             {/* Formation Templates */}
@@ -582,6 +601,12 @@ const SmartPlaybook = () => {
                 onClearSelection={() => setSelectedRouteId(null)}
               />
             </ErrorBoundary>
+
+            {/* Concept Detection Banner */}
+            <ConceptBanner players={players} routes={routes} />
+
+            {/* Coverage Beater Panel */}
+            <CoverageBeaterPanel savedPlays={savedPlays} />
 
             {/* Save/Load Panel */}
             <SaveLoadPanel
@@ -690,6 +715,14 @@ const SmartPlaybook = () => {
         onComplete={() => setShowOnboarding(false)}
         onSkip={() => setShowOnboarding(false)}
       />
+
+      {/* Wristband Export Modal */}
+      {showExportModal && (
+        <WristbandExportModal
+          savedPlays={savedPlays}
+          onClose={() => setShowExportModal(false)}
+        />
+      )}
     </div>
     </ErrorBoundary>
   );

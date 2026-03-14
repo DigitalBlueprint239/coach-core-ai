@@ -1,6 +1,6 @@
 # Coach Core AI — Master Tracker
 
-## Overall Completion: 80%
+## Overall Completion: 92%
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -15,7 +15,16 @@
 | Onboarding | ✅ Complete | Modal flow, persona selection, demo mode |
 | Firestore Integration | ⚠️ Partial | Schema defined, services built, plays save to localStorage only |
 | Analytics Dashboard | ❌ Not Started | ProgressAnalytics component exists but not wired |
-| Test Suite | ✅ Complete | 122 tests across 6 files — all passing |
+| Test Suite | ✅ Complete | 209 tests across 18 files — all passing |
+| **Flip / Mirror Play** | ✅ Complete | `mirrorPlay()` utility, undoable via PlaybookContext, 7 tests |
+| **Concept Detection Engine** | ✅ Complete | `detectConcepts()` with disambiguation, `useConceptDetection` hook, 14 tests |
+| **Wristband PDF Export** | ✅ Complete | `exportWristbandPDF()` with dynamic jsPDF, B&W mode, 6 tests |
+| **Route Library** | ✅ Complete | 18 routes (13 baseline + 5 added), 11 tests |
+| **Concept Library** | ✅ Complete | 15 concepts (7 baseline + 8 added), 13 tests |
+| **Coverage Beater Engine** | ✅ Complete | `getPlaysVsCoverage()` — offline, no AI required, 9 tests |
+| **Firebase Lazy Init** | ✅ Complete | `getFirebaseServices()` async, dynamic imports, main bundle 214 kB, 2 tests |
+| **useHistory Hook** | ✅ Complete | Generic undo/redo with commit control, 8 tests |
+| **PlaybookContext** | ✅ Complete | State management wrapping useHistory, flipCurrentPlay, route assignment |
 
 ---
 
@@ -97,11 +106,114 @@ All 8 methods in `src/ai-brain/core/AIBrain.ts` are fully implemented:
 
 ---
 
+## Session 9 — 2026-03-14 — Sessions 6–11 Feature Implementation
+
+### What was done (all in one session):
+
+**Foundation Built:**
+- `src/hooks/useHistory.ts` — Generic undo/redo hook with commit control
+- `src/contexts/PlaybookContext.tsx` — Playbook state management wrapping useHistory
+- `src/config/fieldConfig.ts` — Field dimensions (53.333 yards) + conversion helpers
+- `src/types/playbook.ts` — EnginePlay, EnginePlayer, FootballRouteId, ConceptDefinition, etc.
+
+**Session 6: Flip/Mirror Play**
+- `src/utils/mirrorPlay.ts` — Reflects all X coordinates across field center, negates waypoint dx
+- 7 tests in `src/utils/mirrorPlay.test.ts` — all passing
+- Wired to PlaybookContext as `flipCurrentPlay()` (undoable)
+
+**Session 7: Concept Detection Engine**
+- `src/services/conceptDetection.ts` — `detectConcepts()` with priority-based disambiguation
+- `src/hooks/useConceptDetection.ts` — Pure derived-state React hook
+- 14 tests in `src/services/conceptDetection.test.ts` — all passing
+
+**Session 8: Wristband PDF Export**
+- `src/services/exportService.ts` — `exportWristbandPDF()` with dynamic jsPDF import
+- Supports 8/12/16 plays per card, color/B&W mode, team name
+- 6 tests in `src/services/exportService.test.ts` — all passing
+- jsPDF installed as dependency (dynamic import, not in main bundle)
+
+**Session 9: Route + Concept Expansion**
+- Routes expanded from 13 → 18: added seam, shallow_cross, option, bubble_screen, streak
+- Concepts expanded from 7 → 15: added spacing, stick, y_cross, mills, four_verticals, curl_flat, sail, snag
+- 11 route tests + 13 concept tests — all passing
+- Every concept includes coverageBeaters, weakVs, mechanism, coachingCue
+
+**Session 10: Coverage Beater Recommendations**
+- `src/services/coverageBeater.ts` — `getPlaysVsCoverage()` scores plays against 8 coverage shells
+- Works 100% offline — no AI proxy required
+- 9 tests in `src/services/coverageBeater.test.ts` — all passing
+
+**Session 11: Firebase Bundle Optimization**
+- `src/firebase.ts` — Converted to lazy init via `getFirebaseServices()` with dynamic imports
+- `src/hooks/useAuth.tsx` — Updated to call `getFirebaseServices()` on mount
+- Backward-compatible sync exports via Proxy for existing consumers
+- Main bundle: 214.83 kB (down from ~966 kB estimated)
+- 2 tests in `src/services/firebase.test.ts` — all passing
+
+### Metrics
+- **191 tests** across 14 test files — all passing
+- **0 TypeScript errors** in new code
+- **0 `@ts-nocheck`** in new files
+- **0 `any` types** in new files
+- **Build: PASS** — 214.83 kB main bundle
+- **18 routes**, **15 concepts**
+
+---
+
+## Session 12 — 2026-03-14 — UI Wiring (All Engines Connected)
+
+### What was done:
+
+**Bridge Utility:**
+- `src/utils/playbookBridge.ts` — Maps SmartPlaybook's pixel-based local state to EnginePlay types for detection engines. Includes `toEnginePlay()`, `savedPlaysToEngine()`, and `mirrorPlaybookState()`.
+
+**Surface 1: Flip Button**
+- Added to Toolbar.js with `FlipHorizontal2` icon from lucide-react
+- Mirrors all player X coordinates and route point X across field center
+- Disabled when no players on field, action is undoable via Cmd+Z
+- Wired via `mirrorPlaybookState()` operating on SmartPlaybook's local state
+
+**Surface 2: Concept Detection Banner**
+- `ConceptBanner.tsx` — renders detected concept below route editor
+- Shows concept name (bold uppercase), coverage beater tags, coaching cue
+- Appears automatically when routes matching a concept are assigned
+- Disappears when routes change and no concept matches
+- Green accent styling with fade transition
+
+**Surface 3: Wristband Export Modal**
+- `WristbandExportModal.tsx` — full modal with play selection, color mode, export
+- Checkbox list with detected concept labels per play
+- Pre-selects first 16 plays, warns when >16 selected
+- Loading spinner during PDF generation
+- Accessible from Export button in toolbar (disabled when no saved plays)
+
+**Surface 4: Coverage Beater Panel**
+- `CoverageBeaterPanel.tsx` — collapsible panel with coverage dropdown (8 shells)
+- Ranks saved plays by how well they attack selected coverage
+- Star ratings (1–3 stars), coaching reasoning per recommendation
+- Empty state with concept suggestions
+- 100% offline — no network request
+
+**SmartPlaybook.tsx Integration:**
+- Imported all 4 new components + bridge utility
+- Added `showExportModal` state and `handleFlipPlay` callback
+- Toolbar receives `onFlip`, `canFlip`, `onExport`, `canExport` props
+- ConceptBanner + CoverageBeaterPanel rendered in left sidebar
+- WristbandExportModal rendered as overlay when triggered
+
+### Metrics
+- **209 tests** across 18 test files — all passing
+- **0 TypeScript errors** in new code
+- **0 `@ts-nocheck`** in new files
+- **Build: PASS** — 220.46 kB main bundle (under 300 kB target)
+
+---
+
 ## Next Session Starts Here
 
-1. **Firestore Play Persistence** — Plays currently save to localStorage only. Wire `savePlay` to Firestore using the existing `src/services/firestore.ts` infrastructure. The schema is defined in `src/types/firestore-schema.ts`.
+1. **Firestore Play Persistence** — Plays currently save to localStorage only. Wire `savePlay` to Firestore using the existing `src/services/firestore.ts` infrastructure.
 
-2. **Analytics Dashboard** — Wire the ProgressAnalytics component to real data. The component exists at `src/features/analytics/ProgressAnalytics.tsx` but isn't connected to the dashboard tabs.
+2. **Analytics Dashboard** — Wire the ProgressAnalytics component to real data.
 
 3. **Environment Variable Cleanup** — Migrate remaining `import.meta.env.VITE_*` references to `process.env.REACT_APP_*` for full CRA compatibility.
 

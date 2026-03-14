@@ -6,16 +6,18 @@
  */
 
 import React, { memo } from 'react';
-import { 
-  Eye, 
-  UserPlus, 
-  Route, 
-  Trash2, 
-  RotateCcw, 
-  RotateCw, 
+import {
+  Eye,
+  UserPlus,
+  Route,
+  Trash2,
+  RotateCcw,
+  RotateCw,
   Trash,
   MousePointer,
-  HelpCircle
+  HelpCircle,
+  FlipHorizontal2,
+  Download
 } from 'lucide-react';
 
 const TOOLBAR_MODES = [
@@ -34,7 +36,11 @@ const Toolbar = memo(({
   canRedo = false,
   undoStack = [],
   onClear,
-  onShowHelp
+  onShowHelp,
+  onFlip,
+  canFlip = false,
+  onExport,
+  canExport = false
 }) => {
   // Keyboard shortcuts
   React.useEffect(() => {
@@ -111,7 +117,31 @@ const Toolbar = memo(({
         <div className="text-xs text-gray-500 text-center">
           {canUndo ? `${undoStack.length} actions available` : 'No actions to undo'}
         </div>
-        
+
+        {/* Play-Level Actions */}
+        <div className="flex gap-2">
+          <button
+            onClick={onFlip}
+            disabled={!canFlip}
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            title="Mirror Play (flip left↔right)"
+            data-testid="flip-button"
+          >
+            <FlipHorizontal2 size={14} />
+            <span className="text-xs">Flip</span>
+          </button>
+          <button
+            onClick={onExport}
+            disabled={!canExport}
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            title="Export Wristband PDF"
+            data-testid="export-button"
+          >
+            <Download size={14} />
+            <span className="text-xs">Export</span>
+          </button>
+        </div>
+
         <button
           onClick={onClear}
           className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"

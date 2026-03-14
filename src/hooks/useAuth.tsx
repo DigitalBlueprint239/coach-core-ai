@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
-import { auth } from '../services/firebase';
+import { useState, useEffect, useContext, createContext, ReactNode, useRef } from 'react';
+import { getFirebaseServices } from '../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -9,7 +9,8 @@ import {
   onAuthStateChanged,
   User,
   setPersistence,
-  browserLocalPersistence
+  browserLocalPersistence,
+  Auth,
 } from 'firebase/auth';
 
 interface AuthContextType {
@@ -37,24 +38,38 @@ export const useAuth = () => {
 function useProvideAuth(): AuthContextType {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const authRef = useRef<Auth | null>(null);
 
   useEffect(() => {
-    if (!auth) {
-      setLoading(false);
-      return;
-    }
-    setPersistence(auth, browserLocalPersistence);
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    let unsubscribe: (() => void) | undefined;
+
+    getFirebaseServices()
+      .then(({ auth }) => {
+        authRef.current = auth;
+        setPersistence(auth, browserLocalPersistence);
+        unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+          setUser(firebaseUser);
+          setLoading(false);
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
+
+  const getAuth = () => {
+    if (!authRef.current) throw new Error('Firebase not initialized yet');
+    return authRef.current;
+  };
 
   const signup = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(getAuth(), email, password);
       setUser(result.user);
       return result.user;
     } catch (error) {
@@ -68,7 +83,7 @@ function useProvideAuth(): AuthContextType {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(getAuth(), email, password);
       setUser(result.user);
       return result.user;
     } catch (error) {
@@ -83,7 +98,7 @@ function useProvideAuth(): AuthContextType {
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(getAuth(), provider);
       setUser(result.user);
       return result.user;
     } catch (error) {
@@ -97,7 +112,7 @@ function useProvideAuth(): AuthContextType {
   const logout = async () => {
     setLoading(true);
     try {
-      await signOut(auth);
+      await signOut(getAuth());
       setUser(null);
     } finally {
       setLoading(false);
