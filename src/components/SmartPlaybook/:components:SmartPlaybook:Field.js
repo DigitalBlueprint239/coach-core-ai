@@ -279,6 +279,22 @@ const drawDebugInfo = (ctx, mode, width, height) => {
   }
 };
 
+/**
+ * Custom memo comparator — only re-render when visual data changes.
+ * Skips re-render when only callback identity changes (common with parent re-renders).
+ */
+function fieldPropsAreEqual(prev, next) {
+  return (
+    prev.players === next.players &&
+    prev.routes === next.routes &&
+    prev.selectedRouteId === next.selectedRouteId &&
+    prev.width === next.width &&
+    prev.height === next.height &&
+    prev.mode === next.mode &&
+    prev.debug === next.debug
+  );
+}
+
 const Field = memo(({
   players = [],
   routes = [],
@@ -506,7 +522,7 @@ const Field = memo(({
       data-testid={testId}
     />
   );
-});
+}, fieldPropsAreEqual);
 
 // Add display name for better debugging
 Field.displayName = 'Field';

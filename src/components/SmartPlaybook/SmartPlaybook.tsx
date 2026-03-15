@@ -277,14 +277,14 @@ const SmartPlaybook = () => {
     }
   }, [mode, isDrawingRoute, players, getCanvasCoordinates, saveToUndoStack]);
 
-  // Handle player drag
+  // Handle player drag — FIELD_DIMENSIONS is a module constant, no need in deps
   const handlePlayerDrag = useCallback((playerId, newX, newY) => {
     // Constrain to field boundaries
     const constrainedX = Math.max(20, Math.min(FIELD_DIMENSIONS.width - 20, newX));
     const constrainedY = Math.max(20, Math.min(FIELD_DIMENSIONS.height - 20, newY));
-    
+
     setPlayers(prev => updatePlayerPosition(prev, playerId, constrainedX, constrainedY));
-  }, [FIELD_DIMENSIONS.width, FIELD_DIMENSIONS.height]);
+  }, []);
 
   // Handle player drag end (save to undo stack)
   const handlePlayerDragEnd = useCallback((playerId) => {

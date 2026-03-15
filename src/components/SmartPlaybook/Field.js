@@ -1,6 +1,6 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, memo } from 'react';
 
-const Field = forwardRef(({ players = [], routes = [], onCanvasEvent, onPlayerDrag, ...props }, ref) => {
+const Field = memo(forwardRef(({ players = [], routes = [], onCanvasEvent, onPlayerDrag, ...props }, ref) => {
   return (
     <canvas
       ref={ref}
@@ -10,7 +10,7 @@ const Field = forwardRef(({ players = [], routes = [], onCanvasEvent, onPlayerDr
       {...props}
     />
   );
-});
+}));
 
 Field.displayName = 'Field';
 export default Field;

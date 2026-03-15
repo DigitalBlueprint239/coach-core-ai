@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from 'react';
+import React, { memo } from 'react';
 import Field from '../:components:SmartPlaybook:Field.js';
 
 interface CanvasAreaProps {
@@ -10,7 +10,7 @@ interface CanvasAreaProps {
   onPlayerDrag: (id: string, x: number, y: number) => void;
 }
 
-const CanvasArea: React.FC<CanvasAreaProps> = ({
+const CanvasArea: React.FC<CanvasAreaProps> = memo(({
   canvasRef,
   players,
   routes,
@@ -28,6 +28,8 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
       />
     </div>
   );
-};
+});
+
+CanvasArea.displayName = 'CanvasArea';
 
 export default CanvasArea;

@@ -95,7 +95,7 @@ describe('AIProxyService', () => {
     it('sends request body as JSON', async () => {
       mockFetch.mockResolvedValueOnce(createSuccessResponse({}));
 
-      const requestData = { type: 'performance_analysis', data: { teamId: 't1' } };
+      const requestData: AIProxyRequest = { type: 'performance_analysis', data: { teamId: 't1' } };
       await service.makeRequest(requestData);
 
       const [, options] = mockFetch.mock.calls[0];
