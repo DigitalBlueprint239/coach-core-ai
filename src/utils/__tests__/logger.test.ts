@@ -5,14 +5,22 @@
 describe('logger', () => {
   const originalEnv = process.env.NODE_ENV;
 
+  function setNodeEnv(value: string) {
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value,
+      writable: true,
+      configurable: true,
+    });
+  }
+
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv;
+    setNodeEnv(originalEnv!);
     jest.restoreAllMocks();
     jest.resetModules();
   });
 
   it('log calls console.log in development', () => {
-    process.env.NODE_ENV = 'development';
+    setNodeEnv('development');
     jest.resetModules();
     const spy = jest.spyOn(console, 'log').mockImplementation();
     const { logger } = require('../logger');
@@ -21,7 +29,7 @@ describe('logger', () => {
   });
 
   it('log does not call console.log in production', () => {
-    process.env.NODE_ENV = 'production';
+    setNodeEnv('production');
     jest.resetModules();
     const spy = jest.spyOn(console, 'log').mockImplementation();
     const { logger } = require('../logger');
@@ -30,7 +38,7 @@ describe('logger', () => {
   });
 
   it('warn always calls console.warn', () => {
-    process.env.NODE_ENV = 'production';
+    setNodeEnv('production');
     jest.resetModules();
     const spy = jest.spyOn(console, 'warn').mockImplementation();
     const { logger } = require('../logger');
@@ -39,7 +47,7 @@ describe('logger', () => {
   });
 
   it('error always calls console.error', () => {
-    process.env.NODE_ENV = 'production';
+    setNodeEnv('production');
     jest.resetModules();
     const spy = jest.spyOn(console, 'error').mockImplementation();
     const { logger } = require('../logger');
@@ -48,7 +56,7 @@ describe('logger', () => {
   });
 
   it('log passes multiple arguments', () => {
-    process.env.NODE_ENV = 'development';
+    setNodeEnv('development');
     jest.resetModules();
     const spy = jest.spyOn(console, 'log').mockImplementation();
     const { logger } = require('../logger');

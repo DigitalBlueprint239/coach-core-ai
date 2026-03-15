@@ -112,6 +112,24 @@ describe('yardToPixel', () => {
 });
 
 describe('pixel↔yard round-trip', () => {
+  it('preserves X position within 0.1 pixel tolerance for specific values', () => {
+    const testValues = [0, 50, 100, 200, 300, 400, 500, 550, 590, FIELD_WIDTH_PX];
+    testValues.forEach(pixelX => {
+      const yards = pixelToYard({ x: pixelX, y: 0 });
+      const back = yardToPixel(yards);
+      expect(back.x).toBeCloseTo(pixelX, 1);
+    });
+  });
+
+  it('preserves Y position within 0.1 pixel tolerance for specific values', () => {
+    const testValues = [0, 25, 50, 100, 150, 200, 250, 275, 295, FIELD_HEIGHT_PX];
+    testValues.forEach(pixelY => {
+      const yards = pixelToYard({ x: 0, y: pixelY });
+      const back = yardToPixel(yards);
+      expect(back.y).toBeCloseTo(pixelY, 1);
+    });
+  });
+
   it('preserves position within 0.1px for 100 random positions', () => {
     for (let i = 0; i < 100; i++) {
       const pixelX = Math.random() * FIELD_WIDTH_PX;
@@ -123,19 +141,22 @@ describe('pixel↔yard round-trip', () => {
     }
   });
 
-  it('yard values after conversion are within legal field bounds', () => {
-    // Test 50 random pixel positions
-    for (let i = 0; i < 50; i++) {
-      const px: Point = {
-        x: Math.random() * FIELD_WIDTH_PX,
-        y: Math.random() * FIELD_HEIGHT_PX,
-      };
-      const yards = pixelToYard(px);
-      expect(yards.x).toBeGreaterThanOrEqual(0);
-      expect(yards.x).toBeLessThanOrEqual(FIELD_WIDTH_YARDS + 0.01);
-      expect(yards.y).toBeGreaterThanOrEqual(0);
-      expect(yards.y).toBeLessThanOrEqual(FIELD_LENGTH_YARDS + 0.01);
-    }
+  it('round-trips a complete Play with players and routes', () => {
+    const original = createFullyPopulatedPlay();
+    const enginePlay = toEnginePlay(original);
+    const restored = fromEnginePlay(enginePlay);
+    // Player positions must round-trip within 0.1px
+    original.players.forEach((player, i) => {
+      expect(restored.players[i].x).toBeCloseTo(player.x, 1);
+      expect(restored.players[i].y).toBeCloseTo(player.y, 1);
+    });
+    // Route waypoints must round-trip within 0.1px
+    original.routes.forEach((route, ri) => {
+      route.path.forEach((wp, wi) => {
+        expect(restored.routes[ri].path[wi].x).toBeCloseTo(wp.x, 1);
+        expect(restored.routes[ri].path[wi].y).toBeCloseTo(wp.y, 1);
+      });
+    });
   });
 
   it('yard→pixel→yard round-trip preserves position within 0.01 yards', () => {
@@ -146,6 +167,38 @@ describe('pixel↔yard round-trip', () => {
       const back = pixelToYard(pixels);
       expect(back.x).toBeCloseTo(yardX, 2);
       expect(back.y).toBeCloseTo(yardY, 2);
+    }
+  });
+});
+
+describe('field boundary enforcement', () => {
+  it('converted yard X values stay within 0 and FIELD_WIDTH_YARDS', () => {
+    [0, 1, FIELD_WIDTH_PX - 1, FIELD_WIDTH_PX].forEach(pixelX => {
+      const yards = pixelToYard({ x: pixelX, y: 0 });
+      expect(yards.x).toBeGreaterThanOrEqual(0);
+      expect(yards.x).toBeLessThanOrEqual(FIELD_WIDTH_YARDS + 0.001);
+    });
+  });
+
+  it('converted yard Y values stay within 0 and FIELD_LENGTH_YARDS', () => {
+    [0, 1, FIELD_HEIGHT_PX - 1, FIELD_HEIGHT_PX].forEach(pixelY => {
+      const yards = pixelToYard({ x: 0, y: pixelY });
+      expect(yards.y).toBeGreaterThanOrEqual(0);
+      expect(yards.y).toBeLessThanOrEqual(FIELD_LENGTH_YARDS + 0.001);
+    });
+  });
+
+  it('yard values from random pixel positions are within legal field bounds', () => {
+    for (let i = 0; i < 50; i++) {
+      const px: Point = {
+        x: Math.random() * FIELD_WIDTH_PX,
+        y: Math.random() * FIELD_HEIGHT_PX,
+      };
+      const yards = pixelToYard(px);
+      expect(yards.x).toBeGreaterThanOrEqual(0);
+      expect(yards.x).toBeLessThanOrEqual(FIELD_WIDTH_YARDS + 0.01);
+      expect(yards.y).toBeGreaterThanOrEqual(0);
+      expect(yards.y).toBeLessThanOrEqual(FIELD_LENGTH_YARDS + 0.01);
     }
   });
 });
@@ -283,6 +336,56 @@ describe('full round-trip: Play → EnginePlay → Play', () => {
     const route = roundTripped.routes.find(r => r.id === 'r1')!;
     expect(route.path[0].y).toBeGreaterThan(route.path[1].y);
     expect(route.path[1].y).toBeGreaterThan(route.path[2].y);
+  });
+});
+
+describe('no silent field drops', () => {
+  it('preserves player ID after bridge translation', () => {
+    const play = createFullyPopulatedPlay();
+    const result = toEnginePlay(play);
+    // Player ID must survive — concept detection uses it for reporting
+    expect(result.players[0].id).toBe('p1');
+    expect(result.players[1].id).toBe('p2');
+    expect(result.players[2].id).toBe('p3');
+  });
+
+  it('preserves empty routes array — does not drop it', () => {
+    const play = createFullyPopulatedPlay();
+    play.routes = [];
+    const result = toEnginePlay(play);
+    expect(result.routes).toEqual([]);
+  });
+
+  it('preserves waypoint ordering after bridge', () => {
+    const play = createFullyPopulatedPlay();
+    const result = toEnginePlay(play);
+    const route = result.routes.find(r => r.id === 'r1')!;
+    // Original waypoints: (50,150) → (50,50) → (150,20)
+    // After converting to yards, the order must be preserved
+    // Verify by round-tripping: ordering should match original
+    const restored = fromEnginePlay(result);
+    const restoredRoute = restored.routes.find(r => r.id === 'r1')!;
+    const originalRoute = play.routes.find(r => r.id === 'r1')!;
+    restoredRoute.path.forEach((wp, i) => {
+      expect(wp.x).toBeCloseTo(originalRoute.path[i].x, 1);
+      expect(wp.y).toBeCloseTo(originalRoute.path[i].y, 1);
+    });
+  });
+
+  it('preserves player number and position', () => {
+    const play = createFullyPopulatedPlay();
+    const result = toEnginePlay(play);
+    const qb = result.players.find(p => p.id === 'p1')!;
+    expect(qb.number).toBe(12);
+    expect(qb.position).toBe('QB');
+  });
+
+  it('preserves route playerId linkage', () => {
+    const play = createFullyPopulatedPlay();
+    const engine = toEnginePlay(play);
+    const restored = fromEnginePlay(engine);
+    expect(restored.routes[0].playerId).toBe('p2');
+    expect(restored.routes[1].playerId).toBe('p3');
   });
 });
 

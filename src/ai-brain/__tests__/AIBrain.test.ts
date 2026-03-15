@@ -200,7 +200,7 @@ describe('CoachCoreAIBrain', () => {
         routeCombinations: [{ routes: ['Corner', 'Hitch'], reasoning: 'Smash concept', confidence: 0.85 }]
       })));
 
-      await brain.getCoverageRecommendation({ opponents: 'Team A', fieldPosition: 'own 40' });
+      await brain.getCoverageRecommendation({ offensiveFormation: 'Spread', fieldPosition: 'own 40' });
       expect(mockMakeRequest).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'play_suggestion' })
       );
@@ -286,7 +286,7 @@ describe('CoachCoreAIBrain', () => {
         confidence: 0.85
       })));
 
-      await brain.generateGamePlan(context);
+      await brain.generateGamePlan(context, { strengths: ['passing game'] });
       expect(mockMakeRequest).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'play_suggestion' })
       );
@@ -294,7 +294,7 @@ describe('CoachCoreAIBrain', () => {
 
     it('returns fallback on failure', async () => {
       mockMakeRequest.mockResolvedValueOnce(mockProxyFailure());
-      const result = await brain.generateGamePlan(context);
+      const result = await brain.generateGamePlan(context, { strengths: ['passing game'] });
       expect(result.offensiveConcepts.length).toBeGreaterThan(0);
     });
   });
@@ -311,7 +311,7 @@ describe('CoachCoreAIBrain', () => {
         confidence: 0.9
       })));
 
-      await brain.getMotivationalInsight({ teamContext: 'Playoff game' });
+      await brain.getMotivationalInsight({ teamName: 'Eagles', seasonPhase: 'Playoff game' });
       expect(mockMakeRequest).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'conversation' })
       );
