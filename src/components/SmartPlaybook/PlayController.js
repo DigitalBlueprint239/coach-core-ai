@@ -12,7 +12,7 @@ export const PLAYER_POSITIONS = {
 };
 
 // Route types for validation
-export const ROUTE_TYPES = ['custom', 'slant', 'post', 'corner', 'out', 'in', 'hitch', 'go'];
+export const ROUTE_TYPES = ['custom', 'slant', 'post', 'corner', 'out', 'in', 'hitch', 'go', 'flat', 'comeback', 'curl', 'wheel', 'screen'];
 
 // Default colors for routes
 export const ROUTE_COLORS = {
