@@ -1,9 +1,8 @@
-// @ts-nocheck
 import React, { memo } from 'react';
-import Field from '../:components:SmartPlaybook:Field.js';
+import Field from '../Field';
 
 interface CanvasAreaProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
   players: any[];
   routes: any[];
   onCanvasEvent: (e: any) => void;
