@@ -6,7 +6,7 @@
  */
 
 import React, { memo } from 'react';
-import { Save, FolderOpen, FileText, Tag } from 'lucide-react';
+import { Save, FolderOpen, FileText, Tag, FilePlus } from 'lucide-react';
 
 const SaveLoadPanel = memo(({
   currentPlayName,
@@ -17,6 +17,7 @@ const SaveLoadPanel = memo(({
   onPlayTypeChange,
   onSave,
   onLoad,
+  onNewPlay,
   canSave = false
 }) => {
   return (
@@ -81,6 +82,15 @@ const SaveLoadPanel = memo(({
 
       {/* Action Buttons */}
       <div className="space-y-2">
+        {onNewPlay && (
+          <button
+            onClick={onNewPlay}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            <FilePlus size={14} />
+            New Play
+          </button>
+        )}
         <button
           onClick={onSave}
           disabled={!canSave}

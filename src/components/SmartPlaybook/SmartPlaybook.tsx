@@ -495,6 +495,22 @@ const SmartPlaybook = () => {
     }
   }, [addNotification]);
 
+  // Create new play with default formation
+  const createNewPlay = useCallback(() => {
+    saveToUndoStack('new_play');
+    const centerX = FIELD_DIMENSIONS.width / 2;
+    const centerY = FIELD_DIMENSIONS.height / 2;
+    setPlayers(shotgunFormation(centerX, centerY));
+    setRoutes([]);
+    setSelectedPlayerId(null);
+    setSelectedRouteId(null);
+    setCurrentPlayName('New Play');
+    setCurrentPlayPhase('offense');
+    setCurrentPlayType('pass');
+    setMode('view');
+    addNotification('success', 'New play created with default formation');
+  }, [saveToUndoStack, addNotification]);
+
   // Clear field
   const clearField = useCallback(() => {
     if (window.confirm('Are you sure you want to clear the field?')) {
@@ -643,6 +659,7 @@ const SmartPlaybook = () => {
               onPlayTypeChange={setCurrentPlayType}
               onSave={() => setShowSaveDialog(true)}
               onLoad={() => setShowLibrary(true)}
+              onNewPlay={createNewPlay}
               canSave={players.length > 0}
             />
           </div>

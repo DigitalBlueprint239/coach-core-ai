@@ -9,6 +9,7 @@ interface SaveLoadPanelProps {
   onPlayTypeChange: (type: string) => void;
   onSave: () => void;
   onLoad: () => void;
+  onNewPlay?: () => void;
   canSave?: boolean;
 }
 
