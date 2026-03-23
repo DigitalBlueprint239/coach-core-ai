@@ -40,7 +40,9 @@ const RouteEditor = memo(({
   onUpdateRoute,
   onDeleteRoute,
   onApplyPreset,
-  onClearSelection
+  onClearSelection,
+  onRouteHover = () => {},
+  onRouteLeave = () => {}
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editType, setEditType] = useState('');
@@ -239,7 +241,9 @@ const RouteEditor = memo(({
           {PRESET_ROUTES.map(preset => (
             <button
               key={preset.id}
-              onClick={() => handleApplyPreset(preset)}
+              onClick={() => { onRouteLeave(); handleApplyPreset(preset); }}
+              onMouseEnter={() => onRouteHover(preset)}
+              onMouseLeave={() => onRouteLeave()}
               className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
               title={preset.name}
             >

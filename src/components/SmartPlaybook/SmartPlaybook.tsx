@@ -111,6 +111,9 @@ const SmartPlaybook = () => {
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
   const [currentPlayType, setCurrentPlayType] = useState('pass');
 
+  // Route preview state (ghost overlay on hover)
+  const [previewRoute, setPreviewRoute] = useState<{ id: string; points: Array<{ x: number; y: number }> } | null>(null);
+
   // Route drawing state
   const [isDrawingRoute, setIsDrawingRoute] = useState(false);
   const [routePoints, setRoutePoints] = useState<Array<{ x: number; y: number }>>([]);
@@ -649,6 +652,8 @@ const SmartPlaybook = () => {
                 onDeleteRoute={handleRouteDelete}
                 onApplyPreset={handleApplyPreset}
                 onClearSelection={() => setSelectedRouteId(null)}
+                onRouteHover={setPreviewRoute}
+                onRouteLeave={() => setPreviewRoute(null)}
               />
             </ErrorBoundary>
 
@@ -676,6 +681,8 @@ const SmartPlaybook = () => {
                 routes={routes}
                 onCanvasEvent={handleCanvasEvent}
                 onPlayerDrag={handlePlayerDrag}
+                previewRoute={previewRoute}
+                selectedPlayerId={selectedPlayerId}
               />
             </ErrorBoundary>
 
