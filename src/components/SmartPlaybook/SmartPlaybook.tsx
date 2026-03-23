@@ -218,7 +218,10 @@ const SmartPlaybook = () => {
       action,
       timestamp: Date.now()
     };
-    setUndoStack(prev => [...prev, currentState]);
+    setUndoStack(prev => {
+      const next = [...prev, currentState];
+      return next.length > 50 ? next.slice(next.length - 50) : next;
+    });
     setRedoStack([]); // Clear redo stack when new action is performed
   }, [players, routes]);
 
