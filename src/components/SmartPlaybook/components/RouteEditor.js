@@ -15,7 +15,12 @@ const PRESET_ROUTES = [
   { id: 'out', name: 'Out', points: [{ x: 0, y: 0 }, { x: 20, y: 0 }, { x: 40, y: 0 }] },
   { id: 'in', name: 'In', points: [{ x: 0, y: 0 }, { x: 20, y: 0 }, { x: 40, y: -20 }] },
   { id: 'hitch', name: 'Hitch', points: [{ x: 0, y: 0 }, { x: 15, y: 0 }, { x: 15, y: -10 }, { x: 0, y: -10 }] },
-  { id: 'go', name: 'Go', points: [{ x: 0, y: 0 }, { x: 0, y: -50 }] }
+  { id: 'go', name: 'Go', points: [{ x: 0, y: 0 }, { x: 0, y: -50 }] },
+  { id: 'flat', name: 'Flat', points: [{ x: 0, y: 0 }, { x: 30, y: -5 }] },
+  { id: 'comeback', name: 'Comeback', points: [{ x: 0, y: 0 }, { x: 0, y: -65 }, { x: 15, y: -50 }] },
+  { id: 'curl', name: 'Curl', points: [{ x: 0, y: 0 }, { x: 0, y: -45 }, { x: -5, y: -35 }] },
+  { id: 'wheel', name: 'Wheel', points: [{ x: 0, y: 0 }, { x: 25, y: -5 }, { x: 35, y: -25 }, { x: 35, y: -60 }] },
+  { id: 'screen', name: 'Screen', points: [{ x: 0, y: 0 }, { x: 5, y: 8 }, { x: 30, y: 5 }] }
 ];
 
 const ROUTE_COLORS = [
@@ -145,6 +150,11 @@ const RouteEditor = memo(({
               <option value="in">In</option>
               <option value="hitch">Hitch</option>
               <option value="go">Go</option>
+              <option value="flat">Flat</option>
+              <option value="comeback">Comeback</option>
+              <option value="curl">Curl</option>
+              <option value="wheel">Wheel</option>
+              <option value="screen">Screen</option>
             </select>
           </div>
           
