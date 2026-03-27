@@ -1,14 +1,33 @@
 [build]
-publish = "dist"
-command = "npm run build"
+  # Fixed build directory for Create React App
+  publish = "build"
+  command = "npm run build"
 
 [build.environment]
-NODE_VERSION = "18"
+  # Required for Netlify Prerender Extension (Node 20+)
+  NODE_VERSION = "20"
+  
+  # Ensure CI is false so warnings don't fail the build
+  CI = "false"
 
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  # SPA Fallback routing
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
-[post_processing]
-prerender = true
+[[headers]]
+  # Basic caching strategy for static assets
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  # Prevent caching of index.html so SPA updates immediately
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# NOTE: Legacy [post_processing] prerender = true is REMOVED.
+# Prerendering is now handled by the Netlify Prerender Extension
+# which must be enabled in the Netlify UI.
