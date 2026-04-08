@@ -111,6 +111,9 @@ const SmartPlaybook = () => {
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
   const [currentPlayType, setCurrentPlayType] = useState('pass');
 
+  // Route preview state (ghost overlay on hover)
+  const [previewRoute, setPreviewRoute] = useState<{ id: string; points: Array<{ x: number; y: number }> } | null>(null);
+
   // Route drawing state
   const [isDrawingRoute, setIsDrawingRoute] = useState(false);
   const [routePoints, setRoutePoints] = useState<Array<{ x: number; y: number }>>([]);
@@ -218,7 +221,10 @@ const SmartPlaybook = () => {
       action,
       timestamp: Date.now()
     };
-    setUndoStack(prev => [...prev, currentState]);
+    setUndoStack(prev => {
+      const next = [...prev, currentState];
+      return next.length > 50 ? next.slice(next.length - 50) : next;
+    });
     setRedoStack([]); // Clear redo stack when new action is performed
   }, [players, routes]);
 
@@ -495,6 +501,22 @@ const SmartPlaybook = () => {
     }
   }, [addNotification]);
 
+  // Create new play with default formation
+  const createNewPlay = useCallback(() => {
+    saveToUndoStack('new_play');
+    const centerX = FIELD_DIMENSIONS.width / 2;
+    const centerY = FIELD_DIMENSIONS.height / 2;
+    setPlayers(shotgunFormation(centerX, centerY));
+    setRoutes([]);
+    setSelectedPlayerId(null);
+    setSelectedRouteId(null);
+    setCurrentPlayName('New Play');
+    setCurrentPlayPhase('offense');
+    setCurrentPlayType('pass');
+    setMode('view');
+    addNotification('success', 'New play created with default formation');
+  }, [saveToUndoStack, addNotification]);
+
   // Clear field
   const clearField = useCallback(() => {
     if (window.confirm('Are you sure you want to clear the field?')) {
@@ -630,6 +652,8 @@ const SmartPlaybook = () => {
                 onDeleteRoute={handleRouteDelete}
                 onApplyPreset={handleApplyPreset}
                 onClearSelection={() => setSelectedRouteId(null)}
+                onRouteHover={setPreviewRoute}
+                onRouteLeave={() => setPreviewRoute(null)}
               />
             </ErrorBoundary>
 
@@ -643,6 +667,7 @@ const SmartPlaybook = () => {
               onPlayTypeChange={setCurrentPlayType}
               onSave={() => setShowSaveDialog(true)}
               onLoad={() => setShowLibrary(true)}
+              onNewPlay={createNewPlay}
               canSave={players.length > 0}
             />
           </div>
@@ -656,6 +681,8 @@ const SmartPlaybook = () => {
                 routes={routes}
                 onCanvasEvent={handleCanvasEvent}
                 onPlayerDrag={handlePlayerDrag}
+                previewRoute={previewRoute}
+                selectedPlayerId={selectedPlayerId}
               />
             </ErrorBoundary>
 

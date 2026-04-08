@@ -66,12 +66,20 @@ class ErrorBoundary extends Component<Props, State> {
               Something went wrong. Please try again later.
             </p>
             
-            <button
-              onClick={() => window.location.reload()}
-              className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Reload Page
-            </button>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => this.setState({ hasError: false, error: undefined, errorInfo: undefined })}
+                className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                Reload Page
+              </button>
+            </div>
           </div>
 
           {/* Development error details */}

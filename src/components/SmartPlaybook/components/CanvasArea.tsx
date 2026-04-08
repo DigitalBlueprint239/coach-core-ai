@@ -7,6 +7,8 @@ interface CanvasAreaProps {
   routes: any[];
   onCanvasEvent: (e: any) => void;
   onPlayerDrag: (id: string, x: number, y: number) => void;
+  previewRoute?: any;
+  selectedPlayerId?: string | null;
 }
 
 const CanvasArea: React.FC<CanvasAreaProps> = memo(({
@@ -14,7 +16,9 @@ const CanvasArea: React.FC<CanvasAreaProps> = memo(({
   players,
   routes,
   onCanvasEvent,
-  onPlayerDrag
+  onPlayerDrag,
+  previewRoute = null,
+  selectedPlayerId = null
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
@@ -24,6 +28,8 @@ const CanvasArea: React.FC<CanvasAreaProps> = memo(({
         routes={routes}
         onCanvasEvent={onCanvasEvent}
         onPlayerDrag={onPlayerDrag}
+        previewRoute={previewRoute}
+        selectedPlayerId={selectedPlayerId}
       />
     </div>
   );

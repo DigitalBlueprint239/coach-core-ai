@@ -12,6 +12,8 @@ interface FieldProps {
   mode?: string;
   debug?: boolean;
   className?: string;
+  previewRoute?: { id: string; points: Array<{ x: number; y: number }> } | null;
+  selectedPlayerId?: string | null;
   'data-testid'?: string;
 }
 
