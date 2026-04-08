@@ -1,3 +1,5 @@
+> **Note:** This document was created during an earlier planning phase and may not reflect the current state of the project. See the root `README.md` for the authoritative project status.
+
 # Coach Core AI
 
 A scalable AI-powered coaching platform designed to revolutionize sports coaching through intelligent practice planning, real-time analytics, and personalized team management.
