@@ -3,6 +3,7 @@ export const LEGACY_KEY = 'smartPlaybook_plays';
 export const decisionKey = (uid: string) => `coachcore:v1:${uid}:legacyImportDecision`;
 export interface LegacyPlay {
   id: string; name: string; phase: string; type: string;
+  createdAt?: string; updatedAt?: string;
   players: Array<{id:string; x:number; y:number; position:string; number:number; [key:string]:unknown}>;
   routes: Array<{id:string; playerId:string; points:Array<{x:number;y:number}>; type:string; color?:string; [key:string]:unknown}>;
 }
@@ -24,10 +25,13 @@ export function readLegacy(storage: Storage): LegacyPlay[] {
       || !['offense', 'defense', 'special'].includes(p.phase)
       || typeof p.type !== 'string' || p.type.length > 40
       || !Array.isArray(p.players) || p.players.length > 30 || !Array.isArray(p.routes) || p.routes.length > 60
-      || Object.keys(p).some(k => !['id','name','phase','type','players','routes'].includes(k))) {
+      || Object.keys(p).some(k => !['id','name','phase','type','players','routes','createdAt','updatedAt'].includes(k))) {
       throw new Error('Unsupported legacy play. Originals are preserved; export/review before importing.');
     }
     ids.add(p.id);
+    for (const key of ['createdAt','updatedAt']) {
+      if (key in p && (typeof p[key] !== 'string' || !Number.isFinite(Date.parse(p[key])) || new Date(p[key]).toISOString() !== p[key])) throw new Error('Unsupported legacy timestamp. Originals preserved.');
+    }
     for (const player of p.players) {
       if (!player || typeof player.id !== 'string' || typeof player.position !== 'string'
         || !Number.isFinite(player.x) || !Number.isFinite(player.y) || !Number.isFinite(player.number)) throw new Error('Invalid player.');

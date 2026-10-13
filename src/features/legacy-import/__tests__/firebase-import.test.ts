@@ -6,7 +6,7 @@ import { doc, serverTimestamp, runTransaction, getDocFromServer } from 'firebase
 jest.mock('../../../firebase',()=>({auth:{currentUser:{uid:'A',isAnonymous:false}},db:{}}));
 jest.mock('firebase/firestore',()=>({doc:jest.fn((_db,_collection,id)=>({id})),collection:jest.fn(),query:jest.fn(),where:jest.fn(),
   getDocsFromServer:jest.fn(),getDocFromServer:jest.fn(),runTransaction:jest.fn(),serverTimestamp:jest.fn(()=> 'server-time')}));
-const play={id:'local',name:'Mesh',phase:'special',type:'pass',players:[{id:'p',number:1,position:'QB',x:10,y:20}],routes:[]};
+const play={id:'local',createdAt:'2026-10-01T00:00:00.000Z',updatedAt:'2026-10-02T00:00:00.000Z',name:'Mesh',phase:'special',type:'pass',players:[{id:'p',number:1,position:'QB',x:10,y:20}],routes:[]};
 const session={uid:'A',teamId:'teamA'};
 let docs:Map<string,any>;
 let writes: number;
@@ -27,6 +27,11 @@ test('transaction retries do not duplicate or overwrite; server read reverses sp
   expect(await firebaseImport.copy(session,play)).toBe(id); expect(writes).toBe(1);
   expect(docs.get(id)).toMatchObject({teamId:'teamA',createdBy:'A',revision:1,localId:'local',phase:'special_teams'});
   expect(await firebaseImport.read(session,id)).toEqual(play);
+});
+test('legacy plays with absent timestamps reopen without inventing source fields',async()=>{
+  const {createdAt,updatedAt,...withoutDates}=play;
+  const id=await firebaseImport.copy(session,withoutDates);
+  expect(await firebaseImport.read(session,id)).toEqual(withoutDates);
 });
 test('changed existing imported copy is a visible error, never overwritten',async()=>{
   const id=await firebaseImport.copy(session,play); docs.get(id).name='Other edit';

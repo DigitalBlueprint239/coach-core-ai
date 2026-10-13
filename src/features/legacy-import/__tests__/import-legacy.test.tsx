@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { importLegacy, declineImport, decisionKey, LEGACY_KEY, readLegacy } from '../import-legacy';
 import LegacyImport from '../LegacyImport';
 jest.mock('../firebase-import', () => ({ firebaseImport: {} }));
-const play = { id:'local1', name:'Mesh', phase:'special', type:'pass',
+const play = { id:'local1', createdAt:'2026-10-01T00:00:00.000Z', updatedAt:'2026-10-02T00:00:00.000Z', name:'Mesh', phase:'special', type:'pass',
   players:[{id:'p',x:10.25,y:20,number:1,position:'QB',selected:false}],
   routes:[{id:'r',playerId:'p',points:[{x:10.25,y:20},{x:30,y:45}],type:'custom',color:'#fff'}] };
 const session = { uid:'coachA',teamId:'teamA' };
