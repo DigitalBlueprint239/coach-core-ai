@@ -19,7 +19,8 @@ export default class AnnotateReporter {
     else if (result.status === 'passed' && test.outcome() === 'expected') status = 'PASS';
     else status = 'FAIL';
     const msg = status === 'FAIL'
-      ? String(result.error?.message || result.status).replace(/\x1b\[[0-9;]*m/g, '').split('\n')[0].slice(0, 300)
+      ? String(result.error?.message || result.status).replace(/\x1b\[[0-9;]*m/g, '')
+        .split('\n').filter((l) => l.trim()).slice(0, 4).join(' | ').slice(0, 900)
       : (status === 'BLOCKED' || status === 'SKIPPED') ? (blocked?.description || status.toLowerCase()) : '';
     this.rows.push({ project, title: test.title, status, msg, ms: result.duration });
   }
