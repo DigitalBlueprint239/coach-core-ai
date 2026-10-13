@@ -56,10 +56,20 @@ Repo `Coach-Core-Smart-Playbook-`. Environment: Linux, Playwright bundled **Chro
 
 | Run | Commit | Result |
 |---|---|---|
-| Baseline, original test ×10 per project | PR #2 `aea4fd9` | **FAIL 10/20** (desktop-mouse 3, tablet-touch 7). Log: `docs/evidence/integration/playbook-pr2-aea4fd9-chromium141-x10.log` |
+| Baseline, original test ×10 per project | PR #2 `aea4fd9` | **FAIL 10/20** (desktop-mouse 3, tablet-touch 7). Log: `docs/evidence/integration/01-baseline-pr2-aea4fd9-original-test-x10.txt` |
 | Root-cause instrumentation (DIAG3: unmodified test + in-page timeline) | `aea4fd9` | 5/20 failed, all at an Undo checkpoint. In every failure the test read storage **+43 to +74 ms** after Undo, while the label still said **"Saved"** from the previous save; the label changed to "Unsaved changes" only at +65 to +83 ms. Undo itself was never lost (DIAG2: 20/20 persisted after settling). **Demonstrated cause:** the save-status label lags the state by one effect, and the test checkpoint trusted the label |
-| Codex correction, full browser suite ×10 | PR #3 `04946b7` | **PASS 140/140** (7 tests × 10 × `chromium-desktop` + `chromium-tablet-touch`), 11.3 min, `EXIT=0`. Log: `docs/evidence/integration/playbook-pr3-04946b7-chromium141-x10.log` |
+| Codex correction, full browser suite ×10 | PR #3 `04946b7` | **PASS 140/140** (7 tests × 10 × `chromium-desktop` + `chromium-tablet-touch`), 11.3 min, `EXIT=0`. Log: `docs/evidence/integration/05-final-pr3-04946b7-full-suite-x10.txt` |
 | PR #3 unit / typecheck / canary | `04946b7` | 19/19 · tsc 0 · canary 0 violations |
+
+**Evidence correction (2026-10-13 afternoon).** Commit `f154e05` referenced `.log` files that the repository's `*.log` ignore rule had silently excluded, so they were not published. Codex caught this. All raw outputs are now published as `.txt` with `SHA256SUMS.txt` in `docs/evidence/integration/`. No result was dropped or edited:
+
+- `01` baseline ×10;
+- `02` DIAG1 (settle-instrumented);
+- `03` DIAG2 (3 s observation);
+- `04` DIAG3 (unmodified test + in-page timeline, 5 failures);
+- `05` final PR #3 ×10;
+- `diag3-failure-contexts/` (one per DIAG3 failure);
+- `diagnostic-specs/` (the exact diagnostic specs and configs).
 
 **Independent review of PR #3:**
 - **Product fix.** `saveStatus` is derived during render (`savedSnapshot === playbook`), so the label can no longer show "Saved" for unsaved state.
