@@ -1,0 +1,75 @@
+
+> coach-core-–-smart-playbook@0.0.0 dev
+> vite --host 127.0.0.1 --port 3102
+
+
+  VITE v6.4.4  ready in 774 ms
+
+  ➜  Local:   http://127.0.0.1:3102/
+7:34:31 AM [vite] (client) hmr update /App.tsx
+7:34:32 AM [vite] (client) hmr update /components/ai/DrillFinder.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx
+7:34:32 AM [vite] (client) hmr update /components/RouteSuggestionTip.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx
+7:34:32 AM [vite] (client) hmr update /components/ai/GameScripter.tsx, /components/ai/DrillFinder.tsx, /components/ai/PracticePlanner.tsx
+7:34:32 AM [vite] (client) hmr update /src/annotations/AnnotationLayer.tsx
+7:34:32 AM [vite] (client) hmr update /src/players/PlayerLayer.tsx
+7:34:32 AM [vite] (client) hmr update /src/routes/RouteLayer.tsx
+7:34:32 AM [vite] (client) hmr update /src/selection/SelectionLayer.tsx
+7:34:32 AM [vite] (client) hmr update /App.tsx
+7:34:32 AM [vite] (client) hmr update /components/FormationSelector.tsx
+7:34:32 AM [vite] (client) hmr update /components/AlignmentToolbar.tsx
+7:34:32 AM [vite] (client) hmr update /components/AnalyticsPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/CoverageAnalysisPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/DesignPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/ExportSuite.tsx
+7:34:32 AM [vite] (client) hmr update /components/FieldCanvas.tsx
+7:34:32 AM [vite] (client) hmr update /components/FloatingPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/FormationSelector.tsx
+7:34:32 AM [vite] (client) hmr update /components/FormationThumbnail.tsx
+7:34:32 AM [vite] (client) hmr update /components/GamePlanPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/InstallManager.tsx
+7:34:32 AM [vite] (client) hmr update /components/LearnPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/Modal.tsx
+7:34:32 AM [vite] (client) hmr update /components/NewPlayModal.tsx
+7:34:32 AM [vite] (client) hmr update /components/OptimizePanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/PlayOrganizer.tsx
+7:34:32 AM [vite] (client) hmr update /components/PracticePlanModal.tsx
+7:34:32 AM [vite] (client) hmr update /components/RightSidebar.tsx
+7:34:32 AM [vite] (client) hmr update /components/RouteSuggestionTip.tsx
+7:34:32 AM [vite] (client) hmr update /components/RoutesConceptsPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/SituationalPlayCallerPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/ThumbToolbelt.tsx
+7:34:32 AM [vite] (client) hmr update /components/Toolbar.tsx
+7:34:32 AM [vite] (client) hmr update /components/WristbandModal.tsx
+7:34:32 AM [vite] (client) hmr update /components/WristbandPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/icons.tsx
+7:34:32 AM [vite] (client) hmr update /components/FieldCanvas.tsx, /contexts/PlaybookContext.tsx, /contexts/UIContext.tsx, /src/players/PlayerLayer.tsx, /src/field/FieldLayers.tsx, /src/routes/RouteLayer.tsx, /src/field/CanvasInspector.tsx, /src/selection/SelectionLayer.tsx, /components/FormationSelector.tsx, /components/NewPlayModal.tsx, /components/ExportSuite.tsx, /components/CoverageAnalysisPanel.tsx, /components/OptimizePanel.tsx, /components/RouteSuggestionTip.tsx, /components/WristbandModal.tsx, /components/DesignPanel.tsx, /components/RoutesConceptsPanel.tsx
+7:34:32 AM [vite] (client) page reload index.html
+7:34:32 AM [vite] (client) page reload index.tsx
+7:34:32 AM [vite] changed tsconfig file detected: C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/smart-playbook-source/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+7:34:32 AM [vite] vite.config.ts changed, restarting server...
+7:34:32 AM [vite] (client) hmr update /components/ai/GameScripter.tsx
+7:34:32 AM [vite] (client) hmr update /components/ai/PracticePlanner.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/UIContext.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx
+7:34:32 AM [vite] (client) hmr update /components/OptimizePanel.tsx, /components/RouteSuggestionTip.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/UIContext.tsx
+7:34:32 AM [vite] (client) hmr update /components/RoutesConceptsPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/CoverageAnalysisPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/ExportSuite.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx, /components/FormationSelector.tsx, /components/NewPlayModal.tsx, /components/ExportSuite.tsx, /components/CoverageAnalysisPanel.tsx, /components/OptimizePanel.tsx, /components/RouteSuggestionTip.tsx, /components/WristbandModal.tsx
+7:34:32 AM [vite] (client) hmr update /components/GamePlanPanel.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx, /components/DesignPanel.tsx, /components/RoutesConceptsPanel.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx, /components/DesignPanel.tsx, /components/RoutesConceptsPanel.tsx
+7:34:32 AM [vite] (client) hmr update /contexts/PlaybookContext.tsx, /components/DesignPanel.tsx, /components/RoutesConceptsPanel.tsx
+7:34:32 AM [vite] (client) hmr update /components/SituationalPlayCallerPanel.tsx
+7:34:32 AM [vite] (client) hmr update /src/field/CanvasInspector.tsx
+7:34:32 AM [vite] (client) hmr update /src/field/FieldLayers.tsx
+7:34:32 AM [vite] (client) hmr update /src/field/FieldLayers.tsx
+7:34:32 AM [vite] (client) hmr update /components/FieldCanvas.tsx, /src/players/PlayerLayer.tsx, /src/routes/RouteLayer.tsx
+7:34:32 AM [vite] (client) hmr update /App.tsx
+7:34:32 AM [vite] (client) hmr update /components/FormationSelector.tsx
+7:34:32 AM [vite] server restarted.
+

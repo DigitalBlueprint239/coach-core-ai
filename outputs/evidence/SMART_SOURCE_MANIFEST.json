@@ -1,0 +1,428 @@
+{
+  "repository": "DigitalBlueprint239/Coach-Core-Smart-Playbook-",
+  "commit": "6b4c42c0d18a2a0364a3cf72f62bbc4535517e58",
+  "branch": "recovery/smart-playbook-mvp-2026",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha": "a547bf36d8d11a4f89c59c144f24795749086dd1",
+      "size": 253
+    },
+    {
+      "path": "App.tsx",
+      "sha": "d0e80a1b113ae811c355c012387ff1a93593097f",
+      "size": 5545
+    },
+    {
+      "path": "README.md",
+      "sha": "1519c9c095de345b7e6c77e45c4024518f0c7199",
+      "size": 553
+    },
+    {
+      "path": "TESTING.md",
+      "sha": "eecf93fca920c957c0b17bc54e53faef74868fdb",
+      "size": 4393
+    },
+    {
+      "path": "components/AIPanel.tsx",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0
+    },
+    {
+      "path": "components/AlignmentToolbar.tsx",
+      "sha": "9579e807e6b88ec866aecb50456d84938ef448a6",
+      "size": 3132
+    },
+    {
+      "path": "components/AnalyticsPanel.tsx",
+      "sha": "749a97f119cdbb9cdffd63ac658b272600ffb285",
+      "size": 8829
+    },
+    {
+      "path": "components/AssignQuizModal.tsx",
+      "sha": "1b82a7105e85b15510fd9a745e3dbd2ac3aec8f2",
+      "size": 7840
+    },
+    {
+      "path": "components/CoverageAnalysisPanel.tsx",
+      "sha": "5734702babd264f9700673eb4b6f0f7dd5bbefe3",
+      "size": 6582
+    },
+    {
+      "path": "components/DesignPanel.tsx",
+      "sha": "12ca816a02de928e2ce32de32ce8281c253e6cc1",
+      "size": 24243
+    },
+    {
+      "path": "components/ExportSuite.tsx",
+      "sha": "3094935bbda623b945e169f85451eae72999af87",
+      "size": 5971
+    },
+    {
+      "path": "components/FieldCanvas.tsx",
+      "sha": "251b5b59127671a05c17d297825745fdb978e4e8",
+      "size": 15414
+    },
+    {
+      "path": "components/FloatingPanel.tsx",
+      "sha": "543d7b25a17abb5533b1354eb6282d589ed2bbda",
+      "size": 5382
+    },
+    {
+      "path": "components/FormationSelector.tsx",
+      "sha": "87276dd802c2abb3666b7980750bd53cbba4e373",
+      "size": 14947
+    },
+    {
+      "path": "components/FormationThumbnail.tsx",
+      "sha": "ba2f4e2ea0aae3a2ac0a00d9958a92c18b6a7be1",
+      "size": 2621
+    },
+    {
+      "path": "components/GamePlanPanel.tsx",
+      "sha": "9687633082903a71f3ffd60758d9d1158fc58eb6",
+      "size": 6521
+    },
+    {
+      "path": "components/InstallManager.tsx",
+      "sha": "358f1ac4a2a69403b15a7bc7a2b259f0af8eceab",
+      "size": 8194
+    },
+    {
+      "path": "components/LearnPanel.tsx",
+      "sha": "b378dba9c752b875cf579d768841b8e54735c13e",
+      "size": 4282
+    },
+    {
+      "path": "components/Modal.tsx",
+      "sha": "70c6f3eeeabfee494de36fa7563097af4193cf26",
+      "size": 3578
+    },
+    {
+      "path": "components/NewPlayModal.tsx",
+      "sha": "0c707c69900839ad7322b8177a7a1df148679c28",
+      "size": 7660
+    },
+    {
+      "path": "components/OptimizePanel.tsx",
+      "sha": "596700dcb5168569ddcd0b223f470df8deb51b7a",
+      "size": 8431
+    },
+    {
+      "path": "components/PlayOrganizer.tsx",
+      "sha": "93844e9a70a88d00962295edb1b9e8602eab3100",
+      "size": 8170
+    },
+    {
+      "path": "components/PracticePlanModal.tsx",
+      "sha": "08555fda68c7ab390694e2f6cb8422c66a8cc9ab",
+      "size": 9087
+    },
+    {
+      "path": "components/QuizModal.tsx",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0
+    },
+    {
+      "path": "components/RightSidebar.tsx",
+      "sha": "a43c70e0e04e4f51021a759d353bbfba05c26aae",
+      "size": 11046
+    },
+    {
+      "path": "components/RouteSuggestionTip.tsx",
+      "sha": "957c4a383368eb647589190cae7f72e357e91a2b",
+      "size": 2496
+    },
+    {
+      "path": "components/RoutesConceptsPanel.tsx",
+      "sha": "7cd0c8b5df92aab284e1b79b5367b51c83594d7d",
+      "size": 31522
+    },
+    {
+      "path": "components/Sidebar.tsx",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0
+    },
+    {
+      "path": "components/SituationalPlayCallerPanel.tsx",
+      "sha": "e82366cebea6b93a3b5f68fc15c6ae1a88d5dd27",
+      "size": 7243
+    },
+    {
+      "path": "components/ThumbToolbelt.tsx",
+      "sha": "e268a1e3c3f931bf6a825a67945dbc153ced1395",
+      "size": 3522
+    },
+    {
+      "path": "components/Toolbar.tsx",
+      "sha": "94ee67bade27e130dc65f45e8a5438c29d26eeec",
+      "size": 3971
+    },
+    {
+      "path": "components/WristbandModal.tsx",
+      "sha": "a8109a39f5295b513aa52c56e2435c6dc970b007",
+      "size": 11178
+    },
+    {
+      "path": "components/WristbandPanel.tsx",
+      "sha": "4a301150e5fbe6aecead0c0726695e81deda6034",
+      "size": 3460
+    },
+    {
+      "path": "components/ai/DrillFinder.tsx",
+      "sha": "21a6e4d98fd86972407afc1c84526abc714201c4",
+      "size": 12081
+    },
+    {
+      "path": "components/ai/GameScripter.tsx",
+      "sha": "9e1d787c6f69f510dc9998370b4bbf0316d1ac52",
+      "size": 11179
+    },
+    {
+      "path": "components/ai/PracticePlanner.tsx",
+      "sha": "854ddbdd9e5d306d71ee1a84957d1ff1aa2bc1f5",
+      "size": 9762
+    },
+    {
+      "path": "components/icons.tsx",
+      "sha": "f5b2059513aa5fc2b81449f1e81109647dd2b919",
+      "size": 13008
+    },
+    {
+      "path": "constants.ts",
+      "sha": "fa6c523d1f39208b77af496a89a7dfda32b0824b",
+      "size": 3702
+    },
+    {
+      "path": "contexts/PlaybookContext.tsx",
+      "sha": "096a9f42a20f0bb084ab47234899df3af9e329bb",
+      "size": 12112
+    },
+    {
+      "path": "contexts/UIContext.tsx",
+      "sha": "21aca89fff9bfe09f391f6479458547dd9ec41c5",
+      "size": 16806
+    },
+    {
+      "path": "functions/index.ts",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0
+    },
+    {
+      "path": "hooks/useDebounce.ts",
+      "sha": "494f92e69ccfddef9060d287fae11bf13ece3952",
+      "size": 942
+    },
+    {
+      "path": "hooks/useHistory.ts",
+      "sha": "fd2c318cd633c036c7db5392a1116a9b6204ee44",
+      "size": 1960
+    },
+    {
+      "path": "hooks/useKeyboardShortcuts.ts",
+      "sha": "ee2484fd3fa532b289ece5250a1cbc7c39a7b93c",
+      "size": 75
+    },
+    {
+      "path": "hooks/usePlayAnimation.ts",
+      "sha": "c9d388029227b9c61d5b6cc03f2bf8b4c9e00631",
+      "size": 74
+    },
+    {
+      "path": "hooks/useRouteDrawing.ts",
+      "sha": "ee2484fd3fa532b289ece5250a1cbc7c39a7b93c",
+      "size": 75
+    },
+    {
+      "path": "hooks/useSelectionManager.ts",
+      "sha": "ee2484fd3fa532b289ece5250a1cbc7c39a7b93c",
+      "size": 75
+    },
+    {
+      "path": "index.html",
+      "sha": "fe36494b350833a60b52af6c760e92a81170a4e6",
+      "size": 1594
+    },
+    {
+      "path": "index.tsx",
+      "sha": "f169d7f5fba018cbcf082399e6406a3349f81902",
+      "size": 354
+    },
+    {
+      "path": "logic/scoring.ts",
+      "sha": "2684eff2219c392a5c65e928e39846357822622d",
+      "size": 1816
+    },
+    {
+      "path": "metadata.json",
+      "sha": "2d25258e4b12586a932e8bb1bd29c7d3bed82eeb",
+      "size": 347
+    },
+    {
+      "path": "mocks/presets.ts",
+      "sha": "2c06b76c9df00191cd81626816480896ed13111b",
+      "size": 480
+    },
+    {
+      "path": "package.json",
+      "sha": "a8e16e435fcba9ae1c10a24019a3470ad8a03aaf",
+      "size": 727
+    },
+    {
+      "path": "services/aiCoachingService.ts",
+      "sha": "8487b4216e6a8606204e4ee90849166203be5f64",
+      "size": 1571
+    },
+    {
+      "path": "services/aiService.ts",
+      "sha": "2f359da17a5e1f75f37bc471d2e5f667234bb66e",
+      "size": 13134
+    },
+    {
+      "path": "services/alignmentService.ts",
+      "sha": "abe16877c307745f56dfb8aac91701ddd3cb535d",
+      "size": 2166
+    },
+    {
+      "path": "services/conceptService.ts",
+      "sha": "8f5cf8a78111d8ea12e623f8e894a85bfb3e674e",
+      "size": 3227
+    },
+    {
+      "path": "services/coverageAnalysisService.ts",
+      "sha": "868472d2afc46052d94ad24e794ca0f430fd60d0",
+      "size": 4170
+    },
+    {
+      "path": "services/exportService.ts",
+      "sha": "8ae2a84d6571ab593596c632c0fcc55682c771df",
+      "size": 5264
+    },
+    {
+      "path": "services/formationService.ts",
+      "sha": "1311be067b48a9a2eb2e216d7319ad122107b3e0",
+      "size": 30722
+    },
+    {
+      "path": "services/gameplanService.ts",
+      "sha": "71fd9c9d293b4ed606779b53cb42ffc26a18f36a",
+      "size": 4034
+    },
+    {
+      "path": "services/installService.ts",
+      "sha": "7a8059d2442db20934507e748bdcb6872abb9440",
+      "size": 6431
+    },
+    {
+      "path": "services/quizService.ts",
+      "sha": "cc734ff8df82866b12a4a16634ad63079895a00a",
+      "size": 4783
+    },
+    {
+      "path": "services/routeDefinitions.ts",
+      "sha": "48189fa3bdba40eacbe0cce9ca41000edffea228",
+      "size": 2989
+    },
+    {
+      "path": "services/routeParser.ts",
+      "sha": "62f81ea334b20a99fd7ba20eecf48bcf9df2939a",
+      "size": 10572
+    },
+    {
+      "path": "services/routeService.ts",
+      "sha": "7d1a9697c3544de614fd3b19c29e1ed1119f4712",
+      "size": 3455
+    },
+    {
+      "path": "services/situationalPlayCallerService.ts",
+      "sha": "cb57b6c088802544418d39e7e5e3a9efc6cb4f4a",
+      "size": 3375
+    },
+    {
+      "path": "src/annotations/AnnotationLayer.tsx",
+      "sha": "673687238634a7fbb4e9357d79bba456646dc241",
+      "size": 1437
+    },
+    {
+      "path": "src/components/FieldCanvas.tsx",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0
+    },
+    {
+      "path": "src/field/AuditHUD.tsx",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0
+    },
+    {
+      "path": "src/field/CanvasInspector.tsx",
+      "sha": "95931ef27c3ee4871bfbe41cbde3c114364d222f",
+      "size": 5465
+    },
+    {
+      "path": "src/field/FieldLayers.tsx",
+      "sha": "239763fe2d8355bc4e4f902fe0fe005abfc62e5b",
+      "size": 5007
+    },
+    {
+      "path": "src/field/SnapGridOverlay.tsx",
+      "sha": "aa2e96077a85689c1f7cc30f5e29372b6a18c7fe",
+      "size": 1822
+    },
+    {
+      "path": "src/field/dpr.ts",
+      "sha": "0faada339357a4fa11718b155e855f91296ac9bd",
+      "size": 2273
+    },
+    {
+      "path": "src/field/snap.ts",
+      "sha": "f9e28d6b7ddaa2c1152e0d8924634432ccd4a553",
+      "size": 4533
+    },
+    {
+      "path": "src/players/PlayerLayer.tsx",
+      "sha": "6fc21f5d91cf941163e2d1e38bc286461a599f34",
+      "size": 5761
+    },
+    {
+      "path": "src/routes/RouteLayer.tsx",
+      "sha": "4e52d472c40b5dbc7b0cb3bfe09de4595256b239",
+      "size": 10898
+    },
+    {
+      "path": "src/selection/SelectionLayer.tsx",
+      "sha": "dcacdf0c73346cb4aaa893e5162430d33f43aae9",
+      "size": 4489
+    },
+    {
+      "path": "src/styles/globalStyles.ts",
+      "sha": "66290833a797400842ae38c6817266af16b67845",
+      "size": 1964
+    },
+    {
+      "path": "src/styles/theme.ts",
+      "sha": "c03b9aa91a1c8b555b0315008a4f8cef826eae38",
+      "size": 1776
+    },
+    {
+      "path": "tsconfig.json",
+      "sha": "2c6eed55868c7545e8f265f260277fb0605b2dbc",
+      "size": 542
+    },
+    {
+      "path": "types.ts",
+      "sha": "9b5950675b87934265f97267072991b3fb1d9c98",
+      "size": 12189
+    },
+    {
+      "path": "types/formations.ts",
+      "sha": "30dbe69c33620c34ed8ac344f312e314f6b58388",
+      "size": 1577
+    },
+    {
+      "path": "vite.config.ts",
+      "sha": "ee5fb8d2dfb261530fb407cb2f28599d50fcae26",
+      "size": 580
+    }
+  ]
+}
+
