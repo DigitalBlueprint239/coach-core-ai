@@ -150,7 +150,13 @@ service cloud.firestore {
       return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
         && d.keys().hasOnly(['name', 'date', 'duration', 'periods', 'goals', 'notes',
                              'source', 'safetyConsiderations', 'aiRequestId', 'revision',
+                             'ageGroup', 'skillLevel', 'contactLevel', 'hydrationBreakMinutes',
                              'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+        && (!('ageGroup' in d) || d.ageGroup in ['6U', '8U', '10U', '12U', '14U',
+                                                   'HS_JV', 'HS_VARSITY', 'ADULT'])
+        && (!('skillLevel' in d) || d.skillLevel in ['beginner', 'intermediate', 'advanced'])
+        && (!('contactLevel' in d) || d.contactLevel in ['non_contact', 'limited_contact', 'full_contact'])
+        && (!('hydrationBreakMinutes' in d) || isBoundedList(d.hydrationBreakMinutes, 20))
         && (!('safetyConsiderations' in d) || isBoundedList(d.safetyConsiderations, 20))
         && (!('aiRequestId' in d) || isShortString(d.aiRequestId, 1, 64))
         && (!('revision' in d) || (d.revision is int && d.revision >= 1))

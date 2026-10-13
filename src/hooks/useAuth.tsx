@@ -55,14 +55,36 @@ export interface AuthContextType {
   completeEmailLink: (email: string) => Promise<void>;
   /** Re-read claims from the server, e.g. after beta access is granted. */
   refreshAccess: () => Promise<void>;
-  logout: () => Promise<void>;
+  /**
+   * Sign out after every registered sign-out guard agrees. Resolves false
+   * (and stays signed in) if a guard cancels, e.g. the coach chose to keep
+   * unsynced drafts. Session expiry/revocation by Firebase cannot be guarded;
+   * uid-scoped drafts then remain on the device for the same coach.
+   */
+  logout: () => Promise<boolean>;
+  /** Register a guard run before an explicit sign-out (persistence contract §4). */
+  registerSignOutGuard: (guard: SignOutGuard) => () => void;
   /** @deprecated alias of signInWithGoogle */
   loginWithGoogle: () => Promise<void>;
   /** @deprecated alias of logout */
-  signOut: () => Promise<void>;
+  signOut: () => Promise<boolean>;
 }
 
 export const EMAIL_FOR_SIGN_IN_KEY = 'coachcore.emailForSignIn';
+
+/**
+ * Called before an explicit sign-out with the signed-in uid. Return true to
+ * continue, false to cancel. Guards may show UI (e.g. "Sync now / Export
+ * drafts / Sign out anyway") and must never delete another uid's data.
+ */
+export type SignOutGuard = (uid: string) => Promise<boolean> | boolean;
+const signOutGuards = new Set<SignOutGuard>();
+
+/** Register a sign-out guard; returns an unregister function. */
+export function registerSignOutGuard(guard: SignOutGuard): () => void {
+  signOutGuards.add(guard);
+  return () => { signOutGuards.delete(guard); };
+}
 
 // Browser storage that belongs to the signed-in coach and must not survive a
 // sign-out on a shared device (Day 1 F-10).
@@ -250,7 +272,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [apply]);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (): Promise<boolean> => {
+    const uid = auth?.currentUser?.uid;
+    if (uid) {
+      for (const guard of Array.from(signOutGuards)) {
+        let proceed = false;
+        try {
+          proceed = (await guard(uid)) === true;
+        } catch {
+          proceed = false; // a failing guard must not lose data
+        }
+        if (!proceed) return false;
+      }
+    }
     wasSignedIn.current = false;
     try {
       await signOut(auth);
@@ -264,6 +298,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.location.assign('/');
       }
     }
+    return true;
   }, []);
 
   const value = useMemo<AuthContextType>(() => ({
@@ -278,6 +313,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     completeEmailLink,
     refreshAccess,
     logout,
+    registerSignOutGuard,
     loginWithGoogle: signInWithGoogle,
     signOut: logout,
   }), [user, status, notice, error, signInWithGoogle, sendEmailLink, completeEmailLink, refreshAccess, logout]);
