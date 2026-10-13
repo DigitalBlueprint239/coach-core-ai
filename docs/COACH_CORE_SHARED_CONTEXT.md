@@ -33,6 +33,14 @@ Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public re
 - Production data untouched and restricted preview with a rollback plan.
 - Report blocked cases truthfully.
 
+## Issue #41 — standalone Day 2 milestones (review pending)
+- Standalone [PR #1](https://github.com/DigitalBlueprint239/Coach-Core-Smart-Playbook-/pull/1) targets `recovery/smart-playbook-mvp-2026` from `codex/issue-41-types-drag-history`. No application integration or automatic merge.
+- Milestone 1: typed DefaultTheme augmentation, inferred GlobalStyles props, and standard SVG props. Verified compiler diagnostics **810 → 0**, including new tests; no suppressions or framework upgrades.
+- Milestone 2: final player moves now commit the immutable pre-drag playbook snapshot. The same drag callback/state regressions fail 5/pass 2 against original context and pass **7/7** against the repair; canvas rendering/capability probing are mocked. Native pointer/touch gestures remain unverified.
+- Clean `npm ci` and production build pass. Main chunk 1,448.88 kB (449.67 kB gzip); existing chunk warning remains. Original audit-locked dependency versions retained. Final dependency audit reports one existing critical jsPDF finding.
+- Generic route/property interaction snapshot issue remains identified by inspection and unchanged. Storage validation/export defects and security gates remain. Claude owns authentication/security; no keys, Firebase/user data, deployments, or main auth/security implementation changes.
+- Evidence and exact commands: [Issue #41 handoff](ISSUE_41_DAY_2_HANDOFF.md). The documentation-only draft is held until main PR #40 lands per Issue #41. Review and merge both PRs explicitly. **MVP remains NO-GO.**
+
 ## Workflow / ownership
 - Codex = implement and test core feature repairs / integration; Claude = parallel independent security/auth review and test plans, NOT simultaneous edits to Codex-owned files.
 - GitHub issues/PRs and this document are the only canonical status. Each agent reads this file and `AGENTS.md` before work, logs commands + test evidence, notes blockers, and proposes concise updates via PR to this file.
