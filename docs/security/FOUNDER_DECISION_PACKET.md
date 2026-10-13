@@ -113,7 +113,24 @@ Monthly estimates, not quotes. Prices vary by region and change over time. Regio
 | Cloud Storage + downloads (after film ships) | **Nothing automatic**; A6 + alerts | Normal ≈ $0–7/month. Worst case: one beta account re-downloading 100 MB films continuously; at the proposed 100 links/day that's ≈ 10 GB/day per coach before re-fetching inside link windows. **Uncapped in bytes** until the proposed kill switch exists. $0.12/GiB ✔ |
 | Hosting | Nothing automatic | Static app, small; free tier 10 GB/month downloads |
 
-**Bottom line for D5:** with A1–A5 in place, AI and function spend are hard-bounded (about $70/month combined at most). Firestore and Storage are **not** hard-bounded by any Google control; they are bounded by invite-only access plus alerts and a person acting on them. If that is not acceptable for staging, approve the non-destructive kill switch above before film upload is enabled.
+**Bottom line for D5:**
+- **AI** has enforced limits with delayed enforcement: app quotas, plus an OpenAI hard limit whose enforcement can lag slightly.
+- **Cloud Functions** also has an enforced limit with delayed enforcement: the Firebase spend cap, a Preview feature that can lag several minutes.
+- **Together** they are expected to stay near **$70/month**, plus whatever accrues during the delays.
+- **Not capped by any Google control:** Firestore, Cloud Storage (at rest and downloads), Hosting, Cloud Logging, Cloud Build / Artifact Registry and Pub/Sub. These are limited only by invite-only access, app limits, alerts and a person acting on them.
+- If that is not acceptable for staging, approve the non-destructive shutdown switch (`SHUTDOWN_SWITCH_DESIGN.md`) before film upload is enabled. Even that switch reacts to billing data that can be hours old.
+
+**Standard cost wording (use this in every status update, deck or message about staging costs):**
+
+| Say | Don't say |
+|---|---|
+| "Budget **alerts** at $25/$50/$100 **notify** us; they don't stop spending" | "budget cap", "capped at $100" |
+| "**Threshold** = the amount at which an alert or limit triggers" | treating a threshold as a guaranteed maximum |
+| "The OpenAI hard limit **stops new AI requests at $50, possibly slightly above**" | "AI can never exceed $50" |
+| "The Firebase spend cap **pauses Cloud Functions at $20 after a delay of up to several minutes**; it's a Preview feature" | "Firebase is capped at $20" |
+| "Firestore, Storage, Hosting, logging and build costs are **uncapped**; we rely on access limits and alerts" | "everything is capped" |
+| "Estimated $0–15/month infrastructure + ≈$17 AI, **an estimate, not a quote**" | a fixed monthly price |
+| "The shutdown switch is **designed, not built**" | "we have an automatic shutdown" |
 
 ## 5. FFmpeg: exact build and remaining review
 
