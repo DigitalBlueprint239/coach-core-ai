@@ -8,7 +8,7 @@ Nothing was merged, deployed, billed or configured live. No real credentials or 
 
 | | |
 |---|---|
-| Tested SHA | **`ea01bd4`** |
+| Tested SHA | **`2f8c61e`** (final, ×10). Also `ea01bd4` (single pass and ×10, before the T03/C01 strengthening). At `2f8c61e` the rules, functions and web-auth+bundle checks are green. The push-triggered single E2E run was auto-cancelled by the ×10 dispatch (same concurrency group) |
 | CI runs | Single pass: check run `115411684648` (push). Stability ×10: Actions run `38431303292`, job `115413877940` (`workflow_dispatch`, `repeat_each=10`) |
 | Browsers | **Chromium 156.0.8078.4** and **Firefox 157.0** (Playwright 1.64.0 builds), Linux `ubuntu-latest`, desktop viewport, headless. `retries: 0`, `workers: 1` |
 | Firebase | firebase-tools 15.33.0. Emulators: Auth, Firestore (repo `firestore.rules`), Functions (repo `functions/`, `COACH_CORE_AI_ENABLED=false`, placeholder key). Project `demo-coach-core-e2e` |
@@ -23,6 +23,7 @@ Nothing was merged, deployed, billed or configured live. No real credentials or 
 |---|---|---|
 | Single pass `ea01bd4` | **14 PASS / 0 FAIL** / 8 BLOCKED | **14 PASS / 0 FAIL** / 8 BLOCKED |
 | Stability ×10 `ea01bd4` | **140 PASS / 0 FAIL** / 80 BLOCKED | **140 PASS / 0 FAIL** / 80 BLOCKED |
+| **Stability ×10 `2f8c61e` (final; strengthened T03/C01)** — run `38433054754`, job `115420408550` | **140 PASS / 0 FAIL** / 80 BLOCKED | **140 PASS / 0 FAIL** / 80 BLOCKED |
 
 Earlier runs, kept for the record:
 
@@ -83,7 +84,7 @@ It flagged three tests whose wording claimed more than they asserted:
 - **T03:** lacked existing-document reads/edits and a positive control.
 - **C01:** used a partial match.
 
-T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated on the new SHA (§2a).
+T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated on the new SHA (§2, final row).
 
 ## 6. Regression on this branch
 
