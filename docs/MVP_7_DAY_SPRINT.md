@@ -1,7 +1,19 @@
 # Coach Core AI — Seven-Day MVP Recovery Sprint
-Window: **Oct 13–20, 2026** (aggressive target, not guaranteed launch). One status document shared through GitHub.
+Original window: **Oct 13–20, 2026**. Founder-required Film Analyzer rebaseline below supersedes the original release target. One status document shared through GitHub.
+
+## Required film rebaseline — 2026-10-13 / Codex / Issue #50
+
+Documentation branch `codex/issue-50-film-plan`, stacked on docs PR #45 to preserve prior milestones; retarget after #45 is reviewed/lands. Changed files: this sprint, shared context and new [FILM_ANALYZER_MVP_SPEC.md](FILM_ANALYZER_MVP_SPEC.md). Source inventory only: neither app contains a functional film workflow. No film tests/build newly run; all film acceptance tests planned, not PASS. Claude PR #49 inspected as an unmerged dependency, not integrated.
+
+Revised sequence: Oct 13–14 contracts/security/media spike; Oct 15–19 new UI and secured backend/persistence; Oct 20 optional local synthetic demo; Oct 20–23 frame privacy/OpenAI suggestions and editable saved practice/play links; Oct 24–27 emulator/browser/physical tablet and independent security acceptance. Conditional full MVP assessment **Oct 27–30**, subject to prerequisites and review. 88–134 added engineer-hours, 106–161 with contingency, plus existing security work. No deployment authorized by schedule.
+
+Codex proposes `src/features/film-analyzer/**`; Claude owns auth/Storage/Firestore/functions/gateway and frame-processing security. Shared App/Dashboard/PracticePlanner files sequenced after #49 and explicit ownership agreement. Request posted #39; confirmation pending. Product owner supplies footage rights/consent, upload limits, retention, acceptable AI errors and budget. Film now required but unimplemented/unverified; **MVP remains NO-GO**. Prior seven-day tasks remain historical context, not release permission.
 
 ## Day 1: Evidence and blockers
+
+### P0 follow-up / 2026-10-13 / CC-CODEX-01/02/03
+
+Codex read PR #52 `e0e842864f963295ab6602b7dc96d1931052acdd`, accepted ownership on #39, and reconciled film spec. D1–D10 PENDING; no decision-dependent film code. CC-CODEX-01 isolated standalone save/status and checkpoint investigation underway; exact Linux141 environment unavailable on Windows and requested from Claude. CC-CODEX-02/03 BLOCKED on reviewed lossless DTO/revision-rule/sign-out contract; no shared interfaces edited. [Detailed contract/dependency handoff](RELEASE_BLOCKER_CONTRACT_HANDOFF.md). Targets Oct15/16 23:59 America/New_York remain proposed until Coach Drew confirms. Security gap escalated immediately: existing cloud helpers/global queue and rule allowlists do not satisfy conflict-safe complete save/reopen. MVP NO-GO, no merge/deploy/live changes.
 **Codex owns:** import four previous audit reports into `outputs/` with raw commands, tool versions, reproducible test evidence; fix 2 failing main tests and unloaded suite, or attach reproducible cause. Inventory 810 TS errors by category, not file count alone.
 **Claude owns:** independent *read-only* review of auth, Firestore rules, AI secret exposure, minimum secure beta architecture. Produce a PR touching documentation only, no production secrets.
 **Gate:** both agents report precise blockers, sources, commands, baselines.
@@ -47,3 +59,15 @@ Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands |
 - Do not add keys, personal player data, customer records, or credentials.
 - Preserve `master`, Smart Playbook `main`, existing Firebase projects.
 - If waiting on access or unresolved critical vulnerabilities, do not ship.
+
+## P0 milestone — 2026-10-13 / Codex
+
+CC-CODEX-01 draft standalone PR #3: source/test `04946b75c94a57f811875e7c50524928fa2d9a3e`, evidence head `32a9291d07ff634029918d3e3a3377ded2e92729`. Unit19/19; typecheck0; build/canary pass; full browser21/21. Ten repeats each of three persistence/history workflows: Chromium141 desktop30/30, Firefox157 desktop30/30, touch emulation29/30 first batch then unchanged30/30 confirmation. Retained failure is a browser exit during final screenshot after fidelity assertions. Exact Claude Linux configuration/artifacts and review remain BLOCKED; physical devices untested. Full commands/results: standalone docs/CC_CODEX_01_SAVE_DIAGNOSIS.md and evidence/cc-codex-01.
+
+CC-CODEX-02/03 BLOCKED pending Claude-reviewed lossless DTO/revision rules/session contract, escalated #39. Inspection and consent/conflict/edit UX plan only; no shared source changes or two-account authorization acceptance claimed. Film PR #51 reconciles #52; D1–D10 PENDING. Ownership accepted #39, proposed dates unconfirmed. See RELEASE_BLOCKER_CONTRACT_HANDOFF.md. MVP NO-GO; no merge/deployment.
+
+## Contract reconciliation — 2026-10-13 / Codex
+
+PR #53 `7267698ae890662281ff4510a4d232954e9f1190` reviewed: account/team DTO, revision transactions, scoped drafts and sign-out guard ACCEPTED on #39/#53. The prior blanket missing-contract blocker is superseded. Two exact practice bounds disagree: gateway title200 vs stored name120; gateway unbounded notes vs stored5000. Proposed Claude fixes and boundary tests in PERSISTENCE_CONTRACT_RECONCILIATION.md. D10 gates import only, not isolation or practice editing. Client acceptance remains outstanding; no shared source changes in this review milestone.
+
+CC01 Claude reports140/140 Linux Chromium on source04946b7; links now alongside Codex Firefox30/30 and retained touch29/30 failure/30/30 confirmation. Raw Linux log paths absent in published tree; requested artifacts plus remaining configuration mismatch/exit trace classification. Physical tablet untested. Proposed Oct14 noon ET contract checkpoint and Oct16 implementation targets retained. MVP NO-GO.

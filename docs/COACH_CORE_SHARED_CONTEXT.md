@@ -23,7 +23,16 @@ Ship a **restricted private coaching MVP** by 2026-10-20 if and only if safety a
 3. Save/reopen plays reliably with ownership checks.
 4. Generate/edit/save practice plans; AI credentials never in client bundle.
 5. Mobile/tablet usable for core flows.
-Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public release.
+6. Required Film Analyzer: secure bounded video upload/playback, manual tags and save/reopen, safe optional selected-frame OpenAI suggestions, saved play and editable practice links. Founder [Issue #50](https://github.com/DigitalBlueprint239/coach-core-ai/issues/50) supersedes film deferral.
+Defer autonomous whole-game film analysis, NIL, blockchain, advanced analytics, billing, and broad public release.
+
+## Film scope rebaseline — Issue #50 / 2026-10-13
+
+Code inventory finds no implemented Film Analyzer in either repository. Video URL types, feature flags and archived Hudl declarations are partial/stub references; no upload/player/film persistence/frame worker exists. Claude's PR #49 proposes owner-only beta auth and a text OpenAI gateway; neither its Storage rules nor its AI schema accepts film. These findings are source inspection, not film PASS results.
+
+[Film MVP specification](FILM_ANALYZER_MVP_SPEC.md) records revisions, wireflow, proposed data/API contracts, privacy/upload/access design, cost/licensing constraints and planned acceptance tests. Reconciled to Claude PR #52: owner-only beta ownership accepted on #39; Claude retains auth/rules/functions/gateway and private media/frame security. D1–D10 all pending absent explicit founder decision. No decision-dependent film implementation. Shared client cloud/practice DTO/rules agreement is still pending; see [release blocker handoff](RELEASE_BLOCKER_CONTRACT_HANDOFF.md). Playbook recovery branches preserved.
+
+Oct 20 is a possible synthetic local demo milestone, not a full MVP promise. Film adds an estimated 88–134 engineer-hours (106–161 with contingency), excluding existing security work/review delays. Conditional full assessment Oct 27–30 after film/device/end-to-end/security gates. Film required but not implemented/verified; **MVP NO-GO**. No production access, paid infrastructure or deployment.
 
 ## Gates
 - Reproducible builds + typecheck; no unexplained high-severity errors in shipped surface.
@@ -54,3 +63,15 @@ Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public re
 - GitHub issues/PRs and this document are the only canonical status. Each agent reads this file and `AGENTS.md` before work, logs commands + test evidence, notes blockers, and proposes concise updates via PR to this file.
 - Two agents never push to the same branch or edit overlapping files without assigned ownership. Separate work branches, PR review, explicit integration owner. No merges to `master` without approval.
 - Daily single update in `docs/MVP_7_DAY_SPRINT.md`; do not claim cross-product AI memory auto-synchronizes.
+
+## P0 milestone — 2026-10-13 / Codex
+
+CC-CODEX-01 draft standalone PR #3: source/test `04946b75c94a57f811875e7c50524928fa2d9a3e`, evidence head `32a9291d07ff634029918d3e3a3377ded2e92729`. Unit19/19; typecheck0; build/canary pass; full browser21/21. Ten repeats each of three persistence/history workflows: Chromium141 desktop30/30, Firefox157 desktop30/30, touch emulation29/30 first batch then unchanged30/30 confirmation. Retained failure is a browser exit during final screenshot after fidelity assertions. Exact Claude Linux configuration/artifacts and review remain BLOCKED; physical devices untested. Full commands/results: standalone docs/CC_CODEX_01_SAVE_DIAGNOSIS.md and evidence/cc-codex-01.
+
+CC-CODEX-02/03 BLOCKED pending Claude-reviewed lossless DTO/revision rules/session contract, escalated #39. Inspection and consent/conflict/edit UX plan only; no shared source changes or two-account authorization acceptance claimed. Film PR #51 reconciles #52; D1–D10 PENDING. Ownership accepted #39, proposed dates unconfirmed. See RELEASE_BLOCKER_CONTRACT_HANDOFF.md. MVP NO-GO; no merge/deployment.
+
+## Contract reconciliation — 2026-10-13 / Codex
+
+PR #53 `7267698ae890662281ff4510a4d232954e9f1190` reviewed: account/team DTO, revision transactions, scoped drafts and sign-out guard ACCEPTED on #39/#53. The prior blanket missing-contract blocker is superseded. Two exact practice bounds disagree: gateway title200 vs stored name120; gateway unbounded notes vs stored5000. Proposed Claude fixes and boundary tests in PERSISTENCE_CONTRACT_RECONCILIATION.md. D10 gates import only, not isolation or practice editing. Client acceptance remains outstanding; no shared source changes in this review milestone.
+
+CC01 Claude reports140/140 Linux Chromium on source04946b7; links now alongside Codex Firefox30/30 and retained touch29/30 failure/30/30 confirmation. Raw Linux log paths absent in published tree; requested artifacts plus remaining configuration mismatch/exit trace classification. Physical tablet untested. Proposed Oct14 noon ET contract checkpoint and Oct16 implementation targets retained. MVP NO-GO.
