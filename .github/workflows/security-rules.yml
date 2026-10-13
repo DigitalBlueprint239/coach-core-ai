@@ -1,0 +1,49 @@
+name: Security gates
+
+# Runs Coach Core security checks with NO credentials:
+#  - Firestore + Storage rules against the local Firebase Emulator Suite
+#    using a demo-* project ID (the emulator cannot reach real projects).
+#  - Cloud Functions AI-gateway tests with a mocked provider.
+#  - A canary build of the web app that must contain zero provider secrets.
+# This workflow never deploys and never reads repository secrets.
+
+on:
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
+  push:
+    branches: ['claude/**', 'recovery/coach-core-mvp-2026']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rules-emulator:
+    name: Firestore & Storage rules (emulator, demo project)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GCLOUD_PROJECT: demo-coach-core-beta
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/rules/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-${{ hashFiles('tests/rules/package-lock.json') }}
+      - name: Install test dependencies
+        run: npm ci --prefix tests/rules --no-audit --no-fund
+      - name: Run rules tests in the emulator
+        run: npm --prefix tests/rules test

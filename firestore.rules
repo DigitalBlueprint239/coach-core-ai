@@ -1,78 +1,159 @@
-rules_version='2'
+rules_version = '2';
+
+// Coach Core AI — Firestore security rules (private beta)
+//
+// Model: owner-only tenancy. A team has exactly one owner (the coach). Plays
+// and practice plans belong to exactly one team and are visible only to that
+// team's owner. Team membership/invites are disabled for the private beta.
+//
+// Every client access requires a private-beta identity:
+//   * signed in with a real provider (never anonymous),
+//   * verified email,
+//   * custom claim `beta == true` (granted server-side by an admin script).
+//
+// Anything not matched below is denied. Server-only collections
+// (userProfiles, notifications, analytics, aiUsage, betaUsers, ...) have no
+// client rules on purpose; Cloud Functions use the Admin SDK.
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is authenticated
-    function isAuthenticated() {
+
+    // ---------- identity ----------
+    function signedIn() {
       return request.auth != null;
     }
-    
-    // Helper function to check if user is the team owner (coach)
-    function isTeamOwner(teamId) {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/teams/$(teamId)).data.ownerId == request.auth.uid;
+
+    function isBetaUser() {
+      return signedIn()
+        && request.auth.token.firebase.sign_in_provider != 'anonymous'
+        && request.auth.token.email_verified == true
+        && request.auth.token.beta == true;
     }
 
-    // Teams collection
+    // ---------- tenancy ----------
+    function teamPath(teamId) {
+      return /databases/$(database)/documents/teams/$(teamId);
+    }
+
+    function ownsTeam(teamId) {
+      return teamId is string
+        && exists(teamPath(teamId))
+        && get(teamPath(teamId)).data.ownerId == request.auth.uid;
+    }
+
+    // ---------- validation helpers ----------
+    function isShortString(v, minLen, maxLen) {
+      return v is string && v.size() >= minLen && v.size() <= maxLen;
+    }
+
+    function isBoundedList(v, maxLen) {
+      return v is list && v.size() <= maxLen;
+    }
+
+    function unchanged(field) {
+      return request.resource.data[field] == resource.data[field];
+    }
+
+    // ---------- teams ----------
+    function validNewTeam() {
+      let d = request.resource.data;
+      return d.keys().hasAll(['name', 'ownerId', 'createdAt', 'updatedAt'])
+        && d.keys().hasOnly(['name', 'code', 'ownerId', 'memberIds', 'memberDetails',
+                             'createdAt', 'updatedAt'])
+        && isShortString(d.name, 1, 80)
+        && d.ownerId == request.auth.uid
+        && (!('code' in d) || isShortString(d.code, 4, 16))
+        && (!('memberIds' in d) || d.memberIds == [request.auth.uid])
+        && (!('memberDetails' in d) || isBoundedList(d.memberDetails, 1))
+        && d.createdAt is timestamp
+        && d.updatedAt is timestamp;
+    }
+
+    function validTeamUpdate() {
+      let d = request.resource.data;
+      return d.diff(resource.data).affectedKeys().hasOnly(['name', 'updatedAt'])
+        && isShortString(d.name, 1, 80)
+        && d.updatedAt is timestamp;
+    }
+
     match /teams/{teamId} {
-      // Only the coach (owner) can read the team
-      allow read: if isTeamOwner(teamId)
-        else error('permission-denied', 'Only the coach can access this team.');
-
-      // Coaches can create teams; they become the owner
-      allow create: if isAuthenticated() &&
-        request.resource.data.ownerId == request.auth.uid
-        else error('permission-denied', 'Only authenticated coaches can create teams.');
-
-      // Only team owners can update team data
-      allow update: if isTeamOwner(teamId)
-        else error('permission-denied', 'Only the coach can modify this team.');
-
-      // Only team owners can delete teams
-      allow delete: if isTeamOwner(teamId)
-        else error('permission-denied', 'Only the coach can delete this team.');
+      // `list` requires the query to filter on ownerId == request.auth.uid.
+      allow get, list: if isBetaUser() && resource.data.ownerId == request.auth.uid;
+      allow create: if isBetaUser() && validNewTeam();
+      allow update: if isBetaUser()
+        && resource.data.ownerId == request.auth.uid
+        && validTeamUpdate();
+      allow delete: if isBetaUser() && resource.data.ownerId == request.auth.uid;
     }
 
-    // Practice Plans collection
-    match /practicePlans/{planId} {
-      // Only the coach can read practice plans
-      allow read: if isTeamOwner(resource.data.teamId)
-        else error('permission-denied', 'Only the coach can view practice plans.');
-
-      // Only the coach can create practice plans
-      allow create: if isAuthenticated() &&
-        isTeamOwner(request.resource.data.teamId) &&
-        request.resource.data.createdBy == request.auth.uid
-        else error('permission-denied', 'Only the coach can create practice plans.');
-
-      // Only the coach can update practice plans
-      allow update: if isTeamOwner(resource.data.teamId)
-        else error('permission-denied', 'Only the coach can modify practice plans.');
-
-      // Only the coach can delete practice plans
-      allow delete: if isTeamOwner(resource.data.teamId)
-        else error('permission-denied', 'Only the coach can delete practice plans.');
+    // ---------- plays ----------
+    function validPlayFields(d) {
+      return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+        && d.keys().hasOnly(['name', 'formation', 'description', 'routes', 'players',
+                             'tags', 'difficulty', 'sport', 'teamId', 'createdBy',
+                             'createdAt', 'updatedAt'])
+        && isShortString(d.name, 1, 120)
+        && (!('formation' in d) || isShortString(d.formation, 0, 80))
+        && (!('description' in d) || isShortString(d.description, 0, 2000))
+        && (!('routes' in d) || isBoundedList(d.routes, 60))
+        && (!('players' in d) || isBoundedList(d.players, 30))
+        && (!('tags' in d) || isBoundedList(d.tags, 20))
+        && (!('difficulty' in d) || d.difficulty in ['beginner', 'intermediate', 'advanced'])
+        && (!('sport' in d) || isShortString(d.sport, 0, 40))
+        && d.createdAt is timestamp
+        && d.updatedAt is timestamp;
     }
 
-    // Plays collection
     match /plays/{playId} {
-      // Only the coach can read plays
-      allow read: if isTeamOwner(resource.data.teamId)
-        else error('permission-denied', 'Only the coach can view plays.');
+      // `list` requires the query to filter on teamId == <a team the caller owns>.
+      allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
+      allow create: if isBetaUser()
+        && validPlayFields(request.resource.data)
+        && request.resource.data.createdBy == request.auth.uid
+        && ownsTeam(request.resource.data.teamId);
+      allow update: if isBetaUser()
+        && ownsTeam(resource.data.teamId)
+        && unchanged('teamId')
+        && unchanged('createdBy')
+        && unchanged('createdAt')
+        && validPlayFields(request.resource.data);
+      allow delete: if isBetaUser() && ownsTeam(resource.data.teamId);
+    }
 
-      // Only the coach can create plays
-      allow create: if isAuthenticated() &&
-        isTeamOwner(request.resource.data.teamId) &&
-        request.resource.data.createdBy == request.auth.uid
-        else error('permission-denied', 'Only the coach can create plays.');
+    // ---------- practice plans ----------
+    function validPlanFields(d) {
+      return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+        && d.keys().hasOnly(['name', 'date', 'duration', 'periods', 'goals', 'notes',
+                             'source', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+        && isShortString(d.name, 1, 120)
+        && (!('date' in d) || isShortString(d.date, 0, 40))
+        && (!('duration' in d) || (d.duration is number && d.duration >= 0 && d.duration <= 600))
+        && (!('periods' in d) || isBoundedList(d.periods, 40))
+        && (!('goals' in d) || isBoundedList(d.goals, 20))
+        && (!('notes' in d) || isShortString(d.notes, 0, 5000))
+        && (!('source' in d) || d.source in ['manual', 'ai'])
+        && d.createdAt is timestamp
+        && d.updatedAt is timestamp;
+    }
 
-      // Only the coach can update plays
-      allow update: if isTeamOwner(resource.data.teamId)
-        else error('permission-denied', 'Only the coach can modify plays.');
+    match /practicePlans/{planId} {
+      allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
+      allow create: if isBetaUser()
+        && validPlanFields(request.resource.data)
+        && request.resource.data.createdBy == request.auth.uid
+        && ownsTeam(request.resource.data.teamId);
+      allow update: if isBetaUser()
+        && ownsTeam(resource.data.teamId)
+        && unchanged('teamId')
+        && unchanged('createdBy')
+        && unchanged('createdAt')
+        && validPlanFields(request.resource.data);
+      allow delete: if isBetaUser() && ownsTeam(resource.data.teamId);
+    }
 
-      // Only the coach can delete plays
-      allow delete: if isTeamOwner(resource.data.teamId)
-        else error('permission-denied', 'Only the coach can delete plays.');
+    // Everything else: no client access.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
