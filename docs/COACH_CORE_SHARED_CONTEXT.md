@@ -23,7 +23,16 @@ Ship a **restricted private coaching MVP** by 2026-10-20 if and only if safety a
 3. Save/reopen plays reliably with ownership checks.
 4. Generate/edit/save practice plans; AI credentials never in client bundle.
 5. Mobile/tablet usable for core flows.
-Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public release.
+6. Required Film Analyzer: secure bounded video upload/playback, manual tags and save/reopen, safe optional selected-frame OpenAI suggestions, saved play and editable practice links. Founder [Issue #50](https://github.com/DigitalBlueprint239/coach-core-ai/issues/50) supersedes film deferral.
+Defer autonomous whole-game film analysis, NIL, blockchain, advanced analytics, billing, and broad public release.
+
+## Film scope rebaseline — Issue #50 / 2026-10-13
+
+Code inventory finds no implemented Film Analyzer in either repository. Video URL types, feature flags and archived Hudl declarations are partial/stub references; no upload/player/film persistence/frame worker exists. Claude's PR #49 proposes owner-only beta auth and a text OpenAI gateway; neither its Storage rules nor its AI schema accepts film. These findings are source inspection, not film PASS results.
+
+[Film MVP specification](FILM_ANALYZER_MVP_SPEC.md) records revisions, wireflow, proposed data/API contracts, privacy/upload/access design, cost/licensing constraints and planned acceptance tests. Reconciled to Claude PR #52: owner-only beta ownership accepted on #39; Claude retains auth/rules/functions/gateway and private media/frame security. D1–D10 all pending absent explicit founder decision. No decision-dependent film implementation. Shared client cloud/practice DTO/rules agreement is still pending; see [release blocker handoff](RELEASE_BLOCKER_CONTRACT_HANDOFF.md). Playbook recovery branches preserved.
+
+Oct 20 is a possible synthetic local demo milestone, not a full MVP promise. Film adds an estimated 88–134 engineer-hours (106–161 with contingency), excluding existing security work/review delays. Conditional full assessment Oct 27–30 after film/device/end-to-end/security gates. Film required but not implemented/verified; **MVP NO-GO**. No production access, paid infrastructure or deployment.
 
 **AI decision (founders, 2026-10-13):** OpenAI is the only active provider for the MVP, called only through the authenticated `coachAI` Cloud Function (contract `coach-ai.v1`). No Gemini, no Anthropic API, no coach-facing model picker. Details: `docs/security/CLAUDE_SECURITY_DAY2.md` §5.
 **Security status (Claude, Day 2, issues #43/#46):** F-01..F-04 fixed in code on `claude/day2-security-gateway` with no real credentials. CI evidence: rules emulator 30/30, functions gateway 69/69, web auth 21/21, bundle credential scan 10/10. Deployment-level gate still BLOCKED on founder actions (old-key check, web-key restriction, staging auth setup, fresh OpenAI key in Secret Manager, approved staging deploy). MVP remains NO-GO.
