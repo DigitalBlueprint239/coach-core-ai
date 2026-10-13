@@ -48,8 +48,9 @@ function createOpenAIProvider({apiKey, model, client, createClient}) {
     if (!apiKey) throw new ProviderError("auth", "OpenAI key not configured");
     const factory = createClient || ((key) => {
       const OpenAI = require("openai");
-      // One retry at most; the gateway enforces its own overall deadline.
-      return new OpenAI({apiKey: key, maxRetries: 1});
+      // No SDK retries: a retried timeout could outlive the function's
+      // 60 s limit. The client can retry; quotas still apply.
+      return new OpenAI({apiKey: key, maxRetries: 0});
     });
     sdk = factory(apiKey);
     return sdk;

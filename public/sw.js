@@ -103,11 +103,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // API calls are user-specific: let them go straight to the network,
+  // untouched by the worker (checked BEFORE the static-asset rule).
+  if (isAPIRequest(request)) {
+    return;
+  }
+
   // Handle different types of requests
   if (isStaticAsset(request)) {
     event.respondWith(handleStaticAsset(request));
-  } else if (isAPIRequest(request)) {
-    event.respondWith(handleAPIRequest(request));
   } else if (isImageRequest(request)) {
     event.respondWith(handleImageRequest(request));
   } else {
@@ -227,16 +231,18 @@ async function handleDynamicRequest(request) {
 // ============================================
 
 function isStaticAsset(request) {
-  return STATIC_ASSETS.some(asset => 
-    request.url.includes(asset) || 
+  // Exact path match (a substring match on '/' used to match every URL).
+  const { pathname } = new URL(request.url);
+  return STATIC_ASSETS.includes(pathname) ||
     request.destination === 'document' ||
     request.destination === 'script' ||
-    request.destination === 'style'
-  );
+    request.destination === 'style';
 }
 
 function isAPIRequest(request) {
-  return API_ROUTES.some(route => request.url.includes(route));
+  const { pathname } = new URL(request.url);
+  return pathname.startsWith('/api/') ||
+    API_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
 }
 
 function isImageRequest(request) {

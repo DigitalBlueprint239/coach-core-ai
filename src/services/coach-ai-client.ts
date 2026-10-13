@@ -10,6 +10,11 @@ import { app } from '../firebase';
 
 export const COACH_AI_CONTRACT = 'coach-ai.v1' as const;
 
+/** Show next to every AI input. The server also redacts contact details. */
+export const AI_PRIVACY_NOTICE =
+  'Do not enter player names, contact details, birth dates or medical information. ' +
+  'AI suggestions are drafts — review them before using them with athletes.';
+
 export type AgeGroup = '6U' | '8U' | '10U' | '12U' | '14U' | 'HS_JV' | 'HS_VARSITY' | 'ADULT';
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced';
 export type ContactLevel = 'non_contact' | 'limited_contact' | 'full_contact';

@@ -6,7 +6,7 @@ import React from 'react';
 import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 type Listener = (u: any) => void;
-const mockState: { listener: Listener | null } = { listener: null };
+const mockState: { listener: Listener | null; emailLink: boolean } = { listener: null, emailLink: false };
 const mockSignOut = jest.fn();
 const mockPopup = jest.fn();
 const mockSendLink = jest.fn();
@@ -21,7 +21,7 @@ jest.mock('firebase/auth', () => ({
   signOut: (...args: unknown[]) => (mockSignOut as any)(...args),
   signInWithPopup: (...args: unknown[]) => (mockPopup as any)(...args),
   sendSignInLinkToEmail: (...args: unknown[]) => (mockSendLink as any)(...args),
-  isSignInWithEmailLink: () => false,
+  isSignInWithEmailLink: () => mockState.emailLink,
   signInWithEmailLink: () => Promise.resolve(),
   GoogleAuthProvider: function GoogleAuthProvider() { return {}; },
 }));
@@ -70,6 +70,7 @@ async function emit(user: any) {
 
 beforeEach(() => {
   mockState.listener = null;
+  mockState.emailLink = false;
   mockSignOut.mockReset().mockImplementation(() => Promise.resolve());
   mockPopup.mockReset().mockImplementation(() => Promise.resolve());
   mockSendLink.mockReset().mockImplementation(() => Promise.resolve());
@@ -140,6 +141,15 @@ describe('AuthGate', () => {
     expect(window.localStorage.getItem('currentTeamId')).toBeNull();
     expect(window.localStorage.getItem('offline_operations')).toBeNull();
     expect(window.localStorage.getItem('unrelated')).toBe('keep');
+  });
+
+  it('email link opened on another device asks for the email instead of showing sign-in', async () => {
+    mockState.emailLink = true; // no stored email on this device
+    renderGate();
+    await emit(null);
+    expect(await screen.findByText('Confirm your email')).toBeInTheDocument();
+    expect(screen.queryByText('Continue with Google')).toBeNull();
+    expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
   });
 
   it('sign-in buttons call the real providers (never anonymous)', async () => {

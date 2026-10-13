@@ -83,7 +83,11 @@ service cloud.firestore {
       allow update: if isBetaUser()
         && resource.data.ownerId == request.auth.uid
         && validTeamUpdate();
-      allow delete: if isBetaUser() && resource.data.ownerId == request.auth.uid;
+      // No client-side team deletion during the beta: a deleted team id could
+      // be re-created by another coach and inherit the orphaned plays, plans
+      // and files (review finding M5). Deletion will move to a server
+      // function that removes child data first.
+      allow delete: if false;
     }
 
     // ---------- plays ----------

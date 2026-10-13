@@ -44,5 +44,10 @@ describe("functions/index.js", () => {
       auth: {uid: "x", token: {beta: true, firebase: {sign_in_provider: "anonymous"}}},
       data: {activity: "sign_in"},
     }), (e) => e.code === "permission-denied");
+    await assert.rejects(fns.trackUserActivity.run({
+      auth: {uid: "x", token: {beta: true, email_verified: false,
+        firebase: {sign_in_provider: "password"}}},
+      data: {activity: "sign_in"},
+    }), (e) => e.code === "permission-denied");
   });
 });

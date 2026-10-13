@@ -173,6 +173,11 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   // Leave a team
   const leaveTeam = async (teamId: string): Promise<void> => {
+    // Private beta: teams are owner-only and cannot be deleted from the
+    // client (the rules deny it). Ask the Coach Core team to remove a team.
+    const message = 'Leaving or deleting a team is not available during the private beta.';
+    setError(message);
+    if (message) throw new Error(message);
     try {
       setError(null);
       const user = auth.currentUser;

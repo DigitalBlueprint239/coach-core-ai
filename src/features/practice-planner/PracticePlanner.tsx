@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
-import { AGE_GROUP_OPTIONS, type AgeGroup, type SkillLevel } from '../../services/coach-ai-client';
+import { AGE_GROUP_OPTIONS, AI_PRIVACY_NOTICE, type AgeGroup, type SkillLevel } from '../../services/coach-ai-client';
 
 const defaultGoals = [
   { label: 'Game Prep', value: 'game_prep' },
@@ -108,6 +108,7 @@ const PracticePlanner: React.FC = () => {
       >
         {loading ? 'Generating...' : 'Generate with AI'}
       </button>
+      <p className="text-xs text-gray-500 mb-2">{AI_PRIVACY_NOTICE}</p>
       {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
       {aiResult && (
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">

@@ -32,6 +32,21 @@ elif grep -q "Build blocked" /tmp/guard.log && ! grep -q "${CANARY}_GUARD" /tmp/
 else
   fail "prebuild guard" "build failed for an unexpected reason"; tail -20 /tmp/guard.log
 fi
+# Same check for a key placed in a CRA .env file instead of the environment.
+if [[ -e .env.production.local ]]; then
+  fail "prebuild guard (.env file)" ".env.production.local already exists; refusing to overwrite"
+else
+  trap 'rm -f .env.production.local' EXIT
+  echo "REACT_APP_GEMINI_API_KEY=${CANARY}_GUARD_FILE" > .env.production.local
+  if CI=false npm run build >/tmp/guard2.log 2>&1; then
+    fail "prebuild guard (.env file)" "build succeeded with a key in .env.production.local"
+  elif grep -q "Build blocked" /tmp/guard2.log && ! grep -q "${CANARY}_GUARD_FILE" /tmp/guard2.log; then
+    pass "prebuild guard also blocks secret-like keys in CRA .env files"
+  else
+    fail "prebuild guard (.env file)" "build failed for an unexpected reason"; tail -20 /tmp/guard2.log
+  fi
+  rm -f .env.production.local
+fi
 
 # --- 3. canary bundle check ------------------------------------------------
 export CI=false GENERATE_SOURCEMAP=false

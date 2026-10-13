@@ -131,6 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [notice, setNotice] = useState<AuthNotice>(null);
   const [error, setError] = useState<string | null>(null);
   const wasSignedIn = useRef(false);
+  // An email sign-in link was opened but needs the address re-entered.
+  const pendingEmailLink = useRef(false);
 
   const apply = useCallback(async (u: User | null) => {
     try {
@@ -140,6 +142,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setNotice('anonymous-blocked');
         setUser(null);
         setStatus('signed_out');
+        return;
+      }
+      if (!u && pendingEmailLink.current) {
+        // Keep the confirm-email screen instead of falling back to sign-in.
+        setUser(null);
+        setStatus('needs_email_confirmation');
         return;
       }
       const next = await evaluateUser(u);
@@ -175,6 +183,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isSignInWithEmailLink?.(auth, href)) {
           const email = safeStorage()?.getItem(EMAIL_FOR_SIGN_IN_KEY);
           if (!email) {
+            pendingEmailLink.current = true;
             setStatus('needs_email_confirmation');
           } else {
             await signInWithEmailLink(auth, email, href);
@@ -222,6 +231,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const href = window.location.href;
       await signInWithEmailLink(auth, email.trim(), href);
+      pendingEmailLink.current = false;
       safeStorage()?.removeItem(EMAIL_FOR_SIGN_IN_KEY);
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (err) {

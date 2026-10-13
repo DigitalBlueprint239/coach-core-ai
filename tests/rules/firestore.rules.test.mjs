@@ -79,13 +79,15 @@ describe('T3 signed in but not beta-eligible', () => {
 });
 
 describe('T4 owner can work inside their own team', () => {
-  it('creates, reads, lists, updates and deletes own team', async () => {
+  it('creates, reads, lists and updates own team', async () => {
     const db = alice();
     await assertSucceeds(setDoc(doc(db, 'teams', 'alice-2'), { ...team(ALICE, 'JV'), createdAt: serverTimestamp(), updatedAt: serverTimestamp() }));
     await assertSucceeds(getDoc(doc(db, 'teams', TEAM_A)));
     await assertSucceeds(getDocs(query(collection(db, 'teams'), where('ownerId', '==', ALICE))));
     await assertSucceeds(updateDoc(doc(db, 'teams', TEAM_A), { name: 'Alice Eagles Varsity', updatedAt: serverTimestamp() }));
-    await assertSucceeds(deleteDoc(doc(db, 'teams', 'alice-2')));
+  });
+  it('cannot delete a team from the client (prevents orphaned-data takeover)', async () => {
+    await assertFails(deleteDoc(doc(alice(), 'teams', TEAM_A)));
   });
   it('creates, reads, lists, updates and deletes own plays', async () => {
     const db = alice();

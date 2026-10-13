@@ -69,9 +69,9 @@ const ALLOWED_ORIGINS = defineList("COACH_CORE_ALLOWED_ORIGINS", {
   default: [
     "https://coach-core-mvp-staging-239.web.app",
     "https://coach-core-mvp-staging-239.firebaseapp.com",
-    "http://localhost:3000",
   ],
-  description: "Browser origins allowed to call the AI gateway.",
+  description: "Browser origins allowed to call the AI gateway. Add " +
+    "http://localhost:3000 only in a local/emulator .env file.",
 });
 
 // ============================================
@@ -273,7 +273,7 @@ exports.trackUserActivity = onCall(async (request) => {
   const token = request.auth && request.auth.token;
   if (!request.auth || !token ||
       (token.firebase && token.firebase.sign_in_provider === "anonymous") ||
-      token.beta !== true) {
+      token.email_verified !== true || token.beta !== true) {
     throw new HttpsError("permission-denied", "beta-access-required");
   }
   const activity = request.data && request.data.activity;

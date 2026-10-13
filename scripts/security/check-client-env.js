@@ -20,15 +20,39 @@ const ALLOWED_PUBLIC = new Set([
 const SUSPICIOUS_NAME = /(SECRET|TOKEN|PASSWORD|PRIVATE|OPENAI|GEMINI|ANTHROPIC|CLAUDE|API_KEY|ACCESS_KEY)/i;
 const SUSPICIOUS_VALUE = /(sk-(proj-|ant-|svcacct-|admin-)?[A-Za-z0-9_-]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ghp_[A-Za-z0-9]{36})/;
 
+// CRA also reads .env files during `react-scripts build` (production mode),
+// in this precedence order; the shell environment wins over all of them.
+const fs = require('fs');
+const path = require('path');
+const dotenv = require('dotenv');
+
+const root = path.resolve(__dirname, '..', '..');
+const ENV_FILES = ['.env', '.env.production', '.env.local', '.env.production.local'];
+const merged = {};
+const sources = {};
+for (const file of ENV_FILES) {
+  const full = path.join(root, file);
+  if (!fs.existsSync(full)) continue;
+  const parsed = dotenv.parse(fs.readFileSync(full));
+  for (const [k, v] of Object.entries(parsed)) {
+    merged[k] = v;
+    sources[k] = file;
+  }
+}
+for (const [k, v] of Object.entries(process.env)) {
+  merged[k] = v;
+  sources[k] = 'environment';
+}
+
 const offenders = [];
-for (const [name, value] of Object.entries(process.env)) {
+for (const [name, value] of Object.entries(merged)) {
   if (!name.startsWith('REACT_APP_')) continue;
   if (ALLOWED_PUBLIC.has(name)) {
-    if (SUSPICIOUS_VALUE.test(String(value))) offenders.push(`${name} (value looks like a private key)`);
+    if (SUSPICIOUS_VALUE.test(String(value))) offenders.push(`${name} [${sources[name]}] (value looks like a private key)`);
     continue;
   }
-  if (SUSPICIOUS_NAME.test(name)) offenders.push(name);
-  else if (SUSPICIOUS_VALUE.test(String(value))) offenders.push(`${name} (value looks like a private key)`);
+  if (SUSPICIOUS_NAME.test(name)) offenders.push(`${name} [${sources[name]}]`);
+  else if (SUSPICIOUS_VALUE.test(String(value))) offenders.push(`${name} [${sources[name]}] (value looks like a private key)`);
 }
 
 if (offenders.length > 0) {
