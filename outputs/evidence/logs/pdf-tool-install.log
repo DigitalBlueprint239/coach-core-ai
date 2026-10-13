@@ -1,0 +1,10 @@
+Collecting pymupdf
+  Downloading pymupdf-1.28.2-cp310-abi3-win_amd64.whl.metadata (26 kB)
+Downloading pymupdf-1.28.2-cp310-abi3-win_amd64.whl (19.8 MB)
+   ---------------------------------------- 19.8/19.8 MB 11.3 MB/s eta 0:00:00
+Installing collected packages: pymupdf
+Successfully installed pymupdf-1.28.2
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+

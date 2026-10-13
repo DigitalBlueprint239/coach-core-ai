@@ -1,0 +1,122 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/utils/__tests__/logger.test.ts
+
+FAIL src/utils/__tests__/logger.test.ts (14.54 s)
+  logger
+    × log calls console.log in development (25 ms)
+    × log does not call console.log in production (2 ms)
+    × warn always calls console.warn (1 ms)
+    × error always calls console.error (2 ms)
+    × log passes multiple arguments (2 ms)
+
+  ● logger › log calls console.log in development
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "development"
+    Received: "test"
+
+      22 |   it('log calls console.log in development', () => {
+      23 |     setNodeEnv('development');
+    > 24 |     expect(process.env.NODE_ENV).toBe('development');
+         |                                  ^
+      25 |     jest.resetModules();
+      26 |     const spy = jest.spyOn(console, 'log').mockImplementation();
+      27 |     const { logger } = require('../logger');
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:24:34)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● logger › log does not call console.log in production
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "development"
+    Received: "test"
+
+      32 |   it('log does not call console.log in production', () => {
+      33 |     setNodeEnv('production');
+    > 34 |     expect(process.env.NODE_ENV).toBe('development');
+         |                                  ^
+      35 |     jest.resetModules();
+      36 |     const spy = jest.spyOn(console, 'log').mockImplementation();
+      37 |     const { logger } = require('../logger');
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:34:34)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● logger › warn always calls console.warn
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "development"
+    Received: "test"
+
+      42 |   it('warn always calls console.warn', () => {
+      43 |     setNodeEnv('production');
+    > 44 |     expect(process.env.NODE_ENV).toBe('development');
+         |                                  ^
+      45 |     jest.resetModules();
+      46 |     const spy = jest.spyOn(console, 'warn').mockImplementation();
+      47 |     const { logger } = require('../logger');
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:44:34)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● logger › error always calls console.error
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "development"
+    Received: "test"
+
+      52 |   it('error always calls console.error', () => {
+      53 |     setNodeEnv('production');
+    > 54 |     expect(process.env.NODE_ENV).toBe('development');
+         |                                  ^
+      55 |     jest.resetModules();
+      56 |     const spy = jest.spyOn(console, 'error').mockImplementation();
+      57 |     const { logger } = require('../logger');
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:54:34)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● logger › log passes multiple arguments
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "development"
+    Received: "test"
+
+      62 |   it('log passes multiple arguments', () => {
+      63 |     setNodeEnv('development');
+    > 64 |     expect(process.env.NODE_ENV).toBe('development');
+         |                                  ^
+      65 |     jest.resetModules();
+      66 |     const spy = jest.spyOn(console, 'log').mockImplementation();
+      67 |     const { logger } = require('../logger');
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:64:34)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 5 total
+Snapshots:   0 total
+Time:        15.213 s
+Ran all test suites within paths "src/utils/__tests__/logger.test.ts".
