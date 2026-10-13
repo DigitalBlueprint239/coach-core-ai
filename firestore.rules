@@ -54,6 +54,20 @@ service cloud.firestore {
       return request.resource.data[field] == resource.data[field];
     }
 
+    // Optimistic concurrency (persistence contract v1). New documents may
+    // start at revision 1. Once a document carries a revision, every update
+    // must send exactly resource.revision + 1, so a stale editor is denied
+    // instead of silently overwriting (client shows a conflict).
+    function revisionOnCreate(d) {
+      return !('revision' in d) || d.revision == 1;
+    }
+    function revisionOnUpdate() {
+      return ('revision' in resource.data)
+        ? (('revision' in request.resource.data)
+            && request.resource.data.revision == resource.data.revision + 1)
+        : (!('revision' in request.resource.data) || request.resource.data.revision == 1);
+    }
+
     // ---------- teams ----------
     function validNewTeam() {
       let d = request.resource.data;
@@ -94,8 +108,13 @@ service cloud.firestore {
     function validPlayFields(d) {
       return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
         && d.keys().hasOnly(['name', 'formation', 'description', 'routes', 'players',
-                             'tags', 'difficulty', 'sport', 'teamId', 'createdBy',
+                             'tags', 'difficulty', 'sport', 'phase', 'type',
+                             'localId', 'revision', 'teamId', 'createdBy',
                              'createdAt', 'updatedAt'])
+        && (!('phase' in d) || d.phase in ['offense', 'defense', 'special_teams'])
+        && (!('type' in d) || isShortString(d.type, 0, 40))
+        && (!('localId' in d) || isShortString(d.localId, 1, 64))
+        && (!('revision' in d) || (d.revision is int && d.revision >= 1))
         && isShortString(d.name, 1, 120)
         && (!('formation' in d) || isShortString(d.formation, 0, 80))
         && (!('description' in d) || isShortString(d.description, 0, 2000))
@@ -113,10 +132,12 @@ service cloud.firestore {
       allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
         && validPlayFields(request.resource.data)
+        && revisionOnCreate(request.resource.data)
         && request.resource.data.createdBy == request.auth.uid
         && ownsTeam(request.resource.data.teamId);
       allow update: if isBetaUser()
         && ownsTeam(resource.data.teamId)
+        && revisionOnUpdate()
         && unchanged('teamId')
         && unchanged('createdBy')
         && unchanged('createdAt')
@@ -128,7 +149,11 @@ service cloud.firestore {
     function validPlanFields(d) {
       return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
         && d.keys().hasOnly(['name', 'date', 'duration', 'periods', 'goals', 'notes',
-                             'source', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+                             'source', 'safetyConsiderations', 'aiRequestId', 'revision',
+                             'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+        && (!('safetyConsiderations' in d) || isBoundedList(d.safetyConsiderations, 20))
+        && (!('aiRequestId' in d) || isShortString(d.aiRequestId, 1, 64))
+        && (!('revision' in d) || (d.revision is int && d.revision >= 1))
         && isShortString(d.name, 1, 120)
         && (!('date' in d) || isShortString(d.date, 0, 40))
         && (!('duration' in d) || (d.duration is number && d.duration >= 0 && d.duration <= 600))
@@ -144,10 +169,12 @@ service cloud.firestore {
       allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
         && validPlanFields(request.resource.data)
+        && revisionOnCreate(request.resource.data)
         && request.resource.data.createdBy == request.auth.uid
         && ownsTeam(request.resource.data.teamId);
       allow update: if isBetaUser()
         && ownsTeam(resource.data.teamId)
+        && revisionOnUpdate()
         && unchanged('teamId')
         && unchanged('createdBy')
         && unchanged('createdAt')
