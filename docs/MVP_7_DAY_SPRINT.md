@@ -33,3 +33,8 @@ Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands |
 - Do not add keys, personal player data, customer records, or credentials.
 - Preserve `master`, Smart Playbook `main`, existing Firebase projects.
 - If waiting on access or unresolved critical vulnerabilities, do not ship.
+
+## Daily report — 2026-10-13 / Codex / Issue #38
+Branch `codex/issue-38-tests-audit` → `recovery/coach-core-mvp-2026`; task PR review pending. Three milestones: original four reports imported unchanged with evidence/hash manifest; logger and FieldMemo test repairs completed; 810 standalone TypeScript errors classified by root cause. Main targeted 9/9 tests and full 344/344 tests (16/16 suites) pass, main TypeScript exits 0; production build succeeds with 15 existing lint warnings. Build results and exact commands are retained in [Day 1 evidence](ISSUE_38_DAY_1_EVIDENCE.md). Files changed: two test files, outputs reports/evidence, this sprint log, shared context, Day 1 evidence, and diagnostic classification. No production application/security code or lockfile changes.
+
+Security/functional blockers remain: App.test still logs the AuthProvider crash despite passing; mocked tests do not establish real auth, tenant isolation, or coaching workflows. Standalone theme/icon fixes are recommendations only; drag undo and export defects remain. Next owners: reviewer for task PR, Claude independent security/auth review, Codex for separately scoped Playbook repairs. No beta readiness or deployment approval claimed.

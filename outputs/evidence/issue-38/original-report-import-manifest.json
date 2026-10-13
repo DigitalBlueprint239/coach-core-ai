@@ -1,0 +1,22 @@
+[
+  {
+    "path": "outputs/COACH_CORE_RECOVERY_AUDIT.md",
+    "bytes": 18264,
+    "sha256": "452795a55881b0b1ab2df6d675ab22be26ffa90389140e1d555c087c9f0887a3"
+  },
+  {
+    "path": "outputs/MVP_FEATURE_TEST_MATRIX.md",
+    "bytes": 9175,
+    "sha256": "fa2fe18cf71f72f9e142806c9701dad57fc36fb87989269503f51383d15c5d94"
+  },
+  {
+    "path": "outputs/SECURITY_FINDINGS.md",
+    "bytes": 10606,
+    "sha256": "44dc35bc3443c15ad7e343217383240ed65269973e603f1b492f896b2149fea0"
+  },
+  {
+    "path": "outputs/MVP_RECOVERY_ROADMAP.md",
+    "bytes": 10773,
+    "sha256": "d579ff6aa784053bc9cee64e9c762cedea21acfa5bd74b28f4647401b989752e"
+  }
+]
