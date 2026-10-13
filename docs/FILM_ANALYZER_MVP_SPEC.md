@@ -42,6 +42,33 @@ AI assistance is optional per clip; required MVP infrastructure includes safe se
 
 ## Architecture spike and security decisions to validate first
 
+### Reconciled security review — PR #52 (supersedes draft details below)
+
+Read Claude's review at `e0e842864f963295ab6602b7dc96d1931052acdd`: [FILM_SECURITY_REVIEW.md](https://github.com/DigitalBlueprint239/coach-core-ai/blob/e0e842864f963295ab6602b7dc96d1931052acdd/docs/security/FILM_SECURITY_REVIEW.md). Codex accepts owner-only beta tenancy and ownership on #39. Shared client persistence and editable planner ownership are accepted, but cloud DTO/rules agreement remains required before editing shared interfaces.
+
+- Upload authorization must bind the create-only quarantine path to the unexpired server reservation, its creator, status, declared byte count and approved limits. Clients cannot read, update or delete quarantine; cancellation uses `abandonFilmUpload`.
+- Validation order is bounded pure-JS container parse, pinned probe, metadata-stripping remux (`-map_metadata -1`, `+faststart`), generation-idempotent promotion. Decoder/parser selection and licensing remain Claude's ownership; no installation/processing authorized here.
+- Film documents are server-write-only. Clips have strict client rules, revision +1, immutable authorship and bounds against ready-film duration. Link target tenancy is checked in rules. Server suggestion output is immutable; only coach review state can change.
+- Claude recommends <=10-minute V4 signed playback URLs. **D2 pending**: this is not approved or implemented. Signed URLs remain bearer capabilities until expiry; strict per-request revocation is not claimed. Cookie proxy is an alternative, not the committed architecture. Authenticated getBlob fallback is removed from the plan because client film reads allow download-token access. No film/frames client Storage reads.
+- Separate `coach-film.v1` callable envelope; proposed `reserveFilmUpload`, `abandonFilmUpload`, `getFilmPlaybackUrl`, `requestFramePreview`, `approveFrame`, `deleteFilm`. Clip/link writes follow reviewed rules; older `finalizeFilmUpload`, media proxy, saveClip/linkClip names below are historical proposals, not agreed endpoints. Do not implement DTOs until Claude's schemas are agreed.
+- Inline frame preview <=300 KB, <=768 px, server-only expiring frame plus server-recorded approval. Additive `film_frame_suggestion` within `coach-ai.v1`, OpenAI image detail low, bounded outputs/quota, separate flag default off. No youth frames transmitted absent D1/D7/D8 decisions; no film/provider implementation in this follow-up. Text-only manual review can remain the safe path.
+- D10 pending: prepare consent UX only behind an inactive gate. Preserve anonymous/local original plays byte-for-byte; never auto-import or remove originals after a mere prompt or before verified explicit consent/import fidelity. Do not treat a recommendation in #52 as founder approval.
+
+| Decision | Current status | Explicit founder decision evidence |
+| --- | --- | --- |
+| D1 Youth frames to OpenAI | PENDING; default off | None found |
+| D2 Signed playback URL vs cookie proxy and acceptance interpretation | PENDING | None found |
+| D3 Formats/size/duration/resolution/team cap | PENDING; values are proposals | None found |
+| D4 Retention/deletion intervals | PENDING | None found |
+| D5 Paid staging budget/Blaze | PENDING; no activation | None found |
+| D6 Exact decoder build/licensing | PENDING | None found |
+| D7 Upload rights/consent and minor-footage policy | PENDING | None found |
+| D8 Provider data-control acceptance | PENDING | None found |
+| D9 Image model/access | PENDING | None found |
+| D10 Explicit legacy-play import activation | PENDING; gate inactive | None found |
+
+Film being required and OpenAI being the sole MVP provider are explicit founder directions; they do not decide D1–D10. October dates remain proposed until Coach Drew accepts them. No decision-dependent film implementation begins here.
+
 This is an architecture/test spike design, not executed decoder or playback evidence. First implementation milestone is a local synthetic-media spike: measure authenticated range playback, decoder limits and timestamp accuracy before committing infrastructure.
 
 1. Authenticated upload reservation validates beta identity, team ownership, limits and rights acknowledgment. Server allocates UUID film ID and fixed quarantine path; do not trust client owner/path fields. Resumable Storage upload is restricted to that reservation and byte/type ceilings. Cancel/error keeps a recoverable state, never a false Saved status. No overwrite of an existing ready object's generation.
