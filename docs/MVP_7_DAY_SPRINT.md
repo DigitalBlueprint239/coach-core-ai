@@ -35,3 +35,7 @@ Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands |
 - Do not add keys, personal player data, customer records, or credentials.
 - Preserve `master`, Smart Playbook `main`, existing Firebase projects.
 - If waiting on access or unresolved critical vulnerabilities, do not ship.
+
+## D10 founder approval and implementation — 2026-10-13 / Codex
+
+Coach Drew explicitly approved consent-based legacy import implementation/testing only, recorded #39 and docs/security/FOUNDER_DECISION_PACKET.md. NO merge/deployment/spending/deletion. D1–D9 pending. Source6a412e71993038069882920c9c16ba30914534bc on codex/d10-consent-import, stacked #54. Sixteen unit/DOM/mocked-SDK tests pass, TypeScript0, build PASS; originals preserved. Full-suite known logger/FieldMemo failures retained. Real browser/rules P13 awaits Claude; Java absent locally. D10_IMPORT_HANDOFF.md records commands/evidence/limitations and accept/decline/repeat/account-switch scenarios. CC02 normal cloud edits/sign-out conflicts and CC03 plan persistence remain outstanding. PR53 bounds amendments accepted; no contract disagreement remains, checkpoint escalation paused. MVP NO-GO.
