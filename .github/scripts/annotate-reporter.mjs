@@ -34,5 +34,6 @@ export default async function* annotateReporter(source) {
     yield `::error title=${esc(`${label} FAIL: ${f.name}`.slice(0, 200))}::${esc(f.msg)}\n`;
   }
   const level = fail > 0 ? 'error' : 'notice';
-  yield `::${level} title=${esc(`${label}: ${pass} passed, ${fail} failed`)}::${esc(lines.join('\n'))}\n`;
+  // Commas separate annotation properties, so the title must not contain one.
+  yield `::${level} title=${esc(`${label}: ${pass} passed / ${fail} failed`)}::${esc(lines.join('\n'))}\n`;
 }

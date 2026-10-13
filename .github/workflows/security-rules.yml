@@ -47,3 +47,25 @@ jobs:
         run: npm ci --prefix tests/rules --no-audit --no-fund
       - name: Run rules tests in the emulator
         run: npm --prefix tests/rules test
+
+  functions-gateway:
+    name: Cloud Functions + OpenAI gateway (mocked provider)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Placeholders only: the tests must never need a real key or project.
+      GCLOUD_PROJECT: demo-coach-core-beta
+      OPENAI_API_KEY: ''
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+      - name: Install
+        run: npm ci --prefix functions --no-audit --no-fund
+      - name: Lint
+        run: npm --prefix functions run lint
+      - name: Test
+        run: npm --prefix functions run test:ci
