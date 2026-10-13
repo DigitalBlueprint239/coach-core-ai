@@ -49,8 +49,9 @@ export class AIProxyService {
         const response = await fetch(this.config.endpoint, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_AI_PROXY_TOKEN || ''}`
+            // No shared browser token (F-01). Legacy module; the app uses
+            // services/coach-ai-client.ts (Firebase-authenticated callable).
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(request),
           signal: AbortSignal.timeout(this.config.timeout!)
