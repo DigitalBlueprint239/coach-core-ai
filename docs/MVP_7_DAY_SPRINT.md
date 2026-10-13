@@ -10,6 +10,10 @@ Revised sequence: Oct 13–14 contracts/security/media spike; Oct 15–19 new UI
 Codex proposes `src/features/film-analyzer/**`; Claude owns auth/Storage/Firestore/functions/gateway and frame-processing security. Shared App/Dashboard/PracticePlanner files sequenced after #49 and explicit ownership agreement. Request posted #39; confirmation pending. Product owner supplies footage rights/consent, upload limits, retention, acceptable AI errors and budget. Film now required but unimplemented/unverified; **MVP remains NO-GO**. Prior seven-day tasks remain historical context, not release permission.
 
 ## Day 1: Evidence and blockers
+
+### P0 follow-up / 2026-10-13 / CC-CODEX-01/02/03
+
+Codex read PR #52 `e0e842864f963295ab6602b7dc96d1931052acdd`, accepted ownership on #39, and reconciled film spec. D1–D10 PENDING; no decision-dependent film code. CC-CODEX-01 isolated standalone save/status and checkpoint investigation underway; exact Linux141 environment unavailable on Windows and requested from Claude. CC-CODEX-02/03 BLOCKED on reviewed lossless DTO/revision-rule/sign-out contract; no shared interfaces edited. [Detailed contract/dependency handoff](RELEASE_BLOCKER_CONTRACT_HANDOFF.md). Targets Oct15/16 23:59 America/New_York remain proposed until Coach Drew confirms. Security gap escalated immediately: existing cloud helpers/global queue and rule allowlists do not satisfy conflict-safe complete save/reopen. MVP NO-GO, no merge/deploy/live changes.
 **Codex owns:** import four previous audit reports into `outputs/` with raw commands, tool versions, reproducible test evidence; fix 2 failing main tests and unloaded suite, or attach reproducible cause. Inventory 810 TS errors by category, not file count alone.
 **Claude owns:** independent *read-only* review of auth, Firestore rules, AI secret exposure, minimum secure beta architecture. Produce a PR touching documentation only, no production secrets.
 **Gate:** both agents report precise blockers, sources, commands, baselines.
