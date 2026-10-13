@@ -1,0 +1,33 @@
+
+> coach-core-ai@0.1.0 build
+> react-scripts build
+
+Creating an optimized production build...
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Compiled successfully.
+
+File sizes after gzip:
+
+  59.11 kB  build\static\js\main.42b6f163.js
+  1.77 kB   build\static\js\453.1e570e2a.chunk.js
+  513 B     build\static\css\main.f855e6bc.css
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  npm install -g serve
+  serve -s build
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+
+
