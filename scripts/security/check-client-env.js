@@ -62,4 +62,12 @@ if (offenders.length > 0) {
   console.error('used only by the coachAI Cloud Function. Remove these variables from the build environment.\n');
   process.exit(1);
 }
+
+// Emulator builds (browser tests) may only target a demo-* project, so a
+// test build can never be pointed at, or confused with, a real project.
+if (merged.REACT_APP_USE_FIREBASE_EMULATORS === 'true'
+    && !String(merged.REACT_APP_FIREBASE_PROJECT_ID || '').startsWith('demo-')) {
+  console.error('\n[security] Build blocked: REACT_APP_USE_FIREBASE_EMULATORS=true requires a demo-* REACT_APP_FIREBASE_PROJECT_ID.\n');
+  process.exit(1);
+}
 console.log('[security] client env check passed: no secret-like REACT_APP_* variables.');

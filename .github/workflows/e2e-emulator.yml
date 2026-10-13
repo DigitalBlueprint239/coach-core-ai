@@ -1,0 +1,86 @@
+name: E2E (emulator, real browsers)
+
+# Real Chromium and Firefox against the local Firebase Emulator Suite with a
+# demo-* project. No repository secrets, no real Firebase project, no AI
+# provider: the gateway runs with COACH_CORE_AI_ENABLED=false and a
+# placeholder key. Authentication is EMULATOR authentication (no real Google
+# OAuth, no real email delivery). Never deploys.
+
+on:
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
+  push:
+    branches: ['claude/**', 'recovery/coach-core-mvp-2026']
+  workflow_dispatch:
+    inputs:
+      repeat_each:
+        description: 'Repeat each test N times (stability runs)'
+        default: '1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-emulator-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: E2E emulator (Chromium + Firefox)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GCLOUD_PROJECT: demo-coach-core-e2e
+      OPENAI_API_KEY: ''
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+            e2e/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-e2e-${{ hashFiles('e2e/package-lock.json') }}
+      - name: Install
+        run: |
+          npm ci --legacy-peer-deps --no-audit --no-fund
+          npm ci --prefix functions --no-audit --no-fund
+          npm ci --prefix e2e --no-audit --no-fund
+      - name: Install browsers
+        run: npx --prefix e2e playwright install --with-deps chromium firefox
+      - name: Emulator-only function config (placeholders, AI off)
+        run: |
+          # Both files are git-ignored and exist only on this runner.
+          printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=http://localhost:3000\n' > functions/.env.local
+          printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\n' > functions/.secret.local
+      - name: Build web app for emulators (demo project)
+        run: npm --prefix e2e run build:app
+      - name: Run browser tests in the emulator suite
+        env:
+          REPEAT: ${{ github.event.inputs.repeat_each || '1' }}
+        run: |
+          set -o pipefail
+          mkdir -p e2e/test-results
+          npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
+            --only auth,firestore,functions \
+            "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT}" 2>&1 | tee e2e/test-results/run.log
+      - name: Browser versions
+        if: always()
+        run: |
+          v=$(cd e2e && node -e "const {chromium,firefox}=require('@playwright/test');(async()=>{for(const b of [chromium,firefox]){const x=await b.launch();console.log(b.name()+' '+x.version());await x.close()}})()" | tr '\n' ' ')
+          echo "::notice title=E2E browsers::${v} (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-results-${{ github.sha }}
+          path: e2e/test-results
+          retention-days: 14
