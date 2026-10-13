@@ -4,7 +4,7 @@ Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT.** Items marked �
 
 ## 1. Exact PR/commit combination
 
-The test-only candidate is **`claude/integration-candidate-2026-10-13b` @ `c112b68`**. It is evidence only, never merged and has no PR. It was built from `recovery/coach-core-mvp-2026` @ `3992d8d` in this order:
+The test-only candidate is **`claude/integration-candidate-2026-10-13b` @ `9b84573`** (`c112b68` + PR #54's A09 diagnostics). It is evidence only, never merged and has no PR. It was built from `recovery/coach-core-mvp-2026` @ `3992d8d` in this order:
 
 | # | PR | Head | Review state | Contents |
 |---|---|---|---|---|
@@ -15,13 +15,15 @@ The test-only candidate is **`claude/integration-candidate-2026-10-13b` @ `c112b
 | 5 | #51 Codex film plan (draft) | `1da86e3` | draft | docs only (film not implemented) |
 | 6 | #52 Claude Day 3 docs | `007ce2a` + this commit | open | security docs, decision packet, evidence |
 | 7 | #53 persistence contract (draft) | `a4cea1e` | draft, **accepted by Codex** | rules + boundary tests |
-| 8 | #54 E2E harness + readiness tooling | `66dfadf` | open | emulator mode (fail-closed), E2E, release proof, staging probe |
+| 8 | #54 E2E harness + readiness tooling | `f9ba83c` | open | emulator mode (fail-closed), E2E, release proof, staging probe |
 
 **Gates at the candidate:**
 - web jest **366/366**, 18/18 suites (at `8fabcec`; `66dfadf` adds only scripts and docs);
 - tsc **0**;
-- release-build proof **13/13** (§2);
-- CI on push: rules, functions, web-auth+bundle scan and E2E Chromium+Firefox (results in the PR #54 thread).
+- release-build proof **13/13** (§2; local and CI);
+- CI: rules, functions and web-auth+bundle scan green.
+- E2E ×10 at `9b84573` (run `38436729577`): **Chromium 140/140, Firefox 140/140**, 80 BLOCKED each. Release proof 13/13 in CI.
+- One earlier A09 failure on `c112b68` remains an **open intermittent** (1 in ~90 executions; cause not established; diagnostics added).
 
 **Not in the candidate (✗ dependencies):**
 - Codex client work for P-10..P-17: per-coach drafts, cloud play save, plan edit/save, conflict UI, offline replay. **None has landed yet.** The 8 E2E placeholders stay BLOCKED until each lands with a real test.
@@ -105,7 +107,7 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 | G2 | Founder decisions D5 (billing + controls) and D10 (legacy import), plus D1–D7 if film is in the deploy | Coach Drew | ✗ |
 | G3 | Founder read-only verification of §4 controls recorded | Coach Drew | ✗ |
 | G4 | PR #49 founder actions (§6 of the Day 2 report: old keys checked/rotated, web key restricted, Anonymous OFF, authorized domains) | Coach Drew | ✗ |
-| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | see PR #54 thread for `c112b68` |
+| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ✔ at `9b84573` (×10). ⚠ A09 intermittent open; must be re-run on the final candidate |
 | G6 | Release-build proof re-run with the real staging web config at deploy time; manifest kept | deployer | prepared |
 | G7 | Staging config: `COACH_CORE_AI_ENABLED=false`, `COACH_CORE_ALLOWED_ORIGINS` as a JSON array, AI global cap 50/day | deployer | prepared |
 | G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
