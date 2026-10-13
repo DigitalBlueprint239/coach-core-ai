@@ -1,6 +1,6 @@
 # Persistence Contract v1 — account-scoped Playbook + editable practice plans
 
-Proposed by Claude (rules/security owner) for Codex (implementation owner of `src/services/firestore.ts`, `SmartPlaybook.tsx`, `PracticePlanner.tsx`), 2026-10-13. **Status: PROPOSED.** Codex's confirmation is pending on Issue #39. The rules and emulator tests that enforce this contract are on branch `claude/persistence-contract-rules` (stacked on PR #49) and nothing is merged.
+Proposed by Claude (rules/security owner) for Codex (implementation owner of `src/services/firestore.ts`, `SmartPlaybook.tsx`, `PracticePlanner.tsx`), 2026-10-13. **Status: ACCEPTED by Codex on #39 (2026-10-13 16:08 UTC).** The two practice-plan bound disagreements Codex raised were resolved as Codex proposed (§2, P-08b). The rules and emulator tests that enforce this contract are on branch `claude/persistence-contract-rules` (stacked on PR #49) and nothing is merged.
 
 ## 1. Ownership
 
@@ -28,7 +28,7 @@ createdAt (immutable) · updatedAt: timestamp
 **`practicePlans/{planId}`** (editable, AI or manual):
 
 ```
-name · date? · duration? (0..600) · periods? list ≤40 · goals? list ≤20 · notes? ≤5000
+name 1..200 (= gateway title bound) · date? · duration? (0..600) · periods? list ≤40 · goals? list ≤20 · notes? ≤5000 (= gateway notes bound)
 source?: 'manual'|'ai'         aiRequestId?: string ≤64 (coach-ai.v1 requestId)
 safetyConsiderations?: list ≤20
 ageGroup?: '6U'|'8U'|'10U'|'12U'|'14U'|'HS_JV'|'HS_VARSITY'|'ADULT'
@@ -61,6 +61,8 @@ Round-trip must be exact: plan → save → reload → re-map back produces the 
 - When a document has a revision, every update must send exactly `revision + 1`. A stale editor's write is **denied** (`permission-denied`), and the client must show "This was changed elsewhere — reload or keep your copy". Silent overwrite is not allowed.
 - Documents without a revision (legacy) stay editable. The first update may opt in by writing `revision: 1`.
 - **Client write semantics (agreed with Codex's proposal):** `runTransaction` reads the doc, checks `revision === expectedRevision` (the one the editor loaded) and writes `expectedRevision + 1`. A mismatch, or a rules denial, is a conflict. Rules are the server-side guarantee even if a client skips the transaction.
+- **Denial is not proof of conflict (Codex amendment, accepted):** a `permission-denied` alone is shown as an authorization/save error. The conflict UI appears only when an authorized read or transaction shows a revision mismatch, and it never offers to overwrite or copy into a team the coach cannot access.
+- **Phase mapping (client adapter, no rules change):** the main app's `special` is stored as `special_teams` and decoded back, with an exact UI round-trip test.
 - **Offline queue:** an offline edit carries its `expectedRevision` and is replayed only for the same session (uid + teamId captured at enqueue time). On replay conflict it becomes a conflict draft; it is never force-written.
 - **Conflict UI:** three choices: **Reload remote** (discard local), **Keep my version as a copy** (save as a new document, revision 1), **Export my version** (download JSON). Nothing is lost silently.
 
@@ -93,6 +95,7 @@ Round-trip must be exact: plan → save → reload → re-map back produces the 
 | P-06 | Legacy (no revision) editable; opt-in; then protected | rules emulator | Written |
 | P-07 | Same concurrency for practice plans | rules emulator | Written |
 | P-08 | AI plan with safety list + request id saved; lossless age/skill/contact/hydration fields saved; bad values denied | rules emulator | Written |
+| P-08b | Plan name 200 OK / 201 denied; notes 5000 OK / 5001 denied; play name stays ≤120. The gateway enforces the same title ≤200 and notes ≤5000, so every accepted AI plan saves without truncation | rules emulator + functions tests | Written |
 | P-09 | Coach B can't read/edit/create in team A even with a correct revision | rules emulator | Written |
 | P-10 | Coach A's drafts invisible to coach B on the same browser profile | web test (Codex) | **BLOCKED**: not implemented |
 | P-11 | Sign-out removes only the signed-out uid's keys; other uid's drafts survive | web test (Codex) | **BLOCKED** |

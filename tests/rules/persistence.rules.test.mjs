@@ -116,6 +116,21 @@ describe('Editable AI practice plans', () => {
   });
 });
 
+describe('Plan bounds equal the gateway output bounds (no truncation on save)', () => {
+  it('accepts a 200-character plan name and 5000-character notes; rejects 201 and 5001', async () => {
+    const db = alice();
+    await assertSucceeds(setDoc(doc(db, 'practicePlans', 'n200'), plan({ name: 't'.repeat(200) })));
+    await assertFails(setDoc(doc(db, 'practicePlans', 'n201'), plan({ name: 't'.repeat(201) })));
+    await assertSucceeds(setDoc(doc(db, 'practicePlans', 'notes5000'), plan({ notes: 'n'.repeat(5000) })));
+    await assertFails(setDoc(doc(db, 'practicePlans', 'notes5001'), plan({ notes: 'n'.repeat(5001) })));
+  });
+  it('play names stay capped at 120 characters', async () => {
+    const db = alice();
+    await assertSucceeds(setDoc(doc(db, 'plays', 'p120'), play({ name: 'p'.repeat(120) })));
+    await assertFails(setDoc(doc(db, 'plays', 'p121'), play({ name: 'p'.repeat(121) })));
+  });
+});
+
 describe('Cross-team denial still holds with the new fields', () => {
   it('coach B cannot read, edit (even with the right next revision) or create into team A', async () => {
     const db = bob();

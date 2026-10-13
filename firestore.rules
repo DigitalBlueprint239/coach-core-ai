@@ -160,7 +160,8 @@ service cloud.firestore {
         && (!('safetyConsiderations' in d) || isBoundedList(d.safetyConsiderations, 20))
         && (!('aiRequestId' in d) || isShortString(d.aiRequestId, 1, 64))
         && (!('revision' in d) || (d.revision is int && d.revision >= 1))
-        && isShortString(d.name, 1, 120)
+        // 200 = coach-ai.v1 practice_plan title bound, so AI titles save losslessly.
+        && isShortString(d.name, 1, 200)
         && (!('date' in d) || isShortString(d.date, 0, 40))
         && (!('duration' in d) || (d.duration is number && d.duration >= 0 && d.duration <= 600))
         && (!('periods' in d) || isBoundedList(d.periods, 40))
