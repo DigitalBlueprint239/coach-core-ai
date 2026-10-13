@@ -71,8 +71,8 @@ Production project `coach-core-ai` is never used.
 
 | ID | Step | Expected |
 |---|---|---|
-| FILM-01 | Upload a valid synthetic H.264 MP4 (≤100 MiB, ≤5 min) | Progress shown → validating → ready; GPS/metadata absent in the stored object (check with `ffprobe` from an admin machine) |
-| FILM-02 | Upload a corrupt file, HEVC (if D3 rejects it), >100 MiB, >5 min, or a `.mov` renamed `.mp4` | Rejected with a clear message; nothing playable; quarantine emptied |
+| FILM-01 | Upload a valid synthetic H.264 MP4 (≤100 MB = 100,000,000 bytes, ≤5 min) | Progress shown → validating → ready; GPS/metadata absent in the stored object (check with `ffprobe` from an admin machine) |
+| FILM-02 | Upload a corrupt file, HEVC (if D3 rejects it), >100,000,000 bytes, >5 min, or a `.mov` renamed `.mp4` | Rejected with a clear message; nothing playable; quarantine emptied |
 | FILM-03 | Cancel mid-upload, then retry | No false "Saved"; retry works; orphan removed by the sweeper ≤24 h |
 | FILM-04 | Play, seek, change speed, step by time | Smooth on all three devices; range requests return 206 |
 | FILM-05 | Copy the playback URL; open after 11 minutes, and in a signed-out browser | Expired → 403. Within 10 min it works (documented bearer limitation, D2) |

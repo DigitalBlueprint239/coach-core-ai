@@ -31,7 +31,7 @@ I accept it as the base design **with the required changes in §3** and **ten fo
 | OpenAI frame suggestions | **Accept behind a flag** | Additive `coach-ai.v1` task; `detail: "low"`; ≤768 px; no confidence %; youth-image policy is founder decision D1 (§3.6) |
 | Retention/deletion | **Accept** | Values pending D4; add a Storage lifecycle backstop (live config, founder) |
 | Data model / API | **Accept with changes** | Separate `coach-film.v1` contract; revision-checked clip edits; rules-verified same-team links (§4) |
-| Limits (MP4/H.264, 100 MiB, 5 min, 1080p) | **Founder decision D3** | iPhones record HEVC by default, so H.264-only will reject many coach uploads without conversion |
+| Limits (MP4/H.264, 100 MB (100,000,000 bytes), 5 min, 1080p) | **Founder decision D3** | iPhones record HEVC by default, so H.264-only will reject many coach uploads without conversion |
 | Costs / FFmpeg licensing | **Founder decisions D5, D6** | — |
 
 ## 2. Threat model (film-specific)
@@ -60,7 +60,7 @@ I accept it as the base design **with the required changes in §3** and **ten fo
    - `resource == null` (no overwrite);
    - a beta user who owns the team;
    - a film document that exists with `status == 'uploading'`, `createdBy == request.auth.uid` and `request.time < reservationExpiresAt`;
-   - `0 < size ≤ 100 MiB` and `contentType == 'video/mp4'`.
+   - `0 < size ≤ 100,000,000 bytes (100 MB)` and `contentType == 'video/mp4'`.
 
    Read, update and delete are denied to clients. Resumable upload (`uploadBytesResumable`) works under these rules.
 3. **`abandonFilmUpload`** lets the coach cancel; the sweeper also expires reservations. A stuck reservation never shows as "Saved".
@@ -90,7 +90,7 @@ Client may read only; **all film-document writes are server-side**. Clients writ
 |---|---|---|---|
 | **A. V4 signed URL, ≤10 min, per request** (recommended) | Bearer capability until expiry. Issued only to a verified owner, never persisted, single object, GET only | ~4 h | Native range streaming; works with `<video>`. Needs a live IAM change: the function service account needs `iam.serviceAccounts.signBlob`, so the founder must approve |
 | B. Same-origin range proxy with `__session` cookie | Strongest (per-request check) | +3–5 days | Firebase Hosting forwards only the `__session` cookie to functions; needs a session-cookie flow, CSRF protection and egress through functions |
-| C. `getBlob` via Storage SDK | Rules-enforced per fetch | ~2 h | Downloads the whole file into memory (up to 100 MiB on a tablet). Requires client read on `films/`, which re-opens `getDownloadURL` tokens; **rejected** |
+| C. `getBlob` via Storage SDK | Rules-enforced per fetch | ~2 h | Downloads the whole file into memory (up to 100 MB on a tablet). Requires client read on `films/`, which re-opens `getDownloadURL` tokens; **rejected** |
 
 **Acceptance interpretation for Issue #50's "unauthorized video URLs not exposed" (needs founder sign-off):**
 - No URL is ever issued to a non-owner, anonymous or non-beta caller.
@@ -151,7 +151,7 @@ Sources: [OpenAI data controls](https://developers.openai.com/api/docs/guides/yo
 ### 4.1 Storage rules
 
 - **Keep** `teams/{teamId}/files/*` exactly as is (png/jpeg/webp/pdf, 5 MB).
-- **Add** quarantine create-only as in §3.1. The 100 MiB ceiling applies to this path only.
+- **Add** quarantine create-only as in §3.1. The 100 MB (100,000,000-byte) ceiling applies to this path only.
 - **Add** an explicit deny for client read/write on `films/**` and `frames/**`. Deny-by-default already covers it, but explicit rules make the tests readable.
 
 ### 4.2 Firestore rules (nested under `teams/{teamId}`)
@@ -179,7 +179,7 @@ Sources: [OpenAI data controls](https://developers.openai.com/api/docs/guides/yo
 
 ### 4.4 CI
 
-- About 25 new rules-emulator cases (owner, foreign, anonymous and non-beta × films/clips/links/suggestions/quarantine), plus boundary cases at 100 MiB and the reservation expiry.
+- About 25 new rules-emulator cases (owner, foreign, anonymous and non-beta × films/clips/links/suggestions/quarantine), plus boundary cases at 100,000,000 and 100,000,001 bytes and the reservation expiry.
 - Worker tests generate **synthetic, rights-free MP4s at test time**: `ffmpeg -f lavfi -i testsrc`, H.264 and HEVC variants, too long, too large, corrupt/truncated, extra data track, GPS metadata present. These are written to a temp dir and never committed.
 - Bundle scan gains: no `storage.googleapis.com` signed-URL strings and no `firebaseStorageDownloadTokens` in shipped JS.
 
@@ -212,7 +212,7 @@ Sources: [OpenAI data controls](https://developers.openai.com/api/docs/guides/yo
 |---|---|---|---|
 | D1 | Send youth game frames to OpenAI at all in the beta? | **Default off.** Build the text-only path first: suggestions from the coach's manual tags and notes through the existing safe gateway. Enable images only after D7 consent policy, per-frame approval, ≤768 px, and D8 accepted | S9 |
 | D2 | Playback authorization: signed URL ≤10 min vs cookie proxy | **Signed URL** with the §3.4 acceptance interpretation | S4 |
-| D3 | Formats/limits | MP4 H.264/AAC, ≤100 MiB, ≤5 min, ≤1080p, ≤20 films per team, no transcoding in the MVP, with clear "export as H.264/Most Compatible" guidance. Alternative: accept HEVC (Safari plays it; Chrome support varies), which needs a transcode later | S1, S3 |
+| D3 | Formats/limits | MP4 H.264/AAC, ≤100 MB (100,000,000 bytes), ≤5 min, ≤1080p, ≤20 films per team, no transcoding in the MVP, with clear "export as H.264/Most Compatible" guidance. Alternative: accept HEVC (Safari plays it; Chrome support varies), which needs a transcode later | S1, S3 |
 | D4 | Retention | 24 h orphans; frames ≤1 h; films 30 days; coach can delete any time | S10 |
 | D5 | Blaze + budget for **staging only** | Approve with alerts and the app quotas above. Storage, Functions, Scheduler and egress are billable | All live testing |
 | D6 | FFmpeg build/licensing | Counsel review of the exact binary (GPL vs LGPL build); server-side use only, not redistributed. This is not legal advice | S3 |
