@@ -92,6 +92,10 @@ Production project `coach-core-ai` is never used.
 | SEC-04 | Deployed rules match the repository | Diff the console rules against `firestore.rules` and `storage.rules` at the deployed SHA |
 | SEC-05 | Function logs during the run | No prompts, keys, signed URLs, emails or frames logged |
 | SEC-06 | Billing/usage after the run | Within budget; OpenAI usage matches the request count |
+| SEC-07 | Call `coachAI` (preflight + POST) from an **unlisted** origin, e.g. a page on `http://localhost:8000` | Refused by CORS (no `access-control-allow-origin` for that origin). **Not testable in the emulator**, which allows any origin (`enableCors` debug flag) |
+| SEC-08 | Call `coachAI` with a syntactically valid but **forged/unsigned** ID token | `unauthenticated` (`sign-in-required`). **Not testable in the emulator** (`skipTokenVerification`) |
+| SEC-09 | Gateway from the staging site with `COACH_CORE_ALLOWED_ORIGINS` set | Works. The param is a **JSON array** in `.env.<project>`, e.g. `["https://coach-core-mvp-staging-239.web.app","https://coach-core-mvp-staging-239.firebaseapp.com"]`; a bare URL fails to parse and refuses every origin (found by E2E harness, 2026-10-13) |
+| SEC-10 | Spend controls exist before any test traffic | OpenAI staging project hard limit ($50) enforced; Firebase spend cap ($20, Cloud Functions) **Configured**; budget alerts $25/$50/$100 — recorded as *alerts*, not caps (Founder Decision Packet §4) |
 
 ## 7. Exit and rollback
 

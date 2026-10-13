@@ -14,7 +14,7 @@ Facts marked ✔ were checked against the official pages linked in §9 on 2026-1
 | **D2** | How private playback is authorized | **Signed links valid 10 minutes**, issued only to the verified team owner on each request (§3) | Anyone the coach forwards a live link to can watch for up to 10 min; no per-link revoke (§3) | +1 IAM grant (no direct cost); egress as in §4 | S4 (playback endpoint); unblocks S5 playback UI |
 | **D3** | Accepted video | **MP4 with H.264 video (+ optional AAC audio), ≤ 100 MB (= 100,000,000 bytes), ≤ 5 min, ≤ 1920×1080, ≤ 20 films per team, no transcoding** | iPhone default (HEVC) uploads are rejected with "Export as Most Compatible / H.264" instructions. Some coach friction | Caps worst-case storage at ~20 GB for 10 teams (§4) | S1 rules constants, S2 reservation, S3 validator |
 | **D4** | Retention | **Failed/abandoned uploads: deleted at once, swept ≤ 24 h. Frame previews: ≤ 1 h. Films: 30 days after upload, coach can delete sooner; expiry shown in the UI** | Coaches must re-upload film older than 30 days | Keeps storage bounded; the sweeper uses 1 Cloud Scheduler job (3 free per account) | S10 retention/delete jobs |
-| **D5** | Billing for staging | **Approve Blaze on `coach-core-mvp-staging-239` only**, with the controls in §4: Google budget alerts at $25/$50/$100, a Firebase spend-cap budget on Cloud Functions, app-level quotas, and a separate OpenAI project with its own limit | Enables Storage, Functions, Secret Manager and Scheduler in staging | Estimated **$0–15/month infrastructure + OpenAI usage** (≤ ~$42/month at the proposed staging AI cap) (§4) | Every live test: staging smoke plan, real upload/playback, device tests |
+| **D5** | Billing for staging | **Approve Blaze on `coach-core-mvp-staging-239` only**, with the controls in §4: app AI quotas (50/day staging), an OpenAI staging project with a **$50 hard limit**, a Firebase spend cap of **$20 on Cloud Functions**, and budget **alerts** at $25/$50/$100. Alerts are not a cap; Firestore/Storage stay uncapped except by invite-only access + alerts (§4 D) | Enables Storage, Functions, Secret Manager and Scheduler in staging | Estimated **$0–15/month infrastructure + OpenAI usage** (≤ ~$42/month at the proposed staging AI cap) (§4) | Every live test: staging smoke plan, real upload/playback, device tests |
 | **D6** | FFmpeg build and license | **Build FFmpeg 9.0.2 from source, LGPL-only minimal configuration (§5)**; no `--enable-gpl`/`nonfree`. Do not use `ffmpeg-static` (GPLv3) or `ffprobe-static` (FFmpeg 4.0.2) | LGPL-2.1-or-later binary with only the MP4/H.264/AAC/MJPEG parts; much smaller attack surface | ~3–4 h extra build/CI work; no license fee | S3 validator/remux and frame extraction |
 | **D7** | Upload rights and consent wording | **Adopt the text in §6** (per-upload checkbox; counsel review recommended) | Each upload records `rightsAcknowledgedAt` plus wording version. No upload without it | None | S2 reservation; UI copy in S5 |
 | **D8** | Accept OpenAI's data handling for coaching text (and later images) | **Accept for text only** (✔ facts in §7). Revisit for images with D1 | Text prompts (no names, redacted) may be held up to 30 days for abuse monitoring | None | Enabling `coachAI` text tasks in staging; prerequisite for D1 |
@@ -68,15 +68,52 @@ The earlier review docs said "100 MiB" (104,857,600 bytes); they are corrected i
 
 Monthly estimates, not quotes. Prices vary by region and change over time. Region must be us-central1, us-east1 or us-west1 for the Storage no-cost tier (✔).
 
-**Controls: alerts vs. enforcement**
+**Controls: what actually limits spending (re-verified 2026-10-13, CC-NEXT-04)**
 
-| Control | Type | What it does |
+**There is no single hard cap on a Google Cloud bill.** Budget alerts only send email. The staging plan therefore combines four enforcing controls, each covering part of the bill, with alerts for everything else.
+
+*A. Enforcing controls: they stop usage automatically*
+
+| # | Control | Covers | Trigger → what stops | Limits of the control |
+|---|---|---|---|---|
+| A1 | App AI quotas (in code, PR #49) | OpenAI cost | Per coach 5/min and 25/day. Staging global **50/day** (`COACH_CORE_AI_GLOBAL_DAILY_LIMIT=50`). Over the limit the gateway refuses (`ai-quota-exceeded`/`ai-busy`), with no provider call | Bounds request count, not tokens. Tokens are bounded separately by `max_output_tokens` |
+| A2 | AI kill switch `COACH_CORE_AI_ENABLED` (default **false**) | All AI | `false` → gateway refuses everything with `ai-disabled` (proven in a real browser by E2E-AI01) | Turning it on or off is a param change plus redeploy, a live config change that needs your approval |
+| A3 | **OpenAI project hard spend limit** ✔ | OpenAI cost | Recommend **$50/month** on a staging-only OpenAI project with "Enforce a hard limit" on. At the limit OpenAI returns HTTP 429 `project_spend_limit_exceeded` and the gateway shows "AI is busy" | Enforcement isn't instantaneous; spend "can slightly exceed" the limit. OpenAI's tier usage limit and prepaid-credit exhaustion are separate |
+| A4 | **Firebase spend cap** (Preview, Blaze) ✔ | **Cloud Functions only** (AI gateway, later film validation and playback-link issuing) | Recommend **$20/month**. At 100% Cloud Billing pauses Cloud Run functions for the rest of the month; warnings at 50% and 80%. Resumes when lifted or on the 1st | Enforcement "can be delayed by several minutes", and overage in that window is billed. **Does not cover Cloud Storage, Firestore or Hosting.** Preview feature, no SLA |
+| A5 | Access limits (rules, PR #49) | Everything | Only invited, verified, beta-claimed accounts can read or write anything. Revoking the claim or disabling the account cuts a coach off at the next token check (proven by E2E-A08) | Doesn't stop a legitimate beta account from heavy use; it is the manual response |
+| A6 | Film limits (spec, **not built**, gated by D1–D7) | Storage/egress | 100 MB/file, ≤20 films/team, 30-day retention, and a **per-coach playback-link quota (proposed 100 links/day)** enforced by the link-issuing function | Each 10-minute link can be fetched many times inside its window, so a quota bounds links, not bytes |
+
+*B. Alert-only controls: they notify a person and stop nothing*
+
+| Control | Recommended setting | Reaction time |
 |---|---|---|
-| Google Cloud budget + alerts ($25/$50/$100) | **Alert only** | ✔ Budgets don't cap spending; reports can lag by hours |
-| Firebase spend-cap budget | **Enforcement, partial** | ✔ Pauses covered services (incl. Cloud Functions for Firebase) at 100% for the rest of the month. **Does not cover Storage or Firestore** |
-| App quotas (in code) | **Enforcement** | AI per-user 5/min and daily cap, global daily cap (set `COACH_CORE_AI_GLOBAL_DAILY_LIMIT=50` in staging), ≤20 films/team, 100 MB/file, 5 min, kill switches |
-| OpenAI project limit | **Founder to verify** | ⚠ Set a monthly limit on the new OpenAI project; confirm in the dashboard whether it blocks requests or only notifies before relying on it |
-| Automatic "disable billing" function | **Hard stop, destructive** | ✔ Stops all services, can lead to resources being deleted, and may still overshoot. **Not recommended** |
+| Cloud Billing budget on the staging project | $25 / $50 / $100 thresholds, email to founder + engineers | Billing data can lag **hours**. This is a notification, **not a cap** |
+| Cloud Monitoring alerts (proposed) | Firestore reads > 500K/day; Storage egress > 20 GB/day; function errors | Minutes. Each alert links to the shutdown runbook (C) |
+
+*C. Shutdown triggers: who or what stops what*
+
+| Trigger | Automatic response | Manual response (founder-approved runbook) |
+|---|---|---|
+| AI daily quota reached | Gateway refuses until the next UTC day (A1) | none needed |
+| OpenAI project hits $50 | OpenAI 429; AI unavailable for the month (A3) | Raise the limit only with founder approval |
+| Functions spend reaches $20 | All functions paused for the month (A4); AI and (later) film processing stop; the rest of the app works | Lift the cap only with founder approval |
+| Budget alert $25 | none | Engineer reviews usage the same day |
+| Budget alert $50 or a Monitoring alert | none | Set `COACH_CORE_AI_ENABLED=false`, revoke the beta claim of any abusive account, and (with film) set the proposed film kill switch |
+| Budget alert $100 | none | Founder decides: keep going, or deploy deny-all Storage rules and pause the beta. **Disabling billing is not recommended:** it is destructive and can delete resources |
+
+*Proposed (not built, needs approval): non-destructive automatic shutdown.* A budget → Pub/Sub → function that flips a Firestore `config/killSwitches` document. The gateway, the upload-reservation and playback-link functions, and the rules would read it, stopping AI, uploads and new playback links at a chosen threshold without disabling billing. This closes most of the Storage gap that A4 leaves. Approximate size: 1 slice of Claude work.
+
+*D. Remaining spending exposure (estimates, not quotes)*
+
+| Area | Capped by | Remaining exposure |
+|---|---|---|
+| OpenAI | A1 + A3 | **≤ ~$50/month** (hard limit plus slight overshoot); realistic ≈ $17 |
+| Cloud Functions | A4 | **≤ ~$20/month** plus a few minutes of overage |
+| Firestore | **Nothing automatic**; only A5 + alerts | Normal beta use ≈ $0 (free tier). Worst case: a beta account scripting reads at ~1,000/s ≈ 86M reads/day ≈ **$25–50/day** (⚠ price varies by location, ≈$0.03–0.06 per 100K reads) until someone acts on an alert |
+| Cloud Storage + downloads (after film ships) | **Nothing automatic**; A6 + alerts | Normal ≈ $0–7/month. Worst case: one beta account re-downloading 100 MB films continuously; at the proposed 100 links/day that's ≈ 10 GB/day per coach before re-fetching inside link windows. **Uncapped in bytes** until the proposed kill switch exists. $0.12/GiB ✔ |
+| Hosting | Nothing automatic | Static app, small; free tier 10 GB/month downloads |
+
+**Bottom line for D5:** with A1–A5 in place, AI and function spend are hard-bounded (about $70/month combined at most). Firestore and Storage are **not** hard-bounded by any Google control; they are bounded by invite-only access plus alerts and a person acting on them. If that is not acceptable for staging, approve the non-destructive kill switch above before film upload is enabled.
 
 ## 5. FFmpeg: exact build and remaining review
 
@@ -163,6 +200,9 @@ Founder check (D9): the new OpenAI project must list the chosen model before AI 
   - Secret Manager pricing: https://cloud.google.com/secret-manager/pricing
   - Firestore pricing: https://cloud.google.com/firestore/pricing
 - Budgets and caps:
+  - Firebase spend caps (Preview; covered services, delay): https://firebase.google.com/docs/projects/billing/spend-caps
+  - OpenAI spend limits (hard limit → HTTP 429): https://developers.openai.com/api/docs/guides/spend-limits
+  - Cloud Storage quotas (no user-set egress cap): https://docs.cloud.google.com/storage/quotas
   - Budgets: https://docs.cloud.google.com/billing/docs/how-to/budgets
   - Firebase "avoid surprise bills": https://firebase.google.com/docs/projects/billing/avoid-surprise-bills
   - Disable billing with notifications: https://docs.cloud.google.com/billing/docs/how-to/disable-billing-with-notifications
