@@ -32,6 +32,13 @@ Verified: standalone diagnostics 810 → 0; same drag regressions 5 failed/2 pas
 
 Remaining: native pointer/touch testing, generic route/property transaction snapshots, storage/export defects, one existing critical jsPDF finding, authentication/authorization and AI credential gates. Claude retains authentication/security ownership. Next owners: PR reviewer; Codex for separately scoped route/property history and native gesture tests; Claude for independent security review. No application merge, production changes, Firebase access, or deployment. MVP remains NO-GO.
 
+## Core workflow follow-up — 2026-10-13 / Codex / Issue #48
+Implementation [standalone PR #2](https://github.com/DigitalBlueprint239/Coach-Core-Smart-Playbook-/pull/2), branch `codex/playbook-core-workflows`, stacked on reviewed/unmerged PR #1. Shared documentation is updated in main draft PR #45, held for #40 landing. No production/recovery base overwrite or automatic merge.
+
+Results: **18/18 unit tests**, **14/14 real production browser tests** across desktop mouse/tablet touch emulation, **3/3 repeated tablet pan/export cases**, **0 TypeScript diagnostics**, clean install/build pass, **0 npm audit findings**, **0 provider canary/legacy graph violations**. Main chunk 1,403.37 kB / gzip 436.44 kB retains the existing warning. Original context/history fails 3 focused transaction regressions. [Exact commands, artifacts, files and limitations](ISSUE_48_CORE_WORKFLOW_HANDOFF.md).
+
+Repaired: route/property snapshots and batching; complete play/reference validation and safe failed saves; canonical PDF/install rendering and note pagination; jsPDF advisory; V2 editor/panels/drawing/touch controls. Latest OpenAI-only boundary disables browser AI pending an agreed protected gateway; no provider key/call or application integration. Remaining owners/gates: reviewer for PRs, Claude for auth/security/gateway, Codex for explicitly agreed integration; physical device/other engine and full authenticated coaching acceptance remain. **MVP NO-GO; no deployment.**
+
 ## One daily report format (commit or PR in this file)
 Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands | Files changed | Security issues | What remains | Next owner. No unverified percentages.
 
