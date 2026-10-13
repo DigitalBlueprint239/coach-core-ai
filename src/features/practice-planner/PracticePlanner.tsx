@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
+import { AGE_GROUP_OPTIONS, AI_PRIVACY_NOTICE, type AgeGroup, type SkillLevel } from '../../services/coach-ai-client';
 
 const defaultGoals = [
   { label: 'Game Prep', value: 'game_prep' },
@@ -11,6 +12,8 @@ const defaultGoals = [
 const PracticePlanner: React.FC = () => {
   const ai = useAI();
   const [duration, setDuration] = useState(90);
+  const [ageGroup, setAgeGroup] = useState<AgeGroup | ''>('');
+  const [skillLevel, setSkillLevel] = useState<SkillLevel>('beginner');
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [aiResult, setAIResult] = useState<any>(null);
@@ -29,14 +32,17 @@ const PracticePlanner: React.FC = () => {
     setAIResult(null);
     setFeedback(null);
     try {
+      // Team id comes from the signed-in coach's current team (AIContext);
+      // the server re-checks ownership. No roster data is sent.
       const result = await ai.generateSmartPractice({
         duration,
         goals,
-        teamId: 'demo-team', // Replace with real teamId if available
+        ageGroup: ageGroup || undefined,
+        skillLevel,
       });
       setAIResult(result);
     } catch (err: any) {
-      setError('AI generation failed. Please try again.');
+      setError(err?.message || 'AI generation failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -61,6 +67,25 @@ const PracticePlanner: React.FC = () => {
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
         />
       </div>
+      <div className="mb-4 grid grid-cols-2 gap-3">
+        <div>
+          <label htmlFor="pp-age" className="block mb-1 font-medium">Age group</label>
+          <select id="pp-age" value={ageGroup} onChange={e => setAgeGroup(e.target.value as AgeGroup)}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring">
+            <option value="">Choose…</option>
+            {AGE_GROUP_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="pp-skill" className="block mb-1 font-medium">Skill level</label>
+          <select id="pp-skill" value={skillLevel} onChange={e => setSkillLevel(e.target.value as SkillLevel)}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+      </div>
       <div className="mb-4">
         <label className="block mb-1 font-medium">Goals</label>
         <div className="flex flex-wrap gap-2">
@@ -78,39 +103,32 @@ const PracticePlanner: React.FC = () => {
       </div>
       <button
         onClick={handleAIGenerate}
-        disabled={loading || goals.length === 0}
+        disabled={loading || goals.length === 0 || !ageGroup}
         className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition mb-4 disabled:opacity-50"
       >
         {loading ? 'Generating...' : 'Generate with AI'}
       </button>
+      <p className="text-xs text-gray-500 mb-2">{AI_PRIVACY_NOTICE}</p>
       {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
       {aiResult && (
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 className="font-semibold text-lg mb-2">AI-Generated Practice Plan</h3>
-          <div className="mb-2">
-            <span className="font-medium">Confidence:</span> <span className="text-blue-700">{Math.round((aiResult.confidence || 0) * 100)}%</span>
-          </div>
-          {aiResult.insights && aiResult.insights.length > 0 && (
-            <div className="mb-2">
-              <span className="font-medium">Insights:</span>
-              <ul className="list-disc ml-6 text-sm text-blue-900">
-                {aiResult.insights.map((insight: string, i: number) => (
-                  <li key={i}>{insight}</li>
-                ))}
-              </ul>
-            </div>
+          {/* coach-ai.v1 practice_plan result; AI-generated, coach should review */}
+          <h3 className="font-semibold text-lg mb-1">{aiResult.title || 'AI-Generated Practice Plan'}</h3>
+          <p className="text-xs text-gray-500 mb-3">AI-generated draft — review before running practice.</p>
+          {aiResult.warmup && (
+            <p className="text-sm mb-2"><span className="font-medium">Warm-up:</span> {aiResult.warmup.durationMinutes} min</p>
           )}
-          {aiResult.plan && aiResult.plan.periods && (
+          {Array.isArray(aiResult.periods) && (
             <div className="mb-2">
               <span className="font-medium">Periods:</span>
               <ul className="list-decimal ml-6 text-sm">
-                {aiResult.plan.periods.map((period: any, i: number) => (
+                {aiResult.periods.map((period: any, i: number) => (
                   <li key={i} className="mb-1">
-                    <span className="font-semibold">{period.name}</span> - {period.duration} min, Intensity: {period.intensity}
-                    {period.drills && (
+                    <span className="font-semibold">{period.name}</span> — {period.durationMinutes} min{period.focus ? `, ${period.focus}` : ''}
+                    {Array.isArray(period.drills) && (
                       <ul className="list-disc ml-6 text-xs text-gray-700">
-                        {period.drills.map((drill: string, j: number) => (
-                          <li key={j}>{drill}</li>
+                        {period.drills.map((drill: any, j: number) => (
+                          <li key={j}>{drill.name} ({drill.durationMinutes} min)</li>
                         ))}
                       </ul>
                     )}
@@ -118,6 +136,17 @@ const PracticePlanner: React.FC = () => {
                 ))}
               </ul>
             </div>
+          )}
+          {Array.isArray(aiResult.safetyConsiderations) && aiResult.safetyConsiderations.length > 0 && (
+            <div className="mb-2">
+              <span className="font-medium">Safety:</span>
+              <ul className="list-disc ml-6 text-sm text-blue-900">
+                {aiResult.safetyConsiderations.map((s: string, i: number) => <li key={i}>{s}</li>)}
+              </ul>
+            </div>
+          )}
+          {aiResult.meta?.warnings?.length > 0 && (
+            <p className="text-xs text-amber-700">Check the schedule: durations may not add up exactly.</p>
           )}
           {/* Feedback */}
           <div className="mt-3 flex items-center gap-3">

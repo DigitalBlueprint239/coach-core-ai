@@ -5,6 +5,7 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
 import { AuthProvider } from './components/AuthProvider';
+import AuthGate from './components/auth/AuthGate';
 import { TeamProvider } from './contexts/TeamContext';
 import { TeamSelector } from './components/TeamManagement';
 import { MigrationBanner } from './components/MigrationBanner';
@@ -68,6 +69,8 @@ const App: React.FC = () => {
           </React.Suspense>
         );
       case 'test':
+        // Firebase diagnostics page: development builds only.
+        if (process.env.NODE_ENV === 'production') return <Dashboard />;
         return (
           <React.Suspense fallback={<LoadingSpinner text="Loading Firebase Test..." />}>
             <FirebaseTest />
@@ -82,6 +85,7 @@ const App: React.FC = () => {
     <ErrorBoundary children={
       <ToastManager>
         <AuthProvider>
+          <AuthGate>
           <TeamProvider>
             <AIProvider>
               <div className="min-h-screen bg-gray-50">
@@ -115,6 +119,7 @@ const App: React.FC = () => {
               </div>
             </AIProvider>
           </TeamProvider>
+          </AuthGate>
         </AuthProvider>
       </ToastManager>
     } />
