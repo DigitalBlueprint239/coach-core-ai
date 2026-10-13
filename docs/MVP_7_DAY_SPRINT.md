@@ -1,5 +1,13 @@
 # Coach Core AI — Seven-Day MVP Recovery Sprint
-Window: **Oct 13–20, 2026** (aggressive target, not guaranteed launch). One status document shared through GitHub.
+Original window: **Oct 13–20, 2026**. Founder-required Film Analyzer rebaseline below supersedes the original release target. One status document shared through GitHub.
+
+## Required film rebaseline — 2026-10-13 / Codex / Issue #50
+
+Documentation branch `codex/issue-50-film-plan`, stacked on docs PR #45 to preserve prior milestones; retarget after #45 is reviewed/lands. Changed files: this sprint, shared context and new [FILM_ANALYZER_MVP_SPEC.md](FILM_ANALYZER_MVP_SPEC.md). Source inventory only: neither app contains a functional film workflow. No film tests/build newly run; all film acceptance tests planned, not PASS. Claude PR #49 inspected as an unmerged dependency, not integrated.
+
+Revised sequence: Oct 13–14 contracts/security/media spike; Oct 15–19 new UI and secured backend/persistence; Oct 20 optional local synthetic demo; Oct 20–23 frame privacy/OpenAI suggestions and editable saved practice/play links; Oct 24–27 emulator/browser/physical tablet and independent security acceptance. Conditional full MVP assessment **Oct 27–30**, subject to prerequisites and review. 88–134 added engineer-hours, 106–161 with contingency, plus existing security work. No deployment authorized by schedule.
+
+Codex proposes `src/features/film-analyzer/**`; Claude owns auth/Storage/Firestore/functions/gateway and frame-processing security. Shared App/Dashboard/PracticePlanner files sequenced after #49 and explicit ownership agreement. Request posted #39; confirmation pending. Product owner supplies footage rights/consent, upload limits, retention, acceptable AI errors and budget. Film now required but unimplemented/unverified; **MVP remains NO-GO**. Prior seven-day tasks remain historical context, not release permission.
 
 ## Day 1: Evidence and blockers
 **Codex owns:** import four previous audit reports into `outputs/` with raw commands, tool versions, reproducible test evidence; fix 2 failing main tests and unloaded suite, or attach reproducible cause. Inventory 810 TS errors by category, not file count alone.

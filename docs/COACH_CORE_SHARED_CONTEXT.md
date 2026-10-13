@@ -23,7 +23,16 @@ Ship a **restricted private coaching MVP** by 2026-10-20 if and only if safety a
 3. Save/reopen plays reliably with ownership checks.
 4. Generate/edit/save practice plans; AI credentials never in client bundle.
 5. Mobile/tablet usable for core flows.
-Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public release.
+6. Required Film Analyzer: secure bounded video upload/playback, manual tags and save/reopen, safe optional selected-frame OpenAI suggestions, saved play and editable practice links. Founder [Issue #50](https://github.com/DigitalBlueprint239/coach-core-ai/issues/50) supersedes film deferral.
+Defer autonomous whole-game film analysis, NIL, blockchain, advanced analytics, billing, and broad public release.
+
+## Film scope rebaseline — Issue #50 / 2026-10-13
+
+Code inventory finds no implemented Film Analyzer in either repository. Video URL types, feature flags and archived Hudl declarations are partial/stub references; no upload/player/film persistence/frame worker exists. Claude's PR #49 proposes owner-only beta auth and a text OpenAI gateway; neither its Storage rules nor its AI schema accepts film. These findings are source inspection, not film PASS results.
+
+[Film MVP specification](FILM_ANALYZER_MVP_SPEC.md) records revisions, wireflow, proposed data/API contracts, privacy/upload/access design, cost/licensing constraints and planned acceptance tests. Codex proposes new film UI/contracts/tests; Claude retains auth/rules/functions/gateway and private media/frame security. Ownership confirmation and shared navigation/practice sequencing are pending on #39. No implementation source changed in this planning milestone; Playbook recovery branches preserved.
+
+Oct 20 is a possible synthetic local demo milestone, not a full MVP promise. Film adds an estimated 88–134 engineer-hours (106–161 with contingency), excluding existing security work/review delays. Conditional full assessment Oct 27–30 after film/device/end-to-end/security gates. Film required but not implemented/verified; **MVP NO-GO**. No production access, paid infrastructure or deployment.
 
 ## Gates
 - Reproducible builds + typecheck; no unexplained high-severity errors in shipped surface.
