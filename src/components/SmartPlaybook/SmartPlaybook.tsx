@@ -6,6 +6,10 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useAuth } from '../../hooks/useAuth';
+import { useTeam } from '../../contexts/TeamContext';
+import LegacyImport from '../../features/legacy-import/LegacyImport';
+import { loadImportedPlays } from '../../features/legacy-import/firebase-import';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
@@ -100,6 +104,9 @@ const FIELD_DIMENSIONS = {
 const TOUCH_THRESHOLD = 20; // pixels for touch detection
 
 const SmartPlaybook = () => {
+  const { user } = useAuth();
+  const { currentTeam } = useTeam();
+  const libraryKey = user ? (currentTeam && currentTeam.ownerId === user.uid ? `coachcore:v1:${user.uid}:${currentTeam.id}:drafts` : null) : 'smartPlaybook_plays';
   // Core state
   const [players, setPlayers] = useState<PlaybookPlayer[]>([]);
   const [routes, setRoutes] = useState<PlaybookRoute[]>([]);
@@ -107,6 +114,10 @@ const SmartPlaybook = () => {
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [mode, setMode] = useState<PlaybookMode>('view');
   const [savedPlays, setSavedPlays] = useState<SavedPlay[]>([]);
+  const [cloudPlays, setCloudPlays] = useState<SavedPlay[]>([]);
+  const [cloudLoadError, setCloudLoadError] = useState('');
+  const [importVersion, setImportVersion] = useState(0);
+  const [loadedLibraryKey, setLoadedLibraryKey] = useState<string | null>(null);
   const [currentPlayName, setCurrentPlayName] = useState('');
   const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
   const [currentPlayType, setCurrentPlayType] = useState('pass');
@@ -133,10 +144,22 @@ const SmartPlaybook = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastTouchRef = useRef<TouchEvent | null>(null);
 
-  // Load saved plays from localStorage on mount
+  useEffect(() => {
+    let active = true; setCloudPlays([]); setCloudLoadError('');
+    if (user && currentTeam && currentTeam.ownerId === user.uid) {
+      void loadImportedPlays({uid:user.uid,teamId:currentTeam.id})
+        .then(plays => { if (active) setCloudPlays(plays as SavedPlay[]); })
+        .catch(() => { if (active) setCloudLoadError('Cloud plays could not be opened. Retry after checking team access.'); });
+    }
+    return () => { active = false; };
+  }, [user, currentTeam, importVersion]);
+
+  // Device drafts are scoped; verified imported plays are loaded from cloud.
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('smartPlaybook_plays');
+      setSavedPlays([]);
+      setPlayers([]); setRoutes([]); setUndoStack([]); setRedoStack([]);
+      const saved = libraryKey ? localStorage.getItem(libraryKey) : null;
       if (saved) {
         setSavedPlays(JSON.parse(saved));
       }
@@ -149,7 +172,8 @@ const SmartPlaybook = () => {
     if (!onboardingComplete) {
       setShowOnboarding(true);
     }
-  }, []);
+    setLoadedLibraryKey(libraryKey);
+    }, [libraryKey]);
 
   // Handle window resize
   useEffect(() => {
@@ -204,11 +228,12 @@ const SmartPlaybook = () => {
   // Save plays to localStorage when they change
   useEffect(() => {
     try {
-      localStorage.setItem('smartPlaybook_plays', JSON.stringify(savedPlays));
+      // Account libraries never rewrite shared legacy originals.
+      if (libraryKey && loadedLibraryKey === libraryKey) localStorage.setItem(libraryKey, JSON.stringify(savedPlays));
     } catch (error) {
       console.error('Error saving plays:', error);
     }
-  }, [savedPlays]);
+  }, [savedPlays, libraryKey, loadedLibraryKey]);
 
   // Save current state to undo stack
   const saveToUndoStack = useCallback((action: string) => {
@@ -471,8 +496,8 @@ const SmartPlaybook = () => {
     setSavedPlays(prev => [...prev, play]);
     setShowSaveDialog(false);
     setCurrentPlayName('');
-    addNotification('success', `Play "${name}" saved successfully`);
-  }, [players, routes, currentPlayPhase, currentPlayType, addNotification]);
+    addNotification('success', user ? `Play "${name}" kept as a device draft; cloud save pending` : `Play "${name}" saved successfully`);
+  }, [players, routes, currentPlayPhase, currentPlayType, addNotification, user]);
 
   // Load play
   const loadPlay = useCallback((play: SavedPlay) => {
@@ -489,11 +514,14 @@ const SmartPlaybook = () => {
 
   // Delete play
   const deletePlay = useCallback((playId: string) => {
+    if (cloudPlays.some(play => play.id === playId)) {
+      addNotification('warning', 'Cloud copies are preserved. Deletion is not enabled.'); return;
+    }
     if (window.confirm('Are you sure you want to delete this play?')) {
       setSavedPlays(prev => prev.filter(play => play.id !== playId));
       addNotification('success', 'Play deleted successfully');
     }
-  }, [addNotification]);
+  }, [addNotification, cloudPlays]);
 
   // Clear field
   const clearField = useCallback(() => {
@@ -551,7 +579,9 @@ const SmartPlaybook = () => {
   return (
     <ErrorBoundary>
       <div className="smart-playbook-app min-h-screen bg-gray-50">
-      {/* Header */}
+      {user && currentTeam && currentTeam.ownerId === user.uid && <LegacyImport key={`${user.uid}:${currentTeam.id}`} uid={user.uid} teamId={currentTeam.id} teamName={currentTeam.name} onImported={() => setImportVersion(v => v + 1)} />}
+        {cloudLoadError && <p role="alert">{cloudLoadError}</p>}
+        {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -687,7 +717,7 @@ const SmartPlaybook = () => {
           <div className="lg:col-span-1">
             {showLibrary && (
               <PlayLibrary
-                savedPlays={savedPlays}
+                savedPlays={loadedLibraryKey === libraryKey ? [...cloudPlays, ...savedPlays] : []}
                 onLoadPlay={loadPlay}
                 onDeletePlay={deletePlay}
                 onClose={() => setShowLibrary(false)}
@@ -745,10 +775,14 @@ const SmartPlaybook = () => {
   );
 };
 
-const WrappedSmartPlaybook = () => (
-  <AIProvider>
-    <SmartPlaybook />
-  </AIProvider>
-);
+const WrappedSmartPlaybook = () => {
+  const { user } = useAuth();
+  const { currentTeam } = useTeam();
+  return (
+    <AIProvider>
+      <SmartPlaybook key={`${user?.uid || 'anonymous'}:${currentTeam?.id || 'none'}`} />
+    </AIProvider>
+  );
+};
 
-export default WrappedSmartPlaybook; 
+export default WrappedSmartPlaybook;
