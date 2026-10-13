@@ -57,7 +57,7 @@ export class AIService {
     this.config = {
       timeout: 30000,
       retries: 3,
-      baseUrl: 'https://api.openai.com/v1',
+      baseUrl: '', // legacy direct-provider path disabled (F-01)
       ...config
     };
   }
@@ -649,61 +649,11 @@ Format the response as a JSON object with the structure:
   // CORE AI REQUEST HANDLING
   // ============================================
 
-  private async makeAIRequest(request: AIRequest): Promise<string> {
-    const { prompt, context, options } = request;
-    
-    const messages = [
-      {
-        role: 'system',
-        content: 'You are an expert sports coaching assistant. Provide helpful, accurate, and safe advice for coaches. Always respond with valid JSON when requested.'
-      },
-      {
-        role: 'user',
-        content: prompt
-      }
-    ];
-
-    const requestBody = {
-      model: options?.model || this.config.model,
-      messages,
-      max_tokens: options?.maxTokens || this.config.maxTokens,
-      temperature: options?.temperature || this.config.temperature,
-      stream: false
-    };
-
-    let lastError: Error | null = null;
-    
-    for (let attempt = 1; attempt <= this.config.retries!; attempt++) {
-      try {
-        const response = await fetch(`${this.config.baseUrl}/chat/completions`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.config.apiKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody),
-          signal: AbortSignal.timeout(this.config.timeout!)
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(`OpenAI API error: ${response.status} ${errorData.error?.message || response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data.choices[0]?.message?.content || 'No response generated';
-
-      } catch (error) {
-        lastError = error as Error;
-        console.warn(`AI request attempt ${attempt} failed:`, error);
-        
-        if (attempt < this.config.retries!) {
-          await this.delay(1000 * attempt); // Exponential backoff
-        }
-      }
-    }
-
-    throw lastError || new Error('All AI request attempts failed');
+  private async makeAIRequest(_request: AIRequest): Promise<string> {
+    // Security (Day 2, F-01): the browser must never call an AI provider
+    // directly or hold a provider key. Use services/coach-ai-client.ts,
+    // which calls the authenticated server gateway.
+    throw new Error('Direct browser AI requests are disabled. Use the Coach Core AI gateway.');
   }
 
   // ============================================

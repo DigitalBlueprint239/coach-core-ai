@@ -66,14 +66,13 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate a unique team code
+  // Team display code. Private beta: owner-only teams, so the code is a label,
+  // not an access credential (invites are disabled; see joinTeam).
   const generateTeamCode = (): string => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < 6; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const bytes = new Uint8Array(8);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (b) => chars[b % chars.length]).join('');
   };
 
   // Create a new team
@@ -83,14 +82,9 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       const user = auth.currentUser;
       if (!user) throw new Error('User must be authenticated');
 
-      // Generate unique team code
-      let code: string;
-      let isUnique = false;
-      do {
-        code = generateTeamCode();
-        const existingTeam = await getDocs(query(collection(db, 'teams'), where('code', '==', code)));
-        isUnique = existingTeam.empty;
-      } while (!isUnique);
+      // Querying other teams' codes is denied by the security rules, so no
+      // uniqueness lookup; 8 random characters make collisions negligible.
+      const code = generateTeamCode();
 
       const teamData = {
         name,
@@ -118,6 +112,11 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   // Join a team using a code
   const joinTeam = async (code: string): Promise<void> => {
+    // Private beta: teams are owner-only. Joining by code is disabled until a
+    // server-side invite flow exists (Day 1 F-08); rules would deny it anyway.
+    const message = 'Joining teams is not available during the private beta.';
+    setError(message);
+    if (message) throw new Error(message);
     try {
       setError(null);
       const user = auth.currentUser;
@@ -174,6 +173,11 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   // Leave a team
   const leaveTeam = async (teamId: string): Promise<void> => {
+    // Private beta: teams are owner-only and cannot be deleted from the
+    // client (the rules deny it). Ask the Coach Core team to remove a team.
+    const message = 'Leaving or deleting a team is not available during the private beta.';
+    setError(message);
+    if (message) throw new Error(message);
     try {
       setError(null);
       const user = auth.currentUser;
@@ -282,7 +286,8 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     }
 
     const unsubscribe = onSnapshot(
-      query(collection(db, 'teams'), where('memberIds', 'array-contains', user.uid)),
+      // Owner-only tenancy: the rules allow listing only the caller's own teams.
+      query(collection(db, 'teams'), where('ownerId', '==', user.uid)),
       (snapshot) => {
         const teams: Team[] = [];
         snapshot.forEach((doc) => {

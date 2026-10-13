@@ -1,10 +1,13 @@
 // public/sw.js
 // Service Worker for Coach Core AI PWA
 
-const CACHE_NAME = 'coach-core-ai-v1.0.0';
-const STATIC_CACHE = 'coach-core-static-v1.0.0';
-const DYNAMIC_CACHE = 'coach-core-dynamic-v1.0.0';
-const API_CACHE = 'coach-core-api-v1.0.0';
+// v1.1.0 (Day 2 security): authenticated API responses and cross-origin
+// requests are never cached. The version bump makes the activate step delete
+// caches written by older workers (including the old API cache).
+const CACHE_NAME = 'coach-core-ai-v1.1.0';
+const STATIC_CACHE = 'coach-core-static-v1.1.0';
+const DYNAMIC_CACHE = 'coach-core-dynamic-v1.1.0';
+const API_CACHE = 'coach-core-api-v1.1.0';
 
 // ============================================
 // CACHE CONFIGURATION
@@ -93,11 +96,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Never intercept cross-origin traffic (Firebase Auth, Firestore, Storage
+  // download URLs, Cloud Functions). Those responses can carry user data or
+  // access tokens and must not be stored on a shared device.
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // API calls are user-specific: let them go straight to the network,
+  // untouched by the worker (checked BEFORE the static-asset rule).
+  if (isAPIRequest(request)) {
+    return;
+  }
+
   // Handle different types of requests
   if (isStaticAsset(request)) {
     event.respondWith(handleStaticAsset(request));
-  } else if (isAPIRequest(request)) {
-    event.respondWith(handleAPIRequest(request));
   } else if (isImageRequest(request)) {
     event.respondWith(handleImageRequest(request));
   } else {
@@ -141,25 +155,11 @@ async function handleStaticAsset(request) {
 
 async function handleAPIRequest(request) {
   try {
-    // Try network first for API requests
-    const networkResponse = await fetch(request);
-    
-    // Cache successful responses
-    if (networkResponse.status === 200) {
-      const cache = await caches.open(API_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
+    // Network only: API responses are user-specific and are never cached.
+    return await fetch(request);
   } catch (error) {
-    console.error('Service Worker: API request failed, trying cache', error);
-    
-    // Fallback to cache
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
+    console.error('Service Worker: API request failed', error);
+
     // Return offline response
     return new Response(
       JSON.stringify({ 
@@ -231,16 +231,18 @@ async function handleDynamicRequest(request) {
 // ============================================
 
 function isStaticAsset(request) {
-  return STATIC_ASSETS.some(asset => 
-    request.url.includes(asset) || 
+  // Exact path match (a substring match on '/' used to match every URL).
+  const { pathname } = new URL(request.url);
+  return STATIC_ASSETS.includes(pathname) ||
     request.destination === 'document' ||
     request.destination === 'script' ||
-    request.destination === 'style'
-  );
+    request.destination === 'style';
 }
 
 function isAPIRequest(request) {
-  return API_ROUTES.some(route => request.url.includes(route));
+  const { pathname } = new URL(request.url);
+  return pathname.startsWith('/api/') ||
+    API_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
 }
 
 function isImageRequest(request) {
@@ -354,6 +356,18 @@ self.addEventListener('message', (event) => {
     event.ports[0].postMessage({ version: CACHE_NAME });
   }
   
+  // Sent by the app on sign-out: drop anything that could belong to the
+  // previous coach (Day 1 F-10).
+  if (event.data && event.data.type === 'CLEAR_USER_CACHES') {
+    event.waitUntil(
+      caches.keys().then(cacheNames => Promise.all(
+        cacheNames
+          .filter(name => name !== STATIC_CACHE)
+          .map(name => caches.delete(name))
+      ))
+    );
+  }
+
   if (event.data && event.data.type === 'CLEAR_CACHE') {
     event.waitUntil(
       caches.keys().then(cacheNames => {
