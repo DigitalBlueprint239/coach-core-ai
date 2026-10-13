@@ -1,0 +1,4 @@
+# Preserve imported audit evidence byte-for-byte across platforms.
+outputs/** -text
+outputs/**/*.pdf -diff
+outputs/**/*.png -diff

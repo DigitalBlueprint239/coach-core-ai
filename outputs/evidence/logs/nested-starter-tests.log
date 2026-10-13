@@ -1,0 +1,13 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand
+
+PASS src/App.test.tsx (23.489 s)
+  √ renders learn react link (63 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        50.856 s
+Ran all test suites.
+
