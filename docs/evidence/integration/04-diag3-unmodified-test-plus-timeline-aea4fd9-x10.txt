@@ -1,0 +1,273 @@
+
+Running 20 tests using 1 worker
+
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   1 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   2 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   3 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   4 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   5 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (6.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   6 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   7 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   8 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   9 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (6.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓  10 [desktop-mouse] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (6.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  11 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (7.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  12 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.8s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  13 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  14 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (8.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  15 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (7.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  16 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (6.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  17 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.8s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  18 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (5.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  19 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (4.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  20 [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo (7.9s)
+
+
+  1) [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791906280344",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      168 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      169 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 170 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      171 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      172 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      173 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/diag3.spec.ts:170:124
+
+    Error Context: test-results/diag3-real-route-waypoint--f268b-erty-transactions-undo-redo-tablet-touch-repeat1/error-context.md
+
+  2) [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791906287235",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      168 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      169 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 170 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      171 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      172 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      173 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/diag3.spec.ts:170:124
+
+    Error Context: test-results/diag3-real-route-waypoint--f268b-erty-transactions-undo-redo-tablet-touch-repeat2/error-context.md
+
+  3) [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791906322217",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      168 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      169 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 170 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      171 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      172 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      173 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/diag3.spec.ts:170:124
+
+    Error Context: test-results/diag3-real-route-waypoint--f268b-erty-transactions-undo-redo-tablet-touch-repeat6/error-context.md
+
+  4) [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791906329164",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      168 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      169 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 170 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      171 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      172 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      173 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/diag3.spec.ts:170:124
+
+    Error Context: test-results/diag3-real-route-waypoint--f268b-erty-transactions-undo-redo-tablet-touch-repeat7/error-context.md
+
+  5) [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791906336317",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      168 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      169 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 170 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      171 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      172 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      173 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/diag3.spec.ts:170:124
+
+    Error Context: test-results/diag3-real-route-waypoint--f268b-erty-transactions-undo-redo-tablet-touch-repeat8/error-context.md
+
+  5 failed
+    [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/diag3.spec.ts:152:1 › real route waypoint drag and property transactions undo redo 
+  15 passed (2.6m)
+EXIT=1

@@ -1,0 +1,269 @@
+import { test, expect, type Page } from '@playwright/test';
+import { completePlaybook } from '../fixtures';
+import type { Playbook } from '../../types';
+import fs from 'node:fs';
+import type Konva from 'konva';
+import { getDocument, OPS, ImageKind } from 'pdfjs-dist/legacy/build/pdf.mjs';
+const safety = new WeakMap<Page, {pageErrors:number;aiRequests:number}>();
+
+test.beforeAll(async ({browser}, info) => console.log('Browser evidence', {
+  version: browser.version(), channel: 'msedge', project: info.project.name,
+}));
+
+test.beforeEach(async ({ page }, info) => {
+  const counts = {pageErrors:0,aiRequests:0}; safety.set(page,counts);
+  page.on('pageerror', () => counts.pageErrors++);
+  const fixture = completePlaybook();
+  if (info.title.includes('route waypoint')) {
+    fixture.plays['qa-play-a'].routes[0].treeId = null;
+    fixture.plays['qa-play-a'].routes[0].points = [{x:816,y:276},{x:876,y:288}];
+  }
+  if (info.title.includes('long coaching notes'))
+    fixture.plays['qa-play-a'].notes = Array.from({length:80},(_,i)=>`NOTE-${i}: Keep all coaching instructions intact.`).join('\n');
+  await page.addInitScript(book => {
+    if (!localStorage.getItem('qa-seeded')) {
+      localStorage.setItem('coachcore-playbook', JSON.stringify(book));
+      localStorage.setItem('qa-seeded', 'true');
+    }
+  }, fixture);
+  await page.route('**/*', async route => {
+    const url = new URL(route.request().url());
+    if (/generativelanguage|api\.openai\.com|anthropic/.test(url.hostname) || url.pathname.startsWith('/api/ai/')) counts.aiRequests++;
+    if (url.hostname === '127.0.0.1' || url.protocol === 'data:') await route.continue();
+    else await route.abort();
+  });
+  await page.goto('/');
+  await expect(page.locator('canvas').first()).toBeVisible();
+});
+test.beforeEach(async ({page}) => {
+  await page.evaluate(() => {
+    const w = window as any; w.__t = [];
+    const log = (e: any) => w.__t.push({t: performance.now(), ...e});
+    const orig = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (k: string, v: string) {
+      if (k === 'coachcore-playbook') { try { const r = JSON.parse(v).plays['qa-play-a'].routes[0]; log({ev: 'app-write', depth: r.depthYds, flipped: r.isFlipped, p0x: r.points[0].x}); } catch { /* */ } }
+      return orig.call(this, k, v);
+    };
+    document.addEventListener('click', (e) => { const b = (e.target as Element)?.closest?.('button'); if (b) log({ev: 'click', label: b.getAttribute('aria-label') || b.getAttribute('title') || b.textContent?.trim()}); }, true);
+    const btn = Array.from(document.querySelectorAll('button')).find(b => b.getAttribute('title') === 'Save Now');
+    const statusNode = btn?.parentElement;
+    if (statusNode) {
+      let last = '';
+      new MutationObserver(() => { const txt = statusNode.firstElementChild?.textContent?.trim() || ''; if (txt !== last) { last = txt; log({ev: 'status', txt}); } })
+        .observe(statusNode, {subtree: true, childList: true, characterData: true});
+      log({ev: 'status', txt: statusNode.firstElementChild?.textContent?.trim()});
+    }
+  });
+});
+test.afterEach(async ({page}, info) => {
+  if (info.title.includes('route waypoint')) {
+    const t = await page.evaluate(() => (window as any).__t);
+    fs.mkdirSync('diag3', {recursive: true});
+    fs.writeFileSync(`diag3/${info.project.name}-${info.repeatEachIndex}-${info.status}.json`, JSON.stringify({status: info.status, error: info.error?.message?.split('\n').slice(0,12).join('\n'), timeline: t}, null, 1));
+  }
+});
+test.afterEach(async ({page}) => {
+  expect(safety.get(page)?.pageErrors).toBe(0);
+  expect(safety.get(page)?.aiRequests).toBe(0);
+});
+
+test('long coaching notes continue onto additional PDF pages without truncation', async ({page},info) => {
+  const touch = info.project.name==='tablet-touch';
+  await press(page,'Package',touch); await press(page,'Export',touch);
+  const pending = page.waitForEvent('download'); await press(page,'Export as PDF',touch);
+  const download = await pending;
+  const file = `docs/evidence/core-workflows/${info.project.name}-long-notes.pdf`; await download.saveAs(file);
+  const task = getDocument({data:new Uint8Array(fs.readFileSync(file)),useSystemFonts:true});
+  const pdf = await task.promise; expect(pdf.numPages).toBeGreaterThan(1);
+  let text = '';
+  for(let i=1;i<=pdf.numPages;i++) {
+    const content = await (await pdf.getPage(i)).getTextContent();
+    text += content.items.filter(v=>'str' in v).map(v=>'str' in v?v.str:'').join(' ');
+  }
+  expect(text).toContain('NOTE-0:'); expect(text).toContain('NOTE-79:'); await task.destroy();
+});
+
+async function saved(page: Page): Promise<Playbook> {
+  return page.evaluate(() => {
+    const book = JSON.parse(localStorage.getItem('coachcore-playbook') ?? '{}');
+    const w = window as any; const r = book?.plays?.['qa-play-a']?.routes?.[0];
+    if (w.__t) w.__t.push({t: performance.now(), ev: 'test-read', depth: r?.depthYds, flipped: r?.isFlipped, p0x: r?.points?.[0]?.x});
+    return book;
+  });
+}
+
+test('renders real canvas and complete synthetic play', async ({ page }, info) => {
+  await expect(page.getByRole('button', {name:'Collapse Tools & Inspector'})).toBeInViewport();
+  expect((await saved(page)).plays['qa-play-a'].routes).toHaveLength(1);
+  await page.screenshot({path:`docs/evidence/core-workflows/${info.project.name}-initial.png`});
+});
+
+async function coords(page: Page, x: number, y: number) {
+  return page.evaluate(({x,y}) => {
+    const stage = (window as unknown as {Konva:{stages:Konva.Stage[]}}).Konva.stages[0];
+    const point = stage.getAbsoluteTransform().point({x,y});
+    const box = stage.container().getBoundingClientRect();
+    return {x:point.x+box.left,y:point.y+box.top};
+  }, {x,y});
+}
+async function gesture(page: Page, from: {x:number;y:number}, to: {x:number;y:number}, touch: boolean) {
+  if (touch) {
+    const session = await page.context().newCDPSession(page);
+    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...from,id:1}]});
+    for (let i=1;i<=10;i++) await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:from.x+(to.x-from.x)*i/10,y:from.y+(to.y-from.y)*i/10,id:1}]});
+    await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    await session.detach();
+  } else {
+    await page.mouse.move(from.x,from.y); await page.mouse.down();
+    await page.mouse.move(to.x,to.y,{steps:12}); await page.mouse.up();
+  }
+}
+async function press(page: Page, label: string, touch: boolean) {
+  const button = page.getByRole('button',{name:label,exact:true});
+  if (touch) await button.tap(); else await button.click();
+}
+async function checkpoint(page: Page) {
+  await expect(page.getByText('Unsaved changes',{exact:true}).or(page.getByText('Saved',{exact:true}))).toBeVisible();
+  const save = page.getByRole('button',{name:'Save Now'});
+  if (await save.isEnabled()) await save.click();
+  await expect(page.getByText('Saved',{exact:true})).toBeVisible();
+}
+
+test('native mouse/touch player drag undo redo and reload preserve complete play', async ({page}, info) => {
+  const touch = info.project.name === 'tablet-touch';
+  await press(page,'Collapse Tools & Inspector',touch);
+  const before = (await saved(page)).plays['qa-play-a'];
+  const player = before.players[0];
+  await gesture(page, await coords(page,player.x,player.y), await coords(page,player.x+48,player.y+24),touch);
+  await expect(page.getByRole('button',{name:'Undo (Cmd+Z)'})).toBeEnabled();
+  await checkpoint(page);
+  const moved = (await saved(page)).plays['qa-play-a'];
+  expect(moved.players[0].x).not.toBe(player.x);
+  await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+  expect((await saved(page)).plays['qa-play-a']).toEqual(before);
+  await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page);
+  expect((await saved(page)).plays['qa-play-a']).toEqual(moved);
+  await page.reload(); await expect(page.locator('canvas').first()).toBeVisible();
+  expect((await saved(page)).plays['qa-play-a']).toEqual(moved);
+  await page.screenshot({path:`docs/evidence/core-workflows/${info.project.name}-drag.png`});
+});
+
+test('real route waypoint drag and property transactions undo redo', async ({page}, info) => {
+  const touch = info.project.name === 'tablet-touch';
+  await press(page,'Collapse Tools & Inspector',touch);
+  const before = (await saved(page)).plays['qa-play-a'].routes[0];
+  const select = await coords(page,828,282.4);
+  if (touch) await page.touchscreen.tap(select.x,select.y); else await page.mouse.click(select.x,select.y);
+  const endpoint = before.points[0];
+  await gesture(page, await coords(page,endpoint.x,endpoint.y),await coords(page,endpoint.x+36,endpoint.y+48),touch);
+  await checkpoint(page);
+  const moved = (await saved(page)).plays['qa-play-a'].routes[0]; expect(moved.points).not.toEqual(before.points);
+  await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(before);
+  await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+  await press(page,'Expand Tools & Inspector',touch);
+  await page.getByRole('button',{name:'Design',exact:true}).last().click();
+  await expect(page.getByLabel('Depth (yds)',{exact:true})).toBeVisible();
+  await page.getByLabel('Depth (yds)',{exact:true}).fill('20');
+  await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+  const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+  await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+  await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+  await press(page,'Flip Horizontal',touch); await checkpoint(page);
+  expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+  await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+  expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+  await page.screenshot({path:`docs/evidence/core-workflows/${info.project.name}-route.png`});
+});
+
+test('downloaded single and install PDFs have diagrams and all play labels without changing selection', async ({page},info) => {
+  const touch = info.project.name === 'tablet-touch';
+  await press(page,'Collapse Playbook',touch);
+  // Pan the real field before export; exported geometry must remain complete.
+  await gesture(page,await coords(page,150,100),await coords(page,500,350),touch);
+  await press(page,'Package',touch);
+  await expect(page.getByRole('heading',{name:'Package',exact:true})).toBeVisible();
+  await press(page,'Export',touch);
+  const before = await saved(page);
+  for (const [label, suffix] of [['Export as PDF','play'],['Export Install Book','install']] as const) {
+    const downloadPromise = page.waitForEvent('download'); await press(page,label,touch);
+    const download = await downloadPromise;
+    const path = `docs/evidence/core-workflows/${info.project.name}-${suffix}.pdf`; await download.saveAs(path);
+    const task = getDocument({data:new Uint8Array(fs.readFileSync(path)),useSystemFonts:true});
+    const pdf = await task.promise;
+    expect(pdf.numPages).toBe(suffix === 'install' ? 3 : 1);
+    let text = '', images = 0;
+    for(let n=1;n<=pdf.numPages;n++) {
+      const page = await pdf.getPage(n); const content = await page.getTextContent();
+      text += content.items.filter(i => 'str' in i).map(i => 'str' in i ? i.str : '').join(' ');
+      const ops = await page.getOperatorList();
+      for(let i=0;i<ops.fnArray.length;i++) if(ops.fnArray[i]===OPS.paintImageXObject) {
+        images++;
+        const image = page.objs.get(ops.argsArray[i][0]) as {width:number;height:number;data:Uint8Array;kind:number};
+        expect(image.width).toBe(1440); expect(image.height).toBe(640);
+        const stride = image.kind===ImageKind.RGBA_32BPP ? 4 : 3;
+        let offense=0, defense=0;
+        for(let p=0;p<image.data.length;p+=stride) {
+          if(image.data[p]===1 && image.data[p+1]===115 && image.data[p+2]===178) offense++;
+          if(image.data[p]===222 && image.data[p+1]===143 && image.data[p+2]===5) defense++;
+        }
+        expect(offense).toBeGreaterThan(100); expect(defense).toBeGreaterThan(100);
+      }
+    }
+    expect(text).toContain('QA Complete Alpha');
+    if(suffix==='install') expect(text).toContain('QA Complete Bravo');
+    expect(images).toBe(suffix==='install'?2:1);
+    await task.destroy();
+  }
+  await press(page,'Expand Playbook',touch);
+  expect(await saved(page)).toEqual(before);
+  await expect(page.getByRole('button',{name:'QA Complete Alpha',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.getByRole('button',{name:'Export Install Book'})).toBeEnabled();
+});
+
+test('cancel route drawing preserves existing route; replacement is one undoable action', async ({page},info) => {
+  const touch = info.project.name==='tablet-touch';
+  await press(page,'Collapse Tools & Inspector',touch);
+  const before = (await saved(page)).plays['qa-play-a'];
+  const player = before.players[0];
+  const tap = async (x:number,y:number) => {
+    const p = await coords(page,x,y);
+    if(touch) await page.touchscreen.tap(p.x,p.y); else await page.mouse.click(p.x,p.y);
+  };
+  await press(page,'Draw Route (R)',touch);
+  await tap(player.x,player.y);
+  if(touch) await press(page,'Cancel route',touch); else await page.keyboard.press('Escape');
+  expect((await saved(page)).plays['qa-play-a']).toEqual(before);
+  await tap(player.x,player.y); await tap(player.x+144,player.y+72);
+  if(touch) await press(page,'Finish route',touch);
+  else { await page.getByRole('application').focus(); await page.keyboard.press('Enter'); }
+  await checkpoint(page);
+  const after = (await saved(page)).plays['qa-play-a'];
+  expect(after.players).toEqual(before.players); expect(after.routes).toHaveLength(1);
+  expect(after.routes[0].treeId).toBeNull(); expect(after.routes[0].points).not.toEqual(before.routes[0].points);
+  await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+  expect((await saved(page)).plays['qa-play-a']).toEqual(before);
+});
+
+test('create save reopen and switch complete plays without loss', async ({page},info) => {
+  const touch = info.project.name==='tablet-touch';
+  const original = await saved(page);
+  await press(page,'Add Play',touch);
+  await page.getByLabel('Play Name',{exact:true}).fill('QA New Coach Play');
+  await page.getByLabel('Situation',{exact:true}).fill('Goal line');
+  await page.getByLabel('Tags (comma separated)').fill('QA, Sprint');
+  await press(page,'Create Play',touch); await checkpoint(page);
+  const created = await saved(page);
+  expect(Object.keys(created.plays)).toHaveLength(3);
+  expect(created.plays['qa-play-a']).toEqual(original.plays['qa-play-a']);
+  expect(created.plays['qa-play-b']).toEqual(original.plays['qa-play-b']);
+  const play = Object.values(created.plays).find(p=>p.name==='QA New Coach Play');
+  expect(play?.routes).toEqual([]); expect(play?.players.length).toBeGreaterThan(0);
+  expect(play?.tags).toEqual(['QA','Sprint']);
+  await page.reload();
+  await press(page,'QA New Coach Play',touch);
+  await expect(page.getByRole('button',{name:'QA New Coach Play',exact:true})).toHaveAttribute('aria-pressed','true');
+  await press(page,'QA Complete Bravo',touch);
+  await expect(page.getByRole('button',{name:'QA Complete Bravo',exact:true})).toHaveAttribute('aria-pressed','true');
+  expect(await saved(page)).toEqual(created);
+});

@@ -1,0 +1,126 @@
+
+Running 20 tests using 1 worker
+
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   1 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (11.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   2 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (12.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   3 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   4 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   5 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (11.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   6 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (11.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   7 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (11.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   8 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   9 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (12.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓  10 [desktop-mouse] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  11 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (14.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  12 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  13 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (12.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  14 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (12.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  15 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (12.0s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  16 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (14.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  17 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (14.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  18 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (14.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  19 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  20 [tablet-touch] › tests/browser/diag.spec.ts:113:1 › DIAG real route waypoint property undo (13.7s)
+
+  20 passed (4.9m)
+EXIT=0
