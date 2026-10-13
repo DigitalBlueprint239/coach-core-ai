@@ -20,7 +20,7 @@ npm ci --prefix e2e && npm ci --prefix functions
 npx --prefix e2e playwright install chromium firefox
 npm --prefix e2e run build:app          # emulator build into e2e/.app-build
 # functions emulator config (git-ignored, placeholders, AI OFF):
-printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=http://localhost:3000\n' > functions/.env.local
+printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=["http://localhost:3000"]\n' > functions/.env.local
 printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\n' > functions/.secret.local
 npm --prefix e2e test                    # emulators:exec + Playwright (Chromium + Firefox)
 ```
@@ -35,6 +35,17 @@ npm --prefix e2e test                    # emulators:exec + Playwright (Chromium
 - Per-browser PASS/FAIL/BLOCKED counts appear as check annotations.
 - Results are uploaded as an artifact.
 - `workflow_dispatch` with `repeat_each=10` gives a stability run.
+
+## What the emulators do NOT test
+
+The Functions emulator runs with the debug features `enableCors` and `skipTokenVerification` (firebase-tools `functionsEmulator.js`). Inside the emulator:
+
+- **Any origin** passes the AI gateway's CORS check, so the `COACH_CORE_ALLOWED_ORIGINS` allowlist is not tested.
+- ID-token **signatures** are not verified. Rules-side auth in the Firestore emulator is still enforced.
+
+Both must be checked in staging (staging smoke plan: gateway from an unlisted origin is refused; a forged token is rejected). Real email delivery, real Google OAuth, App Check, quotas under real latency and physical devices are also out of scope here.
+
+`COACH_CORE_ALLOWED_ORIGINS` is a list param: in any `.env` file it must be a JSON array, e.g. `["https://coach-core-mvp-staging-239.web.app"]`. A bare URL fails to parse, and the gateway then rejects every browser origin. This fails closed, but it breaks AI for everyone, so the staging config must use the array form.
 
 ## Status vocabulary
 

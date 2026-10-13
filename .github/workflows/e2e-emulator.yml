@@ -60,7 +60,9 @@ jobs:
       - name: Emulator-only function config (placeholders, AI off)
         run: |
           # Both files are git-ignored and exist only on this runner.
-          printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=http://localhost:3000\n' > functions/.env.local
+          # List params must be a JSON array in .env files; a bare URL fails to
+          # parse and the gateway then refuses every browser origin (fail closed).
+          printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=["http://localhost:3000"]\n' > functions/.env.local
           printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\n' > functions/.secret.local
       - name: Build web app for emulators (demo project)
         run: npm --prefix e2e run build:app
