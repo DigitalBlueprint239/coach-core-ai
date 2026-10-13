@@ -73,7 +73,7 @@ check "no Anthropic endpoint in bundle" "api\.anthropic\.com"
 check "no Gemini SDK in bundle" "GoogleGenAI|@google/genai"
 check "no provider key-shaped strings in bundle" "sk-(proj-|ant-)?[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35}"
 check "no emulator test hooks in a non-emulator bundle" "__coachCoreE2E|e2e-support"
-check "no emulator endpoints in a non-emulator bundle" "127\.0\.0\.1:9099|localhost:9099"
+check "no emulator endpoints in a non-emulator bundle" "[:,](9099|9199|5001|8080)[^0-9]"
 if grep -rqF "coachAI" "$BUILD_DIR"; then pass "bundle calls the coachAI gateway"; else fail "gateway wiring" "coachAI callable not referenced"; fi
 
 js_files=$(find "$BUILD_DIR" -name '*.js' | wc -l | tr -d ' ')

@@ -65,7 +65,13 @@ jobs:
           printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=["http://localhost:3000"]\n' > functions/.env.local
           printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\n' > functions/.secret.local
       - name: Build web app for emulators (demo project)
-        run: npm --prefix e2e run build:app
+        run: |
+          npm --prefix e2e run build:app
+          mkdir -p e2e/test-results
+      - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build)
+        run: |
+          RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/test-results/release-build-manifest.sha256 \
+            bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239
       - name: Run browser tests in the emulator suite
         env:
           REPEAT: ${{ github.event.inputs.repeat_each || '1' }}
