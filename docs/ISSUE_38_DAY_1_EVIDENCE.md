@@ -1,6 +1,6 @@
 # Issue #38 — Day 1 implementation evidence
 
-Date: 2026-10-13. Owner: Codex. Task branch: `codex/issue-38-tests-audit`, based on recovery commit `3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53`. PR targets `recovery/coach-core-mvp-2026`; no merge is authorized by this record.
+Date: 2026-10-13. Owner: Codex. Task branch: `codex/issue-38-tests-audit`, based on recovery commit `3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53`. PR [#40](https://github.com/DigitalBlueprint239/coach-core-ai/pull/40) targets `recovery/coach-core-mvp-2026`; no merge is authorized by this record.
 
 ## Milestone 1 — original reports imported
 
@@ -70,3 +70,20 @@ The workspace-only `node ../issue38-report.cjs` parsed compiler diagnostics, cop
 ## Handoff / readiness
 
 Main test failures assigned here are repaired. Standalone diagnostic classification is complete. Private MVP remains **NO-GO** pending auth and authorization review, safe AI credential handling, and verified critical coaching workflows. Next owners: reviewer for this PR; Claude for independent security/auth review; Codex for a separately scoped standalone theme/icon repair and functional regressions. Keep applications separate and do not deploy from this milestone.
+
+## Publication checks
+
+The recovery base was refetched before publication and remained `3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53`. `.gitattributes` preserves original evidence bytes; PDF/PNG artifacts are marked non-text diffs. The default ignore rules excluded logs, so they were explicitly staged. A credential-pattern scan of all textual outputs returned zero matching files; this is a limited pattern check, not Claude's independent review.
+
+```powershell
+# Default credential helper dry-run stalled and was interrupted; manager override succeeded.
+$env:GIT_TERMINAL_PROMPT='0'
+$env:GCM_INTERACTIVE='Never'
+git -c credential.helper= -c credential.helper=manager push --dry-run origin HEAD:refs/heads/codex/issue-38-tests-audit
+git add .gitattributes docs/COACH_CORE_SHARED_CONTEXT.md docs/MVP_7_DAY_SPRINT.md docs/ISSUE_38_DAY_1_EVIDENCE.md docs/SMART_PLAYBOOK_TYPESCRIPT_CLASSIFICATION.md src/utils/__tests__/logger.test.ts src/components/SmartPlaybook/__tests__/FieldMemo.test.js outputs
+git add -f outputs/evidence/logs outputs/evidence/issue-38
+git -c user.name='Codex' -c user.email='codex@users.noreply.github.com' commit -m 'Repair main test suites and import recovery audit evidence for issue 38'
+git -c credential.helper= -c credential.helper=manager push -u origin HEAD:refs/heads/codex/issue-38-tests-audit
+```
+
+The initial whole-evidence `git diff --cached --check` reported whitespace in original PDF xref records and an original manifest EOF blank line. Those bytes were preserved intentionally. PDF is subsequently marked binary; original manifest formatting is retained. Source/doc repair diffs pass the scoped whitespace check. Auth/rules/AI implementation and lockfiles are absent from the PR diff. PR was created and Issue #38 updated with the GitHub connector. No merge or deployment was performed.
