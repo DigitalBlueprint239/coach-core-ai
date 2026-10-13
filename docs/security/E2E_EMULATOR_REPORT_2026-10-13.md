@@ -50,13 +50,13 @@ Every sign-in is **emulator authentication**: the link is recorded, not emailed,
 | | Unsynced-drafts guard UI (P-12b) | UI | **BLOCKED**: Codex client |
 | **Account switching** | T02 coach A → sign out → coach B on the same profile sees none of A's team; B's team invisible to A | UI | **PASS** ×10 both |
 | | Per-coach Playbook drafts (P-10/P-11) | UI | **BLOCKED**: Codex client (Playbook drafts are still global `localStorage`) |
-| **Cloud save/reopen** | T01 team created in UI is in Firestore and reopens on a fresh device (new browser profile) | UI | **PASS** ×10 both |
+| **Cloud save/reopen** | T01 team created in UI is in Firestore and reopens in a fresh browser profile (empty storage; same browser process, so a "new device" in data terms only) | UI | **PASS** ×10 both |
 | | Playbook play save → reload → reopen (P-15) | UI | **BLOCKED**: Codex client (no cloud save for plays yet) |
-| **Practice-plan edits** | AI01 planner reaches the real gateway function, which refuses with "AI features are turned off" (kill switch); no provider request | UI | **PASS** ×10 both |
+| **Practice-plan edits** | AI01 planner POSTs to the real (emulated) gateway function, which refuses with "AI features are turned off" (kill switch). No provider request **from the browser**. The server-side provider call is not observable here; the functions unit test asserts `provider.calls.length === 0` when AI is disabled (`functions/test/gateway.test.js`) | UI | **PASS** ×10 both |
 | | Plan edit → save → reload identical (P-16) | UI | **BLOCKED**: Codex client (planner has no save/edit); AI generation also gated by founder approval |
-| **Concurrent edits** | C01 two devices of one coach load revision 1: first save accepted, stale second save and revision-less save denied, stored doc = first save | SDK-in-browser (server half) | **PASS** ×10 both |
+| **Concurrent edits** | C01 two devices of one coach load revision 1: first save accepted; stale second save and revision-less save denied; stored document equals device 1's edit with every other field unchanged (full-document equality) | SDK-in-browser (server half; no client transaction yet) | **PASS** ×10 both |
 | | Conflict screen (reload / keep copy / export) (P-14) | UI | **BLOCKED**: Codex client |
-| **Access denial** | T03 coach B can't read, edit, or write plays/plans into coach A's team; A's team unchanged | SDK-in-browser + UI | **PASS** ×10 both |
+| **Access denial** | T03 coach B is denied: reading A's team, an existing A play and an existing A plan; editing all three; creating a play or plan in team A. **Positive control:** the identical payloads succeed in B's own team, so the denials come from ownership, not malformed data. A's documents are unchanged and nothing was injected. B's UI never lists A's team | SDK-in-browser + UI | **PASS** ×10 both |
 | **Other blocked** | Legacy-play import after D10 (P-13); offline replay per session (P-17) | UI | **BLOCKED**: D10 + Codex client |
 | **Film** | all | — | **BLOCKED**: not implemented; D1–D7 |
 | **Physical devices** | iPad / Android tablet | — | **NOT TESTED** (outstanding, Day 6) |
@@ -74,7 +74,18 @@ Every sign-in is **emulator authentication**: the link is recorded, not emailed,
 3. **Emulator blind spots.** The Functions emulator sets `enableCors` and `skipTokenVerification`, so these tests prove **neither** the origin allowlist **nor** ID-token signature checks. Added as staging smoke checks SEC-07 and SEC-08. Firestore rules are fully enforced in the emulator.
 4. **Contract bounds** raised by Codex are resolved in #53 `a4cea1e` (plan name ≤200, gateway notes ≤5000). The CI rules job is green with the new boundary tests, and functions pass 73/73.
 
-## 5. Regression on this branch
+## 5. Independent verification
+
+A separate agent that had not seen this work checked the report against the Checks API and the code at `ea01bd4`. It confirmed every count, browser version, run ID and event, `retries: 0`, fixme-only BLOCKED entries, the hook gating, the demo-only guard, `.env.production`, the bundle-scan checks, the rules (45/45) and functions (73/73) annotations, and that no secrets or real project IDs were committed.
+
+It flagged three tests whose wording claimed more than they asserted:
+- **AI01:** server-side provider not observable from the browser. The wording is corrected above.
+- **T03:** lacked existing-document reads/edits and a positive control.
+- **C01:** used a partial match.
+
+T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated on the new SHA (§2a).
+
+## 6. Regression on this branch
 
 - Web jest: 362/362. The one suite-load failure (FieldMemo) also fails on the base branch and is fixed by #40, which is not in this stack.
 - tsc: 0.

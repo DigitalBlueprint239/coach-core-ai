@@ -1,7 +1,7 @@
 // Account-scoped cloud data that exists in the client today: teams.
 // Requires the Firestore emulator (runs in CI; see e2e/README.md).
 import { test, expect } from '@playwright/test';
-import { resetEmulators, adminTeamsOwnedBy, AUTH_ONLY } from './support/emulator';
+import { resetEmulators, adminTeamsOwnedBy, adminSet, adminGet, AUTH_ONLY } from './support/emulator';
 import {
   coachEmail, skipOnboarding, signInAsBetaCoach, signOutViaUI, createTeamViaUI,
   openTab, storage, waitForE2EHooks, dashboardFor,
@@ -75,8 +75,19 @@ test('E2E-T03 [SDK-in-browser] coach B is denied coach A\'s team and cannot writ
     const hooks = (fn: string, ...args: unknown[]) =>
       pb.evaluate(([f, a2]) => (window as any).__coachCoreE2E[f as string](...(a2 as unknown[])), [fn, args] as const);
     const now = { __ts: new Date().toISOString() };
+    const t = new Date('2026-10-13T12:00:00Z');
+    // Existing team-A records (seeded as admin) and coach B's own team.
+    await adminSet('plays/alpha-play', { name: 'Alpha Mesh', teamId: alphaId, createdBy: uidA, createdAt: t, updatedAt: t, revision: 1 });
+    await adminSet('practicePlans/alpha-plan', { name: 'Alpha Tuesday', teamId: alphaId, createdBy: uidA, createdAt: t, updatedAt: t, revision: 1 });
+    await adminSet('teams/bravo-own', { name: 'Bravo', code: 'BRAVO001', ownerId: uidB, memberIds: [uidB], createdAt: t, updatedAt: t });
 
     expect(await hooks('get', `teams/${alphaId}`)).toEqual({ ok: false, code: 'permission-denied' });
+    expect(await hooks('get', 'plays/alpha-play')).toEqual({ ok: false, code: 'permission-denied' });
+    expect(await hooks('get', 'practicePlans/alpha-plan')).toEqual({ ok: false, code: 'permission-denied' });
+    expect(await hooks('update', 'plays/alpha-play', { name: 'Hijacked', revision: 2, updatedAt: now }))
+      .toEqual({ ok: false, code: 'permission-denied' });
+    expect(await hooks('update', 'practicePlans/alpha-plan', { name: 'Hijacked', revision: 2, updatedAt: now }))
+      .toEqual({ ok: false, code: 'permission-denied' });
     expect(await hooks('update', `teams/${alphaId}`, { name: 'Hijacked', updatedAt: now }))
       .toEqual({ ok: false, code: 'permission-denied' });
     expect(await hooks('set', 'plays/injected', {
@@ -85,11 +96,23 @@ test('E2E-T03 [SDK-in-browser] coach B is denied coach A\'s team and cannot writ
     expect(await hooks('set', 'practicePlans/injected', {
       name: 'Injected', teamId: alphaId, createdBy: uidB, createdAt: now, updatedAt: now, revision: 1,
     })).toEqual({ ok: false, code: 'permission-denied' });
+    // Positive control: the same payloads succeed against B's OWN team, so the
+    // denials above come from team ownership, not from malformed data.
+    expect(await hooks('set', 'plays/bravo-play', {
+      name: 'Injected', teamId: 'bravo-own', createdBy: uidB, createdAt: now, updatedAt: now, revision: 1,
+    })).toEqual({ ok: true });
+    expect(await hooks('set', 'practicePlans/bravo-plan', {
+      name: 'Injected', teamId: 'bravo-own', createdBy: uidB, createdAt: now, updatedAt: now, revision: 1,
+    })).toEqual({ ok: true });
     await expect(dashboardFor(pb, b)).toBeVisible();
     await expect(pb.getByText('Alpha Eagles')).toHaveCount(0);
   } finally {
     await ctxB.close();
   }
-  // A's team is untouched.
+  // A's team and records are untouched; nothing was injected into team A.
   expect(await adminTeamsOwnedBy(uidA)).toEqual([{ id: alphaId, name: 'Alpha Eagles' }]);
+  expect(await adminGet('plays/alpha-play')).toMatchObject({ name: 'Alpha Mesh', revision: 1 });
+  expect(await adminGet('practicePlans/alpha-plan')).toMatchObject({ name: 'Alpha Tuesday', revision: 1 });
+  expect(await adminGet('plays/injected')).toBeNull();
+  expect(await adminGet('practicePlans/injected')).toBeNull();
 });

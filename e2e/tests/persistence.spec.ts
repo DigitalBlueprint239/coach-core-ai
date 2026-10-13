@@ -52,8 +52,13 @@ test('E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second 
   } finally {
     await device2.close();
   }
+  // Exactly device 1's edit is stored; every other field is unchanged.
   const stored = await adminGet('plays/play-c01');
-  expect(stored).toMatchObject({ name: 'Device 1 edit', revision: 2 });
+  expect(stored).toEqual({
+    name: 'Device 1 edit', phase: 'offense', type: 'pass', revision: 2,
+    players: [{ id: 'p1', x: 10, y: 20 }], routes: [],
+    teamId: 'team-c01', createdBy: uid, createdAt: expect.stringMatching(/^2026-10-13T12:00:00(\.0+)?Z$/), updatedAt: expect.any(String),
+  });
 });
 
 const BLOCKED: Array<[string, string]> = [
