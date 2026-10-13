@@ -75,6 +75,15 @@ Every sign-in is **emulator authentication**: the link is recorded, not emailed,
 3. **Emulator blind spots.** The Functions emulator sets `enableCors` and `skipTokenVerification`, so these tests prove **neither** the origin allowlist **nor** ID-token signature checks. Added as staging smoke checks SEC-07 and SEC-08. Firestore rules are fully enforced in the emulator.
 4. **Contract bounds** raised by Codex are resolved in #53 `a4cea1e` (plan name ≤200, gateway notes ≤5000). The CI rules job is green with the new boundary tests, and functions pass 73/73.
 
+## 4a. Open intermittent failure: A09 (emulator Google popup)
+
+- **The failure:** one Chromium failure on integration candidate 2 `c112b68` (check run `115430223852`). The beta-gate heading did not appear within 10 s after submitting in the emulator popup. Firefox passed in the same run.
+- **The app code is identical to #54.** #40 changes only two test files.
+- **No recurrence** in 40 later runs (×10 on PR #54 `f9ba83c` run `38436733211` and on candidate 2 `9b84573` run `38436729577`, both engines: 140/140 each). About 1 failure in about 90 A09 executions overall.
+- **Cause not established.** A09 is the only test that depends on an external host (`apis.google.com`, which the SDK loads for the popup flow), but that is a hypothesis, not a finding.
+- `f9ba83c` adds failure diagnostics: visible headings/alerts, popup state, and a network/console timeline in the CI annotation.
+- **Status: OPEN.** No timeout was raised and no retry was added. It will be classified from the next occurrence.
+
 ## 5. Independent verification
 
 A separate agent that had not seen this work checked the report against the Checks API and the code at `ea01bd4`. It confirmed every count, browser version, run ID and event, `retries: 0`, fixme-only BLOCKED entries, the hook gating, the demo-only guard, `.env.production`, the bundle-scan checks, the rules (45/45) and functions (73/73) annotations, and that no secrets or real project IDs were committed.
