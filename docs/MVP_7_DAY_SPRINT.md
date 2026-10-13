@@ -28,6 +28,9 @@ Run launch checklist. Ship ONLY if evidence passes all security + functional gat
 ## One daily report format (commit or PR in this file)
 Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands | Files changed | Security issues | What remains | Next owner. No unverified percentages.
 
+## Daily report — 2026-10-13 / Claude / Issue #39
+Branch `claude/security-audit-day1` → `recovery/coach-core-mvp-2026` (documentation only). **Passed:** none of the security gates. **Reproduced:** canary builds put `REACT_APP_OPENAI_API_KEY`, `REACT_APP_AI_PROXY_TOKEN` (main, `react-scripts build`) and `GEMINI_API_KEY` (Smart Playbook, `vite build`, ×6) into shipped JS; scratch render test fails with `useAuth must be used within an AuthProvider`; gitleaks over all refs: 24 findings in main = 2 Firebase web keys, 0 in Smart Playbook, no AI secret values. **Blocked:** Firestore/Storage emulator download (403, sandbox egress), so rules are not compiler-verified. **Files changed:** `docs/security/CLAUDE_SECURITY_AUDIT_DAY1.md` (new), this log, shared context. **Security issues:** 4 blockers (F-01..F-04), 2 high, 5 medium, 2 low — see report. **What remains:** owner console checks (report §4); Day 2 file-ownership agreement with Codex in #39 before any rules/auth/AI edits; emulator CI. **Next owner:** human owner for §4 checks; Claude for Day 2 security branch once ownership is agreed; Codex for dependency triage (F-11). No beta readiness claimed.
+
 ## Strict controls
 - Codex and Claude do not share hidden context or update each other's chat memory. Share decisions via this GitHub repository only.
 - Do not add keys, personal player data, customer records, or credentials.
