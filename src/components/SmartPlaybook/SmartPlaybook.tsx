@@ -152,7 +152,7 @@ const SmartPlaybook = () => {
         .catch(() => { if (active) setCloudLoadError('Cloud plays could not be opened. Retry after checking team access.'); });
     }
     return () => { active = false; };
-  }, [user?.uid, currentTeam?.id, currentTeam?.ownerId, importVersion]);
+  }, [user, currentTeam, importVersion]);
 
   // Device drafts are scoped; verified imported plays are loaded from cloud.
   useEffect(() => {
