@@ -33,6 +33,14 @@ Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public re
 - Production data untouched and restricted preview with a rollback plan.
 - Report blocked cases truthfully.
 
+## Security status — Issue #39 / Claude — 2026-10-13
+Report: [`docs/security/CLAUDE_SECURITY_AUDIT_DAY1.md`](security/CLAUDE_SECURITY_AUDIT_DAY1.md) (branch `claude/security-audit-day1`, docs-only PR to recovery). **Security gate: FAIL — private beta blocked.**
+- Blockers: F-01 AI keys compiled into client bundles (OpenAI/proxy token in main, Gemini in Smart Playbook) — canary builds reproduced; F-02 no working sign-in, only anonymous auth, dual auth contexts (crash reproduced); F-03 Storage rules allow any signed-in user to read/write every team's files; F-04 `firestore.rules` uses invalid `else error()` syntax, so deployed rules are unknown.
+- Full git history of both repos scanned (gitleaks + fingerprinting): no OpenAI/Gemini/Anthropic/GitHub secret values ever committed; 2 Firebase web keys (public by design) need API restrictions.
+- Rules-emulator compile/tests BLOCKED in agent sandbox (egress to storage.googleapis.com denied); propose a GitHub Actions emulator workflow on Day 2.
+- Owner actions pending (human only): check hosting env vars for AI keys and rotate if ever set; restrict Firebase web keys / confirm Generative Language API status; confirm enabled sign-in providers and deployed rules. Details in report §4.
+- Independent cross-check of Codex `outputs/SECURITY_FINDINGS.md`: agree with S01–S09, S11, S12, S14, S15; adds anonymous-auth exposure, history scan, Gemini-via-web-key path, youth-data-to-AI privacy, Functions PII.
+
 ## Workflow / ownership
 - Codex = implement and test core feature repairs / integration; Claude = parallel independent security/auth review and test plans, NOT simultaneous edits to Codex-owned files.
 - GitHub issues/PRs and this document are the only canonical status. Each agent reads this file and `AGENTS.md` before work, logs commands + test evidence, notes blockers, and proposes concise updates via PR to this file.
