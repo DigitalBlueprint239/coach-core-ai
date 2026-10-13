@@ -91,6 +91,23 @@ describe('Editable AI practice plans', () => {
   it('owner saves an AI plan with safety considerations and the gateway request id', async () => {
     await assertSucceeds(setDoc(doc(alice(), 'practicePlans', 'ai-1'), plan()));
   });
+  it('stores the lossless coach-ai.v1 plan fields (age group, skill, contact level, hydration breaks)', async () => {
+    await assertSucceeds(setDoc(doc(alice(), 'practicePlans', 'ai-2'), plan({
+      ageGroup: '10U', skillLevel: 'beginner', contactLevel: 'limited_contact', hydrationBreakMinutes: [20, 40],
+      periods: [
+        { kind: 'warmup', name: 'Dynamic', durationMinutes: 10, activities: [{ name: 'High knees', durationMinutes: 5, instructions: 'Lines' }] },
+        { kind: 'period', name: 'Tackling', focus: 'Leverage', durationMinutes: 40, drills: [{ name: 'Shimmy', durationMinutes: 15, setup: 'Cones', instructions: 'Walk-through', coachingPoints: ['Eyes up'], equipment: ['cones'] }] },
+        { kind: 'cooldown', name: 'Stretch', durationMinutes: 10, activities: [] },
+      ],
+    })));
+  });
+  it('rejects an unknown age group, skill or contact level and oversized hydration lists', async () => {
+    const db = alice();
+    await assertFails(setDoc(doc(db, 'practicePlans', 'c1'), plan({ ageGroup: '4U' })));
+    await assertFails(setDoc(doc(db, 'practicePlans', 'c2'), plan({ skillLevel: 'pro' })));
+    await assertFails(setDoc(doc(db, 'practicePlans', 'c3'), plan({ contactLevel: 'tackle_everything' })));
+    await assertFails(setDoc(doc(db, 'practicePlans', 'c4'), plan({ hydrationBreakMinutes: Array.from({ length: 21 }, (_, i) => i) })));
+  });
   it('rejects oversized safety lists, bad request ids and unknown source values', async () => {
     const db = alice();
     await assertFails(setDoc(doc(db, 'practicePlans', 'b1'), plan({ safetyConsiderations: Array.from({ length: 21 }, () => 's') })));
