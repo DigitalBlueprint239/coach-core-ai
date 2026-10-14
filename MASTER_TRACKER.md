@@ -1,6 +1,8 @@
 # Coach Core AI — Master Tracker
 
-## Overall Completion: 80%
+> 2026-10-14 CC-007: current MVP NO-GO; readiness percentage NOT MEASURED (no accepted weighted denominator). Historical feature-complete labels below do not establish independent, staging or physical-device acceptance. Canonical recovery status: docs/COACH_CORE_SHARED_CONTEXT.md and docs/CC_007_STAGING_READINESS.md. Candidate runtime/evidence remains frozen;416/416 implementation tests,TS0,buildPASS and18/18 emulator browser measurements are historical, not new CC-007 tests.
+
+## Historical completion claim: 80% (not current MVP readiness)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -106,3 +108,9 @@ All 8 methods in `src/ai-brain/core/AIBrain.ts` are fully implemented:
 3. **Environment Variable Cleanup** — Migrate remaining `import.meta.env.VITE_*` references to `process.env.REACT_APP_*` for full CRA compatibility.
 
 4. **Legacy File Cleanup** — Remove nested `coach-core-ai/` directories and fix `@ts-nocheck` suppressions in utility files.
+
+## CC-007 — staging-readiness / rollback package — 2026-10-14 / Codex
+
+Separate codex/cc-007-staging-readiness based on frozen60@2cf1a5c. #59c21c0c6/#60 2cf1a5c unchanged; tested ff9b421/da8ebe1/5d04077 retained. Documentation-only; runtime/evidence/security/test trees unchanged. CC_007_STAGING_READINESS.md records PR graph/config/access/evidence owners, future deployment/rollback/data preservation and desktop/tablet checklist. CC_007_DECISION_RECONCILIATION.md supersedes blanket pending directions with settled founder direction + one missing detailed-record provenance handoff, without reopening decisions or editing Claude's packet.
+
+New concrete blocker: Claude-owned auth cleanup removes quarantined offline_operations on sign-out, contrary to stated retention; escalated #39comment6170214736, no auth edits. Old smoke no-A-keys/delete steps conflict with preservation/no-deletion boundary. #59/#60 reviews/comments/threads empty at initial read; rechecked at closeout. No runtime tests repeated for docs; prior416/416,TS0,buildPASS,18/18emulatorbrowser remain scoped historical evidence. Staging/physical/rollback rehearsal NOT MEASURED; independent acceptance PENDING REVIEW. Package review Claude; provenance/acceptance Coach Drew. AIoff/filmblocked/MVP NO-GO, BDN-AEO-001queued. No protected merge/deploy/spend/live change/deletion.

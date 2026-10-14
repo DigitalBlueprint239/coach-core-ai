@@ -1,5 +1,7 @@
 # D10 consent import — implementation and review handoff
 
+> CC-007 current status (2026-10-14): earlier blanket D1–D9-pending statements below are historical and superseded. Coach Drew reports those directions settled; the detailed settled approval record is unavailable in inspected sources. See [decision provenance reconciliation](CC_007_DECISION_RECONCILIATION.md). No new spending, deployment, AI/film activation or deletion approval is inferred. Current MVP NO-GO; original evidence preserved.
+
 2026-10-13. Coach Drew explicitly approved implementation/testing in the Codex task; recorded on Issue #39. No merge, deployment, spending or deletion is approved. D1–D9 remain pending. Claude reviews authorization and activates real-browser/rules P13 acceptance.
 
 ## Implemented

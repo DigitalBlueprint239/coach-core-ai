@@ -1,5 +1,7 @@
 # CC-CODEX-02 / CC-CODEX-03 implementation handoff
 
+> CC-007 current status (2026-10-14): earlier blanket D1–D9-pending statements below are historical and superseded. Coach Drew reports those directions settled; the detailed settled approval record is unavailable in inspected sources. See [decision provenance reconciliation](CC_007_DECISION_RECONCILIATION.md). No new spending, deployment, AI/film activation or deletion approval is inferred. Current MVP NO-GO; original evidence preserved.
+
 2026-10-14. Status: implementation candidate, **MVP NO-GO**. Claude owns independent security and P10–P17 acceptance; Coach Drew owns acceptance. D10 remains approved for implementation/testing only. D1–D9 pending. No merge, deployment, live configuration/data, spending or deletion. BDN-AEO-001 remains queued.
 
 ## Discover / ownership
