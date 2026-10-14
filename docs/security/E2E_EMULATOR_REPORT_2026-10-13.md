@@ -449,3 +449,48 @@ These are emulator results with demo data. They do not establish production beha
 | 19 | ×1 sanity, candidate 5 (not counted) |
 | 20 | Candidate 6 clean preflight |
 | 21 | **Candidate 6 ×10 final annotations** |
+
+### 9.7 Independent verification of §9, test hardening, and candidate 7
+
+A separate agent re-checked §9 against the Checks API, git and the code. It found **no refuted facts**: every SHA, ancestry claim, run, count, duration and hash was confirmed. It raised weaknesses, all addressed or recorded:
+
+1. **A10's "before" evidence was weaker than stated.** On pre-fix code, file 17 failed at the *new* "Signing out" status. That shows the fix is absent, not that the test catches the defect. A10 now:
+   - checks the defect's symptoms first (no "Welcome,", no sign-in email field, no Google button);
+   - runs a **MutationObserver in the old document** that records any sign-in form, including late renders;
+   - re-checks at the end that no later reload happened.
+
+   Against pre-fix `src` (`dda4107`), it **FAILS 3/3 at the sign-in email field**, which is the defect itself (evidence 22). On the fix, the auth suite passes ×5, 45/45 (evidence 23).
+2. **`bodyWatch` was possibly vacuous.** Firestore WebChannel bodies are form-urlencoded, and every marker contains spaces. The watch now matches raw *and* URL-decoded bodies, and CC-L1 uses it. **CC-W0 positive control:** a marker with spaces is detected on both the app's plan save and an SDK WebChannel write.
+
+   The earlier L0, P17 and L1 conclusions did not depend on the watch: each also checks the server through the Admin SDK, which is unaffected.
+3. **New defect R1c (Codex, `src/features/legacy-import/**`).** `declineImport` keeps the pending device claim and A's pending marker. If A clicks "Not now" on an interrupted import, A is never offered again, and every other account is told to return to A. That is a **dead end no account can act on**. Originals are kept. A pending claim whose original team is gone has the same problem. Probe **D10-06d**: it does not prescribe the fix, only that A is re-offered *or* B is offered.
+4. **Not covered by a test:** the malformed-claim fail-closed branch is confirmed by code reading only.
+5. **The 28 m 50 s duration is partly explained.** Earlier ×10 runs had 20–21 failing tests consuming timeouts.
+6. **The `repeat_each=10` dispatch input** is not returned by the REST API. It is inferred from 430 = 43 × 10 and from the reporter's "10/10" counts.
+7. **Low, pre-existing:** `loadOfflineQueue()` parses `offline_operations` without a try/catch at module load, so malformed bytes would crash start-up. Also, if sign-out cleanup ever hung, "Signing out…" has no timeout. No realistic path to that was found.
+
+**Candidate 7 `d12d273`** on `claude/integration-candidate-2026-10-14e` = candidate 6 + acceptance `e9952db`. It adds tests and docs only: `src/`, `functions/`, `firestore.rules`, `package*.json`, `tests/` and `.github/` are identical to `4757eaf`.
+
+**×10, retries 0, run `38638354889`, job `116107889507`** (evidence 24):
+
+| | Chromium 156.0.8078.4 | Firefox 157.0 |
+|---|---|---|
+| PASS / FAIL / BLOCKED / SKIPPED | **440 / 10 / 0 / 0** | **439 / 11 / 0 / 0** |
+| Failures | D10-06d 10/10 (**R1c**) | D10-06d 10/10 (**R1c**); **D10-07 1/10 timeout (H2 recurred)** |
+| Release-build proof | 13/13 | |
+
+All other 44 tests per engine pass 10/10, including hardened A10, CC-W0, CC-L1 and D10-06c.
+
+**H2 recurred** on the same runtime that passed 10/10 at `4757eaf`. Firefox D10-07 has now failed 2 of 40 counted executions: 1/10 at `709e0f4`, 0/10 at `c858d1d`, 0/10 at `4757eaf`, 1/10 at `d12d273`. The annotation records only "Test timeout of 60000ms". The run's results artifact holds the step detail (14-day retention) but cannot be downloaded from this workspace. Cause **OPEN**.
+
+### 9.8 Status after candidate 7
+
+| Item | Status |
+|---|---|
+| R0, R1, R2, R5, L0, CC02/CC03 scenarios, **L1, R1b, FX-03** | **Verified fixed** (10/10 per engine at `4757eaf` and `d12d273`) |
+| **R1c** "Not now" on an interrupted import leaves a dead end | **FAIL 10/10** both engines (D10-06d). Codex repair requested on #64 |
+| **H2** Firefox D10-07 timeout | **OPEN.** Recurred 1/10 at `d12d273` |
+| FX-02 delay; genuine hidden-tab; R3; R4; touch exit | **OPEN / NOT MEASURED** as in §9.5 |
+| Physical devices, staging | **NOT MEASURED** |
+
+**MVP: NO-GO.** The test-only candidates are not to be merged.
