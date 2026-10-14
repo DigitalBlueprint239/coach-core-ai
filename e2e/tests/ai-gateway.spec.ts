@@ -25,7 +25,7 @@ test('E2E-AI01 practice planner offers no AI generation and makes no AI request 
   expect(calls).toEqual([]);
 });
 
-test('E2E-AI01b [SDK-in-browser] the app\'s AI client reaches the emulated gateway, which refuses with ai-disabled (no provider call)', async ({ page }) => {
+test('E2E-AI01b [SDK-in-browser] the app\'s AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)', async ({ page }) => {
   const provider: string[] = [];
   const gateway: number[] = [];
   page.on('request', (r) => { if (/openai\.com|generativelanguage|anthropic\.com/.test(r.url())) provider.push(r.url()); });

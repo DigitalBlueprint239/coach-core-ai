@@ -332,3 +332,21 @@ test('D10-12 [R5] signed-in coach without an owned team: truthful block, no save
   expect(Object.keys(await storage(page)).filter((k) => k.startsWith(`coachcore:v1:${uid}:`) && k.includes(':drafts'))).toEqual([]);
   await expectOriginalsUntouched(page);
 });
+
+test('D10-06c [founder rule: no cross-account exposure / duplicates] while coach A\'s import is unfinished, coach B on the same device is not offered the same plays', async ({ page }) => {
+  await coachWithTeam(page, 'd10oa', 'Alpha Eagles');
+  const net = commitControl(page); await net.ready; net.holdFrom(2);
+  await openPlaybook(page);
+  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
+  await net.waitFor(2); // A has 1 verified copy, copy 2 on the wire
+  await signOutViaUI(page); // A's import is now unfinished
+  net.pass(); net.release();
+  await signInAsBetaCoach(page, coachEmail('d10ob'));
+  await createTeamViaUI(page, 'Bravo Bulldogs');
+  await openPlaybook(page);
+  // Positive anchor: the import region must explain why B cannot import.
+  await expect(importPrompt(page), 'coach B must see a notice about the other account\'s import').toBeVisible();
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' }),
+    'coach B must not be offered device plays coach A started importing').toHaveCount(0);
+  await expectOriginalsUntouched(page);
+});

@@ -37,6 +37,15 @@ const draftsOf = (page: Page, uid: string) => page.evaluate((u) => Object.entrie
   .filter(([k]) => k.startsWith(`coachcore:v1:${u}:`) && k.includes(':drafts:'))
   .map(([k, v]) => ({ key: k, env: JSON.parse(v) })), uid);
 async function plansOf(uid: string) { return adminQuery('practicePlans', 'createdBy', uid); }
+/** Records any request whose body carries `marker` (a replay attempt is visible even if rules would deny it). */
+function bodyWatch(page: Page, marker: string) {
+  const hits: string[] = [];
+  page.on('request', (r) => { try { const b = r.postData(); if (b && b.includes(marker)) hits.push(r.url()); } catch { /* binary */ } });
+  return hits;
+}
+async function docsNamed(name: string) {
+  return [...await adminQuery('plays', 'name', name), ...await adminQuery('practicePlans', 'name', name)];
+}
 async function downloadJson(page: Page, click: () => Promise<void>) {
   const [dl] = await Promise.all([page.waitForEvent('download'), click()]);
   return JSON.parse(await readFile((await dl.path())!, 'utf8'));
@@ -52,6 +61,7 @@ async function newTabSameProfile(context: BrowserContext, email: string) {
 // ---------------------------------------------------------------- P10 / P11
 test('CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B', async ({ page }) => {
   const a = await coach(page, 'p10a');
+  const aUploads = bodyWatch(page, 'A unsynced note');
   await planner(page);
   await field(page, 'Plan.name').fill('A private plan');
   await field(page, 'Plan.notes').fill('A unsynced note');
@@ -73,7 +83,10 @@ test('CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a
   await expect(page.getByRole('button', { name: /Recover draft/ })).toHaveCount(0);
   expect(await draftsOf(page, b.uid)).toEqual([]);
   expect(await plansOf(b.uid)).toEqual([]);
+  expect(await adminQuery('plays', 'createdBy', b.uid)).toEqual([]);
   expect(await plansOf(a.uid)).toEqual([]); // A's unsynced draft was never uploaded by anyone
+  expect(await docsNamed('A private plan')).toEqual([]);
+  expect(aUploads, 'no request ever carried A\'s unsynced note').toEqual([]);
 });
 
 test('CC-P10b [SDK-in-browser] B is denied A\'s saved plan and A\'s team; the same write into B\'s own team is authorized', async ({ page }) => {
@@ -97,7 +110,7 @@ test('CC-P10b [SDK-in-browser] B is denied A\'s saved plan and A\'s team; the sa
   expect((await adminGet(`practicePlans/${aPlan.id}`))?.name).toBe('A saved plan');
 });
 
-test('CC-P11 team switch while a plan save is held: the copy stays in team A, team B sees nothing of it, A\'s draft stays under A\'s team key', async ({ page }) => {
+test('CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A\'s pending draft is kept under A\'s team key', async ({ page }) => {
   const a = await coach(page, 'p11', 'Alpha');
   await createTeamViaUI(page, 'Bravo');
   await planner(page);
@@ -117,8 +130,11 @@ test('CC-P11 team switch while a plan save is held: the copy stays in team A, te
   await expect(field(page, 'Plan.name')).toHaveValue('New practice');
   await expect(page.getByRole('list', { name: 'Saved practice plans' })).not.toContainText('Alpha plan in flight');
   const drafts = await draftsOf(page, a.uid);
-  expect(drafts.every((d) => d.env.scope.teamId === a.teamId || d.env.fields.name !== 'Alpha plan in flight')).toBe(true);
+  // Positive: the stale completion was discarded, so A's pending envelope is still kept under team A.
+  expect(drafts.filter((d) => d.env.fields.name === 'Alpha plan in flight').map((d) => [d.env.scope.teamId, d.key.includes(`:${a.teamId}:`)]))
+    .toEqual([[a.teamId, true]]);
   expect(drafts.some((d) => d.key.includes(`:${bravo}:`) && d.env.fields.name === 'Alpha plan in flight')).toBe(false);
+  expect((await plansOf(a.uid)).every((d) => d.data.teamId === a.teamId)).toBe(true);
 });
 
 // ---------------------------------------------------------------- P12
@@ -204,7 +220,13 @@ test('CC-P14 two tabs, one profile: stale save shows the conflict screen; Export
     await dialog.getByRole('button', { name: 'Reload remote' }).click(); // confirm() accepted by the dialog handler
     await expect(field(t2, 'Plan.name')).toHaveValue('Tab 1 first');
     await expect(field(t2, 'Plan.notes')).toHaveValue('server note');
+    await expect(planStatus(t2)).toHaveText('saved'); // stale draft discarded, editor now at the server revision
     expect((await adminGet(`practicePlans/${base.id}`))).toMatchObject({ name: 'Tab 1 first', notes: 'server note', revision: 3 });
+    // A follow-up edit from the reloaded tab saves cleanly as revision 4 (proves the client holds revision 3).
+    await field(t2, 'Plan.notes').fill('after reload');
+    await savePlan(t2); await expect(planStatus(t2)).toHaveText('saved');
+    await expect(dialog).toHaveCount(0);
+    expect((await adminGet(`practicePlans/${base.id}`))).toMatchObject({ notes: 'after reload', revision: 4 });
   } finally {
     await t2.close();
   }
@@ -314,7 +336,7 @@ test('CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequest
 });
 
 // ---------------------------------------------------------------- P17
-test('CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; a stranded pending envelope of coach A is never uploaded while B is signed in; the legacy global queue is never replayed', async ({ page, context }) => {
+test('CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)', async ({ page, context }) => {
   const a = await coach(page, 'p17a');
   await planner(page);
   await context.setOffline(true);
@@ -326,7 +348,10 @@ test('CC-P17 offline save is captured as pending and never reported saved; recon
   await expect(planStatus(page)).toHaveText('saved', { timeout: 45_000 });
   expect((await plansOf(a.uid)).map((d) => d.data.name)).toEqual(['Offline plan']);
 
-  const legacyQueue = JSON.stringify([{ type: 'create', collection: 'plays', data: { name: 'Legacy queued play', teamId: a.teamId } }]);
+  // A queue entry the rules WOULD accept for A (so a replay would be visible as a document), plus a body watch.
+  const legacyQueue = JSON.stringify([{ type: 'create', collection: 'plays', data: { name: 'Legacy queued play', teamId: a.teamId, createdBy: a.uid,
+    players: [], routes: [], createdAt: '2026-10-01T00:00:00.000Z', updatedAt: '2026-10-01T00:00:00.000Z' } }]);
+  const replayed = bodyWatch(page, 'Legacy queued play');
   await page.evaluate((q) => localStorage.setItem('offline_operations', q), legacyQueue);
   await signOutViaUI(page);
   // A stranded pending envelope that belongs to coach A (same format the app writes).
@@ -341,22 +366,29 @@ test('CC-P17 offline save is captured as pending and never reported saved; recon
   await savePlan(page); await expect(planStatus(page)).toHaveText('saved');
   expect((await plansOf(b.uid)).map((d) => d.data.name)).toEqual(['B plan']);
   expect((await adminQuery('plays', 'createdBy', b.uid))).toEqual([]);
-  expect((await adminQuery('plays', 'teamId', a.teamId))).toEqual([]); // legacy queue not replayed
+  expect(await docsNamed('Legacy queued play')).toEqual([]); // legacy queue not replayed (by A or B)
+  expect(replayed, 'no request carried the quarantined queue entry').toEqual([]);
   expect(await adminGet('practicePlans/stranded-a')).toBeNull(); // A's envelope not uploaded under B
   expect((await plansOf(a.uid)).map((d) => d.data.name)).toEqual(['Offline plan']);
 });
 
 // ---------------------------------------------------------------- legacy data paths
-test('CC-L0 legacy global offline queue: sign-in, reconnect and sign-out leave its bytes identical and nothing is replayed', async ({ page, context }) => {
-  const raw = '[{"type":"create","collection":"plays","data":{"name":"Quarantined","teamId":"t"}}]';
-  await page.goto('/');
-  await page.evaluate((q) => localStorage.setItem('offline_operations', q), raw);
+test('CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)', async ({ page, context }) => {
   const a = await coach(page, 'l0');
-  await context.setOffline(true); await context.setOffline(false);
+  // An entry the rules would ACCEPT for this coach, so any replay would create a document.
+  const raw = JSON.stringify([{ type: 'create', collection: 'plays', data: { name: 'Quarantined marker', teamId: a.teamId, createdBy: a.uid,
+    players: [], routes: [], createdAt: '2026-10-01T00:00:00.000Z', updatedAt: '2026-10-01T00:00:00.000Z' } }]);
+  const replayed = bodyWatch(page, 'Quarantined marker');
+  await page.evaluate((q) => localStorage.setItem('offline_operations', q), raw);
+  await page.reload(); // the legacy service loads its queue at module start
+  await expect(page.getByText(`Welcome, ${a.email}`)).toBeVisible();
+  await context.setOffline(true); await context.setOffline(false); // 'online' would trigger the old replay
+  await planner(page); // exercise the app's normal cloud paths while the queue is present
   await signOutViaUI(page);
   await page.reload();
   expect(await page.evaluate(() => localStorage.getItem('offline_operations'))).toBe(raw);
-  expect(await adminQuery('plays', 'createdBy', a.uid)).toEqual([]);
+  expect(await docsNamed('Quarantined marker')).toEqual([]);
+  expect(replayed).toEqual([]);
 });
 
 test('CC-L1 [founder rule: no deletion] dashboard "Migrate Now" must not delete legacy device data or report success it did not verify', async ({ page }) => {
@@ -366,11 +398,12 @@ test('CC-L1 [founder rule: no deletion] dashboard "Migrate Now" must not delete 
   await page.reload();
   await expect(page.getByText('Migrate Your Data')).toBeVisible();
   await page.getByRole('button', { name: 'Migrate Now' }).click();
-  await expect(page.getByText(/Data migrated successfully|Failed to migrate data/)).toBeVisible();
+  const toast = page.getByText(/Data migrated successfully|Failed to migrate data/);
+  await expect(toast).toBeVisible();
+  const reported = (await toast.first().innerText()).includes('successfully') ? 'success' : 'failure';
   const cloud = (await adminQuery('plays', 'teamId', a.teamId)).filter((d) => d.data.name === 'Old banner play');
   const original = await page.evaluate((t) => localStorage.getItem(`coach-core-ai-${t}`), a.teamId);
-  expect(original, 'legacy blob must be preserved byte-for-byte').toBe(blob);
-  if (await page.getByText('Data migrated successfully').count()) {
-    expect(cloud.length, 'success shown, so the play must be in the cloud').toBe(1);
-  }
+  expect(original, `legacy blob must be preserved byte-for-byte (app reported ${reported})`).toBe(blob);
+  // Success may only be reported when the copy is really in the cloud.
+  expect(reported === 'success' ? cloud.length : 1, 'success shown, so the play must be in the cloud').toBe(1);
 });
