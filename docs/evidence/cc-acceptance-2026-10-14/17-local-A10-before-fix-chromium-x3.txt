@@ -1,0 +1,147 @@
+i  emulators: Starting emulators: auth
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+⚠  hub: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+⚠  logging: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+⚠  auth: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+i  Running script: E2E_AUTH_ONLY=1 npm --prefix e2e run test:browser -- tests/auth.spec.ts -g A10 --repeat-each 3
+
+> test:browser
+> playwright test -c playwright.config.ts tests/auth.spec.ts -g A10 --repeat-each 3
+
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+
+Running 3 tests using 1 worker
+
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8ix9x8-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=KjVheJ5ROklb60AYZU1SqAJK8vdG5gpyAOuGVt_NMB7cerLXOXbLiK&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✘  1 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (11.2s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8ixjf4-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=R_fokptVBlL3ldue0d_hr_vfhxzAqg-p6pHNrPupjNj3uEdD_unOv1&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✘  2 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (11.1s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8ixsxr-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=vYLr9sPVnG8RHvL_ETTddL0YtCmYE4aFnf5JCmafz7uADVPLGwv2jM&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✘  3 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (11.3s)
+
+
+  1) [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('status')
+    Expected substring: "Signing out"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('status') with timeout 10000ms
+      - waiting for getByRole('status')
+
+
+      189 |   await page.waitForFunction(() => typeof (window as any).__releaseCleanup === 'function');
+      190 |   // While the old document is still alive: no form, no buttons, no coaching content.
+    > 191 |   await expect(page.getByRole('status')).toContainText('Signing out');
+          |                                          ^
+      192 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveCount(0);
+      193 |   await expect(page.getByRole('button', { name: 'Continue with Google' })).toHaveCount(0);
+      194 |   await expect(page.getByText(`Welcome, ${email}`)).toHaveCount(0);
+        at /root/coach-core-ai/e2e/tests/auth.spec.ts:191:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('status')
+    Expected substring: "Signing out"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('status') with timeout 10000ms
+      - waiting for getByRole('status')
+
+
+      189 |   await page.waitForFunction(() => typeof (window as any).__releaseCleanup === 'function');
+      190 |   // While the old document is still alive: no form, no buttons, no coaching content.
+    > 191 |   await expect(page.getByRole('status')).toContainText('Signing out');
+          |                                          ^
+      192 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveCount(0);
+      193 |   await expect(page.getByRole('button', { name: 'Continue with Google' })).toHaveCount(0);
+      194 |   await expect(page.getByText(`Welcome, ${email}`)).toHaveCount(0);
+        at /root/coach-core-ai/e2e/tests/auth.spec.ts:191:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('status')
+    Expected substring: "Signing out"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('status') with timeout 10000ms
+      - waiting for getByRole('status')
+
+
+      189 |   await page.waitForFunction(() => typeof (window as any).__releaseCleanup === 'function');
+      190 |   // While the old document is still alive: no form, no buttons, no coaching content.
+    > 191 |   await expect(page.getByRole('status')).toContainText('Signing out');
+          |                                          ^
+      192 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveCount(0);
+      193 |   await expect(page.getByRole('button', { name: 'Continue with Google' })).toHaveCount(0);
+      194 |   await expect(page.getByText(`Welcome, ${email}`)).toHaveCount(0);
+        at /root/coach-core-ai/e2e/tests/auth.spec.ts:191:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/auth-E2E-A10-FX-03-sign-ou-bccf3-den-recovery-data-preserved-chromium-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved 
+    [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved 
+    [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved 
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "E2E_AUTH_ONLY=1 npm --prefix e2e run test:browser -- tests/auth.spec.ts -g A10 --repeat-each 3" exited with code 1

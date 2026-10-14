@@ -182,16 +182,28 @@ test('E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before it
     w.__beforeSignOut = true;
     const original = window.caches.keys.bind(window.caches);
     window.caches.keys = () => new Promise<string[]>((resolve) => { w.__releaseCleanup = () => { void original().then(resolve); }; });
+    // Record if the sign-in form EVER appears in this (old) document, including
+    // a late render after the checks below (verifier follow-up, 2026-10-14).
+    w.__formSeen = false;
+    const check = () => {
+      if ([...document.querySelectorAll('label')].some((l) => /sign-in link by email/i.test(l.textContent || ''))
+        || [...document.querySelectorAll('button')].some((b) => /Continue with Google/.test(b.textContent || ''))) w.__formSeen = true;
+    };
+    check();
+    new MutationObserver(check).observe(document.body, { childList: true, subtree: true, characterData: true });
   });
+  expect(await page.evaluate(() => (window as any).__formSeen), 'observer baseline: no sign-in form on the dashboard').toBe(false);
   await page.getByRole('button', { name: 'Sign out', exact: true }).click();
   // The seeded unsynced draft triggers the recovery guard first (expected).
   await page.getByRole('dialog', { name: 'Unsynced draft recovery' }).getByRole('button', { name: 'Sign out anyway', exact: true }).click();
   await page.waitForFunction(() => typeof (window as any).__releaseCleanup === 'function');
   // While the old document is still alive: no form, no buttons, no coaching content.
-  await expect(page.getByRole('status')).toContainText('Signing out');
+  // The defect's own symptoms are checked first, so pre-fix code fails on them.
+  await expect(page.getByText(`Welcome, ${email}`)).toHaveCount(0);
   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Continue with Google' })).toHaveCount(0);
-  await expect(page.getByText(`Welcome, ${email}`)).toHaveCount(0);
+  await expect(page.getByRole('status')).toContainText('Signing out');
+  expect(await page.evaluate(() => (window as any).__formSeen), 'sign-in form appeared in the old document').toBe(false);
   expect(await page.evaluate(() => (window as any).__beforeSignOut)).toBe(true); // still the old document
   await page.evaluate(() => (window as any).__releaseCleanup());
   await page.waitForFunction(() => !(window as any).__beforeSignOut && document.readyState === 'complete');
@@ -206,4 +218,7 @@ test('E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before it
   expect(s[draftKey]).toBe(draft);              // recovery draft preserved
   expect(s.offline_operations).toBe('[{"op":"q"}]'); // quarantined queue preserved (L0)
   expect(s.currentTeamId).toBeUndefined();      // session key cleared
+  // Still the same document, input intact, after the storage reads.
+  await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+  expect(await page.evaluate(() => (window as any).__afterSignOutDoc)).toBe(true);
 });

@@ -1,0 +1,36 @@
+i  emulators: Starting emulators: auth
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+⚠  hub: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+⚠  logging: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+⚠  auth: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+i  Running script: E2E_AUTH_ONLY=1 npm --prefix e2e run test:browser -- tests/auth.spec.ts -g A10 --repeat-each 5
+
+> test:browser
+> playwright test -c playwright.config.ts tests/auth.spec.ts -g A10 --repeat-each 5
+
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+
+Running 5 tests using 1 worker
+
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8izv5s-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=ETPwkaA3QX_VwoRSub-Wk5m3XSkFbJBzcncE0wREVgEmQqWERbEV_e&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  1 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.5s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8izwym-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=_ZCiG_ZgmFf9epXY6gkuI-GVQtFT-8i8n9OPD_X-yFMD4lkTr0RTa0&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  2 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.5s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8izytv-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=7e8CFmx5e9ylm3zDVdmy3sLTynjpORSBZnvfFtcRPvd7BqRNEM0hDF&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  3 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.5s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8j00nr-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=9DyaUNkvMUdT_CEXr33BbFZC6o80ZHGtzM0M1P-vzhX7UlQYqqe16e&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  4 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.4s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8j02kg-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=aSBJIeoCkCJ0iS0EekDSsvFdmYNoACtUVK26XZnJ4IbC0Ewz1nkXTp&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  5 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.5s)
+
+  5 passed (12.4s)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
