@@ -107,3 +107,13 @@ export function commitControl(page: Page) {
     waitFor: (n: number) => new Promise<void>((resolve) => { if (seen >= n) resolve(); else waiters.push({ n, resolve }); }),
   };
 }
+
+/** Click "Import plays" and wait for success (prompt gone) or a visible error; a failure names the error. */
+export async function acceptImport(page: Page): Promise<void> {
+  const prompt = importPrompt(page);
+  await prompt.getByRole('button', { name: 'Import plays' }).click();
+  const alert = prompt.getByRole('alert');
+  await expect(prompt.or(alert).first()).toBeVisible().catch(() => undefined);
+  await expect.poll(async () => (await prompt.count()) === 0 || (await alert.count()) > 0, { timeout: 45_000 }).toBe(true);
+  if (await alert.count()) throw new Error(`Import showed an error instead of completing: "${(await alert.innerText()).trim()}"`);
+}

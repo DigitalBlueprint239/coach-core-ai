@@ -11,7 +11,7 @@ import {
 } from './support/app';
 import {
   LEGACY_PLAYS, seedDevice, deviceState, expectOriginalsUntouched, openPlaybook, importPrompt,
-  adminCopies, libraryNames, commitControl, expectedCopyId, decisionKey,
+  adminCopies, libraryNames, commitControl, expectedCopyId, decisionKey, acceptImport,
 } from './support/legacy';
 
 test.beforeEach(async ({ context }) => {
@@ -49,6 +49,13 @@ function expectFaithfulCopies(copies: Awaited<ReturnType<typeof adminCopies>>, u
   }
 }
 
+test('D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id', async ({ page }) => {
+  await coachWithTeam(page, 'd10z', 'Alpha Eagles');
+  await waitForE2EHooks(page);
+  const r = await page.evaluate(() => (window as any).__coachCoreE2E.txGet('plays/legacy_v1_nn_missing'));
+  expect(r, 'transactional read of a missing id (what the import does first)').toEqual({ ok: true, data: 'missing' });
+});
+
 test('D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision only after verification, originals untouched', async ({ page }) => {
   const { uid, teamId } = await coachWithTeam(page, 'd10a', 'Alpha Eagles');
   await openPlaybook(page);
@@ -56,8 +63,7 @@ test('D10-01 accept: explicit consent copies every play exactly into the selecte
   await expect(prompt).toContainText('Import 3 plays saved on this device into Alpha Eagles for this account?');
   expect(await adminCopies(uid), 'no import before consent').toEqual([]);
 
-  await prompt.getByRole('button', { name: 'Import plays' }).click();
-  await expect(prompt).toHaveCount(0);
+  await acceptImport(page);
   await expect(page.getByRole('alert')).toHaveCount(0);
 
   expectFaithfulCopies(await adminCopies(uid), uid, teamId);
@@ -84,8 +90,7 @@ test('D10-02 decline: "Not now" writes nothing to the cloud and leaves originals
 test('D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten', async ({ page }) => {
   const { uid, teamId } = await coachWithTeam(page, 'd10c', 'Alpha Eagles');
   await openPlaybook(page);
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
   const first = await adminCopies(uid);
   expect(first).toHaveLength(3);
 
@@ -93,8 +98,7 @@ test('D10-03 repeat import is idempotent: same IDs, no duplicates, existing copi
   await page.evaluate((k) => localStorage.removeItem(k), decisionKey(uid));
   await page.reload();
   await openPlaybook(page);
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
   const second = await adminCopies(uid);
   expect(second.map((c) => [c.id, c.updateTime]).sort()).toEqual(first.map((c) => [c.id, c.updateTime]).sort());
   expectFaithfulCopies(second, uid, teamId);
@@ -115,8 +119,7 @@ test('D10-04 partial failure: commits fail mid-batch -> visible error, no decisi
   await expectOriginalsUntouched(page);
 
   net.pass();
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
   const done = await adminCopies(uid);
   expectFaithfulCopies(done, uid, teamId);
   const kept = done.find((c) => c.id === partial[0].id)!;
@@ -144,8 +147,7 @@ test('D10-05 a copy changed elsewhere is never overwritten; import stops without
 test('D10-06 two coaches, one browser profile: coach B never sees or reads coach A\'s imported copies', async ({ page }) => {
   const a = await coachWithTeam(page, 'd10fa', 'Alpha Eagles');
   await openPlaybook(page);
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
   await signOutViaUI(page);
 
   const b = coachEmail('d10fb');
@@ -164,8 +166,7 @@ test('D10-06 two coaches, one browser profile: coach B never sees or reads coach
 test('D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B', async ({ page }) => {
   await coachWithTeam(page, 'd10ga', 'Alpha Eagles');
   await openPlaybook(page);
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
   await signOutViaUI(page);
 
   await signInAsBetaCoach(page, coachEmail('d10gb'));
@@ -239,8 +240,7 @@ test('D10-08 account switch while a copy is in flight: no copy is ever attribute
 test('D10-09 [SDK-in-browser] cross-team denial with an authorized positive control', async ({ page, browser }) => {
   const a = await coachWithTeam(page, 'd10ka', 'Alpha Eagles');
   await openPlaybook(page);
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
 
   const ctxB = await browser.newContext({ serviceWorkers: 'block' });
   try {
@@ -288,8 +288,7 @@ test('D10-10 no acknowledgement until every copy verifies: with the last copy he
 test('D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact', async ({ page, browser }) => {
   const a = await coachWithTeam(page, 'd10m', 'Alpha Eagles');
   await openPlaybook(page);
-  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await expect(importPrompt(page)).toHaveCount(0);
+  await acceptImport(page);
 
   const fresh = await browser.newContext({ serviceWorkers: 'block' });
   try {
