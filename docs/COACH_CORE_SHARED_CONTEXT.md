@@ -25,6 +25,9 @@ Ship a **restricted private coaching MVP** by 2026-10-20 if and only if safety a
 5. Mobile/tablet usable for core flows.
 Defer film AI, NIL, blockchain, advanced analytics, billing, and broad public release.
 
+**AI decision (founders, 2026-10-13):** OpenAI is the only active provider for the MVP, called only through the authenticated `coachAI` Cloud Function (contract `coach-ai.v1`). No Gemini, no Anthropic API, no coach-facing model picker. Details: `docs/security/CLAUDE_SECURITY_DAY2.md` §5.
+**Security status (Claude, Day 2, issues #43/#46):** F-01..F-04 fixed in code on `claude/day2-security-gateway` with no real credentials. CI evidence: rules emulator 30/30, functions gateway 69/69, web auth 21/21, bundle credential scan 10/10. Deployment-level gate still BLOCKED on founder actions (old-key check, web-key restriction, staging auth setup, fresh OpenAI key in Secret Manager, approved staging deploy). MVP remains NO-GO.
+
 ## Gates
 - Reproducible builds + typecheck; no unexplained high-severity errors in shipped surface.
 - Passing main test suite including the 2 failures and unloaded suite, plus critical feature regression tests.

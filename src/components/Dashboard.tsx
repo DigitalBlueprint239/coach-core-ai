@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
-import { LoadingSpinner, useToast } from './index';
+import { LoadingSpinner } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
@@ -10,34 +10,18 @@ import ErrorBoundary from './common/ErrorBoundary';
 // import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
 const Dashboard: React.FC = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, logout } = useAuth();
   const { currentTeam } = useTeam();
-  const { showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
 
   if (authLoading) {
     return <LoadingSpinner text="Loading your coaching dashboard..." />;
   }
 
+  // AuthGate (App.tsx) only renders the dashboard for a verified beta
+  // session; this guard keeps the component safe if it is mounted elsewhere.
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
-          <h1 className="text-3xl font-bold text-center text-gray-900 mb-6">
-            Coach Core AI
-          </h1>
-          <p className="text-gray-600 text-center mb-8">
-            The ultimate sports coaching platform. Sign in to get started.
-          </p>
-          <button
-            onClick={() => showSuccess('Authentication coming soon!')}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const tabs = [
@@ -66,6 +50,13 @@ const Dashboard: React.FC = () => {
               <span className="text-sm text-gray-600">
                 Welcome, {user.email}
               </span>
+              <button
+                type="button"
+                onClick={() => { void logout(); }}
+                className="text-sm text-gray-700 border border-gray-300 rounded px-3 py-1 hover:bg-gray-50"
+              >
+                Sign out
+              </button>
             </div>
           </div>
         </div>
