@@ -54,5 +54,10 @@
     "passed": 13,
     "failed": 0
   },
-  "independentAcceptance": "Claude candidate6 PASS; hardenedcandidate7 R1cFAIL/H2open; local Codex-run failures retained"
+  "independentAcceptance": "Claude candidate6 PASS; hardenedcandidate7 R1cFAIL/H2open; local Codex-run failures retained",
+  "credentialCanary": {
+    "passed": 12,
+    "failed": 0,
+    "exit": 0
+  }
 }

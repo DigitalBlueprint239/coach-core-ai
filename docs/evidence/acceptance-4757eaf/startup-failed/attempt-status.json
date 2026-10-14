@@ -1,0 +1,7 @@
+{
+  "status": "INTERRUPTED",
+  "candidate": "4757eaffad31664dae727c34355aca8109fcc63c",
+  "reason": "Functions discovery failed at10000ms; gateway unavailable; not acceptance",
+  "rawEvidence": "Retained in this original directory; never overwritten",
+  "stoppedUTC": "2026-10-14T21:11:44.552885+00:00"
+}
