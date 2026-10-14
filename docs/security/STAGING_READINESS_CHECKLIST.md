@@ -1,6 +1,6 @@
 # Staging readiness checklist (before requesting a staging deploy)
 
-Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-14: D10 acceptance FAIL, CC02/CC03 not implemented). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-14 afternoon: CC02/CC03 and the D10 repairs — implementation delivered; independent acceptance pending (×10 in progress); open defect L1). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
 
 ## 1. Exact PR/commit combination
 
@@ -111,7 +111,18 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 | G6 | Release-build proof re-run with the real staging web config at deploy time; manifest kept | deployer | prepared |
 | G7 | Staging config: `COACH_CORE_AI_ENABLED=false`, `COACH_CORE_ALLOWED_ORIGINS` as a JSON array, AI global cap 50/day | deployer | prepared |
 | G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
-| G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex | ✗ (none landed) |
+| G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex / Claude | ⚠ **implementation delivered (#59/#60); independent acceptance pending.** Real tests CC-P10..P17 in `claude/cc-acceptance-2026-10-14`, ×1 PASS both engines |
 | G10 | Shutdown switch: approve build before film upload, or accept the exposure in writing | Coach Drew | open decision |
-| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5) / Claude (re-test) | ✗ **FAIL**: R0 rules blocker fixed (#53 `51760a4`). R1/R2 fail 10/10 on both engines; R5 is a data-loss finding. See the E2E report §7 (PR #56) |
-| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ✗ not implemented (7 BLOCKED) |
+| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5) / Claude (re-test) | ⚠ **implementation delivered (#59); independent acceptance pending.** History: FAIL on 2026-10-14 (R1/R2 10/10, report §7, PR #56, kept as evidence). Re-test ×1 on `12e386f`: D10-06b (R1), D10-07b (R2), D10-12 (R5) PASS on both engines; ×10 in progress |
+| G13 | Legacy device data never deleted: quarantined `offline_operations` on sign-out (#61 escalation), Migration Banner (L1) | Claude (auth) / Codex (banner) | ⚠ Sign-out: **fixed** by Claude in `12e386f` (CC-L0 PASS). Banner: **L1 FAIL** on both engines; bounded repair requested on #59 |
+| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ⚠ **implementation delivered; independent acceptance pending.** ×1 PASS; ×10 in progress |
+
+## Tracked limitations (kept open until closed with evidence)
+
+| Item | Owner | Status |
+|---|---|---|
+| R3: "Not now" on the D10 prompt is a permanent decline (no re-entry point) | Codex / Coach Drew | OPEN (disclosed limitation) |
+| R4: `D10_APPROVED = true` build constant, so the import prompt ships in release builds | Codex / deploy decision | OPEN |
+| Firefox instability: H1 team-creation toast (3 occurrences 2026-10-14 morning); Codex's P14 background-tab reload timeout | Claude / Codex | OPEN; diagnostics in place |
+| Standalone Playbook touch exit (Windows, PR #3 repo) | Codex | OPEN |
+| Physical tablets/phones; staging real auth, CORS and token checks (RA-*, SEC-07..10) | Coach Drew / Claude | NOT MEASURED (requires approved staging) |
