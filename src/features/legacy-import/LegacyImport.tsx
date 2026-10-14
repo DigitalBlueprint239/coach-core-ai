@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { D10_APPROVED, decisionKey, readLegacy, importLegacy, declineImport, ImportBackend } from './import-legacy';
+import { D10_APPROVED, decisionKey, readLegacy, importLegacy, declineImport, importNotice, ImportBackend } from './import-legacy';
 import { firebaseImport } from './firebase-import';
 export default function LegacyImport({ uid, teamId, teamName, backend = firebaseImport, onImported }: {
   uid: string; teamId: string; teamName: string; backend?: ImportBackend; onImported?: () => void;
@@ -12,7 +12,7 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
   useEffect(() => {
     current.current = session;
     setCount(0); setError(''); setBusy(false);
-    try { if (D10_APPROVED && !localStorage.getItem(decisionKey(uid))) setCount(readLegacy(localStorage).length); }
+    try { const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (D10_APPROVED && !localStorage.getItem(decisionKey(uid))) setCount(readLegacy(localStorage).length); }
     catch { setError('Device library cannot be imported safely. Originals preserved.'); }
     return () => { current.current = ''; };
   }, [uid, teamId]);
@@ -20,7 +20,7 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
   const accept = async () => {
     setBusy(true); setError('');
     try {
-      await importLegacy(localStorage, { uid, teamId }, () => current.current === session, backend);
+      await importLegacy(localStorage, { uid, teamId, teamName }, () => current.current === session, backend);
       if (current.current === session) { setCount(0); onImported?.(); }
     } catch { if (current.current === session) setError('Import not completed. Original plays preserved. Retry or review your team access.'); }
     finally { if (current.current === session) setBusy(false); }

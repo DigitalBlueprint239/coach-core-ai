@@ -1,13 +1,28 @@
 export const D10_APPROVED = true; // Coach Drew, 2026-10-13: implementation/testing only.
 export const LEGACY_KEY = 'smartPlaybook_plays';
 export const decisionKey = (uid: string) => `coachcore:v1:${uid}:legacyImportDecision`;
+export const CLAIM_KEY = 'coachcore:v1:legacyImportClaim';
+export const pendingKey = (uid: string) => `coachcore:v1:${uid}:legacyImportPending`;
+export function importNotice(storage: Storage, session: ImportSession): string {
+  const claim = storage.getItem(CLAIM_KEY);
+  if (claim) {
+    const value = JSON.parse(claim);
+    if (value.uid !== session.uid) return 'Plays on this device were already imported by another account.';
+  }
+  const pending = storage.getItem(pendingKey(session.uid));
+  if (pending) {
+    const value = JSON.parse(pending);
+    if (value.teamId !== session.teamId) return `An import into ${value.teamName || value.teamId} was started and not finished. Switch to ${value.teamName || value.teamId} to finish it.`;
+  }
+  return '';
+}
 export interface LegacyPlay {
   id: string; name: string; phase: string; type: string;
   createdAt?: string; updatedAt?: string;
   players: Array<{id:string; x:number; y:number; position:string; number:number; [key:string]:unknown}>;
   routes: Array<{id:string; playerId:string; points:Array<{x:number;y:number}>; type:string; color?:string; [key:string]:unknown}>;
 }
-export interface ImportSession { uid: string; teamId: string }
+export interface ImportSession { uid: string; teamId: string; teamName?: string }
 export interface ImportBackend {
   copy: (session: ImportSession, play: LegacyPlay) => Promise<string>;
   read: (session: ImportSession, id: string) => Promise<LegacyPlay>;
@@ -54,8 +69,11 @@ export function declineImport(storage: Storage, session: ImportSession) {
 }
 export async function importLegacy(storage: Storage, session: ImportSession, stillCurrent: () => boolean, backend: ImportBackend) {
   if (!D10_APPROVED || !stillCurrent()) throw new Error('Account or team changed.');
+  const notice = importNotice(storage, session);
+  if (notice) throw new Error(notice);
   if (storage.getItem(decisionKey(session.uid))) return [];
   const plays = readLegacy(storage);
+  if (!storage.getItem(pendingKey(session.uid))) storage.setItem(pendingKey(session.uid), JSON.stringify({teamId:session.teamId,teamName:session.teamName || session.teamId,startedAt:new Date().toISOString()}));
   const verified: string[] = [];
   for (const play of plays) {
     if (!stillCurrent()) throw new Error('Account or team changed. Reopen under the original account to resume.');
@@ -67,6 +85,8 @@ export async function importLegacy(storage: Storage, session: ImportSession, sti
     verified.push(id);
   }
   if (!stillCurrent()) throw new Error('Account or team changed.');
+  storage.setItem(CLAIM_KEY, JSON.stringify({uid:session.uid,teamId:session.teamId,ids:verified,at:new Date().toISOString()}));
   storage.setItem(decisionKey(session.uid), JSON.stringify({ decision: 'imported', teamId: session.teamId, ids: verified }));
+  storage.removeItem(pendingKey(session.uid));
   return verified;
 }

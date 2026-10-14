@@ -729,7 +729,7 @@ const WrappedSmartPlaybook = () => {
   const { currentTeam } = useTeam();
   return (
     <AIProvider>
-      <SmartPlaybook key={`${user?.uid || 'anonymous'}:${currentTeam?.id || 'none'}`} />
+      {user && !user.isAnonymous && currentTeam?.ownerId === user.uid ? <SmartPlaybook key={`${user.uid}:${currentTeam.id}`} /> : <p role="alert">Select or create your authorized team before editing plays. No play has been saved.</p>}
     </AIProvider>
   );
 };
