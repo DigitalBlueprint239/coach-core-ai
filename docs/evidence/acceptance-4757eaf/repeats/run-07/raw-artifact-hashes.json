@@ -1,0 +1,20 @@
+[
+  {
+    "path": "artifacts\\legacy-import-D10-01-accep-6da41--D10-10-originals-untouched-firefox\\error-context.md",
+    "sha256": "7b937d9efbb8a52d0b5674ee29b613015c068bf57ce283ca000a0917510c73ea",
+    "bytes": 18019,
+    "rawAvailability": "Retained locally; raw token-bearing ZIP not published"
+  },
+  {
+    "path": "artifacts\\legacy-import-D10-01-accep-6da41--D10-10-originals-untouched-firefox\\test-failed-1.png",
+    "sha256": "9b4a0932e38ff6157f762c9ed60bcf110eb69eaa242c88a022312d8f3ba408a3",
+    "bytes": 30613,
+    "rawAvailability": "Retained locally; raw token-bearing ZIP not published"
+  },
+  {
+    "path": "artifacts\\legacy-import-D10-01-accep-6da41--D10-10-originals-untouched-firefox\\trace.zip",
+    "sha256": "10173a08c80a23d294a8b2213a8d0f32a6bdbdfa2f662ac6e4d192053b06b50e",
+    "bytes": 2283950,
+    "rawAvailability": "Retained locally; raw token-bearing ZIP not published"
+  }
+]

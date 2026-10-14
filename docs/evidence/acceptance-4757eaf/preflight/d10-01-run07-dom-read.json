@@ -1,0 +1,9 @@
+{
+  "run": "run-07",
+  "callId": "igzc@3561",
+  "method": "evalOnSelectorAll",
+  "startTime": 596241.205,
+  "endTime": 596310.611,
+  "selector": "internal:role=heading[name=\"Play Library\"i] >> xpath=.. >> .font-semibold",
+  "result": null
+}

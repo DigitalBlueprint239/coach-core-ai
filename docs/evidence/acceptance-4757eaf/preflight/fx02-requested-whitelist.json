@@ -1,0 +1,28 @@
+{
+  "sha256": "dcc5b745bff5f31d8ff7659a89dc038dcb6633785b7c447e32286f028382cbb0",
+  "callId": "fcwl@56",
+  "logWindowMs": [
+    113977,
+    162363
+  ],
+  "messages": [
+    {
+      "time": 113977.692,
+      "message": "waiting for getByRole('button', { name: 'Email me a sign-in link' })"
+    },
+    {
+      "time": 162362.19,
+      "message": "  locator resolved to <button type=\"submit\" class=\"w-full border border-blue-600 text-blue-700 py-2 px-6 rounded-lg hover:bg-blue-50 disabled:opacity-50\">Email me a sign-in link</button>"
+    }
+  ],
+  "beforeSnapshotTimestampMs": 162323.134,
+  "beforeSnapshotPhase": "before",
+  "submitButtons": [
+    {
+      "text": "Email me a sign-in link",
+      "disabledAttributePresent": false
+    }
+  ],
+  "decoder": "Playwright1.64 snapshotRenderer/snapshotNodes postorder subtree references; original archive unchanged",
+  "limitation": "Before snapshot is captured late at162323.134ms; does not prove continuous DOM presence through48sec stall. No bodies or tokens exported."
+}

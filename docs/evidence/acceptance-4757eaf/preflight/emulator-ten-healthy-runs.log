@@ -1,0 +1,57 @@
+i  emulators: Starting emulators: auth, functions, firestore
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  functions: Watching "C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-acceptance-verification\functions" for Cloud Functions...
++  functions: Using node@22 from host.
+i  functions: Loaded environment variables from functions\.env.local
+Serving at port 8392
+
+Prompting for parameters for codebase default:
+
+COACH_CORE_OPENAI_MODEL: OpenAI model id used by the coaching gateway. Confirm the OpenAI project has access before enabling AI in an environment.
+
+
+
+i  functions: Loaded environment variables from functions\.env.local
+i  functions: Writing new parameter values to disk: functions\.env.local
++  functions: Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.
++  functions[us-central1-coachAI]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).
++  functions[us-central1-createUserProfile]: firestore function initialized.
++  functions[us-central1-onTeamMemberAdded]: firestore function initialized.
++  functions[us-central1-onPracticePlanCreated]: firestore function initialized.
++  functions[us-central1-onPlayCreated]: firestore function initialized.
++  functions[us-central1-trackUserActivity]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).
+i  functions[us-central1-cleanupOldNotifications]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[us-central1-healthCheck]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).
+i  Running script: node ../acceptance-4757eaf-healthy-repeat.mjs
+node:fs:1370
+  const result = binding.mkdir(
+                         ^
+
+Error: ENOENT: no such file or directory, mkdir 'C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\acceptance-4757eaf-healthy-runs\run-01'
+    at Object.mkdirSync (node:fs:1370:26)
+    at file:///C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/acceptance-4757eaf-healthy-repeat.mjs:13:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'mkdir',
+  path: 'C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\acceptance-4757eaf-healthy-runs\\run-01'
+}
+
+Node.js v22.23.1
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "node ../acceptance-4757eaf-healthy-repeat.mjs" exited with code 1

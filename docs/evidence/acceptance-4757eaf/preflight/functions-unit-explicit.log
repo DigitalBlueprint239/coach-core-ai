@@ -1,0 +1,126 @@
+▶ beta-access script
+  ✔ requires an explicit project and a valid email (2.7934ms)
+  ✔ refuses the production project without an explicit override (0.4115ms)
+  ✔ grant sets beta and keeps other claims (2.5907ms)
+  ✔ revoke removes beta and revokes refresh tokens (0.5452ms)
+✔ beta-access script (8.4448ms)
+▶ identity (T13, F-02)
+  ✔ rejects unauthenticated calls (202.1633ms)
+  ✔ rejects anonymous users even with beta + verified claims (8.4724ms)
+  ✔ rejects unverified email (1.4249ms)
+  ✔ uses the LIVE beta claim, so removal works before the token expires (9.0434ms)
+  ✔ rejects disabled accounts (29.1154ms)
+  ✔ rejects revoked sessions (tokens issued before revocation) (1.0019ms)
+  ✔ rejects deleted accounts (14.0337ms)
+✔ identity (T13, F-02) (276.5769ms)
+▶ kill switch
+  ✔ refuses every request when AI is disabled, before any other work (9.0393ms)
+✔ kill switch (23.3951ms)
+▶ tenancy (T14)
+  ✔ rejects a request for another coach's team (127.0392ms)
+  ✔ gives the same answer for a team that does not exist (18.9079ms)
+✔ tenancy (T14) (159.749ms)
+▶ contract validation
+  ✔ rejects wrong schema version (50.7297ms)
+  ✔ rejects unknown task (1.6276ms)
+  ✔ rejects extra envelope field (65.4628ms)
+  ✔ rejects client-supplied model (29.0527ms)
+  ✔ rejects bad team id (45.8002ms)
+  ✔ rejects missing data (1.2537ms)
+  ✔ rejects input with duration over 180 (14.667ms)
+  ✔ rejects input with roster field (16.2852ms)
+  ✔ rejects input with unknown age group (75.5023ms)
+  ✔ rejects input with too many drills (40.7448ms)
+  ✔ rejects input with oversized question (37.9978ms)
+  ✔ rejects input with system prompt override (0.8526ms)
+✔ contract validation (420.0891ms)
+▶ quotas and cost controls
+  ✔ maps user_daily to resource-exhausted without calling the provider (20.1324ms)
+  ✔ maps user_burst to resource-exhausted without calling the provider (1.1343ms)
+  ✔ maps global_daily to resource-exhausted without calling the provider (0.7748ms)
+  ✔ caps output tokens per task and sets a timeout (526.1888ms)
+✔ quotas and cost controls (603.3594ms)
+▶ successful coaching tasks (mocked provider)
+  ✔ returns a versioned practice_plan envelope (151.144ms)
+  ✔ returns a versioned drill_recommendations envelope (1.6619ms)
+  ✔ returns a versioned coach_assistant envelope (77.8039ms)
+  ✔ flags a practice plan whose schedule does not match the request (26.9543ms)
+✔ successful coaching tasks (mocked provider) (258.6174ms)
+▶ privacy minimization (F-09)
+  ✔ redacts emails, phones, links, handles and dates before the provider sees them (16.8235ms)
+  ✔ sends a hashed safety id, never the uid (54.5204ms)
+✔ privacy minimization (F-09) (112.1306ms)
+▶ provider failures never leak details
+  ✔ maps timeout to deadline-exceeded (47.6529ms)
+  ✔ maps rate_limited to resource-exhausted (28.936ms)
+  ✔ maps refused to failed-precondition (3.6814ms)
+  ✔ maps incomplete to internal (1.0579ms)
+  ✔ maps invalid_output to internal (1.2563ms)
+  ✔ maps auth to internal (26.4242ms)
+  ✔ maps unavailable to unavailable (1.1686ms)
+  ✔ treats unexpected exceptions as unavailable (43.4639ms)
+✔ provider failures never leak details (187.596ms)
+▶ output validation
+  ✔ rejects provider output with missing required field (15.6103ms)
+  ✔ rejects provider output with empty limitations (0.8938ms)
+  ✔ rejects provider output with unknown safety flag (1.8377ms)
+  ✔ accepts a practice plan with a 200-character title (11.0951ms)
+  ✔ rejects a practice plan with a 201-character title (8.1094ms)
+  ✔ accepts a practice plan with 5000-character notes (1.1458ms)
+  ✔ rejects a practice plan with 5001-character notes (9.9546ms)
+  ✔ rejects a practice plan with an absurd duration (13.1977ms)
+✔ output validation (62.8393ms)
+▶ functions/index.js
+  ✔ exports the AI gateway and no public destructive HTTP endpoint (37.8748ms)
+  ✔ binds only COACH_CORE_OPENAI_API_KEY to coachAI (22.5ms)
+  ✔ coachAI refuses with ai-disabled when the kill switch is unset (50.1061ms)
+  ✔ trackUserActivity rejects anonymous and non-beta callers (2.6442ms)
+✔ functions/index.js (152.3788ms)
+▶ OpenAI adapter (unit)
+  ✔ sends a strict structured-output request with server-side limits (624.0962ms)
+  ✔ treats truncated output as incomplete (146.8959ms)
+  ✔ treats a refusal as refused (41.4757ms)
+  ✔ classifies SDK errors without exposing their messages (12.3231ms)
+  ✔ fails closed when no key is configured (1.2899ms)
+  ✔ requires a configured model (1.0537ms)
+✔ OpenAI adapter (unit) (968.7533ms)
+▶ OpenAI adapter (integration: real SDK, local mock server)
+  ✖ round-trips practice_plan through /v1/responses (1713.1296ms)
+  ✔ round-trips drill_recommendations through /v1/responses (1453.9543ms)
+  ✔ round-trips coach_assistant through /v1/responses (278.0142ms)
+  ✔ maps HTTP 429 to rate_limited (287.5539ms)
+  ✔ maps HTTP 401 to auth (322.1613ms)
+  ✔ rejects output that does not match the schema (467.8458ms)
+✖ OpenAI adapter (integration: real SDK, local mock server) (5083.4034ms)
+▶ quota
+  ✔ enforces the per-minute burst limit (12.1908ms)
+  ✔ enforces the per-user daily limit and resets the next UTC day (5.6524ms)
+  ✔ enforces the global daily circuit breaker across users (1.9708ms)
+✔ quota (24.1275ms)
+▶ privacy redaction
+  ✔ removes contact details and dates but keeps football content (3.8502ms)
+  ✔ leaves ordinary coaching numbers alone (0.3974ms)
+✔ privacy redaction (4.7992ms)
+ℹ tests 73
+ℹ suites 15
+ℹ pass 72
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156002.3958
+
+✖ failing tests:
+
+test at functions\test\openai-adapter.test.js:138:5
+✖ round-trips practice_plan through /v1/responses (1713.1296ms)
+  Error [ProviderError]: openai error: Error
+      at classify (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-acceptance-verification\functions\src\ai\providers\openai.js:34:10)
+      at Object.generate (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-acceptance-verification\functions\src\ai\providers\openai.js:77:15)
+      at async TestContext.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-acceptance-verification\functions\test\openai-adapter.test.js:140:19)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1442:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    category: 'unavailable'
+  }

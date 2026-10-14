@@ -1,0 +1,50 @@
+[
+  {
+    "callId": "cvnv@4710",
+    "label": "email-link-submit",
+    "startMs": 338182.148,
+    "endMs": 338284.822,
+    "durationMs": 102.674,
+    "hasError": false
+  },
+  {
+    "callId": "cvnv@4726",
+    "label": "create-team",
+    "startMs": 338894.009,
+    "endMs": 338978.714,
+    "durationMs": 84.705,
+    "hasError": false
+  },
+  {
+    "callId": "cvnv@4730",
+    "label": "create-team",
+    "startMs": 339042.525,
+    "endMs": 339375.843,
+    "durationMs": 333.318,
+    "hasError": false
+  },
+  {
+    "callId": "cvnv@4739",
+    "label": "create-team",
+    "startMs": 339973.924,
+    "endMs": 340085.738,
+    "durationMs": 111.814,
+    "hasError": false
+  },
+  {
+    "callId": "cvnv@4743",
+    "label": "create-team",
+    "startMs": 340123.259,
+    "endMs": 340222.767,
+    "durationMs": 99.508,
+    "hasError": false
+  },
+  {
+    "callId": "cvnv@4759",
+    "label": "switch-team",
+    "startMs": 341052.912,
+    "endMs": 397601.002,
+    "durationMs": 56548.09,
+    "hasError": true
+  }
+]

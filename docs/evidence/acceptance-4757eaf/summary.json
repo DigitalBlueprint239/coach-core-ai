@@ -1,0 +1,525 @@
+{
+  "candidate": "4757eaffad31664dae727c34355aca8109fcc63c",
+  "runner": "Codex; unchanged Claude-authored acceptance suite",
+  "runs": [
+    {
+      "run": "run-01",
+      "stats": {
+        "startTime": "2026-10-14T21:15:48.122Z",
+        "duration": 578625.129,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-02",
+      "stats": {
+        "startTime": "2026-10-14T21:25:27.723Z",
+        "duration": 424144.637,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "failed": 1
+        }
+      }
+    },
+    {
+      "run": "run-03",
+      "stats": {
+        "startTime": "2026-10-14T21:32:32.993Z",
+        "duration": 491058.248,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "timedOut": 1
+        }
+      }
+    },
+    {
+      "run": "run-04",
+      "stats": {
+        "startTime": "2026-10-14T21:40:45.591Z",
+        "duration": 491410.276,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-05",
+      "stats": {
+        "startTime": "2026-10-14T21:48:58.183Z",
+        "duration": 508134.461,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-06",
+      "stats": {
+        "startTime": "2026-10-14T21:57:27.120Z",
+        "duration": 557976.3820000001,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-07",
+      "stats": {
+        "startTime": "2026-10-14T22:07:19.951Z",
+        "duration": 743421.694,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "failed": 1
+        }
+      }
+    },
+    {
+      "run": "run-08",
+      "stats": {
+        "startTime": "2026-10-14T22:19:45.902Z",
+        "duration": 873042.071,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 42,
+          "failed": 1
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-09",
+      "stats": {
+        "startTime": "2026-10-14T22:34:22.649Z",
+        "duration": 898907.227,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-10",
+      "stats": {
+        "startTime": "2026-10-14T22:49:22.789Z",
+        "duration": 920803.166,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "failed": 1
+        }
+      }
+    }
+  ],
+  "anchors": {
+    "E2E-A10:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "E2E-A10:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P10:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P10b:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P11:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P12:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P14:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P15:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P16:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P16b:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P17:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-L0:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-L1:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P10:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P10b:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P11:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P12:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P14:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P15:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P16:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P16b:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-P17:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-L0:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "CC-L1:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-00:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-01:chromium": {
+      "passed": 9,
+      "failed": 1,
+      "other": 0
+    },
+    "D10-02:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-03:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-04:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-05:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-06:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-06b:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-07:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-07b:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-08:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-09:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-10:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-11:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-12:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-06c:chromium": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-00:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-01:firefox": {
+      "passed": 8,
+      "failed": 2,
+      "other": 0
+    },
+    "D10-02:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-03:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-04:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-05:firefox": {
+      "passed": 9,
+      "failed": 1,
+      "other": 0
+    },
+    "D10-06:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-06b:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-07:firefox": {
+      "passed": 9,
+      "failed": 1,
+      "other": 0
+    },
+    "D10-07b:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-08:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-09:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-10:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-11:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-12:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    },
+    "D10-06c:firefox": {
+      "passed": 10,
+      "failed": 0,
+      "other": 0
+    }
+  },
+  "failures": [
+    {
+      "run": "run-02",
+      "engine": "firefox",
+      "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+      "status": "failed",
+      "file": "legacy-import.spec.ts",
+      "line": 59
+    },
+    {
+      "run": "run-03",
+      "engine": "firefox",
+      "title": "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)",
+      "status": "timedOut",
+      "file": "legacy-import.spec.ts",
+      "line": 184
+    },
+    {
+      "run": "run-07",
+      "engine": "firefox",
+      "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+      "status": "failed",
+      "file": "legacy-import.spec.ts",
+      "line": 59
+    },
+    {
+      "run": "run-08",
+      "engine": "chromium",
+      "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+      "status": "failed",
+      "file": "legacy-import.spec.ts",
+      "line": 59
+    },
+    {
+      "run": "run-10",
+      "engine": "firefox",
+      "title": "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging",
+      "status": "failed",
+      "file": "legacy-import.spec.ts",
+      "line": 130
+    }
+  ]
+}

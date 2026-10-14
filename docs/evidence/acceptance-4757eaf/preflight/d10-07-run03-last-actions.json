@@ -1,0 +1,62 @@
+[
+  {
+    "callId": "cvnv@4741",
+    "method": "fill",
+    "startTime": 340088.361,
+    "selector": "internal:label=\"Team Name\"i"
+  },
+  {
+    "callId": "cvnv@4743",
+    "method": "click",
+    "startTime": 340123.259,
+    "selector": "internal:role=button[name=\"Create Team\"s] >> nth=-1"
+  },
+  {
+    "callId": "cvnv@4745",
+    "method": "expect",
+    "startTime": 340224.428,
+    "selector": "internal:text=\"Team created successfully!\"i"
+  },
+  {
+    "callId": "cvnv@4747",
+    "method": "setNetworkInterceptionPatterns",
+    "startTime": 340239.391,
+    "selector": null
+  },
+  {
+    "callId": "cvnv@4749",
+    "method": "click",
+    "startTime": 340241.914,
+    "selector": "internal:role=button[name=/Smart Playbook/] >> nth=0"
+  },
+  {
+    "callId": "cvnv@4751",
+    "method": "expect",
+    "startTime": 340442.636,
+    "selector": "internal:role=button[name=/Load Play/]"
+  },
+  {
+    "callId": "cvnv@4753",
+    "method": "click",
+    "startTime": 340484.784,
+    "selector": "internal:role=region[name=\"Import device plays\"i] >> internal:role=button[name=\"Import plays\"i]"
+  },
+  {
+    "callId": "cvnv@4755",
+    "method": "continue",
+    "startTime": 340578.328,
+    "selector": null
+  },
+  {
+    "callId": "cvnv@4757",
+    "method": "click",
+    "startTime": 340971.439,
+    "selector": "internal:role=button[name=/Teams/] >> nth=0"
+  },
+  {
+    "callId": "cvnv@4759",
+    "method": "click",
+    "startTime": 341052.912,
+    "selector": "internal:role=button[name=\"Switch to\"i]"
+  }
+]

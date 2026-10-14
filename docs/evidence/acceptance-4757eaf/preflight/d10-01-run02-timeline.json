@@ -1,0 +1,536 @@
+[
+  {
+    "kind": "before",
+    "callId": "hwzy@3459",
+    "method": "expect",
+    "startTime": 273889.902,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3465",
+    "method": "expect",
+    "startTime": 274327.153,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3469",
+    "method": "expect",
+    "startTime": 274644.472,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3475",
+    "method": "expect",
+    "startTime": 275125.342,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3485",
+    "method": "expect",
+    "startTime": 275535.785,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3489",
+    "method": "expect",
+    "startTime": 276069.347,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3492",
+    "method": "expect",
+    "startTime": 276164.892,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3494",
+    "method": "expect",
+    "startTime": 276197.705,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3496",
+    "method": "expect",
+    "startTime": 276332.388,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3499",
+    "method": "expect",
+    "startTime": 276575.256,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3501",
+    "method": "expect",
+    "startTime": 276613.081,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3506",
+    "method": "expect",
+    "startTime": 276647.917,
+    "selector": null
+  },
+  {
+    "kind": "error",
+    "callId": "hwzy@3506",
+    "endTime": 276650.208,
+    "error": "{'name': '', 'message': 'Error: \\x1b[2mexpect(\\x1b[22m\\x1b[31mreceived\\x1b[39m\\x1b[2m).\\x1b[22mtoBe\\x1b[2m(\\x1b[22m\\x1b[32mexpected\\x1b[39m\\x1b[2m) // Object.is equality\\x1b[22m\\n\\nExpected: \\x1b[32mt"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3511",
+    "method": "expect",
+    "startTime": 276784.714,
+    "selector": null
+  },
+  {
+    "kind": "error",
+    "callId": "hwzy@3511",
+    "endTime": 276785.04,
+    "error": "{'name': '', 'message': 'Error: \\x1b[2mexpect(\\x1b[22m\\x1b[31mreceived\\x1b[39m\\x1b[2m).\\x1b[22mtoBe\\x1b[2m(\\x1b[22m\\x1b[32mexpected\\x1b[39m\\x1b[2m) // Object.is equality\\x1b[22m\\n\\nExpected: \\x1b[32mt"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3514",
+    "method": "expect",
+    "startTime": 277059.618,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3517",
+    "method": "expect",
+    "startTime": 277076.569,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3519",
+    "method": "expect",
+    "startTime": 277110.252,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3520",
+    "method": "expect",
+    "startTime": 277111.08,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3521",
+    "method": "expect",
+    "startTime": 277112.069,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3522",
+    "method": "expect",
+    "startTime": 277112.723,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3523",
+    "method": "expect",
+    "startTime": 277113.289,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3524",
+    "method": "expect",
+    "startTime": 277117.323,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3525",
+    "method": "expect",
+    "startTime": 277117.991,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3526",
+    "method": "expect",
+    "startTime": 277120.669,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3527",
+    "method": "expect",
+    "startTime": 277121.474,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3528",
+    "method": "expect",
+    "startTime": 277122.068,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3529",
+    "method": "expect",
+    "startTime": 277122.757,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3530",
+    "method": "expect",
+    "startTime": 277123.455,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3531",
+    "method": "expect",
+    "startTime": 277124.051,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3532",
+    "method": "expect",
+    "startTime": 277124.795,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3533",
+    "method": "expect",
+    "startTime": 277125.341,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3534",
+    "method": "expect",
+    "startTime": 277126.122,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3537",
+    "method": "expect",
+    "startTime": 277143.641,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3540",
+    "method": "expect",
+    "startTime": 277160.153,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3541",
+    "method": "expect",
+    "startTime": 277160.68,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3544",
+    "method": "expect",
+    "startTime": 277237.695,
+    "selector": null
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3548",
+    "method": "expect",
+    "startTime": 277342.971,
+    "selector": null
+  },
+  {
+    "kind": "error",
+    "callId": "hwzy@3548",
+    "endTime": 277349.86,
+    "error": "{'name': '', 'message': 'Error: \\x1b[2mexpect(\\x1b[22m\\x1b[31mreceived\\x1b[39m\\x1b[2m).\\x1b[22mtoEqual\\x1b[2m(\\x1b[22m\\x1b[32mexpected\\x1b[39m\\x1b[2m) // deep equality\\x1b[22m\\n\\nExpected: \\x1b[32mArr"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3459",
+    "method": "expect",
+    "startTime": 273891.65,
+    "selector": "internal:role=heading[name=\"Private beta sign-in\"i]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3463",
+    "method": "click",
+    "startTime": 274166.819,
+    "selector": "internal:role=button[name=\"Email me a sign-in link\"i]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3465",
+    "method": "expect",
+    "startTime": 274330.67,
+    "selector": "internal:text=\"Check d10a-mv8mid3c-26@e2e.coachcore.test for a sign-in link\"i"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3469",
+    "method": "expect",
+    "startTime": 274653.45,
+    "selector": "internal:role=heading[name=\"Waiting for beta access\"i] >> internal:or=\"internal:text=\\\"Welcome, d10a-mv8mid3c-26@e2e.coachcore.test\\\"i\""
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3473",
+    "method": "click",
+    "startTime": 274877.569,
+    "selector": "internal:role=button[name=\"Check again\"i]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3475",
+    "method": "expect",
+    "startTime": 275136.855,
+    "selector": "internal:text=\"Welcome, d10a-mv8mid3c-26@e2e.coachcore.test\"i"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3477",
+    "method": "click",
+    "startTime": 275162.575,
+    "selector": "internal:role=button[name=/Teams/] >> nth=0"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3479",
+    "method": "click",
+    "startTime": 275282.578,
+    "selector": "internal:role=button[name=\"Create Team\"s] >> nth=0"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3483",
+    "method": "click",
+    "startTime": 275406.4,
+    "selector": "internal:role=button[name=\"Create Team\"s] >> nth=-1"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3485",
+    "method": "expect",
+    "startTime": 275536.921,
+    "selector": "internal:text=\"Team created successfully!\"i"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3490",
+    "method": "click",
+    "startTime": 276070.908,
+    "selector": "internal:role=button[name=/Smart Playbook/] >> nth=0"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3492",
+    "method": "expect",
+    "startTime": 276165.933,
+    "selector": "internal:role=button[name=/Load Play/]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3494",
+    "method": "expect",
+    "startTime": 276199.774,
+    "selector": "internal:role=region[name=\"Import device plays\"i]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3497",
+    "method": "click",
+    "startTime": 276349.387,
+    "selector": "internal:role=region[name=\"Import device plays\"i] >> internal:role=button[name=\"Import plays\"i]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3499",
+    "method": "expect",
+    "startTime": 276576.619,
+    "selector": "internal:role=region[name=\"Import device plays\"i] >> internal:or=\"internal:role=region[name=\\\"Import device plays\\\"i] >> internal:role=alert\" >> nth=0"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3517",
+    "method": "expect",
+    "startTime": 277079.397,
+    "selector": "internal:role=alert"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3542",
+    "method": "click",
+    "startTime": 277162.751,
+    "selector": "internal:role=button[name=/Load Play/]"
+  },
+  {
+    "kind": "before",
+    "callId": "hwzy@3544",
+    "method": "expect",
+    "startTime": 277241.28,
+    "selector": "internal:role=heading[name=\"Play Library\"i] >> xpath=.."
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275114.274,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275523.184,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275531.743,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275560.578,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275582.63,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276148.798,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276200.853,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276252.11,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276291.098,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "documents:commit",
+    "time": 276532.559,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276559.072,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276595.548,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "documents:commit",
+    "time": 276595.805,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276817.473,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276844.412,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "documents:commit",
+    "time": 276853.528,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276920.466,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276972.902,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 276995.404,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 277327.888,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275122.256,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 275554.159,
+    "status": 200
+  },
+  {
+    "kind": "network",
+    "operation": "channel",
+    "time": 277361.297,
+    "status": -1
+  }
+]

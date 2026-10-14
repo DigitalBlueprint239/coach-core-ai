@@ -1,0 +1,88 @@
+Listing tests:
+  [chromium] › ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  [chromium] › ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  [chromium] › auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen
+  [chromium] › auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted
+  [chromium] › auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first
+  [chromium] › auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed
+  [chromium] › auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email"
+  [chromium] › auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in
+  [chromium] › auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical
+  [chromium] › auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check
+  [chromium] › auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+  [chromium] › auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved
+  [chromium] › coaching.spec.ts:62:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  [chromium] › coaching.spec.ts:92:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  [chromium] › coaching.spec.ts:113:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  [chromium] › coaching.spec.ts:141:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  [chromium] › coaching.spec.ts:179:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  [chromium] › coaching.spec.ts:236:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  [chromium] › coaching.spec.ts:280:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  [chromium] › coaching.spec.ts:312:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  [chromium] › coaching.spec.ts:339:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  [chromium] › coaching.spec.ts:376:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  [chromium] › coaching.spec.ts:398:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  [chromium] › legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  [chromium] › legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  [chromium] › legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  [chromium] › legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  [chromium] › legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  [chromium] › legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  [chromium] › legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  [chromium] › legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  [chromium] › legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  [chromium] › legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  [chromium] › legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  [chromium] › legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  [chromium] › legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  [chromium] › legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  [chromium] › legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  [chromium] › legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  [chromium] › persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  [chromium] › teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  [chromium] › teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  [chromium] › teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+  [firefox] › ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  [firefox] › ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  [firefox] › auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen
+  [firefox] › auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted
+  [firefox] › auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first
+  [firefox] › auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed
+  [firefox] › auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email"
+  [firefox] › auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in
+  [firefox] › auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical
+  [firefox] › auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check
+  [firefox] › auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+  [firefox] › auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved
+  [firefox] › coaching.spec.ts:62:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  [firefox] › coaching.spec.ts:92:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  [firefox] › coaching.spec.ts:113:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  [firefox] › coaching.spec.ts:141:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  [firefox] › coaching.spec.ts:179:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  [firefox] › coaching.spec.ts:236:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  [firefox] › coaching.spec.ts:280:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  [firefox] › coaching.spec.ts:312:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  [firefox] › coaching.spec.ts:339:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  [firefox] › coaching.spec.ts:376:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  [firefox] › coaching.spec.ts:398:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  [firefox] › legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  [firefox] › legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  [firefox] › legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  [firefox] › legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  [firefox] › legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  [firefox] › legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  [firefox] › legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  [firefox] › legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  [firefox] › legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  [firefox] › legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  [firefox] › legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  [firefox] › legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  [firefox] › legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  [firefox] › legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  [firefox] › legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  [firefox] › legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  [firefox] › persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  [firefox] › teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  [firefox] › teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  [firefox] › teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+Total: 86 tests in 6 files

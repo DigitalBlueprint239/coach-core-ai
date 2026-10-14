@@ -1,0 +1,20 @@
+[
+  {
+    "path": "artifacts\\legacy-import-D10-05-a-cop-5d934-stops-without-acknowledging-firefox\\error-context.md",
+    "sha256": "5e6d286817486377ac80da7707f7635c34d6a2b1bd7a01558be22d48aad15fe1",
+    "bytes": 7677,
+    "rawAvailability": "Retained locally; raw token-bearing ZIP not published"
+  },
+  {
+    "path": "artifacts\\legacy-import-D10-05-a-cop-5d934-stops-without-acknowledging-firefox\\test-failed-1.png",
+    "sha256": "23b62fdb81fd2657d244db799c4de4d5a0c2ad01008c944a560c47bedc27ed98",
+    "bytes": 30736,
+    "rawAvailability": "Retained locally; raw token-bearing ZIP not published"
+  },
+  {
+    "path": "artifacts\\legacy-import-D10-05-a-cop-5d934-stops-without-acknowledging-firefox\\trace.zip",
+    "sha256": "e31aac97c94e33a3d9378a2596625bf7f642f96ba206317a1cdc1b9dbe93a3d9",
+    "bytes": 1797111,
+    "rawAvailability": "Retained locally; raw token-bearing ZIP not published"
+  }
+]
