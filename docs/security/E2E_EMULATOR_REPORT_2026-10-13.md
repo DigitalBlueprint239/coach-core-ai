@@ -328,3 +328,124 @@ It found weaker-than-claimed tests and stale or overstated wording. All were add
 | Candidate 4 `c858d1d` (job `116005526509`) | **400 PASS / 20 FAIL** (same two) | **400 PASS / 20 FAIL** (same two) |
 
 Every other test, 40 per engine, passes 10/10 in both runs. The only exception is Firefox D10-07 (9/10) on the acceptance run. Evidence files 13–15 are in `docs/evidence/cc-acceptance-2026-10-14/`.
+
+## 9. FX-03 fix, L1/R1b repairs, integrated candidate 6 (2026-10-14 evening)
+
+§7 and §8 stay as historical evidence. Their failures (CC-L1 10/10, D10-06c 10/10, H2 1/10) are not rewritten.
+
+### 9.1 Exact SHAs
+
+| | SHA | Owner |
+|---|---|---|
+| Acceptance head (L0, FX-03, CC-L1 re-anchor, A10) | `ddae645` (`dc36080` FX-03, `12e386f` L0) | Claude |
+| L1/R1b repairs, PR #64 final | `8f0d9f7` (application `f33a8a8`, plus Codex test-lane label fix `ed4978b`, plus docs); contains `ddae645` | Codex |
+| **Integrated candidate 6** (test-only, never merged) | **`4757eaf`** on `claude/integration-candidate-2026-10-14d` = candidate 4 `c858d1d` + #52 `50ae718` + #64 `8f0d9f7`. `src/`, `e2e/`, `tests/`, `firestore.rules`, `functions/`, `package*.json` and `.github/` are byte-identical to #64 `8f0d9f7` | Claude |
+| Frozen, unchanged | #59 `c21c0c6`, #60 `2cf1a5c`, #61 `3c7c4b0` | Codex |
+
+### 9.2 FX-03 (Claude, auth/UI): sign-in form shown before logout's reload
+
+**Defect (#62, Codex probe FAIL 5/5 per engine).** `logout` → `signOut` → SDK `onAuthStateChanged(null)` rendered the interactive sign-in form in the *old* document, while `clearUserScopedState` and `location.assign('/')` were still pending. Input typed there was lost on the reload.
+
+**Fix.** `useAuth` sets a `signing_out` status before `signOut()`. `AuthGate` renders only a neutral "Signing out…" status: no form, no buttons, no coaching content. `onAuthStateChanged` is ignored for the rest of that sign-out. The DraftSignOut guard still runs first. Recovery data is unchanged: scoped drafts and the quarantined `offline_operations` are preserved, and only `currentTeamId` is cleared.
+
+Files: `src/hooks/useAuth.tsx`, `src/components/auth/AuthGate.tsx`, `src/hooks/__tests__/useAuth.test.tsx`, `e2e/tests/auth.spec.ts`.
+
+**Test: E2E-A10.** It holds CacheStorage cleanup, the same lifecycle point as #62.
+
+While the old document is alive it asserts:
+- status "Signing out";
+- 0 email inputs, 0 Google buttons, 0 "Welcome,".
+
+After the reload it asserts:
+- the typed email survives and no further reload occurs;
+- draft and queue are byte-identical;
+- `currentTeamId` is removed.
+
+| | Result |
+|---|---|
+| Before fix, local Chromium | **FAIL 3/3** (evidence 17) |
+| After fix, local Chromium | **PASS 5/5** (evidence 18) |
+| After fix, CI ×1 `ddae645` | PASS 1/1 per engine (evidence 16) |
+| Candidate 6 ×10 | **PASS 10/10 Chromium, 10/10 Firefox** |
+
+### 9.3 L1 and R1b (Codex), independently reviewed and tested
+
+**L1 contract**, agreed on #39 as option (a):
+- `MigrationBanner` renders null.
+- `migrateFromLocalStorage` throws and never deletes.
+- The six legacy plan/play save, update and delete paths reject when offline instead of queueing and reporting success.
+
+CC-L1 was re-anchored to this contract. Its positive anchors are:
+- the signed-in dashboard for the team is rendered;
+- the legacy `coach-core-ai-<teamId>` blob is present.
+
+It then requires:
+- no Migrate Now or Migrate Your Data, and no success toast;
+- the blob byte-identical after navigation;
+- no cloud copy, and no POST carrying the legacy play.
+
+The new CC-L1 **FAILED 1/1 per engine on the pre-repair code** (`ddae645`, `Migrate Now` count 1), so it discriminates.
+
+**R1b.** `importLegacy` writes a device-level `legacyImportClaim {status:'pending', uid, teamId}` before any cloud request. `importNotice` then:
+- blocks any other account while the claim is pending;
+- also blocks on another account's pre-repair per-account pending marker;
+- fails closed on a malformed claim;
+- lets only the same account and original team resume.
+
+The `storage` event refreshes the offer across tabs.
+
+**D10-06c is byte-identical** to the version that failed 10/10 at `709e0f4` and `c858d1d`: `e2e/tests/legacy-import.spec.ts` and `e2e/tests/support/` show no diff `709e0f4..4757eaf`. Since `709e0f4`, the only e2e changes are A10 (added) and the CC-L1 re-anchor.
+
+Code review found no remaining path in `src/` (excluding `_archived`, which is not imported) that deletes legacy originals or queues a legacy write.
+
+### 9.4 Results, candidate 6 `4757eaf`, retries 0, workers 1
+
+**Clean preflight** (evidence 20):
+- `npm ci --legacy-peer-deps` OK;
+- jest **434/434** (29 suites);
+- tsc **0**;
+- `npm audit --omit=dev` **0 vulnerabilities**.
+
+Codex's `docs/evidence/l1-r1b-repairs/SHA256SUMS.txt` verifies.
+
+**×10, Actions run `38632770550`, job `116088458893`** (evidence 21):
+
+| | Chromium 156.0.8078.4 | Firefox 157.0 |
+|---|---|---|
+| PASS / FAIL / BLOCKED / SKIPPED | **430 / 0 / 0 / 0** | **430 / 0 / 0 / 0** |
+| Release-build proof | 13/13 | |
+
+All 43 tests pass 10/10 in each engine:
+- **Previously failing, now verified fixed on this SHA:** CC-L1, D10-06c.
+- **Fixed by Claude:** E2E-A10 (FX-03), CC-L0.
+- **Still verified:** D10-06b, D10-07, D10-07b, D10-12, CC-P10..P17, AI01, AI01b, A01..A09.
+
+The job took 28 m 50 s, against 42–49 min for earlier ×10 runs. **This is not explained** and is recorded only as an observation.
+
+The ×1 sanity run on candidate 5 `f85cde2` (same runtime, before Codex's final docs head) was green. It is **not counted** (evidence 19).
+
+### 9.5 Status after candidate 6
+
+| Item | Status |
+|---|---|
+| R0, R1, R2, R5, L0, CC02/CC03 scenarios | **Verified fixed** (unchanged from §8, re-confirmed 10/10 per engine at `4757eaf`) |
+| **L1** | **Verified fixed** at `4757eaf` (CC-L1 10/10 per engine; FAIL on pre-repair) |
+| **R1b** | **Verified fixed** at `4757eaf` (D10-06c 10/10 per engine; same test FAILED 10/10 before) |
+| **FX-03** | **Verified fixed** at `4757eaf` (A10 10/10 per engine; FAIL 3/3 before) |
+| **H2**, Firefox D10-07 timeout | **OPEN.** 1/10 at `709e0f4`, then 0/10 at `c858d1d` and 0/10 at `4757eaf`. The cause is unexplained, so passing batches do not close it |
+| **FX-02**, unexplained 51 s locator delay (Codex) | **OPEN** |
+| Genuine hidden or background-tab behaviour | **NOT MEASURED** (CC-P14 and the probes bring tabs to the front; visibility was always `visible`) |
+| R3 "Not now" permanent; R4 `D10_APPROVED` release constant; standalone touch exit | **OPEN / tracked** |
+| Physical devices, staging | **NOT MEASURED** |
+
+These are emulator results with demo data. They do not establish production behaviour. **MVP: NO-GO.** No merge, deploy, spend, live configuration change, real credentials or footage. AI stays off.
+
+### 9.6 Evidence (`docs/evidence/cc-acceptance-2026-10-14/`, SHA256SUMS updated; files 01–15 unchanged)
+
+| File | Contents |
+|---|---|
+| 16 | ×1 CI on pre-repair `ddae645`: CC-L1 and D10-06c FAIL, A10 PASS, both engines |
+| 17 / 18 | Local A10 before (FAIL 3/3) and after (PASS 5/5) the FX-03 fix |
+| 19 | ×1 sanity, candidate 5 (not counted) |
+| 20 | Candidate 6 clean preflight |
+| 21 | **Candidate 6 ×10 final annotations** |
