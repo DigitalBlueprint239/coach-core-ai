@@ -1,4 +1,6 @@
 # Coach Core AI — Seven-Day MVP Recovery Sprint
+
+**2026-10-14 / Codex / first visual milestone:** draft PR67, UI source ca5ca72 on frozen4757eaf, separate branch codex/visual-shell-dashboard. Shared shell/tokens/My Week/Today, live dated-plan reads and honest empty/sample states. Baseline434/434 →441/441,TS0,buildPASS; 16 browser layoutsPASS/axe0/overflow0; keyboard/dialog/reduced-motionPASS. Runtime changes only App/Dashboard/Onboarding +src/ui; auth/persistence/rules/functions/AI/locks/e2e unchanged. Claude navigation/existing-workflow review requested #39, PENDING behind R1c/acceptance repairs. Physical/staging/authenticated browser acceptance not newly measured. Evidence/screenshots: VISUAL_DASHBOARD_HANDOFF.md. Coach Drew reviews before wider rollout; no merge/deploy/spend; MVP NO-GO.
 Original window: **Oct 13–20, 2026**. Founder-required Film Analyzer rebaseline below supersedes the original release target. One status document shared through GitHub.
 
 ## Required film rebaseline — 2026-10-13 / Codex / Issue #50

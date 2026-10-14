@@ -1,5 +1,9 @@
 # Coach Core AI — Shared Recovery Context
 
+## Isolated first visual milestone — 2026-10-14 / Codex
+
+Draft PR #67, `codex/visual-shell-dashboard`, application source `ca5ca7296858f5dcde5dd353d9172d4884c767cb` on frozen integrated candidate `4757eaf`. Shared tokens/shell, My Week/Today, existing functional navigation and honest empty/explicit sample states. App/Dashboard layout and onboarding copy only; auth, team scope, persistence, import, rules, Functions, locks, canvas and independent e2e unchanged. Ownership/review request #39comment6179875785. 441/441 Jest,TS0,production buildPASS with existing warnings; Chromium/Firefox8widths each,axe0,overflow0,keyboard/dialog/reduced-motionPASS. Standalone shared-component preview only; no new authenticated/physical/staging acceptance. Claude independent UI/workflow review PENDING after higher-priority R1c repairs. Screenshots/reproduction/limits: VISUAL_DASHBOARD_HANDOFF.md. Stop for Coach Drew's visual review; no broader rollout, merge, deployment, spending or AI activation. MVP NO-GO; readiness percentage not measured.
+
 > CC-007 current status (2026-10-14): earlier blanket D1–D9-pending statements below are historical and superseded. Coach Drew reports those directions settled; the detailed settled approval record is unavailable in inspected sources. See [decision provenance reconciliation](CC_007_DECISION_RECONCILIATION.md). No new spending, deployment, AI/film activation or deletion approval is inferred. Current MVP NO-GO; original evidence preserved.
 Updated: 2026-10-13. Canonical project status for Codex, Claude, and human team. This file is versioned project context, NOT a claim of updating anyone's personal AI memory.
 
