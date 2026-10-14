@@ -1,6 +1,6 @@
 # Staging readiness checklist (before requesting a staging deploy)
 
-Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-14 afternoon: CC02/CC03 and the D10 repairs — implementation delivered; independent acceptance pending (×10 in progress); open defect L1). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-14 evening: CC02/CC03 and the D10 repairs — implementation delivered; independent acceptance pending. ×10 measured: open defects L1 and R1b fail 10/10 on both engines; Firefox intermittent H2). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
 
 ## 1. Exact PR/commit combination
 
@@ -103,19 +103,19 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 
 | # | Item | Owner | Status |
 |---|---|---|---|
-| G1 | Dependency findings fixed or accepted in writing; regression re-run on the new candidate SHA | Codex / Coach Drew | ✗ |
+| G1 | Dependency findings fixed or accepted in writing; regression re-run on the new candidate SHA | Codex / Coach Drew | ✗ | — **update 2026-10-14:** #60 brings production `npm audit` to **0** (verified on candidate-4 clean install); full-graph dev/tooling advisories remain as disclosed in #60 |
 | G2 | Founder decisions D5 (billing + controls) and D10 (legacy import), plus D1–D7 if film is in the deploy | Coach Drew | ✗ |
 | G3 | Founder read-only verification of §4 controls recorded | Coach Drew | ✗ |
 | G4 | PR #49 founder actions (§6 of the Day 2 report: old keys checked/rotated, web key restricted, Anonymous OFF, authorized domains) | Coach Drew | ✗ |
-| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ✔ at `9b84573` (×10). ⚠ A09 intermittent open; must be re-run on the final candidate |
+| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ✗ at candidate-4 `c858d1d`: rules/functions/web+bundle ✔; E2E ×10 400/20 per engine (L1, R1b); clean `npm ci` jest 416/416, tsc 0, release proof 13/13, prod audit 0 |
 | G6 | Release-build proof re-run with the real staging web config at deploy time; manifest kept | deployer | prepared |
 | G7 | Staging config: `COACH_CORE_AI_ENABLED=false`, `COACH_CORE_ALLOWED_ORIGINS` as a JSON array, AI global cap 50/day | deployer | prepared |
 | G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
-| G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex / Claude | ⚠ **implementation delivered (#59/#60); independent acceptance pending.** Real tests CC-P10..P17 in `claude/cc-acceptance-2026-10-14`, ×1 PASS both engines |
+| G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex / Claude | ⚠ **implementation delivered (#59/#60); independent acceptance pending.** CC-P10..P17 (+P10b, P16b) PASS **10/10** on Chromium 156 and Firefox 157 at `709e0f4` and candidate `c858d1d` (PR #63) |
 | G10 | Shutdown switch: approve build before film upload, or accept the exposure in writing | Coach Drew | open decision |
-| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5) / Claude (re-test) | ⚠ **implementation delivered (#59); independent acceptance pending.** History: FAIL on 2026-10-14 (R1/R2 10/10, report §7, PR #56, kept as evidence). Re-test ×1 on `12e386f`: D10-06b (R1), D10-07b (R2), D10-12 (R5) PASS on both engines; ×10 in progress |
-| G13 | Legacy device data never deleted: quarantined `offline_operations` on sign-out (#61 escalation), Migration Banner (L1) | Claude (auth) / Codex (banner) | ⚠ Sign-out: **fixed** by Claude in `12e386f` (CC-L0 PASS). Banner: **L1 FAIL** on both engines; bounded repair requested on #59 |
-| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ⚠ **implementation delivered; independent acceptance pending.** ×1 PASS; ×10 in progress |
+| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5) / Claude (re-test) | ⚠ **implementation delivered (#59); independent acceptance pending.** History: FAIL on 2026-10-14 (R1/R2 10/10, report §7, PR #56, kept as evidence). Re-test ×10 at `709e0f4`/`c858d1d`: R1 finished-import (D10-06b), R2 (D10-07b) and R5 (D10-12) **VERIFIED FIXED** (10/10 both engines). **R1b** (unfinished import offered to another account, D10-06c) **FAIL 10/10**, repair requested |
+| G13 | Legacy device data never deleted: quarantined `offline_operations` on sign-out (#61 escalation), Migration Banner (L1) | Claude (auth) / Codex (banner) | ⚠ Sign-out: **fixed** by Claude in `12e386f` (CC-L0 PASS). Banner: **L1 FAIL 10/10** on both engines (app reports success and deletes the original); bounded repair requested on #59 |
+| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ⚠ **implementation delivered; independent acceptance pending.** Scenarios PASS 10/10 both engines; gate open until L1/R1b close and the suite is re-run green |
 
 ## Tracked limitations (kept open until closed with evidence)
 
@@ -123,6 +123,6 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 |---|---|---|
 | R3: "Not now" on the D10 prompt is a permanent decline (no re-entry point) | Codex / Coach Drew | OPEN (disclosed limitation) |
 | R4: `D10_APPROVED = true` build constant, so the import prompt ships in release builds | Codex / deploy decision | OPEN |
-| Firefox instability: H1 team-creation toast (3 occurrences 2026-10-14 morning); Codex's P14 background-tab reload timeout | Claude / Codex | OPEN; diagnostics in place |
+| Firefox instability: H1 team-creation toast (3 in the morning, 0 in 1,660 afternoon Firefox executions); **H2** D10-07 timeout 1/10 at `709e0f4`; Codex's P14 background-tab reload timeout | Claude / Codex | OPEN; diagnostics in place, no retries |
 | Standalone Playbook touch exit (Windows, PR #3 repo) | Codex | OPEN |
 | Physical tablets/phones; staging real auth, CORS and token checks (RA-*, SEC-07..10) | Coach Drew / Claude | NOT MEASURED (requires approved staging) |
