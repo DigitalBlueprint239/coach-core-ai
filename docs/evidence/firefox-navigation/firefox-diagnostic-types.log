@@ -1,0 +1,5 @@
+e2e/tests/support/app.ts(87,124): error TS2554: Expected 0-1 arguments, but got 2.
+tests/coaching-ui/playwright.config.ts(6,3): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '{ cwd: string; }' is not assignable to type 'TestConfigWebServer | TestConfigWebServer[]'.
+      Property 'command' is missing in type '{ cwd: string; }' but required in type 'TestConfigWebServer'.

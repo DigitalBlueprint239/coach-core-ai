@@ -1,0 +1,12 @@
+{
+  "sourceRuntime": "da8ebe1c90a877102e1913770690ff98a3530d3f",
+  "sourceBrowser": "5d04077a1db88c8ea24ec2ee6ea3cae96d780ac2",
+  "copiedArtifact": "previously tested emulator .app-build",
+  "fileHashMismatches": 0,
+  "applicationEdits": false,
+  "browserVersions": [
+    "Chromium156.0.8078.4",
+    "Firefox157.0"
+  ],
+  "newCandidate": "4442f4977a87e6b7fa6c78b7efe260950855509e"
+}

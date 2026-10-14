@@ -1,0 +1,2412 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\drewl\\AppData\\Local\\hermes\\node\\node.exe",
+      "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/coaching-ui/navigation-investigation.config.ts",
+      "--repeat-each=5"
+    ],
+    "configFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.config.ts",
+    "rootDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-firefox-investigation/tests/coaching-ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/firefox-investigation-results",
+        "repeatEach": 5,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-firefox-investigation/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "navigation-investigation.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/firefox-investigation-results",
+        "repeatEach": 5,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-firefox-investigation/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "navigation-investigation.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results",
+        "repeatEach": 5,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "navigation-investigation.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "on",
+          "screenshot": "only-on-failure",
+          "actionTimeout": 10000,
+          "navigationTimeout": 10000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results",
+        "repeatEach": 5,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "navigation-investigation.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "on",
+          "screenshot": "only-on-failure",
+          "actionTimeout": 10000,
+          "navigationTimeout": 10000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node scripts/serve.mjs .app-build 3000",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "cwd": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\e2e"
+    }
+  },
+  "suites": [
+    {
+      "title": "navigation-investigation.spec.ts",
+      "file": "navigation-investigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17919,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:14:18.028Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-5c866b86aeaca887fd7a",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13506,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:14:37.228Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-359b8ff4ce06308b42c1",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13511,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:14:52.805Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ded8a39b29e154589334",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12558,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:15:07.327Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-chromium\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-564cb4a41bc8c9778a1d",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2778,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:15:23.742Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-chromium-repeat1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-c986267df900a04fbf89",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13166,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:15:27.118Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-9361a2529f9e66d46178",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8312,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:15:41.579Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-chromium-repeat1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ced7e621b8fee626dd02",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10786,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:15:50.966Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-chromium-repeat1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-b90de5624cc9c984ee1b",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2066,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:04.062Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-chromium-repeat2\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-3dc6f44acaf1343999f0",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12722,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:06.420Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-050c17c353f9824d23c3",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8608,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:20.426Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-chromium-repeat2\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-e94e0b8e8eae7b1f56bb",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9908,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:29.480Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-chromium-repeat2\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-b60ca45a5ddd278cbdbf",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2143,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:41.013Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-chromium-repeat3\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-3ca491218cbc0ffbfc2b",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12904,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:43.643Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-5b89825867d6a2d27a87",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10279,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:16:57.989Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-chromium-repeat3\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-c911aaccba34dfb8a58c",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11883,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:17:09.148Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-chromium-repeat3\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ba2917fd6ebfa3759038",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3887,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:17:23.000Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-chromium-repeat4\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-e2127b55f8b1a0c5084a",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13055,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:17:27.535Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-a84004f876840fb53556",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8213,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:17:41.852Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-chromium-repeat4\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-e01639969f135bfbe982",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9505,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE chromium 156.0.8078.4\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:17:50.973Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-chromium-repeat4\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-f57594bdc6c40b3f924a",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21721,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:18:02.731Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-firefox\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-801f1cafe4508c418f28",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17050,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:18:26.892Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-7b745a8da38dbcd9e1a0",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23219,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:18:47.088Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-firefox\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-9a5dc90757ad0c22bc92",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11232,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:19:12.175Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-firefox\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-5bdea9e8061e57783253",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8785,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:19:26.244Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-firefox-repeat1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-733e7b36c004ec7c3410",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13362,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:19:36.059Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-abc9bf7077dba98b024a",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 13,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11109,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:19:50.722Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-firefox-repeat1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-dd8ffb09714f7bb7efbc",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 13,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7335,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:20:02.882Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-firefox-repeat1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-5e6a4df7b41ae59bd762",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5913,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:20:11.767Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-firefox-repeat2\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ff90ed345dd9a3a867af",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12753,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:20:18.489Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ee51f2d2891685d0f012",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 15,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11348,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:20:32.593Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-firefox-repeat2\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-a7cc6ace715733875213",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 15,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7963,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:20:45.195Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-firefox-repeat2\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-48945738091877e11b32",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 16,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5956,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:20:54.578Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-firefox-repeat3\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-dd790082006661364580",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 16,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12948,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:21:01.479Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-78f63a1093df0f57f45c",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 17,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11691,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:21:15.733Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-firefox-repeat3\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-fd65f6a1ef2839e667e1",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 17,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7960,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:21:28.617Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-firefox-repeat3\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-df17d250284b0634e1e1",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "transitional sign-in visibility precedes logout navigation completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 18,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6277,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:21:38.264Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-t-bfcc5-ogout-navigation-completion-firefox-repeat4\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-b8d744726e9c98a436d9",
+          "file": "navigation-investigation.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "sign-in entered during pending logout is preserved after navigation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 18,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13275,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                      "column": 67,
+                      "line": 39
+                    },
+                    "snippet": "  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                        "column": 67,
+                        "line": 39
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Or get a sign-in link by email')\nExpected: \u001b[32m\"next-coach@e2e.coachcore.test\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Or get a sign-in link by email') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Or get a sign-in link by email')\u001b[22m\n\u001b[2m    22 × locator resolved to <input value=\"\" required=\"\" type=\"email\" id=\"signin-email\" autocomplete=\"email\" class=\"w-full px-3 py-2 border rounded focus:outline-none focus:ring\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');\n  38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});\n> 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');\n     |                                                                   ^\n  40 | });\n  41 |\n  42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts:39:67"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:21:45.434Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-firefox-investigation\\tests\\coaching-ui\\navigation-investigation.spec.ts",
+                    "column": 67,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ef77cfef0cc68654b6b3",
+          "file": "navigation-investigation.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "background tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 19,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12147,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:22:00.198Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-b-aaf01--and-rejects-stale-revision-firefox-repeat4\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-d931894fe9e568b46404",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        },
+        {
+          "title": "foreground tab reload preserves its own draft and rejects stale revision",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 19,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7489,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "ENGINE firefox 157.0\n"
+                    },
+                    {
+                      "text": "VISIBILITY visible\n"
+                    },
+                    {
+                      "text": "SECOND DIALOG beforeunload\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T16:22:13.327Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\firefox-investigation-results\\navigation-investigation-f-3a81e--and-rejects-stale-revision-firefox-repeat4\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3d571d105d8acd05b9a2-ddc0acf2f576e6948e07",
+          "file": "navigation-investigation.spec.ts",
+          "line": 42,
+          "column": 42
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-14T16:14:15.384Z",
+    "duration": 486984.667,
+    "expected": 30,
+    "skipped": 0,
+    "unexpected": 10,
+    "flaky": 0
+  }
+}
