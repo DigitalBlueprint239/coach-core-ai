@@ -1,0 +1,12 @@
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] Bundle credential scan: 12 passed / 0 failed
+Scanned 3 JS files. Source / prebuild guard / canary bundle checks all passed.
+
+[notice] Web auth tests
+Tests:       23 passed, 23 total
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+

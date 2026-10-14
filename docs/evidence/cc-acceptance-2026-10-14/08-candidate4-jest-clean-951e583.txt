@@ -1,0 +1,711 @@
+PASS src/services/__tests__/ai-proxy.test.ts
+  ● Console
+
+    console.warn
+      AI proxy attempt 1 failed: Error: Network error
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:118:35)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:120:22)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: Network error
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:118:35)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:120:22)
+
+    console.warn
+      AI proxy attempt 1 failed: Error: Network error
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:127:35)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at runNextTicks (node:internal/process/task_queues:65:5)
+          at listOnTimeout (node:internal/timers:549:9)
+          at processTimers (node:internal/timers:523:7)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:129:7)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: Network error
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:127:35)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at runNextTicks (node:internal/process/task_queues:65:5)
+          at listOnTimeout (node:internal/timers:549:9)
+          at processTimers (node:internal/timers:523:7)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:129:7)
+
+    console.warn
+      AI proxy attempt 1 failed: Error: AI Proxy error: 500 Internal Server Error
+          at AIProxyService.makeRequest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/ai-proxy.ts:62:17)
+          at runNextTicks (node:internal/process/task_queues:65:5)
+          at listOnTimeout (node:internal/timers:549:9)
+          at processTimers (node:internal/timers:523:7)
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:138:22)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:138:22)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: AI Proxy error: 500 Internal Server Error
+          at AIProxyService.makeRequest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/ai-proxy.ts:62:17)
+          at runNextTicks (node:internal/process/task_queues:65:5)
+          at listOnTimeout (node:internal/timers:549:9)
+          at processTimers (node:internal/timers:523:7)
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:138:22)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:138:22)
+
+    console.warn
+      AI proxy attempt 1 failed: Error: Connection refused
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:144:35)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at runNextTicks (node:internal/process/task_queues:65:5)
+          at listOnTimeout (node:internal/timers:549:9)
+          at processTimers (node:internal/timers:523:7)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:146:22)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: Connection refused
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/services/__tests__/ai-proxy.test.ts:144:35)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at runNextTicks (node:internal/process/task_queues:65:5)
+          at listOnTimeout (node:internal/timers:549:9)
+          at processTimers (node:internal/timers:523:7)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34)
+
+    [0m [90m 79 |[39m       } [36mcatch[39m (error) {
+     [90m 80 |[39m         lastError [33m=[39m error [36mas[39m [33mError[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 81 |[39m         console[33m.[39mwarn([32m`AI proxy attempt ${attempt} failed:`[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 82 |[39m         
+     [90m 83 |[39m         [36mif[39m (attempt [33m<[39m [36mthis[39m[33m.[39mconfig[33m.[39mretries[33m![39m) {
+     [90m 84 |[39m           [36mawait[39m [36mthis[39m[33m.[39mdelay([35m1000[39m [33m*[39m attempt)[33m;[39m [90m// Exponential backoff[39m[0m
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:81:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:146:22)
+
+PASS src/App.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m test([32m'renders App without crashing'[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 5 |[39m   render([33m<[39m[33mApp[39m [33m/[39m[33m>[39m)[33m;[39m
+     [90m   |[39m         [31m[1m^[22m[39m
+     [90m 6 |[39m   [90m// App renders successfully - may show "Coach Core" heading or[39m
+     [90m 7 |[39m   [90m// error boundary if Firebase is not configured in test environment[39m
+     [90m 8 |[39m   [36mconst[39m coachCore [33m=[39m screen[33m.[39mqueryByText([35m/Coach Core/i[39m)[33m;[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/App.test.tsx:5:9)
+
+PASS src/services/__tests__/conceptDetection.test.ts
+PASS src/hooks/__tests__/useAuth.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 53 |[39m
+     [90m 54 |[39m [36mfunction[39m renderGate() {
+    [31m[1m>[22m[39m[90m 55 |[39m   [36mreturn[39m render(
+     [90m    |[39m                [31m[1m^[22m[39m
+     [90m 56 |[39m     [33m<[39m[33mAuthProvider[39m[33m>[39m
+     [90m 57 |[39m       [33m<[39m[33mAuthGate[39m[33m>[39m
+     [90m 58 |[39m         [33m<[39m[33mdiv[39m[33m>[39m[33mPROTECTED[39m [33mCOACHING[39m [33mCONTENT[39m[33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at renderGate (src/hooks/__tests__/useAuth.test.tsx:55:16)
+      at Object.<anonymous> (src/hooks/__tests__/useAuth.test.tsx:82:5)
+
+    console.error
+      An update to SignInScreen inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 33 |[39m     [36mtry[39m {
+     [90m 34 |[39m       [36mawait[39m sendEmailLink(email)[33m;[39m
+    [31m[1m>[22m[39m[90m 35 |[39m       setSent([36mtrue[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 36 |[39m     } [36mcatch[39m {
+     [90m 37 |[39m       setSent([36mfalse[39m)[33m;[39m
+     [90m 38 |[39m     } [36mfinally[39m {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setSent (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at onEmail (src/components/auth/AuthGate.tsx:35:7)
+
+    console.error
+      An update to SignInScreen inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 37 |[39m       setSent([36mfalse[39m)[33m;[39m
+     [90m 38 |[39m     } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 39 |[39m       setBusy([36mfalse[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 40 |[39m     }
+     [90m 41 |[39m   }[33m;[39m
+     [90m 42 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setBusy (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at onEmail (src/components/auth/AuthGate.tsx:39:7)
+
+PASS src/features/persistence/__tests__/document.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 17 |[39m  records[33m.[39m[36mset[39m([32m'legacy'[39m[33m,[39m{id[33m:[39m[32m'legacy'[39m[33m,[39mrevision[33m:[39m[36mnull[39m[33m,[39mfields[33m:[39m{[33m...[39mfields[33m,[39mname[33m:[39m[32m'Legacy'[39m}[33m,[39mcreatedAt[33m:[39mstamp[33m,[39mupdatedAt[33m:[39mstamp})[33m;[39m
+     [90m 18 |[39m  writeDraft({scope[33m,[39mkind[33m:[39m[32m'plays'[39m[33m,[39mid[33m:[39m[32m'legacy'[39m[33m,[39mexpectedRevision[33m:[39m[36mnull[39m[33m,[39mfields[33m,[39mpending[33m:[39m[36mtrue[39m})[33m;[39m
+    [31m[1m>[22m[39m[90m 19 |[39m  [36mconst[39m h[33m=[39mrenderHook(()[33m=>[39museDocument(scope[33m,[39m[32m'plays'[39m[33m,[39m{}[33m,[39mgateway))[33m;[39m
+     [90m    |[39m                    [31m[1m^[22m[39m
+     [90m 20 |[39m  expect(h[33m.[39mresult[33m.[39mcurrent[33m.[39mrevision)[33m.[39mtoBeNull()[33m;[39m
+     [90m 21 |[39m  [36mawait[39m act([36masync[39m()[33m=>[39m{expect([36mawait[39m h[33m.[39mresult[33m.[39mcurrent[33m.[39msave())[33m.[39mtoBe([36mtrue[39m)[33m;[39m})[33m;[39m
+     [90m 22 |[39m  expect(records[33m.[39m[36mget[39m([32m'legacy'[39m)[33m?[39m[33m.[39mrevision)[33m.[39mtoBe([35m1[39m)[33m;[39mexpect(records[33m.[39m[36mget[39m([32m'legacy'[39m)[33m?[39m[33m.[39mfields)[33m.[39mtoEqual(fields)[33m;[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at renderHook (node_modules/@testing-library/react/dist/pure.js:293:7)
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:19:20)
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 30 |[39m     window[33m.[39maddEventListener([32m'pagehide'[39m[33m,[39mrelease)[33m;[39m[36mreturn[39m()[33m=>[39m{window[33m.[39mremoveEventListener([32m'pagehide'[39m[33m,[39mrelease)[33m;[39mrelease()[33m;[39m}[33m;[39m
+     [90m 31 |[39m   }[33m,[39m[lease[33m,[39mwriter[33m,[39mmountId])[33m;[39m
+    [31m[1m>[22m[39m[90m 32 |[39m   [36mconst[39m reload[33m=[39museCallback([36masync[39m()[33m=>[39m{[36mtry[39m{[36mconst[39m rows[33m=[39m[36mawait[39m gateway[33m.[39mlist(scope[33m,[39mkind)[33m;[39m[36mif[39m(mounted[33m.[39mcurrent){setRecords(rows)[33m;[39msetListError([32m''[39m)[33m;[39m}}[36mcatch[39m{[36mif[39m(mounted[33m.[39mcurrent)setListError([32m'Cloud library unavailable. Your drafts are preserved. Retry when connected.'[39m)[33m;[39m}}[33m,[39m[gateway[33m,[39mscope[33m,[39mkind])[33m;[39m
+     [90m    |[39m                                                                                                        [31m[1m^[22m[39m
+     [90m 33 |[39m   useEffect(()[33m=>[39m{[36mvoid[39m reload()[33m;[39m}[33m,[39m[reload])[33m;[39m
+     [90m 34 |[39m   [36mconst[39m update[33m=[39museCallback((next[33m:[39m[33mFields[39m)[33m=>[39m{
+     [90m 35 |[39m     [36mif[39m(equal(next[33m,[39mstate[33m.[39mcurrent[33m.[39mfields))[36mreturn[39m[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setRecords (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/features/persistence/useDocument.ts:32:104
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 30 |[39m     window[33m.[39maddEventListener([32m'pagehide'[39m[33m,[39mrelease)[33m;[39m[36mreturn[39m()[33m=>[39m{window[33m.[39mremoveEventListener([32m'pagehide'[39m[33m,[39mrelease)[33m;[39mrelease()[33m;[39m}[33m;[39m
+     [90m 31 |[39m   }[33m,[39m[lease[33m,[39mwriter[33m,[39mmountId])[33m;[39m
+    [31m[1m>[22m[39m[90m 32 |[39m   [36mconst[39m reload[33m=[39museCallback([36masync[39m()[33m=>[39m{[36mtry[39m{[36mconst[39m rows[33m=[39m[36mawait[39m gateway[33m.[39mlist(scope[33m,[39mkind)[33m;[39m[36mif[39m(mounted[33m.[39mcurrent){setRecords(rows)[33m;[39msetListError([32m''[39m)[33m;[39m}}[36mcatch[39m{[36mif[39m(mounted[33m.[39mcurrent)setListError([32m'Cloud library unavailable. Your drafts are preserved. Retry when connected.'[39m)[33m;[39m}}[33m,[39m[gateway[33m,[39mscope[33m,[39mkind])[33m;[39m
+     [90m    |[39m                                                                                                                         [31m[1m^[22m[39m
+     [90m 33 |[39m   useEffect(()[33m=>[39m{[36mvoid[39m reload()[33m;[39m}[33m,[39m[reload])[33m;[39m
+     [90m 34 |[39m   [36mconst[39m update[33m=[39museCallback((next[33m:[39m[33mFields[39m)[33m=>[39m{
+     [90m 35 |[39m     [36mif[39m(equal(next[33m,[39mstate[33m.[39mcurrent[33m.[39mfields))[36mreturn[39m[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setListError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/features/persistence/useDocument.ts:32:121
+
+PASS src/ai-brain/__tests__/AIBrain.test.ts
+  ● Console
+
+    console.error
+      [AIBrain.generatePracticePlan] Proxy error: Proxy unavailable
+
+    [0m [90m 138 |[39m
+     [90m 139 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 140 |[39m         console[33m.[39merror([32m'[AIBrain.generatePracticePlan] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 141 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackPracticePlan(params)[33m;[39m
+     [90m 142 |[39m       }
+     [90m 143 |[39m[0m
+
+      at CoachCoreAIBrain.generatePracticePlan (src/ai-brain/core/AIBrain.ts:140:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:101:22)
+
+    console.error
+      [AIBrain.generatePracticePlan] Exception: Error: Network error
+          at Object.<anonymous> (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/src/ai-brain/__tests__/AIBrain.test.ts:107:45)
+          at Promise.then.completed (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/utils.js:316:10)
+          at _callCircusTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:218:40)
+          at _runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:155:3)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:66:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at _runTestsForDescribeBlock (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:60:9)
+          at run (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/run.js:25:3)
+          at runAndTransformResultsToJestFormat (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+          at jestAdapter (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+          at runTestInternal (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:389:16)
+          at runTest (/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/integ4/node_modules/jest-runner/build/runTest.js:475:34) Params: {
+        duration: 90,
+        goals: [ 'conditioning', 'install new plays' ],
+        teamId: 'team1'
+      }
+
+    [0m [90m 163 |[39m       [36mreturn[39m [36mthis[39m[33m.[39mfallbackPracticePlan(params)[33m;[39m
+     [90m 164 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 165 |[39m       console[33m.[39merror([32m'[AIBrain.generatePracticePlan] Exception:'[39m[33m,[39m error[33m,[39m [32m'Params:'[39m[33m,[39m params)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 166 |[39m       [36mreturn[39m [36mthis[39m[33m.[39mfallbackPracticePlan(params)[33m;[39m
+     [90m 167 |[39m     }
+     [90m 168 |[39m   }[0m
+
+      at CoachCoreAIBrain.generatePracticePlan (src/ai-brain/core/AIBrain.ts:165:15)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:109:22)
+
+    console.warn
+      [AIBrain.generatePracticePlan] Could not parse AI response, using fallback
+
+    [0m [90m 160 |[39m       }
+     [90m 161 |[39m
+    [31m[1m>[22m[39m[90m 162 |[39m       console[33m.[39mwarn([32m'[AIBrain.generatePracticePlan] Could not parse AI response, using fallback'[39m)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 163 |[39m       [36mreturn[39m [36mthis[39m[33m.[39mfallbackPracticePlan(params)[33m;[39m
+     [90m 164 |[39m     } [36mcatch[39m (error) {
+     [90m 165 |[39m       console[33m.[39merror([32m'[AIBrain.generatePracticePlan] Exception:'[39m[33m,[39m error[33m,[39m [32m'Params:'[39m[33m,[39m params)[33m;[39m[0m
+
+      at CoachCoreAIBrain.generatePracticePlan (src/ai-brain/core/AIBrain.ts:162:15)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:115:22)
+
+    console.error
+      [AIBrain.getPlaySuggestions] Proxy error: Proxy unavailable
+
+    [0m [90m 254 |[39m
+     [90m 255 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 256 |[39m         console[33m.[39merror([32m'[AIBrain.getPlaySuggestions] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 257 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackPlaySuggestions(context)[33m;[39m
+     [90m 258 |[39m       }
+     [90m 259 |[39m[0m
+
+      at CoachCoreAIBrain.getPlaySuggestions (src/ai-brain/core/AIBrain.ts:256:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:157:22)
+
+    console.error
+      [AIBrain.analyzeFormation] Proxy error: Proxy unavailable
+
+    [0m [90m 352 |[39m
+     [90m 353 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 354 |[39m         console[33m.[39merror([32m'[AIBrain.analyzeFormation] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 355 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackFormationAnalysis(formationName)[33m;[39m
+     [90m 356 |[39m       }
+     [90m 357 |[39m[0m
+
+      at CoachCoreAIBrain.analyzeFormation (src/ai-brain/core/AIBrain.ts:354:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:185:22)
+
+    console.error
+      [AIBrain.getCoverageRecommendation] Proxy error: Proxy unavailable
+
+    [0m [90m 460 |[39m
+     [90m 461 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 462 |[39m         console[33m.[39merror([32m'[AIBrain.getCoverageRecommendation] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 463 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackCoverageRecommendation(situation)[33m;[39m
+     [90m 464 |[39m       }
+     [90m 465 |[39m[0m
+
+      at CoachCoreAIBrain.getCoverageRecommendation (src/ai-brain/core/AIBrain.ts:462:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:211:22)
+
+    console.error
+      [AIBrain.generateDrillSuggestions] Proxy error: Proxy unavailable
+
+    [0m [90m 555 |[39m
+     [90m 556 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 557 |[39m         console[33m.[39merror([32m'[AIBrain.generateDrillSuggestions] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 558 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackDrillSuggestions(focus[33m,[39m playerLevel)[33m;[39m
+     [90m 559 |[39m       }
+     [90m 560 |[39m[0m
+
+      at CoachCoreAIBrain.generateDrillSuggestions (src/ai-brain/core/AIBrain.ts:557:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:237:22)
+
+    console.error
+      [AIBrain.assessPlayerDevelopment] Proxy error: Proxy unavailable
+
+    [0m [90m 655 |[39m
+     [90m 656 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 657 |[39m         console[33m.[39merror([32m'[AIBrain.assessPlayerDevelopment] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 658 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackPlayerDevelopment(playerData)[33m;[39m
+     [90m 659 |[39m       }
+     [90m 660 |[39m[0m
+
+      at CoachCoreAIBrain.assessPlayerDevelopment (src/ai-brain/core/AIBrain.ts:657:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:269:22)
+
+    console.error
+      [AIBrain.generateGamePlan] Proxy error: Proxy unavailable
+
+    [0m [90m 764 |[39m
+     [90m 765 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 766 |[39m         console[33m.[39merror([32m'[AIBrain.generateGamePlan] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 767 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackGamePlan()[33m;[39m
+     [90m 768 |[39m       }
+     [90m 769 |[39m[0m
+
+      at CoachCoreAIBrain.generateGamePlan (src/ai-brain/core/AIBrain.ts:766:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:297:22)
+
+    console.error
+      [AIBrain.getMotivationalInsight] Proxy error: Proxy unavailable
+
+    [0m [90m 866 |[39m
+     [90m 867 |[39m       [36mif[39m ([33m![39mresponse[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 868 |[39m         console[33m.[39merror([32m'[AIBrain.getMotivationalInsight] Proxy error:'[39m[33m,[39m response[33m.[39merror)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 869 |[39m         [36mreturn[39m [36mthis[39m[33m.[39mfallbackMotivationalInsight(teamContext)[33m;[39m
+     [90m 870 |[39m       }
+     [90m 871 |[39m[0m
+
+      at CoachCoreAIBrain.getMotivationalInsight (src/ai-brain/core/AIBrain.ts:868:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:322:22)
+
+PASS src/components/common/__tests__/ErrorBoundary.test.tsx
+PASS src/components/SmartPlaybook/__tests__/PlayController.test.js
+  ● Console
+
+    console.warn
+      Player with ID non-existent-id not found
+
+    [0m [90m 203 |[39m   
+     [90m 204 |[39m   [36mif[39m (filtered[33m.[39mlength [33m===[39m players[33m.[39mlength) {
+    [31m[1m>[22m[39m[90m 205 |[39m     console[33m.[39mwarn([32m`Player with ID ${playerId} not found`[39m)[33m;[39m
+     [90m     |[39m             [31m[1m^[22m[39m
+     [90m 206 |[39m   }
+     [90m 207 |[39m   
+     [90m 208 |[39m   [36mreturn[39m filtered[33m;[39m[0m
+
+      at removePlayer (src/components/SmartPlaybook/PlayController.js:205:13)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/PlayController.test.js:224:32)
+
+    console.warn
+      Route with ID non-existent not found
+
+    [0m [90m 307 |[39m   
+     [90m 308 |[39m   [36mif[39m (filtered[33m.[39mlength [33m===[39m routes[33m.[39mlength) {
+    [31m[1m>[22m[39m[90m 309 |[39m     console[33m.[39mwarn([32m`Route with ID ${routeId} not found`[39m)[33m;[39m
+     [90m     |[39m             [31m[1m^[22m[39m
+     [90m 310 |[39m   }
+     [90m 311 |[39m   
+     [90m 312 |[39m   [36mreturn[39m filtered[33m;[39m[0m
+
+      at removeRoute (src/components/SmartPlaybook/PlayController.js:309:13)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/PlayController.test.js:318:31)
+
+PASS src/features/legacy-import/__tests__/import-legacy.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 33 |[39m   expect(localStorage[33m.[39mgetItem(decisionKey([32m'coachB'[39m)))[33m.[39mtoBeNull()[33m;[39m
+     [90m 34 |[39m   [36mawait[39m expect(importLegacy(localStorage[33m,[39m{uid[33m:[39m[32m'coachB'[39m[33m,[39mteamId[33m:[39m[32m'teamB'[39m}[33m,[39m()[33m=>[39m[36mtrue[39m[33m,[39mbackend))[33m.[39mrejects[33m.[39mtoThrow([32m'already imported by another account'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 35 |[39m   render([33m<[39m[33mLegacyImport[39m uid[33m=[39m[32m"coachB"[39m teamId[33m=[39m[32m"teamB"[39m teamName[33m=[39m[32m"Bears"[39m backend[33m=[39m{backend}[33m/[39m[33m>[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 36 |[39m   expect(screen[33m.[39mgetByText([35m/already imported by another account/[39m))[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m 37 |[39m   expect(screen[33m.[39mqueryByRole([32m'button'[39m[33m,[39m{name[33m:[39m[32m'Import plays'[39m}))[33m.[39mnot[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m 38 |[39m   expect(stored[33m.[39msize)[33m.[39mtoBe([35m1[39m)[33m;[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:35:9)
+
+PASS src/components/SmartPlaybook/__tests__/FieldMemo.test.js
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 40 |[39m
+     [90m 41 |[39m   it([32m'renders without crashing'[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 42 |[39m     [36mconst[39m { container } [33m=[39m render([33m<[39m[33mField[39m {[33m...[39mbaseProps} [33m/[39m[33m>[39m)[33m;[39m
+     [90m    |[39m                                 [31m[1m^[22m[39m
+     [90m 43 |[39m     expect(container[33m.[39mquerySelector([32m'canvas'[39m))[33m.[39mtoBeTruthy()[33m;[39m
+     [90m 44 |[39m   })[33m;[39m
+     [90m 45 |[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/FieldMemo.test.js:42:33)
+
+PASS src/utils/__tests__/playbookBridge.test.ts
+PASS src/features/persistence/__tests__/editor.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m  6 |[39m  [36mconst[39m original[33m:[39m[33mFields[39m[33m=[39m{name[33m:[39m[32m'Plan'[39m[33m,[39mnotes[33m:[39m[32m'All notes'[39m[33m,[39mperiods[33m:[39m[{name[33m:[39m[32m'Skills'[39m[33m,[39mkind[33m:[39m[32m'period'[39m[33m,[39mdurationMinutes[33m:[39m[35m30[39m[33m,[39mfocus[33m:[39m[32m'Routes'[39m[33m,[39mdrills[33m:[39m[{name[33m:[39m[32m'Mesh'[39m[33m,[39mdurationMinutes[33m:[39m[35m10[39m[33m,[39msetup[33m:[39m[32m'Pairs'[39m[33m,[39minstructions[33m:[39m[32m'Cross'[39m[33m,[39mcoachingPoints[33m:[39m[[32m'Eyes'[39m][33m,[39mequipment[33m:[39m[[32m'cones'[39m]}]}][33m,[39mhydrationBreakMinutes[33m:[39m[[35m10[39m[33m,[39m[35m20[39m]}[33m;[39m
+     [90m  7 |[39m  [36mlet[39m result[33m:[39m[33mValue[39m[33m=[39moriginal[33m;[39m[36mfunction[39m [33mDemo[39m(){[36mconst[39m [v[33m,[39msetV][33m=[39museState[33m<[39m[33mValue[39m[33m>[39m(original)[33m;[39m[36mreturn[39m [33m<[39m[33mFieldsEditor[39m value[33m=[39m{v} onChange[33m=[39m{n[33m=>[39m{result[33m=[39mn[33m;[39msetV(n)[33m;[39m}}[33m/[39m[33m>[39m[33m;[39m}
+    [31m[1m>[22m[39m[90m  8 |[39m  render([33m<[39m[33mDemo[39m[33m/[39m[33m>[39m)[33m;[39mfireEvent[33m.[39mchange(screen[33m.[39mgetByLabelText([32m'Plan.periods.1.drills.1.instructions'[39m)[33m,[39m{target[33m:[39m{value[33m:[39m[32m'Edited instructions'[39m}})[33m;[39m
+     [90m    |[39m        [31m[1m^[22m[39m
+     [90m  9 |[39m  fireEvent[33m.[39mchange(screen[33m.[39mgetByLabelText([32m'Plan.notes'[39m)[33m,[39m{target[33m:[39m{value[33m:[39m[32m'Detailed notes'[39m}})[33m;[39m
+     [90m 10 |[39m  expect((result [36mas[39m [33mFields[39m)[33m.[39mperiods)[33m.[39mtoEqual([{[33m...[39m(original[33m.[39mperiods [36mas[39m [33mFields[39m[])[[35m0[39m][33m,[39mdrills[33m:[39m[{name[33m:[39m[32m'Mesh'[39m[33m,[39mdurationMinutes[33m:[39m[35m10[39m[33m,[39msetup[33m:[39m[32m'Pairs'[39m[33m,[39minstructions[33m:[39m[32m'Edited instructions'[39m[33m,[39mcoachingPoints[33m:[39m[[32m'Eyes'[39m][33m,[39mequipment[33m:[39m[[32m'cones'[39m]}]}])[33m;[39m
+     [90m 11 |[39m  fireEvent[33m.[39mclick(within(screen[33m.[39mgetByLabelText([32m'Plan.hydrationBreakMinutes.2'[39m)[33m.[39mclosest([32m'div'[39m)[33m![39m)[33m.[39mgetByRole([32m'button'[39m[33m,[39m{name[33m:[39m[32m'Move up'[39m[33m,[39mexact[33m:[39m[36mtrue[39m}))[33m;[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/persistence/__tests__/editor.test.tsx:8:8)
+
+PASS src/services/__tests__/coach-ai-client.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 70 |[39m       [36mreturn[39m [36mnull[39m[33m;[39m
+     [90m 71 |[39m     }
+    [31m[1m>[22m[39m[90m 72 |[39m     render([33m<[39m[33mAIProvider[39m[33m>[39m[33m<[39m[33mProbe[39m [33m/[39m[33m>[39m[33m<[39m[33m/[39m[33mAIProvider[39m[33m>[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 73 |[39m     [36mreturn[39m ref[33m;[39m
+     [90m 74 |[39m   }
+     [90m 75 |[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at capture (src/services/__tests__/coach-ai-client.test.tsx:72:11)
+      at Object.<anonymous> (src/services/__tests__/coach-ai-client.test.tsx:78:17)
+
+PASS src/services/__tests__/firestore.edge.test.ts
+PASS src/services/__tests__/spacingEngine.test.ts
+PASS src/services/__tests__/firestore.test.ts
+PASS src/features/legacy-import/__tests__/firebase-import.test.ts
+PASS src/components/SmartPlaybook/__tests__/PlayController.edge.test.js
+PASS src/services/__tests__/timingEngine.test.ts
+PASS src/hooks/__tests__/useConceptDetection.test.ts
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m 45 |[39m describe([32m'useConceptDetection'[39m[33m,[39m () [33m=>[39m {
+     [90m 46 |[39m   it([32m'returns empty array for null play'[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 47 |[39m     [36mconst[39m { result } [33m=[39m renderHook(() [33m=>[39m useConceptDetection([36mnull[39m))[33m;[39m
+     [90m    |[39m                                  [31m[1m^[22m[39m
+     [90m 48 |[39m     expect(result[33m.[39mcurrent)[33m.[39mtoEqual([])[33m;[39m
+     [90m 49 |[39m   })[33m;[39m
+     [90m 50 |[39m[0m
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at renderHook (node_modules/@testing-library/react/dist/pure.js:293:7)
+      at Object.<anonymous> (src/hooks/__tests__/useConceptDetection.test.ts:47:34)
+
+PASS src/utils/__tests__/typeGuards.test.ts
+PASS src/features/persistence/__tests__/model.test.ts
+PASS src/features/persistence/__tests__/gateway.test.ts
+PASS src/utils/__tests__/logger.test.ts
+PASS src/features/persistence/__tests__/createOnly.test.ts
+PASS src/features/persistence/__tests__/playRoutes.test.ts
+
+Test Suites: 26 passed, 26 total
+Tests:       416 passed, 416 total
+Snapshots:   0 total
+Time:        11.629 s, estimated 12 s
+Ran all test suites.
+EXIT=0
