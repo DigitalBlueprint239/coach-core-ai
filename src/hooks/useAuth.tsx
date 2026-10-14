@@ -34,7 +34,10 @@ export type AuthStatus =
   | 'needs_email_confirmation' // opened an email link on a different device
   | 'unverified'
   | 'not_beta'
-  | 'ready';
+  | 'ready'
+  // Explicit sign-out in progress (FX-03): a non-interactive screen is shown
+  // until the post-sign-out reload, so no form appears in the old document.
+  | 'signing_out';
 
 export type AuthNotice =
   | 'session-expired'
@@ -159,8 +162,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const wasSignedIn = useRef(false);
   // An email sign-in link was opened but needs the address re-entered.
   const pendingEmailLink = useRef(false);
+  // Set once an explicit sign-out has passed its guards (FX-03).
+  const signingOut = useRef(false);
 
   const apply = useCallback(async (u: User | null) => {
+    if (signingOut.current) {
+      // The SDK's signed-out event arrives before cleanup and the reload finish.
+      // Stay on the neutral signing-out screen instead of showing the sign-in
+      // form in a document that is about to be replaced (its input would be lost).
+      setUser(null);
+      return;
+    }
     try {
       if (u?.isAnonymous) {
         // Anonymous sessions never get access; end them.
@@ -290,16 +302,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
     wasSignedIn.current = false;
+    // FX-03: from here until the reload, render only a non-interactive screen.
+    // Private content is unmounted immediately; recovery data is untouched
+    // (clearUserScopedState removes only the session team key).
+    signingOut.current = true;
+    setUser(null);
+    setStatus('signing_out');
     try {
       await signOut(auth);
     } finally {
       await clearUserScopedState();
-      setUser(null);
       setNotice('signed-out');
-      setStatus('signed_out');
-      // Reload to drop any in-memory data that belonged to this coach.
       if (process.env.NODE_ENV !== 'test') {
+        // Reload to drop any in-memory data that belonged to this coach. The
+        // sign-in form is rendered only by the fresh document.
         window.location.assign('/');
+      } else {
+        signingOut.current = false;
+        setStatus('signed_out');
       }
     }
     return true;
