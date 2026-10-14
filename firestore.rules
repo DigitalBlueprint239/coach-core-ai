@@ -131,7 +131,9 @@ service cloud.firestore {
       // `list` requires the query to filter on teamId == <a team the caller owns>.
       // A missing id is readable (result: not found) so create-only transactions
       // can check before writing (D10 import). Existing documents keep owner-only
-      // reads; `list` is unchanged. Reveals only that an id is unused.
+      // reads; `list` is unchanged. Side effect: a beta user can tell whether an
+      // id exists (not-found vs permission-denied). Accepted: copy ids are
+      // SHA-256 of uid+team+content and other ids are random.
       allow get: if isBetaUser() && (resource == null || ownsTeam(resource.data.teamId));
       allow list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
@@ -179,7 +181,9 @@ service cloud.firestore {
     match /practicePlans/{planId} {
       // A missing id is readable (result: not found) so create-only transactions
       // can check before writing (D10 import). Existing documents keep owner-only
-      // reads; `list` is unchanged. Reveals only that an id is unused.
+      // reads; `list` is unchanged. Side effect: a beta user can tell whether an
+      // id exists (not-found vs permission-denied). Accepted: copy ids are
+      // SHA-256 of uid+team+content and other ids are random.
       allow get: if isBetaUser() && (resource == null || ownsTeam(resource.data.teamId));
       allow list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
