@@ -10,7 +10,7 @@
 import type { Auth } from 'firebase/auth';
 import { signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
-import { doc, getDoc, setDoc, updateDoc, Timestamp, type UpdateData, type DocumentData } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, runTransaction, Timestamp, type UpdateData, type DocumentData } from 'firebase/firestore';
 
 type Result = { ok: true; data?: unknown } | { ok: false; code: string };
 
@@ -45,6 +45,11 @@ export function installEmulatorHooks(auth: Auth, db: Firestore): void {
       const snap = await getDoc(doc(db, path));
       return snap.exists() ? JSON.parse(JSON.stringify(snap.data())) : null;
     }),
+    // Same read a create-only import transaction performs (exists check).
+    txGet: (path: string) => run(() => runTransaction(db, async (tx) => {
+      const snap = await tx.get(doc(db, path));
+      return snap.exists() ? 'exists' : 'missing';
+    })),
     set: (path: string, data: unknown) => run(() => setDoc(doc(db, path), revive(data) as object)),
     update: (path: string, data: unknown) =>
       run(() => updateDoc(doc(db, path), revive(data) as UpdateData<DocumentData>)),
