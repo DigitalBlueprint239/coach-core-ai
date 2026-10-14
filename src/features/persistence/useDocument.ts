@@ -16,6 +16,7 @@ export function useDocument(incomingScope:Scope,kind:Kind,initial:Fields,gateway
   const [id,setId]=useState(restored.current?.id??crypto.randomUUID());
   const [revision,setRevision]=useState<number|null>(restored.current?.expectedRevision??0);
   const [ack,setAck]=useState<Fields|null>(null);
+  const ackRef=useRef<Fields|null>(ack);ackRef.current=ack;
   const [saving,setSaving]=useState(false);const [error,setError]=useState(restoreError.current);
   const [conflict,setConflict]=useState<RecordData|null>(null);const [opened,setOpened]=useState(0);
   const [records,setRecords]=useState<RecordData[]>([]);const [listError,setListError]=useState('');
@@ -44,7 +45,7 @@ export function useDocument(incomingScope:Scope,kind:Kind,initial:Fields,gateway
       writeDraft({scope,kind,writer,id:snapshot.id,expectedRevision:snapshot.revision,fields:snapshot.fields,pending:true});
       const result=await gateway.save(scope,kind,snapshot.id,snapshot.revision,snapshot.fields);
       if(!mounted.current||run!==generation.current)return false;
-      setId(result.id);setRevision(result.revision);setAck(result.fields);setTimestamps(result);setConflict(null);
+      setId(result.id);setRevision(result.revision);setAck(result.fields);ackRef.current=result.fields;setTimestamps(result);setConflict(null);
       state.current={...state.current,id:result.id,revision:result.revision};
       if(equal(state.current.fields,snapshot.fields))localStorage.removeItem(key(scope,kind,writer));
       else writeDraft({scope,kind,writer,id:result.id,expectedRevision:result.revision,fields:state.current.fields,pending:false});
@@ -61,10 +62,15 @@ export function useDocument(incomingScope:Scope,kind:Kind,initial:Fields,gateway
   },[scope,kind,writer,save]);
   useEffect(()=>registerSignOutGuard(uid=>{
     if(uid!==scope.uid)return true;
-    try{if(!readDraft(scope,kind,localStorage,writer)&&!equal(state.current.fields,ack??initial)){
+    try{if(!readDraft(scope,kind,localStorage,writer)&&!equal(state.current.fields,ackRef.current??initial)){
       setError('Device recovery is unavailable. Export your unsaved work before leaving.');return false;
     }}catch{setError('Recovery data cannot be read. Export before signing out.');return false;}return true;
   }),[scope,kind,writer,ack,initial]);
+  useEffect(()=>{const notify=(event:Event)=>{const d=(event as CustomEvent<RecordData & {scope:Scope;kind:Kind;writer?:string}>).detail;
+    if(!d||d.scope.uid!==scope.uid||d.scope.teamId!==scope.teamId||d.kind!==kind||d.writer!==writer||d.id!==state.current.id)return;
+    setRevision(d.revision);state.current={...state.current,revision:d.revision};setTimestamps(d);
+    if(equal(state.current.fields,d.fields)){ackRef.current=d.fields;setAck(d.fields);setError('');}
+  };window.addEventListener('coachcore:acknowledged',notify);return()=>window.removeEventListener('coachcore:acknowledged',notify);},[scope,kind,writer]);
   useEffect(()=>{const warn=(e:BeforeUnloadEvent)=>{
     if(!equal(state.current.fields,ack??initial)){e.preventDefault();e.returnValue='';}
   };window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[ack,initial]);

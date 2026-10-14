@@ -14,6 +14,7 @@ export default function DraftSignOut(){
   if(!pending||pending.uid!==user?.uid)return null;
   const finish=(yes:boolean)=>{pending.resolve(yes);setPending(null);};
   const sync=async()=>{try{for(const d of scopedDrafts(pending.uid)){const ack=await cloud.save(d.scope,d.kind,d.id,d.expectedRevision,d.fields);const current=readDraft(d.scope,d.kind,localStorage,d.writer);
+    window.dispatchEvent(new CustomEvent('coachcore:acknowledged',{detail:{...ack,scope:d.scope,kind:d.kind,writer:d.writer}}));
     if(current&&current.id===d.id&&equal(current.fields,d.fields))localStorage.removeItem(key(d.scope,d.kind,d.writer));
     else if(current&&current.id===d.id)writeDraft({...current,expectedRevision:ack.revision});
   }if(scopedDrafts(pending.uid).length)throw new Error('More edits were made during sync. Drafts retained; sync again or export.');finish(true);}catch(e){setError(e instanceof Error?e.message:'Sync failed. Drafts retained.');}};

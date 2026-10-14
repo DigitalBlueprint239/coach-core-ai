@@ -57,3 +57,14 @@ test('two editor drafts share storage without overwriting; one acknowledgement c
  await act(async()=>{expect(await first.result.current.save()).toBe(true);});
  expect(readDraft(scope,'plays',localStorage,second.result.current.writer)?.fields.name).toBe('Second draft');
 });
+test('cloned session pointer allocates a distinct live writer instead of sharing the draft key',async()=>{
+ const first=renderHook(()=>useDocument(scope,'plays',{name:'A'},gateway));await waitFor(()=>expect(gateway.list).toHaveBeenCalled());
+ const second=renderHook(()=>useDocument(scope,'plays',{name:'B'},gateway));expect(first.result.current.writer).not.toBe(second.result.current.writer);
+});
+test('sign-out sync acknowledgement updates the live editor only for its exact scope and writer',async()=>{
+ const h=renderHook(()=>useDocument(scope,'plays',{name:'A'},gateway));await waitFor(()=>expect(gateway.list).toHaveBeenCalled());act(()=>h.result.current.update({name:'Synced'}));
+ act(()=>window.dispatchEvent(new CustomEvent('coachcore:acknowledged',{detail:{id:h.result.current.id,revision:1,fields:{name:'Synced'},createdAt:stamp,updatedAt:stamp,scope:{uid:'B',teamId:'T'},kind:'plays',writer:h.result.current.writer}})));
+ expect(h.result.current.status).toBe('unsaved');
+ act(()=>window.dispatchEvent(new CustomEvent('coachcore:acknowledged',{detail:{id:h.result.current.id,revision:1,fields:{name:'Synced'},createdAt:stamp,updatedAt:stamp,scope,kind:'plays',writer:h.result.current.writer}})));
+ expect(h.result.current.status).toBe('saved');
+});
