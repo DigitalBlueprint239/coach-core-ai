@@ -12,6 +12,22 @@ test('P16 manual editable plan saves and reopens exact ordered content in clean 
  await clean.getByRole('button',{name:`Open ${'A'.repeat(200)}`,exact:true}).click();await expect(clean.getByLabel('Plan.notes',{exact:true})).toHaveValue('N'.repeat(5000));await expect(clean.getByLabel('Plan.periods.2.focus')).toHaveValue('Route timing');
  }finally{await context.close();}
 });
+test('R5 no-team coach sees a truthful block with no save action',async({page})=>{
+ await signInAsBetaCoach(page,coachEmail('no-team'));await openTab(page,'Smart Playbook');
+ await expect(page.getByRole('alert')).toContainText('No play has been saved');
+ await expect(page.getByRole('button',{name:'Save Play',exact:true})).toHaveCount(0);
+});
+test('R1 verified legacy import keeps originals and blocks another account',async({page})=>{
+ await setup(page,'claim-a');const originals=JSON.stringify([{id:'legacy',name:'Original',phase:'offense',type:'pass',players:[],routes:[]}]);
+ await page.evaluate(raw=>localStorage.setItem('smartPlaybook_plays',raw),originals);await openTab(page,'Smart Playbook');
+ await page.getByRole('button',{name:'Import plays',exact:true}).click();
+ await expect.poll(()=>page.evaluate(()=>localStorage.getItem('coachcore:v1:legacyImportClaim'))).not.toBeNull();
+ await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
+ await signInAsBetaCoach(page,coachEmail('claim-b'));await createTeamViaUI(page,'Bravo');await openTab(page,'Smart Playbook');
+ await expect(page.getByRole('region',{name:'Import device plays'})).toContainText('already imported by another account');
+ await expect(page.getByRole('button',{name:'Import plays',exact:true})).toHaveCount(0);
+ expect(await page.evaluate(()=>localStorage.getItem('smartPlaybook_plays'))).toBe(originals);
+});
 test('P14 shared-profile tabs preserve drafts across refresh and recover conflict as a copy',async({page,context})=>{
  const s=await setup(page,'p14');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('Original');await saved(page);
  const p2=await context.newPage();try{p2.on('dialog',d=>{void d.accept();});await p2.goto('/');await expect(p2.getByText(`Welcome, ${s.email}`)).toBeVisible();await plan(p2);await p2.getByRole('button',{name:'Open Original',exact:true}).click();
