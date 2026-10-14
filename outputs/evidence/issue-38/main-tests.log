@@ -1,0 +1,625 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand
+
+PASS src/services/__tests__/conceptDetection.test.ts
+PASS src/components/common/__tests__/ErrorBoundary.test.tsx
+PASS src/App.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      3 |
+      4 | test('renders App without crashing', () => {
+    > 5 |   render(<App />);
+        |         ^
+      6 |   // App renders successfully - may show "Coach Core" heading or
+      7 |   // error boundary if Firebase is not configured in test environment
+      8 |   const coachCore = screen.queryByText(/Coach Core/i);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/App.test.tsx:5:9)
+
+    console.error
+      Error: useAuth must be used within an AuthProvider
+          at useAuth (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\hooks\useAuth.tsx:33:23)
+          at Dashboard (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\components\Dashboard.tsx:13:49)
+          at Object.react-stack-bottom-frame (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:23863:20)
+          at renderWithHooks (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:5529:22)
+          at updateFunctionComponent (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:8897:19)
+          at beginWork (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:10522:18)
+          at runWithFiberInDEV (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:1522:13)
+          at performUnitOfWork (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:15140:22)
+          at workLoopSync (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:14956:41)
+          at renderRootSync (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:14936:11)
+          at performWorkOnRoot (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:14462:44)
+          at performWorkOnRootViaSchedulerTask (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:16216:7)
+          at flushActQueue (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react\cjs\react.development.js:566:34)
+          at Object.<anonymous>.process.env.NODE_ENV.exports.act (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react\cjs\react.development.js:859:10)
+          at Object.<anonymous>.process.env.NODE_ENV.exports.act (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-test-utils.development.js:22:20)
+          at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\@testing-library\react\dist\act-compat.js:63:25
+          at renderRoot (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\@testing-library\react\dist\pure.js:159:26)
+          at render (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\@testing-library\react\dist\pure.js:246:10)
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\App.test.tsx:5:9)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34) {
+        [stack]: [Getter/Setter],
+        [message]: 'useAuth must be used within an AuthProvider'
+      }
+      
+      The above error occurred in the <Dashboard> component.
+      
+      React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+
+      3 |
+      4 | test('renders App without crashing', () => {
+    > 5 |   render(<App />);
+        |         ^
+      6 |   // App renders successfully - may show "Coach Core" heading or
+      7 |   // error boundary if Firebase is not configured in test environment
+      8 |   const coachCore = screen.queryByText(/Coach Core/i);
+
+      at defaultOnCaughtError (node_modules/react-dom/cjs/react-dom-client.development.js:8331:17)
+      at logCaughtError (node_modules/react-dom/cjs/react-dom-client.development.js:8367:9)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at ErrorBoundary.inst.componentDidCatch.update.callback (node_modules/react-dom/cjs/react-dom-client.development.js:8414:11)
+      at callCallback (node_modules/react-dom/cjs/react-dom-client.development.js:5363:16)
+      at commitCallbacks (node_modules/react-dom/cjs/react-dom-client.development.js:5383:11)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitClassCallbacks (node_modules/react-dom/cjs/react-dom-client.development.js:12067:11)
+      at commitLayoutEffectOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:12688:25)
+      at recursivelyTraverseLayoutEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13590:11)
+      at commitLayoutEffectOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:12611:11)
+      at recursivelyTraverseLayoutEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13590:11)
+      at commitLayoutEffectOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:12693:11)
+      at flushLayoutEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15559:15)
+      at commitRoot (node_modules/react-dom/cjs/react-dom-client.development.js:15402:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs/react-dom-client.development.js:14526:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-dom/cjs/react-dom-client.development.js:16216:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:22:20)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/App.test.tsx:5:9)
+
+    console.error
+      ErrorBoundary caught an error: Error: useAuth must be used within an AuthProvider
+          at useAuth (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\hooks\useAuth.tsx:33:23)
+          at Dashboard (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\components\Dashboard.tsx:13:49)
+          at Object.react-stack-bottom-frame (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:23863:20)
+          at renderWithHooks (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:5529:22)
+          at updateFunctionComponent (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:8897:19)
+          at beginWork (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:10522:18)
+          at runWithFiberInDEV (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:1522:13)
+          at performUnitOfWork (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:15140:22)
+          at workLoopSync (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:14956:41)
+          at renderRootSync (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:14936:11)
+          at performWorkOnRoot (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:14462:44)
+          at performWorkOnRootViaSchedulerTask (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-client.development.js:16216:7)
+          at flushActQueue (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react\cjs\react.development.js:566:34)
+          at Object.<anonymous>.process.env.NODE_ENV.exports.act (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react\cjs\react.development.js:859:10)
+          at Object.<anonymous>.process.env.NODE_ENV.exports.act (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\react-dom\cjs\react-dom-test-utils.development.js:22:20)
+          at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\@testing-library\react\dist\act-compat.js:63:25
+          at renderRoot (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\@testing-library\react\dist\pure.js:159:26)
+          at render (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\@testing-library\react\dist\pure.js:246:10)
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\App.test.tsx:5:9)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34) {
+        componentStack: '\n' +
+          '    at Dashboard (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\components\\Dashboard.tsx:13:49)\n' +
+          '    at div (<anonymous>)\n' +
+          '    at div (<anonymous>)\n' +
+          '    at AIProvider (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\ai-brain\\AIContext.tsx:78:3)\n' +
+          '    at TeamProvider (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\contexts\\TeamContext.tsx:63:61)\n' +
+          '    at AuthProvider (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\components\\AuthProvider.tsx:27:61)\n' +
+          '    at ToastManager (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\components\\ToastManager.tsx:33:54)\n' +
+          '    at ErrorBoundary (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\components\\common\\ErrorBoundary.tsx:14:53)\n' +
+          '    at App (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-platform\\src\\App.tsx:19:49)'
+      }
+
+      23 |
+      24 |   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    > 25 |     console.error('ErrorBoundary caught an error:', error, errorInfo);
+         |             ^
+      26 |     
+      27 |     this.setState({
+      28 |       error,
+
+      at ErrorBoundary.componentDidCatch (src/components/common/ErrorBoundary.tsx:25:13)
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23916:20)
+      at ErrorBoundary.inst.componentDidCatch.update.callback (node_modules/react-dom/cjs/react-dom-client.development.js:8425:11)
+      at callCallback (node_modules/react-dom/cjs/react-dom-client.development.js:5363:16)
+      at commitCallbacks (node_modules/react-dom/cjs/react-dom-client.development.js:5383:11)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitClassCallbacks (node_modules/react-dom/cjs/react-dom-client.development.js:12067:11)
+      at commitLayoutEffectOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:12688:25)
+      at recursivelyTraverseLayoutEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13590:11)
+      at commitLayoutEffectOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:12611:11)
+      at recursivelyTraverseLayoutEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13590:11)
+      at commitLayoutEffectOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:12693:11)
+      at flushLayoutEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15559:15)
+      at commitRoot (node_modules/react-dom/cjs/react-dom-client.development.js:15402:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs/react-dom-client.development.js:14526:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-dom/cjs/react-dom-client.development.js:16216:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:22:20)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/App.test.tsx:5:9)
+
+PASS src/services/__tests__/ai-proxy.test.ts
+  ● Console
+
+    console.warn
+      AI proxy attempt 1 failed: Error: Network error
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:118:35)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:120:22)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: Network error
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:118:35)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:120:22)
+
+    console.warn
+      AI proxy attempt 1 failed: Error: Network error
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:127:35)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:129:7)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: Network error
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:127:35)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:129:7)
+
+    console.warn
+      AI proxy attempt 1 failed: Error: AI Proxy error: 500 Internal Server Error
+          at AIProxyService.makeRequest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\ai-proxy.ts:61:17)
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:138:22)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:138:22)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: AI Proxy error: 500 Internal Server Error
+          at AIProxyService.makeRequest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\ai-proxy.ts:61:17)
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:138:22)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:138:22)
+
+    console.warn
+      AI proxy attempt 1 failed: Error: Connection refused
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:144:35)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:146:22)
+
+    console.warn
+      AI proxy attempt 2 failed: Error: Connection refused
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\services\__tests__\ai-proxy.test.ts:144:35)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34)
+
+      78 |       } catch (error) {
+      79 |         lastError = error as Error;
+    > 80 |         console.warn(`AI proxy attempt ${attempt} failed:`, error);
+         |                 ^
+      81 |         
+      82 |         if (attempt < this.config.retries!) {
+      83 |           await this.delay(1000 * attempt); // Exponential backoff
+
+      at AIProxyService.makeRequest (src/services/ai-proxy.ts:80:17)
+      at Object.<anonymous> (src/services/__tests__/ai-proxy.test.ts:146:22)
+
+PASS src/components/SmartPlaybook/__tests__/PlayController.test.js
+  ● Console
+
+    console.warn
+      Player with ID non-existent-id not found
+
+      203 |   
+      204 |   if (filtered.length === players.length) {
+    > 205 |     console.warn(`Player with ID ${playerId} not found`);
+          |             ^
+      206 |   }
+      207 |   
+      208 |   return filtered;
+
+      at removePlayer (src/components/SmartPlaybook/PlayController.js:205:13)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/PlayController.test.js:224:32)
+
+    console.warn
+      Route with ID non-existent not found
+
+      307 |   
+      308 |   if (filtered.length === routes.length) {
+    > 309 |     console.warn(`Route with ID ${routeId} not found`);
+          |             ^
+      310 |   }
+      311 |   
+      312 |   return filtered;
+
+      at removeRoute (src/components/SmartPlaybook/PlayController.js:309:13)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/PlayController.test.js:318:31)
+
+PASS src/components/SmartPlaybook/__tests__/FieldMemo.test.js
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      40 |
+      41 |   it('renders without crashing', () => {
+    > 42 |     const { container } = render(<Field {...baseProps} />);
+         |                                 ^
+      43 |     expect(container.querySelector('canvas')).toBeTruthy();
+      44 |   });
+      45 |
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/FieldMemo.test.js:42:33)
+
+PASS src/ai-brain/__tests__/AIBrain.test.ts
+  ● Console
+
+    console.error
+      [AIBrain.generatePracticePlan] Proxy error: Proxy unavailable
+
+      138 |
+      139 |       if (!response.success) {
+    > 140 |         console.error('[AIBrain.generatePracticePlan] Proxy error:', response.error);
+          |                 ^
+      141 |         return this.fallbackPracticePlan(params);
+      142 |       }
+      143 |
+
+      at CoachCoreAIBrain.generatePracticePlan (src/ai-brain/core/AIBrain.ts:140:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:101:22)
+
+    console.error
+      [AIBrain.generatePracticePlan] Exception: Error: Network error
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\src\ai-brain\__tests__\AIBrain.test.ts:107:45)
+          at Promise.then.completed (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:60:9)
+          at run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-platform\node_modules\jest-runner\build\runTest.js:475:34) Params: {
+        duration: 90,
+        goals: [ 'conditioning', 'install new plays' ],
+        teamId: 'team1'
+      }
+
+      163 |       return this.fallbackPracticePlan(params);
+      164 |     } catch (error) {
+    > 165 |       console.error('[AIBrain.generatePracticePlan] Exception:', error, 'Params:', params);
+          |               ^
+      166 |       return this.fallbackPracticePlan(params);
+      167 |     }
+      168 |   }
+
+      at CoachCoreAIBrain.generatePracticePlan (src/ai-brain/core/AIBrain.ts:165:15)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:109:22)
+
+    console.warn
+      [AIBrain.generatePracticePlan] Could not parse AI response, using fallback
+
+      160 |       }
+      161 |
+    > 162 |       console.warn('[AIBrain.generatePracticePlan] Could not parse AI response, using fallback');
+          |               ^
+      163 |       return this.fallbackPracticePlan(params);
+      164 |     } catch (error) {
+      165 |       console.error('[AIBrain.generatePracticePlan] Exception:', error, 'Params:', params);
+
+      at CoachCoreAIBrain.generatePracticePlan (src/ai-brain/core/AIBrain.ts:162:15)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:115:22)
+
+    console.error
+      [AIBrain.getPlaySuggestions] Proxy error: Proxy unavailable
+
+      254 |
+      255 |       if (!response.success) {
+    > 256 |         console.error('[AIBrain.getPlaySuggestions] Proxy error:', response.error);
+          |                 ^
+      257 |         return this.fallbackPlaySuggestions(context);
+      258 |       }
+      259 |
+
+      at CoachCoreAIBrain.getPlaySuggestions (src/ai-brain/core/AIBrain.ts:256:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:157:22)
+
+    console.error
+      [AIBrain.analyzeFormation] Proxy error: Proxy unavailable
+
+      352 |
+      353 |       if (!response.success) {
+    > 354 |         console.error('[AIBrain.analyzeFormation] Proxy error:', response.error);
+          |                 ^
+      355 |         return this.fallbackFormationAnalysis(formationName);
+      356 |       }
+      357 |
+
+      at CoachCoreAIBrain.analyzeFormation (src/ai-brain/core/AIBrain.ts:354:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:185:22)
+
+    console.error
+      [AIBrain.getCoverageRecommendation] Proxy error: Proxy unavailable
+
+      460 |
+      461 |       if (!response.success) {
+    > 462 |         console.error('[AIBrain.getCoverageRecommendation] Proxy error:', response.error);
+          |                 ^
+      463 |         return this.fallbackCoverageRecommendation(situation);
+      464 |       }
+      465 |
+
+      at CoachCoreAIBrain.getCoverageRecommendation (src/ai-brain/core/AIBrain.ts:462:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:211:22)
+
+    console.error
+      [AIBrain.generateDrillSuggestions] Proxy error: Proxy unavailable
+
+      555 |
+      556 |       if (!response.success) {
+    > 557 |         console.error('[AIBrain.generateDrillSuggestions] Proxy error:', response.error);
+          |                 ^
+      558 |         return this.fallbackDrillSuggestions(focus, playerLevel);
+      559 |       }
+      560 |
+
+      at CoachCoreAIBrain.generateDrillSuggestions (src/ai-brain/core/AIBrain.ts:557:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:237:22)
+
+    console.error
+      [AIBrain.assessPlayerDevelopment] Proxy error: Proxy unavailable
+
+      655 |
+      656 |       if (!response.success) {
+    > 657 |         console.error('[AIBrain.assessPlayerDevelopment] Proxy error:', response.error);
+          |                 ^
+      658 |         return this.fallbackPlayerDevelopment(playerData);
+      659 |       }
+      660 |
+
+      at CoachCoreAIBrain.assessPlayerDevelopment (src/ai-brain/core/AIBrain.ts:657:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:269:22)
+
+    console.error
+      [AIBrain.generateGamePlan] Proxy error: Proxy unavailable
+
+      764 |
+      765 |       if (!response.success) {
+    > 766 |         console.error('[AIBrain.generateGamePlan] Proxy error:', response.error);
+          |                 ^
+      767 |         return this.fallbackGamePlan();
+      768 |       }
+      769 |
+
+      at CoachCoreAIBrain.generateGamePlan (src/ai-brain/core/AIBrain.ts:766:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:297:22)
+
+    console.error
+      [AIBrain.getMotivationalInsight] Proxy error: Proxy unavailable
+
+      866 |
+      867 |       if (!response.success) {
+    > 868 |         console.error('[AIBrain.getMotivationalInsight] Proxy error:', response.error);
+          |                 ^
+      869 |         return this.fallbackMotivationalInsight(teamContext);
+      870 |       }
+      871 |
+
+      at CoachCoreAIBrain.getMotivationalInsight (src/ai-brain/core/AIBrain.ts:868:17)
+      at Object.<anonymous> (src/ai-brain/__tests__/AIBrain.test.ts:322:22)
+
+PASS src/services/__tests__/timingEngine.test.ts
+PASS src/services/__tests__/spacingEngine.test.ts
+PASS src/services/__tests__/firestore.edge.test.ts
+PASS src/utils/__tests__/playbookBridge.test.ts
+PASS src/utils/__tests__/logger.test.ts
+PASS src/hooks/__tests__/useConceptDetection.test.ts
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      45 | describe('useConceptDetection', () => {
+      46 |   it('returns empty array for null play', () => {
+    > 47 |     const { result } = renderHook(() => useConceptDetection(null));
+         |                                  ^
+      48 |     expect(result.current).toEqual([]);
+      49 |   });
+      50 |
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at renderHook (node_modules/@testing-library/react/dist/pure.js:293:7)
+      at Object.<anonymous> (src/hooks/__tests__/useConceptDetection.test.ts:47:34)
+
+PASS src/services/__tests__/firestore.test.ts
+PASS src/utils/__tests__/typeGuards.test.ts
+PASS src/components/SmartPlaybook/__tests__/PlayController.edge.test.js
+
+Test Suites: 16 passed, 16 total
+Tests:       344 passed, 344 total
+Snapshots:   0 total
+Time:        18.574 s, estimated 57 s
+Ran all test suites.

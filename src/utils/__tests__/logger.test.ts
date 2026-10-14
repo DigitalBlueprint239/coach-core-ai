@@ -6,11 +6,9 @@ describe('logger', () => {
   const originalEnv = process.env.NODE_ENV;
 
   function setNodeEnv(value: string) {
-    Object.defineProperty(process.env, 'NODE_ENV', {
-      value,
-      writable: true,
-      configurable: true,
-    });
+    // Jest's process.env proxy does not apply defineProperty writes.
+    Object.assign(process.env, { NODE_ENV: value });
+    expect(process.env.NODE_ENV).toBe(value);
   }
 
   afterEach(() => {

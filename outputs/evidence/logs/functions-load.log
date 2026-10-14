@@ -1,0 +1,10 @@
+[
+  'createUserProfile',
+  'onTeamMemberAdded',
+  'onPracticePlanCreated',
+  'onPlayCreated',
+  'trackUserActivity',
+  'cleanupOldNotifications',
+  'healthCheck'
+]
+
