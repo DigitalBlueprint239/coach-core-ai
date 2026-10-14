@@ -1,6 +1,6 @@
 import {test,expect,Page} from '../../e2e/node_modules/@playwright/test';
 import {resetEmulators,adminSet,adminGet,adminTeamsOwnedBy} from '../../e2e/tests/support/emulator';
-import {coachEmail,skipOnboarding,signInAsBetaCoach,createTeamViaUI,openTab,signInScreen,waitForE2EHooks} from '../../e2e/tests/support/app';
+import {coachEmail,skipOnboarding,signInAsBetaCoach,createTeamViaUI,openTab,signInScreen,waitForE2EHooks,signOutViaUI} from '../../e2e/tests/support/app';
 test.beforeEach(async({page,context,browser,browserName})=>{console.info('Browser:',browserName,browser.version());await resetEmulators();await skipOnboarding(context);await context.addInitScript(()=>localStorage.setItem('smartPlaybook_onboarding_complete','true'));page.on('dialog',d=>{void d.accept();});});
 async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}
 async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}
@@ -22,7 +22,7 @@ test('R1 verified legacy import keeps originals and blocks another account',asyn
  await page.evaluate(raw=>localStorage.setItem('smartPlaybook_plays',raw),originals);await openTab(page,'Smart Playbook');
  await page.getByRole('button',{name:'Import plays',exact:true}).click();
  await expect.poll(()=>page.evaluate(()=>localStorage.getItem('coachcore:v1:legacyImportClaim'))).not.toBeNull();
- await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
+ await signOutViaUI(page);
  await signInAsBetaCoach(page,coachEmail('claim-b'));await createTeamViaUI(page,'Bravo');await openTab(page,'Smart Playbook');
  await expect(page.getByRole('region',{name:'Import device plays'})).toContainText('already imported by another account');
  await expect(page.getByRole('button',{name:'Import plays',exact:true})).toHaveCount(0);
@@ -32,7 +32,7 @@ test('P14 shared-profile tabs preserve drafts across refresh and recover conflic
  const s=await setup(page,'p14');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('Original');await saved(page);
  const p2=await context.newPage();try{p2.on('dialog',d=>{void d.accept();});await p2.goto('/');await expect(p2.getByText(`Welcome, ${s.email}`)).toBeVisible();await plan(p2);await p2.getByRole('button',{name:'Open Original',exact:true}).click();
  await p2.getByLabel('Plan.name',{exact:true}).fill('Second editor');await page.getByLabel('Plan.name',{exact:true}).fill('Server first');await saved(page);
- await p2.reload();await plan(p2);await expect(p2.getByLabel('Plan.name',{exact:true})).toHaveValue('Second editor');await p2.getByRole('button',{name:'Save practice plan',exact:true}).click();
+ await p2.bringToFront();await p2.reload();await plan(p2);await expect(p2.getByLabel('Plan.name',{exact:true})).toHaveValue('Second editor');await p2.getByRole('button',{name:'Save practice plan',exact:true}).click();
  await expect(p2.getByRole('alertdialog',{name:'Conflicting edits'})).toBeVisible();await expect(p2.getByLabel('Plan.name',{exact:true})).toHaveValue('Second editor');await p2.getByRole('button',{name:'Keep my version as a copy'}).click();await expect(p2.getByRole('status',{name:'Practice save status'})).toHaveText('saved');
  await expect(p2.getByRole('button',{name:'Open Server first',exact:true})).toBeVisible();await expect(p2.getByRole('button',{name:'Open Second editor',exact:true})).toBeVisible();
  }finally{await p2.close();}
@@ -72,7 +72,7 @@ test('P15 existing complete route payload survives property save and reopening',
 test('[SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules',async({page})=>{
  const a=await setup(page,'negative-a');const when=new Date('2026-10-13T12:00:00Z');
  await adminSet('practicePlans/protected',{name:'Private team A',teamId:a.teamId,createdBy:a.uid,createdAt:when,updatedAt:when,revision:1});
- await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(signInScreen(page)).toBeVisible();const b=await signInAsBetaCoach(page,coachEmail('negative-b'));await waitForE2EHooks(page);
+ await signOutViaUI(page);const b=await signInAsBetaCoach(page,coachEmail('negative-b'));await waitForE2EHooks(page);
  const result=await page.evaluate(async([team,uid])=>{
    const hooks=(window as unknown as {__coachCoreE2E:{get:(path:string)=>Promise<unknown>;set:(path:string,data:unknown)=>Promise<unknown>}}).__coachCoreE2E;
    return [await hooks.get('practicePlans/protected'),await hooks.set('plays/forbidden',{name:'Forbidden',players:[],routes:[],teamId:team,createdBy:uid,revision:1,createdAt:{__ts:'2026-10-13T12:00:00Z'},updatedAt:{__ts:'2026-10-13T12:00:00Z'}})];
