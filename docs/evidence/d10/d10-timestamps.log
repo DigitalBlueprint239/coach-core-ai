@@ -1,0 +1,44 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --testPathPattern=legacy-import
+
+PASS src/features/legacy-import/__tests__/import-legacy.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      57 | });
+      58 | test('consent UI explicitly accepts selected team and removes prompt only after verification', async () => {
+    > 59 |   render(<LegacyImport uid="coachA" teamId="teamA" teamName="Owls" backend={backend}/>);
+         |         ^
+      60 |   expect(screen.getByText(/into Owls/)).toBeInTheDocument();
+      61 |   expect(backend.copy).not.toHaveBeenCalled(); fireEvent.click(screen.getByText('Import plays'));
+      62 |   await waitFor(()=>expect(localStorage.getItem(decisionKey('coachA'))).not.toBeNull()); expect(screen.queryByRole('button', {name:'Import plays'})).not.toBeInTheDocument(); expect(stored.size).toBe(1);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-platform/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-platform/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-platform/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-platform/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:59:9)
+
+FAIL src/features/legacy-import/__tests__/firebase-import.test.ts
+  ● transaction retries do not duplicate or overwrite; server read reverses special phase exactly
+
+    Imported copy changed elsewhere. Preserve and review; no overwrite.
+
+      32 |       if (existing.exists()) {
+      33 |         const d = existing.data();
+    > 34 |         if (d.teamId !== session.teamId || d.createdBy !== session.uid || !sameContent(play, decode(d, id))) throw new Error('Imported copy changed elsewhere. Preserve and review; no overwrite.');
+         |                                                                                                                    ^
+      35 |       } else {
+      36 |         check(session);
+      37 |         tx.set(ref, { ...payload(play), teamId: session.teamId, createdBy: session.uid, revision: 1,
+
+      at src/features/legacy-import/firebase-import.ts:34:116
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        1.967 s
+Ran all test suites matching /legacy-import/i.

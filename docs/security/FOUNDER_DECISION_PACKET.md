@@ -2,7 +2,7 @@
 
 Prepared by Claude for Coach Drew (approval authority). 2026-10-13. Task CC-NEXT-03.
 
-**Status of every decision: OPEN — NOT APPROVED.** Nothing in this packet is approved by inference. A decision counts as approved only when Coach Drew records it on Issue #50 (e.g. "D3: approve recommendation"). AI frame submission stays **off** regardless.
+**D10 APPROVED by Coach Drew in the Codex task on 2026-10-13, recorded on Issue #39. D1–D9 remain OPEN — NOT APPROVED.** Nothing in this packet is approved by inference. A decision counts as approved only when Coach Drew explicitly records it (D10: task approval recorded on Issue #39; other decisions on Issue #50) (e.g. "D3: approve recommendation"). AI frame submission stays **off** regardless.
 
 Facts marked ✔ were checked against the official pages linked in §9 on 2026-10-13. Facts marked ⚠ could not be confirmed and must not be relied on until checked.
 
@@ -19,7 +19,7 @@ Facts marked ✔ were checked against the official pages linked in §9 on 2026-1
 | **D7** | Upload rights and consent wording | **Adopt the text in §6** (per-upload checkbox; counsel review recommended) | Each upload records `rightsAcknowledgedAt` plus wording version. No upload without it | None | S2 reservation; UI copy in S5 |
 | **D8** | Accept OpenAI's data handling for coaching text (and later images) | **Accept for text only** (✔ facts in §7). Revisit for images with D1 | Text prompts (no names, redacted) may be held up to 30 days for abuse monitoring | None | Enabling `coachAI` text tasks in staging; prerequisite for D1 |
 | **D9** | Which OpenAI model | **`gpt-6.1-sol` for text tasks** (✔ exists, Structured Outputs, image-capable). Confirm the new OpenAI project lists it; `gpt-6-luna` as a cheaper fallback | Quality/cost balance; changing later is a config change (`COACH_CORE_OPENAI_MODEL`) | $2/M input, $10/M output tokens (✔) | Staging AI enablement; S9 |
-| **D10** | Plays saved on a device before sign-in (legacy local data) | **Ask once per account: "Import N plays saved on this device?"**; never import automatically; remove the shared copy after a decision | No silent mixing of one coach's plays into another's account | None | S8 persistence migration path |
+| **D10** | Plays saved on a device before sign-in (legacy local data) | **Ask once per account: "Import N plays saved on this device?"**; never import automatically; preserve all originals; no deletion authorized | No silent mixing of one coach's plays into another's account | None | S8 persistence migration path |
 
 ## 2. Size limit: one unit everywhere
 
@@ -240,3 +240,8 @@ Founder check (D9): the new OpenAI project must list the chosen model before AI 
   - `ffmpeg-static`: https://www.npmjs.com/package/ffmpeg-static
   - `ffprobe-static`: https://github.com/joshwnj/ffprobe-static
   - `mp4box`: `npm view mp4box` → 2.4.1, BSD-3-Clause
+
+## D10 explicit founder decision — 2026-10-13
+
+Coach Drew approves consent-based legacy import implementation and testing only: ask once per account, explicit accept/decline into the selected authorized team, verify exact read-back before recording success, idempotent retry/repeated import, account-switch isolation. Preserve originals byte-for-byte. Claude reviews authorization and activates P13 accept/decline/repeat/account-switch testing. This does not approve merging, deployment, spending or deletion. Supersedes any earlier removal recommendation. All other decisions remain pending.
+

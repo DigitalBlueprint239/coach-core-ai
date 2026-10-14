@@ -2,3 +2,4 @@
 outputs/** -text
 outputs/**/*.pdf -diff
 outputs/**/*.png -diff
+docs/evidence/d10/** -text
