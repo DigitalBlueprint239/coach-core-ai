@@ -59,6 +59,16 @@ test('P12 sync-now acknowledges the unsaved plan before signing out',async({page
  await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();
  await page.getByRole('button',{name:'Sync now',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
 });
+test('P15 existing complete route payload survives property save and reopening',async({page})=>{
+ const s=await setup(page,'geometry');const when=new Date('2026-10-01T12:00:00Z');
+ const players=[{id:'qb',x:110.25,y:180.5,position:'QB',number:7,selected:false,color:'#abcdef'}];
+ const routes=[{id:'route',playerId:'qb',path:[{x:110.25,y:180.5,t:0},{x:150.75,y:140.25,t:1}],type:'custom',color:'#123456',duration:2}];
+ await adminSet('plays/geometry',{name:'Geometry',formation:'Custom',description:'Full precision',phase:'offense',type:'pass',players,routes,tags:['timing'],difficulty:'advanced',sport:'football',teamId:s.teamId,createdBy:s.uid,createdAt:when,updatedAt:when,revision:1});
+ await openTab(page,'Smart Playbook');await page.getByRole('button',{name:'Load Play',exact:true}).click();await page.getByRole('button',{name:'Load',exact:true}).click();
+ await page.getByPlaceholder('Enter play name...').fill('Geometry edited');await page.getByRole('button',{name:'Save Play',exact:true}).first().click();await page.getByRole('button',{name:'Save Play',exact:true}).last().click();await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');
+ const record=await adminGet('plays/geometry');expect(record?.players).toEqual(players);expect(record?.routes).toEqual(routes);expect(record?.description).toBe('Full precision');expect(record?.tags).toEqual(['timing']);expect(record?.revision).toBe(2);
+ await page.reload();await openTab(page,'Smart Playbook');await page.getByRole('button',{name:'Load Play',exact:true}).click();await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByPlaceholder('Enter play name...')).toHaveValue('Geometry edited');
+});
 test('[SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules',async({page})=>{
  const a=await setup(page,'negative-a');const when=new Date('2026-10-13T12:00:00Z');
  await adminSet('practicePlans/protected',{name:'Private team A',teamId:a.teamId,createdBy:a.uid,createdAt:when,updatedAt:when,revision:1});
