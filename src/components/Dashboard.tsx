@@ -12,13 +12,26 @@ import type {RecordData} from '../features/persistence/model';
 import AppShell,{Destination} from '../ui/AppShell';
 import WeekDashboard,{WeekEvent} from '../ui/WeekDashboard';
 
-export function datedPlans(records:RecordData[]):WeekEvent[]{return records.flatMap(record=>{
-  const date=record.fields.date;
-  if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date))return [];
-  const parsed=new Date(`${date}T12:00:00Z`);
-  if(!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date)return [];
-  return [{id:record.id,title:String(record.fields.name),date,kind:'plan' as const}];
-});}
+export function datedPlans(records: RecordData[]): WeekEvent[] {
+  return records.flatMap(record => {
+    const fields = record.fields;
+    const date = fields.date;
+    if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return [];
+    const parsed = new Date(`${date}T12:00:00Z`);
+    if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date) return [];
+    const event: WeekEvent = { id: record.id, title: String(fields.name), date, kind: 'plan' };
+    if (typeof fields.duration === 'number' && Number.isFinite(fields.duration) && fields.duration >= 0) event.durationMinutes = fields.duration;
+    if (Array.isArray(fields.periods)) event.periods = fields.periods.flatMap(value => {
+      if (!value || typeof value !== 'object' || Array.isArray(value) || typeof value.name !== 'string') return [];
+      const duration = value.durationMinutes ?? value.duration;
+      return [{ name: value.name, ...(typeof duration === 'number' && Number.isFinite(duration) && duration >= 0 ? { durationMinutes: duration } : {}) }];
+    });
+    if (Array.isArray(fields.goals)) event.goals = fields.goals.filter((value): value is string => typeof value === 'string');
+    if (typeof fields.notes === 'string') event.notes = fields.notes;
+    return [event];
+  });
+}
+
 const Dashboard:React.FC<{demoMode?:boolean;onDemoChange?:(value:boolean)=>void}>=({demoMode=false,onDemoChange})=>{
   const {user,loading:authLoading,logout}=useAuth();const {currentTeam,loading:teamLoading}=useTeam();
   const [active,setActive]=useState<Destination>('overview');const [preview,setPreview]=useState(demoMode);

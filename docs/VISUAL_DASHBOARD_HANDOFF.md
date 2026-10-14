@@ -1,5 +1,7 @@
 # Coach Core — first visual milestone
 
+> Historical first implementation. Coach Drew did **not** approve its visual design. The current revision and side-by-side review are documented in [VISUAL_FIDELITY_REVIEW.md](VISUAL_FIDELITY_REVIEW.md); visual approval remains pending. Results/source below describe the earlier draft, not current approval.
+
 Draft [PR #67](https://github.com/DigitalBlueprint239/coach-core-ai/pull/67), branch `codex/visual-shell-dashboard`; [ownership and Claude review request on #39](https://github.com/DigitalBlueprint239/coach-core-ai/issues/39#issuecomment-6179875785).
 
 Application source: **`ca5ca7296858f5dcde5dd353d9172d4884c767cb`**. Later evidence/docs commits leave application files identical. Base: **`4757eaffad31664dae727c34355aca8109fcc63c`**, frozen integrated PR #64 candidate. This is a stacked UI diff; do not merge its test-only base. Reconcile/retarget toward recovery after reviewed acceptance integration. R1c and other acceptance-blocking repairs retain priority.

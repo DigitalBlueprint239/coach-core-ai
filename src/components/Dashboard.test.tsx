@@ -16,6 +16,14 @@ beforeEach(()=>{mockTeam={id:'team-a',ownerId:'coach',name:'Alpha'};jest.clearAl
 test('dated plans reject invalid calendar dates and never invent a time',()=>{
   expect(datedPlans([record('valid','2026-10-14'),record('bad','2026-02-30'),record('missing','')])).toEqual([{id:'valid',title:'valid',date:'2026-10-14',kind:'plan'}]);
 });
+
+test('saved plan details are projected without mutating or fabricating data',()=>{
+  const saved=record('Receiver practice','2026-10-14');
+  saved.fields={...saved.fields,duration:75,periods:[{name:'Release technique',durationMinutes:15},{name:'Team',duration:30},null],goals:['Clean releases',false],notes:'Use the east field.'};
+  const original=JSON.stringify(saved);
+  expect(datedPlans([saved])).toEqual([{id:'Receiver practice',title:'Receiver practice',date:'2026-10-14',kind:'plan',durationMinutes:75,periods:[{name:'Release technique',durationMinutes:15},{name:'Team',durationMinutes:30}],goals:['Clean releases'],notes:'Use the east field.'}]);
+  expect(JSON.stringify(saved)).toBe(original);
+});
 test('a delayed old-team response never appears in a new workspace',async()=>{
   let resolveOld!:(records:RecordData[])=>void;
   (cloud.list as jest.Mock).mockImplementationOnce(()=>new Promise(resolve=>{resolveOld=resolve;})).mockResolvedValueOnce([]);
