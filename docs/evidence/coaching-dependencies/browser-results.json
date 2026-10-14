@@ -1,0 +1,871 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\drewl\\AppData\\Local\\hermes\\node\\node.exe",
+      "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/coaching-ui/playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\tests\\coaching-ui\\playwright.config.ts",
+    "rootDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-dependencies/tests/coaching-ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-dependencies/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-dependencies/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node scripts/serve.mjs .app-build 3000",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "cwd": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-dependencies\\e2e"
+    }
+  },
+  "suites": [
+    {
+      "title": "coaching.spec.ts",
+      "file": "coaching.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "P16 manual editable plan saves and reopens exact ordered content in clean browser",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9719,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:08.146Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-88806c93cd994e6487b1",
+          "file": "coaching.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "R5 no-team coach sees a truthful block with no save action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1056,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:18.063Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-f0874770e803e88a535b",
+          "file": "coaching.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "R1 verified legacy import keeps originals and blocks another account",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3779,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:19.140Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-e1e06c026360c646a89d",
+          "file": "coaching.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "P14 shared-profile tabs preserve drafts across refresh and recover conflict as a copy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5272,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:22.939Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-4386fef7f9fc75c1cdf5",
+          "file": "coaching.spec.ts",
+          "line": 31,
+          "column": 5
+        },
+        {
+          "title": "P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3596,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:28.233Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-696273f080c892fe7f32",
+          "file": "coaching.spec.ts",
+          "line": 40,
+          "column": 5
+        },
+        {
+          "title": "P15 ordinary play cloud save, property edit, hard reload, complete reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3129,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:31.849Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-6e5be210a446ab63eebe",
+          "file": "coaching.spec.ts",
+          "line": 51,
+          "column": 5
+        },
+        {
+          "title": "P12 sync-now acknowledges the unsaved plan before signing out",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2030,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:34.996Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-f1d02a78a2d7f93ae181",
+          "file": "coaching.spec.ts",
+          "line": 57,
+          "column": 5
+        },
+        {
+          "title": "P15 existing complete route payload survives property save and reopening",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3002,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:37.045Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-1740aacb58e854e70d5b",
+          "file": "coaching.spec.ts",
+          "line": 62,
+          "column": 5
+        },
+        {
+          "title": "[SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2494,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:40.067Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-c4fcc2160e9e36b95b3f",
+          "file": "coaching.spec.ts",
+          "line": 72,
+          "column": 5
+        },
+        {
+          "title": "P16 manual editable plan saves and reopens exact ordered content in clean browser",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10833,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:43.926Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-5cba5b5e738aab5a0cf7",
+          "file": "coaching.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "R5 no-team coach sees a truthful block with no save action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2007,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:56.598Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-fb5c29e8c0438559cd8f",
+          "file": "coaching.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "R1 verified legacy import keeps originals and blocks another account",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5899,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:29:58.630Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-1731930c55cab7966236",
+          "file": "coaching.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "P14 shared-profile tabs preserve drafts across refresh and recover conflict as a copy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8575,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:30:04.563Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-1d0d21bfdb57f3edb395",
+          "file": "coaching.spec.ts",
+          "line": 31,
+          "column": 5
+        },
+        {
+          "title": "P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6728,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:30:13.184Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-72348e6da106baf0066d",
+          "file": "coaching.spec.ts",
+          "line": 40,
+          "column": 5
+        },
+        {
+          "title": "P15 ordinary play cloud save, property edit, hard reload, complete reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5773,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:30:19.935Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-6e333fd6989d073ebebd",
+          "file": "coaching.spec.ts",
+          "line": 51,
+          "column": 5
+        },
+        {
+          "title": "P12 sync-now acknowledges the unsaved plan before signing out",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3663,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:30:25.732Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-48020f04179ba8d099af",
+          "file": "coaching.spec.ts",
+          "line": 57,
+          "column": 5
+        },
+        {
+          "title": "P15 existing complete route payload survives property save and reopening",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4441,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:30:29.426Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-64bab31c8fe724e9586b",
+          "file": "coaching.spec.ts",
+          "line": 62,
+          "column": 5
+        },
+        {
+          "title": "[SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5839,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T13:30:33.937Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-050427120697618735bd",
+          "file": "coaching.spec.ts",
+          "line": 72,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-14T13:29:06.900Z",
+    "duration": 94178.796,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
