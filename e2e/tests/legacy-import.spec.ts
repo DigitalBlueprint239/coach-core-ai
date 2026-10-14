@@ -56,7 +56,7 @@ test('D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a 
   expect(r, 'transactional read of a missing id (what the import does first)').toEqual({ ok: true, data: 'missing' });
 });
 
-test('D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision only after verification, originals untouched', async ({ page }) => {
+test('D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched', async ({ page }) => {
   const { uid, teamId } = await coachWithTeam(page, 'd10a', 'Alpha Eagles');
   await openPlaybook(page);
   const prompt = importPrompt(page);
@@ -172,11 +172,16 @@ test('D10-06b [founder rule: no cross-account exposure / duplicates] device play
   await signInAsBetaCoach(page, coachEmail('d10gb'));
   await createTeamViaUI(page, 'Bravo Bulldogs');
   await openPlaybook(page);
+  // Acceptance criterion agreed in the R1 repair request (PR #55): a visible
+  // notice is the positive anchor, so this cannot pass before the prompt renders.
+  await expect(importPrompt(page), 'coach B must see the already-imported notice')
+    .toContainText('already imported by another account');
   await expect(importPrompt(page).getByRole('button', { name: 'Import plays' }),
     'coach B must not be offered device plays coach A already imported').toHaveCount(0);
+  await expectOriginalsUntouched(page);
 });
 
-test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded', async ({ page }) => {
+test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)', async ({ page }) => {
   const { uid, teamId: alpha } = await coachWithTeam(page, 'd10h', 'Alpha Eagles');
   await createTeamViaUI(page, 'Bravo Bulldogs');
   const net = commitControl(page);
@@ -189,11 +194,17 @@ test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing 
   await page.getByRole('button', { name: 'Switch to' }).click();
   const bravo = (await storage(page)).currentTeamId;
   expect(bravo).not.toBe(alpha);
-  net.pass();
+  // Keep holding later commits, release only the in-flight copy #2, and wait
+  // for it to land: the stale completion has now returned to the client.
   net.release();
-  await expect.poll(async () => (await adminCopies(uid)).length).toBeGreaterThanOrEqual(1);
-  await expect.poll(async () => (await adminCopies(uid)).every((c) => c.data.teamId === alpha)).toBe(true);
+  await expect.poll(async () => (await adminCopies(uid)).length).toBe(2);
+  // Negative claim (the stale loop must not continue to copy #3 or record a
+  // decision) needs an observation window; 5 s is documented, not a retry.
+  await new Promise((r) => setTimeout(r, 5_000));
+  expect(net.count(), 'no further commit after the stale completion').toBe(2);
+  expect((await adminCopies(uid)).every((c) => c.data.teamId === alpha)).toBe(true);
   expect((await deviceState(page)).decisions[decisionKey(uid)], 'no decision after an interrupted import').toBeUndefined();
+  net.pass(); net.release();
   await expectOriginalsUntouched(page);
 });
 
@@ -211,15 +222,17 @@ test('D10-07b [founder rule: no duplicate imports] an import interrupted in team
   net.pass(); net.release();
   await expect.poll(async () => (await adminCopies(uid)).length).toBeGreaterThanOrEqual(1);
   await openPlaybook(page);
-  // Acceptable: no prompt in team B, or a prompt that names the interrupted import into Alpha.
+  // Acceptance criterion agreed in the R2 repair request (PR #55): in team B the
+  // import region must be shown AND point back to the unfinished team (positive
+  // anchor), and must not offer a fresh import into Bravo.
   const prompt = importPrompt(page);
-  if (await prompt.getByRole('button', { name: 'Import plays' }).count()) {
-    await expect(prompt, 'team B prompt must disclose the unfinished import into team A').toContainText('Alpha Eagles');
-  }
+  await expect(prompt, 'team B must show the unfinished-import notice').toContainText('Alpha Eagles');
+  await expect(prompt.getByRole('button', { name: 'Import plays' }),
+    'no fresh import into team B while the team A import is unfinished').toHaveCount(0);
   expect((await adminCopies(uid)).every((c) => c.data.teamId === alpha)).toBe(true);
 });
 
-test('D10-08 account switch while a copy is in flight: no copy is ever attributed to the next coach', async ({ page }) => {
+test('D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach', async ({ page }) => {
   const a = await coachWithTeam(page, 'd10ja', 'Alpha Eagles');
   const net = commitControl(page);
   await net.ready;
