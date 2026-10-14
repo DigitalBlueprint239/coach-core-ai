@@ -1,0 +1,34 @@
+[
+  {
+    "path": "tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-chromium\\trace.zip",
+    "sha256": "d8f8ebc84c7710201a272272dde5e9221e712c5b8f899efcac97cb76a9613d3c",
+    "lastClicks": [
+      {
+        "selector": "internal:role=button[name=\"Create Team\"s] >> nth=0"
+      },
+      {
+        "selector": "internal:role=button[name=\"Create Team\"s] >> nth=-1"
+      },
+      {
+        "selector": "internal:role=button[name=/Practice Planner/] >> nth=0"
+      }
+    ],
+    "availability": "Original ZIP and PNG attachments cleared by Playwright output cleanup on rerun. SHA256, extracted selectors, full results/logs and DOM error context retained; binary archive NOT RETAINED."
+  },
+  {
+    "path": "tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-firefox\\trace.zip",
+    "sha256": "ad0057985851588238602720938a250dfbc0ea6c0c8942675645af7b929d12ed",
+    "lastClicks": [
+      {
+        "selector": "internal:role=button[name=\"Create Team\"s] >> nth=0"
+      },
+      {
+        "selector": "internal:role=button[name=\"Create Team\"s] >> nth=-1"
+      },
+      {
+        "selector": "internal:role=button[name=/Practice Planner/] >> nth=0"
+      }
+    ],
+    "availability": "Original ZIP and PNG attachments cleared by Playwright output cleanup on rerun. SHA256, extracted selectors, full results/logs and DOM error context retained; binary archive NOT RETAINED."
+  }
+]

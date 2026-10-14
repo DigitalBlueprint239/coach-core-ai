@@ -1,0 +1,216 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/services/__tests__/legacy-save-ack.test.ts src/features/legacy-import/__tests__/unfinished-claim.test.tsx src/components/__tests__/MigrationBanner.test.tsx
+
+FAIL src/features/legacy-import/__tests__/unfinished-claim.test.tsx (44.507 s)
+  ● unfinished copy blocks B before offer or write, then A resumes and verifies every copy
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /another account/
+    Received string:  ""
+
+      22 |   await expect(importLegacy(localStorage, owner, () => current, backend)).rejects.toThrow('Account or team changed');
+      23 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+    > 24 |   expect(importNotice(localStorage, other)).toMatch(/another account/);
+         |                                             ^
+      25 |   render(<LegacyImport {...other} backend={backend} />);
+      26 |   expect(screen.getByRole('region', { name: 'Import device plays' })).toBeInTheDocument();
+      27 |   expect(screen.queryByRole('button', { name: 'Import plays' })).not.toBeInTheDocument();
+
+      at Object.<anonymous> (src/features/legacy-import/__tests__/unfinished-claim.test.tsx:24:45)
+
+  ● device claim is durable before first cloud request; storage failure prevents writes
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Storage unavailable"
+    Received message:   "Saved copy does not match. Originals preserved; retry or review."
+
+          82 |     const saved = await backend.read(session, id);
+          83 |     if (!stillCurrent()) throw new Error('Account or team changed.');
+        > 84 |     if (!sameContent(play, saved)) throw new Error('Saved copy does not match. Originals preserved; retry or review.');
+             |                                          ^
+          85 |     verified.push(id);
+          86 |   }
+          87 |   if (!stillCurrent()) throw new Error('Account or team changed.');
+
+      at importLegacy (src/features/legacy-import/import-legacy.ts:84:42)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/unfinished-claim.test.tsx:45:3)
+      at Object.toThrow (../main-coaching-dependencies/node_modules/expect/build/index.js:285:22)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/unfinished-claim.test.tsx:45:75)
+
+  ● failed readback retains pending device ownership without recording success
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: null
+
+      50 |   const backend: ImportBackend = { copy: jest.fn(async () => 'id'), read: jest.fn(async () => { throw new Error('offline'); }) };
+      51 |   await expect(importLegacy(localStorage, owner, () => true, backend)).rejects.toThrow('offline');
+    > 52 |   expect(JSON.parse(localStorage.getItem(CLAIM_KEY)!)).toMatchObject({ uid: 'A', status: 'pending' });
+         |                                                        ^
+      53 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+      54 |   expect(importNotice(localStorage, other)).toMatch(/another account/);
+      55 | });
+
+      at Object.<anonymous> (src/features/legacy-import/__tests__/unfinished-claim.test.tsx:52:56)
+
+FAIL src/services/__tests__/legacy-save-ack.test.ts
+  ● Console
+
+    console.error
+      Error migrating from localStorage: TypeError: Cannot read properties of undefined (reading 'id')
+          at savePlay (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\src\services\firestore.ts:291:19)
+          at migrateFromLocalStorage (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\src\services\firestore.ts:414:11)
+          at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\src\services\__tests__\legacy-save-ack.test.ts:15:3)
+
+      440 |       localStorage.removeItem(localStorageKey);
+      441 |     } catch (error) {
+    > 442 |       console.error('Error migrating from localStorage:', error);
+          |               ^
+      443 |     }
+      444 |   }
+      445 | }
+
+      at migrateFromLocalStorage (src/services/firestore.ts:442:15)
+      at Object.<anonymous> (src/services/__tests__/legacy-save-ack.test.ts:15:3)
+
+  ● obsolete migration rejects without cloud writes or deleting original bytes
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: undefined
+
+      13 |   localStorage.setItem('plays', 'legacy marker');
+      14 |   localStorage.setItem('coach-core-ai-alpha', original);
+    > 15 |   await expect(migrateFromLocalStorage('alpha')).rejects.toThrow(/disabled/i);
+         |         ^
+      16 |   expect(addDoc).not.toHaveBeenCalled();
+      17 |   expect(localStorage.getItem('coach-core-ai-alpha')).toBe(original);
+      18 |   expect(localStorage.getItem('plays')).toBe('legacy marker');
+
+      at expect (../main-coaching-dependencies/node_modules/expect/build/index.js:178:15)
+      at Object.<anonymous> (src/services/__tests__/legacy-save-ack.test.ts:15:9)
+
+  ● offline play creation fails visibly without queuing or starting a write
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: "offline_1792007464607"
+
+      22 |   window.dispatchEvent(new Event('offline'));
+      23 |   jest.mocked(addDoc).mockRejectedValueOnce(new Error('network unavailable'));
+    > 24 |   await expect(kind === 'play' ? savePlay('alpha', play) : savePracticePlan('alpha', plan)).rejects.toThrow(/offline/i);
+         |         ^
+      25 |   expect(addDoc).not.toHaveBeenCalled();
+      26 |   jest.mocked(addDoc).mockReset();
+      27 | });
+
+      at expect (../main-coaching-dependencies/node_modules/expect/build/index.js:178:15)
+      at src/services/__tests__/legacy-save-ack.test.ts:24:9
+
+  ● offline play creation fails visibly without queuing or starting a write
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "[ {\"type\":\"create\",\"collection\":\"plays\",\"data\":{\"name\":\"A original\"}} ]"
+    Received: "[{\"type\":\"create\",\"collection\":\"plays\",\"data\":{\"name\":\"Mesh\",\"formation\":\"Spread\",\"description\":\"\",\"routes\":[],\"players\":[],\"tags\":[],\"difficulty\":\"beginner\",\"sport\":\"football\",\"teamId\":\"alpha\",\"createdBy\":\"A\",\"createdAt\":\"2026-10-14T19:51:04.607Z\",\"updatedAt\":\"2026-10-14T19:51:04.607Z\"},\"tempId\":\"offline_1792007464607\"}]"
+
+       7 | const quarantine = '[ {"type":"create","collection":"plays","data":{"name":"A original"}} ]';
+       8 | beforeEach(() => { localStorage.clear(); localStorage.setItem('offline_operations', quarantine); jest.mocked(addDoc).mockClear(); window.dispatchEvent(new Event('online')); });
+    >  9 | afterEach(() => { expect(localStorage.getItem('offline_operations')).toBe(quarantine); window.dispatchEvent(new Event('online')); });
+         |                                                                      ^
+      10 |
+      11 | test('obsolete migration rejects without cloud writes or deleting original bytes', async () => {
+      12 |   const original = JSON.stringify({ plays: [play], plans: [plan] });
+
+      at Object.<anonymous> (src/services/__tests__/legacy-save-ack.test.ts:9:70)
+
+  ● offline plan creation fails visibly without queuing or starting a write
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: "offline_1792007464618"
+
+      22 |   window.dispatchEvent(new Event('offline'));
+      23 |   jest.mocked(addDoc).mockRejectedValueOnce(new Error('network unavailable'));
+    > 24 |   await expect(kind === 'play' ? savePlay('alpha', play) : savePracticePlan('alpha', plan)).rejects.toThrow(/offline/i);
+         |         ^
+      25 |   expect(addDoc).not.toHaveBeenCalled();
+      26 |   jest.mocked(addDoc).mockReset();
+      27 | });
+
+      at expect (../main-coaching-dependencies/node_modules/expect/build/index.js:178:15)
+      at src/services/__tests__/legacy-save-ack.test.ts:24:9
+
+  ● offline plan creation fails visibly without queuing or starting a write
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "[ {\"type\":\"create\",\"collection\":\"plays\",\"data\":{\"name\":\"A original\"}} ]"
+    Received: "[{\"type\":\"create\",\"collection\":\"plays\",\"data\":{\"name\":\"Mesh\",\"formation\":\"Spread\",\"description\":\"\",\"routes\":[],\"players\":[],\"tags\":[],\"difficulty\":\"beginner\",\"sport\":\"football\",\"teamId\":\"alpha\",\"createdBy\":\"A\",\"createdAt\":\"2026-10-14T19:51:04.607Z\",\"updatedAt\":\"2026-10-14T19:51:04.607Z\"},\"tempId\":\"offline_1792007464607\"},{\"type\":\"create\",\"collection\":\"practicePlans\",\"data\":{\"name\":\"Practice\",\"date\":\"2026-10-14\",\"duration\":30,\"periods\":[],\"goals\":[],\"notes\":\"\",\"teamId\":\"alpha\",\"createdBy\":\"A\",\"createdAt\":\"2026-10-14T19:51:04.618Z\",\"updatedAt\":\"2026-10-14T19:51:04.618Z\"},\"tempId\":\"offline_1792007464618\"}]"
+
+       7 | const quarantine = '[ {"type":"create","collection":"plays","data":{"name":"A original"}} ]';
+       8 | beforeEach(() => { localStorage.clear(); localStorage.setItem('offline_operations', quarantine); jest.mocked(addDoc).mockClear(); window.dispatchEvent(new Event('online')); });
+    >  9 | afterEach(() => { expect(localStorage.getItem('offline_operations')).toBe(quarantine); window.dispatchEvent(new Event('online')); });
+         |                                                                      ^
+      10 |
+      11 | test('obsolete migration rejects without cloud writes or deleting original bytes', async () => {
+      12 |   const original = JSON.stringify({ plays: [play], plans: [plan] });
+
+      at Object.<anonymous> (src/services/__tests__/legacy-save-ack.test.ts:9:70)
+
+FAIL src/components/__tests__/MigrationBanner.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+       6 | jest.mock('../ToastManager', () => ({ useToast: () => ({ showToast: jest.fn() }) }));
+       7 | test('obsolete destructive migration is never offered even with legacy data and an owned team', () => {
+    >  8 |   render(<MigrationBanner />);
+         |         ^
+       9 |   expect(screen.queryByRole('button', { name: 'Migrate Now' })).not.toBeInTheDocument();
+      10 | });
+      11 |
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-coaching-dependencies/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-coaching-dependencies/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-coaching-dependencies/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-coaching-dependencies/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/components/__tests__/MigrationBanner.test.tsx:8:9)
+      at TestScheduler.scheduleTests (../main-coaching-dependencies/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-coaching-dependencies/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-coaching-dependencies/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-coaching-dependencies/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● obsolete destructive migration is never offered even with legacy data and an owned team
+
+    expect(element).not.toBeInTheDocument()
+
+    expected document not to contain element, found <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Migrate Now</button> instead
+
+       7 | test('obsolete destructive migration is never offered even with legacy data and an owned team', () => {
+       8 |   render(<MigrationBanner />);
+    >  9 |   expect(screen.queryByRole('button', { name: 'Migrate Now' })).not.toBeInTheDocument();
+         |                                                                     ^
+      10 | });
+      11 |
+
+      at Object.<anonymous> (src/components/__tests__/MigrationBanner.test.tsx:9:69)
+      at TestScheduler.scheduleTests (../main-coaching-dependencies/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-coaching-dependencies/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-coaching-dependencies/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-coaching-dependencies/node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 3 failed, 3 total
+Tests:       7 failed, 1 passed, 8 total
+Snapshots:   0 total
+Time:        82.552 s
+Ran all test suites within paths "src/services/__tests__/legacy-save-ack.test.ts", "src/features/legacy-import/__tests__/unfinished-claim.test.tsx", "src/components/__tests__/MigrationBanner.test.tsx".

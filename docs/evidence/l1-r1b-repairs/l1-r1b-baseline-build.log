@@ -1,0 +1,10 @@
+
+> coach-core-ai@0.1.0 prebuild
+> node scripts/security/check-client-env.js
+
+[security] client env check passed: no secret-like REACT_APP_* variables.
+
+> coach-core-ai@0.1.0 build
+> react-scripts build
+
+Creating an optimized production build...
