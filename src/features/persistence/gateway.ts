@@ -1,6 +1,7 @@
 import { collection,doc,getDocsFromServer,getDocFromServer,query,where,runTransaction,serverTimestamp } from 'firebase/firestore';
 import {auth,db} from '../../firebase';
 import {Scope,Kind,Fields,RecordData,equal,validate} from './model';
+import {createOnly,AlreadyCreated} from './createOnly';
 export class Conflict extends Error {constructor(public remote:RecordData){super('Changed elsewhere. Your draft is preserved.');}}
 export interface Gateway {
   list:(scope:Scope,kind:Kind)=>Promise<RecordData[]>;
@@ -17,7 +18,8 @@ export const cloud:Gateway={
   async list(s,kind){await owned(s);const result=await getDocsFromServer(query(collection(db,kind),where('teamId','==',s.teamId)));check(s);
     return result.docs.filter(d=>d.data().createdBy===s.uid).map(d=>decode(d.id,d.data()));},
   async save(s,kind,id,expected,fields){validate(kind,fields);check(s);
-    await runTransaction(db,async tx=>{check(s);const team=await tx.get(doc(db,'teams',s.teamId));const ref=doc(db,kind,id);const previous=await tx.get(ref);
+    if(expected===0){await owned(s);try{await createOnly(s,kind,id,fields);}catch(e){if(!(e instanceof AlreadyCreated))throw e;}}
+    else await runTransaction(db,async tx=>{check(s);const team=await tx.get(doc(db,'teams',s.teamId));const ref=doc(db,kind,id);const previous=await tx.get(ref);
       if(!team.exists()||team.data().ownerId!==s.uid)throw new Error('Team access denied.');
       if(previous.exists()){
         const d=previous.data();if(d.teamId!==s.teamId||d.createdBy!==s.uid)throw new Error('Document access denied.');
@@ -25,10 +27,7 @@ export const cloud:Gateway={
         if(remote.revision===next&&equal(remote.fields,fields))return; // ack lost after successful commit; safe retry.
         if(remote.revision!==expected)throw new Conflict(remote);
         check(s);tx.set(ref,{...fields,teamId:s.teamId,createdBy:s.uid,createdAt:d.createdAt,updatedAt:serverTimestamp(),revision:next});
-      }else{
-        if(expected!==0)throw new Error('Document is missing. Draft retained; save a separate copy.');
-        check(s);tx.set(ref,{...fields,teamId:s.teamId,createdBy:s.uid,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),revision:1});
-      }
+      }else throw new Error('Document is missing. Draft retained; save a separate copy.');
     });
     check(s);const ack=await getDocFromServer(doc(db,kind,id));check(s);
     if(!ack.exists()||ack.data().teamId!==s.teamId||ack.data().createdBy!==s.uid)throw new Error('Save acknowledgement unavailable. Draft retained.');

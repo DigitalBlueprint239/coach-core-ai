@@ -3,6 +3,8 @@ import {cloud,Conflict} from '../gateway';
 import {doc,runTransaction,getDocFromServer,getDocsFromServer} from 'firebase/firestore';
 import {auth} from '../../../firebase';
 import {Fields} from '../model';
+import {createOnly,AlreadyCreated} from '../createOnly';
+jest.mock('../createOnly',()=>({...jest.requireActual('../createOnly'),createOnly:jest.fn()}));
 jest.mock('../../../firebase',()=>({auth:{currentUser:{uid:'A',isAnonymous:false}},db:{}}));
 jest.mock('firebase/firestore',()=>({doc:jest.fn(),collection:jest.fn(),query:jest.fn(),where:jest.fn(),getDocsFromServer:jest.fn(),getDocFromServer:jest.fn(),runTransaction:jest.fn(),serverTimestamp:jest.fn(()=>new Date())}));
 const s={uid:'A',teamId:'T'};let rows:Map<string,{[key:string]:unknown}>;let writes:number;
@@ -13,6 +15,7 @@ beforeEach(()=>{Object.defineProperty(globalThis,'TextEncoder',{configurable:tru
  (getDocFromServer as jest.Mock).mockImplementation(async path=>snapshot(path));
  (getDocsFromServer as jest.Mock).mockImplementation(async()=>({docs:Array.from(rows.keys()).filter(k=>k.startsWith('plays/')).map(snapshot)}));
  (runTransaction as jest.Mock).mockImplementation(async(_db,fn)=>fn({get:async(path:string)=>snapshot(path),set:(path:string,data:{[key:string]:unknown})=>{rows.set(path,data);writes++;}}));
+ (createOnly as jest.Mock).mockImplementation(async(scope,kind,id,fields)=>{const path=`${kind}/${id}`;if(rows.has(path))throw new AlreadyCreated('exists');rows.set(path,{...fields,teamId:scope.teamId,createdBy:scope.uid,revision:1,createdAt:new Date('2026-10-13T00:00:00.000Z'),updatedAt:new Date('2026-10-13T00:00:00.000Z')});writes++;});
  // CRA resets factory mocks between tests.
  const {serverTimestamp}=require('firebase/firestore');serverTimestamp.mockImplementation(()=>new Date('2026-10-13T00:00:00.000Z'));
 });
@@ -40,5 +43,5 @@ test('account switch and cross-team owner mismatch refuse before writing',async(
  (auth as unknown as {currentUser:unknown}).currentUser={uid:'A',isAnonymous:false};rows.set('teams/T',{ownerId:'B'});await expect(cloud.save(s,'plays','p1',0,fields)).rejects.toThrow('Team access denied');expect(writes).toBe(0);
 });
 test('permission denial propagates as an error, not false conflict or offline success',async()=>{
- (runTransaction as jest.Mock).mockRejectedValueOnce(new Error('permission-denied'));await expect(cloud.save(s,'plays','p1',0,fields)).rejects.toThrow('permission-denied');expect(writes).toBe(0);
+ (createOnly as jest.Mock).mockRejectedValueOnce(new Error('permission-denied'));await expect(cloud.save(s,'plays','p1',0,fields)).rejects.toThrow('permission-denied');expect(writes).toBe(0);
 });
