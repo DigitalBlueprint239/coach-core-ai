@@ -9,7 +9,10 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useTeam } from '../../contexts/TeamContext';
 import LegacyImport from '../../features/legacy-import/LegacyImport';
-import { loadImportedPlays } from '../../features/legacy-import/firebase-import';
+import { useDocument } from '../../features/persistence/useDocument';
+import { Recovery, download } from '../../features/persistence/Recovery';
+import { equal, Fields } from '../../features/persistence/model';
+import EarlierDrafts from '../../features/persistence/EarlierDrafts';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
@@ -25,7 +28,6 @@ import {
   updatePlayerPosition,
   addRoute,
   removeRoute,
-  savePlay,
   undo,
   redo,
   shotgunFormation,
@@ -106,22 +108,17 @@ const TOUCH_THRESHOLD = 20; // pixels for touch detection
 const SmartPlaybook = () => {
   const { user } = useAuth();
   const { currentTeam } = useTeam();
-  const libraryKey = user ? (currentTeam && currentTeam.ownerId === user.uid ? `coachcore:v1:${user.uid}:${currentTeam.id}:drafts` : null) : 'smartPlaybook_plays';
+  const persistence = useDocument({uid:user!.uid,teamId:currentTeam!.id},'plays',{name:'',phase:'offense',type:'pass',players:[],routes:[]});
   // Core state
-  const [players, setPlayers] = useState<PlaybookPlayer[]>([]);
-  const [routes, setRoutes] = useState<PlaybookRoute[]>([]);
+  const [players, setPlayers] = useState<PlaybookPlayer[]>((persistence.fields.players || []) as unknown as PlaybookPlayer[]);
+  const [routes, setRoutes] = useState<PlaybookRoute[]>((persistence.fields.routes || []) as unknown as PlaybookRoute[]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [mode, setMode] = useState<PlaybookMode>('view');
-  const [savedPlays, setSavedPlays] = useState<SavedPlay[]>([]);
-  const [cloudPlays, setCloudPlays] = useState<SavedPlay[]>([]);
-  const [cloudLoadError, setCloudLoadError] = useState('');
-  const [importVersion, setImportVersion] = useState(0);
-  const [loadedLibraryKey, setLoadedLibraryKey] = useState<string | null>(null);
-  const [currentPlayName, setCurrentPlayName] = useState('');
-  const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
-  const [currentPlayType, setCurrentPlayType] = useState('pass');
-
+  const [currentPlayName, setCurrentPlayName] = useState(String(persistence.fields.name || ''));
+  const [currentPlayPhase, setCurrentPlayPhase] = useState(persistence.fields.phase === 'special_teams' ? 'special' : String(persistence.fields.phase || 'offense'));
+  const [currentPlayType, setCurrentPlayType] = useState(String(persistence.fields.type || 'pass'));
+  const openedRef = useRef(persistence.opened);
   // Route drawing state
   const [isDrawingRoute, setIsDrawingRoute] = useState(false);
   const [routePoints, setRoutePoints] = useState<Array<{ x: number; y: number }>>([]);
@@ -144,37 +141,21 @@ const SmartPlaybook = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastTouchRef = useRef<TouchEvent | null>(null);
 
-  useEffect(() => {
-    let active = true; setCloudPlays([]); setCloudLoadError('');
-    if (user && currentTeam && currentTeam.ownerId === user.uid) {
-      void loadImportedPlays({uid:user.uid,teamId:currentTeam.id})
-        .then(plays => { if (active) setCloudPlays(plays as SavedPlay[]); })
-        .catch(() => { if (active) setCloudLoadError('Cloud plays could not be opened. Retry after checking team access.'); });
+  const playFields:Fields = {...persistence.fields,name:currentPlayName,phase:currentPlayPhase==='special'?'special_teams':currentPlayPhase,type:currentPlayType,
+    players:JSON.parse(JSON.stringify(players)),routes:JSON.parse(JSON.stringify(routes))};
+  const playStatus = persistence.saving ? 'saving' : persistence.error ? 'failed' : persistence.ack && equal(persistence.ack,playFields) ? 'saved' : 'unsaved';
+  useEffect(()=>{
+    if(openedRef.current !== persistence.opened){
+      openedRef.current=persistence.opened;
+      setPlayers((persistence.fields.players||[]) as unknown as PlaybookPlayer[]);
+      setRoutes((persistence.fields.routes||[]) as unknown as PlaybookRoute[]);
+      setCurrentPlayName(String(persistence.fields.name||''));
+      setCurrentPlayPhase(persistence.fields.phase==='special_teams'?'special':String(persistence.fields.phase||'offense'));
+      setCurrentPlayType(String(persistence.fields.type||'pass'));setUndoStack([]);setRedoStack([]);return;
     }
-    return () => { active = false; };
-  }, [user, currentTeam, importVersion]);
-
-  // Device drafts are scoped; verified imported plays are loaded from cloud.
-  useEffect(() => {
-    try {
-      setSavedPlays([]);
-      setPlayers([]); setRoutes([]); setUndoStack([]); setRedoStack([]);
-      const saved = libraryKey ? localStorage.getItem(libraryKey) : null;
-      if (saved) {
-        setSavedPlays(JSON.parse(saved));
-      }
-    } catch (error) {
-      console.error('Error loading saved plays:', error);
-    }
-
-    // Check if onboarding is needed
-    const onboardingComplete = localStorage.getItem('smartPlaybook_onboarding_complete');
-    if (!onboardingComplete) {
-      setShowOnboarding(true);
-    }
-    setLoadedLibraryKey(libraryKey);
-    }, [libraryKey]);
-
+    persistence.update(playFields);
+  });
+  useEffect(()=>{if(!localStorage.getItem('smartPlaybook_onboarding_complete'))setShowOnboarding(true);},[]);
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
@@ -224,16 +205,6 @@ const SmartPlaybook = () => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
-
-  // Save plays to localStorage when they change
-  useEffect(() => {
-    try {
-      // Account libraries never rewrite shared legacy originals.
-      if (libraryKey && loadedLibraryKey === libraryKey) localStorage.setItem(libraryKey, JSON.stringify(savedPlays));
-    } catch (error) {
-      console.error('Error saving plays:', error);
-    }
-  }, [savedPlays, libraryKey, loadedLibraryKey]);
 
   // Save current state to undo stack
   const saveToUndoStack = useCallback((action: string) => {
@@ -479,50 +450,15 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack]);
 
   // Save current play
-  const saveCurrentPlay = useCallback((name: string, phase: string, type: string) => {
-    if (!name.trim() || players.length === 0) {
-      addNotification('error', 'Please enter a play name and add at least one player.');
-      return;
-    }
-
-    const play = savePlay({
-      name: name.trim(),
-      phase: phase || currentPlayPhase,
-      type: type || currentPlayType,
-      players,
-      routes
-    }) as SavedPlay;
-
-    setSavedPlays(prev => [...prev, play]);
-    setShowSaveDialog(false);
-    setCurrentPlayName('');
-    addNotification('success', user ? `Play "${name}" kept as a device draft; cloud save pending` : `Play "${name}" saved successfully`);
-  }, [players, routes, currentPlayPhase, currentPlayType, addNotification, user]);
-
-  // Load play
-  const loadPlay = useCallback((play: SavedPlay) => {
-    saveToUndoStack('load_play');
-    setPlayers([...play.players]);
-    setRoutes([...play.routes]);
-    setCurrentPlayName(play.name);
-    setCurrentPlayPhase(play.phase);
-    setCurrentPlayType(play.type);
-    setSelectedPlayerId(null);
-    setShowLibrary(false);
-    addNotification('success', `Play "${play.name}" loaded successfully`);
-  }, [saveToUndoStack, addNotification]);
-
-  // Delete play
-  const deletePlay = useCallback((playId: string) => {
-    if (cloudPlays.some(play => play.id === playId)) {
-      addNotification('warning', 'Cloud copies are preserved. Deletion is not enabled.'); return;
-    }
-    if (window.confirm('Are you sure you want to delete this play?')) {
-      setSavedPlays(prev => prev.filter(play => play.id !== playId));
-      addNotification('success', 'Play deleted successfully');
-    }
-  }, [addNotification, cloudPlays]);
-
+  const saveCurrentPlay = async () => {
+    persistence.update(playFields);
+    if(await persistence.save())setShowSaveDialog(false);
+  };
+  const loadPlay = (play:SavedPlay) => {
+    const record=persistence.records.find(r=>r.id===play.id);
+    if(record && (!persistence.hasWork||window.confirm('Open another play? Export your unsaved draft first if you need both.'))){persistence.open(record);setShowLibrary(false);}
+  };
+  const deletePlay = () => {addNotification('warning','Deletion is disabled. Your plays and originals are preserved.');};
   // Clear field
   const clearField = useCallback(() => {
     if (window.confirm('Are you sure you want to clear the field?')) {
@@ -579,8 +515,15 @@ const SmartPlaybook = () => {
   return (
     <ErrorBoundary>
       <div className="smart-playbook-app min-h-screen bg-gray-50">
-      {user && currentTeam && currentTeam.ownerId === user.uid && <LegacyImport key={`${user.uid}:${currentTeam.id}`} uid={user.uid} teamId={currentTeam.id} teamName={currentTeam.name} onImported={() => setImportVersion(v => v + 1)} />}
-        {cloudLoadError && <p role="alert">{cloudLoadError}</p>}
+      {user && currentTeam && currentTeam.ownerId === user.uid && <LegacyImport key={`${user.uid}:${currentTeam.id}`} uid={user.uid} teamId={currentTeam.id} teamName={currentTeam.name} onImported={() => {void persistence.reload();}} />}
+        <EarlierDrafts scope={{uid:user!.uid,teamId:currentTeam!.id}} onOpen={record=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.open(record);}}/>
+        <p role="status" aria-label="Play save status">{playStatus}</p>
+        <button onClick={()=>{if(!persistence.hasWork||window.confirm('Start a new play? Export your current draft first if you need both.'))persistence.create({name:'',phase:'offense',type:'pass',players:[],routes:[]});}}>New play</button>
+        <button onClick={()=>download(playFields,'play-draft.json')}>Export draft</button>
+        <button onClick={()=>{void persistence.reload();}}>Refresh play library</button>
+        {persistence.error&&<p role="alert">{persistence.error}</p>}{persistence.listError&&<p role="alert">{persistence.listError}</p>}
+        {persistence.conflict&&<Recovery remote={persistence.conflict} fields={playFields} onReload={()=>persistence.open(persistence.conflict!)} onCopy={()=>{persistence.update(playFields);void persistence.save(true);}}/>}
+        {persistence.timestamps&&<p>Created {persistence.timestamps.createdAt}; last saved {persistence.timestamps.updatedAt}</p>}
         {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -717,7 +660,7 @@ const SmartPlaybook = () => {
           <div className="lg:col-span-1">
             {showLibrary && (
               <PlayLibrary
-                savedPlays={loadedLibraryKey === libraryKey ? [...cloudPlays, ...savedPlays] : []}
+                savedPlays={persistence.records.map(r => ({...r.fields,id:r.id,phase:r.fields.phase==='special_teams'?'special':r.fields.phase})) as unknown as SavedPlay[]}
                 onLoadPlay={loadPlay}
                 onDeletePlay={deletePlay}
                 onClose={() => setShowLibrary(false)}
@@ -736,7 +679,7 @@ const SmartPlaybook = () => {
         onPlayPhaseChange={setCurrentPlayPhase}
         onPlayTypeChange={setCurrentPlayType}
         onSave={() =>
-          saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)
+          void saveCurrentPlay()
         }
         onCancel={() => setShowSaveDialog(false)}
         canSave={!!currentPlayName.trim() && players.length > 0}
