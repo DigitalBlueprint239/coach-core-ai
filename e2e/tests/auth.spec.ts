@@ -96,7 +96,7 @@ test('E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in', 
   expect(await page.evaluate(() => (window as any).__coachCoreE2E.uid())).toBeNull();
 });
 
-test('E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears session keys, keeps legacy plays byte-identical', async ({ page }) => {
+test('E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical', async ({ page }) => {
   const email = coachEmail('a07');
   const legacy = JSON.stringify([{ id: 'legacy-1', name: 'Pre-account play', players: [{ x: 1.25, y: 2.5 }] }]);
   await page.goto('/');
@@ -116,7 +116,8 @@ test('E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload
   await expect(dashboardFor(page, email)).toHaveCount(0);
   const s = await storage(page);
   expect(s.currentTeamId).toBeUndefined();
-  expect(s.offline_operations).toBeUndefined();
+  // Contract change 2026-10-14 (#61): the quarantined legacy queue is kept byte-for-byte.
+  expect(s.offline_operations).toBe('[{"op":"stale"}]');
   // D10 pending: legacy device data is neither imported nor deleted.
   expect(s[LEGACY_PLAYS_KEY]).toBe(legacy);
 });

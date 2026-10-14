@@ -11,6 +11,7 @@ import type { Auth } from 'firebase/auth';
 import { signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc, runTransaction, Timestamp, type UpdateData, type DocumentData } from 'firebase/firestore';
+import { callCoachAI } from '../services/coach-ai-client';
 
 type Result = { ok: true; data?: unknown } | { ok: false; code: string };
 
@@ -50,6 +51,11 @@ export function installEmulatorHooks(auth: Auth, db: Firestore): void {
       const snap = await tx.get(doc(db, path));
       return snap.exists() ? 'exists' : 'missing';
     })),
+    // Gateway kill-switch check through the app's own AI client (the UI no
+    // longer offers AI generation). Returns the client's stable error reason.
+    coachAI: (teamId: string) => callCoachAI('practice_plan', teamId, {
+      ageGroup: '10U', skillLevel: 'beginner', durationMinutes: 60, objectives: ['Tackling'],
+    } as never).then(() => ({ ok: true }), (e: { code?: string; reason?: string }) => ({ ok: false, code: String(e?.code), reason: String(e?.reason) })),
     set: (path: string, data: unknown) => run(() => setDoc(doc(db, path), revive(data) as object)),
     update: (path: string, data: unknown) =>
       run(() => updateDoc(doc(db, path), revive(data) as UpdateData<DocumentData>)),

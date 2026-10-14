@@ -128,7 +128,7 @@ describe('AuthGate', () => {
     expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
   });
 
-  it('revoked session: SDK sign-out after a live session clears user data and explains why', async () => {
+  it('revoked session: SDK sign-out after a live session clears session data, preserves the quarantined legacy queue, and explains why', async () => {
     window.localStorage.setItem('currentTeamId', 'team-1');
     window.localStorage.setItem('offline_operations', '[{"type":"update"}]');
     window.localStorage.setItem('unrelated', 'keep');
@@ -139,7 +139,8 @@ describe('AuthGate', () => {
     expect(await screen.findByText(/Your session ended/)).toBeInTheDocument();
     expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
     expect(window.localStorage.getItem('currentTeamId')).toBeNull();
-    expect(window.localStorage.getItem('offline_operations')).toBeNull();
+    // Quarantined legacy queue is preserved byte-for-byte (never replayed).
+    expect(window.localStorage.getItem('offline_operations')).toBe('[{"type":"update"}]');
     expect(window.localStorage.getItem('unrelated')).toBe('keep');
   });
 

@@ -74,7 +74,7 @@ Round-trip must be exact: plan → save → reload → re-map back produces the 
    - Explicit sign-out runs the guards registered with `registerSignOutGuard(guard)` from `src/hooks/useAuth.tsx`. These are implemented on this branch with tests.
    - Codex's guard shows "You have N unsynced drafts: **Sync now** / **Export drafts** / **Sign out anyway** / **Cancel**". Returning false cancels sign-out, and a throwing guard also cancels (fail-safe).
    - Session expiry or revocation by Firebase can't be guarded. In that case uid+team-scoped drafts stay on the device for the same coach's next sign-in; the app never shows them to another uid.
-   - `clearUserScopedState` removes only the current session keys (`currentTeamId`, the legacy global `offline_operations`). It does **not** touch `smartPlaybook_plays`, `coachcore-playbook` or other users' scoped keys.
+   - `clearUserScopedState` removes only the current session key `currentTeamId`. **Amended 2026-10-14 (#61):** the legacy global `offline_operations` queue is quarantined (never replayed) and is now **preserved byte-for-byte** on sign-out, like the other legacy device data. It does **not** touch `smartPlaybook_plays`, `coachcore-playbook`, scoped `coachcore:v1:*` drafts, or other users' scoped keys.
 4. **Legacy global data (`smartPlaybook_plays`, standalone `coachcore-playbook`):**
    - **D10 is pending, so import is inactive.** The originals are preserved byte-for-byte: not read into an account, not modified, not deleted.
    - If D10 is approved as recommended: one prompt per uid ("N plays are saved on this device from before accounts. Import into team X? **Import** / **Not now**").

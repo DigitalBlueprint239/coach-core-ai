@@ -86,9 +86,13 @@ export function registerSignOutGuard(guard: SignOutGuard): () => void {
   return () => { signOutGuards.delete(guard); };
 }
 
-// Browser storage that belongs to the signed-in coach and must not survive a
+// Browser storage that belongs to the signed-in session and must not survive a
 // sign-out on a shared device (Day 1 F-10).
-const USER_SCOPED_STORAGE_KEYS = ['currentTeamId', 'offline_operations'];
+// The legacy global `offline_operations` queue is deliberately NOT cleared
+// (2026-10-14, #61 escalation): it has no trustworthy owner/team/revision, is
+// quarantined and never replayed (src/services/firestore.ts), and the founder
+// rule for legacy device data is "preserve original bytes, no deletion".
+const USER_SCOPED_STORAGE_KEYS = ['currentTeamId'];
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
