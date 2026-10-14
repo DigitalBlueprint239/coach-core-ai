@@ -1,6 +1,7 @@
 import {test,expect,Page} from '../../e2e/node_modules/@playwright/test';
 import {resetEmulators,adminSet,adminGet,adminTeamsOwnedBy} from '../../e2e/tests/support/emulator';
 import {coachEmail,skipOnboarding,signInAsBetaCoach,createTeamViaUI,openTab,signInScreen,waitForE2EHooks,signOutViaUI} from '../../e2e/tests/support/app';
+import {afterSignOutNavigation} from './navigationCheckpoint';
 test.beforeEach(async({page,context,browser,browserName})=>{console.info('Browser:',browserName,browser.version());await resetEmulators();await skipOnboarding(context);await context.addInitScript(()=>localStorage.setItem('smartPlaybook_onboarding_complete','true'));page.on('dialog',d=>{void d.accept();});});
 async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}
 async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}
@@ -43,7 +44,7 @@ test('P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-a
  await expect.poll(()=>page.evaluate(([uid,team])=>Object.entries(localStorage).filter(([k])=>k.startsWith(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)).map(([,raw])=>JSON.parse(raw).fields.name),[a.uid,a.teamId])).toContain('Private A draft');
  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');
  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');
- await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
+ await afterSignOutNavigation(page,async()=>{await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();});await expect(signInScreen(page)).toBeVisible();
  const b=await signInAsBetaCoach(page,coachEmail('coach-b'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');
  expect(await page.evaluate(uid=>Object.keys(localStorage).some(k=>k.startsWith(`coachcore:v1:${uid}:`)&&JSON.parse(localStorage.getItem(k)||'null')?.fields?.notes==='Unsynced note'),a.uid)).toBe(true);
  expect(await page.evaluate(uid=>Object.keys(localStorage).filter(k=>k.startsWith(`coachcore:v1:${uid}:`)&&k.includes(':drafts:')),b)).toEqual([]);
@@ -56,8 +57,8 @@ test('P15 ordinary play cloud save, property edit, hard reload, complete reopen'
 });
 test('P12 sync-now acknowledges the unsaved plan before signing out',async({page})=>{
  await setup(page,'p12sync');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('Sync on sign out');await page.getByLabel('Plan.notes',{exact:true}).fill('Preserved by sync');
- await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();
- await page.getByRole('button',{name:'Sync now',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
+ await afterSignOutNavigation(page,async()=>{await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();
+ await page.getByRole('button',{name:'Sync now',exact:true}).click();});await expect(signInScreen(page)).toBeVisible();
 });
 test('P15 existing complete route payload survives property save and reopening',async({page})=>{
  const s=await setup(page,'geometry');const when=new Date('2026-10-01T12:00:00Z');

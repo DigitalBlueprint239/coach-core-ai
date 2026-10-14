@@ -5,5 +5,6 @@ const server=base.webServer;
 if(!server||Array.isArray(server))throw new Error('Client tests require the single published emulator web server.');
 export default defineConfig({...base,testDir:__dirname,testMatch:'*.spec.ts',outputDir:path.resolve(__dirname,'../../../coaching-browser-results'),
   reporter:[['list'],['json',{outputFile:path.resolve(__dirname,'../../../coaching-browser-results/results.json')}]],
+  use:{...base.use,actionTimeout:10_000,navigationTimeout:10_000},
   webServer:{...server,cwd:path.resolve(__dirname,'../../e2e')},
 });
