@@ -5,42 +5,42 @@ import { LoadingState } from './LoadingStates';
 const ONBOARDING_STEPS = [
   {
     title: 'Welcome to Coach Core AI!',
-    description: 'Your all-in-one sports coaching platform. Let’s get you started with a quick walkthrough.',
+    description: 'Your private workspace for teams, practice plans and plays. Let’s get you started with a quick walkthrough.',
     illustration: '🏆'
   },
   {
     title: 'Team Management',
-    description: 'Create or join a team to collaborate with coaches and players. Manage rosters, attendance, and more.',
+    description: 'Create and select your team. Team access is owner-only during this private beta; roster and attendance tools are planned.',
     illustration: '👥'
   },
   {
     title: 'Practice Planner',
-    description: 'Use the AI-powered planner to generate, customize, and save practice plans for your team.',
+    description: 'Create, edit and save your own practice plans. AI generation is disabled in this milestone.',
     illustration: '📋'
   },
   {
     title: 'Smart Playbook',
-    description: 'Design plays with drag-and-drop, get AI suggestions, and share with your team. Touch-optimized for mobile!',
+    description: 'Design plays visually and save them in your authorized team workspace. Recovery tools help preserve unsynced drafts.',
     illustration: '🏈'
   },
   {
     title: 'Analytics & Feedback',
-    description: 'Track player progress, attendance, and get actionable insights from your data.',
+    description: 'Analytics, player development and attendance are planned features, not working modules in this milestone.',
     illustration: '📈'
   },
   {
     title: 'AI Assistant',
-    description: 'Ask the AI for coaching advice, practice ideas, or game strategy. Get instant, personalized suggestions.',
+    description: 'AI generation is unavailable in this milestone. Use the existing manual planning and play design tools.',
     illustration: '🤖'
   },
   {
     title: 'Offline & PWA',
-    description: 'Install the app for offline access, push notifications, and a native-like experience on any device.',
+    description: 'Device drafts support recovery. Cloud saves require an acknowledged connection. App installation depends on your browser.',
     illustration: '📱'
   },
   {
     title: 'Ready to Get Started?',
-    description: 'You can start with your own team or try Demo Mode to explore all features with sample data.',
+    description: 'Start in your own workspace or try the explicitly labeled dashboard sample preview. Fictional events and tasks are never saved to your team.',
     illustration: '🚀'
   }
 ];
@@ -220,4 +220,4 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       `}</style>
     </div>
   );
-}; 
+};
