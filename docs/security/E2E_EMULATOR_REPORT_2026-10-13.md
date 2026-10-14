@@ -494,3 +494,62 @@ All other 44 tests per engine pass 10/10, including hardened A10, CC-W0, CC-L1 a
 | Physical devices, staging | **NOT MEASURED** |
 
 **MVP: NO-GO.** The test-only candidates are not to be merged.
+
+## 10. H2 and FX-02 investigation from retained evidence (2026-10-14 night)
+
+Founder decision (Coach Drew, 2026-10-14): **L1, R1b and FX-03 are accepted as PASSED** on independent testing (§9). That record stands. **MVP remains NO-GO.** No test was repeated for this investigation.
+
+### 10.1 What the retained evidence shows
+
+**FX-02** (Codex, `docs/evidence/firefox-navigation/original-trace-analysis.json` on `codex/firefox-navigation-investigation` `bd341f7`; original Firefox P14 trace, sha256 `DCC5B745…`):
+
+| t (ms, trace clock) | Event |
+|---|---|
+| 110013 → 110449 | `goto('/')` completes (436 ms) |
+| 110957 | Click on "Email me a sign-in link" starts |
+| 113977 | Playwright's first "waiting for locator" log, **3.0 s after the action started** |
+| 162362 | Locator resolved, **48.4 s later** |
+| 162510 | Click done. The action took 51.6 s in total |
+| — | Auth `sendOobCode` 200 in **2.3 ms**; all Auth calls 1.7–2.8 ms |
+
+Code reading (`src/components/auth/AuthGate.tsx`, `SignInScreen`): that button is rendered statically with the form and is disabled **only** while `busy`, which is set only during a submit. The sign-in screen itself had already been asserted visible and the email field filled. No app state hides or replaces the button at this point.
+
+So the 48 s was spent before Playwright could even *find* a statically present button, and a further 3 s passed before its first wait log. **Assessment (not proof):** the stall is in browser, driver or host responsiveness, not in app logic or the Auth emulator. It was measured on Codex's local Windows host, not CI.
+
+**H2** (Claude CI, Linux, Firefox 157). D10-07 timed out at the 60 s test limit:
+- 1/10 at `709e0f4` (job `116004898887`);
+- 0/10 at `c858d1d`;
+- 0/10 at `4757eaf`;
+- 1/10 at `d12d273` (job `116107889507`).
+
+Annotations record only "Test timeout of 60000ms exceeded." That is the message Playwright gives when the pending operation has **no deadline of its own**, and D10-07 has three such points:
+- `net.waitFor(2)`, a custom promise;
+- every action, since `actionTimeout` is unset and actions are bounded only by the test timeout;
+- the 5 s observation sleep.
+
+D10-07 also begins with the same email-link sign-in as FX-02. **Hypothesis:** H2 is the same kind of stall as FX-02. One ~48 s stall during D10-07's sign-in would exhaust its 60 s budget. **Not confirmed:** the retained annotations have no per-step timings.
+
+### 10.2 Exact artifacts needed (no new runs required)
+
+Both are retained until **2026-10-28**. They live in GitHub's blob storage, which this workspace cannot reach; anyone with repository access can download them.
+
+| Defect | Artifact | File inside | Question it answers |
+|---|---|---|---|
+| H2 (2nd) | Run `38638354889`, artifact **`11930869453`** `e2e-results-d12d273786ba76f76102ce0459e6bcb57cac0e2b` | `test-results/results.json` (D10-07 Firefox entries) and `test-results/legacy-import-D10-07-*-firefox-repeat*/trace.zip` for the failed repeat | Which step was open at 60 s? Was it one long stall or general slowness? What did the DOM look like at the time? What do the 9 passing durations look like? |
+| H2 (1st) | Run `38608330808`, artifact **`11920325300`** `e2e-results-709e0f4baf9e076a703649bbb892ec5d40a8f1c4` | Same files | Same step as the 2nd occurrence? |
+| FX-02 | Codex's local raw trace, sha256 `DCC5B745…` (deliberately not published: it carries Auth tokens) | Action `fcwl@56`: the action-log *texts* between 113977 and 162362, and the "before" DOM snapshot | Was the button in the DOM during the 48 s (browser or driver stall), or absent (app re-render)? |
+
+### 10.3 Diagnostics added for the next counted run (`303f178`, observability only)
+
+These add no assertion, timeout or retry change, so candidate 8 diagnoses itself without extra runs.
+
+The CI reporter now emits:
+1. per-test min/median/max duration;
+2. for every failed execution: the step still open at the end (with spec:line), the slowest steps and every error line;
+3. a census of every action or expect step ≥ 10 s across **all** executions, passes included, so an FX-02-like stall is visible even when the test passes.
+
+D10-07's custom waits and the sign-in phases are now named steps. All of this was self-tested locally with a hung custom wait and a hung locator, and both were attributed correctly.
+
+A stricter `actionTimeout` (Codex used 10 s in their own lane) would make a stall fail *at* the responsible step. It is **not** applied: it would change the acceptance suite's failure semantics against every earlier run. It is offered as an option instead.
+
+**Status:** H2 OPEN. FX-02 OPEN. Genuine hidden-tab behaviour, devices and staging NOT MEASURED.
