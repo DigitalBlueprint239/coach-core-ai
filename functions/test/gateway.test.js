@@ -305,6 +305,32 @@ describe("output validation", () => {
     });
   }
 
+  // Gateway output bounds must equal the practicePlans storage bounds
+  // (persistence contract §2) so any accepted plan saves without truncation.
+  for (const [label, patch, ok] of [
+    ["a 200-character title", {title: "t".repeat(200)}, true],
+    ["a 201-character title", {title: "t".repeat(201)}, false],
+    ["5000-character notes", {notes: "n".repeat(5000)}, true],
+    ["5001-character notes", {notes: "n".repeat(5001)}, false],
+  ]) {
+    it(`${ok ? "accepts" : "rejects"} a practice plan with ${label}`, async () => {
+      const provider = makeProvider(() => ({
+        data: {...samplePracticePlan(90), ...patch},
+        usage: {inputTokens: 1, outputTokens: 1},
+      }));
+      const {deps} = makeDeps({provider});
+      const call = createCoachAIHandler(deps)(
+          {auth: betaAuth(), data: envelope("practice_plan")});
+      if (ok) {
+        const res = await call;
+        const key = Object.keys(patch)[0];
+        assert.equal(res.result[key], patch[key]);
+      } else {
+        expectCode(await rejection(() => call), "internal", "ai-invalid-output");
+      }
+    });
+  }
+
   it("rejects a practice plan with an absurd duration", async () => {
     const provider = makeProvider(() => ({
       data: {...samplePracticePlan(90), totalMinutes: 9000},

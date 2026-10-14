@@ -54,6 +54,20 @@ service cloud.firestore {
       return request.resource.data[field] == resource.data[field];
     }
 
+    // Optimistic concurrency (persistence contract v1). New documents may
+    // start at revision 1. Once a document carries a revision, every update
+    // must send exactly resource.revision + 1, so a stale editor is denied
+    // instead of silently overwriting (client shows a conflict).
+    function revisionOnCreate(d) {
+      return !('revision' in d) || d.revision == 1;
+    }
+    function revisionOnUpdate() {
+      return ('revision' in resource.data)
+        ? (('revision' in request.resource.data)
+            && request.resource.data.revision == resource.data.revision + 1)
+        : (!('revision' in request.resource.data) || request.resource.data.revision == 1);
+    }
+
     // ---------- teams ----------
     function validNewTeam() {
       let d = request.resource.data;
@@ -94,8 +108,13 @@ service cloud.firestore {
     function validPlayFields(d) {
       return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
         && d.keys().hasOnly(['name', 'formation', 'description', 'routes', 'players',
-                             'tags', 'difficulty', 'sport', 'teamId', 'createdBy',
+                             'tags', 'difficulty', 'sport', 'phase', 'type',
+                             'localId', 'revision', 'teamId', 'createdBy',
                              'createdAt', 'updatedAt'])
+        && (!('phase' in d) || d.phase in ['offense', 'defense', 'special_teams'])
+        && (!('type' in d) || isShortString(d.type, 0, 40))
+        && (!('localId' in d) || isShortString(d.localId, 1, 64))
+        && (!('revision' in d) || (d.revision is int && d.revision >= 1))
         && isShortString(d.name, 1, 120)
         && (!('formation' in d) || isShortString(d.formation, 0, 80))
         && (!('description' in d) || isShortString(d.description, 0, 2000))
@@ -110,13 +129,21 @@ service cloud.firestore {
 
     match /plays/{playId} {
       // `list` requires the query to filter on teamId == <a team the caller owns>.
-      allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
+      // A missing id is readable (result: not found) so create-only transactions
+      // can check before writing (D10 import). Existing documents keep owner-only
+      // reads; `list` is unchanged. Side effect: a beta user can tell whether an
+      // id exists (not-found vs permission-denied). Accepted: copy ids are
+      // SHA-256 of uid+team+content and other ids are random.
+      allow get: if isBetaUser() && (resource == null || ownsTeam(resource.data.teamId));
+      allow list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
         && validPlayFields(request.resource.data)
+        && revisionOnCreate(request.resource.data)
         && request.resource.data.createdBy == request.auth.uid
         && ownsTeam(request.resource.data.teamId);
       allow update: if isBetaUser()
         && ownsTeam(resource.data.teamId)
+        && revisionOnUpdate()
         && unchanged('teamId')
         && unchanged('createdBy')
         && unchanged('createdAt')
@@ -128,8 +155,19 @@ service cloud.firestore {
     function validPlanFields(d) {
       return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
         && d.keys().hasOnly(['name', 'date', 'duration', 'periods', 'goals', 'notes',
-                             'source', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])
-        && isShortString(d.name, 1, 120)
+                             'source', 'safetyConsiderations', 'aiRequestId', 'revision',
+                             'ageGroup', 'skillLevel', 'contactLevel', 'hydrationBreakMinutes',
+                             'teamId', 'createdBy', 'createdAt', 'updatedAt'])
+        && (!('ageGroup' in d) || d.ageGroup in ['6U', '8U', '10U', '12U', '14U',
+                                                   'HS_JV', 'HS_VARSITY', 'ADULT'])
+        && (!('skillLevel' in d) || d.skillLevel in ['beginner', 'intermediate', 'advanced'])
+        && (!('contactLevel' in d) || d.contactLevel in ['non_contact', 'limited_contact', 'full_contact'])
+        && (!('hydrationBreakMinutes' in d) || isBoundedList(d.hydrationBreakMinutes, 20))
+        && (!('safetyConsiderations' in d) || isBoundedList(d.safetyConsiderations, 20))
+        && (!('aiRequestId' in d) || isShortString(d.aiRequestId, 1, 64))
+        && (!('revision' in d) || (d.revision is int && d.revision >= 1))
+        // 200 = coach-ai.v1 practice_plan title bound, so AI titles save losslessly.
+        && isShortString(d.name, 1, 200)
         && (!('date' in d) || isShortString(d.date, 0, 40))
         && (!('duration' in d) || (d.duration is number && d.duration >= 0 && d.duration <= 600))
         && (!('periods' in d) || isBoundedList(d.periods, 40))
@@ -141,13 +179,21 @@ service cloud.firestore {
     }
 
     match /practicePlans/{planId} {
-      allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
+      // A missing id is readable (result: not found) so create-only transactions
+      // can check before writing (D10 import). Existing documents keep owner-only
+      // reads; `list` is unchanged. Side effect: a beta user can tell whether an
+      // id exists (not-found vs permission-denied). Accepted: copy ids are
+      // SHA-256 of uid+team+content and other ids are random.
+      allow get: if isBetaUser() && (resource == null || ownsTeam(resource.data.teamId));
+      allow list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
         && validPlanFields(request.resource.data)
+        && revisionOnCreate(request.resource.data)
         && request.resource.data.createdBy == request.auth.uid
         && ownsTeam(request.resource.data.teamId);
       allow update: if isBetaUser()
         && ownsTeam(resource.data.teamId)
+        && revisionOnUpdate()
         && unchanged('teamId')
         && unchanged('createdBy')
         && unchanged('createdAt')

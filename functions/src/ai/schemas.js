@@ -169,6 +169,9 @@ const OUTPUT_LIMITS = {
     cooldown: z.object({durationMinutes: nonNeg(60)}).passthrough(),
     hydrationBreakMinutes: z.array(nonNeg(240)).max(20),
     safetyConsiderations: z.array(z.string().max(500)).min(1).max(20),
+    // Same bound as practicePlans.notes in firestore.rules, so every valid
+    // result can be saved without truncation (persistence contract §2).
+    notes: z.string().max(5000),
   }).passthrough(),
   drill_recommendations: z.object({
     drills: z.array(z.object({
