@@ -1,0 +1,84 @@
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[failure] 
+Process completed with exit code 1.
+
+[failure] E2E firefox: 260 passed / 20 failed / 70 blocked / 0 skipped
+PASS E2E-AI01 practice planner reaches the gateway, which refuses because AI is disabled
+PASS E2E-A01 signed-out visitor sees only the sign-in screen
+PASS E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted
+PASS E2E-A03 [emulator email link] link opened on another device asks for the email first
+PASS E2E-A04 [emulator email link] a used sign-in link cannot be replayed
+PASS E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email"
+PASS E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in
+PASS E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears session keys, keeps legacy plays byte-identical
+PASS E2E-A08 [emulator] disabled account is signed out on the next access check
+PASS E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+PASS D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+PASS D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision only after verification, originals untouched
+PASS D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+PASS D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+PASS D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+PASS D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+PASS D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+FAIL D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B -- Error: coach B must not be offered device plays coach A already imported | expect(locator).toHaveCount(expected) failed | Locator:  getByRole('region', { name: 'Import device plays' }).getByRole('button', { name: 'Import plays' }) | Expected: 0
+PASS D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded
+FAIL D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B -- Error: team B prompt must disclose the unfinished import into team A | expect(locator).toContainText(expected) failed | Locator: getByRole('region', { name: 'Import device plays' }) | Expected substring: "Alpha Eagles"
+PASS D10-08 account switch while a copy is in flight: no copy is ever attributed to the next coach
+PASS D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+PASS D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+PASS D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+PASS E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+BLOCKED E2E-P10 coach A's unsynced Playbook drafts are invisible to coach B on the same browser profile -- Codex: uid+team-scoped draft storage in SmartPlaybook.tsx / firestore.ts (contract P-10)
+BLOCKED E2E-P11 sign-out removes only the signed-out coach's draft keys -- Codex: scoped draft keys coachcore:v1:{uid}:{teamId}:* (contract P-11)
+BLOCKED E2E-P12b unsynced-drafts sign-out guard: Sync now / Export / Sign out anyway / Cancel -- Codex: guard UI registered via registerSignOutGuard (contract P-12b)
+BLOCKED E2E-P14 two tabs edit the same play: the second save shows the conflict screen and loses nothing -- Codex: runTransaction(expectedRevision) + 3-way conflict UI (contract P-14); rules half covered by E2E-C01
+BLOCKED E2E-P15 Playbook play: create -> cloud save -> hard reload -> reopen identical on another device -- Codex: Smart Playbook cloud save/load (today plays live only in localStorage smartPlaybook_plays)
+BLOC
+
+[failure] E2E chromium: 260 passed / 20 failed / 70 blocked / 0 skipped
+PASS E2E-AI01 practice planner reaches the gateway, which refuses because AI is disabled
+PASS E2E-A01 signed-out visitor sees only the sign-in screen
+PASS E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted
+PASS E2E-A03 [emulator email link] link opened on another device asks for the email first
+PASS E2E-A04 [emulator email link] a used sign-in link cannot be replayed
+PASS E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email"
+PASS E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in
+PASS E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears session keys, keeps legacy plays byte-identical
+PASS E2E-A08 [emulator] disabled account is signed out on the next access check
+PASS E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+PASS D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+PASS D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision only after verification, originals untouched
+PASS D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+PASS D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+PASS D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+PASS D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+PASS D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+FAIL D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B -- Error: coach B must not be offered device plays coach A already imported | expect(locator).toHaveCount(expected) failed | Locator:  getByRole('region', { name: 'Import device plays' }).getByRole('button', { name: 'Import plays' }) | Expected: 0
+PASS D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded
+FAIL D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B -- Error: team B prompt must disclose the unfinished import into team A | expect(locator).toContainText(expected) failed | Locator: getByRole('region', { name: 'Import device plays' }) | Expected substring: "Alpha Eagles"
+PASS D10-08 account switch while a copy is in flight: no copy is ever attributed to the next coach
+PASS D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+PASS D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+PASS D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+PASS E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+BLOCKED E2E-P10 coach A's unsynced Playbook drafts are invisible to coach B on the same browser profile -- Codex: uid+team-scoped draft storage in SmartPlaybook.tsx / firestore.ts (contract P-10)
+BLOCKED E2E-P11 sign-out removes only the signed-out coach's draft keys -- Codex: scoped draft keys coachcore:v1:{uid}:{teamId}:* (contract P-11)
+BLOCKED E2E-P12b unsynced-drafts sign-out guard: Sync now / Export / Sign out anyway / Cancel -- Codex: guard UI registered via registerSignOutGuard (contract P-12b)
+BLOCKED E2E-P14 two tabs edit the same play: the second save shows the conflict screen and loses nothing -- Codex: runTransaction(expectedRevision) + 3-way conflict UI (contract P-14); rules half covered by E2E-C01
+BLOCKED E2E-P15 Playbook play: create -> cloud save -> hard reload -> reopen identical on another device -- Codex: Smart Playbook cloud save/load (today plays live only in localStorage smartPlaybook_plays)
+BLOC
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
