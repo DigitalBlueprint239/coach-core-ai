@@ -1,0 +1,684 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node e2e/node_modules/@playwright/test/cli.js test --config tests/coaching-ui/navigation-investigation.config.ts --repeat-each=5
+[WebServer] (node:28152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 40 tests using 1 worker
+
+(node:24804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8b8iq1-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8b8ob2-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  1 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (17.9s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8b8s8p-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x   2 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (13.5s)
+(node:7848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8b94bk-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok  3 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (13.5s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8b9fi3-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok  4 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (12.6s)
+(node:9408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8b9s9t-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8b9t92-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  5 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (2.8s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8b9upf-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x   6 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (13.2s)
+(node:25516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8ba62v-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok  7 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (8.3s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bad6w-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok  8 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (10.8s)
+(node:26664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bancd-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bao7k-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  9 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (2.1s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bap0n-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  10 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (12.7s)
+(node:27008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bazxq-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 11 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (8.6s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bb6wp-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 12 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (9.9s)
+(node:4772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bbg0g-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bbgv5-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 13 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (2.1s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bbhpn-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  14 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (12.9s)
+(node:1412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bbt1f-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 15 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (10.3s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bc1fr-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 16 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (11.9s)
+(node:27896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bccfg-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bcddw-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 17 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (3.9s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bcfr1-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  18 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (13.1s)
+(node:11468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bcqp1-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 19 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (8.2s)
+ENGINE chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bcxul-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 20 [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (9.5s)
+(node:1524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bdb6t-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bdj5y-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 21 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (21.7s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bdq35-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  22 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (17.1s)
+(node:19744) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8be6w1-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 23 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (23.2s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8beov6-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 24 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (11.2s)
+(node:11816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bf0ks-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bf4oo-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 25 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (8.8s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bf6xw-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  26 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (13.4s)
+(node:1400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bfj2n-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 27 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (11.1s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bfrvo-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 28 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (7.3s)
+(node:37252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bfzgp-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bg1nc-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 29 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (5.9s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bg3l4-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  30 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (12.8s)
+(node:6476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bgfe3-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 31 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (11.3s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bgohc-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 32 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (8.0s)
+(node:34672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bgwkh-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bgz0v-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 33 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (6.0s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bh0ta-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  34 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (12.9s)
+(node:25824) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bhcqa-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 35 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (11.7s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bhlym-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 36 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (8.0s)
+(node:25268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as logout-barrier-mv8bhubg-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as after-barrier-mv8bhwk5-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 37 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:12:5 › transitional sign-in visibility precedes logout navigation completion (6.3s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as input-barrier-mv8bhyqi-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  38 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation (13.3s)
+(node:21240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as background-mv8bib1f-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 39 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › background tab reload preserves its own draft and rejects stale revision (12.1s)
+ENGINE firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as foreground-mv8bikfh-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+VISIBILITY visible
+SECOND DIALOG beforeunload
+  ok 40 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (7.5s)
+
+
+  1) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat3\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-chromium-repeat4\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        22 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        22 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        23 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat3\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Or get a sign-in link by email')
+    Expected: "next-coach@e2e.coachcore.test"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Or get a sign-in link by email') with timeout 10000ms
+      - waiting for getByLabel('Or get a sign-in link by email')
+        22 × locator resolved to <input value="" required="" type="email" id="signin-email" autocomplete="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring"/>
+           - unexpected value ""
+
+
+      37 |   await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+      38 |   await afterSignOutNavigation(page,async()=>{await page.evaluate(()=>(window as unknown as {__logoutRelease:()=>void}).__logoutRelease());});
+    > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+         |                                                                   ^
+      40 | });
+      41 |
+      42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-firefox-investigation\tests\coaching-ui\navigation-investigation.spec.ts:39:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\firefox-investigation-results\navigation-investigation-s-a2736--preserved-after-navigation-firefox-repeat4\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10 failed
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+  30 passed (8.1m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "node e2e/node_modules/@playwright/test/cli.js test --config tests/coaching-ui/navigation-investigation.config.ts --repeat-each=5" exited with code 1

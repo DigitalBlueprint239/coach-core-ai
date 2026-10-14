@@ -1,0 +1,199 @@
+[
+  {
+    "sha256": "DCC5B745BFF5F31D8FF7659A89DC038DCB6633785B7C447E32286F028382CBB0",
+    "emailClickPhases": [
+      {
+        "time": 113977.692,
+        "phase": "locator-wait-start"
+      },
+      {
+        "time": 162362.19,
+        "phase": "locator-resolved"
+      },
+      {
+        "time": 162368.417,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162368.909,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162378.192,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162378.221,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162381.246,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162447.208,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162509.789,
+        "phase": "click-done"
+      },
+      {
+        "time": 162509.813,
+        "phase": "other-action-log"
+      },
+      {
+        "time": 162511.401,
+        "phase": "other-action-log"
+      }
+    ],
+    "actions": [
+      {
+        "error": null,
+        "label": "goto-query-redacted",
+        "endMs": 110449.571,
+        "startMs": 110013.959,
+        "durationMs": 435.612,
+        "id": "fcwl@50"
+      },
+      {
+        "error": null,
+        "label": "email-link-button",
+        "endMs": 162526.644,
+        "startMs": 110957.378,
+        "durationMs": 51569.266,
+        "id": "fcwl@56"
+      },
+      {
+        "error": null,
+        "label": "goto-query-redacted",
+        "endMs": 162904.83,
+        "startMs": 162626.788,
+        "durationMs": 278.042,
+        "id": "fcwl@60"
+      },
+      {
+        "error": null,
+        "label": "goto-query-redacted",
+        "endMs": 167702.461,
+        "startMs": 167276.813,
+        "durationMs": 425.648,
+        "id": "fcwl@93"
+      },
+      {
+        "error": "whole-test-timeout",
+        "label": "reload",
+        "endMs": 170189.818,
+        "startMs": 170095.105,
+        "durationMs": 94.713,
+        "id": "fcwl@119"
+      }
+    ],
+    "case": "coaching-P14-shared-profil-a2551--recover-conflict-as-a-copy-firefox",
+    "authRequests": [
+      {
+        "started": "2026-10-14T13:14:47.636Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:sendOobCode",
+        "durationMs": 2.339,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:14:48.231Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:signInWithEmailLink",
+        "durationMs": 2.3920000000000003,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:14:48.242Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:lookup",
+        "durationMs": 2.755,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:14:48.59Z",
+        "path": "/securetoken.googleapis.com/v1/token",
+        "durationMs": 2.053,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:14:52.936Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:lookup",
+        "durationMs": 1.727,
+        "status": 200
+      }
+    ]
+  },
+  {
+    "sha256": "DA17574CDF2A84165D6A1A1CD14886A9D9E499E70FE62313AFB914FB4FD7FD95",
+    "emailClickPhases": [],
+    "actions": [
+      {
+        "error": null,
+        "label": "goto-query-redacted",
+        "endMs": 83579.998,
+        "startMs": 83167.024,
+        "durationMs": 412.974,
+        "id": "dffw@339"
+      },
+      {
+        "error": null,
+        "label": "email-link-button",
+        "endMs": 84072.579,
+        "startMs": 83941.554,
+        "durationMs": 131.025,
+        "id": "dffw@345"
+      },
+      {
+        "error": null,
+        "label": "goto-query-redacted",
+        "endMs": 84436.256,
+        "startMs": 84162.306,
+        "durationMs": 273.95,
+        "id": "dffw@349"
+      },
+      {
+        "error": null,
+        "label": "sign-out-button",
+        "endMs": 86232.299,
+        "startMs": 86131.309,
+        "durationMs": 100.99,
+        "id": "dffw@382"
+      },
+      {
+        "error": "NS_BINDING_ABORTED",
+        "label": "goto-query-redacted",
+        "endMs": 86352.029,
+        "startMs": 86249.365,
+        "durationMs": 102.664,
+        "id": "dffw@386"
+      }
+    ],
+    "case": "coaching-R1-verified-legac-41eb3--and-blocks-another-account-firefox",
+    "authRequests": [
+      {
+        "started": "2026-10-14T13:13:29.189Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:sendOobCode",
+        "durationMs": 2.6149999999999998,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:13:29.7Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:signInWithEmailLink",
+        "durationMs": 2.089,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:13:29.711Z",
+        "path": "/identitytoolkit.googleapis.com/v1/accounts:lookup",
+        "durationMs": 1.651,
+        "status": 200
+      },
+      {
+        "started": "2026-10-14T13:13:29.855Z",
+        "path": "/securetoken.googleapis.com/v1/token",
+        "durationMs": 2.1180000000000003,
+        "status": 200
+      }
+    ]
+  }
+]

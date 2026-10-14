@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-14",
+  "branch": "codex/firefox-navigation-investigation",
+  "frozen59": "c21c0c61c03a25860341e699cca8ee1a7036d726",
+  "frozen60": "2cf1a5ca9be33500515b3abf331ca35e3d6df920",
+  "diagnosticSource": "4442f4977a87e6b7fa6c78b7efe260950855509e",
+  "correctedCoachingTests": "15e977c3e0bcdf0a120e28ce53400b78e7d7fdcb",
+  "appRuntime": "da8ebe1c90a877102e1913770690ff98a3530d3f",
+  "copiedBundleHashMismatches": 0,
+  "browsers": {
+    "chromium": "156.0.8078.4",
+    "firefox": "157.0",
+    "headless": true
+  },
+  "diagnostics": {
+    "passed": 30,
+    "skipped": 0,
+    "allFailures": "email input reset after pending logout reload",
+    "retries": 0,
+    "cliExit": 1,
+    "repeatsPerCasePerEngine": 5,
+    "failed": 10
+  },
+  "existingCoachingRegression": {
+    "passed": 18,
+    "retries": 0,
+    "failed": 0,
+    "skipped": 0,
+    "cliExit": 0
+  },
+  "targetedTypeCheckErrorsBefore": 2,
+  "targetedTypeCheckErrorsAfter": 0,
+  "appEdits": false,
+  "claudeHarnessEdits": false,
+  "originalDelayCause": "OPEN",
+  "physicalHiddenTab": "NOT MEASURED",
+  "authCorrection": "BLOCKED Claude ownership",
+  "independentAcceptance": "PENDING",
+  "mvp": "NO-GO"
+}
