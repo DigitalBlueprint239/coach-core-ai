@@ -1,0 +1,98 @@
+name: Security gates
+
+# Runs Coach Core security checks with NO credentials:
+#  - Firestore + Storage rules against the local Firebase Emulator Suite
+#    using a demo-* project ID (the emulator cannot reach real projects).
+#  - Cloud Functions AI-gateway tests with a mocked provider.
+#  - A canary build of the web app that must contain zero provider secrets.
+# This workflow never deploys and never reads repository secrets.
+
+on:
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
+  push:
+    branches: ['claude/**', 'recovery/coach-core-mvp-2026']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rules-emulator:
+    name: Firestore & Storage rules (emulator, demo project)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GCLOUD_PROJECT: demo-coach-core-beta
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/rules/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-${{ hashFiles('tests/rules/package-lock.json') }}
+      - name: Install test dependencies
+        run: npm ci --prefix tests/rules --no-audit --no-fund
+      - name: Run rules tests in the emulator
+        run: npm --prefix tests/rules test
+
+  functions-gateway:
+    name: Cloud Functions + OpenAI gateway (mocked provider)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Placeholders only: the tests must never need a real key or project.
+      GCLOUD_PROJECT: demo-coach-core-beta
+      OPENAI_API_KEY: ''
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+      - name: Install
+        run: npm ci --prefix functions --no-audit --no-fund
+      - name: Lint
+        run: npm --prefix functions run lint
+      - name: Test
+        run: npm --prefix functions run test:ci
+
+  web-auth-and-bundle:
+    name: Web auth tests + browser-bundle credential scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install (legacy peer deps; see Codex issue #38 evidence)
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+      - name: Auth + AI-client tests
+        run: |
+          CI=true npx react-scripts test --watchAll=false \
+            src/hooks/__tests__/useAuth.test.tsx \
+            src/services/__tests__/coach-ai-client.test.tsx \
+            src/App.test.tsx 2>&1 | tee /tmp/web-tests.log
+          summary=$(grep -E '^Tests:' /tmp/web-tests.log | tail -1)
+          if [ -z "$summary" ] || grep -qE '^Tests:.*failed|^FAIL ' /tmp/web-tests.log; then
+            echo "::error title=Web auth tests::${summary}"; exit 1
+          fi
+          echo "::notice title=Web auth tests::${summary}"
+      - name: Browser-bundle credential scan
+        run: bash .github/scripts/bundle-canary-scan.sh

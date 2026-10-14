@@ -1,39 +1,132 @@
 /**
- * Import function triggers from their respective submodules:
+ * Coach Core AI — Cloud Functions (v2).
  *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ * Security notes (Day 2, issues #43 / #46):
+ *  - `coachAI` is the ONLY AI entry point. The OpenAI key lives in Secret
+ *    Manager as COACH_CORE_OPENAI_API_KEY and is bound only to this function.
+ *  - AI is OFF by default (COACH_CORE_AI_ENABLED=false) — a kill switch the
+ *    founders flip per environment.
+ *  - The old public HTTP `cleanupOldNotifications` endpoint is replaced by a
+ *    scheduled job; there is no unauthenticated destructive surface.
+ *  - Nothing here is deployed by agents. Deploys need founder approval.
  */
 
 const {setGlobalOptions} = require("firebase-functions");
-const {onRequest, onCall} = require("firebase-functions/v2/https");
+const {onRequest, onCall, HttpsError} = require("firebase-functions/v2/https");
+const {onSchedule} = require("firebase-functions/v2/scheduler");
 const {
   onDocumentCreated,
   onDocumentUpdated,
 } = require("firebase-functions/v2/firestore");
+const {
+  defineSecret, defineString, defineBoolean, defineInt, defineList,
+} = require("firebase-functions/params");
 const {initializeApp} = require("firebase-admin/app");
+const {getAuth} = require("firebase-admin/auth");
 const {getFirestore, FieldValue} = require("firebase-admin/firestore");
 const logger = require("firebase-functions/logger");
 
-// Initialize Firebase Admin
+const {createCoachAIHandler} = require("./src/ai/gateway");
+const {createOpenAIProvider} = require("./src/ai/providers/openai");
+const {reserveQuota, recordUsage} = require("./src/ai/quota");
+
 initializeApp();
 
-// Set global options for cost control
+// Cost control defaults. Request handlers override timeouts where needed.
 setGlobalOptions({
   maxInstances: 10,
-  timeoutSeconds: 540,
+  timeoutSeconds: 60,
   memory: "256MiB",
 });
 
 const db = getFirestore();
 
 // ============================================
+// PARAMETERS & SECRETS
+// ============================================
+
+const OPENAI_API_KEY = defineSecret("COACH_CORE_OPENAI_API_KEY");
+const OPENAI_MODEL = defineString("COACH_CORE_OPENAI_MODEL", {
+  default: "gpt-6.1-sol",
+  description: "OpenAI model id used by the coaching gateway. Confirm the " +
+    "OpenAI project has access before enabling AI in an environment.",
+});
+const AI_ENABLED = defineBoolean("COACH_CORE_AI_ENABLED", {
+  default: false,
+  description: "Kill switch for all AI features. false = gateway refuses " +
+    "every request with reason ai-disabled.",
+});
+const AI_USER_DAILY_LIMIT = defineInt("COACH_CORE_AI_USER_DAILY_LIMIT", {
+  default: 25,
+});
+const AI_USER_PER_MINUTE = defineInt("COACH_CORE_AI_USER_PER_MINUTE", {
+  default: 5,
+});
+const AI_GLOBAL_DAILY_LIMIT = defineInt("COACH_CORE_AI_GLOBAL_DAILY_LIMIT", {
+  default: 300,
+});
+const ALLOWED_ORIGINS = defineList("COACH_CORE_ALLOWED_ORIGINS", {
+  default: [
+    "https://coach-core-mvp-staging-239.web.app",
+    "https://coach-core-mvp-staging-239.firebaseapp.com",
+  ],
+  description: "Browser origins allowed to call the AI gateway. Add " +
+    "http://localhost:3000 only in a local/emulator .env file.",
+});
+
+// ============================================
+// AI GATEWAY
+// ============================================
+
+let cachedProvider = null;
+/**
+ * Lazily build the provider so the secret is read only at request time.
+ * @return {object}
+ */
+function getProvider() {
+  const model = OPENAI_MODEL.value();
+  if (!cachedProvider || cachedProvider.model !== model) {
+    cachedProvider = createOpenAIProvider({
+      apiKey: OPENAI_API_KEY.value(),
+      model,
+    });
+  }
+  return cachedProvider;
+}
+
+const coachAIHandler = createCoachAIHandler({
+  isEnabled: () => AI_ENABLED.value() === true,
+  getUser: (uid) => getAuth().getUser(uid),
+  getTeam: async (teamId) => {
+    const snap = await db.collection("teams").doc(teamId).get();
+    return snap.exists ? snap.data() : null;
+  },
+  reserveQuota: (uid) => reserveQuota(db, uid, {
+    userDaily: AI_USER_DAILY_LIMIT.value(),
+    userPerMinute: AI_USER_PER_MINUTE.value(),
+    globalDaily: AI_GLOBAL_DAILY_LIMIT.value(),
+  }),
+  recordUsage: (uid, usage) => recordUsage(db, uid, usage, FieldValue),
+  getProvider,
+  logger,
+});
+
+exports.coachAI = onCall({
+  secrets: [OPENAI_API_KEY],
+  cors: ALLOWED_ORIGINS,
+  timeoutSeconds: 60,
+  memory: "512MiB",
+  maxInstances: 5,
+  // App Check is recommended once the web app registers a provider:
+  // enforceAppCheck: true,
+}, coachAIHandler);
+
+// ============================================
 // USER MANAGEMENT FUNCTIONS
 // ============================================
 
-// Create user profile when new user signs up
+// Create user profile when a user document is created (server-side only;
+// clients cannot write `users/*` under the Firestore rules).
 exports.createUserProfile = onDocumentCreated(
     "users/{userId}",
     async (event) => {
@@ -41,7 +134,6 @@ exports.createUserProfile = onDocumentCreated(
       const userData = event.data.data();
 
       try {
-      // Create default user profile
         await db.collection("userProfiles").doc(userId).set({
           uid: userId,
           email: userData.email,
@@ -72,7 +164,8 @@ exports.createUserProfile = onDocumentCreated(
 // TEAM MANAGEMENT FUNCTIONS
 // ============================================
 
-// Send notification when user joins team
+// Send notification when user joins team. Membership changes are denied to
+// clients during the private beta, so this only fires for server writes.
 exports.onTeamMemberAdded = onDocumentUpdated(
     "teams/{teamId}",
     async (event) => {
@@ -80,7 +173,6 @@ exports.onTeamMemberAdded = onDocumentUpdated(
       const beforeData = event.data.before.data();
       const afterData = event.data.after.data();
 
-      // Check if new members were added
       const beforeMembers = beforeData.memberIds || [];
       const afterMembers = afterData.memberIds || [];
       const newMembers = afterMembers.filter(
@@ -89,7 +181,6 @@ exports.onTeamMemberAdded = onDocumentUpdated(
 
       if (newMembers.length > 0) {
         try {
-        // Send welcome notification to new members
           for (const memberId of newMembers) {
             await db.collection("notifications").add({
               userId: memberId,
@@ -102,7 +193,8 @@ exports.onTeamMemberAdded = onDocumentUpdated(
             });
           }
 
-          logger.info(`Notifications sent to ${newMembers.length} new team members`);
+          logger.info("Team join notifications sent",
+              {count: newMembers.length});
         } catch (error) {
           logger.error(`Error sending team join notifications:`, error);
         }
@@ -111,10 +203,9 @@ exports.onTeamMemberAdded = onDocumentUpdated(
 );
 
 // ============================================
-// PRACTICE PLAN FUNCTIONS
+// PRACTICE PLAN / PLAY STATS
 // ============================================
 
-// Update team stats when practice plan is created
 exports.onPracticePlanCreated = onDocumentCreated(
     "practicePlans/{planId}",
     async (event) => {
@@ -123,14 +214,12 @@ exports.onPracticePlanCreated = onDocumentCreated(
       const createdBy = planData.createdBy;
 
       try {
-      // Update team stats
         const teamRef = db.collection("teams").doc(teamId);
         await teamRef.update({
           "stats.practicePlansCount": FieldValue.increment(1),
           "stats.lastPracticePlanCreated": new Date(),
         });
 
-        // Update user stats
         const userProfileRef = db.collection("userProfiles").doc(createdBy);
         await userProfileRef.update({
           "stats.practicePlansCreated": FieldValue.increment(1),
@@ -143,11 +232,6 @@ exports.onPracticePlanCreated = onDocumentCreated(
     },
 );
 
-// ============================================
-// PLAY MANAGEMENT FUNCTIONS
-// ============================================
-
-// Update team stats when play is created
 exports.onPlayCreated = onDocumentCreated(
     "plays/{playId}",
     async (event) => {
@@ -156,14 +240,12 @@ exports.onPlayCreated = onDocumentCreated(
       const createdBy = playData.createdBy;
 
       try {
-      // Update team stats
         const teamRef = db.collection("teams").doc(teamId);
         await teamRef.update({
           "stats.playsCount": FieldValue.increment(1),
           "stats.lastPlayCreated": new Date(),
         });
 
-        // Update user stats
         const userProfileRef = db.collection("userProfiles").doc(createdBy);
         await userProfileRef.update({
           "stats.playsCreated": FieldValue.increment(1),
@@ -177,96 +259,74 @@ exports.onPlayCreated = onDocumentCreated(
 );
 
 // ============================================
-// ANALYTICS FUNCTIONS
+// ANALYTICS
 // ============================================
 
-// Track user activity for analytics
-exports.trackUserActivity = onCall(async (request) => {
-  const {activity, data} = request.data;
+// Minimal, allowlisted product analytics. No IP address, user agent or
+// free-form payload is stored (Day 1 finding F-06).
+const ALLOWED_ACTIVITIES = new Set([
+  "sign_in", "sign_out", "play_created", "play_opened", "plan_created",
+  "plan_opened", "ai_request", "export",
+]);
 
-  if (!request.auth) {
-    throw new Error("Unauthorized");
+exports.trackUserActivity = onCall(async (request) => {
+  const token = request.auth && request.auth.token;
+  if (!request.auth || !token ||
+      (token.firebase && token.firebase.sign_in_provider === "anonymous") ||
+      token.email_verified !== true || token.beta !== true) {
+    throw new HttpsError("permission-denied", "beta-access-required");
+  }
+  const activity = request.data && request.data.activity;
+  if (typeof activity !== "string" || !ALLOWED_ACTIVITIES.has(activity)) {
+    throw new HttpsError("invalid-argument", "unknown-activity");
   }
 
   try {
-    await db
-        .collection("analytics")
-        .add({
-          userId: request.auth.uid,
-          activity: activity,
-          data: data,
-          timestamp: new Date(),
-          userAgent: request.headers["user-agent"],
-          ip: request.ip,
-        });
-
+    await db.collection("analytics").add({
+      userId: request.auth.uid,
+      activity,
+      timestamp: new Date(),
+    });
     return {success: true};
   } catch (error) {
-    logger.error(`Error tracking user activity:`, error);
-    throw new Error("Failed to track activity");
+    logger.error(`Error tracking user activity`, {error: String(error)});
+    throw new HttpsError("internal", "tracking-failed");
   }
 });
 
 // ============================================
-// CLEANUP FUNCTIONS
+// CLEANUP (scheduled, not publicly callable)
 // ============================================
 
-// Clean up old notifications (older than 30 days)
-exports.cleanupOldNotifications = onRequest(async (req, res) => {
-  try {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-    const snapshot = await db
-        .collection("notifications")
-        .where("createdAt", "<", thirtyDaysAgo)
+// Replaces the former public HTTP endpoint. Deletes notifications older than
+// 30 days in batches of 400 (Firestore batches max out at 500 writes).
+exports.cleanupOldNotifications = onSchedule({
+  schedule: "every day 03:30",
+  timeZone: "America/New_York",
+  timeoutSeconds: 300,
+}, async () => {
+  const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  let deleted = 0;
+  for (;;) {
+    const snapshot = await db.collection("notifications")
+        .where("createdAt", "<", cutoff)
+        .limit(400)
         .get();
-
+    if (snapshot.empty) break;
     const batch = db.batch();
-    snapshot.docs.forEach((doc) => {
-      batch.delete(doc.ref);
-    });
-
+    snapshot.docs.forEach((d) => batch.delete(d.ref));
     await batch.commit();
-
-    res.json({
-      success: true,
-      deletedCount: snapshot.size,
-      message: `Deleted ${snapshot.size} old notifications`,
-    });
-  } catch (error) {
-    logger.error("Error cleaning up old notifications:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to cleanup notifications",
-    });
+    deleted += snapshot.size;
+    if (snapshot.size < 400) break;
   }
+  logger.info("cleanupOldNotifications", {deleted});
 });
 
 // ============================================
-// HEALTH CHECK FUNCTION
+// HEALTH CHECK
 // ============================================
 
-// Simple health check endpoint
-exports.healthCheck = onRequest(async (req, res) => {
-  try {
-    // Test database connection
-    await db.collection("health").doc("test").get();
-
-    res.json({
-      status: "healthy",
-      timestamp: new Date().toISOString(),
-      services: {
-        database: "connected",
-        functions: "running",
-      },
-    });
-  } catch (error) {
-    logger.error("Health check failed:", error);
-    res.status(503).json({
-      status: "unhealthy",
-      timestamp: new Date().toISOString(),
-      error: "Service unavailable",
-    });
-  }
+// Static liveness probe; performs no database reads for anonymous callers.
+exports.healthCheck = onRequest((req, res) => {
+  res.json({status: "ok", timestamp: new Date().toISOString()});
 });
