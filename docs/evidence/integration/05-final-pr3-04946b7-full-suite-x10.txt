@@ -1,0 +1,266 @@
+
+Running 140 tests using 1 worker
+
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓    1 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.2s)
+  ✓    2 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.5s)
+  ✓    3 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (4.5s)
+  ✓    4 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.3s)
+  ✓    5 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.1s)
+  ✓    6 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.5s)
+  ✓    7 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓    8 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.6s)
+  ✓    9 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.4s)
+  ✓   10 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (4.1s)
+  ✓   11 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.6s)
+  ✓   12 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.2s)
+  ✓   13 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.6s)
+  ✓   14 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   15 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.8s)
+  ✓   16 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.6s)
+  ✓   17 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (3.9s)
+  ✓   18 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.5s)
+  ✓   19 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (4.7s)
+  ✓   20 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.5s)
+  ✓   21 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   22 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.4s)
+  ✓   23 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.4s)
+  ✓   24 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (3.8s)
+  ✓   25 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.8s)
+  ✓   26 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.4s)
+  ✓   27 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.4s)
+  ✓   28 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   29 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.6s)
+  ✓   30 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.4s)
+  ✓   31 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (3.7s)
+  ✓   32 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.0s)
+  ✓   33 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (4.7s)
+  ✓   34 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.4s)
+  ✓   35 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   36 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.9s)
+  ✓   37 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.7s)
+  ✓   38 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (4.4s)
+  ✓   39 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (8.5s)
+  ✓   40 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.1s)
+  ✓   41 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.5s)
+  ✓   42 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   43 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.4s)
+  ✓   44 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.4s)
+  ✓   45 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (3.7s)
+  ✓   46 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (6.8s)
+  ✓   47 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.0s)
+  ✓   48 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.4s)
+  ✓   49 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   50 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.5s)
+  ✓   51 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.4s)
+  ✓   52 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (4.2s)
+  ✓   53 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.9s)
+  ✓   54 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.1s)
+  ✓   55 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.8s)
+  ✓   56 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   57 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.8s)
+  ✓   58 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.6s)
+  ✓   59 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (4.1s)
+  ✓   60 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (8.0s)
+  ✓   61 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (4.8s)
+  ✓   62 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.3s)
+  ✓   63 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-desktop'
+}
+  ✓   64 [chromium-desktop] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.0s)
+  ✓   65 [chromium-desktop] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (1.6s)
+  ✓   66 [chromium-desktop] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (4.2s)
+  ✓   67 [chromium-desktop] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (7.0s)
+  ✓   68 [chromium-desktop] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (4.7s)
+  ✓   69 [chromium-desktop] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (2.7s)
+  ✓   70 [chromium-desktop] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓   71 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.4s)
+  ✓   72 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.3s)
+  ✓   73 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (6.2s)
+  ✓   74 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (10.8s)
+  ✓   75 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.8s)
+  ✓   76 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (3.6s)
+  ✓   77 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓   78 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.2s)
+  ✓   79 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.1s)
+  ✓   80 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (5.7s)
+  ✓   81 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.0s)
+  ✓   82 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (6.1s)
+  ✓   83 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (4.2s)
+  ✓   84 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓   85 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.0s)
+  ✓   86 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.2s)
+  ✓   87 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (5.9s)
+  ✓   88 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.2s)
+  ✓   89 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (6.8s)
+  ✓   90 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (4.3s)
+  ✓   91 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓   92 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.1s)
+  ✓   93 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.3s)
+  ✓   94 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (6.6s)
+  ✓   95 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (10.5s)
+  ✓   96 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (6.0s)
+  ✓   97 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (3.7s)
+  ✓   98 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓   99 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.4s)
+  ✓  100 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.4s)
+  ✓  101 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (5.9s)
+  ✓  102 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.7s)
+  ✓  103 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (6.2s)
+  ✓  104 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (4.6s)
+  ✓  105 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓  106 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.0s)
+  ✓  107 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.2s)
+  ✓  108 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (6.0s)
+  ✓  109 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.4s)
+  ✓  110 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (6.4s)
+  ✓  111 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (3.8s)
+  ✓  112 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓  113 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.0s)
+  ✓  114 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.3s)
+  ✓  115 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (5.8s)
+  ✓  116 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.0s)
+  ✓  117 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.5s)
+  ✓  118 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (4.0s)
+  ✓  119 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (3.8s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓  120 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.1s)
+  ✓  121 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.2s)
+  ✓  122 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (5.6s)
+  ✓  123 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.0s)
+  ✓  124 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.7s)
+  ✓  125 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (4.1s)
+  ✓  126 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓  127 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (2.9s)
+  ✓  128 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.1s)
+  ✓  129 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (5.7s)
+  ✓  130 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (10.7s)
+  ✓  131 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.7s)
+  ✓  132 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (3.4s)
+  ✓  133 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  engine: 'chromium',
+  channel: 'bundled',
+  project: 'chromium-tablet-touch'
+}
+  ✓  134 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:44:1 › long coaching notes continue onto additional PDF pages without truncation (3.4s)
+  ✓  135 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:64:1 › renders real canvas and complete synthetic play (2.2s)
+  ✓  136 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:141:1 › native mouse/touch player drag undo redo and reload preserve complete play (6.3s)
+  ✓  137 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:171:1 › real route waypoint drag and property transactions undo redo (11.4s)
+  ✓  138 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:222:1 › downloaded single and install PDFs have diagrams and all play labels without changing selection (5.9s)
+  ✓  139 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:267:1 › cancel route drawing preserves existing route; replacement is one undoable action (3.2s)
+  ✓  140 [chromium-tablet-touch] › tests/browser/core-workflows.spec.ts:294:1 › create save reopen and switch complete plays without loss (4.2s)
+
+  140 passed (11.3m)
+EXIT=0
