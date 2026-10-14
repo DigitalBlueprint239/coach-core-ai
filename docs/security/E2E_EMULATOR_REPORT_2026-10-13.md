@@ -103,6 +103,8 @@ T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated o
 
 ## 7. D10 legacy import (PR #55): independent review and real P13 acceptance (2026-10-14)
 
+> **Historical record, preserved unchanged.** This was the verdict on PR #55 as delivered (FAIL: R1/R2 10/10 on both engines; R0 rules blocker fixed). R1, R2 and R5 were re-tested against the #59/#60/#61 stack in **§8**; the failures below remain the evidence of the original defects. "CC02/CC03 not implemented" in §7.6 was true at that time; see §8 for the current status.
+
 **Verdict: FAIL**, with 2 open founder-rule defects (R1, R2) in Codex-owned client code. The core import is verified in real browsers against real rules **only after** a Claude rules fix. Mocked-SDK tests did not and could not prove server authorization.
 
 ### 7.1 What was tested
@@ -203,3 +205,96 @@ It found weaker-than-titled tests. They were fixed, not reworded away:
 | D10-01 | Title claimed decision ordering | Retitled; the ordering is proven by D10-10 |
 
 The rules comment was corrected (existence oracle), and R5 was added to §7.3.
+
+
+## 8. Re-review of #59 / #60 / #61: CC02/CC03 delivered, D10 R1/R2/R5 repairs (2026-10-14 afternoon)
+
+**Status: implementation delivered; independent acceptance largely passing (×10, both engines).** One open defect, **L1** (Codex), keeps the gate failing. **MVP stays NO-GO.**
+
+### 8.1 Exact SHAs
+
+| Item | SHA |
+|---|---|
+| #59 CC02/CC03 client (docs head) / tested application | `c21c0c6` / `ff9b421` |
+| #60 dependency repair (docs head) / runtime | `2cf1a5c` / `da8ebe1` (dependency commit `92d162c`) |
+| #61 staging-readiness docs (stack head) | `3c7c4b0`. Its runtime is identical to #60 |
+| #53 rules fix present in the stack | `51760a4` (+ comment `3ec22cd`), via #54 `ecc6400`. Verified: `allow get … resource == null` at `firestore.rules` lines 137 and 187 |
+| Changes to Claude-owned files in #59/#60/#61 | none (empty diff for rules, functions, auth, `src/firebase.ts`, `e2e-support`, `e2e/`, `scripts/security`, `.github`) |
+| Acceptance branch (#61 + #56 + this review's tests and fixes) | `claude/cc-acceptance-2026-10-14`. ×10 at **`6f6544d`** |
+| Combined candidate (test-only, never merge) | `claude/integration-candidate-2026-10-14b`. ×10 at **`9b5780e`** (code = acceptance branch; docs union) |
+
+### 8.2 Code review (implementation, not reports)
+
+| Area | Finding |
+|---|---|
+| REST create-only (`createOnly.ts`) | ✔ Atomic `documents:commit` with `currentDocument.exists=false`. The ID token is sent only to Firestore and rules are enforced (create rule). `ALREADY_EXISTS` leads to read-back and compare, never an overwrite. The emulator endpoint sits behind the compile-time flag and is **absent from release builds** (release proof 13/13). ⚠ The code comment still says missing-document reads are denied, which is outdated since #53 |
+| Existing-document saves (`gateway.ts`) | ✔ Transaction checks team ownership and revision; acknowledgement read-back from the server; a lost acknowledgement after a successful commit is detected as a safe retry; stale revision raises `Conflict` |
+| Drafts (`drafts.ts`, `useDocument.ts`) | ✔ uid + team + kind + writer envelopes; foreign or corrupt envelopes are never adopted or overwritten; generation guards discard stale completions; per-tab writers |
+| D10 R1 / R2 / R5 | ✔ Device claim written only after full verification; pending marker written before the first copy; no-team guard |
+| Legacy global queue | ✔ Replay disabled (quarantined). ✗ My sign-out cleanup still deleted it (**fixed**, §8.3). ✗ The legacy `savePlay`/`savePracticePlan` offline branches still **append** to it (part of L1) |
+| Migration Banner (legacy `coach-core-ai-<teamId>`) | ✗ **L1**: uploads without consent read-back, swallows errors, shows success regardless, and **deletes the original** |
+
+### 8.3 Defects, by status
+
+| ID | Owner | Verified status | Tested SHA | Evidence |
+|---|---|---|---|---|
+| R0 rules missing-id get | Claude | **VERIFIED FIXED**, present in the stack | `6f6544d` / `9b5780e` | D10-00 PASS 10/10 both engines |
+| R1 cross-account offer | Codex | **VERIFIED FIXED** | same | D10-06b PASS 10/10 ×2 engines ×2 runs (positive anchor: "already imported by another account") |
+| R2 interrupted import re-offered | Codex | **VERIFIED FIXED** | same | D10-07b PASS 10/10 (names the unfinished team, no Import button) |
+| R5 no-team silent loss | Codex | **VERIFIED FIXED** | same | D10-12 PASS 10/10 (truthful block, no Save, no drafts) |
+| L0 sign-out deleted the quarantined legacy queue (#61 escalation) | Claude (auth) | **VERIFIED FIXED** in `12e386f` | same | CC-L0 FAIL ×1 on `13af9e4` (both engines) → PASS 10/10. Unit test and A07 updated to the preservation contract |
+| **L1 Migration Banner deletes legacy data / false success** | Codex | **STILL FAILING** (new) | same | CC-L1 FAIL 10/10, both engines, both runs. Bounded repair requested on #59 |
+| R3 "Not now" is permanent | Codex / Coach Drew | OPEN (disclosed limitation) | — | — |
+| R4 `D10_APPROVED` constant in release builds | Codex / deploy decision | OPEN | — | — |
+| H1 Firefox team-creation toast | Claude | OPEN; **0 occurrences** in 820 Firefox executions today (2 × 410) | `6f6544d` / `9b5780e` | annotations 03/04 |
+| Codex P14 Firefox background-tab reload timeout | Codex | Not reproduced by CC-P14 (10/10 ×2 Firefox); cause not established, kept OPEN | same | — |
+| Standalone Playbook touch exit (Windows) | Codex | OPEN (separate repo) | — | — |
+| Physical devices, staging, real auth/CORS/token | — | **NOT MEASURED** | — | — |
+
+**AI01 contract change.** #59 removed the planner's "Generate with AI" button, so the old AI01 timed out (both engines, `13af9e4`). It now asserts that no AI action is offered and no AI request is made. **AI01b** (SDK-in-browser, via the app's own AI client) asserts that the emulated gateway refuses with `ai-disabled` and that no provider request is made. Both PASS 10/10.
+
+### 8.4 Results (retries 0, workers 1, Chromium 156.0.8078.4 / Firefox 157.0)
+
+| Run | Chromium | Firefox |
+|---|---|---|
+| ×1 measurement `13af9e4` (before the auth fix) | 37 PASS / 3 FAIL (AI01 old contract, L0, L1) | same |
+| ×1 `12e386f` | 40 PASS / 1 FAIL (L1) | same |
+| **×10 acceptance `6f6544d`** (job `115973570012`) | **400 PASS / 10 FAIL** (L1 10/10) | **400 PASS / 10 FAIL** (L1 10/10) |
+| **×10 candidate 4 `9b5780e`** (job `115973617866`) | **400 PASS / 10 FAIL** (L1 10/10) | **400 PASS / 10 FAIL** (L1 10/10) |
+
+**PASS 10/10 in every engine and run:**
+- **CC02/CC03:** CC-P10, P10b, P11, P12, P14, P15, P16, P16b, P17, L0.
+- **D10:** D10-00..12.
+- **Harness:** E2E-A01..A09, AI01, AI01b, C01, T01..T03.
+
+**Nothing is BLOCKED any more** (the P-placeholders were replaced by real tests).
+
+**Candidate 4 `951e583`/`9b5780e`, clean `npm ci --legacy-peer-deps` from its own lockfile:**
+- jest **416/416** (26 suites), tsc 0;
+- release-build proof **13/13**;
+- production `npm audit` **0**. Full-graph dev/tooling advisories remain as disclosed in #60.
+
+### 8.5 What the tests cover (independent of Codex's `tests/coaching-ui/**`)
+
+- **CC-P10:** shared profile, A "Sign out anyway". B gets a blank planner, no A records, no recoverable A drafts, no B drafts, and nothing uploaded. A's draft is retained under A.
+- **CC-P10b** (SDK-in-browser): B is denied read/update of A's plan and create into A's team; the same payload in B's team succeeds.
+- **CC-P11:** team switch while the create commit is held. The copy lands in team A only; team B shows nothing; no A content under team B's keys.
+- **CC-P12:** Cancel keeps edits. A failing Sync shows an error, keeps the coach signed in and the draft retained, with nothing uploaded. Export downloads only this coach's drafts, with content. Sync now uploads, then signs out.
+- **CC-P14:** two tabs in one profile. Stale save leads to the conflict dialog. Export my version contains my fields and the remote revision. Keep a copy gives both documents with the server copy unchanged. Reload remote shows the server version, at revision 3.
+- **CC-P15:** Shotgun play (11 players) at revision 1. Rename → revision 2; players and routes identical; createdAt unchanged; updatedAt advances. Fresh-profile reopen does not write.
+- **CC-P16:** 200-character name, 5000-character notes, focus edit and reorder are exact in Firestore and after a fresh-profile reopen.
+- **CC-P16b:** seeded AI plan. A notes edit keeps every other field, including `source`/`aiRequestId`/safety/hydration, at revision 2. No AI request.
+- **CC-P17:** offline save is pending and never shown as "saved"; reconnect acknowledges it. A's stranded pending envelope is not uploaded while B is signed in. The legacy queue is not replayed.
+- **CC-L0:** quarantined queue bytes survive sign-in, reconnect, sign-out and reload; nothing is replayed.
+- **CC-L1:** the "Migrate Now" original must be preserved, and success must mean a verified cloud copy.
+
+**Timed waits:** the only one is D10-07's documented 5 s negative window. **Codex's P14 background-tab note:** CC-P14 brings each tab to the front before acting, so it does not prove behaviour for background tabs.
+
+### 8.6 Evidence
+
+`docs/evidence/cc-acceptance-2026-10-14/` contains 12 files plus `SHA256SUMS.txt`:
+- CI annotations for every run above, including failures;
+- rules and web/bundle checks;
+- candidate-4 `npm ci`, jest, tsc, release proof, manifest and production audit.
+
+Historical D10 evidence stays in `docs/evidence/d10-acceptance/`.
