@@ -155,7 +155,8 @@ const SmartPlaybook = () => {
       setRoutes(routesForView(persistence.fields.routes) as unknown as PlaybookRoute[]);
       setCurrentPlayName(String(persistence.fields.name||''));
       setCurrentPlayPhase(persistence.fields.phase==='special_teams'?'special':String(persistence.fields.phase||'offense'));
-      setCurrentPlayType(String(persistence.fields.type||'pass'));setUndoStack([]);setRedoStack([]);return;
+      setCurrentPlayType(String(persistence.fields.type||'pass'));setUndoStack([]);setRedoStack([]);
+      setSelectedPlayerId(null);setSelectedRouteId(null);setIsDrawingRoute(false);setRoutePoints([]);setMode('view');return;
     }
     persistence.update(playFields);
   });

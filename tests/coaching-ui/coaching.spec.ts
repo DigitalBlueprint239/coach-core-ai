@@ -1,6 +1,6 @@
 import {test,expect,Page} from '../../e2e/node_modules/@playwright/test';
 import {resetEmulators,adminSet,adminGet,adminTeamsOwnedBy} from '../../e2e/tests/support/emulator';
-import {coachEmail,skipOnboarding,signInAsBetaCoach,createTeamViaUI,openTab,signInScreen} from '../../e2e/tests/support/app';
+import {coachEmail,skipOnboarding,signInAsBetaCoach,createTeamViaUI,openTab,signInScreen,waitForE2EHooks} from '../../e2e/tests/support/app';
 test.beforeEach(async({page,context,browser,browserName})=>{console.info('Browser:',browserName,browser.version());await resetEmulators();await skipOnboarding(context);await context.addInitScript(()=>localStorage.setItem('smartPlaybook_onboarding_complete','true'));page.on('dialog',d=>{void d.accept();});});
 async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}
 async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}
@@ -37,4 +37,19 @@ test('P15 ordinary play cloud save, property edit, hard reload, complete reopen'
  await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');await page.getByPlaceholder('Enter play name...').fill('Mesh edited');await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('unsaved');
  await page.getByRole('button',{name:'Save Play',exact:true}).first().click();await page.getByRole('button',{name:'Save Play',exact:true}).last().click();await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');
  await page.reload();await openTab(page,'Smart Playbook');await page.getByRole('button',{name:'Load Play',exact:true}).click();await expect(page.getByText('Mesh edited',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByPlaceholder('Enter play name...')).toHaveValue('Mesh edited');await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');
+});
+test('P12 sync-now acknowledges the unsaved plan before signing out',async({page})=>{
+ await setup(page,'p12sync');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('Sync on sign out');await page.getByLabel('Plan.notes',{exact:true}).fill('Preserved by sync');
+ await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();
+ await page.getByRole('button',{name:'Sync now',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
+});
+test('[SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules',async({page})=>{
+ const a=await setup(page,'negative-a');const when=new Date('2026-10-13T12:00:00Z');
+ await adminSet('practicePlans/protected',{name:'Private team A',teamId:a.teamId,createdBy:a.uid,createdAt:when,updatedAt:when,revision:1});
+ await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(signInScreen(page)).toBeVisible();const b=await signInAsBetaCoach(page,coachEmail('negative-b'));await waitForE2EHooks(page);
+ const result=await page.evaluate(async([team,uid])=>{
+   const hooks=(window as unknown as {__coachCoreE2E:{get:(path:string)=>Promise<unknown>;set:(path:string,data:unknown)=>Promise<unknown>}}).__coachCoreE2E;
+   return [await hooks.get('practicePlans/protected'),await hooks.set('plays/forbidden',{name:'Forbidden',players:[],routes:[],teamId:team,createdBy:uid,revision:1,createdAt:{__ts:'2026-10-13T12:00:00Z'},updatedAt:{__ts:'2026-10-13T12:00:00Z'}})];
+ },[a.teamId,b]);expect(result).toEqual([{ok:false,code:'permission-denied'},{ok:false,code:'permission-denied'}]);
+ expect((await adminGet('practicePlans/protected'))?.name).toBe('Private team A');expect(await adminGet('plays/forbidden')).toBeNull();
 });

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {render,screen,fireEvent} from '@testing-library/react';
+import {render,screen,fireEvent,within} from '@testing-library/react';
 import FieldsEditor from '../FieldsEditor';
 import {Value,Fields} from '../model';
 test('coach edits full drill content and reorders activities without dropping fields',()=>{
@@ -8,5 +8,6 @@ test('coach edits full drill content and reorders activities without dropping fi
  render(<Demo/>);fireEvent.change(screen.getByLabelText('Plan.periods.1.drills.1.instructions'),{target:{value:'Edited instructions'}});
  fireEvent.change(screen.getByLabelText('Plan.notes'),{target:{value:'Detailed notes'}});
  expect((result as Fields).periods).toEqual([{...(original.periods as Fields[])[0],drills:[{name:'Mesh',durationMinutes:10,setup:'Pairs',instructions:'Edited instructions',coachingPoints:['Eyes'],equipment:['cones']}]}]);
- expect((result as Fields).notes).toBe('Detailed notes');expect((result as Fields).hydrationBreakMinutes).toEqual([10,20]);
+ fireEvent.click(within(screen.getByLabelText('Plan.hydrationBreakMinutes.2').closest('div')!).getByRole('button',{name:'Move up',exact:true}));
+ expect((result as Fields).notes).toBe('Detailed notes');expect((result as Fields).hydrationBreakMinutes).toEqual([20,10]);
 });
