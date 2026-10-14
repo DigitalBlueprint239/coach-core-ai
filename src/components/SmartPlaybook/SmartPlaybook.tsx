@@ -14,6 +14,7 @@ import { Recovery, download } from '../../features/persistence/Recovery';
 import { equal, Fields } from '../../features/persistence/model';
 import EarlierDrafts from '../../features/persistence/EarlierDrafts';
 import {routesForView,routesForStorage} from '../../features/persistence/playRoutes';
+import DeviceRecovery from '../../features/persistence/DeviceRecovery';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
@@ -521,6 +522,7 @@ const SmartPlaybook = () => {
       {user && currentTeam && currentTeam.ownerId === user.uid && <LegacyImport key={`${user.uid}:${currentTeam.id}`} uid={user.uid} teamId={currentTeam.id} teamName={currentTeam.name} onImported={() => {void persistence.reload();}} />}
         <EarlierDrafts scope={{uid:user!.uid,teamId:currentTeam!.id}} onOpen={record=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.open(record);}}/>
         <p role="status" aria-label="Play save status">{playStatus}</p>
+        <DeviceRecovery scope={{uid:user!.uid,teamId:currentTeam!.id}} kind="plays" writer={persistence.writer} onResume={d=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.resume(d);}}/>
         <button onClick={()=>{if(!persistence.hasWork||window.confirm('Start a new play? Export your current draft first if you need both.'))persistence.create({name:'',phase:'offense',type:'pass',players:[],routes:[]});}}>New play</button>
         <button onClick={()=>download(playFields,'play-draft.json')}>Export draft</button>
         <button onClick={()=>{void persistence.reload();}}>Refresh play library</button>

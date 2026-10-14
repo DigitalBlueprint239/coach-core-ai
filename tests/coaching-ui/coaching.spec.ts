@@ -7,23 +7,24 @@ async function plan(page:Page){await openTab(page,'Practice Plans');await expect
 async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}
 test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{
  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);
- const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();
+ const draftKeys=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return Object.keys(localStorage).filter(k=>k.startsWith(prefix));},[s.uid,s.teamId]);expect(draftKeys).toEqual([]);
  const context=await browser.newContext({serviceWorkers:'block'});try{await skipOnboarding(context);const clean=await context.newPage();await signInAsBetaCoach(clean,s.email);await plan(clean);
  await clean.getByRole('button',{name:`Open ${'A'.repeat(200)}`,exact:true}).click();await expect(clean.getByLabel('Plan.notes',{exact:true})).toHaveValue('N'.repeat(5000));await expect(clean.getByLabel('Plan.periods.2.focus')).toHaveValue('Route timing');
  }finally{await context.close();}
 });
-test('P14 concurrent edits show recovery; copy keeps both server versions',async({page,browser})=>{
+test('P14 shared-profile tabs preserve drafts across refresh and recover conflict as a copy',async({page,context})=>{
  const s=await setup(page,'p14');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('Original');await saved(page);
- const second=await browser.newContext({serviceWorkers:'block'});try{await skipOnboarding(second);const p2=await second.newPage();p2.on('dialog',d=>{void d.accept();});await signInAsBetaCoach(p2,s.email);await plan(p2);await p2.getByRole('button',{name:'Open Original',exact:true}).click();
- await page.getByLabel('Plan.name',{exact:true}).fill('Server first');await saved(page);await p2.getByLabel('Plan.name',{exact:true}).fill('Second editor');await p2.getByRole('button',{name:'Save practice plan',exact:true}).click();
+ const p2=await context.newPage();try{p2.on('dialog',d=>{void d.accept();});await p2.goto('/');await expect(p2.getByText(`Welcome, ${s.email}`)).toBeVisible();await plan(p2);await p2.getByRole('button',{name:'Open Original',exact:true}).click();
+ await p2.getByLabel('Plan.name',{exact:true}).fill('Second editor');await page.getByLabel('Plan.name',{exact:true}).fill('Server first');await saved(page);
+ await p2.reload();await plan(p2);await expect(p2.getByLabel('Plan.name',{exact:true})).toHaveValue('Second editor');await p2.getByRole('button',{name:'Save practice plan',exact:true}).click();
  await expect(p2.getByRole('alertdialog',{name:'Conflicting edits'})).toBeVisible();await expect(p2.getByLabel('Plan.name',{exact:true})).toHaveValue('Second editor');await p2.getByRole('button',{name:'Keep my version as a copy'}).click();await expect(p2.getByRole('status',{name:'Practice save status'})).toHaveText('saved');
  await expect(p2.getByRole('button',{name:'Open Server first',exact:true})).toBeVisible();await expect(p2.getByRole('button',{name:'Open Second editor',exact:true})).toBeVisible();
- }finally{await second.close();}
+ }finally{await p2.close();}
 });
 test('P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation',async({page,context})=>{
  const a=await setup(page,'p10');await plan(page);await context.setOffline(true);await page.getByLabel('Plan.name',{exact:true}).fill('Private A draft');await page.getByRole('button',{name:'Save practice plan',exact:true}).click();
  // A transaction cannot acknowledge while offline. Draft is already captured before any network wait.
- await expect.poll(()=>page.evaluate(([uid,team])=>JSON.parse(localStorage.getItem(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)||'null')?.fields.name,[a.uid,a.teamId])).toBe('Private A draft');
+ await expect.poll(()=>page.evaluate(([uid,team])=>Object.entries(localStorage).filter(([k])=>k.startsWith(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)).map(([,raw])=>JSON.parse(raw).fields.name),[a.uid,a.teamId])).toContain('Private A draft');
  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');
  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');
  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();

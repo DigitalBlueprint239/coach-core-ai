@@ -13,8 +13,8 @@ export default function DraftSignOut(){
   });return()=>{unregister();waiter?.(false);};},[user?.uid]);
   if(!pending||pending.uid!==user?.uid)return null;
   const finish=(yes:boolean)=>{pending.resolve(yes);setPending(null);};
-  const sync=async()=>{try{for(const d of scopedDrafts(pending.uid)){const ack=await cloud.save(d.scope,d.kind,d.id,d.expectedRevision,d.fields);const current=readDraft(d.scope,d.kind);
-    if(current&&current.id===d.id&&equal(current.fields,d.fields))localStorage.removeItem(key(d.scope,d.kind));
+  const sync=async()=>{try{for(const d of scopedDrafts(pending.uid)){const ack=await cloud.save(d.scope,d.kind,d.id,d.expectedRevision,d.fields);const current=readDraft(d.scope,d.kind,localStorage,d.writer);
+    if(current&&current.id===d.id&&equal(current.fields,d.fields))localStorage.removeItem(key(d.scope,d.kind,d.writer));
     else if(current&&current.id===d.id)writeDraft({...current,expectedRevision:ack.revision});
   }if(scopedDrafts(pending.uid).length)throw new Error('More edits were made during sync. Drafts retained; sync again or export.');finish(true);}catch(e){setError(e instanceof Error?e.message:'Sync failed. Drafts retained.');}};
   return <section role="dialog" aria-label="Unsynced draft recovery"><h2>You have unsynced drafts</h2><p>Keep a recovery copy before signing out. Only this account can reopen its device drafts.</p>

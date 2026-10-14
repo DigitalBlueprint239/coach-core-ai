@@ -4,7 +4,7 @@ export type Fields = {[key:string]:Value};
 export type Kind = 'plays' | 'practicePlans';
 export interface Scope { uid:string; teamId:string }
 export interface RecordData { id:string; revision:number|null; fields:Fields; createdAt:string; updatedAt:string }
-export interface Draft { scope:Scope; kind:Kind; id:string; expectedRevision:number|null; fields:Fields; pending:boolean }
+export interface Draft { scope:Scope; kind:Kind; id:string; expectedRevision:number|null; fields:Fields; pending:boolean;writer?:string }
 export const equal = (a:unknown,b:unknown):boolean => {
   const sort=(v:unknown):unknown => Array.isArray(v)?v.map(sort):v && typeof v==='object'
     ? Object.fromEntries(Object.keys(v).sort().map(k=>[k,sort((v as {[key:string]:unknown})[k])])):v;

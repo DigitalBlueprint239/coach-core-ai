@@ -5,6 +5,7 @@ import {useDocument} from '../persistence/useDocument';
 import {emptyPlan,Fields} from '../persistence/model';
 import FieldsEditor from '../persistence/FieldsEditor';
 import {Recovery,download} from '../persistence/Recovery';
+import DeviceRecovery from '../persistence/DeviceRecovery';
 function Editor({uid,teamId}:{uid:string;teamId:string}){
   const p=useDocument({uid,teamId},'practicePlans',emptyPlan);
   const switchAllowed=()=>!p.hasWork||window.confirm('Your draft is retained until you choose another plan. Export it first if you need both. Continue?');
@@ -15,6 +16,7 @@ function Editor({uid,teamId}:{uid:string;teamId:string}){
     <button disabled={p.saving} onClick={()=>{void p.save();}}>Save practice plan</button>
     <button onClick={()=>download(p.fields,'practice-plan-draft.json')}>Export draft</button>
     <button onClick={()=>{void p.reload();}}>Refresh practice library</button>
+    <DeviceRecovery scope={{uid,teamId}} kind="practicePlans" writer={p.writer} onResume={d=>{if(switchAllowed())p.resume(d);}}/>
     {p.error&&<p role="alert">{p.error}</p>}{p.listError&&<p role="alert">{p.listError}</p>}
     {p.conflict&&<Recovery remote={p.conflict} fields={p.fields} onReload={()=>p.open(p.conflict!)} onCopy={()=>{void p.save(true);}}/>}
     <ul aria-label="Saved practice plans">{p.records.map(r=><li key={r.id}><button disabled={p.saving} onClick={()=>{if(switchAllowed())p.open(r);}}>Open {String(r.fields.name)}</button> Revision {r.revision??'legacy'}</li>)}</ul>
