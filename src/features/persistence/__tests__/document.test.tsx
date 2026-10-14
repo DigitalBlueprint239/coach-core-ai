@@ -3,7 +3,7 @@ import {renderHook,waitFor} from '@testing-library/react';
 import {useDocument} from '../useDocument';
 import {Gateway,Conflict} from '../gateway';
 import {RecordData,Fields,emptyPlan,equal} from '../model';
-import {readDraft,key} from '../drafts';
+import {readDraft,key,writeDraft} from '../drafts';
 jest.mock('../gateway',()=>{const actual=jest.requireActual('../gateway');return {...actual,cloud:{}};});
 let records:Map<string,RecordData>;let saves:number;
 const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
@@ -12,6 +12,15 @@ beforeEach(()=>{localStorage.clear();sessionStorage.clear();records=new Map();sa
  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+test('restoring a legacy revision preserves null until its authorized upgrade',async()=>{
+ const fields={name:'Legacy edited',players:[],routes:[]};
+ records.set('legacy',{id:'legacy',revision:null,fields:{...fields,name:'Legacy'},createdAt:stamp,updatedAt:stamp});
+ writeDraft({scope,kind:'plays',id:'legacy',expectedRevision:null,fields,pending:true});
+ const h=renderHook(()=>useDocument(scope,'plays',{},gateway));
+ expect(h.result.current.revision).toBeNull();
+ await act(async()=>{expect(await h.result.current.save()).toBe(true);});
+ expect(records.get('legacy')?.revision).toBe(1);expect(records.get('legacy')?.fields).toEqual(fields);
+});
 test('P15/P16 edit -> acknowledged save -> close -> clean reopen preserves exact content',async()=>{
  const h=renderHook(()=>useDocument(scope,'practicePlans',emptyPlan,gateway));await waitFor(()=>expect(gateway.list).toHaveBeenCalled());
  const edited={...emptyPlan,name:'Changed',notes:'Exact notes',hydrationBreakMinutes:[30,10]};act(()=>h.result.current.update(edited));expect(h.result.current.status).toBe('unsaved');

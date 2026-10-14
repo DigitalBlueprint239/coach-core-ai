@@ -14,7 +14,7 @@ export function useDocument(incomingScope:Scope,kind:Kind,initial:Fields,gateway
   const boot=useRef(false);if(!boot.current){boot.current=true;try{restored.current=readDraft(scope,kind,localStorage,writer)??readDraft(scope,kind);}catch{restoreError.current='Draft recovery failed. Original bytes retained; export/review before continuing.';}}
   const [fields,setFields]=useState(restored.current?.fields??initial);
   const [id,setId]=useState(restored.current?.id??crypto.randomUUID());
-  const [revision,setRevision]=useState<number|null>(restored.current?.expectedRevision??0);
+  const [revision,setRevision]=useState<number|null>(restored.current?restored.current.expectedRevision:0);
   const [ack,setAck]=useState<Fields|null>(null);
   const ackRef=useRef<Fields|null>(ack);ackRef.current=ack;
   const [saving,setSaving]=useState(false);const [error,setError]=useState(restoreError.current);
