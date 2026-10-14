@@ -1,6 +1,6 @@
 # Staging readiness checklist (before requesting a staging deploy)
 
-Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT.** Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-14: D10 acceptance FAIL, CC02/CC03 not implemented). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
 
 ## 1. Exact PR/commit combination
 
@@ -113,3 +113,5 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 | G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
 | G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex | ✗ (none landed) |
 | G10 | Shutdown switch: approve build before film upload, or accept the exposure in writing | Coach Drew | open decision |
+| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5) / Claude (re-test) | ✗ **FAIL**: R0 rules blocker fixed (#53 `51760a4`). R1/R2 fail 10/10 on both engines; R5 is a data-loss finding. See the E2E report §7 (PR #56) |
+| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ✗ not implemented (7 BLOCKED) |
