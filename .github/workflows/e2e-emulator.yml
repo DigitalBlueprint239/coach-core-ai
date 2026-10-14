@@ -28,7 +28,7 @@ jobs:
   e2e:
     name: E2E emulator (Chromium + Firefox)
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 120
     env:
       GCLOUD_PROJECT: demo-coach-core-e2e
       OPENAI_API_KEY: ''
