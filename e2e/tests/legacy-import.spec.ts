@@ -319,3 +319,16 @@ test('D10-11 cloud reopen: a fresh browser profile with no device data shows the
     await fresh.close();
   }
 });
+
+test('D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded', async ({ page }) => {
+  await seedDevice(page);
+  const email = coachEmail('d10n');
+  const uid = await signInAsBetaCoach(page, email);
+  await openTab(page, 'Smart Playbook');
+  await expect(page.getByRole('alert')).toContainText('Select or create your authorized team before editing plays. No play has been saved.');
+  await expect(page.getByRole('button', { name: 'Save Play', exact: true })).toHaveCount(0);
+  await expect(importPrompt(page)).toHaveCount(0);
+  expect(await adminCopies(uid)).toEqual([]);
+  expect(Object.keys(await storage(page)).filter((k) => k.startsWith(`coachcore:v1:${uid}:`) && k.includes(':drafts'))).toEqual([]);
+  await expectOriginalsUntouched(page);
+});

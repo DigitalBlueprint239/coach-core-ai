@@ -5,8 +5,8 @@
 // devices of one coach). It is labelled SDK-in-browser and is NOT a UI workflow.
 //
 // P13 (D10 legacy import) is now real: e2e/tests/legacy-import.spec.ts.
-// What is BLOCKED: every client workflow below. They are declared with
-// test.fixme so they appear in every run as BLOCKED with their dependency,
+// Formerly BLOCKED client workflows (P10-P17) were declared here with
+// test.fixme so they appeared in every run as BLOCKED with their dependency,
 // and the reporter never counts them as passed.
 import { test, expect, type Page } from '@playwright/test';
 import { resetEmulators, adminSet, adminGet, AUTH_ONLY } from './support/emulator';
@@ -62,22 +62,5 @@ test('E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second 
   });
 });
 
-const BLOCKED: Array<[string, string]> = [
-  ['E2E-P10 coach A\'s unsynced Playbook drafts are invisible to coach B on the same browser profile',
-    'Codex: uid+team-scoped draft storage in SmartPlaybook.tsx / firestore.ts (contract P-10)'],
-  ['E2E-P11 sign-out removes only the signed-out coach\'s draft keys',
-    'Codex: scoped draft keys coachcore:v1:{uid}:{teamId}:* (contract P-11)'],
-  ['E2E-P12b unsynced-drafts sign-out guard: Sync now / Export / Sign out anyway / Cancel',
-    'Codex: guard UI registered via registerSignOutGuard (contract P-12b)'],
-  ['E2E-P14 two tabs edit the same play: the second save shows the conflict screen and loses nothing',
-    'Codex: runTransaction(expectedRevision) + 3-way conflict UI (contract P-14); rules half covered by E2E-C01'],
-  ['E2E-P15 Playbook play: create -> cloud save -> hard reload -> reopen identical on another device',
-    'Codex: Smart Playbook cloud save/load (today plays live only in localStorage smartPlaybook_plays)'],
-  ['E2E-P16 editable practice plan: AI or manual plan -> edit -> save -> reload -> identical',
-    'Codex: PracticePlanner save/edit UI + coach-ai.v1 -> practicePlans mapping (contract §2); AI generation also needs founder approval to enable'],
-  ['E2E-P17 offline edits replay only for the coach and team that made them',
-    'Codex: per-session offline queue (contract P-16)'],
-];
-for (const [title, dependency] of BLOCKED) {
-  test.fixme(title, { annotation: { type: 'blocked', description: dependency } }, async () => {});
-}
+// P10-P17 (CC02/CC03, PR #59/#60) are now real tests in e2e/tests/coaching.spec.ts
+// (CC-P10..CC-P17); P13 (D10) is e2e/tests/legacy-import.spec.ts. No placeholders remain.
