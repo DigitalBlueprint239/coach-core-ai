@@ -194,10 +194,10 @@ Sources: [OpenAI data controls](https://developers.openai.com/api/docs/guides/yo
 1. For signed-in coaches, the **source of truth is Firestore** (`plays`, `practicePlans`, already owner-only in PR #49). Local storage is only an unsynced-draft buffer, keyed `coachcore:v1:{uid}:…`.
 2. Never read another user's keys. On sign-out:
    - if unsynced drafts exist, warn and offer "sync now";
-   - then remove that user's keys;
+   - then remove that user's keys; **(superseded 2026-10-14: the agreed contract keeps the signed-out coach's own uid+team-scoped recovery drafts on the device, never shown to another account; see PERSISTENCE_CONTRACT §4 and smoke AUTH-08)**
    - the offline queue (`offline_operations`) becomes per-user, and replay checks that the queued `uid` equals the current user.
    - **Amended 2026-10-14 (#59/#61):** the legacy global `offline_operations` queue is now **quarantined** (never replayed) and **preserved byte-for-byte** on sign-out; current editors use uid+team+writer-scoped recovery drafts instead. If replay is ever re-enabled, it must be per-user with owner/team checks, because the legacy array can hold entries from more than one account on a shared device.
-3. The legacy global `smartPlaybook_plays` is **never auto-imported**. On first sign-in after the upgrade, the coach is asked once: "Import N plays saved on this device into your account?" Then the global key is removed.
+3. The legacy global `smartPlaybook_plays` is **never auto-imported**. On first sign-in after the upgrade, the coach is asked once: "Import N plays saved on this device into your account?" Then the global key is removed. **(Superseded by D10, approved 2026-10-13: originals are preserved byte-for-byte; no deletion.)**
 4. **Editable practice plan:** AI result → adapter → `practicePlans` (`source: 'ai'`, `aiRequestId`) → edit → save (`revision`) → reopen identical → link to a film clip. Stale revision gives a conflict UI, never a silent overwrite.
 5. **Tests** (Codex, run against the emulator rules):
    - user A's drafts are invisible to user B on the same browser profile;
