@@ -350,3 +350,35 @@ test('D10-06c [founder rule: no cross-account exposure / duplicates] while coach
     'coach B must not be offered device plays coach A started importing').toHaveCount(0);
   await expectOriginalsUntouched(page);
 });
+
+// R1c probe (verifier follow-up, 2026-10-14). It does not prescribe the fix,
+// which Codex owns: it only requires that declining an unfinished import does
+// not leave the device library in a state NO account can act on.
+test('D10-06d [founder rule: originals preserved, no dead end] after coach A declines ("Not now") an interrupted import, some account can still act on the device plays', async ({ page }) => {
+  await coachWithTeam(page, 'd10da', 'Alpha Eagles');
+  const net = commitControl(page); await net.ready; net.holdFrom(2);
+  await openPlaybook(page);
+  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
+  await net.waitFor(2); // A has 1 verified copy, copy 2 on the wire
+  await page.reload();  // import interrupted (tab refreshed); A is still signed in on Alpha
+  net.pass(); net.release();
+  await openPlaybook(page);
+  // Positive anchor: A, on the original team, is offered the unfinished import again.
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
+  await importPrompt(page).getByRole('button', { name: 'Not now' }).click();
+  await page.reload();
+  await openPlaybook(page);
+  // 5 s observation window for A's offer (the prompt renders in milliseconds when present).
+  const aOffered = await importPrompt(page).getByRole('button', { name: 'Import plays' })
+    .waitFor({ state: 'visible', timeout: 5000 }).then(() => true, () => false);
+  await signOutViaUI(page);
+  await signInAsBetaCoach(page, coachEmail('d10db'));
+  await createTeamViaUI(page, 'Bravo Bulldogs');
+  await openPlaybook(page);
+  await expect(importPrompt(page), 'coach B must see the import region (offer or notice)').toBeVisible();
+  const bOffered = (await importPrompt(page).getByRole('button', { name: 'Import plays' }).count()) > 0;
+  const bNotice = await importPrompt(page).innerText();
+  expect(aOffered || bOffered,
+    `dead end: A re-offered=${aOffered}; B offered=${bOffered}; B sees "${bNotice.replace(/\s+/g, ' ').trim()}"`).toBe(true);
+  await expectOriginalsUntouched(page);
+});

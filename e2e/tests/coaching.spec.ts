@@ -38,9 +38,17 @@ const draftsOf = (page: Page, uid: string) => page.evaluate((u) => Object.entrie
   .map(([k, v]) => ({ key: k, env: JSON.parse(v) })), uid);
 async function plansOf(uid: string) { return adminQuery('practicePlans', 'createdBy', uid); }
 /** Records any request whose body carries `marker` (a replay attempt is visible even if rules would deny it). */
+// Firestore's WebChannel sends form-urlencoded bodies (spaces → '+' or '%20'),
+// so the marker is matched against the raw AND the URL-decoded body.
+// Positive control: CC-W0 (verifier follow-up, 2026-10-14).
+function bodyText(b: string): string {
+  let d = b;
+  try { d = decodeURIComponent(b.replace(/\+/g, ' ')); } catch { /* not encoded */ }
+  return `${b}\n${d}`;
+}
 function bodyWatch(page: Page, marker: string) {
   const hits: string[] = [];
-  page.on('request', (r) => { try { const b = r.postData(); if (b && b.includes(marker)) hits.push(r.url()); } catch { /* binary */ } });
+  page.on('request', (r) => { try { const b = r.postData(); if (b && bodyText(b).includes(marker)) hits.push(r.url()); } catch { /* binary */ } });
   return hits;
 }
 async function docsNamed(name: string) {
@@ -396,8 +404,7 @@ test('CC-L0 legacy global offline queue: reconnect, reload and sign-out leave it
 // (banner click → blob deleted + success shown) FAILED 10/10 at 709e0f4 and
 // c858d1d; that evidence is kept in docs/evidence/cc-acceptance-2026-10-14/.
 test('CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded', async ({ page }) => {
-  const writes: string[] = [];
-  page.on('request', (r) => { const b = r.postData() ?? ''; if (r.method() === 'POST' && b.includes('Old banner play')) writes.push(r.url()); });
+  const writes = bodyWatch(page, 'Old banner play');
   const a = await coach(page, 'l1');
   const blob = JSON.stringify({ plays: [{ name: 'Old banner play', formation: 'I', routes: [], players: [] }], plans: [] });
   await page.evaluate(([t, b]) => { localStorage.setItem('plays', '[]'); localStorage.setItem(`coach-core-ai-${t}`, b); }, [a.teamId, blob]);
@@ -415,4 +422,19 @@ test('CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the
   expect(await page.evaluate((t) => localStorage.getItem(`coach-core-ai-${t}`), a.teamId)).toBe(blob);
   expect((await adminQuery('plays', 'teamId', a.teamId)).filter((d) => d.data.name === 'Old banner play')).toEqual([]);
   expect(writes).toEqual([]);
+});
+
+test('CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app\'s plan save and an SDK (WebChannel) write', async ({ page }) => {
+  const appPath = bodyWatch(page, 'Body watch plan');
+  const sdkPath = bodyWatch(page, 'Body watch sdk play');
+  const a = await coach(page, 'w0');
+  await planner(page);
+  await field(page, 'Plan.name').fill('Body watch plan');
+  await savePlan(page);
+  await expect(planStatus(page)).toHaveText('saved');
+  expect(appPath.length, 'app save path must be visible to bodyWatch').toBeGreaterThan(0);
+  await waitForE2EHooks(page);
+  // Rule outcome is irrelevant here: only the request body on the wire is checked.
+  await page.evaluate(([t]) => (window as any).__coachCoreE2E.set('plays/w0-probe', { name: 'Body watch sdk play', teamId: t }), [a.teamId]);
+  await expect.poll(() => sdkPath.length, { message: 'SDK WebChannel write must be visible to bodyWatch' }).toBeGreaterThan(0);
 });
