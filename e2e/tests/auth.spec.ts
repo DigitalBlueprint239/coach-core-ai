@@ -136,16 +136,32 @@ test('E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emul
   // This proves the app's popup handling, NOT real Google OAuth.
   // The SDK still loads https://apis.google.com/js/api.js for the popup flow.
   test.skip(process.env.E2E_NO_GOOGLE_SCRIPTS === '1', 'apis.google.com unreachable in this environment');
+  // Diagnostics only: recorded so a failure explains itself in CI annotations.
+  const events: string[] = [];
+  const t0 = Date.now();
+  const note = (s: string) => events.push(`+${Date.now() - t0}ms ${s}`);
+  page.on('console', (m) => { if (m.type() === 'error') note(`console.error ${m.text().slice(0, 120)}`); });
+  page.on('requestfailed', (r) => note(`requestfailed ${r.url().slice(0, 80)} ${r.failure()?.errorText}`));
+  page.on('response', (r) => { if (/apis\.google\.com|9099/.test(r.url())) note(`response ${r.status()} ${r.url().slice(0, 80)}`); });
   await page.goto('/');
   const popupPromise = page.waitForEvent('popup');
   await page.getByRole('button', { name: 'Continue with Google' }).click();
   const popup = await popupPromise;
+  popup.on('close', () => note('popup closed'));
   await popup.waitForLoadState();
+  note(`popup loaded ${popup.url().slice(0, 60)}`);
   await popup.getByRole('button', { name: 'Add new account' }).click();
   const email = coachEmail('a09');
   await popup.locator('#email-input').fill(email);
   await popup.getByRole('button', { name: /Sign in with Google\.com/i }).click();
-  await expect(page.getByRole('heading', { name: 'Waiting for beta access' })).toBeVisible();
+  note('submitted in popup');
+  try {
+    await expect(page.getByRole('heading', { name: 'Waiting for beta access' })).toBeVisible();
+  } catch (err) {
+    const visible = await page.locator('h1,h2,[role=alert],[role=status]').allInnerTexts().catch(() => []);
+    throw new Error(`A09 did not reach the beta gate. Page shows: ${JSON.stringify(visible)}. `
+      + `Popup closed: ${popup.isClosed()}. Events: ${events.join(' | ')}`, { cause: err });
+  }
   await grantBeta(email);
   await page.getByRole('button', { name: 'Check again' }).click();
   await expect(dashboardFor(page, email)).toBeVisible();

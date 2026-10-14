@@ -33,7 +33,27 @@ export default class AnnotateReporter {
       const rows = this.rows.filter((r) => r.project === p);
       const n = (s) => rows.filter((r) => r.status === s).length;
       const level = n('FAIL') > 0 ? 'error' : 'notice';
-      const body = rows.map((r) => `${r.status} ${r.title}${r.msg ? ` -- ${r.msg}` : ''}`).join('\n');
+      // Aggregate per test title so repeated runs fit the 4 KB annotation limit:
+      // "PASS 10/10", "FAIL 3/10 (first error)", "BLOCKED".
+      const byTitle = new Map();
+      for (const r of rows) {
+        const t = byTitle.get(r.title) || { pass: 0, fail: 0, blocked: 0, skipped: 0, msg: '', blockMsg: '' };
+        if (r.status === 'PASS') t.pass += 1;
+        else if (r.status === 'FAIL') { t.fail += 1; if (!t.msg) t.msg = r.msg; }
+        else if (r.status === 'BLOCKED') { t.blocked += 1; t.blockMsg = r.msg; }
+        else t.skipped += 1;
+        byTitle.set(r.title, t);
+      }
+      const id = (title) => title.split(' ')[0];
+      const lines = [...byTitle.entries()].map(([title, t]) => {
+        const runs = t.pass + t.fail;
+        if (t.fail) return `FAIL ${t.fail}/${runs} ${id(title)} -- ${t.msg.slice(0, 160)}`;
+        if (t.pass) return `PASS ${t.pass}/${runs} ${id(title)}`;
+        if (t.blocked) return `BLOCKED ${id(title)} -- ${t.blockMsg.slice(0, 90)}`;
+        return `SKIPPED ${id(title)}`;
+      });
+      lines.sort((a, b) => (a.startsWith('FAIL') ? 0 : 1) - (b.startsWith('FAIL') ? 0 : 1));
+      const body = lines.join('\n');
       // Commas separate annotation properties, so the title must not contain one.
       process.stdout.write(`::${level} title=${esc(`E2E ${p}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped`)}::${esc(body)}\n`);
     }
