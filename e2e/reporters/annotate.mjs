@@ -59,8 +59,9 @@ export default class AnnotateReporter {
     let diag = '';
     if (status === 'FAIL') {
       const errs = (result.errors || []).map((e) => firstLine(e.message)).filter(Boolean);
-      // The step still running when the test ended is the one that started last.
-      const last = [...steps].sort((a, b) => b.start - a.start)[0];
+      // The step that ended last; a step still open at the end (duration -1) wins.
+      const end = (x) => (x.duration < 0 ? Infinity : x.start + x.duration);
+      const last = [...steps].sort((a, b) => end(b) - end(a))[0];
       const top = steps.filter((s) => s.category !== 'test.step').sort((a, b) => b.duration - a.duration).slice(0, 3);
       diag = `${id(test.title)} #${test.repeatEachIndex} ${result.status} ${sec(result.duration)}`
         + ` | errors: ${errs.map((e) => e.slice(0, 140)).join(' || ')}`

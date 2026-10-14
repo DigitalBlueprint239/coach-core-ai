@@ -553,3 +553,10 @@ D10-07's custom waits and the sign-in phases are now named steps. All of this wa
 A stricter `actionTimeout` (Codex used 10 s in their own lane) would make a stall fail *at* the responsible step. It is **not** applied: it would change the acceptance suite's failure semantics against every earlier run. It is offered as an option instead.
 
 **Status:** H2 OPEN. FX-02 OPEN. Genuine hidden-tab behaviour, devices and staging NOT MEASURED.
+
+### 10.4 First CI run with the diagnostics (push run `38647098863`, job `116136925139`, acceptance branch `183ff6a`)
+
+This was the normal push run of the acceptance branch. That branch **does not contain #64**, so CC-L1 and D10-06c fail there as expected. It is a reporter validation, **not acceptance evidence**.
+- **D10-07 baseline duration: 7.2 s in Firefox, 6.3 s in Chromium.** A 60 s timeout therefore implies ~53 s of extra time in one execution. That matches the size of the FX-02 stall (51.6 s for one click) and is **not** consistent with general slowness. H2 = FX-02-type stall remains a hypothesis; the artifacts in §10.2 or the next failure's diag annotation would confirm or refute it.
+- **D10-06d passes on code without #64.** With R1b broken, coach B is simply offered the plays. D10-06d is meaningful **only together with D10-06c** (R1b 10/10). For candidate 8 it will be paired with positive anchors for the owner's resume path, per the founder's R1c guidance.
+- Reporter fix: "last step" now ranks by end time, with a step still open at the end ranked last. It had named an instant check instead of the failing 10 s expect in one Chromium case. Re-self-tested locally.
