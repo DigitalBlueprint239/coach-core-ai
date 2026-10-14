@@ -80,5 +80,4 @@ The second browser command deliberately runs the existing coaching spec to valid
 
 Rollback: drop/revert this isolated test/report branch; no deployment, schema or data migration exists. Do not delete evidence/drafts or revert frozen #59/#60. Next: Claude reviews the test corrections, owns FX-03 auth fix and independent acceptance; shared-device legacy queue deletion blocker from CC-007 remains open. Upstream51.6s delay and physical hidden-tab behavior remain unresolved. Coach Drew remains acceptance authority; MVP NO-GO.
 
-Published evidence copies are credential-redacted and LF-normalized for review; original CLI logs and raw trace ZIPs remain untouched locally. An initial evidence diff-check flagged CRLF as whitespace; normalization corrected publication formatting only, not test results/assertions.
-
+Published evidence copies are credential-redacted and LF-normalized for review; original CLI logs and raw trace ZIPs remain untouched locally. Initial evidence diff-checks flagged CRLF and CLI trailing whitespace; LF/end-of-line normalization corrected publication formatting only, not test results/assertions.

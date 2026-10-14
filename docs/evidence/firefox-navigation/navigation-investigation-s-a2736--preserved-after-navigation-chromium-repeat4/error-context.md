@@ -38,13 +38,13 @@ Call log:
   2  | import {resetEmulators} from '../../e2e/tests/support/emulator';
   3  | import {coachEmail,skipOnboarding,signInAsBetaCoach,createTeamViaUI,openTab,signInScreen} from '../../e2e/tests/support/app';
   4  | import {afterSignOutNavigation} from './navigationCheckpoint';
-  5  | 
+  5  |
   6  | test.beforeEach(async({page,context,browser,browserName})=>{
   7  |   console.info('ENGINE',browserName,browser.version());await resetEmulators();await skipOnboarding(context);
   8  |   page.on('dialog',async dialog=>{console.info('DIALOG',dialog.type());await dialog.accept();});
   9  | });
   10 | async function coach(page:Page,label:string){return signInAsBetaCoach(page,coachEmail(label));}
-  11 | 
+  11 |
   12 | test('transitional sign-in visibility precedes logout navigation completion',async({page})=>{
   13 |   await coach(page,'logout-barrier');
   14 |   await page.evaluate(()=>{
@@ -61,7 +61,7 @@ Call log:
   25 |   await expect(signInScreen(page)).toBeVisible();
   26 |   await coach(page,'after-barrier');
   27 | });
-  28 | 
+  28 |
   29 | test('sign-in entered during pending logout is preserved after navigation',async({page})=>{
   30 |   await coach(page,'input-barrier');
   31 |   await page.evaluate(()=>{
@@ -75,7 +75,7 @@ Call log:
 > 39 |   await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
      |                                                                   ^ Error: expect(locator).toHaveValue(expected) failed
   40 | });
-  41 | 
+  41 |
   42 | for(const foreground of [false,true])test(`${foreground?'foreground':'background'} tab reload preserves its own draft and rejects stale revision`,async({page,context})=>{
   43 |   await coach(page,foreground?'foreground':'background');await createTeamViaUI(page,'Navigation team');await openTab(page,'Practice Plans');
   44 |   await page.getByLabel('Plan.name',{exact:true}).fill('Original');await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');
@@ -90,5 +90,5 @@ Call log:
   53 |     await expect(second.getByLabel('Plan.name',{exact:true})).toHaveValue('Second editor');
   54 |   }finally{await second.close();}
   55 | });
-  56 | 
+  56 |
 ```

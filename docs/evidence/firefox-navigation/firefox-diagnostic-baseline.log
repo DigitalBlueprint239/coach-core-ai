@@ -271,7 +271,7 @@ SECOND DIALOG beforeunload
   ok 40 [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:42:42 › foreground tab reload preserves its own draft and rejects stale revision (7.5s)
 
 
-  1) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  1) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -310,7 +310,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  2) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  2) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -349,7 +349,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  3) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  3) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -388,7 +388,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  4) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  4) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -427,7 +427,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  5) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  5) [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -466,7 +466,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  6) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  6) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -505,7 +505,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  7) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  7) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -544,7 +544,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  8) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  8) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -583,7 +583,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  9) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  9) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -622,7 +622,7 @@ SECOND DIALOG beforeunload
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  10) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+  10) [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -662,16 +662,16 @@ SECOND DIALOG beforeunload
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   10 failed
-    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
-    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation 
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [chromium] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
+    [firefox] › tests\coaching-ui\navigation-investigation.spec.ts:29:5 › sign-in entered during pending logout is preserved after navigation
   30 passed (8.1m)
 !  Script exited unsuccessfully (code 1)
 i  emulators: Shutting down emulators.
