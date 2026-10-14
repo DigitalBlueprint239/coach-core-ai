@@ -3,6 +3,8 @@ import { TextEncoder as NodeTextEncoder } from 'util';
 import { firebaseImport } from '../firebase-import';
 import { auth } from '../../../firebase';
 import { doc, serverTimestamp, runTransaction, getDocFromServer } from 'firebase/firestore';
+import {createOnly,AlreadyCreated} from '../../persistence/createOnly';
+jest.mock('../../persistence/createOnly',()=>({...jest.requireActual('../../persistence/createOnly'),createOnly:jest.fn()}));
 jest.mock('../../../firebase',()=>({auth:{currentUser:{uid:'A',isAnonymous:false}},db:{}}));
 jest.mock('firebase/firestore',()=>({doc:jest.fn((_db,_collection,id)=>({id})),collection:jest.fn(),query:jest.fn(),where:jest.fn(),
   getDocsFromServer:jest.fn(),getDocFromServer:jest.fn(),runTransaction:jest.fn(),serverTimestamp:jest.fn(()=> 'server-time')}));
@@ -16,6 +18,7 @@ beforeEach(()=>{
   (auth as any).currentUser={uid:'A',isAnonymous:false}; docs=new Map(); writes=0;
   (doc as jest.Mock).mockImplementation((_db,_collection,id)=>({id}));
   (serverTimestamp as jest.Mock).mockReturnValue('server-time');
+  (createOnly as jest.Mock).mockImplementation(async(s,k,id,fields,dates)=>{if(docs.has(id))throw new AlreadyCreated('exists');docs.set(id,{...fields,teamId:s.teamId,createdBy:s.uid,revision:1,createdAt:dates.createdAt?new Date(dates.createdAt):'server-time',updatedAt:dates.updatedAt?new Date(dates.updatedAt):'server-time'});writes++;});
   (runTransaction as jest.Mock).mockImplementation(async (_db,fn)=>fn({
     get:async (ref:any)=>({exists:()=>docs.has(ref.id),data:()=>docs.get(ref.id)}),
     set:(ref:any,data:any)=>{docs.set(ref.id,data);writes++;},
@@ -48,6 +51,6 @@ test('read-back cannot acknowledge another team or another author',async()=>{
   await expect(firebaseImport.read(session,id)).rejects.toThrow('could not be verified');
 });
 test('server permission denial is propagated rather than queued or reported as saved',async()=>{
-  (runTransaction as jest.Mock).mockRejectedValueOnce(new Error('permission-denied'));
+  (createOnly as jest.Mock).mockRejectedValueOnce(new Error('permission-denied'));
   await expect(firebaseImport.copy(session,play)).rejects.toThrow('permission-denied'); expect(writes).toBe(0);
 });

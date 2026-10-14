@@ -13,6 +13,7 @@ import { useDocument } from '../../features/persistence/useDocument';
 import { Recovery, download } from '../../features/persistence/Recovery';
 import { equal, Fields } from '../../features/persistence/model';
 import EarlierDrafts from '../../features/persistence/EarlierDrafts';
+import {routesForView,routesForStorage} from '../../features/persistence/playRoutes';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
@@ -111,7 +112,7 @@ const SmartPlaybook = () => {
   const persistence = useDocument({uid:user!.uid,teamId:currentTeam!.id},'plays',{name:'',phase:'offense',type:'pass',players:[],routes:[]});
   // Core state
   const [players, setPlayers] = useState<PlaybookPlayer[]>((persistence.fields.players || []) as unknown as PlaybookPlayer[]);
-  const [routes, setRoutes] = useState<PlaybookRoute[]>((persistence.fields.routes || []) as unknown as PlaybookRoute[]);
+  const [routes, setRoutes] = useState<PlaybookRoute[]>(routesForView(persistence.fields.routes) as unknown as PlaybookRoute[]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [mode, setMode] = useState<PlaybookMode>('view');
@@ -142,13 +143,15 @@ const SmartPlaybook = () => {
   const lastTouchRef = useRef<TouchEvent | null>(null);
 
   const playFields:Fields = {...persistence.fields,name:currentPlayName,phase:currentPlayPhase==='special'?'special_teams':currentPlayPhase,type:currentPlayType,
-    players:JSON.parse(JSON.stringify(players)),routes:JSON.parse(JSON.stringify(routes))};
+    players:JSON.parse(JSON.stringify(players)),routes:routesForStorage(JSON.parse(JSON.stringify(routes)),persistence.fields.routes)};
+  if(persistence.fields.phase===undefined&&currentPlayPhase==='offense')delete playFields.phase;
+  if(persistence.fields.type===undefined&&currentPlayType==='pass')delete playFields.type;
   const playStatus = persistence.saving ? 'saving' : persistence.error ? 'failed' : persistence.ack && equal(persistence.ack,playFields) ? 'saved' : 'unsaved';
   useEffect(()=>{
     if(openedRef.current !== persistence.opened){
       openedRef.current=persistence.opened;
       setPlayers((persistence.fields.players||[]) as unknown as PlaybookPlayer[]);
-      setRoutes((persistence.fields.routes||[]) as unknown as PlaybookRoute[]);
+      setRoutes(routesForView(persistence.fields.routes) as unknown as PlaybookRoute[]);
       setCurrentPlayName(String(persistence.fields.name||''));
       setCurrentPlayPhase(persistence.fields.phase==='special_teams'?'special':String(persistence.fields.phase||'offense'));
       setCurrentPlayType(String(persistence.fields.type||'pass'));setUndoStack([]);setRedoStack([]);return;

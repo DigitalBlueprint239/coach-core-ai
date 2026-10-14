@@ -27,7 +27,7 @@ test('P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-a
  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');
  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');
  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();
- const b=await signInAsBetaCoach(page,coachEmail('coachB'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');
+ const b=await signInAsBetaCoach(page,coachEmail('coach-b'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');
  expect(await page.evaluate(uid=>Object.keys(localStorage).some(k=>k.startsWith(`coachcore:v1:${uid}:`)&&JSON.parse(localStorage.getItem(k)||'null')?.fields?.notes==='Unsynced note'),a.uid)).toBe(true);
  expect(await page.evaluate(uid=>Object.keys(localStorage).filter(k=>k.startsWith(`coachcore:v1:${uid}:`)&&k.includes(':drafts:')),b)).toEqual([]);
 });
