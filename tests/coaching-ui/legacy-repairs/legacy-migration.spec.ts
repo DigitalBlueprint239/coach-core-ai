@@ -1,6 +1,6 @@
-import { test, expect } from '../../e2e/node_modules/@playwright/test';
-import { resetEmulators, adminQuery } from '../../e2e/tests/support/emulator';
-import { skipOnboarding, signInAsBetaCoach, coachEmail, createTeamViaUI, storage, openTab } from '../../e2e/tests/support/app';
+import { test, expect } from '../../../e2e/node_modules/@playwright/test/index.mjs';
+import { resetEmulators, adminQuery } from '../../../e2e/tests/support/emulator';
+import { skipOnboarding, signInAsBetaCoach, coachEmail, createTeamViaUI, storage, openTab } from '../../../e2e/tests/support/app';
 
 test('L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload', async ({ page, context }) => {
   await resetEmulators();
@@ -27,3 +27,4 @@ test('L1 disabled migration preserves legacy originals and quarantine after dash
   expect((await adminQuery('plays', 'teamId', teamId!)).filter(d => d.data.name === 'Old banner play')).toEqual([]);
   await expect(page.getByText('Data migrated successfully!')).toHaveCount(0);
 });
+
