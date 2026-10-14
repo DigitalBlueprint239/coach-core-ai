@@ -24,3 +24,8 @@ Raw baseline/UI logs remain locally in work/. Initial visual pass also retained 
 No new authenticated-emulator acceptance, physical-device tests, staging or independent Claude UI review completed. Claude request on issue39comment6179875785 remains pending.
 PR64/auth/tenant/persistence/import/rules/functions/AI/package-lock/e2e/canvas unchanged.
 Observed browser versions: Chromium156.0.8078.4,Firefox157.0.
+
+Actual initial development boot without Firebase config: FAIL auth/invalid-api-key,retained.
+Demo-placeholder dev boot with external requests blocked: private-beta sign-in renders,PASS,pageErrors0,no real sign-in/backend operation.
+Focused modal focus-return check: Chromium/Firefox PASS.
+Configured development server stopped after verification; visual preview4317 remains running.
