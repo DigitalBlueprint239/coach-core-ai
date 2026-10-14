@@ -129,7 +129,11 @@ service cloud.firestore {
 
     match /plays/{playId} {
       // `list` requires the query to filter on teamId == <a team the caller owns>.
-      allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
+      // A missing id is readable (result: not found) so create-only transactions
+      // can check before writing (D10 import). Existing documents keep owner-only
+      // reads; `list` is unchanged. Reveals only that an id is unused.
+      allow get: if isBetaUser() && (resource == null || ownsTeam(resource.data.teamId));
+      allow list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
         && validPlayFields(request.resource.data)
         && revisionOnCreate(request.resource.data)
@@ -173,7 +177,11 @@ service cloud.firestore {
     }
 
     match /practicePlans/{planId} {
-      allow get, list: if isBetaUser() && ownsTeam(resource.data.teamId);
+      // A missing id is readable (result: not found) so create-only transactions
+      // can check before writing (D10 import). Existing documents keep owner-only
+      // reads; `list` is unchanged. Reveals only that an id is unused.
+      allow get: if isBetaUser() && (resource == null || ownsTeam(resource.data.teamId));
+      allow list: if isBetaUser() && ownsTeam(resource.data.teamId);
       allow create: if isBetaUser()
         && validPlanFields(request.resource.data)
         && revisionOnCreate(request.resource.data)
