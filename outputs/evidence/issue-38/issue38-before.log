@@ -1,0 +1,66 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/utils/__tests__/logger.test.ts src/components/SmartPlaybook/__tests__/FieldMemo.test.js
+
+FAIL src/utils/__tests__/logger.test.ts (12.328 s)
+  ● logger › log calls console.log in development
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "test message"
+
+    Number of calls: 0
+
+      26 |     const { logger } = require('../logger');
+      27 |     logger.log('test message');
+    > 28 |     expect(spy).toHaveBeenCalledWith('test message');
+         |                 ^
+      29 |   });
+      30 |
+      31 |   it('log does not call console.log in production', () => {
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:28:17)
+
+  ● logger › log passes multiple arguments
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "a", "b", "c"
+
+    Number of calls: 0
+
+      62 |     const { logger } = require('../logger');
+      63 |     logger.log('a', 'b', 'c');
+    > 64 |     expect(spy).toHaveBeenCalledWith('a', 'b', 'c');
+         |                 ^
+      65 |   });
+      66 | });
+      67 |
+
+      at Object.<anonymous> (src/utils/__tests__/logger.test.ts:64:17)
+
+FAIL src/components/SmartPlaybook/__tests__/FieldMemo.test.js
+  ● Test suite failed to run
+
+    Cannot find module '../:components:SmartPlaybook:Field.js' from 'src/components/SmartPlaybook/__tests__/FieldMemo.test.js'
+
+       8 |
+       9 | // Import the real Field component
+    > 10 | import Field from '../:components:SmartPlaybook:Field.js';
+         | ^
+      11 |
+      12 | describe('Field memoization', () => {
+      13 |   const basePlayers = [
+
+      at Resolver.resolveModule (node_modules/jest-resolve/build/resolver.js:324:11)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/FieldMemo.test.js:10:1)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 2 failed, 2 total
+Tests:       2 failed, 3 passed, 5 total
+Snapshots:   0 total
+Time:        57.401 s
+Ran all test suites within paths "src/utils/__tests__/logger.test.ts", "src/components/SmartPlaybook/__tests__/FieldMemo.test.js".

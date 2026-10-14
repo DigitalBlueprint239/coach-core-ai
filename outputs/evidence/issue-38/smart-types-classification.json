@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "6b4c42c0d18a2a0364a3cf72f62bbc4535517e58",
+  "diagnosticCount": 810,
+  "codes": {
+    "TS2339": 807,
+    "TS2741": 1,
+    "TS2322": 2
+  },
+  "properties": {
+    "spacing": 277,
+    "borderRadius": 25,
+    "shadows": 8,
+    "colors": 393,
+    "fontSizes": 94,
+    "fontFamilies": 2,
+    "transition": 8
+  },
+  "files": {
+    "App.tsx": 8,
+    "components/ai/DrillFinder.tsx": 70,
+    "components/ai/GameScripter.tsx": 70,
+    "components/ai/PracticePlanner.tsx": 63,
+    "components/AlignmentToolbar.tsx": 11,
+    "components/AnalyticsPanel.tsx": 25,
+    "components/AssignQuizModal.tsx": 39,
+    "components/CoverageAnalysisPanel.tsx": 24,
+    "components/DesignPanel.tsx": 50,
+    "components/ExportSuite.tsx": 18,
+    "components/FieldCanvas.tsx": 1,
+    "components/FloatingPanel.tsx": 10,
+    "components/FormationSelector.tsx": 51,
+    "components/FormationThumbnail.tsx": 1,
+    "components/GamePlanPanel.tsx": 20,
+    "components/InstallManager.tsx": 26,
+    "components/LearnPanel.tsx": 27,
+    "components/Modal.tsx": 17,
+    "components/NewPlayModal.tsx": 28,
+    "components/OptimizePanel.tsx": 23,
+    "components/PlayOrganizer.tsx": 37,
+    "components/PracticePlanModal.tsx": 17,
+    "components/RightSidebar.tsx": 24,
+    "components/RoutesConceptsPanel.tsx": 44,
+    "components/SituationalPlayCallerPanel.tsx": 31,
+    "components/ThumbToolbelt.tsx": 11,
+    "components/Toolbar.tsx": 13,
+    "components/WristbandModal.tsx": 14,
+    "components/WristbandPanel.tsx": 19,
+    "src/field/CanvasInspector.tsx": 18
+  }
+}

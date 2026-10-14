@@ -1,0 +1,208 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "jspdf": {
+      "name": "jspdf",
+      "severity": "critical",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1112264,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has Local File Inclusion/Path Traversal vulnerability",
+          "url": "https://github.com/advisories/GHSA-f8cm-6447-x5h2",
+          "severity": "critical",
+          "cwe": [
+            "CWE-22",
+            "CWE-35",
+            "CWE-73"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=3.0.4"
+        },
+        {
+          "source": 1112801,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has PDF Injection in AcroFormChoiceField that allows Arbitrary JavaScript Execution",
+          "url": "https://github.com/advisories/GHSA-pqxr-3g65-p328",
+          "severity": "high",
+          "cwe": [
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 8.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+          },
+          "range": "<=4.0.0"
+        },
+        {
+          "source": 1112802,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF Vulnerable to Denial of Service (DoS) via Unvalidated BMP Dimensions in BMPDecoder",
+          "url": "https://github.com/advisories/GHSA-95fx-jjr5-f39c",
+          "severity": "high",
+          "cwe": [
+            "CWE-20",
+            "CWE-400",
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=4.0.0"
+        },
+        {
+          "source": 1112803,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF Vulnerable to Stored XMP Metadata Injection (Spoofing & Integrity Violation)",
+          "url": "https://github.com/advisories/GHSA-vm32-vv63-w422",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-20",
+            "CWE-74"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=4.0.0"
+        },
+        {
+          "source": 1112804,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has Shared State Race Condition in addJS Plugin",
+          "url": "https://github.com/advisories/GHSA-cjw8-79x6-5cj4",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-200",
+            "CWE-362"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=4.0.0"
+        },
+        {
+          "source": 1113310,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has a PDF Object Injection via Unsanitized Input in addJS Method",
+          "url": "https://github.com/advisories/GHSA-9vjf-qc39-jprp",
+          "severity": "high",
+          "cwe": [
+            "CWE-94",
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 8.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+          },
+          "range": "<4.2.0"
+        },
+        {
+          "source": 1113324,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF Affected by Client-Side/Server-Side Denial of Service via Malicious GIF Dimensions",
+          "url": "https://github.com/advisories/GHSA-67pg-wm7f-q7fj",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<4.2.0"
+        },
+        {
+          "source": 1114396,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has a PDF Injection in AcroForm module allows Arbitrary JavaScript Execution (RadioButton.createOption and \"AS\" property)",
+          "url": "https://github.com/advisories/GHSA-p5xg-68wr-hm3m",
+          "severity": "high",
+          "cwe": [
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 8.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+          },
+          "range": "<4.2.0"
+        },
+        {
+          "source": 1114950,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has a PDF Object Injection via FreeText color",
+          "url": "https://github.com/advisories/GHSA-7x6v-j9x4-qf24",
+          "severity": "high",
+          "cwe": [
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 8.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+          },
+          "range": "<=4.2.0"
+        },
+        {
+          "source": 1114974,
+          "name": "jspdf",
+          "dependency": "jspdf",
+          "title": "jsPDF has HTML Injection in New Window paths",
+          "url": "https://github.com/advisories/GHSA-wfv2-pwc8-crg5",
+          "severity": "critical",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 9.6,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:L"
+          },
+          "range": "<=4.2.0"
+        }
+      ],
+      "effects": [],
+      "range": "<=4.2.0",
+      "nodes": [
+        "node_modules/jspdf"
+      ],
+      "fixAvailable": {
+        "name": "jspdf",
+        "version": "4.2.1",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 1,
+      "total": 1
+    },
+    "dependencies": {
+      "prod": 82,
+      "dev": 111,
+      "optional": 69,
+      "peer": 1,
+      "peerOptional": 0,
+      "total": 209
+    }
+  }
+}
+
