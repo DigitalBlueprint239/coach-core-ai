@@ -18,7 +18,7 @@ test('L1 disabled migration preserves legacy originals and quarantine after dash
   }, { teamId, original, quarantine });
   await page.reload();
   await expect(page.getByRole('button', { name: 'Migrate Now' })).toHaveCount(0);
-  await openTab(page, 'Practice Planner');
+  await openTab(page, 'Practice Plans');
   await expect(page.getByRole('region', { name: 'Practice plan editor' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Migrate Now' })).toHaveCount(0);
   const retained = await storage(page);
