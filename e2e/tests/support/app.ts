@@ -79,7 +79,13 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
   const t0 = Date.now();
   await page.getByRole('button', { name: 'Create Team', exact: true }).last().click();
   try {
-    await expect(page.getByText('Team created successfully!')).toBeVisible();
+    // Team-specific confirmation (H2 follow-up, 2026-10-14): the generic
+    // "Team created successfully!" toast lives 5 s, so after creating a FIRST
+    // team it could falsely confirm a SECOND one still "Creating..." (Codex's
+    // local D10-07 trace: Bravo never rendered, "Switch to" missing). Now the
+    // dialog must close and a heading with exactly this team's name must show.
+    await expect(page.getByRole('heading', { name: 'Create New Team' })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: teamName, exact: true }).first()).toBeVisible();
   } catch (err) {
     // Diagnostics only (Firefox intermittent, 2026-10-14): what the coach saw,
     // whether the modal is still open, and whether the team reached Firestore.

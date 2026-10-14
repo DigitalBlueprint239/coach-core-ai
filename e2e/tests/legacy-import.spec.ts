@@ -11,7 +11,7 @@ import {
 } from './support/app';
 import {
   LEGACY_PLAYS, seedDevice, deviceState, expectOriginalsUntouched, openPlaybook, importPrompt,
-  adminCopies, libraryNames, commitControl, expectedCopyId, decisionKey, acceptImport,
+  adminCopies, expectLibraryContains, seedControlPlay, libraryNamesLoaded, commitControl, expectedCopyId, decisionKey, acceptImport,
 } from './support/legacy';
 
 test.beforeEach(async ({ context }) => {
@@ -70,21 +70,22 @@ test('D10-01 accept: explicit consent copies every play exactly into the selecte
   const decision = JSON.parse((await deviceState(page)).decisions[decisionKey(uid)]);
   expect(decision).toEqual({ decision: 'imported', teamId, ids: LEGACY_PLAYS.map((p) => expectedCopyId(uid, teamId, p)) });
   await expectOriginalsUntouched(page); // includes the standalone format: not converted, not touched
-  expect(await libraryNames(page)).toEqual(expect.arrayContaining(LEGACY_PLAYS.map((p) => p.name)));
+  await expectLibraryContains(page, LEGACY_PLAYS.map((p) => p.name));
 });
 
 test('D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach', async ({ page }) => {
-  const { uid } = await coachWithTeam(page, 'd10b', 'Alpha Eagles');
+  const { uid, teamId } = await coachWithTeam(page, 'd10b', 'Alpha Eagles');
   await openPlaybook(page);
   await importPrompt(page).getByRole('button', { name: 'Not now' }).click();
   await expect(importPrompt(page)).toHaveCount(0);
   expect(await adminCopies(uid)).toEqual([]);
   expect(JSON.parse((await deviceState(page)).decisions[decisionKey(uid)])).toEqual({ decision: 'declined' });
   await expectOriginalsUntouched(page);
+  await seedControlPlay(uid, teamId); // positive anchor for the negative library check
   await page.reload();
   await openPlaybook(page);
   await expect(importPrompt(page)).toHaveCount(0);
-  expect(await libraryNames(page)).not.toEqual(expect.arrayContaining(['Legacy Mesh']));
+  expect(await libraryNamesLoaded(page)).not.toEqual(expect.arrayContaining(['Legacy Mesh']));
 });
 
 test('D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten', async ({ page }) => {
@@ -151,10 +152,11 @@ test('D10-06 two coaches, one browser profile: coach B never sees or reads coach
   await signOutViaUI(page);
 
   const b = coachEmail('d10fb');
-  await signInAsBetaCoach(page, b);
+  const bUid = await signInAsBetaCoach(page, b);
   await createTeamViaUI(page, 'Bravo Bulldogs');
+  await seedControlPlay(bUid, (await storage(page)).currentTeamId as string); // positive anchor: B's own library has loaded
   await openPlaybook(page);
-  const names = await libraryNames(page);
+  const names = await libraryNamesLoaded(page);
   for (const p of LEGACY_PLAYS) expect(names).not.toContain(p.name); // A's cloud copies are not in B's library
   await waitForE2EHooks(page);
   const aCopy = expectedCopyId(a.uid, a.teamId, LEGACY_PLAYS[0]);
@@ -312,7 +314,7 @@ test('D10-11 cloud reopen: a fresh browser profile with no device data shows the
     await signInAsBetaCoach(p2, a.email);
     await openPlaybook(p2);
     await expect(importPrompt(p2)).toHaveCount(0); // nothing on this device to import
-    expect(await libraryNames(p2)).toEqual(expect.arrayContaining(LEGACY_PLAYS.map((p) => p.name)));
+    await expectLibraryContains(p2, LEGACY_PLAYS.map((p) => p.name));
     await expect(p2.getByText('Phase: special | Type: punt')).toBeVisible(); // special_teams decoded back
     expect(await p2.evaluate(() => localStorage.getItem('smartPlaybook_plays'))).toBeNull();
   } finally {
