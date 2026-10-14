@@ -4,6 +4,7 @@
 // through the app's own Firebase SDK session in two browser contexts (two
 // devices of one coach). It is labelled SDK-in-browser and is NOT a UI workflow.
 //
+// P13 (D10 legacy import) is now real: e2e/tests/legacy-import.spec.ts.
 // What is BLOCKED: every client workflow below. They are declared with
 // test.fixme so they appear in every run as BLOCKED with their dependency,
 // and the reporter never counts them as passed.
@@ -68,8 +69,6 @@ const BLOCKED: Array<[string, string]> = [
     'Codex: scoped draft keys coachcore:v1:{uid}:{teamId}:* (contract P-11)'],
   ['E2E-P12b unsynced-drafts sign-out guard: Sync now / Export / Sign out anyway / Cancel',
     'Codex: guard UI registered via registerSignOutGuard (contract P-12b)'],
-  ['E2E-P13 legacy local plays: import prompt once per coach, verified import, no automatic deletion',
-    'Founder decision D10 + Codex import UI (contract P-13); the D10-pending half is covered by E2E-A07'],
   ['E2E-P14 two tabs edit the same play: the second save shows the conflict screen and loses nothing',
     'Codex: runTransaction(expectedRevision) + 3-way conflict UI (contract P-14); rules half covered by E2E-C01'],
   ['E2E-P15 Playbook play: create -> cloud save -> hard reload -> reopen identical on another device',
