@@ -103,7 +103,7 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 
 | # | Item | Owner | Status |
 |---|---|---|---|
-| G1 | Dependency findings fixed or accepted in writing; regression re-run on the new candidate SHA | Codex / Coach Drew | ✗ | — **update 2026-10-14:** #60 brings production `npm audit` to **0** (verified on candidate-4 clean install); full-graph dev/tooling advisories remain as disclosed in #60 |
+| G1 | Dependency findings fixed or accepted in writing; regression re-run on the new candidate SHA | Codex / Coach Drew | ⚠ Production `npm audit` **0** after #60 (verified on candidate-4 clean install); full-graph dev/tooling advisories remain as disclosed in #60 and need fixing or written acceptance |
 | G2 | Founder decisions D5 (billing + controls) and D10 (legacy import), plus D1–D7 if film is in the deploy | Coach Drew | ✗ |
 | G3 | Founder read-only verification of §4 controls recorded | Coach Drew | ✗ |
 | G4 | PR #49 founder actions (§6 of the Day 2 report: old keys checked/rotated, web key restricted, Anonymous OFF, authorized domains) | Coach Drew | ✗ |
