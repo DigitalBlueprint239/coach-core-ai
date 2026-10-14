@@ -1,5 +1,5 @@
 import { expect, type Page, type BrowserContext } from '@playwright/test';
-import { latestSignInLink, grantBeta } from './emulator';
+import { latestSignInLink, grantBeta, adminTeamsOwnedBy } from './emulator';
 
 export const LEGACY_PLAYS_KEY = 'smartPlaybook_plays';
 export const EMAIL_KEY = 'coachcore.emailForSignIn';
@@ -71,8 +71,21 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
   await openTab(page, 'Teams');
   await page.getByRole('button', { name: 'Create Team', exact: true }).first().click();
   await page.getByLabel('Team Name').fill(teamName);
+  const t0 = Date.now();
   await page.getByRole('button', { name: 'Create Team', exact: true }).last().click();
-  await expect(page.getByText('Team created successfully!')).toBeVisible();
+  try {
+    await expect(page.getByText('Team created successfully!')).toBeVisible();
+  } catch (err) {
+    // Diagnostics only (Firefox intermittent, 2026-10-14): what the coach saw,
+    // whether the modal is still open, and whether the team reached Firestore.
+    const visible = await page.locator('[role=alert],[role=status],.fixed').allInnerTexts().catch(() => []);
+    const modalOpen = await page.getByRole('heading', { name: 'Create New Team' }).isVisible().catch(() => false);
+    const creating = await page.getByText('Creating...').isVisible().catch(() => false);
+    const uid = await page.evaluate(() => (window as any).__coachCoreE2E?.uid?.() ?? null).catch(() => null);
+    const saved = uid ? (await adminTeamsOwnedBy(uid)).map((t) => t.name) : 'uid unavailable';
+    throw new Error(`Team "${teamName}" not confirmed within ${Date.now() - t0} ms. modalOpen=${modalOpen} `
+      + `creating=${creating} teamsInFirestore=${JSON.stringify(saved)} visible=${JSON.stringify(visible).slice(0, 300)}`, { cause: err });
+  }
 }
 
 export async function storage(page: Page): Promise<Record<string, string>> {
