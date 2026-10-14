@@ -146,7 +146,7 @@ T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated o
 | R3 | Low | Codex | OPEN | "Not now" is stored as a permanent decline with no later re-offer. Rename it or add a re-entry point |
 | R4 | Info | Codex / deploy decision | OPEN | `D10_APPROVED = true` is a build constant, so the prompt ships in release builds |
 | R5 | Medium (data loss) | Codex | OPEN | Code review (found by the independent verifier): a signed-in coach with no team, or not owning the selected team, gets `libraryKey = null`. Saving a play still says "kept as a device draft; cloud save pending", but nothing is stored, so the play is lost on reload. Not yet covered by an E2E test (needs canvas player placement) |
-| H1 | Intermittent | Claude (harness) | OPEN | Firefox only, **3 occurrences** across two ×10 runs: "Team created successfully!" not seen within 10 s at team creation (D10-09, T02, D10-02). Chromium 0/20. Cause not established; diagnostics added in #54 `3989218`. No timeout raised, no retry added |
+| H1 | Intermittent | Claude (harness) | OPEN | Firefox only, **3 occurrences** across two ×10 runs (0 in the two final ×10 runs): "Team created successfully!" not seen within 10 s at team creation (D10-09, T02, D10-02). Chromium 0/20. Cause not established; diagnostics added in #54 `3989218`. No timeout raised, no retry added |
 
 ### 7.4 Results
 
@@ -155,6 +155,8 @@ T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated o
 | ×1 before rules fix `3806f40` | 16 PASS / 11 FAIL (D10 import never creates copies) | same |
 | ×1 after fix `9aa2666` | 26 PASS / 2 FAIL (06b, 07b) / 7 BLOCKED | same |
 | ×10 acceptance `e4e139f` (job `115645207229`) | **260 PASS / 20 FAIL** / 70 BLOCKED. FAIL = 06b 10/10 + 07b 10/10 | **258 PASS / 22 FAIL**. FAIL = 06b 10/10, 07b 10/10, D10-09 1/10 (H1), T02 1/10 (H1) |
+| **×10 FINAL, hardened tests**, acceptance `e095c3d` (job `115657677831`) | **260 PASS / 20 FAIL** / 70 BLOCKED. FAIL = 06b 10/10 + 07b 10/10 | **260 PASS / 20 FAIL**. FAIL = 06b 10/10 + 07b 10/10 (H1 did not recur) |
+| **×10 FINAL**, candidate 3 `c144cfc` (job `115657693030`) | **260 PASS / 20 FAIL**. Same two tests | **260 PASS / 20 FAIL**. Same two tests |
 | ×10 candidate 3 `e43b525` (job `115645212221`) | **260 PASS / 20 FAIL**. FAIL = 06b 10/10, 07b 10/10 | **259 PASS / 21 FAIL**. FAIL = 06b, 07b 10/10; D10-02 1/10 (H1) |
 
 **Per test (×10, both engines, both runs):**
@@ -171,7 +173,7 @@ T03 and C01 were **strengthened** (not reworded) and the ×10 run was repeated o
 
 ### 7.5 Evidence
 
-`docs/evidence/d10-acceptance/` contains 13 files plus `SHA256SUMS.txt`:
+`docs/evidence/d10-acceptance/` contains 15 files plus `SHA256SUMS.txt` (files 14–15 are the final hardened ×10 runs):
 - the CI annotations of every run listed above, including the failing ones and the truncated first ×10;
 - baseline jest/tsc at `52fc3d9`;
 - candidate-3 jest/tsc/release proof/manifest.
