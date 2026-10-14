@@ -1,0 +1,9 @@
+
+> coach-core-ai@0.1.0 prebuild
+> node scripts/security/check-client-env.js
+
+
+[security] Build blocked: these REACT_APP_* variables would be published in the browser bundle:
+  - REACT_APP_OPENAI_API_KEY [environment]
+AI provider keys belong in Google Cloud Secret Manager (COACH_CORE_OPENAI_API_KEY),
+used only by the coachAI Cloud Function. Remove these variables from the build environment.

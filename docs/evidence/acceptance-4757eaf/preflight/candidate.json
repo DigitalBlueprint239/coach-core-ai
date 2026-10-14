@@ -1,0 +1,16 @@
+{
+  "integratedCommit": "4757eaffad31664dae727c34355aca8109fcc63c",
+  "repairPR": 64,
+  "repairCommit": "8f0d9f7c9494c46eddb6e81a31b0c8d22ea21ad0",
+  "L0Commit": "12e386f12a6d01e54faa7e30d6428ffafab556cd",
+  "FX03Commit": "dc36080bf4db6815c4ad7b420abd75578fed02bc",
+  "sourceTree": "652fc9d3d427c0b7ca35ec8cf57fcc606927e6cc",
+  "runner": "Codex executes unchanged Claude-authored tests; Claude independent sign-off separate",
+  "oldMissingAttachments": "Initial owned L1 ZIP/PNG archives NOT RETAINED; hashes/selectors/results/logs/DOM snapshots preserved. New runs do not replace this history.",
+  "frozenPRs": {
+    "59": "c21c0c61c03a25860341e699cca8ee1a7036d726",
+    "60": "2cf1a5ca9be33500515b3abf331ca35e3d6df920",
+    "64": "8f0d9f7c9494c46eddb6e81a31b0c8d22ea21ad0"
+  },
+  "independentReportHead": "7b4747f8d2883255758c31f8076a58a6fa379cfe"
+}

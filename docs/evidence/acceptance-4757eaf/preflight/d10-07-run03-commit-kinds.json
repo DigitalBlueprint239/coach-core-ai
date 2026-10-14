@@ -1,0 +1,18 @@
+[
+  {
+    "time": "2026-10-14T21:38:12.667Z",
+    "status": 200,
+    "documentKinds": [
+      "plays"
+    ],
+    "teamNames": []
+  },
+  {
+    "time": "2026-10-14T21:38:13.062Z",
+    "status": -1,
+    "documentKinds": [
+      "plays"
+    ],
+    "teamNames": []
+  }
+]

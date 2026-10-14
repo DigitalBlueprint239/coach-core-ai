@@ -1,0 +1,20 @@
+[
+  {
+    "type": "DOM read",
+    "callId": "hwzy@3546",
+    "start": 277268.804,
+    "method": "evalOnSelectorAll",
+    "selector": "internal:role=heading[name=\"Play Library\"i] >> xpath=.. >> .font-semibold"
+  },
+  {
+    "type": "DOM read completed",
+    "callId": "hwzy@3546",
+    "end": 277336.546,
+    "result": {
+      "value": {
+        "a": [],
+        "id": 1
+      }
+    }
+  }
+]

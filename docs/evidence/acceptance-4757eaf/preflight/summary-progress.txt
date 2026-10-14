@@ -1,0 +1,200 @@
+{
+  "completedRuns": 10,
+  "runs": [
+    {
+      "run": "run-01",
+      "stats": {
+        "startTime": "2026-10-14T21:15:48.122Z",
+        "duration": 578625.129,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-02",
+      "stats": {
+        "startTime": "2026-10-14T21:25:27.723Z",
+        "duration": 424144.637,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "failed": 1
+        }
+      }
+    },
+    {
+      "run": "run-03",
+      "stats": {
+        "startTime": "2026-10-14T21:32:32.993Z",
+        "duration": 491058.248,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "timedOut": 1
+        }
+      }
+    },
+    {
+      "run": "run-04",
+      "stats": {
+        "startTime": "2026-10-14T21:40:45.591Z",
+        "duration": 491410.276,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-05",
+      "stats": {
+        "startTime": "2026-10-14T21:48:58.183Z",
+        "duration": 508134.461,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-06",
+      "stats": {
+        "startTime": "2026-10-14T21:57:27.120Z",
+        "duration": 557976.3820000001,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-07",
+      "stats": {
+        "startTime": "2026-10-14T22:07:19.951Z",
+        "duration": 743421.694,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "failed": 1
+        }
+      }
+    },
+    {
+      "run": "run-08",
+      "stats": {
+        "startTime": "2026-10-14T22:19:45.902Z",
+        "duration": 873042.071,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 42,
+          "failed": 1
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-09",
+      "stats": {
+        "startTime": "2026-10-14T22:34:22.649Z",
+        "duration": 898907.227,
+        "expected": 86,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 43
+        }
+      }
+    },
+    {
+      "run": "run-10",
+      "stats": {
+        "startTime": "2026-10-14T22:49:22.789Z",
+        "duration": 920803.166,
+        "expected": 85,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "engines": {
+        "chromium": {
+          "passed": 43
+        },
+        "firefox": {
+          "passed": 42,
+          "failed": 1
+        }
+      }
+    }
+  ]
+}

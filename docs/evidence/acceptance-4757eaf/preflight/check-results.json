@@ -1,0 +1,63 @@
+{
+  "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+  "rootInstallExit": 0,
+  "functionsInstallExit": 0,
+  "e2eInstallExit": 0,
+  "jest": {
+    "passed": 434,
+    "failed": 0,
+    "suites": 29
+  },
+  "typescriptExit": 0,
+  "productionAuditTotal": 0,
+  "functionsProductionAuditTotal": 0,
+  "functionsNpmScript": {
+    "exit": 0,
+    "discovered": 0,
+    "status": "NOT A PASS: Windows single-quoted glob"
+  },
+  "functionsExplicitConcurrent": {
+    "passed": 72,
+    "failed": 1,
+    "total": 73,
+    "unresolved": "practice_plan local mock Responses roundtrip;1713ms;timeout1000ms;concurrent installs"
+  },
+  "functionsExplicitSerial": {
+    "passed": 73,
+    "failed": 0,
+    "total": 73,
+    "note": "unchanged assertions and timeout; not proof prior failure resolved"
+  },
+  "functionsLintCRLF": {
+    "errors": 2113,
+    "status": "FAIL; linebreak-style checkout conversion"
+  },
+  "functionsLintCommittedBlobs": {
+    "exit": 0,
+    "note": "exact unchanged LF Git blobs restored in isolated worktree;no source diff"
+  },
+  "browserTestsListed": 86,
+  "browserRepeats": 10,
+  "browserTotals": {
+    "chromium": {
+      "passed": 429,
+      "failed": 1
+    },
+    "firefox": {
+      "passed": 426,
+      "failed": 4
+    }
+  },
+  "browserRetries": 0,
+  "browserSkips": 0,
+  "releaseProof": {
+    "passed": 13,
+    "failed": 0
+  },
+  "independentAcceptance": "Claude candidate6 PASS; hardenedcandidate7 R1cFAIL/H2open; local Codex-run failures retained",
+  "credentialCanary": {
+    "passed": 12,
+    "failed": 0,
+    "exit": 0
+  }
+}

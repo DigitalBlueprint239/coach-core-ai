@@ -1,0 +1,12 @@
+{
+  "repeat": 1,
+  "exitCode": 0,
+  "stats": {
+    "startTime": "2026-10-14T21:15:48.122Z",
+    "duration": 578625.129,
+    "expected": 86,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
