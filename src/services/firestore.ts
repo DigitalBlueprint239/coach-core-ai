@@ -152,29 +152,10 @@ function loadOfflineQueue() {
 }
 
 async function syncOfflineQueue() {
-  if (!isOnline || offlineQueue.length === 0) {
-    return;
-  }
-
-  const queue = [...offlineQueue];
-  offlineQueue = [];
-  saveOfflineQueue();
-
-  for (const operation of queue) {
-    try {
-      await executeOperation(operation);
-    } catch (error: unknown) {
-      console.error('Failed to sync offline operation:', error);
-      // Only add back to queue if it's not a permanent error
-      if (!(error instanceof Error && error.message?.includes('permission-denied'))) {
-        offlineQueue.push(operation);
-      }
-    }
-  }
-
-  if (offlineQueue.length > 0) {
-    saveOfflineQueue();
-  }
+  // Legacy global operations have no trustworthy account/team/revision envelope.
+  // Preserve their original bytes; never replay them under the current account.
+  // Current coaching clients use scoped recovery drafts and acknowledged transactions.
+  return;
 }
 
 async function executeOperation(operation: any) {

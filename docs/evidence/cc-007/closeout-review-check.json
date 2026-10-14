@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-14",
+  "pr": 61,
+  "baseline59": "c21c0c61c03a25860341e699cca8ee1a7036d726",
+  "baseline60": "2cf1a5ca9be33500515b3abf331ca35e3d6df920",
+  "bothHeadsUnchanged": true,
+  "bothUnmerged": true,
+  "pr59Comments": 0,
+  "pr60Comments": 0,
+  "pr59Reviews": 0,
+  "pr60Reviews": 0,
+  "pr59Threads": 0,
+  "pr60Threads": 0,
+  "latest39ClaudeFindings": "No new findings after client handoff",
+  "newPreservationFinding": "Claude-owned auth clearUserScopedState removes offline_operations; escalated #39comment6170214736",
+  "securityFilesEdited": false,
+  "harnessFilesEdited": false,
+  "deployCommandsExecuted": false
+}

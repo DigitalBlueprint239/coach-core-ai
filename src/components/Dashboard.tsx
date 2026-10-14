@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DraftSignOut from '../features/persistence/DraftSignOut';
 import { useAuth } from '../hooks/useAuth';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
@@ -34,6 +35,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <DraftSignOut />
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

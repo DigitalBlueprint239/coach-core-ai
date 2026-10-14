@@ -1,0 +1,776 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\drewl\\AppData\\Local\\hermes\\node\\node.exe",
+      "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/coaching-ui/playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\playwright.config.ts",
+    "rootDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-persistence/tests/coaching-ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-persistence/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-persistence/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node scripts/serve.mjs .app-build 3000",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "cwd": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e"
+    }
+  },
+  "suites": [
+    {
+      "title": "coaching.spec.ts",
+      "file": "coaching.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "P16 manual editable plan saves and reopens exact ordered content in clean browser",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21468,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    3 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    20 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    3 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    20 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:9:260",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 180,
+                      "line": 7
+                    },
+                    "snippet": "   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 180,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    3 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    20 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n\n   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:9:260"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:19:43.888Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P16-manual-editab-93d35-ed-content-in-clean-browser-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P16-manual-editab-93d35-ed-content-in-clean-browser-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P16-manual-editab-93d35-ed-content-in-clean-browser-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 180,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-88806c93cd994e6487b1",
+          "file": "coaching.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "P14 concurrent edits show recovery; copy keeps both server versions",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16711,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    19 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    19 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:16:116",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 180,
+                      "line": 7
+                    },
+                    "snippet": "   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 180,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    19 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n\n   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:16:116"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:20:42.622Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P14-concurrent-ed-b3dc0--keeps-both-server-versions-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P14-concurrent-ed-b3dc0--keeps-both-server-versions-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P14-concurrent-ed-b3dc0--keeps-both-server-versions-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 180,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-45bb5738d6a4d44361ed",
+          "file": "coaching.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15316,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    7 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    16 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    7 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    16 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:27:103",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 103,
+                      "line": 27
+                    },
+                    "snippet": "  25 |  // A transaction cannot acknowledge while offline. Draft is already captured before any network wait.\n  26 |  await expect.poll(()=>page.evaluate(([uid,team])=>JSON.parse(localStorage.getItem(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)||'null')?.fields.name,[a.uid,a.teamId])).toBe('Private A draft');\n> 27 |  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');\n     |                                                                                                       ^\n  28 |  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');\n  29 |  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();\n  30 |  const b=await signInAsBetaCoach(page,coachEmail('coachB'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 103,
+                        "line": 27
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    7 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    16 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n\n  25 |  // A transaction cannot acknowledge while offline. Draft is already captured before any network wait.\n  26 |  await expect.poll(()=>page.evaluate(([uid,team])=>JSON.parse(localStorage.getItem(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)||'null')?.fields.name,[a.uid,a.teamId])).toBe('Private A draft');\n> 27 |  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');\n     |                                                                                                       ^\n  28 |  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');\n  29 |  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();\n  30 |  const b=await signInAsBetaCoach(page,coachEmail('coachB'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:27:103"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:21:35.632Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 103,
+                    "line": 27
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-696273f080c892fe7f32",
+          "file": "coaching.spec.ts",
+          "line": 23,
+          "column": 5
+        },
+        {
+          "title": "P15 ordinary play cloud save, property edit, hard reload, complete reopen",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14541,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Play save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Play save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Play save status' })\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Play save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Play save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Play save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Play save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Play save status' })\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Play save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Play save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:36:67",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 67,
+                      "line": 36
+                    },
+                    "snippet": "  34 | test('P15 ordinary play cloud save, property edit, hard reload, complete reopen',async({page})=>{\n  35 |  const s=await setup(page,'p15');await openTab(page,'Smart Playbook');await page.getByRole('button',{name:/Shotgun/}).click();await page.getByPlaceholder('Enter play name...').fill('Mesh');await page.getByRole('button',{name:'Save Play',exact:true}).first().click();await page.getByRole('button',{name:'Save Play',exact:true}).last().click();\n> 36 |  await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');await page.getByPlaceholder('Enter play name...').fill('Mesh edited');await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('unsaved');\n     |                                                                   ^\n  37 |  await page.getByRole('button',{name:'Save Play',exact:true}).first().click();await page.getByRole('button',{name:'Save Play',exact:true}).last().click();await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');\n  38 |  await page.reload();await openTab(page,'Smart Playbook');await page.getByRole('button',{name:'Load Play',exact:true}).click();await expect(page.getByText('Mesh edited',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByPlaceholder('Enter play name...')).toHaveValue('Mesh edited');await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');\n  39 | });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 67,
+                        "line": 36
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Play save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Play save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Play save status' })\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Play save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Play save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n\n  34 | test('P15 ordinary play cloud save, property edit, hard reload, complete reopen',async({page})=>{\n  35 |  const s=await setup(page,'p15');await openTab(page,'Smart Playbook');await page.getByRole('button',{name:/Shotgun/}).click();await page.getByPlaceholder('Enter play name...').fill('Mesh');await page.getByRole('button',{name:'Save Play',exact:true}).first().click();await page.getByRole('button',{name:'Save Play',exact:true}).last().click();\n> 36 |  await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');await page.getByPlaceholder('Enter play name...').fill('Mesh edited');await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('unsaved');\n     |                                                                   ^\n  37 |  await page.getByRole('button',{name:'Save Play',exact:true}).first().click();await page.getByRole('button',{name:'Save Play',exact:true}).last().click();await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');\n  38 |  await page.reload();await openTab(page,'Smart Playbook');await page.getByRole('button',{name:'Load Play',exact:true}).click();await expect(page.getByText('Mesh edited',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByPlaceholder('Enter play name...')).toHaveValue('Mesh edited');await expect(page.getByRole('status',{name:'Play save status'})).toHaveText('saved');\n  39 | });\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:36:67"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:22:45.670Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P15-ordinary-play-f7b81-hard-reload-complete-reopen-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P15-ordinary-play-f7b81-hard-reload-complete-reopen-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P15-ordinary-play-f7b81-hard-reload-complete-reopen-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 67,
+                    "line": 36
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-6e5be210a446ab63eebe",
+          "file": "coaching.spec.ts",
+          "line": 34,
+          "column": 5
+        },
+        {
+          "title": "P16 manual editable plan saves and reopens exact ordered content in clean browser",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 42914,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m    - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m    - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:9:260",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 180,
+                      "line": 7
+                    },
+                    "snippet": "   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 180,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m    - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n\n   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:9:260"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:23:09.777Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P16-manual-editab-93d35-ed-content-in-clean-browser-firefox\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P16-manual-editab-93d35-ed-content-in-clean-browser-firefox\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P16-manual-editab-93d35-ed-content-in-clean-browser-firefox\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 180,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-5cba5b5e738aab5a0cf7",
+          "file": "coaching.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "P14 concurrent edits show recovery; copy keeps both server versions",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 63233,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m    - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m    - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:16:116",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 180,
+                      "line": 7
+                    },
+                    "snippet": "   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 180,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m    - unexpected value \"saving\"\u001b[22m\n\u001b[2m    21 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m       - unexpected value \"failed\"\u001b[22m\n\n\n   5 | async function setup(page:Page,label:string){const email=coachEmail(label),uid=await signInAsBetaCoach(page,email);await createTeamViaUI(page,'Owls');const [team]=await adminTeamsOwnedBy(uid);return {email,uid,teamId:team.id};}\n   6 | async function plan(page:Page){await openTab(page,'Practice Plans');await expect(page.getByRole('heading',{name:'Practice Planner'})).toBeVisible();}\n>  7 | async function saved(page:Page){await page.getByRole('button',{name:'Save practice plan',exact:true}).click();await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');}\n     |                                                                                                                                                                                    ^\n   8 | test('P16 manual editable plan saves and reopens exact ordered content in clean browser',async({page,browser})=>{\n   9 |  const s=await setup(page,'p16');await plan(page);await page.getByLabel('Plan.name',{exact:true}).fill('A'.repeat(200));await page.getByLabel('Plan.notes',{exact:true}).fill('N'.repeat(5000));await page.getByLabel('Plan.periods.2.focus').fill('Route timing');await saved(page);\n  10 |  const docId=await page.evaluate(([uid,team])=>{const prefix=`coachcore:v1:${uid}:${team}:drafts:practicePlans`;return localStorage.getItem(prefix);},[s.uid,s.teamId]);expect(docId).toBeNull();\n    at saved (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:7:180)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:16:116"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:24:00.925Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P14-concurrent-ed-b3dc0--keeps-both-server-versions-firefox\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P14-concurrent-ed-b3dc0--keeps-both-server-versions-firefox\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P14-concurrent-ed-b3dc0--keeps-both-server-versions-firefox\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 180,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-532d63da2d9bb86930ed",
+          "file": "coaching.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 100771,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    5 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m      - unexpected value \"failed\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    5 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m      - unexpected value \"failed\"\u001b[22m\n\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:27:103",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                      "column": 103,
+                      "line": 27
+                    },
+                    "snippet": "  25 |  // A transaction cannot acknowledge while offline. Draft is already captured before any network wait.\n  26 |  await expect.poll(()=>page.evaluate(([uid,team])=>JSON.parse(localStorage.getItem(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)||'null')?.fields.name,[a.uid,a.teamId])).toBe('Private A draft');\n> 27 |  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');\n     |                                                                                                       ^\n  28 |  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');\n  29 |  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();\n  30 |  const b=await signInAsBetaCoach(page,coachEmail('coachB'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                        "column": 103,
+                        "line": 27
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('status', { name: 'Practice save status' })\nExpected: \u001b[32m\"\u001b[7msav\u001b[27med\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfail\u001b[27med\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('status', { name: 'Practice save status' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Practice save status' })\u001b[22m\n\u001b[2m    5 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">saving</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-label=\"Practice save status\">failed</p>\u001b[22m\n\u001b[2m      - unexpected value \"failed\"\u001b[22m\n\n\n  25 |  // A transaction cannot acknowledge while offline. Draft is already captured before any network wait.\n  26 |  await expect.poll(()=>page.evaluate(([uid,team])=>JSON.parse(localStorage.getItem(`coachcore:v1:${uid}:${team}:drafts:practicePlans`)||'null')?.fields.name,[a.uid,a.teamId])).toBe('Private A draft');\n> 27 |  await context.setOffline(false);await expect(page.getByRole('status',{name:'Practice save status'})).toHaveText('saved');\n     |                                                                                                       ^\n  28 |  await page.getByLabel('Plan.notes',{exact:true}).fill('Unsynced note');await page.getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('dialog',{name:'Unsynced draft recovery'})).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('Unsynced note');\n  29 |  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('button',{name:'Sign out anyway',exact:true}).click();await expect(signInScreen(page)).toBeVisible();\n  30 |  const b=await signInAsBetaCoach(page,coachEmail('coachB'));await createTeamViaUI(page,'B Team');await plan(page);await expect(page.getByLabel('Plan.notes',{exact:true})).toHaveValue('');\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:27:103"
+                    },
+                    {
+                      "message": "\u001b[31mTearing down \"context\" exceeded the test timeout of 60000ms.\u001b[39m"
+                    },
+                    {
+                      "message": "Error: browserContext.close: Test ended.\nBrowser logs:\n\n<launching> C:\\Users\\drewl\\AppData\\Local\\ms-playwright\\firefox-1555\\firefox\\firefox.exe -no-remote -headless -profile C:\\Users\\drewl\\AppData\\Local\\Temp\\playwright_firefoxdev_profile-YXxj23 -juggler-pipe -silent\n<launched> pid=26524\n[pid=26524][err] *** You are running in headless mode.\n[pid=26524][err] JavaScript warning: resource://services-settings/Utils.sys.mjs, line 125: unreachable code after return statement\n[pid=26524][out] \n[pid=26524][out] Juggler listening to the pipe\n[pid=26524][err] [WARN  rkv::backend::impl_safe::environment] `load_ratio()` is irrelevant for this storage backend.\n[pid=26524][out] Crash Annotation GraphicsCriticalError: |[0][GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt (t=1.24246) [GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n[pid=26524][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]\n[pid=26524][err] [ERROR shell_windows::limited_access_features] Error generating feature token: NS_ERROR_FAILURE\n[pid=26524][out] console.warn: services.settings: #fetchAttachment: Forcing fallbackToDump to false due to Utils.LOAD_DUMPS being false\n[pid=26524][out] console.error: (new NotFoundError(\"Could not find fa0fc42c-d91d-fca7-34eb-806ff46062dc in cache or dump\", \"resource://services-settings/Attachments.sys.mjs\", 48))\n[pid=26524][out] console.warn: \"Unable to find the attachment for\" \"fa0fc42c-d91d-fca7-34eb-806ff46062dc\"\n[pid=26524][out] console.error: \"Error fetching the wallpaper attachments URL\" (new SyntaxError(\"JSON.parse: unexpected end of data at line 1 column 1 of the JSON data\", \"\"))\n[pid=26524][out] console.error: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIContentSniffer.getMIMETypeFromContent]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: resource:///modules/FaviconLoader.sys.mjs :: onStopRequest :: line 356\"  data: no]\n[pid=26524][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=26524][out] console.error: services.settings: \n[pid=26524][out]   Message: EmptyDatabaseError: \"main/nimbus-desktop-experiments\" has not been synced yet\n[pid=26524][out]   Stack:\n[pid=26524][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs:19:5\n[pid=26524][out] list@resource://services-settings/Database.sys.mjs:96:13\n[pid=26524][out] \n[pid=26524][out] console.error: [Exception... \"Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]\"  nsresult: \"0x80070057 (NS_ERROR_ILLEGAL_VALUE)\"  location: \"JS frame :: moz-src:///browser/components/downloads/DownloadsTaskbar.sys.mjs :: #windowsAttachIndicator :: line 181\"  data: no]\n[pid=26524][out] console.error: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIContentSniffer.getMIMETypeFromContent]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: resource:///modules/FaviconLoader.sys.mjs :: onStopRequest :: line 356\"  data: no]\n[pid=26524][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=26524][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=26524] <gracefully close start>\n[pid=26524] <kill>\n[pid=26524] <will force kill>"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:25:32.844Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-firefox\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-firefox\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts",
+                    "column": 103,
+                    "line": 27
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-72348e6da106baf0066d",
+          "file": "coaching.spec.ts",
+          "line": 23,
+          "column": 5
+        },
+        {
+          "title": "P15 ordinary play cloud save, property edit, hard reload, complete reopen",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 132409,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "message": "\u001b[31mTearing down \"context\" exceeded the test timeout of 60000ms.\u001b[39m"
+                    },
+                    {
+                      "message": "\u001b[31mFixture \"trace recording\" timeout of 60000ms exceeded during teardown.\u001b[39m"
+                    },
+                    {
+                      "message": "Error: browserContext.close: Test timeout of 60000ms exceeded.\nBrowser logs:\n\n<launching> C:\\Users\\drewl\\AppData\\Local\\ms-playwright\\firefox-1555\\firefox\\firefox.exe -no-remote -headless -profile C:\\Users\\drewl\\AppData\\Local\\Temp\\playwright_firefoxdev_profile-CXHrxq -juggler-pipe -silent\n<launched> pid=31084\n[pid=31084][err] *** You are running in headless mode.\n[pid=31084][err] JavaScript warning: resource://services-settings/Utils.sys.mjs, line 125: unreachable code after return statement\n[pid=31084][out] \n[pid=31084][out] Juggler listening to the pipe\n[pid=31084][err] [WARN  rkv::backend::impl_safe::environment] `load_ratio()` is irrelevant for this storage backend.\n[pid=31084][out] Crash Annotation GraphicsCriticalError: |[0][GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt (t=1.34209) [GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n[pid=31084][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]\n[pid=31084][err] [ERROR shell_windows::limited_access_features] Error generating feature token: NS_ERROR_FAILURE\n[pid=31084][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=31084][out] console.error: \"Error fetching the wallpaper attachments URL\" (new SyntaxError(\"JSON.parse: unexpected end of data at line 1 column 1 of the JSON data\", \"\"))\n[pid=31084][out] console.error: services.settings: \n[pid=31084][out]   Message: EmptyDatabaseError: \"main/nimbus-desktop-experiments\" has not been synced yet\n[pid=31084][out]   Stack:\n[pid=31084][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs:19:5\n[pid=31084][out] list@resource://services-settings/Database.sys.mjs:96:13\n[pid=31084][out] \n[pid=31084][out] console.warn: services.settings: #fetchAttachment: Forcing fallbackToDump to false due to Utils.LOAD_DUMPS being false\n[pid=31084][out] console.error: (new NotFoundError(\"Could not find fa0fc42c-d91d-fca7-34eb-806ff46062dc in cache or dump\", \"resource://services-settings/Attachments.sys.mjs\", 48))\n[pid=31084][out] console.warn: \"Unable to find the attachment for\" \"fa0fc42c-d91d-fca7-34eb-806ff46062dc\"\n[pid=31084][out] console.error: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIContentSniffer.getMIMETypeFromContent]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: resource:///modules/FaviconLoader.sys.mjs :: onStopRequest :: line 356\"  data: no]\n[pid=31084][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=31084][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=31084][out] console.error: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIContentSniffer.getMIMETypeFromContent]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: resource:///modules/FaviconLoader.sys.mjs :: onStopRequest :: line 356\"  data: no]\n[pid=31084][out] console.error: [Exception... \"Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]\"  nsresult: \"0x80070057 (NS_ERROR_ILLEGAL_VALUE)\"  location: \"JS frame :: moz-src:///browser/components/downloads/DownloadsTaskbar.sys.mjs :: #windowsAttachIndicator :: line 181\"  data: no]\n[pid=31084] <gracefully close start>\n[pid=31084] <kill>\n[pid=31084] <will force kill>\n[pid=31084] <process did exit: exitCode=1, signal=null>\n[pid=31084] starting temporary directories cleanup"
+                    },
+                    {
+                      "location": {
+                        "file": "[pid=31084][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs",
+                        "column": 5,
+                        "line": 19
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nBrowser logs:\n\n<launching> C:\\Users\\drewl\\AppData\\Local\\ms-playwright\\firefox-1555\\firefox\\firefox.exe -no-remote -headless -profile C:\\Users\\drewl\\AppData\\Local\\Temp\\playwright_firefoxdev_profile-CXHrxq -juggler-pipe -silent\n<launched> pid=31084\n[pid=31084][err] *** You are running in headless mode.\n[pid=31084][err] JavaScript warning: resource://services-settings/Utils.sys.mjs, line 125: unreachable code after return statement\n[pid=31084][out] \n[pid=31084][out] Juggler listening to the pipe\n[pid=31084][err] [WARN  rkv::backend::impl_safe::environment] `load_ratio()` is irrelevant for this storage backend.\n[pid=31084][out] Crash Annotation GraphicsCriticalError: |[0][GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt (t=1.34209) [GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt\n[pid=31084][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]\n[pid=31084][err] [ERROR shell_windows::limited_access_features] Error generating feature token: NS_ERROR_FAILURE\n[pid=31084][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=31084][out] console.error: \"Error fetching the wallpaper attachments URL\" (new SyntaxError(\"JSON.parse: unexpected end of data at line 1 column 1 of the JSON data\", \"\"))\n[pid=31084][out] console.error: services.settings: \n[pid=31084][out]   Message: EmptyDatabaseError: \"main/nimbus-desktop-experiments\" has not been synced yet\n[pid=31084][out]   Stack:\n[pid=31084][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs:19:5\n[pid=31084][out] list@resource://services-settings/Database.sys.mjs:96:13\n[pid=31084][out] \n[pid=31084][out] console.warn: services.settings: #fetchAttachment: Forcing fallbackToDump to false due to Utils.LOAD_DUMPS being false\n[pid=31084][out] console.error: (new NotFoundError(\"Could not find fa0fc42c-d91d-fca7-34eb-806ff46062dc in cache or dump\", \"resource://services-settings/Attachments.sys.mjs\", 48))\n[pid=31084][out] console.warn: \"Unable to find the attachment for\" \"fa0fc42c-d91d-fca7-34eb-806ff46062dc\"\n[pid=31084][out] console.error: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIContentSniffer.getMIMETypeFromContent]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: resource:///modules/FaviconLoader.sys.mjs :: onStopRequest :: line 356\"  data: no]\n[pid=31084][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=31084][err] [ERROR shell_windows::taskbar::shortcut] Error matching shortcut: Error { code: HRESULT(0x80004005), message: \"Unspecified error\" }\n[pid=31084][out] console.error: [Exception... \"Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIContentSniffer.getMIMETypeFromContent]\"  nsresult: \"0x80040111 (NS_ERROR_NOT_AVAILABLE)\"  location: \"JS frame :: resource:///modules/FaviconLoader.sys.mjs :: onStopRequest :: line 356\"  data: no]\n[pid=31084][out] console.error: [Exception... \"Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]\"  nsresult: \"0x80070057 (NS_ERROR_ILLEGAL_VALUE)\"  location: \"JS frame :: moz-src:///browser/components/downloads/DownloadsTaskbar.sys.mjs :: #windowsAttachIndicator :: line 181\"  data: no]\n[pid=31084] <gracefully close start>\n[pid=31084] <kill>\n[pid=31084] <will force kill>\n[pid=31084] <process did exit: exitCode=1, signal=null>\n[pid=31084] starting temporary directories cleanup\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Create Team', exact: true }).first()\u001b[22m\n\n    at [pid=31084][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs:19:5\n    at [pid=31084][out] list@resource://services-settings/Database.sys.mjs:96:13\n    at createTeamViaUI (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:72:80)\n    at setup (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:5:116)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:35:10"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:28:22.211Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P15-ordinary-play-f7b81-hard-reload-complete-reopen-firefox\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P15-ordinary-play-f7b81-hard-reload-complete-reopen-firefox\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-6e333fd6989d073ebebd",
+          "file": "coaching.spec.ts",
+          "line": 34,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-14T11:19:41.748Z",
+    "duration": 965057.235,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

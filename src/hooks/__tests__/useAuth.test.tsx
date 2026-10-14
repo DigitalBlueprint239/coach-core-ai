@@ -29,7 +29,7 @@ jest.mock('firebase/auth', () => ({
 jest.mock('../../services/firebase', () => ({ auth: { currentUser: null }, db: {}, analytics: undefined }));
 
 // eslint-disable-next-line import/first
-import { AuthProvider, useAuth, evaluateUser } from '../useAuth';
+import { AuthProvider, useAuth, evaluateUser, registerSignOutGuard } from '../useAuth';
 // eslint-disable-next-line import/first
 import AuthGate from '../../components/auth/AuthGate';
 
@@ -128,7 +128,7 @@ describe('AuthGate', () => {
     expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
   });
 
-  it('revoked session: SDK sign-out after a live session clears user data and explains why', async () => {
+  it('revoked session: SDK sign-out after a live session clears session data, preserves the quarantined legacy queue, and explains why', async () => {
     window.localStorage.setItem('currentTeamId', 'team-1');
     window.localStorage.setItem('offline_operations', '[{"type":"update"}]');
     window.localStorage.setItem('unrelated', 'keep');
@@ -139,7 +139,8 @@ describe('AuthGate', () => {
     expect(await screen.findByText(/Your session ended/)).toBeInTheDocument();
     expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
     expect(window.localStorage.getItem('currentTeamId')).toBeNull();
-    expect(window.localStorage.getItem('offline_operations')).toBeNull();
+    // Quarantined legacy queue is preserved byte-for-byte (never replayed).
+    expect(window.localStorage.getItem('offline_operations')).toBe('[{"type":"update"}]');
     expect(window.localStorage.getItem('unrelated')).toBe('keep');
   });
 
@@ -181,6 +182,48 @@ describe('logout', () => {
     await screen.findByText('out:signed_out');
     expect(mockSignOut).toHaveBeenCalled();
     expect(window.localStorage.getItem('currentTeamId')).toBeNull();
+  });
+});
+
+describe('sign-out guards (persistence contract §4)', () => {
+  function GuardProbe() {
+    const { logout, status } = useAuth();
+    return <button onClick={() => { void logout(); }}>guard:{status}</button>;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const firebaseMock = require('../../services/firebase');
+
+  it('a guard that cancels keeps the coach signed in and their data untouched', async () => {
+    firebaseMock.auth.currentUser = { uid: 'coach-1' };
+    window.localStorage.setItem('currentTeamId', 'team-1');
+    const seen: string[] = [];
+    const off = registerSignOutGuard((uid) => { seen.push(uid); return false; });
+    render(<AuthProvider><GuardProbe /></AuthProvider>);
+    await emit(fakeUser(BETA));
+    fireEvent.click(await screen.findByText('guard:ready'));
+    await waitFor(() => expect(seen).toEqual(['coach-1']));
+    expect(mockSignOut).not.toHaveBeenCalled();
+    expect(screen.getByText('guard:ready')).toBeInTheDocument();
+    expect(window.localStorage.getItem('currentTeamId')).toBe('team-1');
+    off();
+    firebaseMock.auth.currentUser = null;
+  });
+
+  it('a guard that throws also cancels (fail safe), and an agreeing guard lets sign-out proceed', async () => {
+    firebaseMock.auth.currentUser = { uid: 'coach-1' };
+    const offThrow = registerSignOutGuard(() => { throw new Error('boom'); });
+    render(<AuthProvider><GuardProbe /></AuthProvider>);
+    await emit(fakeUser(BETA));
+    fireEvent.click(await screen.findByText('guard:ready'));
+    await waitFor(() => expect(screen.getByText('guard:ready')).toBeInTheDocument());
+    expect(mockSignOut).not.toHaveBeenCalled();
+    offThrow();
+    const offOk = registerSignOutGuard(async () => true);
+    fireEvent.click(screen.getByText('guard:ready'));
+    await screen.findByText('guard:signed_out');
+    expect(mockSignOut).toHaveBeenCalled();
+    offOk();
+    firebaseMock.auth.currentUser = null;
   });
 });
 

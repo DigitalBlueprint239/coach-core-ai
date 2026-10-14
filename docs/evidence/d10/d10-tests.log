@@ -1,0 +1,175 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --testPathPattern=import-legacy
+
+  console.error
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      57 | });
+      58 | test('consent UI explicitly accepts selected team and removes prompt only after verification', async () => {
+    > 59 |   render(<LegacyImport uid="coachA" teamId="teamA" teamName="Owls" backend={backend}/>);
+         |         ^
+      60 |   expect(screen.getByText(/into Owls/)).toBeInTheDocument();
+      61 |   expect(backend.copy).not.toHaveBeenCalled(); fireEvent.click(screen.getByText('Import plays'));
+      62 |   await waitFor(()=>expect(screen.queryByText('Import plays')).not.toBeInTheDocument()); expect(stored.size).toBe(1);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-platform/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-platform/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-platform/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-platform/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:59:9)
+      at TestScheduler.scheduleTests (../main-platform/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-platform/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-platform/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-platform/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  console.error
+    An update to LegacyImport inside a test was not wrapped in act(...).
+    
+    When testing, code that causes React state updates should be wrapped into act(...):
+    
+    act(() => {
+      /* fire events that update state */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      23 |       await importLegacy(localStorage, { uid, teamId }, () => current.current === session, backend);
+      24 |       if (current.current === session) setCount(0);
+    > 25 |     } catch { if (current.current === session) setError('Import not completed. Original plays preserved. Retry or review your team access.'); }
+         |                                                ^
+      26 |     finally { if (current.current === session) setBusy(false); }
+      27 |   };
+      28 |   return <section aria-label="Import device plays" className="p-4 border rounded bg-white">
+
+      at ../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at accept (src/features/legacy-import/LegacyImport.tsx:25:48)
+
+  console.error
+    An update to LegacyImport inside a test was not wrapped in act(...).
+    
+    When testing, code that causes React state updates should be wrapped into act(...):
+    
+    act(() => {
+      /* fire events that update state */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      24 |       if (current.current === session) setCount(0);
+      25 |     } catch { if (current.current === session) setError('Import not completed. Original plays preserved. Retry or review your team access.'); }
+    > 26 |     finally { if (current.current === session) setBusy(false); }
+         |                                                ^
+      27 |   };
+      28 |   return <section aria-label="Import device plays" className="p-4 border rounded bg-white">
+      29 |     {count > 0 && <><p>Import {count} plays saved on this device into {teamName} for this account?</p>
+
+      at ../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setBusy (../main-platform/node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at accept (src/features/legacy-import/LegacyImport.tsx:26:48)
+
+FAIL src/features/legacy-import/__tests__/import-legacy.test.tsx (37.289 s)
+  × accept verifies complete geometry/properties before recording consent (4 ms)
+  √ decline creates no cloud writes and suppresses repeated prompt for that account (5 ms)
+  × repeated completed import creates no duplicate copies (2 ms)
+  × account switching requires new consent; prior decision never imports into second account (3 ms)
+  √ switch during pending write discards stale completion and records neither account consent (4 ms)
+  × failed read-back never marks success; idempotent retry verifies existing copy (7 ms)
+  √ mismatched read-back retains original and does not acknowledge (2 ms)
+  √ all input validated before first write (2 ms)
+  × consent UI explicitly accepts selected team and removes prompt only after verification (155 ms)
+  √ decline UI leaves originals intact and coach B receives an independent prompt (21 ms)
+
+  ● accept verifies complete geometry/properties before recording consent
+
+    Saved copy does not match. Originals preserved; retry or review.
+
+      59 |     const saved = await backend.read(session, id);
+      60 |     if (!stillCurrent()) throw new Error('Account or team changed.');
+    > 61 |     if (!sameContent(play, saved)) throw new Error('Saved copy does not match. Originals preserved; retry or review.');
+         |                                          ^
+      62 |     verified.push(id);
+      63 |   }
+      64 |   if (!stillCurrent()) throw new Error('Account or team changed.');
+
+      at importLegacy (src/features/legacy-import/import-legacy.ts:61:42)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:17:10)
+
+  ● repeated completed import creates no duplicate copies
+
+    Saved copy does not match. Originals preserved; retry or review.
+
+      59 |     const saved = await backend.read(session, id);
+      60 |     if (!stillCurrent()) throw new Error('Account or team changed.');
+    > 61 |     if (!sameContent(play, saved)) throw new Error('Saved copy does not match. Originals preserved; retry or review.');
+         |                                          ^
+      62 |     verified.push(id);
+      63 |   }
+      64 |   if (!stillCurrent()) throw new Error('Account or team changed.');
+
+      at importLegacy (src/features/legacy-import/import-legacy.ts:61:42)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:27:3)
+
+  ● account switching requires new consent; prior decision never imports into second account
+
+    Saved copy does not match. Originals preserved; retry or review.
+
+      59 |     const saved = await backend.read(session, id);
+      60 |     if (!stillCurrent()) throw new Error('Account or team changed.');
+    > 61 |     if (!sameContent(play, saved)) throw new Error('Saved copy does not match. Originals preserved; retry or review.');
+         |                                          ^
+      62 |     verified.push(id);
+      63 |   }
+      64 |   if (!stillCurrent()) throw new Error('Account or team changed.');
+
+      at importLegacy (src/features/legacy-import/import-legacy.ts:61:42)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:32:3)
+
+  ● failed read-back never marks success; idempotent retry verifies existing copy
+
+    Saved copy does not match. Originals preserved; retry or review.
+
+      59 |     const saved = await backend.read(session, id);
+      60 |     if (!stillCurrent()) throw new Error('Account or team changed.');
+    > 61 |     if (!sameContent(play, saved)) throw new Error('Saved copy does not match. Originals preserved; retry or review.');
+         |                                          ^
+      62 |     verified.push(id);
+      63 |   }
+      64 |   if (!stillCurrent()) throw new Error('Account or team changed.');
+
+      at importLegacy (src/features/legacy-import/import-legacy.ts:61:42)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:47:3)
+
+  ● consent UI explicitly accepts selected team and removes prompt only after verification
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+      60 |   expect(screen.getByText(/into Owls/)).toBeInTheDocument();
+      61 |   expect(backend.copy).not.toHaveBeenCalled(); fireEvent.click(screen.getByText('Import plays'));
+    > 62 |   await waitFor(()=>expect(screen.queryByText('Import plays')).not.toBeInTheDocument()); expect(stored.size).toBe(1);
+         |                                                                                                              ^
+      63 | });
+      64 | test('decline UI leaves originals intact and coach B receives an independent prompt', () => {
+      65 |   const view=render(<LegacyImport uid="coachA" teamId="teamA" teamName="Owls" backend={backend}/>);
+
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:62:110)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 5 passed, 10 total
+Snapshots:   0 total
+Time:        71.206 s
+Ran all test suites matching /import-legacy/i.

@@ -1,0 +1,112 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node e2e/node_modules/@playwright/test/cli.js test --config tests/coaching-ui/playwright.config.ts
+[WebServer] (node:28320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 18 tests using 1 worker
+
+(node:1896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p16-mv85c1nb-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p16-mv85c1nb-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  1 [chromium] › tests\coaching-ui\coaching.spec.ts:8:5 › P16 manual editable plan saves and reopens exact ordered content in clean browser (9.7s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as no-team-mv85c6g3-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  2 [chromium] › tests\coaching-ui\coaching.spec.ts:15:5 › R5 no-team coach sees a truthful block with no save action (1.1s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as claim-a-mv85c797-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as claim-b-mv85c92f-4@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  3 [chromium] › tests\coaching-ui\coaching.spec.ts:20:5 › R1 verified legacy import keeps originals and blocks another account (3.8s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p14-mv85ca85-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  4 [chromium] › tests\coaching-ui\coaching.spec.ts:31:5 › P14 shared-profile tabs preserve drafts across refresh and recover conflict as a copy (5.3s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p10-mv85ceab-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as coach-b-mv85cfxv-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  5 [chromium] › tests\coaching-ui\coaching.spec.ts:40:5 › P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation (3.6s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p15-mv85ch3x-8@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  6 [chromium] › tests\coaching-ui\coaching.spec.ts:51:5 › P15 ordinary play cloud save, property edit, hard reload, complete reopen (3.1s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p12sync-mv85cji1-9@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  7 [chromium] › tests\coaching-ui\coaching.spec.ts:57:5 › P12 sync-now acknowledges the unsaved plan before signing out (2.0s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as geometry-mv85cl3g-10@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  8 [chromium] › tests\coaching-ui\coaching.spec.ts:62:5 › P15 existing complete route payload survives property save and reopening (3.0s)
+Browser: chromium 156.0.8078.4
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as negative-a-mv85cng2-11@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as negative-b-mv85cop7-12@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  9 [chromium] › tests\coaching-ui\coaching.spec.ts:72:5 › [SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules (2.5s)
+(node:21792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p16-mv85csrw-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p16-mv85csrw-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 10 [firefox] › tests\coaching-ui\coaching.spec.ts:8:5 › P16 manual editable plan saves and reopens exact ordered content in clean browser (10.8s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as no-team-mv85d0ir-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 11 [firefox] › tests\coaching-ui\coaching.spec.ts:15:5 › R5 no-team coach sees a truthful block with no save action (2.0s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as claim-a-mv85d1xe-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as claim-b-mv85d4i5-4@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 12 [firefox] › tests\coaching-ui\coaching.spec.ts:20:5 › R1 verified legacy import keeps originals and blocks another account (5.9s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p14-mv85d6l6-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 13 [firefox] › tests\coaching-ui\coaching.spec.ts:31:5 › P14 shared-profile tabs preserve drafts across refresh and recover conflict as a copy (8.6s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p10-mv85dd7y-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as coach-b-mv85dgj0-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 14 [firefox] › tests\coaching-ui\coaching.spec.ts:40:5 › P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation (6.7s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p15-mv85dija-8@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 15 [firefox] › tests\coaching-ui\coaching.spec.ts:51:5 › P15 ordinary play cloud save, property edit, hard reload, complete reopen (5.8s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as p12sync-mv85dmx8-9@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 16 [firefox] › tests\coaching-ui\coaching.spec.ts:57:5 › P12 sync-now acknowledges the unsaved plan before signing out (3.7s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as geometry-mv85dpw3-10@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 17 [firefox] › tests\coaching-ui\coaching.spec.ts:62:5 › P15 existing complete route payload survives property save and reopening (4.4s)
+Browser: firefox 157.0
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as negative-a-mv85dt9y-11@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as negative-b-mv85dvi4-12@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 18 [firefox] › tests\coaching-ui\coaching.spec.ts:72:5 › [SDK-in-browser] P10 unauthorized cross-team read and write are denied by actual rules (5.8s)
+
+  18 passed (1.6m)
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
