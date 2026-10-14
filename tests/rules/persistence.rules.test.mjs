@@ -131,6 +131,26 @@ describe('Plan bounds equal the gateway output bounds (no truncation on save)', 
   });
 });
 
+describe('Create-only checks: reading a document that does not exist yet (D10 import)', () => {
+  // A transaction that checks "does my deterministic copy already exist?" reads
+  // a missing document. That read must be allowed for a beta user, or every
+  // create-only import fails before it writes anything.
+  it('a beta coach may read a play or plan id that does not exist (result: not found)', async () => {
+    const db = alice();
+    const snap = await assertSucceeds(getDoc(doc(db, 'plays', 'legacy_v1_nn_does-not-exist')));
+    if (snap.exists()) throw new Error('expected missing document');
+    await assertSucceeds(getDoc(doc(db, 'practicePlans', 'missing-plan')));
+  });
+  it('non-beta and signed-out users still cannot read even a missing id', async () => {
+    await assertFails(getDoc(doc(env.authenticatedContext('nobeta', tokens.noBeta).firestore(), 'plays', 'missing')));
+    await assertFails(getDoc(doc(env.unauthenticatedContext().firestore(), 'plays', 'missing')));
+  });
+  it('an existing play of another team stays unreadable (no change to tenancy)', async () => {
+    await assertFails(getDoc(doc(bob(), 'plays', 'p-rev')));
+    await assertFails(getDoc(doc(bob(), 'practicePlans', 'plan-rev')));
+  });
+});
+
 describe('Cross-team denial still holds with the new fields', () => {
   it('coach B cannot read, edit (even with the right next revision) or create into team A', async () => {
     const db = bob();
