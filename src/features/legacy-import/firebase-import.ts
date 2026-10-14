@@ -1,4 +1,6 @@
-import { collection, query, where, getDocsFromServer, doc, getDocFromServer, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, getDocsFromServer, doc, getDocFromServer } from 'firebase/firestore';
+import { createOnly, AlreadyCreated } from '../persistence/createOnly';
+import type { Fields } from '../persistence/model';
 import { auth, db } from '../../firebase';
 import { ImportBackend, ImportSession, LegacyPlay, sameContent } from './import-legacy';
 const check = (session: ImportSession) => {
@@ -25,19 +27,17 @@ export const firebaseImport: ImportBackend = {
     const bytes = new TextEncoder().encode(JSON.stringify([session.uid, session.teamId, play]));
     const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))).map(n => n.toString(16).padStart(2, '0')).join('');
     const id = `legacy_v1_${play.createdAt ? 'c' : 'n'}${play.updatedAt ? 'u' : 'n'}_${hash}`;
-    await runTransaction(db, async tx => {
+    try {
+      await createOnly(session,'plays',id,payload(play) as unknown as Fields,{createdAt:play.createdAt,updatedAt:play.updatedAt});
+    } catch (e) {
+      if (!(e instanceof AlreadyCreated)) throw e;
+      const existing = await getDocFromServer(doc(db,'plays',id));
       check(session);
-      const ref = doc(db, 'plays', id);
-      const existing = await tx.get(ref);
       if (existing.exists()) {
         const d = existing.data();
         if (d.teamId !== session.teamId || d.createdBy !== session.uid || !sameContent(play, decode(d, id))) throw new Error('Imported copy changed elsewhere. Preserve and review; no overwrite.');
-      } else {
-        check(session);
-        tx.set(ref, { ...payload(play), teamId: session.teamId, createdBy: session.uid, revision: 1,
-          createdAt: play.createdAt ? new Date(play.createdAt) : serverTimestamp(), updatedAt: play.updatedAt ? new Date(play.updatedAt) : serverTimestamp() });
-      }
-    });
+      } else throw new Error('Copy acknowledgement unavailable. Originals retained.');
+    }
     return id;
   },
   async read(session, id) {

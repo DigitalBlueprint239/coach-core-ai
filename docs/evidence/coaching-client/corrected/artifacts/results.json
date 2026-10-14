@@ -1,0 +1,571 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\drewl\\AppData\\Local\\hermes\\node\\node.exe",
+      "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/coaching-ui/playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\playwright.config.ts",
+    "rootDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-persistence/tests/coaching-ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-persistence/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-coaching-persistence/tests/coaching-ui",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node scripts/serve.mjs .app-build 3000",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "cwd": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e"
+    }
+  },
+  "suites": [
+    {
+      "title": "coaching.spec.ts",
+      "file": "coaching.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "P16 manual editable plan saves and reopens exact ordered content in clean browser",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 25009,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:50:02.766Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-88806c93cd994e6487b1",
+          "file": "coaching.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "P14 concurrent edits show recovery; copy keeps both server versions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14684,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:50:28.759Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-45bb5738d6a4d44361ed",
+          "file": "coaching.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7791,
+                  "error": {
+                    "message": "Error: no sign-in link recorded for coachB-mv81tjgh-4@e2e.coachcore.test",
+                    "stack": "Error: no sign-in link recorded for coachB-mv81tjgh-4@e2e.coachcore.test\n    at latestSignInLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts:30:28)\n    at signInWithEmailLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:38:16)\n    at signInAsBetaCoach (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:44:3)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:30:10",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts",
+                      "column": 28,
+                      "line": 30
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\..\\e2e\\tests\\support\\emulator.ts:30\n\n  28 |   const { oobCodes = [] } = await call(`${AUTH}/emulator/v1/projects/${PROJECT}/oobCodes`);\n  29 |   const codes = oobCodes.filter((c: any) => c.email === email && c.requestType === 'EMAIL_SIGNIN');\n> 30 |   if (!codes.length) throw new Error(`no sign-in link recorded for ${email}`);\n     |                            ^\n  31 |   // The emulator link points at its own action page; the real link lands on\n  32 |   // the continue URL with the same parameters, which is what the app parses.\n  33 |   const link = new URL(codes[codes.length - 1].oobLink);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts",
+                        "column": 28,
+                        "line": 30
+                      },
+                      "message": "Error: no sign-in link recorded for coachB-mv81tjgh-4@e2e.coachcore.test\n\n   at ..\\..\\e2e\\tests\\support\\emulator.ts:30\n\n  28 |   const { oobCodes = [] } = await call(`${AUTH}/emulator/v1/projects/${PROJECT}/oobCodes`);\n  29 |   const codes = oobCodes.filter((c: any) => c.email === email && c.requestType === 'EMAIL_SIGNIN');\n> 30 |   if (!codes.length) throw new Error(`no sign-in link recorded for ${email}`);\n     |                            ^\n  31 |   // The emulator link points at its own action page; the real link lands on\n  32 |   // the continue URL with the same parameters, which is what the app parses.\n  33 |   const link = new URL(codes[codes.length - 1].oobLink);\n    at latestSignInLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts:30:28)\n    at signInWithEmailLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:38:16)\n    at signInAsBetaCoach (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:44:3)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:30:10"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:50:43.505Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts",
+                    "column": 28,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-696273f080c892fe7f32",
+          "file": "coaching.spec.ts",
+          "line": 23,
+          "column": 5
+        },
+        {
+          "title": "P15 ordinary play cloud save, property edit, hard reload, complete reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7042,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: chromium 156.0.8078.4\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:50:55.794Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-6e5be210a446ab63eebe",
+          "file": "coaching.spec.ts",
+          "line": 34,
+          "column": 5
+        },
+        {
+          "title": "P16 manual editable plan saves and reopens exact ordered content in clean browser",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 29165,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:51:04.608Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-5cba5b5e738aab5a0cf7",
+          "file": "coaching.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "P14 concurrent edits show recovery; copy keeps both server versions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21288,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:51:36.233Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-532d63da2d9bb86930ed",
+          "file": "coaching.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "P10 P11 P12 P17 offline draft, refresh, sign-out cancellation and second-account isolation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14496,
+                  "error": {
+                    "message": "Error: no sign-in link recorded for coachB-mv81v8gw-4@e2e.coachcore.test",
+                    "stack": "Error: no sign-in link recorded for coachB-mv81v8gw-4@e2e.coachcore.test\n    at latestSignInLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts:30:28)\n    at signInWithEmailLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:38:16)\n    at signInAsBetaCoach (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:44:3)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:30:10",
+                    "location": {
+                      "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts",
+                      "column": 28,
+                      "line": 30
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\..\\e2e\\tests\\support\\emulator.ts:30\n\n  28 |   const { oobCodes = [] } = await call(`${AUTH}/emulator/v1/projects/${PROJECT}/oobCodes`);\n  29 |   const codes = oobCodes.filter((c: any) => c.email === email && c.requestType === 'EMAIL_SIGNIN');\n> 30 |   if (!codes.length) throw new Error(`no sign-in link recorded for ${email}`);\n     |                            ^\n  31 |   // The emulator link points at its own action page; the real link lands on\n  32 |   // the continue URL with the same parameters, which is what the app parses.\n  33 |   const link = new URL(codes[codes.length - 1].oobLink);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts",
+                        "column": 28,
+                        "line": 30
+                      },
+                      "message": "Error: no sign-in link recorded for coachB-mv81v8gw-4@e2e.coachcore.test\n\n   at ..\\..\\e2e\\tests\\support\\emulator.ts:30\n\n  28 |   const { oobCodes = [] } = await call(`${AUTH}/emulator/v1/projects/${PROJECT}/oobCodes`);\n  29 |   const codes = oobCodes.filter((c: any) => c.email === email && c.requestType === 'EMAIL_SIGNIN');\n> 30 |   if (!codes.length) throw new Error(`no sign-in link recorded for ${email}`);\n     |                            ^\n  31 |   // The emulator link points at its own action page; the real link lands on\n  32 |   // the continue URL with the same parameters, which is what the app parses.\n  33 |   const link = new URL(codes[codes.length - 1].oobLink);\n    at latestSignInLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts:30:28)\n    at signInWithEmailLink (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:38:16)\n    at signInAsBetaCoach (C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\app.ts:44:3)\n    at C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\tests\\coaching-ui\\coaching.spec.ts:30:10"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:51:57.622Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-firefox\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-firefox\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\coaching-browser-results\\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-firefox\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-coaching-persistence\\e2e\\tests\\support\\emulator.ts",
+                    "column": 28,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-72348e6da106baf0066d",
+          "file": "coaching.spec.ts",
+          "line": 23,
+          "column": 5
+        },
+        {
+          "title": "P15 ordinary play cloud save, property edit, hard reload, complete reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23125,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Browser: firefox 157.0\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T11:52:19.741Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-6e333fd6989d073ebebd",
+          "file": "coaching.spec.ts",
+          "line": 34,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-14T11:50:00.099Z",
+    "duration": 166870.28900000002,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

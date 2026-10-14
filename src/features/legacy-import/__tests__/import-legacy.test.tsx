@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { importLegacy, declineImport, decisionKey, LEGACY_KEY, readLegacy } from '../import-legacy';
+import { importLegacy, declineImport, decisionKey, LEGACY_KEY, readLegacy, importNotice, pendingKey, CLAIM_KEY } from '../import-legacy';
 import LegacyImport from '../LegacyImport';
 jest.mock('../firebase-import', () => ({ firebaseImport: {} }));
 const play = { id:'local1', createdAt:'2026-10-01T00:00:00.000Z', updatedAt:'2026-10-02T00:00:00.000Z', name:'Mesh', phase:'special', type:'pass',
@@ -28,17 +28,34 @@ test('repeated completed import creates no duplicate copies', async () => {
   await importLegacy(localStorage,session,()=>true,backend);
   expect(backend.copy).toHaveBeenCalledTimes(1); expect(stored.size).toBe(1);
 });
-test('account switching requires new consent; prior decision never imports into second account', async () => {
+test('verified device claim blocks a second account without copying originals', async () => {
   await importLegacy(localStorage,session,()=>true,backend);
   expect(localStorage.getItem(decisionKey('coachB'))).toBeNull();
-  await importLegacy(localStorage,{uid:'coachB',teamId:'teamB'},()=>true,backend);
-  expect(stored.size).toBe(2); expect(stored.get('coachB:teamB:local1')).toEqual(play);
+  await expect(importLegacy(localStorage,{uid:'coachB',teamId:'teamB'},()=>true,backend)).rejects.toThrow('already imported by another account');
+  render(<LegacyImport uid="coachB" teamId="teamB" teamName="Bears" backend={backend}/>);
+  expect(screen.getByText(/already imported by another account/)).toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Import plays'})).not.toBeInTheDocument();
+  expect(stored.size).toBe(1);
 });
 test('switch during pending write discards stale completion and records neither account consent', async () => {
   let current=true;
   backend.copy.mockImplementationOnce(async () => { current=false; return 'pending'; });
   await expect(importLegacy(localStorage,session,()=>current,backend)).rejects.toThrow('Account or team changed');
   expect(localStorage.getItem(decisionKey('coachA'))).toBeNull(); expect(backend.read).not.toHaveBeenCalled();
+  expect(localStorage.getItem(pendingKey('coachA'))).not.toBeNull();
+  expect(localStorage.getItem(CLAIM_KEY)).toBeNull();
+});
+test('unfinished import names its original team and blocks another team before writes', async () => {
+  backend.read.mockRejectedValueOnce(new Error('network'));
+  await expect(importLegacy(localStorage,{...session,teamName:'Alpha Eagles'},()=>true,backend)).rejects.toThrow('network');
+  expect(importNotice(localStorage,{uid:'coachA',teamId:'teamB'})).toContain('Alpha Eagles');
+  render(<LegacyImport uid="coachA" teamId="teamB" teamName="Bravo" backend={backend}/>);
+  expect(screen.getByText(/Alpha Eagles/)).toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Import plays'})).not.toBeInTheDocument();
+  await expect(importLegacy(localStorage,{uid:'coachA',teamId:'teamB'},()=>true,backend)).rejects.toThrow('Alpha Eagles');
+  expect(backend.copy).toHaveBeenCalledTimes(1);
+  await importLegacy(localStorage,session,()=>true,backend);
+  expect(localStorage.getItem(pendingKey('coachA'))).toBeNull();
 });
 test('failed read-back never marks success; idempotent retry verifies existing copy', async () => {
   backend.read.mockRejectedValueOnce(new Error('network'));
