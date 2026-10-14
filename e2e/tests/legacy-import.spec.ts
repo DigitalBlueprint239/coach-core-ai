@@ -189,7 +189,7 @@ test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing 
   net.holdFrom(2);
   await openPlaybook(page);
   await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await net.waitFor(2); // copy #2 is on the wire
+  await test.step('wait for copy #2 on the wire', () => net.waitFor(2)); // copy #2 is on the wire
   await openTab(page, 'Teams');
   await page.getByRole('button', { name: 'Switch to' }).click();
   const bravo = (await storage(page)).currentTeamId;
@@ -200,7 +200,7 @@ test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing 
   await expect.poll(async () => (await adminCopies(uid)).length).toBe(2);
   // Negative claim (the stale loop must not continue to copy #3 or record a
   // decision) needs an observation window; 5 s is documented, not a retry.
-  await new Promise((r) => setTimeout(r, 5_000));
+  await test.step('5 s observation window', () => new Promise((r) => setTimeout(r, 5_000)));
   expect(net.count(), 'no further commit after the stale completion').toBe(2);
   expect((await adminCopies(uid)).every((c) => c.data.teamId === alpha)).toBe(true);
   expect((await deviceState(page)).decisions[decisionKey(uid)], 'no decision after an interrupted import').toBeUndefined();

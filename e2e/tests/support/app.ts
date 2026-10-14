@@ -1,4 +1,4 @@
-import { expect, type Page, type BrowserContext } from '@playwright/test';
+import { test, expect, type Page, type BrowserContext } from '@playwright/test';
 import { latestSignInLink, grantBeta, adminTeamsOwnedBy } from './emulator';
 
 export const LEGACY_PLAYS_KEY = 'smartPlaybook_plays';
@@ -26,11 +26,16 @@ export const dashboardFor = (page: Page, email: string) => page.getByText(`Welco
  * EMULATOR AUTH: the emulator records the link instead of emailing it.
  */
 export async function requestEmailLink(page: Page, email: string): Promise<URL> {
-  await page.goto('/');
-  await expect(signInScreen(page)).toBeVisible();
-  await page.getByLabel('Or get a sign-in link by email').fill(email);
-  await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
-  await expect(page.getByText(`Check ${email} for a sign-in link`)).toBeVisible();
+  // Named phases so a stall (FX-02: 48 s before this button resolved) is attributed in CI diagnostics.
+  await test.step('sign-in: open app and wait for sign-in screen', async () => {
+    await page.goto('/');
+    await expect(signInScreen(page)).toBeVisible();
+  });
+  await test.step('sign-in: request email link', async () => {
+    await page.getByLabel('Or get a sign-in link by email').fill(email);
+    await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
+    await expect(page.getByText(`Check ${email} for a sign-in link`)).toBeVisible();
+  });
   return latestSignInLink(email);
 }
 
