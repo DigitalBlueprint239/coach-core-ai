@@ -7,7 +7,23 @@ export function importNotice(storage: Storage, session: ImportSession): string {
   const claim = storage.getItem(CLAIM_KEY);
   if (claim) {
     const value = JSON.parse(claim);
+    if (!value || typeof value.uid !== 'string' || !value.uid || typeof value.teamId !== 'string' || !value.teamId
+      || (value.status !== undefined && !['pending', 'imported'].includes(value.status))) {
+      throw new Error('Device import ownership cannot be verified. Originals preserved.');
+    }
+    if (value.status === 'pending') {
+      if (value.uid !== session.uid) return 'Plays on this device have an unfinished import by another account. Return to that account to finish it.';
+      if (value.teamId !== session.teamId) return `An import into ${value.teamName || value.teamId} was started and not finished. Switch to ${value.teamName || value.teamId} to finish it.`;
+    }
     if (value.uid !== session.uid) return 'Plays on this device were already imported by another account.';
+  }
+  // Older clients recorded only per-account pending markers. Preserve those
+  // markers and honor their ownership before offering the library to anyone else.
+  for (let i = 0; i < storage.length; i++) {
+    const key = storage.key(i);
+    if (key && key.startsWith('coachcore:v1:') && key.endsWith(':legacyImportPending') && key !== pendingKey(session.uid)) {
+      return 'Plays on this device have an unfinished import by another account. Return to that account to finish it.';
+    }
   }
   const pending = storage.getItem(pendingKey(session.uid));
   if (pending) {
@@ -73,6 +89,10 @@ export async function importLegacy(storage: Storage, session: ImportSession, sti
   if (notice) throw new Error(notice);
   if (storage.getItem(decisionKey(session.uid))) return [];
   const plays = readLegacy(storage);
+  if (!plays.length) return [];
+  // Durable device ownership precedes every cloud request. Interrupted imports
+  // keep this claim; only the same account and original team may resume.
+  storage.setItem(CLAIM_KEY, JSON.stringify({uid:session.uid,status:'pending',teamId:session.teamId,teamName:session.teamName || session.teamId}));
   if (!storage.getItem(pendingKey(session.uid))) storage.setItem(pendingKey(session.uid), JSON.stringify({teamId:session.teamId,teamName:session.teamName || session.teamId,startedAt:new Date().toISOString()}));
   const verified: string[] = [];
   for (const play of plays) {
@@ -85,7 +105,7 @@ export async function importLegacy(storage: Storage, session: ImportSession, sti
     verified.push(id);
   }
   if (!stillCurrent()) throw new Error('Account or team changed.');
-  storage.setItem(CLAIM_KEY, JSON.stringify({uid:session.uid,teamId:session.teamId,ids:verified,at:new Date().toISOString()}));
+  storage.setItem(CLAIM_KEY, JSON.stringify({uid:session.uid,status:'imported',teamId:session.teamId,ids:verified,at:new Date().toISOString()}));
   storage.setItem(decisionKey(session.uid), JSON.stringify({ decision: 'imported', teamId: session.teamId, ids: verified }));
   storage.removeItem(pendingKey(session.uid));
   return verified;
