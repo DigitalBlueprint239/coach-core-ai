@@ -209,7 +209,7 @@ The rules comment was corrected (existence oracle), and R5 was added to §7.3.
 
 ## 8. Re-review of #59 / #60 / #61: CC02/CC03 delivered, D10 R1/R2/R5 repairs (2026-10-14 afternoon)
 
-**Status: implementation delivered; independent acceptance largely passing (×10, both engines).** One open defect, **L1** (Codex), keeps the gate failing. **MVP stays NO-GO.**
+**Status: implementation delivered; independent acceptance pending.** Most scenarios pass ×10 on both engines, but two Codex-owned defects fail 10/10 (**L1**, **R1b**), and Firefox showed one more intermittent timeout. **MVP stays NO-GO.**
 
 ### 8.1 Exact SHAs
 
@@ -220,8 +220,8 @@ The rules comment was corrected (existence oracle), and R5 was added to §7.3.
 | #61 staging-readiness docs (stack head) | `3c7c4b0`. Its runtime is identical to #60 |
 | #53 rules fix present in the stack | `51760a4` (+ comment `3ec22cd`), via #54 `ecc6400`. Verified: `allow get … resource == null` at `firestore.rules` lines 137 and 187 |
 | Changes to Claude-owned files in #59/#60/#61 | none (empty diff for rules, functions, auth, `src/firebase.ts`, `e2e-support`, `e2e/`, `scripts/security`, `.github`) |
-| Acceptance branch (#61 + #56 + this review's tests and fixes) | `claude/cc-acceptance-2026-10-14`. ×10 at **`6f6544d`** |
-| Combined candidate (test-only, never merge) | `claude/integration-candidate-2026-10-14b`. ×10 at **`9b5780e`** (code = acceptance branch; docs union) |
+| Acceptance branch (#61 + #56 + this review's tests and fixes) | `claude/cc-acceptance-2026-10-14`. ×10 at `6f6544d`; **final ×10 at `709e0f4`** (strengthened tests, §8.7) |
+| Combined candidate (test-only, never merge) | `claude/integration-candidate-2026-10-14b`. ×10 at `9b5780e`; **final ×10 at `c858d1d`** (code = acceptance branch; docs union) |
 
 ### 8.2 Code review (implementation, not reports)
 
@@ -239,19 +239,23 @@ The rules comment was corrected (existence oracle), and R5 was added to §7.3.
 | ID | Owner | Verified status | Tested SHA | Evidence |
 |---|---|---|---|---|
 | R0 rules missing-id get | Claude | **VERIFIED FIXED**, present in the stack | `6f6544d` / `9b5780e` | D10-00 PASS 10/10 both engines |
-| R1 cross-account offer | Codex | **VERIFIED FIXED** | same | D10-06b PASS 10/10 ×2 engines ×2 runs (positive anchor: "already imported by another account") |
+| R1 cross-account offer, **finished import** | Codex | **VERIFIED FIXED** | same | D10-06b PASS 10/10 ×2 engines ×2 runs (positive anchor: "already imported by another account") |
+| **R1b** cross-account offer while A's import is **unfinished** | Codex | **STILL FAILING** (new; found by the independent verifier) | `709e0f4` / `c858d1d` | D10-06c FAIL 10/10, both engines, both runs. The claim is written only on completion. Bounded repair on #59 (device-level in-progress claim) |
 | R2 interrupted import re-offered | Codex | **VERIFIED FIXED** | same | D10-07b PASS 10/10 (names the unfinished team, no Import button) |
 | R5 no-team silent loss | Codex | **VERIFIED FIXED** | same | D10-12 PASS 10/10 (truthful block, no Save, no drafts) |
 | L0 sign-out deleted the quarantined legacy queue (#61 escalation) | Claude (auth) | **VERIFIED FIXED** in `12e386f` | same | CC-L0 FAIL ×1 on `13af9e4` (both engines) → PASS 10/10. Unit test and A07 updated to the preservation contract |
 | **L1 Migration Banner deletes legacy data / false success** | Codex | **STILL FAILING** (new) | same | CC-L1 FAIL 10/10, both engines, both runs. Bounded repair requested on #59 |
 | R3 "Not now" is permanent | Codex / Coach Drew | OPEN (disclosed limitation) | — | — |
 | R4 `D10_APPROVED` constant in release builds | Codex / deploy decision | OPEN | — | — |
-| H1 Firefox team-creation toast | Claude | OPEN; **0 occurrences** in 820 Firefox executions today (2 × 410) | `6f6544d` / `9b5780e` | annotations 03/04 |
+| H1 Firefox team-creation toast | Claude | OPEN; 0 occurrences in 1,660 Firefox executions this afternoon (2 × 410 + 2 × 420) | `6f6544d` / `9b5780e` / `709e0f4` / `c858d1d` | annotations 03/04/14/15 |
+| **H2** Firefox D10-07 test timeout (60 s) | Claude (harness) | OPEN, new: **1/10** on Firefox at `709e0f4`; 0/10 on candidate `c858d1d`; Chromium 0/20. Cause not established; no retry or timeout change | `709e0f4` | annotation 14 |
 | Codex P14 Firefox background-tab reload timeout | Codex | Not reproduced by CC-P14 (10/10 ×2 Firefox); cause not established, kept OPEN | same | — |
 | Standalone Playbook touch exit (Windows) | Codex | OPEN (separate repo) | — | — |
 | Physical devices, staging, real auth/CORS/token | — | **NOT MEASURED** | — | — |
 
-**AI01 contract change.** #59 removed the planner's "Generate with AI" button, so the old AI01 timed out (both engines, `13af9e4`). It now asserts that no AI action is offered and no AI request is made. **AI01b** (SDK-in-browser, via the app's own AI client) asserts that the emulated gateway refuses with `ai-disabled` and that no provider request is made. Both PASS 10/10.
+**Legacy queue.** It is still appended to by the legacy offline save branches (part of L1). After the sign-out fix it survives across accounts, so on a shared device the one array can hold entries from more than one coach. Nothing replays it today (CC-L0 and CC-P17 watch request bodies for the planted marker). If replay is ever re-enabled, it must be per-user with owner and team checks.
+
+**AI01 contract change.** #59 removed the planner's "Generate with AI" button, so the old AI01 timed out (both engines, `13af9e4`). It now asserts that no AI action is offered and no AI request is made. **AI01b** (SDK-in-browser, via the app's own AI client) asserts that the emulated gateway refuses with `ai-disabled` and that no **browser-side** provider request is made. Server-side provider calls are not observable from the browser; the functions unit test asserts `provider.calls.length === 0` when AI is disabled. Both PASS 10/10.
 
 ### 8.4 Results (retries 0, workers 1, Chromium 156.0.8078.4 / Firefox 157.0)
 
@@ -298,3 +302,29 @@ The rules comment was corrected (existence oracle), and R5 was added to §7.3.
 - candidate-4 `npm ci`, jest, tsc, release proof, manifest and production audit.
 
 Historical D10 evidence stays in `docs/evidence/d10-acceptance/`.
+
+### 8.7 Independent verification and final run
+
+A separate agent re-checked §8 against the Checks API and the code. It **confirmed**:
+- every SHA, run ID, count and code-review claim;
+- R1, R2, R5, R0, L0 and L1.
+
+It found weaker-than-claimed tests and stale or overstated wording. All were addressed:
+- **Replay probes (CC-L0, CC-P17):** the planted queue entries were rule-invalid, so a replay would not have been visible. Now **rule-valid entries plus a request-body watch** for the marker.
+- **CC-P10:** "nothing uploaded" is checked across plays and plans, by name, and by request body.
+- **CC-P11:** a **positive** check that A's pending draft is kept under team A.
+- **CC-P14:** after Reload remote the client is at the server revision (a follow-up save becomes revision 4, with no conflict).
+- **CC-L1:** records which toast the app actually showed, so there is no silent skip. Result: the app reported **success** and deleted the original.
+- **R1 gap:** measured as **R1b** (D10-06c).
+- **CC-P17:** the stranded-envelope step is retitled as a structural guard, because the app never retries other accounts' envelopes.
+- **AI01b:** wording now says browser-side only.
+- **Docs:** smoke AUTH-08's retention is marked as a *proposed* risk, not a founder decision. The film review's queue and deletion requirements are marked superseded. The tsc evidence now records its exit code (0).
+
+**Final ×10, retries 0:**
+
+| Run | Chromium 156 | Firefox 157 |
+|---|---|---|
+| Acceptance `709e0f4` (job `116004898887`) | **400 PASS / 20 FAIL** (CC-L1 10/10, D10-06c 10/10) | **399 PASS / 21 FAIL** (CC-L1 10/10, D10-06c 10/10, D10-07 1/10 timeout = H2) |
+| Candidate 4 `c858d1d` (job `116005526509`) | **400 PASS / 20 FAIL** (same two) | **400 PASS / 20 FAIL** (same two) |
+
+Every other test, 40 per engine, passes 10/10 in both runs. The only exception is Firefox D10-07 (9/10) on the acceptance run. Evidence files 13–15 are in `docs/evidence/cc-acceptance-2026-10-14/`.
