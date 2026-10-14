@@ -7,7 +7,7 @@ import { readFile } from 'node:fs/promises';
 import { resetEmulators, adminSet, adminGet, adminQuery, adminTeamsOwnedBy, AUTH_ONLY } from './support/emulator';
 import {
   coachEmail, skipOnboarding, signInAsBetaCoach, signOutViaUI, createTeamViaUI, openTab, signInScreen,
-  storage, waitForE2EHooks,
+  storage, waitForE2EHooks, dashboardFor,
 } from './support/app';
 import { commitControl } from './support/legacy';
 
@@ -391,19 +391,28 @@ test('CC-L0 legacy global offline queue: reconnect, reload and sign-out leave it
   expect(replayed).toEqual([]);
 });
 
-test('CC-L1 [founder rule: no deletion] dashboard "Migrate Now" must not delete legacy device data or report success it did not verify', async ({ page }) => {
+// CC-L1, contract agreed on #39 (2026-10-14, Codex option a): the obsolete
+// destructive "Migrate Now" entry point is removed. The original CC-L1
+// (banner click → blob deleted + success shown) FAILED 10/10 at 709e0f4 and
+// c858d1d; that evidence is kept in docs/evidence/cc-acceptance-2026-10-14/.
+test('CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded', async ({ page }) => {
+  const writes: string[] = [];
+  page.on('request', (r) => { const b = r.postData() ?? ''; if (r.method() === 'POST' && b.includes('Old banner play')) writes.push(r.url()); });
   const a = await coach(page, 'l1');
   const blob = JSON.stringify({ plays: [{ name: 'Old banner play', formation: 'I', routes: [], players: [] }], plans: [] });
   await page.evaluate(([t, b]) => { localStorage.setItem('plays', '[]'); localStorage.setItem(`coach-core-ai-${t}`, b); }, [a.teamId, blob]);
   await page.reload();
-  await expect(page.getByText('Migrate Your Data')).toBeVisible();
-  await page.getByRole('button', { name: 'Migrate Now' }).click();
-  const toast = page.getByText(/Data migrated successfully|Failed to migrate data/);
-  await expect(toast).toBeVisible();
-  const reported = (await toast.first().innerText()).includes('successfully') ? 'success' : 'failure';
-  const cloud = (await adminQuery('plays', 'teamId', a.teamId)).filter((d) => d.data.name === 'Old banner play');
-  const original = await page.evaluate((t) => localStorage.getItem(`coach-core-ai-${t}`), a.teamId);
-  expect(original, `legacy blob must be preserved byte-for-byte (app reported ${reported})`).toBe(blob);
-  // Success may only be reported when the copy is really in the cloud.
-  expect(reported === 'success' ? cloud.length : 1, 'success shown, so the play must be in the cloud').toBe(1);
+  // Positive anchors: the signed-in dashboard for this team has rendered with the blob in place.
+  await expect(dashboardFor(page, a.email)).toBeVisible();
+  await expect(page.getByText('Owls').first()).toBeVisible();
+  expect(await page.evaluate((t) => localStorage.getItem(`coach-core-ai-${t}`), a.teamId)).toBe(blob);
+  // No destructive migration is offered.
+  await expect(page.getByRole('button', { name: 'Migrate Now' })).toHaveCount(0);
+  await expect(page.getByText('Migrate Your Data')).toHaveCount(0);
+  await expect(page.getByText(/Data migrated successfully/)).toHaveCount(0);
+  // Exercise normal navigation; the blob is still untouched and never uploaded.
+  await planner(page);
+  expect(await page.evaluate((t) => localStorage.getItem(`coach-core-ai-${t}`), a.teamId)).toBe(blob);
+  expect((await adminQuery('plays', 'teamId', a.teamId)).filter((d) => d.data.name === 'Old banner play')).toEqual([]);
+  expect(writes).toEqual([]);
 });
