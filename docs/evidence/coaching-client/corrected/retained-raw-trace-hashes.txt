@@ -1,0 +1,2 @@
+95C5E498D616D4CCD3E1905628D332081B8AEAFB92D3F8BB7AD4E419ADA59874 C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\coaching-browser-corrected-results\artifacts\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-chromium\trace.zip
+C18D242A591BFEDFFB4FED8752C50817541A81B3634BD1704C2D1B51C82DD918 C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\coaching-browser-corrected-results\artifacts\coaching-P10-P11-P12-P17-o-a5cad-nd-second-account-isolation-firefox\trace.zip
