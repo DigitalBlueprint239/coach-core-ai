@@ -384,3 +384,49 @@ test('D10-06d [founder rule: originals preserved, no dead end] after coach A dec
     `dead end: A re-offered=${aOffered}; B offered=${bOffered}; B sees "${bNotice.replace(/\s+/g, ' ').trim()}"`).toBe(true);
   await expectOriginalsUntouched(page);
 });
+
+// R1c acceptance with positive anchors (founder guidance, 2026-10-14: "Not now"
+// postpones an unfinished import and leaves a clear recovery path for the
+// original coach and team; ownership protections, originals and verified
+// completion preserved). D10-06d above is kept unchanged as the original probe.
+test('D10-06e [founder rule: R1c recovery] "Not now" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched', async ({ page }) => {
+  const a = await coachWithTeam(page, 'd10ea', 'Alpha Eagles');
+  const net = commitControl(page); await net.ready; net.holdFrom(2);
+  await openPlaybook(page);
+  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
+  await test.step('wait for copy #2 on the wire', () => net.waitFor(2)); // 1 verified copy
+  await page.reload(); // import interrupted
+  net.pass(); net.release();
+  await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
+  await importPrompt(page).getByRole('button', { name: 'Not now' }).click();
+  // 1. Postponed, with a visible way back, and no permanent decline recorded.
+  await expect(importPrompt(page)).toContainText('Unfinished import postponed');
+  await expect(importPrompt(page).getByRole('button', { name: 'Resume import' })).toBeVisible();
+  expect((await deviceState(page)).decisions[decisionKey(a.uid)], 'postpone must not record a decline').toBeUndefined();
+  await importPrompt(page).getByRole('button', { name: 'Resume import' }).click();
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
+  // 2. After a reload the original coach on the original team is offered it again.
+  await page.reload();
+  await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' }), 'owner re-offered after reload').toBeVisible();
+  await expectOriginalsUntouched(page);
+  // 3. Another coach on this device is still blocked (R1b) and sees why.
+  await signOutViaUI(page);
+  await signInAsBetaCoach(page, coachEmail('d10eb'));
+  await createTeamViaUI(page, 'Bravo Bulldogs');
+  await openPlaybook(page);
+  await expect(importPrompt(page)).toContainText('unfinished import by another account');
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toHaveCount(0);
+  await expectOriginalsUntouched(page);
+  // 4. The original coach returns, resumes, and finishes: exactly the verified copies, no duplicates.
+  await signOutViaUI(page);
+  await signInAsBetaCoach(page, a.email);
+  expect((await storage(page)).currentTeamId, 'original team selected').toBe(a.teamId);
+  await openPlaybook(page);
+  await acceptImport(page);
+  expectFaithfulCopies(await adminCopies(a.uid), a.uid, a.teamId);
+  const decision = JSON.parse((await deviceState(page)).decisions[decisionKey(a.uid)]);
+  expect(decision).toEqual({ decision: 'imported', teamId: a.teamId, ids: LEGACY_PLAYS.map((p) => expectedCopyId(a.uid, a.teamId, p)) });
+  await expectOriginalsUntouched(page);
+});
