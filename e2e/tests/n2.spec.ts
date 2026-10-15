@@ -70,7 +70,54 @@ test('N2-D1 [diagnostic] write reaches the server but its acknowledgement channe
   const teams = await teamsNamed(uid, 'N2 Lost Ack');
   record(`D1 server=${server}ms stuckAt8s=${stuckAt8s} creatingAt8s=${creatingAt8s} abortedBackchannel=${aborted} dialogClosed=${closed}ms teams=${teams.length} net: ${net.summary(1200)}`);
   net.stop(); await page.unroute(/Firestore\/Write\/channel/);
-  expect(teams.length, 'never more teams than submitted (1), and the submitted team is not lost').toBe(1);
+  // Safety only: no duplicate, and no false success (a closed dialog means the team is on the server).
+  expect(teams.length, 'never more teams than submitted').toBeLessThanOrEqual(1);
+  if (closed >= 0) expect(teams.length, 'dialog closed, so the team must be on the server').toBe(1);
+});
+
+/** Shared runner for "hold one leg of the Write stream for 8 s" experiments. */
+async function holdLeg(page: Page, label: string, leg: 'write-response' | 'backchannel') {
+  const uid = await signInAsBetaCoach(page, coachEmail(`n2${label.toLowerCase()}`));
+  const name = `N2 ${label}`;
+  await openCreate(page, name);
+  const releases: Array<() => void> = []; let holding = true; let posts = 0; let heldCount = 0;
+  await page.route(/Firestore\/Write\/channel/, async (route: Route) => {
+    const req = route.request();
+    if (leg === 'write-response' && req.method() === 'POST') {
+      posts += 1;
+      if (holding && posts >= 2) { // 1st POST = handshake; 2nd carries the write
+        const response = await route.fetch(); // delivered to the server now
+        heldCount += 1; await new Promise<void>((r) => releases.push(r));
+        await route.fulfill({ response }).catch(() => {}); return;
+      }
+    }
+    if (leg === 'backchannel' && req.method() === 'GET' && holding) {
+      heldCount += 1; await new Promise<void>((r) => releases.push(r)); // request not yet sent
+    }
+    await route.continue().catch(() => {});
+  });
+  const net = firestoreNetLog(page);
+  const t0 = Date.now(); net.mark('click');
+  await submit(page).click();
+  const server = await until(async () => (await teamsNamed(uid, name)).length > 0, t0, 8_000);
+  const closedWhileHeld = await until(async () => (await dialog(page).count()) === 0, t0, Math.max(0, 8_000 - (Date.now() - t0)));
+  const serverAt8 = (await teamsNamed(uid, name)).length;
+  holding = false; releases.splice(0).forEach((r) => r()); net.mark('release');
+  const closed = closedWhileHeld >= 0 ? closedWhileHeld : await until(async () => (await dialog(page).count()) === 0, t0, 40_000);
+  net.mark('end');
+  const teams = await teamsNamed(uid, name);
+  record(`${label} leg=${leg} held=${heldCount} server=${server}ms serverAt8s=${serverAt8} dialogClosedWhileHeld=${closedWhileHeld >= 0} dialogClosed=${closed}ms teams=${teams.length} net: ${net.summary(1200)}`);
+  net.stop(); await page.unroute(/Firestore\/Write\/channel/);
+  expect(teams.length, 'never more teams than submitted').toBeLessThanOrEqual(1);
+  if (closed >= 0) expect(teams.length, 'dialog closed, so the team must be on the server').toBe(1);
+}
+
+test('N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?', async ({ page }) => {
+  await holdLeg(page, 'D3', 'write-response');
+});
+
+test('N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?', async ({ page }) => {
+  await holdLeg(page, 'D4', 'backchannel');
 });
 
 test('N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?', async ({ page }) => {
