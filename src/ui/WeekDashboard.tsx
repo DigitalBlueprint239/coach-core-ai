@@ -19,18 +19,21 @@ const samplePeriods: PracticePeriod[] = [
   { name: 'Position groups', durationMinutes: 20 }, { name: 'Team period', durationMinutes: 30 },
   { name: 'Cool-down', durationMinutes: 10 },
 ];
-export function sampleEvents(today: Date): WeekEvent[] {
-  const monday = addDays(today, -((today.getDay() + 6) % 7));
+export const DEMO_DAY = '2026-10-14';
+const WEEK_GRID_HEIGHT = 260;
+export function sampleEvents(): WeekEvent[] {
+  const today = parseDay(DEMO_DAY);
+  const monday = parseDay('2026-10-12');
   const pastExamples: WeekEvent[] = [
     { id: 'sample-staff', title: 'Staff meeting', date: dateKey(monday), time: '8:00 AM', startMinute: 480, endMinute: 525, kind: 'meeting' },
     { id: 'sample-previous-practice', title: 'Team practice', date: dateKey(monday), time: '3:30 PM', startMinute: 930, endMinute: 1020, kind: 'practice', durationMinutes: 90, periods: samplePeriods },
     { id: 'sample-position-groups', title: 'Position groups', date: dateKey(addDays(monday, 1)), time: '3:30 PM', startMinute: 930, endMinute: 990, kind: 'practice', durationMinutes: 60 },
   ];
   return [...pastExamples.filter(event => event.date < dateKey(today)),
-    { id: 'sample-practice', title: 'Team practice', date: dateKey(addDays(today, 1)), time: '3:30–5:00 PM', location: 'Practice field', kind: 'practice', startMinute: 930, endMinute: 1020, durationMinutes: 90, periods: samplePeriods, goals: ['Clean alignment', 'Fast transitions'], notes: 'Emphasize communication and clean execution.' },
-    { id: 'sample-film', title: 'Staff meeting', date: dateKey(addDays(today, 2)), time: '8:00–8:30 AM', location: 'Coaches room', kind: 'meeting', startMinute: 480, endMinute: 510 },
-    { id: 'sample-walkthrough', title: 'Walk-through', date: dateKey(addDays(today, 3)), time: '4:00–4:45 PM', location: 'Practice field', kind: 'practice', startMinute: 960, endMinute: 1005, durationMinutes: 45 },
-    { id: 'sample-game', title: 'Game day', date: dateKey(addDays(today, 4)), time: '7:00 PM', location: 'Home stadium', kind: 'game', startMinute: 1140, endMinute: 1200 },
+    { id: 'sample-practice', title: 'Team practice', date: DEMO_DAY, time: '3:30–5:00 PM', location: 'Practice field', kind: 'practice', startMinute: 930, endMinute: 1020, durationMinutes: 90, periods: samplePeriods, goals: ['Clean alignment', 'Fast transitions'], notes: 'Emphasize communication and clean execution.' },
+    { id: 'sample-film', title: 'Staff meeting', date: dateKey(addDays(today, 1)), time: '8:00–8:30 AM', location: 'Coaches room', kind: 'meeting', startMinute: 480, endMinute: 510 },
+    { id: 'sample-walkthrough', title: 'Walk-through', date: dateKey(addDays(today, 2)), time: '4:00–4:45 PM', location: 'Practice field', kind: 'practice', startMinute: 960, endMinute: 1005, durationMinutes: 45 },
+    { id: 'sample-game', title: 'Game day', date: dateKey(addDays(today, 3)), time: '7:00 PM', location: 'Home stadium', kind: 'game', startMinute: 1140, endMinute: 1200 },
   ];
 }
 const initialTasks = [{ id: 'plan', title: 'Review the practice plan', done: true }, { id: 'equipment', title: 'Check practice equipment', done: false }, { id: 'staff', title: 'Prepare staff meeting notes', done: false }];
@@ -69,38 +72,41 @@ function PracticeSummary({ event, preview, onNavigate, onDetails }: { event: Wee
   </>;
 }
 
-export default function WeekDashboard({ teamName, events = [], loading = false, error = '', preview, onPreviewChange, onNavigate, today: givenToday }: {
+export default function WeekDashboard({ teamName, events = [], loading = false, error = '', preview, onPreviewChange, onNavigate, today: givenToday, emptyExample = false }: {
   teamName?: string; events?: WeekEvent[]; loading?: boolean; error?: string; preview: boolean;
-  onPreviewChange: (next: boolean) => void; onNavigate: (view: Destination) => void; today?: Date;
+  onPreviewChange: (next: boolean) => void; onNavigate: (view: Destination) => void; today?: Date; emptyExample?: boolean;
 }) {
-  const [today] = useState(() => givenToday || new Date());
-  const [weekOffset, setWeekOffset] = useState(0);
-  const [selected, setSelected] = useState(dateKey(today));
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [dayChosen, setDayChosen] = useState(false);
+  const [realToday] = useState(() => givenToday || new Date());
+  const today = preview ? parseDay(DEMO_DAY) : realToday;
+  type CalendarState = { weekOffset: number; selected: string; selectedId: string | null; dayChosen: boolean };
+  const initialSample: CalendarState = { weekOffset: 0, selected: DEMO_DAY, selectedId: 'sample-practice', dayChosen: true };
+  const [liveCalendar, setLiveCalendar] = useState<CalendarState>(() => ({ weekOffset: 0, selected: dateKey(realToday), selectedId: null, dayChosen: false }));
+  const [sampleCalendar, setSampleCalendar] = useState<CalendarState>(initialSample);
+  const { weekOffset, selected, selectedId, dayChosen } = preview ? sampleCalendar : liveCalendar;
+  const setCalendar = preview ? setSampleCalendar : setLiveCalendar;
   const [tasks, setTasks] = useState(initialTasks);
   const [detail, setDetail] = useState<WeekEvent | null>(null);
-  const source = preview ? sampleEvents(today) : events;
+  const source = preview ? sampleEvents() : events;
   const start = addDays(today, -((today.getDay() + 6) % 7) + weekOffset * 7);
   const days = Array.from({ length: 7 }, (_, index) => addDays(start, index));
   const nextEvents = source.filter(event => event.date >= dateKey(today)).sort((a, b) => a.date.localeCompare(b.date));
   const nextPractice = nextEvents.find(isPractice);
   const selectedEvents = source.filter(event => event.date === selected);
   const practice = source.find(event => event.id === selectedId && isPractice(event)) || selectedEvents.find(isPractice) || (!dayChosen ? nextPractice : undefined);
-  const chooseDay = (day: string) => { setSelected(day); setSelectedId(null); setDayChosen(true); };
-  const chooseEvent = (event: WeekEvent, agenda: boolean) => { chooseDay(event.date); if (isPractice(event)) setSelectedId(event.id); if (!isPractice(event) || agenda) setDetail(event); };
-  const changeWeek = (offset: number) => { setWeekOffset(offset); chooseDay(dateKey(addDays(today, -((today.getDay() + 6) % 7) + offset * 7))); };
+  const chooseDay = (day: string) => setCalendar(previous => ({ ...previous, selected: day, selectedId: null, dayChosen: true }));
+  const chooseEvent = (event: WeekEvent, agenda: boolean) => { setCalendar(previous => ({ ...previous, selected: event.date, selectedId: isPractice(event) ? event.id : null, dayChosen: true })); if (!isPractice(event) || agenda) setDetail(event); };
+  const changeWeek = (offset: number) => setCalendar(previous => ({ ...previous, weekOffset: offset, selected: dateKey(addDays(today, -((today.getDay() + 6) % 7) + offset * 7)), selectedId: null, dayChosen: true }));
   const eventButton = (event: WeekEvent, timed = false, agenda = false) => <button key={event.id} type="button" className={`cc-event cc-event-${event.kind} ${practice?.id === event.id ? 'cc-event-selected' : ''}`}
     aria-label={`${event.title}, ${parseDay(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${event.time || 'time not set'}`}
     aria-pressed={isPractice(event) ? practice?.id === event.id : undefined}
-    style={timed ? { top: `${((event.startMinute! - 420) / 900) * 100}%`, height: `${((event.endMinute! - event.startMinute!) / 900) * 100}%` } : undefined}
+    style={timed ? { top: `${((event.startMinute! - 420) / 900) * 100}%` } : undefined}
     onClick={() => chooseEvent(event, agenda)}><strong>{event.title}</strong><span>{timed && event.startMinute !== undefined ? new Date(2000, 0, 1, Math.floor(event.startMinute / 60), event.startMinute % 60).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : event.time || 'Time not set'}</span></button>;
 
   return <>
     <div className="cc-dashboard-heading"><div><h1><span className="cc-desktop-title">My Week</span><span className="cc-phone-title">Today</span></h1>
-      <p>{today.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}{teamName && <span className="cc-heading-team"> · {teamName}</span>}</p></div>
-      <div className="cc-mode"><span className={`cc-sample-label ${preview ? '' : 'cc-live-label'}`}>{preview ? 'Sample data · preview' : 'Team workspace'}</span>
-        <Action onClick={() => { onPreviewChange(!preview); setDetail(null); setSelectedId(null); setDayChosen(false); setTasks(initialTasks); }}>{preview ? 'Exit preview' : 'Sample preview'}</Action>
+      <p>{preview ? 'Demo week · Oct 12–18, 2026' : today.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}{teamName && <span className="cc-heading-team"> · {teamName}</span>}</p></div>
+      <div className="cc-mode"><span className={`cc-sample-label ${preview ? '' : 'cc-live-label'}`}>{preview ? 'Sample data · preview' : emptyExample ? 'Empty-state example' : 'Team workspace'}</span>
+        <Action onClick={() => { onPreviewChange(!preview); setDetail(null); setSampleCalendar(initialSample); setTasks(initialTasks); }}>{preview ? 'Exit preview' : 'Sample preview'}</Action>
         {preview && <span className="cc-sr-only">Fictional events and tasks. Changes are temporary and never saved.</span>}
       </div>
     </div>
@@ -111,10 +117,10 @@ export default function WeekDashboard({ teamName, events = [], loading = false, 
           <button type="button" aria-label="Previous week" onClick={() => changeWeek(weekOffset - 1)}><ChevronLeft size={18} aria-hidden="true" /></button>
           <span aria-live="polite">{days[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – {days[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
           <button type="button" aria-label="Next week" onClick={() => changeWeek(weekOffset + 1)}><ChevronRight size={18} aria-hidden="true" /></button>
-          <Action onClick={() => { setWeekOffset(0); chooseDay(dateKey(today)); }}>Today</Action>
+          <Action onClick={() => { setCalendar(previous => ({ ...previous, weekOffset: 0, selected: dateKey(today), selectedId: null, dayChosen: true })); }}>{preview ? 'Demo day' : 'Today'}</Action>
         </div><span className="cc-week-view">Week</span></div>
         <div className={`cc-week-grid ${preview ? 'cc-week-timed' : 'cc-week-plans'}`} role="group" aria-label="Choose a day">
-          {preview && <div className="cc-hours" aria-hidden="true"><span className="cc-hours-head" />{['7 AM', '9 AM', '11 AM', '1 PM', '3 PM', '5 PM', '7 PM'].map((hour, index) => <span key={hour} style={{ top: `${54 + index * 2 / 15 * 320}px` }}>{hour}</span>)}</div>}
+          {preview && <div className="cc-hours" aria-hidden="true"><span className="cc-hours-head" />{['7 AM', '9 AM', '11 AM', '1 PM', '3 PM', '5 PM', '7 PM'].map((hour, index) => <span key={hour} style={{ top: `${44 + index * 2 / 15 * WEEK_GRID_HEIGHT}px` }}>{hour}</span>)}</div>}
           {days.map(day => { const key = dateKey(day); return <div className={`cc-day ${key === dateKey(today) ? 'cc-day-today' : ''}`} key={key}>
             <button type="button" className="cc-day-picker" aria-pressed={selected === key} aria-label={day.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} onClick={() => chooseDay(key)}>
               <span>{day.toLocaleDateString('en-US', { weekday: 'short' })}</span><strong>{day.getDate()}</strong></button>
@@ -134,8 +140,9 @@ export default function WeekDashboard({ teamName, events = [], loading = false, 
         <p className="cc-kicker">Next up {preview && <span className="cc-inline-label">Sample</span>}</p>
         {nextPractice ? <div className="cc-next-event"><div className="cc-next-summary"><span className="cc-next-icon"><ClipboardList size={21} aria-hidden="true" /></span><div>
           <p className="cc-next-time">{nextPractice.time || 'Time not set'}</p><h2>{nextPractice.title}</h2>
-          <p className="cc-next-date">{parseDay(nextPractice.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+          <p className="cc-next-date">{parseDay(nextPractice.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}{nextPractice.durationMinutes !== undefined && <> · {nextPractice.durationMinutes} min</>}</p>
           {nextPractice.location && <p><MapPin size={14} aria-hidden="true" />{nextPractice.location}</p>}</div></div>
+          {nextPractice.goals?.length ? <p className="cc-next-focus"><strong>Focus</strong> {nextPractice.goals.join(' · ')}</p> : null}
           <Action primary onClick={() => preview ? setDetail(nextPractice) : onNavigate('practice')}>{preview ? 'View practice preview' : 'Open practice plans'}<ArrowRight size={17} aria-hidden="true" /></Action>
         </div> : <EmptyState title={loading ? 'Loading your plans…' : 'A clear field ahead'}>{teamName ? 'No upcoming dated practice plans.' : 'Select or create your team to start planning.'}</EmptyState>}
         {!nextPractice && <div className="cc-quick-actions"><Action primary onClick={() => onNavigate(teamName ? 'practice' : 'teams')}><Plus size={18} aria-hidden="true" />{teamName ? 'Create Practice Plan' : 'Manage Teams'}</Action></div>}

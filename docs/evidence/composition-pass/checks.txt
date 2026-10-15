@@ -1,0 +1,17 @@
+2026-10-15 composition implementation — visual approval pending
+Baseline: npx tsc --noEmit: 0 diagnostics; Jest 443/443 in31 suites; production build PASS, inherited warnings.
+Post-change: npx tsc --noEmit: 0 diagnostics; CI=true npm test -- --watchAll=false --runInBand: 445/445 in31 suites.
+Final: CI=false npm run build: PASS; inherited SmartPlaybook warning files only, no new UI/CSS warnings. Gzip JS225.64kB, CSS4.56kB.
+Local server: node scripts/visual-preview.cjs 4317; refreshed with --build-only after final CSS adjustment. Cloud/auth module graph guard PASS.
+Chromium156.0.8078.4 and Firefox157.0: 320x740,375x812,430x932,490x900,834x1112,1280x800,1440x900: all14 cases PASS.
+All cases: fixed labeled demo week12–18 October2026, populated Wednesday14 selected on entry; real-empty example has no sample events/tasks; axe0; overflow0; fragmented event words0; button heights>=44px; no browser page errors or external requests.
+Desktop1280/1440: calendar406.5px high; practice top532.3px; practice bottom752px/729.5px respectively, including periods/focus/action, all before viewport bottom.
+Phone375: next-practice card starts110.3px, focus/duration visible; one primary action. All visible content controls clear opaque nav when individually scrolled/focused.
+Native dialog/Escape/focus return, mode/week/day controls, shell destinations/main focus and sample local/sessionStorage isolation PASS.
+Both engines:490px calendar inside1440px viewport uses agenda; skip link/main focus and reduced motion PASS; simulated additional32px bottom inset keeps every visible control above nav.
+Minified production CSS replay on isolated UI: all7 widths PASS (not authenticated application acceptance).
+New regression tests: stable populated sample irrespective of real date; real account week/day/saved-plan selection survives changed sample week and exit; live Today remains real.
+Visual inspection: desktop1440x900 and1280x800, phone375x812, narrow490 bottom clearance, tablet834 and separate375 empty example. Production-CSS375 capture also inspected.
+Initial browser selector failure matched hidden team text; corrected to assert direct visible demo text. Initial failure retained separately; no acceptance assertions/timeouts/retries changed.
+Inherited archived/embedded @ts-nocheck files unchanged, none added; firestore.ts offline queue intact and quarantined replay unchanged.
+No auth/team/persistence/rules/functions/AI/acceptance repairs/e2e/lockfile changes. No merge/deploy. Functional emulator walkthrough requested separately from Claude via issue39; not delivered or claimed here. No physical-device testing claimed.

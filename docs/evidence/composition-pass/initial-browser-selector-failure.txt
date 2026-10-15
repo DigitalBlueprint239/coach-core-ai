@@ -1,0 +1,10 @@
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByText('Demo week · Oct 12–18, 2026', { exact: true }) to be visible
+
+    at C:\Users\drewl\Documents\Codex\2026-10-14\coach-core-implement-the-approved-visual\work\verify-composition.cjs:8:169 {
+  log: [
+    "  - waiting for getByText('Demo week · Oct 12–18, 2026', { exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}

@@ -1,5 +1,7 @@
 # PR #67 — narrow-preview correction, visual approval pending
 
+> Superseded by the implemented composition pass in [COMPOSITION_PASS_REVIEW.md](COMPOSITION_PASS_REVIEW.md). Prior measurements are retained as historical evidence.
+
 Coach Drew rejected the prior visual revision. This pass addresses the specified narrow layout, next-practice hierarchy, surface depth, compact support rows and navigation clearance. The new revision is submitted for review; it is not visually approved.
 
 ## Implementation

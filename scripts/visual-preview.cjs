@@ -19,7 +19,7 @@ webpack({mode:'production',entry:path.join(root,'src/ui/preview.tsx'),output:{pa
   if(modules.some(m=>/firebase|AuthProvider|useAuth|gateway\.ts/.test(m.name||'')))throw new Error('Preview unexpectedly imports a cloud/auth module.');
   console.log('Preview compiled; cloud/auth module check passed.');
   if(process.argv.includes('--build-only'))return;
-  http.createServer((req,res)=>{const file=req.url==='/preview.js'?'preview.js':req.url==='/'||req.url==='/index.html'?'index.html':null;
+  http.createServer((req,res)=>{const file=req.url==='/preview.js'?'preview.js':req.url==='/'||req.url==='/index.html'||req.url==='/empty.html'?'index.html':null;
     if(!file){res.writeHead(404).end();return;}
     res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript':'text/html','Cache-Control':'no-store'});res.end(fs.readFileSync(path.join(out,file)));
   }).listen(port,'127.0.0.1',()=>console.log(`Coach Core visual preview: http://127.0.0.1:${port} (sample data; no cloud connection)`));

@@ -11,7 +11,7 @@ test('a new workspace has no invented events or actionable assignments',()=>{
   expect(screen.getByText('A clear field ahead')).toBeInTheDocument();
   fireEvent.click(screen.getAllByRole('button',{name:'Manage Teams'})[0]);expect(navigate).toHaveBeenCalledWith('teams');
 });
-test('sample tasks are interactive and clearly labeled; dates follow the review day',()=>{
+test('sample tasks are interactive and clearly labeled in the demonstration week',()=>{
   const change=jest.fn();render(<WeekDashboard today={today} preview onPreviewChange={change} onNavigate={jest.fn()}/>);
   expect(screen.getByText('Sample data · preview')).toBeInTheDocument();
   expect(screen.getByRole('button',{name:'Wednesday, October 14, 2026'})).toHaveAttribute('aria-pressed','true');
@@ -53,4 +53,36 @@ test('selecting a saved practice updates its real detail without inventing perio
   expect(detail.getByText('Time not set')).toBeInTheDocument();
   expect(detail.getByText('No period information in this plan.')).toBeInTheDocument();
   expect(detail.queryByText('Receiver release')).not.toBeInTheDocument();
+});
+
+
+test('sample preview opens a populated fixed day with meaningful details regardless of the real date',()=>{
+  render(<WeekDashboard today={new Date(2040,5,8,12)} preview onPreviewChange={jest.fn()} onNavigate={jest.fn()}/>);
+  expect(screen.getByText('Demo week · Oct 12–18, 2026')).toBeInTheDocument();
+  expect(screen.getByRole('button',{name:'Wednesday, October 14, 2026'})).toHaveAttribute('aria-pressed','true');
+  const practice=within(screen.getByRole('region',{name:'Selected practice'}));
+  expect(practice.getByRole('heading',{name:'Team practice'})).toBeInTheDocument();
+  expect(practice.getByText('Warm-up')).toBeInTheDocument();
+  expect(practice.getByText(/Clean alignment/)).toBeInTheDocument();
+  expect(screen.getByRole('button',{name:'Demo day'})).toBeInTheDocument();
+});
+
+test('visiting sample preview preserves a real account week, day and saved-practice selection',()=>{
+  function Workspace(){const [preview,setPreview]=React.useState(false);return <WeekDashboard today={today} preview={preview} onPreviewChange={setPreview} onNavigate={jest.fn()} events={[{id:'real-plan',title:'Saved Thursday plan',date:'2026-10-22',kind:'plan',notes:'Real saved notes.'}]}/>;}
+  render(<Workspace/>);
+  fireEvent.click(screen.getByRole('button',{name:'Next week'}));
+  fireEvent.click(screen.getByRole('button',{name:'Saved Thursday plan, Oct 22, time not set'}));
+  expect(screen.getByRole('button',{name:'Thursday, October 22, 2026'})).toHaveAttribute('aria-pressed','true');
+  fireEvent.click(screen.getByRole('button',{name:'Sample preview'}));
+  expect(screen.getByRole('button',{name:'Wednesday, October 14, 2026'})).toHaveAttribute('aria-pressed','true');
+  fireEvent.click(screen.getByRole('button',{name:'Next week'}));
+  fireEvent.click(screen.getByRole('button',{name:'Exit preview'}));
+  expect(screen.getByRole('button',{name:'Thursday, October 22, 2026'})).toHaveAttribute('aria-pressed','true');
+  const practice=within(screen.getByRole('region',{name:'Selected practice'}));
+  expect(practice.getByRole('heading',{name:'Saved Thursday plan'})).toBeInTheDocument();
+  expect(practice.getByText('Real saved notes.')).toBeInTheDocument();
+  expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+  expect(screen.queryByText('Sample concept')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button',{name:'Today'}));
+  expect(screen.getByRole('button',{name:'Wednesday, October 14, 2026'})).toHaveAttribute('aria-pressed','true');
 });

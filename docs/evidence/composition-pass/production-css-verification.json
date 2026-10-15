@@ -1,0 +1,54 @@
+{
+  "scope": "Minified production CSS replayed on isolated shared UI; no authentication/cloud acceptance",
+  "results": [
+    {
+      "width": 320,
+      "height": 740,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    },
+    {
+      "width": 490,
+      "height": 900,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    },
+    {
+      "width": 834,
+      "height": 1112,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "css": "main.dd0ab96c.css",
+      "overflow": false,
+      "agendaAndNav": "PASS"
+    }
+  ]
+}

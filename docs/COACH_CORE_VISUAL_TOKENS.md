@@ -1,5 +1,7 @@
 # Coach Core — fidelity revision tokens (visual approval pending)
 
+Current composition revision (approval pending): desktop sidebar208px, intermediate sidebar128px with text labels; brand18px/800 desktop and17px/800 phone; header44px high, main padding12px20px desktop; page heading24px. Week has44px day headers and260px time body; event labels13px/12px with52px minimum timed tile height and natural text height. Calendar padding12px; selected-practice surface gradient135deg #102C3E→#0B1E2D with #2E566B border and restrained inset highlight; supporting cards #071521/#172B39, titles16px secondary. Selected practice title24px, mobile practice22px, bottom labels11px. Stable sample data only:12–18 Oct2026, selected14 Oct; real-account dates untouched. Full current evidence: COMPOSITION_PASS_REVIEW.md. Earlier token notes below are historical where they differ.
+
 Source: Coach Drew’s supplied concept-board interface. These are exact implementation values derived from its visual direction, not recovered original font/layout metadata. The previous implementation was not visually approved; this revision awaits Coach Drew’s approval.
 
 | Role | Value |

@@ -1,0 +1,565 @@
+{
+  "scope": "Isolated shared UI, synthetic preview only. No authenticated workflow or physical device acceptance.",
+  "results": [
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 320,
+      "height": 740,
+      "geometry": {
+        "calendar": {
+          "top": 799.375,
+          "bottom": 1052.875,
+          "height": 253.5,
+          "width": 288
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 126.796875,
+          "bottom": 368.78125,
+          "height": 241.984375,
+          "width": 288
+        },
+        "nav": {
+          "top": 671,
+          "bottom": 740,
+          "height": 69,
+          "width": 320
+        },
+        "pageWidth": 320
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 375,
+      "height": 812,
+      "geometry": {
+        "calendar": {
+          "top": 782.875,
+          "bottom": 1036.375,
+          "height": 253.5,
+          "width": 343
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 110.296875,
+          "bottom": 352.28125,
+          "height": 241.984375,
+          "width": 343
+        },
+        "nav": {
+          "top": 743,
+          "bottom": 812,
+          "height": 69,
+          "width": 375
+        },
+        "pageWidth": 375
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 430,
+      "height": 932,
+      "geometry": {
+        "calendar": {
+          "top": 782.875,
+          "bottom": 1036.375,
+          "height": 253.5,
+          "width": 398
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 110.296875,
+          "bottom": 352.28125,
+          "height": 241.984375,
+          "width": 398
+        },
+        "nav": {
+          "top": 863,
+          "bottom": 932,
+          "height": 69,
+          "width": 430
+        },
+        "pageWidth": 430
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 490,
+      "height": 900,
+      "geometry": {
+        "calendar": {
+          "top": 782.875,
+          "bottom": 1036.375,
+          "height": 253.5,
+          "width": 458
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 110.296875,
+          "bottom": 352.28125,
+          "height": 241.984375,
+          "width": 458
+        },
+        "nav": {
+          "top": 831,
+          "bottom": 900,
+          "height": 69,
+          "width": 490
+        },
+        "pageWidth": 490
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 834,
+      "height": 1112,
+      "geometry": {
+        "calendar": {
+          "top": 117.796875,
+          "bottom": 371.296875,
+          "height": 253.5,
+          "width": 674
+        },
+        "practice": {
+          "top": 383.296875,
+          "bottom": 643.296875,
+          "height": 260,
+          "width": 674
+        },
+        "next": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "nav": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "pageWidth": 834
+      },
+      "compact": true,
+      "contentControlsCleared": 0,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 1280,
+      "height": 800,
+      "geometry": {
+        "calendar": {
+          "top": 113.796875,
+          "bottom": 520.296875,
+          "height": 406.5,
+          "width": 1032
+        },
+        "practice": {
+          "top": 532.296875,
+          "bottom": 751.984375,
+          "height": 219.6875,
+          "width": 1032
+        },
+        "next": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "nav": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "pageWidth": 1280
+      },
+      "compact": false,
+      "contentControlsCleared": 0,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "width": 1440,
+      "height": 900,
+      "geometry": {
+        "calendar": {
+          "top": 113.796875,
+          "bottom": 520.296875,
+          "height": 406.5,
+          "width": 1192
+        },
+        "practice": {
+          "top": 532.296875,
+          "bottom": 729.484375,
+          "height": 197.1875,
+          "width": 1192
+        },
+        "next": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "nav": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "pageWidth": 1440
+      },
+      "compact": false,
+      "contentControlsCleared": 0,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "chromium",
+      "calendar490InWideViewport": "PASS",
+      "safeAreaAdditional32": "PASS",
+      "keyboard": "PASS",
+      "reducedMotion": "PASS"
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 320,
+      "height": 740,
+      "geometry": {
+        "calendar": {
+          "top": 799.4000244140625,
+          "bottom": 1052.9000244140625,
+          "height": 253.5,
+          "width": 288
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 126.80000305175781,
+          "bottom": 368.8000030517578,
+          "height": 242,
+          "width": 288
+        },
+        "nav": {
+          "top": 671,
+          "bottom": 740,
+          "height": 69,
+          "width": 320
+        },
+        "pageWidth": 320
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 375,
+      "height": 812,
+      "geometry": {
+        "calendar": {
+          "top": 782.9000244140625,
+          "bottom": 1036.4000244140625,
+          "height": 253.5,
+          "width": 343
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 110.30000305175781,
+          "bottom": 352.3000030517578,
+          "height": 242,
+          "width": 343
+        },
+        "nav": {
+          "top": 743,
+          "bottom": 812,
+          "height": 69,
+          "width": 375
+        },
+        "pageWidth": 375
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 430,
+      "height": 932,
+      "geometry": {
+        "calendar": {
+          "top": 782.9000244140625,
+          "bottom": 1036.4000244140625,
+          "height": 253.5,
+          "width": 398
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 110.30000305175781,
+          "bottom": 352.3000030517578,
+          "height": 242,
+          "width": 398
+        },
+        "nav": {
+          "top": 863,
+          "bottom": 932,
+          "height": 69,
+          "width": 430
+        },
+        "pageWidth": 430
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 490,
+      "height": 900,
+      "geometry": {
+        "calendar": {
+          "top": 782.9000244140625,
+          "bottom": 1036.4000244140625,
+          "height": 253.5,
+          "width": 458
+        },
+        "practice": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "next": {
+          "top": 110.30000305175781,
+          "bottom": 352.3000030517578,
+          "height": 242,
+          "width": 458
+        },
+        "nav": {
+          "top": 831,
+          "bottom": 900,
+          "height": 69,
+          "width": 490
+        },
+        "pageWidth": 490
+      },
+      "compact": true,
+      "contentControlsCleared": 19,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 834,
+      "height": 1112,
+      "geometry": {
+        "calendar": {
+          "top": 117.80000305175781,
+          "bottom": 371.3000030517578,
+          "height": 253.5,
+          "width": 674
+        },
+        "practice": {
+          "top": 383.29998779296875,
+          "bottom": 643.2999877929688,
+          "height": 260,
+          "width": 674
+        },
+        "next": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "nav": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "pageWidth": 834
+      },
+      "compact": true,
+      "contentControlsCleared": 0,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 1280,
+      "height": 800,
+      "geometry": {
+        "calendar": {
+          "top": 113.80000305175781,
+          "bottom": 520.3000030517578,
+          "height": 406.5,
+          "width": 1032
+        },
+        "practice": {
+          "top": 532.2999877929688,
+          "bottom": 751.9999847412109,
+          "height": 219.6999969482422,
+          "width": 1032
+        },
+        "next": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "nav": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "pageWidth": 1280
+      },
+      "compact": false,
+      "contentControlsCleared": 0,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "width": 1440,
+      "height": 900,
+      "geometry": {
+        "calendar": {
+          "top": 113.80000305175781,
+          "bottom": 520.3000030517578,
+          "height": 406.5,
+          "width": 1192
+        },
+        "practice": {
+          "top": 532.2999877929688,
+          "bottom": 729.4999847412109,
+          "height": 197.1999969482422,
+          "width": 1192
+        },
+        "next": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "nav": {
+          "top": 0,
+          "bottom": 0,
+          "height": 0,
+          "width": 0
+        },
+        "pageWidth": 1440
+      },
+      "compact": false,
+      "contentControlsCleared": 0,
+      "axe": 0,
+      "wordFragments": 0,
+      "pageErrors": [],
+      "external": []
+    },
+    {
+      "engine": "firefox",
+      "calendar490InWideViewport": "PASS",
+      "safeAreaAdditional32": "PASS",
+      "keyboard": "PASS",
+      "reducedMotion": "PASS"
+    }
+  ]
+}
