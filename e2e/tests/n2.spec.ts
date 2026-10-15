@@ -5,7 +5,7 @@
 // submitted; no loss of the submitted team). They do not prescribe a fix and
 // are reported separately from acceptance tests.
 import { test, expect, type Page, type Route } from '@playwright/test';
-import { resetEmulators, adminTeamsOwnedBy, adminTeamsFull, AUTH_ONLY } from './support/emulator';
+import { resetEmulators, adminTeamsOwnedBy, adminTeamsFull, adminGet, adminSet, AUTH_ONLY } from './support/emulator';
 import { coachEmail, skipOnboarding, signInAsBetaCoach, openTab, firestoreNetLog, createTeamViaUI, signOutViaUI } from './support/app';
 
 test.beforeEach(async ({ context }) => {
@@ -155,12 +155,6 @@ test('N2-D2 [diagnostic] write held (pending, not on the server): coach cancels,
 });
 
 // ---------------------------------------------------------------------------
-// WebChannel-model tests N2-W1/N2-W2 (2026-10-15). Written as N2-A1/N2-A2 at
-// c4e087f and measured pre-repair as such (evidence 37). The repair (#71
-// bdb06ae) moved team creation to REST, which these faults no longer touch,
-// so they are kept unchanged in substance as DIAGNOSTICS; the REST-path
-// acceptance tests N2-A1..A4 follow below.
-// Original header:
 // N2 repair ACCEPTANCE tests (2026-10-15, Coach Drew N2-repair directive).
 // They state the required behaviour; they are expected to FAIL on code without
 // the repair (candidate 10 `186a743`) and are counted as acceptance tests once
@@ -170,7 +164,7 @@ test('N2-D2 [diagnostic] write held (pending, not on the server): coach cancels,
 // ---------------------------------------------------------------------------
 const savingStatus = (page: Page) => page.getByRole('status').or(page.getByRole('alert')).filter({ hasText: /saving|connection|offline|retry/i });
 
-test('N2-W1 [diagnostic] (was N2-A1 at c4e087f; WebChannel fault model, pre-repair evidence 37) after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed', async ({ page }) => {
+test('N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2a1'));
   const name = 'N2 Recovered';
   await openCreate(page, name);
@@ -201,7 +195,7 @@ test('N2-W1 [diagnostic] (was N2-A1 at c4e087f; WebChannel fault model, pre-repa
   expect(recoveredAt, 'the UI must recover: dialog closed and the team shown').toBeGreaterThanOrEqual(0);
 });
 
-test('N2-W2 [diagnostic] (was N2-A2 at c4e087f; WebChannel fault model, pre-repair evidence 37) cancelling or leaving during a pending create and trying again never produces a duplicate team', async ({ page }) => {
+test('N2-A2 [acceptance] cancelling or leaving during a pending create and trying again never produces a duplicate team', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2a2'));
   const name = 'N2 No Duplicate';
   await openCreate(page, name);
@@ -269,9 +263,10 @@ test('N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth
   expect(failures, 'an N3-like creation failure occurred (see diag-data for the probe)').toBe(0);
 });
 
-
 // ---------------------------------------------------------------------------
-// N2 REPAIR ACCEPTANCE on the actual transport (2026-10-15; #71 `bdb06ae`).
+// N2 REPAIR ACCEPTANCE on the actual transport (2026-10-15; #71 `bdb06ae`), IDs N2-R*.
+// The original N2-A1/N2-A2 above (WebChannel fault model, pre-repair evidence 37)
+// are preserved unchanged; they do not exercise the REST path.
 // Team creation now uses REST: POST .../documents:commit (create-only, fixed
 // team id saved on the device first) then GET .../documents/teams/{id}
 // (authoritative readback). These tests fault THAT path. Requirements are not
@@ -319,7 +314,7 @@ async function expectExactlyTheOperation(uid: string, op: { id: string; name: st
     .toEqual({ id: op!.id, name: op!.name, code: op!.code, ownerId: uid });
 }
 
-test('N2-A1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree', async ({ page }) => {
+test('N2-R1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2ra1'));
   const name = 'N2 REST Held';
   await openCreate(page, name);
@@ -339,16 +334,16 @@ test('N2-A1 [acceptance] REST commit held through an 8 s outage (request not yet
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 3_000)); // late-duplicate window
   net.mark('end');
-  record(`A1 heldCommits=${held} statusAt=${statusAt}ms serverDuringOutage=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  record(`R1 heldCommits=${held} statusAt=${statusAt}ms serverDuringOutage=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
   net.stop(); await page.unroute(COMMIT);
   expect(statusAt, 'accessible saving/connection status within the 8 s outage').toBeGreaterThanOrEqual(0);
   expect(serverDuring, 'nothing on the server while the request is held').toBe(0);
   expect(rec.mode, 'the operation completes after recovery and the UI shows the team').not.toBe('not-recovered');
-  await expectExactlyTheOperation(uid, op, 'A1');
+  await expectExactlyTheOperation(uid, op, 'R1');
   expect(await pendingOp(page, uid), 'pending operation cleared after confirmation').toBeNull();
 });
 
-test('N2-A1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree', async ({ page }) => {
+test('N2-R1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2ra1b'));
   const name = 'N2 REST Reset';
   await openCreate(page, name);
@@ -368,15 +363,15 @@ test('N2-A1b [acceptance] REST commit fails with a connection reset during an 8 
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 3_000));
   net.mark('end');
-  record(`A1b resets=${resets} statusAt=${statusAt}ms serverDuringOutage=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  record(`R1b resets=${resets} statusAt=${statusAt}ms serverDuringOutage=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
   net.stop(); await page.unroute(COMMIT);
   expect(statusAt, 'accessible saving/connection status within the 8 s outage').toBeGreaterThanOrEqual(0);
   expect(serverDuring, 'nothing on the server during the outage').toBe(0);
   expect(rec.mode, 'the operation completes after restore and the UI shows the team').not.toBe('not-recovered');
-  await expectExactlyTheOperation(uid, op, 'A1b');
+  await expectExactlyTheOperation(uid, op, 'R1b');
 });
 
-test('N2-A1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree', async ({ page }) => {
+test('N2-R1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2ra1c'));
   const name = 'N2 REST Lost Response';
   await openCreate(page, name);
@@ -399,15 +394,15 @@ test('N2-A1c [acceptance] lost response AFTER server commit (commit delivered, i
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 3_000));
   net.mark('end');
-  record(`A1c dropped=${dropped} serverCommitStatus=${committedStatus} statusAt=${statusAt}ms serverAfterCommit=${serverAfterCommit} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  record(`R1c dropped=${dropped} serverCommitStatus=${committedStatus} statusAt=${statusAt}ms serverAfterCommit=${serverAfterCommit} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
   net.stop(); await page.unroute(COMMIT);
   expect(committedStatus, 'the commit really reached the server').toBe(200);
   expect(statusAt, 'accessible saving/connection status within 8 s').toBeGreaterThanOrEqual(0);
   expect(rec.mode, 'the UI recovers and shows the team').not.toBe('not-recovered');
-  await expectExactlyTheOperation(uid, op, 'A1c');
+  await expectExactlyTheOperation(uid, op, 'R1c');
 });
 
-test('N2-A2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)', async ({ page }) => {
+test('N2-R2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2ra2'));
   const name = 'N2 REST Pending';
   await openCreate(page, name);
@@ -437,14 +432,14 @@ test('N2-A2 [acceptance] REST create held pending; coach leaves and returns to T
   holding = false; releases.splice(0).forEach((r) => r());
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 5_000)); // late-duplicate window
-  record(`A2 resumeVisibleWhilePending=${resumeVisible} secondSubmitPossible=${secondSubmit} recovery=${rec.mode}/${rec.ms}ms`);
+  record(`R2 resumeVisibleWhilePending=${resumeVisible} secondSubmitPossible=${secondSubmit} recovery=${rec.mode}/${rec.ms}ms`);
   await page.unroute(COMMIT);
   expect(resumeVisible, 'the pending creation stays visible and resumable on Teams').toBe(true);
   expect(rec.mode, 'the pending creation completes').not.toBe('not-recovered');
-  await expectExactlyTheOperation(uid, op, 'A2');
+  await expectExactlyTheOperation(uid, op, 'R2');
 });
 
-test('N2-A3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once', async ({ page }) => {
+test('N2-R3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2ra3'));
   const name = 'N2 REST Refresh';
   await openCreate(page, name);
@@ -462,13 +457,13 @@ test('N2-A3 [acceptance] pending REST creation survives a page refresh and the s
   await expect(page.getByRole('button', { name: 'Resume team creation' }), 'pending creation survives refresh').toBeVisible();
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 3_000));
-  record(`A3 recovery=${rec.mode}/${rec.ms}ms`);
+  record(`R3 recovery=${rec.mode}/${rec.ms}ms`);
   await page.unroute(COMMIT);
   expect(rec.mode).not.toBe('not-recovered');
-  await expectExactlyTheOperation(uid, op, 'A3');
+  await expectExactlyTheOperation(uid, op, 'R3');
 });
 
-test('N2-A4 [acceptance] account isolation A -> B -> A: B cannot see or resume A\'s pending team; A recovers it once', async ({ page }) => {
+test('N2-R4 [acceptance] account isolation A -> B -> A: B cannot see or resume A\'s pending team; A recovers it once', async ({ page }) => {
   const emailA = coachEmail('n2ra4a');
   const uidA = await signInAsBetaCoach(page, emailA);
   const name = 'N2 REST Isolation';
@@ -498,9 +493,91 @@ test('N2-A4 [acceptance] account isolation A -> B -> A: B cannot see or resume A
   await expect(page.getByRole('button', { name: 'Resume team creation' }), 'A can resume').toBeVisible();
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 3_000));
-  record(`A4 recovery=${rec.mode}/${rec.ms}ms`);
+  record(`R4 recovery=${rec.mode}/${rec.ms}ms`);
   await page.unroute(COMMIT);
   expect(rec.mode).not.toBe('not-recovered');
-  await expectExactlyTheOperation(uidA, opA, 'A4');
+  await expectExactlyTheOperation(uidA, opA, 'R4');
   expect((await adminTeamsFull(uidB)).filter((t) => t.name === name), 'nothing under B').toHaveLength(0);
+});
+
+
+/** No success shown: dialog still open, no success toast, no team heading. */
+async function noSuccessShown(page: Page, name: string) {
+  return (await dialog(page).count()) > 0
+    && (await page.getByText('Team created successfully!').count()) === 0
+    && (await page.getByRole('heading', { name, exact: true }).count()) === 0;
+}
+
+test('N2-R5 [acceptance] commit appears to succeed but the authoritative readback finds nothing: no success is reported; after recovery the same operation is created once at the original ID', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2rr5'));
+  const name = 'N2 REST Readback';
+  await openCreate(page, name);
+  let faking = true; let faked = 0;
+  await page.route(COMMIT, async (route: Route) => {
+    if (faking) { // the request never reaches the server; the client is told it succeeded
+      faked += 1;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ writeResults: [{}], commitTime: new Date().toISOString() }) }).catch(() => {});
+      return;
+    }
+    await route.continue().catch(() => {});
+  });
+  const net = firestoreNetLog(page);
+  const t0 = Date.now(); net.mark('click');
+  await submit(page).click();
+  const statusAt = await statusWithin(page, t0, 8_000);
+  const op = await pendingOp(page, uid);
+  await new Promise((r) => setTimeout(r, Math.max(0, 8_000 - (Date.now() - t0))));
+  const noFalseSuccess = await noSuccessShown(page, name);
+  const serverDuring = (await adminTeamsFull(uid)).length;
+  faking = false; net.mark('restore');
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 3_000));
+  net.mark('end');
+  record(`R5 fakedCommits=${faked} statusAt=${statusAt}ms noFalseSuccessAt8s=${noFalseSuccess} serverDuring=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  net.stop(); await page.unroute(COMMIT);
+  expect(faked, 'the fault was applied').toBeGreaterThan(0);
+  expect(statusAt, 'accessible saving/connection status within 8 s').toBeGreaterThanOrEqual(0);
+  expect(serverDuring, 'nothing on the server').toBe(0);
+  expect(noFalseSuccess, 'a commit response without authoritative readback must not be reported as success').toBe(true);
+  expect(rec.mode).not.toBe('not-recovered');
+  await expectExactlyTheOperation(uid, op, 'R5');
+});
+
+test('N2-R6 [acceptance] a different team already exists at the operation\'s document ID: no success, no overwrite, no second team, even after Check and retry', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2rr6'));
+  const name = 'N2 REST Mismatch';
+  await openCreate(page, name);
+  const releases: Array<() => void> = []; let holding = true;
+  await page.route(COMMIT, async (route: Route) => {
+    if (holding) await new Promise<void>((r) => releases.push(r));
+    await route.continue().catch(() => {});
+  });
+  const t0 = Date.now();
+  await submit(page).click();
+  const statusAt = await statusWithin(page, t0, 8_000);
+  const op = await pendingOp(page, uid);
+  expect(op, 'pending operation recorded before the request').not.toBeNull();
+  // A different team (same owner, different name/code) occupies the operation's ID on the server.
+  const t = new Date();
+  await adminSet(`teams/${op!.id}`, { name: 'Existing Different Team', code: 'ZZZZ2222', ownerId: uid, memberIds: [uid], createdAt: t, updatedAt: t });
+  const before = await adminGet(`teams/${op!.id}`);
+  holding = false; releases.splice(0).forEach((r) => r());
+  // Give the app time to resolve, then use its own retry control once.
+  await new Promise((r) => setTimeout(r, 12_000));
+  const noSuccessFirst = await noSuccessShown(page, name);
+  const alertShown = (await page.getByRole('alert').count()) > 0;
+  const retry = page.getByRole('button', { name: 'Check and retry' });
+  let retried = false;
+  if (await retry.count() && await retry.isEnabled()) { await retry.click(); retried = true; await new Promise((r) => setTimeout(r, 8_000)); }
+  const noSuccessAfterRetry = await noSuccessShown(page, name);
+  const after = await adminGet(`teams/${op!.id}`);
+  const mine = (await adminTeamsFull(uid)).filter((x) => x.name === name);
+  record(`R6 statusAt=${statusAt}ms noSuccess=${noSuccessFirst} alert=${alertShown} retried=${retried} noSuccessAfterRetry=${noSuccessAfterRetry} unchanged=${JSON.stringify(after) === JSON.stringify(before)} teamsWithName=${mine.length}`);
+  await page.unroute(COMMIT);
+  expect(statusAt, 'accessible saving/connection status within 8 s').toBeGreaterThanOrEqual(0);
+  expect(noSuccessFirst, 'mismatching server data is not reported as success').toBe(true);
+  expect(alertShown, 'the coach is told the creation was not confirmed').toBe(true);
+  expect(noSuccessAfterRetry, 'still no success after Check and retry').toBe(true);
+  expect(after, 'the existing team is not overwritten').toEqual(before);
+  expect(mine, 'no second team with the submitted name').toHaveLength(0);
 });
