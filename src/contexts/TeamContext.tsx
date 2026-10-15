@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { 
   collection, 
   doc, 
-  addDoc, 
   getDoc, 
   getDocs, 
   query, 
@@ -13,6 +12,9 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db, auth } from '../services/firebase';
+import {useAuth} from '../hooks/useAuth';
+import {TeamCreation, TeamCreationState} from './teamCreation';
+import {teamCreationGateway} from './teamCreationGateway';
 
 // Types
 export interface Team {
@@ -39,6 +41,8 @@ interface TeamContextType {
   loading: boolean;
   error: string | null;
   createTeam: (name: string) => Promise<string>;
+  teamCreation: TeamCreationState;
+  teamCreationAccount: string | null;
   joinTeam: (code: string) => Promise<void>;
   switchTeam: (teamId: string) => void;
   leaveTeam: (teamId: string) => Promise<void>;
@@ -60,52 +64,54 @@ interface TeamProviderProps {
   children: ReactNode;
 }
 
+// Team display code. Private beta: owner-only teams, so the code is a label,
+// not an access credential (invites are disabled; see joinTeam).
+const generateTeamCode = (): string => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => chars[b % chars.length]).join('');
+};
+
 export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
   const [userTeams, setUserTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Team display code. Private beta: owner-only teams, so the code is a label,
-  // not an access credential (invites are disabled; see joinTeam).
-  const generateTeamCode = (): string => {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    const bytes = new Uint8Array(8);
-    crypto.getRandomValues(bytes);
-    return Array.from(bytes, (b) => chars[b % chars.length]).join('');
-  };
+  const {user: signedInUser} = useAuth();
+  const uid = signedInUser?.uid;
+  const creation = useMemo(() => uid ? new TeamCreation(uid,
+    `coachcore:v1:${auth.app.options.projectId}:${uid}:team-create`, localStorage,
+    teamCreationGateway, name => ({uid, name, id: doc(collection(db, 'teams')).id,
+      code: generateTeamCode(), startedAt: Date.now()})) : null, [uid]);
+  const [creationView, setCreationView] = useState<{owner: TeamCreation | null; state: TeamCreationState}>(
+    {owner: creation, state: creation?.state || {operation: null, phase: 'idle', error: null}});
+  const teamCreation = creationView.owner === creation ? creationView.state :
+    creation?.state || {operation: null, phase: 'idle' as const, error: null};
+  useEffect(() => {
+    if (!creation) return;
+    creation.activate();
+    const update = () => setCreationView({owner: creation, state: creation.state});
+    update();
+    const unsubscribe = creation.subscribe(update);
+    return () => { unsubscribe(); creation.dispose(); };
+  }, [creation]);
 
-  // Create a new team
   const createTeam = async (name: string): Promise<string> => {
     try {
       setError(null);
-      const user = auth.currentUser;
-      if (!user) throw new Error('User must be authenticated');
-
-      // Querying other teams' codes is denied by the security rules, so no
-      // uniqueness lookup; 8 random characters make collisions negligible.
-      const code = generateTeamCode();
-
-      const teamData = {
-        name,
-        code,
-        ownerId: user.uid,
-        memberIds: [user.uid],
-        memberDetails: [{
-          id: user.uid,
-          email: user.email || '',
-          role: 'owner' as const,
-          joinedAt: new Date()
-        }],
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      };
-
-      const docRef = await addDoc(collection(db, 'teams'), teamData);
-      return docRef.id;
+      if (!creation || !uid || auth.currentUser?.uid !== uid) throw new Error('User must be authenticated. No team submitted.');
+      const id = await creation.start(name);
+      if (auth.currentUser?.uid !== uid) throw new Error('Account changed. Pending creation retained.');
+      const confirmed = creation.confirmedTeam;
+      if (confirmed) {
+        setUserTeams(teams => [...teams.filter(t => t.id !== id && t.ownerId === uid), confirmed]);
+        setCurrentTeam(team => team?.ownerId === uid ? team : confirmed);
+      }
+      return id;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create team';
-      setError(errorMessage);
+      if (auth.currentUser?.uid === uid) setError(err instanceof Error ? err.message : 'Team creation not confirmed.');
       throw err;
     }
   };
@@ -279,38 +285,39 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   // Load user's teams
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) {
-      setLoading(false);
-      return;
-    }
+    setCurrentTeam(null);
+    setUserTeams([]);
+    setError(null);
+    setLoading(Boolean(uid));
+    if (!uid || auth.currentUser?.uid !== uid) { setLoading(false); return; }
 
     const unsubscribe = onSnapshot(
       // Owner-only tenancy: the rules allow listing only the caller's own teams.
-      query(collection(db, 'teams'), where('ownerId', '==', user.uid)),
+      query(collection(db, 'teams'), where('ownerId', '==', uid)),
+      {includeMetadataChanges: true},
       (snapshot) => {
+        if (auth.currentUser?.uid !== uid) return;
         const teams: Team[] = [];
         snapshot.forEach((doc) => {
           teams.push({ id: doc.id, ...doc.data() } as Team);
         });
         setUserTeams(teams);
 
-        // Set current team if not already set
-        if (!currentTeam && teams.length > 0) {
-          const savedTeamId = localStorage.getItem('currentTeamId');
-          const teamToSet = savedTeamId 
-            ? teams.find(t => t.id === savedTeamId) 
-            : teams[0];
-          
-          if (teamToSet) {
-            setCurrentTeam(teamToSet);
-            localStorage.setItem('currentTeamId', teamToSet.id);
-          }
+        // Pending local snapshots cannot acknowledge a creation.
+        if (!snapshot.metadata.fromCache && !snapshot.metadata.hasPendingWrites) {
+          teams.forEach(team => creation?.confirm(team));
         }
+        setCurrentTeam(previous => {
+          const savedTeamId = localStorage.getItem('currentTeamId');
+          const next = teams.find(t => t.id === previous?.id) || teams.find(t => t.id === savedTeamId) || teams[0] || null;
+          if (next) localStorage.setItem('currentTeamId', next.id);
+          return next;
+        });
 
         setLoading(false);
       },
       (err) => {
+        if (auth.currentUser?.uid !== uid) return;
         console.error('Error loading teams:', err);
         setError('Failed to load teams');
         setLoading(false);
@@ -318,14 +325,16 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     );
 
     return () => unsubscribe();
-  }, [currentTeam]);
+  }, [uid, creation]);
 
   const value: TeamContextType = {
-    currentTeam,
-    userTeams,
+    currentTeam: currentTeam?.ownerId === uid ? currentTeam : null,
+    userTeams: userTeams.filter(team => team.ownerId === uid),
     loading,
     error,
     createTeam,
+    teamCreation,
+    teamCreationAccount: uid || null,
     joinTeam,
     switchTeam,
     leaveTeam,
@@ -338,4 +347,4 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       {children}
     </TeamContext.Provider>
   );
-}; 
+};
