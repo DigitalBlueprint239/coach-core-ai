@@ -6,7 +6,7 @@
 // are reported separately from acceptance tests.
 import { test, expect, type Page, type Route } from '@playwright/test';
 import { resetEmulators, adminTeamsOwnedBy, AUTH_ONLY } from './support/emulator';
-import { coachEmail, skipOnboarding, signInAsBetaCoach, openTab, firestoreNetLog } from './support/app';
+import { coachEmail, skipOnboarding, signInAsBetaCoach, openTab, firestoreNetLog, createTeamViaUI, signOutViaUI } from './support/app';
 
 test.beforeEach(async ({ context }) => {
   test.skip(AUTH_ONLY, 'needs the Firestore emulator');
@@ -152,4 +152,113 @@ test('N2-D2 [diagnostic] write held (pending, not on the server): coach cancels,
   await page.unroute(/Firestore\/Write\/channel/);
   expect(teams.length, 'no more teams than submissions').toBeLessThanOrEqual(retryEnabled ? 2 : 1);
   expect(teams.length, 'the submitted team is not lost').toBeGreaterThanOrEqual(1);
+});
+
+// ---------------------------------------------------------------------------
+// N2 repair ACCEPTANCE tests (2026-10-15, Coach Drew N2-repair directive).
+// They state the required behaviour; they are expected to FAIL on code without
+// the repair (candidate 10 `186a743`) and are counted as acceptance tests once
+// Codex's repair SHA is under test. The fault injection is the same as D1/D2.
+// Status wording is matched loosely (proposed on #39): a role=status/alert
+// whose text mentions saving, connection, offline or retry.
+// ---------------------------------------------------------------------------
+const savingStatus = (page: Page) => page.getByRole('status').or(page.getByRole('alert')).filter({ hasText: /saving|connection|offline|retry/i });
+
+test('N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2a1'));
+  const name = 'N2 Recovered';
+  await openCreate(page, name);
+  let blocking = true;
+  await page.route(/Firestore\/Write\/channel/, async (route: Route) => {
+    if (blocking && route.request().method() === 'GET') { await route.abort('connectionreset').catch(() => {}); return; }
+    await route.continue().catch(() => {});
+  });
+  const net = firestoreNetLog(page);
+  const t0 = Date.now(); net.mark('click');
+  await submit(page).click();
+  // While unconfirmed (within the 8 s outage) the coach must see an explicit status, not only a spinner.
+  const statusAt = await until(async () => (await savingStatus(page).count()) > 0, t0, 8_000);
+  await new Promise((r) => setTimeout(r, Math.max(0, 8_000 - (Date.now() - t0))));
+  blocking = false; net.mark('restore');
+  const tr = Date.now();
+  const savedAt = await until(async () => (await teamsNamed(uid, name)).length > 0, tr, 30_000);
+  const recoveredAt = await until(async () => (await dialog(page).count()) === 0
+    && (await page.getByRole('heading', { name, exact: true }).count()) > 0, tr, 30_000);
+  await new Promise((r) => setTimeout(r, 3_000)); // late-duplicate observation window
+  const teams = await teamsNamed(uid, name);
+  net.mark('end');
+  record(`A1 statusAt=${statusAt}ms savedAfterRestore=${savedAt}ms recoveredAfterRestore=${recoveredAt}ms teams=${teams.length} net: ${net.summary(1000)}`);
+  net.stop(); await page.unroute(/Firestore\/Write\/channel/);
+  expect(statusAt, 'an explicit saving/connection status must appear while the save is unconfirmed').toBeGreaterThanOrEqual(0);
+  expect(savedAt, 'the pending write must be sent after connectivity returns').toBeGreaterThanOrEqual(0);
+  expect(teams.length, 'saved exactly once').toBe(1);
+  expect(recoveredAt, 'the UI must recover: dialog closed and the team shown').toBeGreaterThanOrEqual(0);
+});
+
+test('N2-A2 [acceptance] cancelling or leaving during a pending create and trying again never produces a duplicate team', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2a2'));
+  const name = 'N2 No Duplicate';
+  await openCreate(page, name);
+  const held: Array<() => void> = []; let holding = true;
+  await page.route(/Firestore\/Write\/channel/, async (route: Route) => {
+    if (holding && route.request().method() === 'POST') { await new Promise<void>((r) => held.push(r)); }
+    await route.continue().catch(() => {});
+  });
+  await submit(page).click();
+  await expect(page.getByText('Creating...')).toBeVisible(); // positive anchor: the create is pending
+  // The coach tries every way back to a fresh attempt the UI allows.
+  const cancel = page.getByRole('button', { name: 'Cancel' });
+  const cancelEnabled = (await cancel.count()) > 0 && await cancel.isEnabled();
+  if (cancelEnabled) await cancel.click();
+  await openTab(page, 'My Week');
+  await openTab(page, 'Teams');
+  let retried = false;
+  const createButton = page.getByRole('button', { name: 'Create Team', exact: true }).first();
+  if ((await createButton.count()) > 0 && await createButton.isEnabled()) {
+    await createButton.click();
+    const field = page.getByLabel('Team Name');
+    if ((await field.count()) > 0) {
+      await field.fill(name);
+      if (await submit(page).isEnabled()) { await submit(page).click(); retried = true; }
+    }
+  }
+  holding = false; held.splice(0).forEach((r) => r());
+  const t0 = Date.now();
+  const savedAt = await until(async () => (await teamsNamed(uid, name)).length > 0, t0, 30_000);
+  await new Promise((r) => setTimeout(r, 5_000)); // late-duplicate observation window
+  const teams = await teamsNamed(uid, name);
+  record(`A2 cancelEnabled=${cancelEnabled} retrySubmitted=${retried} savedAfterRelease=${savedAt}ms teams=${teams.length}`);
+  await page.unroute(/Firestore\/Write\/channel/);
+  expect(savedAt, 'the pending team must be saved once delivered').toBeGreaterThanOrEqual(0);
+  expect(teams.length, 'never a duplicate team').toBe(1);
+});
+
+// ---------------------------------------------------------------------------
+// N3 diagnostic (2026-10-15): Create Team produced no request and no
+// "Creating..." (D10-06b, Firefox, 1/10 at 186a743). Repeats the D10-06b
+// pattern (coach A creates, signs out, coach B signs in and creates at once)
+// and records the N3 probe for every creation. Fails only if an N3-like case
+// occurs, so a reproduction is preserved; reported separately from acceptance.
+// ---------------------------------------------------------------------------
+test('N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text', async ({ page }) => {
+  const rows: string[] = [];
+  let failures = 0;
+  for (let i = 0; i < 4; i += 1) {
+    for (const who of ['a', 'b']) {
+      const uid = await signInAsBetaCoach(page, coachEmail(`n3${who}${i}`));
+      const name = `N3 ${who.toUpperCase()}${i}`;
+      try {
+        await createTeamViaUI(page, name);
+        rows.push(`${who}${i}:ok`);
+      } catch {
+        failures += 1;
+        rows.push(`${who}${i}:FAIL server=${(await teamsNamed(uid, name)).length}`);
+        break;
+      }
+      await signOutViaUI(page);
+    }
+    if (failures) break;
+  }
+  record(`N3-D5 cycles=${rows.join(' ')}`);
+  expect(failures, 'an N3-like creation failure occurred (see diag-data for the probe)').toBe(0);
 });
