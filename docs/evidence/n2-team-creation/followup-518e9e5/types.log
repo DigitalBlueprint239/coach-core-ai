@@ -1,0 +1,1 @@
+src/contexts/TeamContext.tsx(126,45): error TS18047: 'currentTeam' is possibly 'null'.

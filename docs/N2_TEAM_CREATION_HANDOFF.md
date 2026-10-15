@@ -170,3 +170,45 @@ Rollback: retain the frozen base and the repair commit. If review rejects the
 transport, do not merge or deploy it. Do not clear journals or replay an older
 random-ID create while an operation is unconfirmed; reconcile its ID with the
 server first. No rollback deployment or data operation is authorized here.
+
+
+## Same-name consent and selected-team follow-up — 2026-10-15
+
+Contract: #39 comment 6200909139; file claim 6202039959. Runtime source
+518e9e5817abd2a0e1bf1308468928f238fa8533, branch codex/n2-team-creation-reliability,
+PR #71. Prior candidate/evidence remains intact.
+
+- Same-name gap: a new submission previously went directly to createTeam. The
+  modal now compares exact trimmed names against the current owner's server-
+  confirmed teams and requests explicit separate-team consent. Opening or
+  declining the prompt sends nothing. An immediate submission guard prevents
+  duplicate confirm clicks. Pending journal retries bypass this new-operation
+  prompt and retain the existing operation ID/create-only/readback contract.
+- Selection defect: REST confirmation could populate React currentTeam without
+  writing currentTeamId; only the SDK listener/switch path persisted selection.
+  An account-guarded selection effect covers REST completion too. Snapshot IDs
+  are now taken from the document reference after spreading document fields.
+  Existing valid selection is preserved. Focused regression confirms storage
+  when the gateway resolves without any listener callback.
+- App-owned tests cover prompt/decline/confirm once, same-name pending retry,
+  and REST-only selection persistence. Full unit suite: 480/480, 37 suites.
+  TypeScript final: zero diagnostics. Initial new effect produced TS18047;
+  explicit non-null guard corrected it, and the failure log is retained.
+- No auth/rules/functions/acceptance harness edits. No schema or dependency
+  changes. No new independent browser, staging or physical-device acceptance
+  is claimed. Claude owns R7/R7b/R8/R8b and full matrix on this exact SHA.
+  N2-A2 stays obsolete-fault-model, with historical evidence unchanged.
+- Rollback: review/revert only this bounded app commit after coordination;
+  do not delete journals, replay new random IDs, merge or deploy. Candidate10,
+  candidate9b and #67 are unchanged. MVP NO-GO; AI disabled; film blocked.
+
+
+Final follow-up production build: PASS (exit0), with inherited SmartPlaybook
+warnings retained in build.log. Evidence and exact commands:
+`docs/evidence/n2-team-creation/followup-518e9e5/README.md` and manifest.json.
+Initial focused run overlapped edits and is not a frozen baseline. A later
+old-source check used the wrong copied fixtures and was terminated; its output
+is retained as invalid setup, never counted as a product failure or acceptance.
+The new selection regression is verified on repaired code; frozen pre-fix dynamic
+reproduction for this follow-up is NOT MEASURED. Original independent findings
+remain the external reproduction record. All 480 unit cases are app/mocked tests.

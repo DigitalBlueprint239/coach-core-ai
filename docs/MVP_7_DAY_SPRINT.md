@@ -137,3 +137,18 @@ Isolated codex/n2-team-creation-reliability, draft #71, source bdb06ae6d39ff9ed3
 Baseline453/453,TS0,buildPASS; final477/477,TS0,production/emulator buildsPASS with inherited warnings. Owned pre-repair modal regression5FAIL/5; initial fixture failures retained; corrected listener testsPASS. Real focused emulator browser8/8 (Chromium156.0.8078.4/Firefox157.0, retries0/skips0). Clean install, dependencies unchanged/full graph98 findings. docs/N2_TEAM_CREATION_HANDOFF.md and docs/evidence/n2-team-creation contain commands, failures, results, hashes, limits and rollback. This is implementation evidence, not Claude independent acceptance.
 
 Claude next: independently fault the new REST path and run existing full coaching/identity matrix on a separate candidate; original Write-channel diagnostics alone do not test the new transport. Historical H2/FX02/N3/import residual/R3/R4/touch/missing initial ZIP/PNG preserved; staging/physical/hidden tabs NOT MEASURED. D1â€“D9 directions settled with exact approval provenance still missing per CC007; no film/AI activation. MVP NO-GO, BDN-AEO-001 queued; no merge/deploy/spend/live changes/deletion.
+
+
+## N2 same-name/selection follow-up — 2026-10-15
+
+PR71 runtime 518e9e5817abd2a0e1bf1308468928f238fa8533; contract #39/6200909139,
+claim6202039959 and runtime handoff6202137524. App-only consent for exact trimmed
+same-name confirmed own teams; decline/open prompt writes nothing; pending retries
+retain operation identity. Account-guarded selection persistence covers REST-only
+confirmation before SDK listener; focused app regression added. 480/480 unit,
+37 suites; final TypeScript0 (initial TS18047 retained/corrected). Build result in
+N2_TEAM_CREATION_HANDOFF.md and evidence/n2-team-creation/followup-518e9e5.
+Claude owns R7/R7b/R8/R8b and full browser matrix on this exact runtime. No new
+independent/staging/physical acceptance claimed. N2-A2 obsolete-fault-model,
+historical failures and missing evidence retained. Candidate10/9b/#67 and harness,
+auth/rules/functions unchanged. No merge/deploy; MVP NO-GO; AIoff/film blocked.
