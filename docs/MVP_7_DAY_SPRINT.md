@@ -128,3 +128,12 @@ Claude next: confirm integrated SHA, clean integration checks and independent ac
 ## 2026-10-14 — R1c acceptance-blocking repair (#69)
 
 Source82d46cc33b7933d4de19b84a0acc553553c51d44, isolated codex/r1c-owner-resume, base frozen #64 8f0d9f7. Unfinished Not now postpones with explicit Resume import and reload recovery for original coach/team, including pre-repair declined/pending records. Other accounts/teams blocked, verified readback/idempotency/original bytes preserved; freshR3 unchanged. Frozen source4FAIL/1PASS -> six focused cases and440/440 full unitPASS; buildPASS existing warnings, initialTS0. Final check/handoff in docs/R1C_OWNER_RESUME_HANDOFF.md. No auth/rules/functions/independent acceptance edits. Claude candidate8 repeat pending; all prior failures/missing historical ZIP/PNG remain disclosed. #65 PhaseA separate #70. MVP NO-GO; AIoff; Film50required/blocked; no merge/deploy/live changes.
+
+
+## N2 client reliability milestone — 2026-10-15 / Codex
+
+Isolated codex/n2-team-creation-reliability, draft #71, source bdb06ae6d39ff9ed3fee7000f93468c8cf2f8fe7 from frozen approved-identity candidate10 186a7435ef2236470a2ed9e2f94e8f614f6e6feb. Candidate10/9b/#67 unchanged; no identity/auth/rules/functions/Claude E2E edits. Durable uid+project-scoped pending team operation; same-id create-only REST commit; authoritative confirmation; ten-second Still saving and explicit safe retry. No SDK network toggles. N3 and natural SDK N2 cause remain unproven.
+
+Baseline453/453,TS0,buildPASS; final477/477,TS0,production/emulator buildsPASS with inherited warnings. Owned pre-repair modal regression5FAIL/5; initial fixture failures retained; corrected listener testsPASS. Real focused emulator browser8/8 (Chromium156.0.8078.4/Firefox157.0, retries0/skips0). Clean install, dependencies unchanged/full graph98 findings. docs/N2_TEAM_CREATION_HANDOFF.md and docs/evidence/n2-team-creation contain commands, failures, results, hashes, limits and rollback. This is implementation evidence, not Claude independent acceptance.
+
+Claude next: independently fault the new REST path and run existing full coaching/identity matrix on a separate candidate; original Write-channel diagnostics alone do not test the new transport. Historical H2/FX02/N3/import residual/R3/R4/touch/missing initial ZIP/PNG preserved; staging/physical/hidden tabs NOT MEASURED. D1–D9 directions settled with exact approval provenance still missing per CC007; no film/AI activation. MVP NO-GO, BDN-AEO-001 queued; no merge/deploy/spend/live changes/deletion.
