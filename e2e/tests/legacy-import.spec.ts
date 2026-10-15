@@ -11,7 +11,7 @@ import {
 } from './support/app';
 import {
   LEGACY_PLAYS, seedDevice, deviceState, expectOriginalsUntouched, openPlaybook, importPrompt,
-  adminCopies, libraryNames, commitControl, expectedCopyId, decisionKey, acceptImport,
+  adminCopies, expectLibraryContains, seedControlPlay, libraryNamesLoaded, commitControl, expectedCopyId, decisionKey, acceptImport,
 } from './support/legacy';
 
 test.beforeEach(async ({ context }) => {
@@ -70,21 +70,22 @@ test('D10-01 accept: explicit consent copies every play exactly into the selecte
   const decision = JSON.parse((await deviceState(page)).decisions[decisionKey(uid)]);
   expect(decision).toEqual({ decision: 'imported', teamId, ids: LEGACY_PLAYS.map((p) => expectedCopyId(uid, teamId, p)) });
   await expectOriginalsUntouched(page); // includes the standalone format: not converted, not touched
-  expect(await libraryNames(page)).toEqual(expect.arrayContaining(LEGACY_PLAYS.map((p) => p.name)));
+  await expectLibraryContains(page, LEGACY_PLAYS.map((p) => p.name));
 });
 
 test('D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach', async ({ page }) => {
-  const { uid } = await coachWithTeam(page, 'd10b', 'Alpha Eagles');
+  const { uid, teamId } = await coachWithTeam(page, 'd10b', 'Alpha Eagles');
   await openPlaybook(page);
   await importPrompt(page).getByRole('button', { name: 'Not now' }).click();
   await expect(importPrompt(page)).toHaveCount(0);
   expect(await adminCopies(uid)).toEqual([]);
   expect(JSON.parse((await deviceState(page)).decisions[decisionKey(uid)])).toEqual({ decision: 'declined' });
   await expectOriginalsUntouched(page);
+  await seedControlPlay(uid, teamId); // positive anchor for the negative library check
   await page.reload();
   await openPlaybook(page);
   await expect(importPrompt(page)).toHaveCount(0);
-  expect(await libraryNames(page)).not.toEqual(expect.arrayContaining(['Legacy Mesh']));
+  expect(await libraryNamesLoaded(page)).not.toEqual(expect.arrayContaining(['Legacy Mesh']));
 });
 
 test('D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten', async ({ page }) => {
@@ -151,10 +152,11 @@ test('D10-06 two coaches, one browser profile: coach B never sees or reads coach
   await signOutViaUI(page);
 
   const b = coachEmail('d10fb');
-  await signInAsBetaCoach(page, b);
+  const bUid = await signInAsBetaCoach(page, b);
   await createTeamViaUI(page, 'Bravo Bulldogs');
+  await seedControlPlay(bUid, (await storage(page)).currentTeamId as string); // positive anchor: B's own library has loaded
   await openPlaybook(page);
-  const names = await libraryNames(page);
+  const names = await libraryNamesLoaded(page);
   for (const p of LEGACY_PLAYS) expect(names).not.toContain(p.name); // A's cloud copies are not in B's library
   await waitForE2EHooks(page);
   const aCopy = expectedCopyId(a.uid, a.teamId, LEGACY_PLAYS[0]);
@@ -189,7 +191,7 @@ test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing 
   net.holdFrom(2);
   await openPlaybook(page);
   await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
-  await net.waitFor(2); // copy #2 is on the wire
+  await test.step('wait for copy #2 on the wire', () => net.waitFor(2)); // copy #2 is on the wire
   await openTab(page, 'Teams');
   await page.getByRole('button', { name: 'Switch to' }).click();
   const bravo = (await storage(page)).currentTeamId;
@@ -200,7 +202,7 @@ test('D10-07 team switch while a copy is in flight: no acknowledgement, nothing 
   await expect.poll(async () => (await adminCopies(uid)).length).toBe(2);
   // Negative claim (the stale loop must not continue to copy #3 or record a
   // decision) needs an observation window; 5 s is documented, not a retry.
-  await new Promise((r) => setTimeout(r, 5_000));
+  await test.step('5 s observation window', () => new Promise((r) => setTimeout(r, 5_000)));
   expect(net.count(), 'no further commit after the stale completion').toBe(2);
   expect((await adminCopies(uid)).every((c) => c.data.teamId === alpha)).toBe(true);
   expect((await deviceState(page)).decisions[decisionKey(uid)], 'no decision after an interrupted import').toBeUndefined();
@@ -312,7 +314,7 @@ test('D10-11 cloud reopen: a fresh browser profile with no device data shows the
     await signInAsBetaCoach(p2, a.email);
     await openPlaybook(p2);
     await expect(importPrompt(p2)).toHaveCount(0); // nothing on this device to import
-    expect(await libraryNames(p2)).toEqual(expect.arrayContaining(LEGACY_PLAYS.map((p) => p.name)));
+    await expectLibraryContains(p2, LEGACY_PLAYS.map((p) => p.name));
     await expect(p2.getByText('Phase: special | Type: punt')).toBeVisible(); // special_teams decoded back
     expect(await p2.evaluate(() => localStorage.getItem('smartPlaybook_plays'))).toBeNull();
   } finally {
@@ -380,5 +382,51 @@ test('D10-06d [founder rule: originals preserved, no dead end] after coach A dec
   const bNotice = await importPrompt(page).innerText();
   expect(aOffered || bOffered,
     `dead end: A re-offered=${aOffered}; B offered=${bOffered}; B sees "${bNotice.replace(/\s+/g, ' ').trim()}"`).toBe(true);
+  await expectOriginalsUntouched(page);
+});
+
+// R1c acceptance with positive anchors (founder guidance, 2026-10-14: "Not now"
+// postpones an unfinished import and leaves a clear recovery path for the
+// original coach and team; ownership protections, originals and verified
+// completion preserved). D10-06d above is kept unchanged as the original probe.
+test('D10-06e [founder rule: R1c recovery] "Not now" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched', async ({ page }) => {
+  const a = await coachWithTeam(page, 'd10ea', 'Alpha Eagles');
+  const net = commitControl(page); await net.ready; net.holdFrom(2);
+  await openPlaybook(page);
+  await importPrompt(page).getByRole('button', { name: 'Import plays' }).click();
+  await test.step('wait for copy #2 on the wire', () => net.waitFor(2)); // 1 verified copy
+  await page.reload(); // import interrupted
+  net.pass(); net.release();
+  await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
+  await importPrompt(page).getByRole('button', { name: 'Not now' }).click();
+  // 1. Postponed, with a visible way back, and no permanent decline recorded.
+  await expect(importPrompt(page)).toContainText('Unfinished import postponed');
+  await expect(importPrompt(page).getByRole('button', { name: 'Resume import' })).toBeVisible();
+  expect((await deviceState(page)).decisions[decisionKey(a.uid)], 'postpone must not record a decline').toBeUndefined();
+  await importPrompt(page).getByRole('button', { name: 'Resume import' }).click();
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
+  // 2. After a reload the original coach on the original team is offered it again.
+  await page.reload();
+  await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' }), 'owner re-offered after reload').toBeVisible();
+  await expectOriginalsUntouched(page);
+  // 3. Another coach on this device is still blocked (R1b) and sees why.
+  await signOutViaUI(page);
+  await signInAsBetaCoach(page, coachEmail('d10eb'));
+  await createTeamViaUI(page, 'Bravo Bulldogs');
+  await openPlaybook(page);
+  await expect(importPrompt(page)).toContainText('unfinished import by another account');
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toHaveCount(0);
+  await expectOriginalsUntouched(page);
+  // 4. The original coach returns, resumes, and finishes: exactly the verified copies, no duplicates.
+  await signOutViaUI(page);
+  await signInAsBetaCoach(page, a.email);
+  expect((await storage(page)).currentTeamId, 'original team selected').toBe(a.teamId);
+  await openPlaybook(page);
+  await acceptImport(page);
+  expectFaithfulCopies(await adminCopies(a.uid), a.uid, a.teamId);
+  const decision = JSON.parse((await deviceState(page)).decisions[decisionKey(a.uid)]);
+  expect(decision).toEqual({ decision: 'imported', teamId: a.teamId, ids: LEGACY_PLAYS.map((p) => expectedCopyId(a.uid, a.teamId, p)) });
   await expectOriginalsUntouched(page);
 });

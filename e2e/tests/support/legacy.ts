@@ -1,7 +1,7 @@
 // D10 legacy-import fixtures and helpers (synthetic data only).
 import { createHash } from 'node:crypto';
 import { expect, type Page } from '@playwright/test';
-import { adminQuery } from './emulator';
+import { adminQuery, adminSet } from './emulator';
 import { openTab } from './app';
 
 export const LEGACY_KEY = 'smartPlaybook_plays';
@@ -75,12 +75,37 @@ export async function adminCopies(uid: string) {
   return docs.filter((d) => d.id.startsWith('legacy_v1_'));
 }
 
-/** Library names visible in the Playbook UI. */
-export async function libraryNames(page: Page): Promise<string[]> {
+// Play Library reads (N1 follow-up, 2026-10-14). The list renders "No plays saved."
+// both while the cloud query is loading and when it is empty, so a one-shot read
+// can be premature: a positive check could fail early (Codex local N1) and a
+// negative check could pass vacuously. Positive checks poll; negative checks
+// first wait for a server-seeded control play of the SAME coach and team.
+async function openLibrary(page: Page) {
   await page.getByRole('button', { name: /Load Play/ }).click();
   const lib = page.getByRole('heading', { name: 'Play Library' }).locator('xpath=..');
   await expect(lib).toBeVisible();
-  return lib.locator('.font-semibold').allInnerTexts();
+  return lib.locator('.font-semibold');
+}
+/** The library eventually lists every name in `names` (poll, expect timeout). */
+export async function expectLibraryContains(page: Page, names: string[]): Promise<void> {
+  const items = await openLibrary(page);
+  await expect.poll(() => items.allInnerTexts(), { message: 'Play Library should list the imported plays' })
+    .toEqual(expect.arrayContaining(names));
+}
+export const CONTROL_PLAY = 'Library loaded control';
+/** Seed a rule-valid cloud play owned by uid in teamId; its appearance proves the library query has delivered. */
+export async function seedControlPlay(uid: string, teamId: string): Promise<void> {
+  const t = new Date();
+  await adminSet(`plays/control-${uid}-${teamId}`, {
+    name: CONTROL_PLAY, phase: 'offense', type: 'pass', players: [], routes: [],
+    teamId, createdBy: uid, revision: 1, createdAt: t, updatedAt: t,
+  });
+}
+/** Library names, read only after the seeded control play is listed (positive anchor). */
+export async function libraryNamesLoaded(page: Page): Promise<string[]> {
+  const items = await openLibrary(page);
+  await expect(items.filter({ hasText: CONTROL_PLAY }).first(), 'control play must load before a negative check').toBeVisible();
+  return items.allInnerTexts();
 }
 
 /** Hold or fail Firestore transaction commits (`…/documents:commit`). */
