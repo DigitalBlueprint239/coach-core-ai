@@ -5,15 +5,16 @@ import type {TeamCreationState} from '../contexts/teamCreation';
 const operation = {uid: 'A', id: 'abcdefghijklmnopqrst', name: 'Pending Owls', code: 'ABCDEFGH', startedAt: 1000};
 let mockCreation: TeamCreationState;
 let mockAccount = 'A';
+let mockConfirmed: Array<{name: string}> = [];
 const mockCreate = jest.fn();
 const mockToast = jest.fn();
 jest.mock('../contexts/TeamContext', () => ({useTeam: () => ({
-  createTeam: mockCreate, teamCreation: mockCreation, teamCreationAccount: mockAccount,
+  confirmedTeams: mockConfirmed, createTeam: mockCreate, teamCreation: mockCreation, teamCreationAccount: mockAccount,
 })}));
 jest.mock('./ToastManager', () => ({useToast: () => ({showToast: mockToast})}));
 beforeEach(() => {
   mockCreation = {operation: null, phase: 'idle', error: null};
-  mockAccount = 'A'; mockCreate.mockReset(); mockToast.mockReset();
+  mockConfirmed = []; mockAccount = 'A'; mockCreate.mockReset(); mockToast.mockReset();
 });
 
 test('remounted modal retains pending team, locks new name and offers safe retry instead of a second create', async () => {
@@ -75,4 +76,31 @@ test('authentication failure is visible; no false success or silent spinning (no
   expect(screen.getByRole('alert')).toHaveTextContent('User must be authenticated');
   expect(screen.getByRole('button', {name: 'Create Team'})).toBeEnabled();
   expect(mockToast).not.toHaveBeenCalled();
+});
+
+
+test('same trimmed name requires consent; decline writes nothing and confirm submits once', async () => {
+  mockConfirmed = [{name: 'Owls'}];
+  mockCreate.mockImplementation(() => new Promise(() => {}));
+  render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
+  fireEvent.change(screen.getByLabelText('Team Name'), {target: {value: ' Owls '}});
+  fireEvent.click(screen.getByRole('button', {name: 'Create Team'}));
+  expect(screen.getByRole('alertdialog')).toHaveTextContent('already have a team named');
+  expect(mockCreate).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole('button', {name: 'Go back'}));
+  expect(mockCreate).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole('button', {name: 'Create Team'}));
+  fireEvent.click(screen.getByRole('button', {name: 'Create a separate team'}));
+  expect(mockCreate).toHaveBeenCalledTimes(1);
+  expect(mockCreate).toHaveBeenCalledWith('Owls');
+});
+
+test('pending same-name retry bypasses new-operation consent', async () => {
+  mockConfirmed = [{name: operation.name}];
+  mockCreation = {operation, phase: 'unconfirmed', error: null};
+  mockCreate.mockRejectedValue(new Error('Still saving'));
+  render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
+  await act(async () => {fireEvent.click(screen.getByRole('button', {name: 'Check and retry'}));});
+  expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+  expect(mockCreate).toHaveBeenCalledWith(operation.name);
 });

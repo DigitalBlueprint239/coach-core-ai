@@ -66,3 +66,12 @@ test('switching accounts hides A pending operation and rejects late A snapshots 
   expect(localStorage.getItem('coachcore:v1:demo-n2:A:team-create')).not.toBeNull();
   expect(localStorage.getItem('coachcore:v1:demo-n2:B:team-create')).toBeNull();
 });
+
+
+test('REST-confirmed creation persists selected team without waiting for a listener', async () => {
+  mockCreate.mockImplementation(async (op) => ({...op, ownerId: op.uid, memberIds: [op.uid], memberDetails: [], createdAt: new Date(), updatedAt: new Date()}));
+  render(<TeamProvider><Probe/></TeamProvider>);
+  await act(async () => {fireEvent.click(screen.getByText('Submit'));});
+  expect(screen.getByTestId('state')).toHaveTextContent('confirmed');
+  expect(localStorage.getItem('currentTeamId')).toBe('abcdefghijklmnopqrst');
+});

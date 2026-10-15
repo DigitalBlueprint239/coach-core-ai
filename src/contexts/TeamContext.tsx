@@ -38,6 +38,7 @@ export interface TeamMember {
 interface TeamContextType {
   currentTeam: Team | null;
   userTeams: Team[];
+  confirmedTeams: Team[];
   loading: boolean;
   error: string | null;
   createTeam: (name: string) => Promise<string>;
@@ -76,6 +77,7 @@ const generateTeamCode = (): string => {
 export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
   const [userTeams, setUserTeams] = useState<Team[]>([]);
+  const [confirmedTeams, setConfirmedTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -106,6 +108,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       if (auth.currentUser?.uid !== uid) throw new Error('Account changed. Pending creation retained.');
       const confirmed = creation.confirmedTeam;
       if (confirmed) {
+        setConfirmedTeams(teams => [...teams.filter(t => t.id !== id && t.ownerId === uid), confirmed]);
         setUserTeams(teams => [...teams.filter(t => t.id !== id && t.ownerId === uid), confirmed]);
         setCurrentTeam(team => team?.ownerId === uid ? team : confirmed);
       }
@@ -115,6 +118,14 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       throw err;
     }
   };
+
+  // REST readback may finish before the SDK listener. Persist the selected
+  // confirmed team on either path, rather than relying on a listener callback.
+  useEffect(() => {
+    if (currentTeam && currentTeam.ownerId === uid && auth.currentUser?.uid === uid) {
+      localStorage.setItem('currentTeamId', currentTeam.id);
+    }
+  }, [currentTeam, uid]);
 
   // Join a team using a code
   const joinTeam = async (code: string): Promise<void> => {
@@ -287,6 +298,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   useEffect(() => {
     setCurrentTeam(null);
     setUserTeams([]);
+    setConfirmedTeams([]);
     setError(null);
     setLoading(Boolean(uid));
     if (!uid || auth.currentUser?.uid !== uid) { setLoading(false); return; }
@@ -299,12 +311,13 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
         if (auth.currentUser?.uid !== uid) return;
         const teams: Team[] = [];
         snapshot.forEach((doc) => {
-          teams.push({ id: doc.id, ...doc.data() } as Team);
+          teams.push({ ...doc.data(), id: doc.id } as Team);
         });
         setUserTeams(teams);
 
         // Pending local snapshots cannot acknowledge a creation.
         if (!snapshot.metadata.fromCache && !snapshot.metadata.hasPendingWrites) {
+          setConfirmedTeams(teams);
           teams.forEach(team => creation?.confirm(team));
         }
         setCurrentTeam(previous => {
@@ -329,6 +342,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
 
   const value: TeamContextType = {
     currentTeam: currentTeam?.ownerId === uid ? currentTeam : null,
+    confirmedTeams: confirmedTeams.filter(team => team.ownerId === uid),
     userTeams: userTeams.filter(team => team.ownerId === uid),
     loading,
     error,

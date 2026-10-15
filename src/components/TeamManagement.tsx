@@ -144,7 +144,9 @@ const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [teamName, setTeamName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const { createTeam, teamCreation } = useTeam();
+  const { createTeam, teamCreation, confirmedTeams } = useTeam();
+  const [separateName, setSeparateName] = useState<string | null>(null);
+  const submitting = useRef(false);
   const { showToast } = useToast();
   const pending = teamCreation.operation !== null && teamCreation.phase !== 'confirmed';
   const saving = teamCreation.phase === 'saving';
@@ -167,10 +169,10 @@ const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       tracked.current = null;
     }
   });
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const name = pending ? teamCreation.operation!.name : teamName.trim();
-    if (!name || saving) return;
+  const submit = async (name: string) => {
+    if (!name || saving || submitting.current) return;
+    submitting.current = true;
+    setSeparateName(null);
     setSubmitError(null);
     setIsCreating(true);
     try {
@@ -179,8 +181,20 @@ const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     } catch (error) {
       if (mounted.current) setSubmitError(error instanceof Error ? error.message : 'Team creation not confirmed.');
     } finally {
+      submitting.current = false;
       if (mounted.current) setIsCreating(false);
     }
+  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting.current || separateName !== null) return;
+    const name = pending ? teamCreation.operation!.name : teamName.trim();
+    // A journalled retry is the existing operation, never a second creation.
+    if (!pending && confirmedTeams.some(team => team.name.trim() === name)) {
+      setSeparateName(name);
+      return;
+    }
+    void submit(name);
   };
 
   if (!isOpen) return null;
@@ -203,6 +217,11 @@ const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           
           {pending && <p role="status">{saving ? 'Saving your team. You may leave this dialog; the pending creation will be retained.' : 'Still saving. Check your connection. We are checking the server for this team; Check and retry uses the same team ID.'}</p>}
           {(submitError || teamCreation.error) && <p role="alert">{submitError || teamCreation.error}</p>}
+          {separateName !== null && <div role="alertdialog" aria-label="Confirm separate team">
+            <p>You already have a team named {separateName}. Do you intend to create a separate team?</p>
+            <button type="button" onClick={() => setSeparateName(null)}>Go back</button>
+            <button type="button" onClick={() => {void submit(separateName);}}>Create a separate team</button>
+          </div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label htmlFor="team-name" className="block text-sm font-medium text-gray-700 mb-2">
