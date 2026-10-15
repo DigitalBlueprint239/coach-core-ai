@@ -635,7 +635,7 @@ D10-07 durations: Firefox 8.6–10.1 s, Chromium 6.4–7.3 s.
 
 | Item | Status |
 |---|---|
-| **R1c** | **Verified fixed** at `069c8f1` (D10-06e 10/10 per engine, and it FAILS on the pre-repair runtime) |
+| **R1c** | **Verified fixed (emulator)** at `069c8f1` (D10-06e 10/10 per engine, and it FAILS on the pre-repair runtime) |
 | L1, R1b, FX-03 | **Passed** (founder-accepted, §10), re-confirmed 10/10 per engine |
 | R0, R1, R2, R5, L0, CC02/CC03 | Verified, re-confirmed 10/10 per engine |
 | H2, N1, N2 | No recurrence in 920 executions, with 0 steps ≥ 10 s. The harness causes of the N1 and H2-local signatures are fixed. The **underlying team-creation/client stall (N2) and the older CI H2 cause remain OPEN**: passing batches do not close them |
@@ -645,3 +645,17 @@ D10-07 durations: Firefox 8.6–10.1 s, Chromium 6.4–7.3 s.
 | Genuine hidden-tab behaviour, physical devices, staging | **NOT MEASURED** |
 
 These are emulator results with demo data, and they do not establish production behaviour. **MVP: NO-GO.** No merge, deploy, spend, live change or AI activation.
+
+### 12.6 Independent verification of §12
+
+A separate agent re-checked §12 against git, the Checks API and the code. **Nothing was refuted.** It confirmed:
+- every SHA and empty diff;
+- both jobs' per-test results;
+- the D10-07 durations;
+- the evidence checksums, with files 01–24 unchanged;
+- that the #69 code has no bypass. B is never offered the import, resume still requires verified readback, postponing never writes a decline, and status-less legacy claims are handled correctly.
+
+It reported these **coverage gaps** (tracked, not fixed now):
+1. **Browser coverage of the pre-repair "declined but pending" state.** Its recovery is covered only by Codex's jest test (`owner-resume.test.tsx`). No browser test seeds that state.
+2. **Multi-team owner.** In D10-06e, A owns one team, so the original-team selection is trivial. Recovery when A has several teams and another one is selected is not browser-tested.
+3. **"Resume import" after a reload.** The button is only exercised in-session. After a reload the offer is recomputed, which is by design.
