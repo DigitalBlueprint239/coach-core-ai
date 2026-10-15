@@ -1,0 +1,218 @@
+E2E emulator (Chromium + Firefox) failure 2026-10-15T13:19:23Z 2026-10-15T14:38:28Z sha=186a7435ef2236470a2ed9e2f94e8f614f6e6feb
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[failure] 
+Process completed with exit code 1.
+
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 150 executions
+none
+
+[notice] E2E phone-firefox: 150 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 E2E-A07 [2.3/2.5/5.1s]
+PASS 10/10 E2E-A10 [1.0/1.1/2.6s]
+PASS 10/10 CC-P10 [3.6/3.8/3.9s]
+PASS 10/10 CC-P11 [3.8/3.9/4.2s]
+PASS 10/10 CC-P12 [3.8/4.2/4.7s]
+PASS 10/10 CC-P14 [7.9/8.5/9.6s]
+PASS 10/10 CC-P15 [5.2/5.7/6.6s]
+PASS 10/10 CC-P16 [4.8/5.1/5.7s]
+PASS 10/10 CC-P17 [5.9/6.2/6.7s]
+PASS 10/10 CC-L0 [2.9/3.1/3.2s]
+PASS 10/10 CC-L1 [2.5/2.8/3.4s]
+PASS 10/10 D10-01 [4.5/5.5/5.8s]
+PASS 10/10 D10-06e [8.3/8.6/9.3s]
+PASS 10/10 E2E-T01 [2.9/3.1/3.8s]
+PASS 10/10 E2E-T02 [4.6/4.9/5.0s]
+
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 150 executions
+none
+
+[notice] E2E phone-chromium: 150 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 E2E-A07 [1.2/1.4/1.5s]
+PASS 10/10 E2E-A10 [0.7/0.8/0.9s]
+PASS 10/10 CC-P10 [2.9/3.0/3.1s]
+PASS 10/10 CC-P11 [3.0/3.2/3.4s]
+PASS 10/10 CC-P12 [2.5/3.1/3.4s]
+PASS 10/10 CC-P14 [6.5/6.9/7.2s]
+PASS 10/10 CC-P15 [4.1/4.4/4.5s]
+PASS 10/10 CC-P16 [3.3/3.4/3.6s]
+PASS 10/10 CC-P17 [4.9/5.1/5.2s]
+PASS 10/10 CC-L0 [2.1/2.3/2.4s]
+PASS 10/10 CC-L1 [1.9/2.0/2.3s]
+PASS 10/10 D10-01 [3.3/4.0/4.2s]
+PASS 10/10 D10-06e [5.4/6.0/7.3s]
+PASS 10/10 E2E-T01 [2.2/2.4/2.6s]
+PASS 10/10 E2E-T02 [3.5/3.8/3.9s]
+
+[notice] E2E firefox diag data: 51 executions
+FAIL D10-06b #5: N2 createTeam "Bravo Bulldogs" modalOpen=true creating=false server=[] net: [submit@0] | [gave-up@10102] | Listen: 0 req, 0 open
+PASS N2-D0 #0: D0 server=137ms dialogClosed=304ms net: [click@0] | WP 57-62 200 | WG:xmlhttp 70-open | WP 78-261 200 | [end@304] | Listen: 2 req, 0 open
+PASS N2-D1 #0: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 90-96 200 | WG:xmlhttp 102-103 NS_ERROR_NET_RESET | WG:xmlhttp 168-169 NS_ERROR_NET_RESET | [unblock@8026] | [end@40001] | Listen: 2 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=1 server=122ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=300ms teams=1 net: [click@0] | WP 54-65 200 | WG:xmlhttp 69-open | WP 77-306 200 | [release@303] | [end@303] | Listen: 2 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8259ms teams=1 net: [click@0] | WP 53-61 200 | WG:xmlhttp 66-8028 200 | WG:xmlhttp 90-8029 200 | [release@8021] | WP 8035-8216 200 | WG:xmlhttp 8038-8217 200 | WG:xmlhttp 8221-open | [end@8259] | Listen: 2 req, 0 open
+PASS N2-D2 #0: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=839ms teamsNamedSame=2
+PASS N2-D0 #1: D0 server=126ms dialogClosed=315ms net: [click@0] | WP 59-60 200 | WG:xmlhttp 63-open | WP 70-296 200 | [end@315] | Listen: 2 req, 0 open
+PASS N2-D1 #1: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 82-91 200 | WG:xmlhttp 109-112 NS_ERROR_NET_RESET | WG:xmlhttp 143-144 NS_ERROR_NET_RESET | [unblock@8041] | [end@40050] | Listen: 2 req, 0 open
+PASS N2-D3 #1: D3 leg=write-response held=1 server=121ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=304ms teams=1 net: [click@0] | WP 55-61 200 | WG:xmlhttp 70-open | WP 75-312 200 | [release@309] | [end@309] | Listen: 2 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8290ms teams=1 net: [click@0] | WP 60-70 200 | WG:xmlhttp 73-8055 200 | WG:xmlhttp 95-8056 200 | [release@8048] | WP 8065-8267 200 | WG:xmlhttp 8066-8268 200 | WG:xmlhttp 8277-open | [end@8290] | Listen: 2 req, 0 open
+PASS N2-D2 #1: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=778ms teamsNamedSame=2
+PASS N2-D0 #2: D0 server=131ms dialogClosed=309ms net: [click@0] | WP 58-64 200 | WG:xmlhttp 70-open | WP 77-297 200 | [end@309] | Listen: 2 req, 0 open
+PASS N2-D1 #2: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 70-78 200 | WG:xmlhttp 83-86 NS_ERROR_NET_RESET | WG:xmlhttp 109-111 NS_ERROR_NET_RESET | [unblock@8051] | [end@40015] | Listen: 2 req, 0 open
+PASS N2-D3 #2: D3 leg=write-response held=1 server=120ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=359ms teams=1 net: [click@0] | WP 53-61 200 | WG:xmlhttp 65-open | WP 74-366 200 | [release@362] | [end@362] | Listen: 2 req, 0 open
+PASS N2-D4 #2: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8293ms teams=1 net: [click@0] | WP 52-59 200 | WG:xmlhttp 67-8058 200 | WG:xmlhttp 93-8059 200 | [release@8050] | WP 8065-8275 200 | WG:xmlhttp 8066-8277 200 | WG:xmlhttp 8282-open | [end@8293] | Listen: 2 req, 0 open
+PASS N2-D2 #2: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=1002ms teamsNamedSame=2
+PASS N2-D0 #3: D0 server=159ms dialogClosed=394ms net: [click@1] | WP 85-91 200 | WG:xmlhttp 100-open | WP 113-360 200 | [end@395] | Listen: 2 req, 0 open
+PASS N2-D1 #3: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 70-78 200 | WG:xmlhttp 84-86 NS_ERROR_NET_RESET | 
+
+[notice] E2E firefox slow steps >= 10s: 1 of 530 executions
+FAIL D10-06b #5: Expect "toHaveCount"@app.ts:132 10.0s
+
+[warning] E2E firefox diag: 1 failed executions
+D10-06b #5 failed 14.1s | errors: Error: Team "Bravo Bulldogs" not confirmed within 10102 ms. modalOpen=true creating=false teamsInFirestore=[] visible=["Create New Team\nTea | last step: Evaluate@app.ts:141 (0.0s) | slowest: Expect "toHaveCount"@app.ts:132 10.0s; Expect "poll toBe"@legacy.ts:142 0.9s; Expect "toHaveCount"@app.ts:132 0.8s
+
+[failure] E2E firefox: 529 passed / 1 failed / 0 blocked / 0 skipped
+FAIL 1/10 D10-06b [3.1/5.5/14.1s] -- Error: Team "Bravo Bulldogs" not confirmed within 10102 ms. modalOpen=true creating=false teamsInFirestore=[] visible=["
+PASS 10/10 E2E-AI01 [2.4/3.5/4.0s]
+PASS 10/10 E2E-AI01b [1.3/2.1/2.3s]
+PASS 10/10 E2E-A01 [0.5/0.6/0.8s]
+PASS 10/10 E2E-A02 [0.6/0.7/0.9s]
+PASS 10/10 E2E-A03 [0.8/0.9/1.1s]
+PASS 10/10 E2E-A04 [1.0/1.2/1.4s]
+PASS 10/10 E2E-A05 [0.4/0.4/0.7s]
+PASS 10/10 E2E-A06 [0.8/1.1/1.3s]
+PASS 10/10 E2E-A07 [1.1/1.2/1.3s]
+PASS 10/10 E2E-A08 [0.6/0.7/0.7s]
+PASS 10/10 E2E-A09 [1.4/1.6/2.6s]
+PASS 10/10 E2E-A10 [1.1/1.2/1.4s]
+PASS 10/10 CC-P10 [2.5/3.7/4.1s]
+PASS 10/10 CC-P10b [2.9/4.8/5.2s]
+PASS 10/10 CC-P11 [2.1/3.4/4.0s]
+PASS 10/10 CC-P12 [2.2/3.3/3.5s]
+PASS 10/10 CC-P14 [4.1/7.6/7.9s]
+PASS 10/10 CC-P15 [3.7/5.5/5.8s]
+PASS 10/10 CC-P16 [2.7/3.6/4.2s]
+PASS 10/10 CC-P16b [1.9/2.9/4.1s]
+PASS 10/10 CC-P17 [3.1/5.7/5.9s]
+PASS 10/10 CC-L0 [1.9/2.6/2.8s]
+PASS 10/10 CC-L1 [1.6/2.0/2.6s]
+PASS 10/10 CC-W0 [1.8/3.0/3.2s]
+PASS 10/10 D10-00 [1.3/2.1/2.3s]
+PASS 10/10 D10-01 [2.8/3.1/3.4s]
+PASS 10/10 D10-02 [2.0/3.0/3.5s]
+PASS 10/10 D10-03 [2.8/3.9/4.8s]
+PASS 10/10 D10-04 [2.3/3.3/5.4s]
+PASS 10/10 D10-05 [1.8/2.6/2.9s]
+PASS 10/10 D10-06 [3.8/5.5/6.9s]
+PASS 10/10 D10-07 [7.4/8.9/9.5s]
+PASS 10/10 D10-07b [2.3/3.6/4.2s]
+PASS 10/10 D10-08 [2.8/4.5/4.9s]
+PASS 10/10 D10-09 [3.8/5.7/7.1s]
+PASS 10/10 D10-10 [2.2/3.5/4.4s]
+PASS 10/10 D10-11 [3.4/5.2/5.5s]
+PASS 10/10 D10-12 [1.0/1.2/1.4s]
+PASS 10/10 D10-06c [2.8/3.9/4.7s]
+PASS 10/10 D10-06d [3.6/5.0/5.3s]
+PASS 10/10 D10-06e [4.9/6.8/8.3s]
+PASS 10/10 N2-D0 [1.3/1.6/1.9s]
+PASS 10/10 N2-D1 [41.2/41.5/41.6s]
+PASS 10/10 N2-D3 [1.1/1.3/1.4s]
+PASS 10/10 N2-D4 [9.2/9.6/9.8s]
+PASS 10/10 N2-D2 [4.8/5.4/5.6s]
+PASS 10/10 E2E-C01 [1.9/2.3/2.5s]
+PASS 10/10 E2E-T01 [1.9/2.6/3.5s]
+PASS 10/10 E2E-T02 [3.1/4.5/4.7s]
+PASS 10/10 E2E-T03 [3.6/5.1/5.8s]
+PASS 10/10 UI-01 [1.0/1.2/1.4s]
+PASS 10/10 UI-02 [1.9/2.4/2.8s]
+
+[notice] E2E chromium diag data: 50 executions
+PASS N2-D0 #0: D0 server=111ms dialogClosed=106ms net: [click@0] | WP 55-65 200 | WG:xmlhttp 65-open | WP 67-99 200 | [end@111] | Listen: 2 req, 0 open
+PASS N2-D1 #0: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 55-65 200 | WG:xmlhttp 65-70 net::ERR_CONNECTION_RESET | WG:xmlhttp 88-91 net::ERR_CONNECTION_RESET | [unblock@8056] | [end@40006] | Listen: 2 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=1 server=104ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=111ms teams=1 net: [click@1] | WP 54-63 200 | WG:xmlhttp 64-open | WP 74-120 200 | [release@115] | [end@115] | Listen: 2 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=-1ms teams=1 net: [click@1] | WP 54-64 200 | WG:xmlhttp 63-8094 200 | WG:xmlhttp 83-8048 200 | [release@8036] | WP 8047-8069 200 | WG:xmlhttp 8049-8069 200 | WG:xmlhttp 8070-open | [end@40046] | Listen: 2 req, 0 open
+PASS N2-D2 #0: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=387ms teamsNamedSame=2
+PASS N2-D0 #1: D0 server=106ms dialogClosed=103ms net: [click@0] | WP 57-61 200 | WG:xmlhttp 62-open | WP 67-94 200 | [end@106] | Listen: 2 req, 0 open
+PASS N2-D1 #1: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 54-63 200 | WG:xmlhttp 65-68 net::ERR_CONNECTION_RESET | WG:xmlhttp 81-82 net::ERR_CONNECTION_RESET | [unblock@8053] | [end@40002] | Listen: 2 req, 0 open
+PASS N2-D3 #1: D3 leg=write-response held=1 server=99ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=160ms teams=1 net: [click@1] | WP 52-63 200 | WG:xmlhttp 63-open | WP 75-open | [release@165] | [end@165] | Listen: 2 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=-1ms teams=1 net: [click@1] | WP 54-63 200 | WG:xmlhttp 65-8098 200 | WG:xmlhttp 81-8050 200 | [release@8042] | WP 8051-8083 200 | WG:xmlhttp 8051-8082 200 | WG:xmlhttp 8083-open | [end@40034] | Listen: 2 req, 0 open
+PASS N2-D2 #1: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=373ms teamsNamedSame=2
+PASS N2-D0 #2: D0 server=105ms dialogClosed=157ms net: [click@0] | WP 55-61 200 | WG:xmlhttp 61-open | WP 65-112 200 | [end@157] | Listen: 2 req, 0 open
+PASS N2-D1 #2: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 54-61 200 | WG:xmlhttp 62-65 net::ERR_CONNECTION_RESET | WG:xmlhttp 78-79 net::ERR_CONNECTION_RESET | [unblock@8056] | [end@40015] | Listen: 2 req, 0 open
+PASS N2-D3 #2: D3 leg=write-response held=1 server=108ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=169ms teams=1 net: [click@1] | WP 54-64 200 | WG:xmlhttp 65-open | WP 72-182 | [release@177] | [end@177] | Listen: 2 req, 0 open
+PASS N2-D4 #2: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8080ms teams=1 net: [click@1] | WP 54-63 200 | WG:xmlhttp 64-8077 200 | WG:xmlhttp 85-8029 200 | [release@8021] | WP 8030-8075 200 | WG:xmlhttp 8030-8074 200 | WG:xmlhttp 8075-open | [end@8081] | Listen: 2 req, 0 open
+PASS N2-D2 #2: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=393ms teamsNamedSame=2
+PASS N2-D0 #3: D0 server=106ms dialogClosed=161ms net: [click@0] | WP 55-62 200 | WG:xmlhttp 62-open | WP 66-123 200 | [end@161] | Listen: 2 req, 0 open
+PASS N2-D1 #3: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 53-61 200 | WG:xmlhttp 61-64 net::ERR_CONNECTION_RESET | WG:xmlhttp 77-78 net::ERR_CONNECTION_RESET | [unblock@8029] | [end@40040] | Listen: 2 req, 0 open
+PASS N2-D3 #3: D3 leg=wr
+
+[notice] E2E chromium slow steps >= 10s: 0 of 530 executions
+none
+
+[notice] E2E chromium: 530 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 E2E-AI01 [1.0/1.2/1.6s]
+PASS 10/10 E2E-AI01b [0.7/0.8/1.5s]
+PASS 10/10 E2E-A01 [0.2/0.3/0.3s]
+PASS 10/10 E2E-A02 [0.4/0.5/0.5s]
+PASS 10/10 E2E-A03 [0.5/0.5/0.6s]
+PASS 10/10 E2E-A04 [0.6/0.6/0.6s]
+PASS 10/10 E2E-A05 [0.2/0.2/0.2s]
+PASS 10/10 E2E-A06 [0.2/0.2/0.3s]
+PASS 10/10 E2E-A07 [0.7/0.7/0.8s]
+PASS 10/10 E2E-A08 [0.4/0.4/0.4s]
+PASS 10/10 E2E-A09 [1.0/1.1/1.3s]
+PASS 10/10 E2E-A10 [0.7/0.8/0.8s]
+PASS 10/10 CC-P10 [1.6/1.7/1.9s]
+PASS 10/10 CC-P10b [1.6/2.0/2.0s]
+PASS 10/10 CC-P11 [1.2/1.4/1.7s]
+PASS 10/10 CC-P12 [1.2/1.3/1.5s]
+PASS 10/10 CC-P14 [2.0/2.6/2.7s]
+PASS 10/10 CC-P15 [1.7/2.1/2.2s]
+PASS 10/10 CC-P16 [1.5/1.7/1.8s]
+PASS 10/10 CC-P16b [1.0/1.2/1.5s]
+PASS 10/10 CC-P17 [1.8/2.2/2.3s]
+PASS 10/10 CC-L0 [1.0/1.2/1.3s]
+PASS 10/10 CC-L1 [0.8/1.0/1.1s]
+PASS 10/10 CC-W0 [0.9/1.1/1.3s]
+PASS 10/10 D10-00 [0.7/0.9/1.0s]
+PASS 10/10 D10-01 [1.1/1.2/1.2s]
+PASS 10/10 D10-02 [1.2/1.3/1.6s]
+PASS 10/10 D10-03 [1.3/1.7/1.9s]
+PASS 10/10 D10-04 [1.1/1.5/1.8s]
+PASS 10/10 D10-05 [0.9/1.0/1.2s]
+PASS 10/10 D10-06 [1.8/2.3/2.6s]
+PASS 10/10 D10-06b [1.7/2.2/2.3s]
+PASS 10/10 D10-07 [6.2/6.5/6.8s]
+PASS 10/10 D10-07b [1.2/1.5/1.8s]
+PASS 10/10 D10-08 [1.5/1.8/2.1s]
+PASS 10/10 D10-09 [1.8/2.2/2.4s]
+PASS 10/10 D10-10 [1.0/1.2/1.5s]
+PASS 10/10 D10-11 [1.6/1.9/2.7s]
+PASS 10/10 D10-12 [0.6/0.6/0.7s]
+PASS 10/10 D10-06c [1.6/1.8/2.1s]
+PASS 10/10 D10-06d [1.9/2.2/2.6s]
+PASS 10/10 D10-06e [2.7/3.2/3.5s]
+PASS 10/10 N2-D0 [0.7/0.7/0.9s]
+PASS 10/10 N2-D1 [40.5/40.6/40.7s]
+PASS 10/10 N2-D3 [0.6/0.7/0.8s]
+PASS 10/10 N2-D4 [8.6/8.8/40.8s]
+PASS 10/10 N2-D2 [3.9/4.1/4.3s]
+PASS 10/10 E2E-C01 [1.1/1.2/1.4s]
+PASS 10/10 E2E-T01 [1.1/1.3/1.4s]
+PASS 10/10 E2E-T02 [1.8/2.0/2.4s]
+PASS 10/10 E2E-T03 [1.4/1.9/2.3s]
+PASS 10/10 UI-01 [0.5/0.6/0.7s]
+PASS 10/10 UI-02 [1.1/1.2/1.4s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+

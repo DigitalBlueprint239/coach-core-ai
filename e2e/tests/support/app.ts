@@ -115,12 +115,48 @@ export function firestoreNetLog(page: Page) {
   };
 }
 
+/**
+ * N3 probe (2026-10-15): what happened between the Create Team click and the
+ * first Firestore request. Records booleans and short UI texts only; never
+ * uids, emails or tokens. "submitFired" is the DOM submit event (React's
+ * onSubmit runs on it); "creatingSeen" proves the handler set its pending state;
+ * "shown" holds toast/alert/status texts that appeared (e.g. an auth error).
+ */
+export async function teamCreateProbe(page: Page) {
+  await page.evaluate(() => {
+    const w = window as any;
+    w.__n3 = { submitFired: 0, creatingSeen: false, shown: [] as string[] };
+    if (w.__n3Installed) return;
+    w.__n3Installed = true;
+    document.addEventListener('submit', () => { w.__n3.submitFired += 1; }, true);
+    new MutationObserver((records) => {
+      for (const r of records) for (const n of Array.from(r.addedNodes)) {
+        const el = n.nodeType === 1 ? (n as Element) : n.parentElement;
+        if (!el) continue;
+        const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+        if (/Creating\.\.\./.test(text)) w.__n3.creatingSeen = true;
+        const toast = el.closest('[role=alert],[role=status],.fixed.top-4.right-4');
+        if (toast && text && w.__n3.shown.length < 8 && !w.__n3.shown.includes(text.slice(0, 120))) w.__n3.shown.push(text.slice(0, 120));
+      }
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  });
+  const signedInAtSubmit = await page.evaluate(() => {
+    const hooks = (window as any).__coachCoreE2E;
+    return hooks?.uid ? Boolean(hooks.uid()) : 'unknown';
+  });
+  return {
+    signedInAtSubmit,
+    read: async () => page.evaluate(() => (window as any).__n3 as { submitFired: number; creatingSeen: boolean; shown: string[] }),
+  };
+}
+
 export async function createTeamViaUI(page: Page, teamName: string): Promise<void> {
   await openTab(page, 'Teams');
   await page.getByRole('button', { name: 'Create Team', exact: true }).first().click();
   await page.getByLabel('Team Name').fill(teamName);
   const t0 = Date.now();
   const net = firestoreNetLog(page); // N2: network lifecycle, reported only on failure
+  const probe = await teamCreateProbe(page); // N3: auth state, submit, pending state, UI texts
   net.mark('submit');
   await page.getByRole('button', { name: 'Create Team', exact: true }).last().click();
   try {
@@ -141,7 +177,8 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
     const uid = await page.evaluate(() => (window as any).__coachCoreE2E?.uid?.() ?? null).catch(() => null);
     const saved = uid ? (await adminTeamsOwnedBy(uid)).map((t) => t.name) : 'uid unavailable';
     net.mark('gave-up');
-    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} net: ${net.summary()}` });
+    const n3 = await probe.read().catch(() => null);
+    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} shown=${JSON.stringify(visible.map((v) => v.replace(/\s+/g, ' ').slice(0, 120))).slice(0, 500)} n3={signedInAtSubmit:${probe.signedInAtSubmit},submitFired:${n3?.submitFired},creatingSeen:${n3?.creatingSeen},toasts:${JSON.stringify(n3?.shown ?? []).slice(0, 400)}} net: ${net.summary(1200)}` });
     throw new Error(`Team "${teamName}" not confirmed within ${Date.now() - t0} ms. modalOpen=${modalOpen} `
       + `creating=${creating} teamsInFirestore=${JSON.stringify(saved)} visible=${JSON.stringify(visible).slice(0, 300)}`, { cause: err });
   }
