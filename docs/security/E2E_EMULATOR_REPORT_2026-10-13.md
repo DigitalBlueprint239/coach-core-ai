@@ -1025,3 +1025,37 @@ Historical runs and failures in §14.3–14.7 and evidence 33–36 are unchanged
 - N3: not reproduced in 320 targeted creations on `bdb06ae` (D5 ×10 × 2 engines × 2 runs), plus 80 on the pre-repair baseline (§14.8). **Not claimed fixed.**
 - Natural SDK stall cause: **unresolved**.
 - No merge, deployment or live-data testing. MVP **NO-GO**.
+
+### 14.10 Coach Drew's decisions on same-name teams and the obsolete N2-A2 fault model (2026-10-15)
+
+**Decisions (Coach Drew, 2026-10-15; not to be re-asked):**
+1. Same-name teams are allowed **only after an explicit confirmation** that the coach intends a separate team.
+2. Pending-save retry stays separate: **a retry of one operation must never create a second team.**
+3. Original **N2-A2 is reported as an obsolete fault model**, not a repair failure: its SDK-WebChannel fault no longer affects the REST save path. Its body is unchanged, it still runs, and the reporter counts it in its own column (`obsolete-fault-model`). Evidence 37, 39 and 40 are kept as recorded.
+4. Add a separate test for the intentional-duplicate confirmation, and the missing test for a failed server readback.
+
+**Harness** (candidate branch `claude/n2-repair-acceptance-2026-10-15`, harness `f325a23`; runtime still `bdb06ae`; no product code, assertion, timeout or retry change):
+
+| Test | Fault / scenario | Required |
+|---|---|---|
+| N2-R7 | coach already owns team X, submits X again | confirmation prompt (role alertdialog/dialog/alert/status matching `/already have a team (named\|called)\|already exists\|same name/i`) within 8 s; nothing written while open; decline creates nothing; confirm creates exactly one separate team (new id and code), original untouched, no pending op left |
+| N2-R7b | confirmed same-name creation, commit reset during an 8 s outage | status ≤ 8 s; journalled before request; nothing new during outage; recovered as the **same** operation; exactly 2 teams, never 3 |
+| N2-R8 | commit answered 200 by the fault, readback connection reset, nothing on server | status ≤ 8 s; no false success at 8 s; after restore exactly one team = the operation |
+| N2-R8b | commit reaches the server, readback returns 503 | status ≤ 8 s; the committed team is not overwritten; UI recovers; exactly one team = the operation |
+
+The UI wording for R7 is Codex's choice; the contract (locators above, confirm `/create (another|a separate|…)|create anyway|yes,? create/i`, decline or the dialog's Cancel) is posted on #39.
+
+**First run `38796970604` on `56b0948` (evidence 43):** R7/R7b results are **invalid**: the test's own team name "N2 Same Name FC" matched the prompt regex via the "Pending team: …" status, so the tests timed out instead of asserting. Fixed in `f325a23` (names changed; a vanished match or missing confirm control now fails the assertion). R8/R8b passed 10/10 in both engines in that run. N2-A2 appeared in the new `obsolete-fault-model` column: 0/10 per engine, as before.
+
+**Run `38807699055` on `f325a23`, ×10, retries 0, grep `N2-R7|N2-R8` (evidence 44):**
+
+| Test | Chromium | Firefox | Observation |
+|---|---|---|---|
+| N2-R7 | **FAIL 10/10** | **FAIL 10/10** | `promptAt=-1`, `teamsBeforeAnswer=2`: no confirmation exists; the second same-name team is created immediately |
+| N2-R7b | **FAIL 10/10** | **FAIL 10/10** | same: no confirmation to give |
+| N2-R8 | PASS 10/10 | PASS 10/10 | readback network failure never shown as success; same op created once |
+| N2-R8b | PASS 10/10 | PASS 10/10 | readback 503: no overwrite, same op confirmed once |
+
+**Classification.** R7/R7b failures are a **product gap on `bdb06ae`** (the confirmation decided in (1) is not implemented), not a regression of the REST repair. R8/R8b close the "readback failure not tested" limitation from §14.9. The §14.9 full-matrix totals are unchanged; re-counting that run under the new column would give acceptance 1,439/1 (D10-06e, inherited) and obsolete-fault-model 0/20, but that is a re-labelling of evidence 40, not a new run.
+
+**Status:** REST repair holds on every REST-path test, including readback failure. The same-name confirmation is **not implemented**. The full matrix on the final harness has not yet been re-run. N3 unresolved; MVP **NO-GO**.
