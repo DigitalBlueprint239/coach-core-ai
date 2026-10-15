@@ -1,6 +1,6 @@
 # Staging readiness checklist (before requesting a staging deploy)
 
-Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-14 night: on test-only integrated candidates 6 `4757eaf` and 7 `d12d273`, ×10 on both engines, **L1, R1b and FX-03 are verified fixed**. **New defect R1c** ("Not now" on an interrupted import leaves a dead end) FAILS 10/10 and is with Codex. **H2** Firefox D10-07 recurred 1/10). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-15: on test-only integrated candidate 8 `069c8f1`, ×10 on both engines gives **460/460 per engine**. **R1c verified fixed** (#69). L1, R1b and FX-03 are founder-accepted as passed. Open: N2/H2 underlying causes, FX-02, the R1c missing-team residual, R3, R4, touch exit, plus genuine hidden tabs, devices and staging, which are NOT MEASURED). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
 
 ## 1. Exact PR/commit combination
 
@@ -107,15 +107,15 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 | G2 | Founder decisions D5 (billing + controls) and D10 (legacy import), plus D1–D7 if film is in the deploy | Coach Drew | ✗ |
 | G3 | Founder read-only verification of §4 controls recorded | Coach Drew | ✗ |
 | G4 | PR #49 founder actions (§6 of the Day 2 report: old keys checked/rotated, web key restricted, Anonymous OFF, authorized domains) | Coach Drew | ✗ |
-| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ✗ Candidate 6 `4757eaf`: E2E ×10 **430/0 per engine**, release proof 13/13, clean `npm ci` jest 434/434, tsc 0, prod audit 0. Candidate 7 `d12d273` (same runtime, adds the R1c probe and hardened tests): Chromium 440/10, Firefox 439/11 (D10-06d R1c 10/10; Firefox D10-07 H2 1/10). Not green until R1c is repaired and re-run |
+| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ✔ in emulator at candidate 8 `069c8f1` (test-only): E2E ×10 **460/0 per engine**, 0 steps ≥ 10 s in 920 executions, release proof 13/13. Clean `npm ci`: jest 440/440, tsc 0, functions 73/73, prod audits 0. History kept: candidate 6 430/0; candidate 7 440/10 and 439/11 (R1c, H2) |
 | G6 | Release-build proof re-run with the real staging web config at deploy time; manifest kept | deployer | prepared |
 | G7 | Staging config: `COACH_CORE_AI_ENABLED=false`, `COACH_CORE_ALLOWED_ORIGINS` as a JSON array, AI global cap 50/day | deployer | prepared |
 | G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
 | G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex / Claude | ⚠ **implementation delivered (#59/#60); independent acceptance pending.** CC-P10..P17 (+P10b, P16b) PASS **10/10** on Chromium 156 and Firefox 157 at `709e0f4` and candidate `c858d1d` (PR #63) |
 | G10 | Shutdown switch: approve build before film upload, or accept the exposure in writing | Coach Drew | open decision |
-| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5, R1b, R1c) / Claude (re-test) | ✗ History: FAIL on 2026-10-14 (R1/R2 10/10, report §7, PR #56, kept as evidence). **Verified fixed** (10/10 both engines): R1 finished import (D10-06b), R2 (D10-07b), R5 (D10-12), **R1b** (D10-06c, #64 `8f0d9f7`, at `4757eaf`/`d12d273`). **R1c FAIL 10/10** (D10-06d: after A declines an interrupted import, no account can act on the device plays; originals kept). Repair requested on #64 |
+| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5, R1b, R1c) / Claude (re-test) | ✔ in emulator: R1, R2, R5, R1b and **R1c** verified fixed (D10-06b, 07b, 12, 06c, 06d, **06e** at 10/10 both engines, `069c8f1`). D10-06e fails on the pre-repair runtime. History kept: FAIL 2026-10-14 (§7, PR #56). **Residual:** if the original team is missing the device stays visibly blocked (no data loss). R3 and R4 stay open |
 | G13 | Legacy device data never deleted: quarantined `offline_operations` on sign-out (#61 escalation), Migration Banner (L1) | Claude (auth) / Codex (banner) | ✔ in emulator: sign-out preserves the queue (Claude `12e386f`, CC-L0 10/10). The banner is removed and legacy migration never deletes (#64, **CC-L1 10/10** both engines at `4757eaf`/`d12d273`; the re-anchored test failed on pre-repair code). Still emulator-only |
-| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ⚠ Implementation delivered; scenarios PASS 10/10 both engines at `4757eaf` and `d12d273`. Sign-out no longer shows an interactive sign-in form before its reload (**FX-03** fixed by Claude, A10 10/10). Gate stays open until the full candidate is green (R1c) |
+| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ✔ in emulator: every scenario 10/10 both engines at `069c8f1`; FX-03 fixed (A10). Emulator-only: devices, staging and genuine hidden tabs NOT MEASURED |
 
 ## Tracked limitations (kept open until closed with evidence)
 
@@ -123,6 +123,6 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 |---|---|---|
 | R3: "Not now" on the D10 prompt is a permanent decline (no re-entry point) | Codex / Coach Drew | OPEN (disclosed limitation) |
 | R4: `D10_APPROVED = true` build constant, so the import prompt ships in release builds | Codex / deploy decision | OPEN |
-| Firefox instability: H1 team-creation toast (3 in the morning, none since); **H2** D10-07 timeout: 1/10 `709e0f4`, 0/10 `c858d1d`, 0/10 `4757eaf`, **1/10 `d12d273`** (cause unexplained); Codex FX-02 unexplained 51 s locator delay; genuine hidden/background-tab behaviour NOT MEASURED | Claude / Codex | OPEN; diagnostics in place, no retries |
+| Firefox instability: **H2** D10-07 timeout (1/10 `709e0f4`, 1/10 `d12d273`, 0/10 `4757eaf`, 0/10 `069c8f1`); **N2** team creation stuck on "Creating…" after the server write (Codex local); the false-confirm harness signature of local H2 and N1 is fixed (`5752d2b`); FX-02 unexplained 51 s stall; genuine hidden or background tabs NOT MEASURED | Claude / Codex | OPEN; per-step diagnostics in CI, no retries |
 | Standalone Playbook touch exit (Windows, PR #3 repo) | Codex | OPEN |
 | Physical tablets/phones; staging real auth, CORS and token checks (RA-*, SEC-07..10) | Coach Drew / Claude | NOT MEASURED (requires approved staging) |
