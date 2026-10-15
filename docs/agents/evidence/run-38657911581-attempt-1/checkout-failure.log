@@ -1,0 +1,157 @@
+﻿2026-10-15T00:04:49.2178207Z Current runner version: '2.337.0'
+2026-10-15T00:04:49.2205400Z ##[group]Runner Image Provisioner
+2026-10-15T00:04:49.2206392Z Hosted Compute Agent
+2026-10-15T00:04:49.2206987Z Version: 20261012.601
+2026-10-15T00:04:49.2207598Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-15T00:04:49.2208384Z Build Date: 2026-10-12T17:48:21Z
+2026-10-15T00:04:49.2209082Z Worker ID: {6d213562-feba-4d7a-9065-29cd412e02e6}
+2026-10-15T00:04:49.2209869Z Region: westus
+2026-10-15T00:04:49.2210405Z Cloud: Azure
+2026-10-15T00:04:49.2210921Z ##[endgroup]
+2026-10-15T00:04:49.2212434Z ##[group]Operating System
+2026-10-15T00:04:49.2213435Z Ubuntu
+2026-10-15T00:04:49.2214060Z 24.04.5
+2026-10-15T00:04:49.2214600Z LTS
+2026-10-15T00:04:49.2215112Z ##[endgroup]
+2026-10-15T00:04:49.2215703Z ##[group]Runner Image
+2026-10-15T00:04:49.2216340Z Image: ubuntu-24.04
+2026-10-15T00:04:49.2217005Z Version: 20261012.334.1
+2026-10-15T00:04:49.2218333Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-15T00:04:49.2219949Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-15T00:04:49.2220976Z ##[endgroup]
+2026-10-15T00:04:49.2222128Z ##[group]GITHUB_TOKEN Permissions
+2026-10-15T00:04:49.2224399Z Contents: read
+2026-10-15T00:04:49.2225071Z Metadata: read
+2026-10-15T00:04:49.2225752Z ##[endgroup]
+2026-10-15T00:04:49.2227883Z Secret source: Actions
+2026-10-15T00:04:49.2228917Z Cache mode: write
+2026-10-15T00:04:49.2229645Z Prepare workflow directory
+2026-10-15T00:04:49.2819481Z Prepare all required actions
+2026-10-15T00:04:49.2871402Z Getting action download info
+2026-10-15T00:04:49.6291378Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-15T00:04:49.8068933Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-15T00:04:49.9542369Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-15T00:04:50.2147379Z Complete job name: evidence-format
+2026-10-15T00:04:50.3161645Z ##[group]Run actions/checkout@v5
+2026-10-15T00:04:50.3163428Z with:
+2026-10-15T00:04:50.3164302Z   persist-credentials: false
+2026-10-15T00:04:50.3165437Z   repository: DigitalBlueprint239/coach-core-ai
+2026-10-15T00:04:50.3174143Z   token: ***
+2026-10-15T00:04:50.3174977Z   ssh-strict: true
+2026-10-15T00:04:50.3175814Z   ssh-user: git
+2026-10-15T00:04:50.3176621Z   clean: true
+2026-10-15T00:04:50.3177465Z   sparse-checkout-cone-mode: true
+2026-10-15T00:04:50.3178475Z   fetch-depth: 1
+2026-10-15T00:04:50.3179295Z   fetch-tags: false
+2026-10-15T00:04:50.3180145Z   show-progress: true
+2026-10-15T00:04:50.3180993Z   lfs: false
+2026-10-15T00:04:50.3181862Z   submodules: false
+2026-10-15T00:04:50.3182740Z   set-safe-directory: true
+2026-10-15T00:04:50.3183982Z   allow-unsafe-pr-checkout: false
+2026-10-15T00:04:50.3185306Z env:
+2026-10-15T00:04:50.3186736Z   OUTPUT: phase-a-38657911581-1-evidence-format-7c44aa0115c42c0fee214f645bb04af52870817d
+2026-10-15T00:04:50.3188490Z ##[endgroup]
+2026-10-15T00:04:50.4262041Z Syncing repository: DigitalBlueprint239/coach-core-ai
+2026-10-15T00:04:50.4266713Z ##[group]Getting Git version info
+2026-10-15T00:04:50.4269039Z Working directory is '/home/runner/work/coach-core-ai/coach-core-ai'
+2026-10-15T00:04:50.4272393Z [command]/usr/bin/git version
+2026-10-15T00:04:50.4310113Z git version 2.55.0
+2026-10-15T00:04:50.4334705Z ##[endgroup]
+2026-10-15T00:04:50.4351396Z Temporarily overriding HOME='/home/runner/work/_temp/316b6945-34e7-4a44-b8e9-30cad10618dd' before making global git config changes
+2026-10-15T00:04:50.4358434Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T00:04:50.4363228Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-15T00:04:50.4420205Z Deleting the contents of '/home/runner/work/coach-core-ai/coach-core-ai'
+2026-10-15T00:04:50.4424863Z ##[group]Initializing the repository
+2026-10-15T00:04:50.4430035Z [command]/usr/bin/git init /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-15T00:04:50.4542495Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-15T00:04:50.4547398Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-15T00:04:50.4551128Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-15T00:04:50.4554337Z hint: call:
+2026-10-15T00:04:50.4556012Z hint:
+2026-10-15T00:04:50.4558087Z hint: 	git config --global init.defaultBranch <name>
+2026-10-15T00:04:50.4560734Z hint:
+2026-10-15T00:04:50.4562872Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-15T00:04:50.4566555Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-15T00:04:50.4569305Z hint:
+2026-10-15T00:04:50.4570711Z hint: 	git branch -m <name>
+2026-10-15T00:04:50.4572072Z hint:
+2026-10-15T00:04:50.4574409Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-15T00:04:50.4577972Z Initialized empty Git repository in /home/runner/work/coach-core-ai/coach-core-ai/.git/
+2026-10-15T00:04:50.4583407Z [command]/usr/bin/git remote add origin https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-15T00:04:50.4652542Z ##[endgroup]
+2026-10-15T00:04:50.4655823Z ##[group]Disabling automatic garbage collection
+2026-10-15T00:04:50.4657861Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-15T00:04:50.4700094Z ##[endgroup]
+2026-10-15T00:04:50.4702746Z ##[group]Setting up auth
+2026-10-15T00:04:50.4708142Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T00:04:50.4752618Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T00:04:50.5161382Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T00:04:50.5204951Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T00:04:50.5441108Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T00:04:50.5482618Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T00:04:50.5716516Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-15T00:04:50.5760438Z ##[endgroup]
+2026-10-15T00:04:50.5761924Z ##[group]Fetching the repository
+2026-10-15T00:04:50.5771148Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7c44aa0115c42c0fee214f645bb04af52870817d:refs/remotes/pull/70/merge
+2026-10-15T00:04:51.1749343Z From https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-15T00:04:51.1751332Z  * [new ref]         7c44aa0115c42c0fee214f645bb04af52870817d -> pull/70/merge
+2026-10-15T00:04:51.1754831Z ##[endgroup]
+2026-10-15T00:04:51.1755920Z ##[group]Determining the checkout info
+2026-10-15T00:04:51.1757255Z ##[endgroup]
+2026-10-15T00:04:51.1762979Z [command]/usr/bin/git sparse-checkout disable
+2026-10-15T00:04:51.1819185Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-15T00:04:51.1855251Z ##[group]Checking out the ref
+2026-10-15T00:04:51.1859772Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/70/merge
+2026-10-15T00:04:51.2201739Z Note: switching to 'refs/remotes/pull/70/merge'.
+2026-10-15T00:04:51.2202232Z 
+2026-10-15T00:04:51.2202571Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-15T00:04:51.2203845Z changes and commit them, and you can discard any commits you make in this
+2026-10-15T00:04:51.2205060Z state without impacting any branches by switching back to a branch.
+2026-10-15T00:04:51.2205943Z 
+2026-10-15T00:04:51.2206281Z If you want to create a new branch to retain commits you create, you may
+2026-10-15T00:04:51.2207077Z do so (now or later) by using -c with the switch command. Example:
+2026-10-15T00:04:51.2207539Z 
+2026-10-15T00:04:51.2207858Z   git switch -c <new-branch-name>
+2026-10-15T00:04:51.2208236Z 
+2026-10-15T00:04:51.2208482Z Or undo this operation with:
+2026-10-15T00:04:51.2208821Z 
+2026-10-15T00:04:51.2209038Z   git switch -
+2026-10-15T00:04:51.2209339Z 
+2026-10-15T00:04:51.2209739Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-15T00:04:51.2210286Z 
+2026-10-15T00:04:51.2211011Z HEAD is now at 7c44aa0 Merge 63101e7fe40da17130dc9728a9089f4397e2c210 into 3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53
+2026-10-15T00:04:51.2213665Z ##[endgroup]
+2026-10-15T00:04:51.2260831Z [command]/usr/bin/git log -1 --format=%H
+2026-10-15T00:04:51.2288094Z 7c44aa0115c42c0fee214f645bb04af52870817d
+2026-10-15T00:04:51.2299022Z ##[group]Removing auth
+2026-10-15T00:04:51.2303877Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T00:04:51.2339537Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T00:04:51.2586198Z ##[error]fatal: No url found for submodule path 'src/components/Coach's Corner/Practice Plan Generator' in .gitmodules
+2026-10-15T00:04:51.2621516Z ##[error]The process '/usr/bin/git' failed with exit code 128
+2026-10-15T00:04:51.3012876Z ##[group]Run actions/upload-artifact@v4
+2026-10-15T00:04:51.3014009Z with:
+2026-10-15T00:04:51.3015061Z   name: phase-a-38657911581-1-evidence-format-7c44aa0115c42c0fee214f645bb04af52870817d
+2026-10-15T00:04:51.3016623Z   path: phase-a-38657911581-1-evidence-format-7c44aa0115c42c0fee214f645bb04af52870817d/
+2026-10-15T00:04:51.3017838Z   retention-days: 14
+2026-10-15T00:04:51.3018575Z   if-no-files-found: warn
+2026-10-15T00:04:51.3019365Z   compression-level: 6
+2026-10-15T00:04:51.3020061Z   overwrite: false
+2026-10-15T00:04:51.3020780Z   include-hidden-files: false
+2026-10-15T00:04:51.3021510Z env:
+2026-10-15T00:04:51.3022528Z   OUTPUT: phase-a-38657911581-1-evidence-format-7c44aa0115c42c0fee214f645bb04af52870817d
+2026-10-15T00:04:51.3024020Z ##[endgroup]
+2026-10-15T00:04:51.4700134Z (node:2339) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T00:04:51.4701352Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T00:04:51.4720735Z ##[warning]No files were found with the provided path: phase-a-38657911581-1-evidence-format-7c44aa0115c42c0fee214f645bb04af52870817d/. No artifacts will be uploaded.
+2026-10-15T00:04:51.5015623Z Post job cleanup.
+2026-10-15T00:04:51.5957329Z [command]/usr/bin/git version
+2026-10-15T00:04:51.6004926Z git version 2.55.0
+2026-10-15T00:04:51.6052552Z Temporarily overriding HOME='/home/runner/work/_temp/7a3669a1-72e1-4062-9a8b-6b846ba9b716' before making global git config changes
+2026-10-15T00:04:51.6054423Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T00:04:51.6058215Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-15T00:04:51.6102768Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T00:04:51.6139731Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T00:04:51.6448202Z fatal: No url found for submodule path 'src/components/Coach's Corner/Practice Plan Generator' in .gitmodules
+2026-10-15T00:04:51.6476649Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-10-15T00:04:51.6679644Z Cleaning up orphan processes
+2026-10-15T00:04:51.7024982Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
