@@ -1,0 +1,129 @@
+﻿2026-10-15T00:07:24.5334522Z Current runner version: '2.337.0'
+2026-10-15T00:07:24.5360466Z ##[group]Runner Image Provisioner
+2026-10-15T00:07:24.5361674Z Hosted Compute Agent
+2026-10-15T00:07:24.5362372Z Version: 20261012.601
+2026-10-15T00:07:24.5363028Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-15T00:07:24.5363734Z Build Date: 2026-10-12T17:48:21Z
+2026-10-15T00:07:24.5364519Z Worker ID: {1b578892-01fd-43b3-b668-963eed15af15}
+2026-10-15T00:07:24.5365224Z Region: eastus
+2026-10-15T00:07:24.5365844Z Cloud: Azure
+2026-10-15T00:07:24.5366380Z ##[endgroup]
+2026-10-15T00:07:24.5367968Z ##[group]Operating System
+2026-10-15T00:07:24.5368672Z Ubuntu
+2026-10-15T00:07:24.5369197Z 24.04.5
+2026-10-15T00:07:24.5369757Z LTS
+2026-10-15T00:07:24.5370261Z ##[endgroup]
+2026-10-15T00:07:24.5370790Z ##[group]Runner Image
+2026-10-15T00:07:24.5371942Z Image: ubuntu-24.04
+2026-10-15T00:07:24.5372548Z Version: 20261012.334.1
+2026-10-15T00:07:24.5373911Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-15T00:07:24.5375574Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-15T00:07:24.5376562Z ##[endgroup]
+2026-10-15T00:07:24.5377717Z ##[group]GITHUB_TOKEN Permissions
+2026-10-15T00:07:24.5379623Z Contents: read
+2026-10-15T00:07:24.5380286Z Metadata: read
+2026-10-15T00:07:24.5380993Z ##[endgroup]
+2026-10-15T00:07:24.5383535Z Secret source: Actions
+2026-10-15T00:07:24.5384565Z Cache mode: write
+2026-10-15T00:07:24.5385276Z Prepare workflow directory
+2026-10-15T00:07:24.5957987Z Prepare all required actions
+2026-10-15T00:07:24.6008293Z Getting action download info
+2026-10-15T00:07:24.8207846Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-15T00:07:25.1312783Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-15T00:07:25.3258345Z Complete job name: evidence-format
+2026-10-15T00:07:25.3907841Z ##[group]Run mkdir "$OUTPUT"
+2026-10-15T00:07:25.3908603Z [36;1mmkdir "$OUTPUT"[0m
+2026-10-15T00:07:25.4209255Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-15T00:07:25.4210447Z env:
+2026-10-15T00:07:25.4211703Z   OUTPUT: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:25.4212834Z ##[endgroup]
+2026-10-15T00:07:25.4494126Z ##[group]Run git init . 2>&1 | tee "$OUTPUT/checkout.log"
+2026-10-15T00:07:25.4495028Z [36;1mgit init . 2>&1 | tee "$OUTPUT/checkout.log"[0m
+2026-10-15T00:07:25.4496046Z [36;1mgit remote add origin https://github.com/DigitalBlueprint239/coach-core-ai.git[0m
+2026-10-15T00:07:25.4497389Z [36;1mgit -c credential.helper= fetch --no-tags --depth=1 origin "$GITHUB_SHA" 2>&1 | tee -a "$OUTPUT/checkout.log"[0m
+2026-10-15T00:07:25.4498665Z [36;1mgit checkout --detach FETCH_HEAD 2>&1 | tee -a "$OUTPUT/checkout.log"[0m
+2026-10-15T00:07:25.4499574Z [36;1mtest "$(git rev-parse HEAD)" = "$GITHUB_SHA"[0m
+2026-10-15T00:07:25.4563726Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-15T00:07:25.4564552Z env:
+2026-10-15T00:07:25.4565390Z   OUTPUT: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:25.4566362Z ##[endgroup]
+2026-10-15T00:07:25.4878650Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-15T00:07:25.4880823Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-15T00:07:25.4882719Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-15T00:07:25.4883898Z hint: call:
+2026-10-15T00:07:25.4884738Z hint:
+2026-10-15T00:07:25.4885832Z hint: 	git config --global init.defaultBranch <name>
+2026-10-15T00:07:25.4886894Z hint:
+2026-10-15T00:07:25.4888035Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-15T00:07:25.4889490Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-15T00:07:25.4890651Z hint:
+2026-10-15T00:07:25.4892433Z hint: 	git branch -m <name>
+2026-10-15T00:07:25.4893278Z hint:
+2026-10-15T00:07:25.4894009Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-15T00:07:25.4895147Z Initialized empty Git repository in /home/runner/work/coach-core-ai/coach-core-ai/.git/
+2026-10-15T00:07:25.7934101Z From https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-15T00:07:25.7935283Z  * branch            21a635f65ae798e4f4b9c32536c2c2ce955a7cd6 -> FETCH_HEAD
+2026-10-15T00:07:25.8300819Z HEAD is now at 21a635f Merge 724f1a7d29299792d3bb19118fbec86b5002c3ad into 3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53
+2026-10-15T00:07:25.8497934Z ##[group]Run actions/setup-node@v5
+2026-10-15T00:07:25.8498644Z with:
+2026-10-15T00:07:25.8499116Z   node-version: 22
+2026-10-15T00:07:25.8499636Z   always-auth: false
+2026-10-15T00:07:25.8500151Z   check-latest: false
+2026-10-15T00:07:25.8504534Z   token: ***
+2026-10-15T00:07:25.8505054Z   package-manager-cache: true
+2026-10-15T00:07:25.8505644Z env:
+2026-10-15T00:07:25.8506431Z   OUTPUT: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:25.8507353Z ##[endgroup]
+2026-10-15T00:07:26.0069737Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-15T00:07:26.0075275Z (node:2240) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T00:07:26.0076821Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T00:07:26.0079588Z ##[group]Environment details
+2026-10-15T00:07:26.4904536Z node: v22.23.3
+2026-10-15T00:07:26.4906025Z npm: 10.9.9
+2026-10-15T00:07:26.4907300Z yarn: 1.22.22
+2026-10-15T00:07:26.4909700Z ##[endgroup]
+2026-10-15T00:07:26.5237309Z ##[group]Run node .github/scripts/validate-test-summary.mjs --self-test 2>&1 | tee "$OUTPUT/self-test.log"
+2026-10-15T00:07:26.5241524Z [36;1mnode .github/scripts/validate-test-summary.mjs --self-test 2>&1 | tee "$OUTPUT/self-test.log"[0m
+2026-10-15T00:07:26.5322281Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-15T00:07:26.5324003Z env:
+2026-10-15T00:07:26.5325866Z   OUTPUT: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:26.5328167Z ##[endgroup]
+2026-10-15T00:07:26.5854868Z {"passed":12,"failed":0,"kind":"synthetic-format-tests","productAcceptance":false}
+2026-10-15T00:07:26.5985664Z ##[group]Run node .github/scripts/validate-test-summary.mjs docs/agents/test-summary.json "$OUTPUT/validation"
+2026-10-15T00:07:26.5989082Z [36;1mnode .github/scripts/validate-test-summary.mjs docs/agents/test-summary.json "$OUTPUT/validation"[0m
+2026-10-15T00:07:26.6059368Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-15T00:07:26.6060853Z env:
+2026-10-15T00:07:26.6062806Z   OUTPUT: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:26.6064850Z ##[endgroup]
+2026-10-15T00:07:26.6467614Z Evidence format valid. Product acceptance remains NO-GO.
+2026-10-15T00:07:26.6674370Z ##[group]Run actions/upload-artifact@v4
+2026-10-15T00:07:26.6675675Z with:
+2026-10-15T00:07:26.6677283Z   name: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:26.6679959Z   path: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6/
+2026-10-15T00:07:26.6682448Z   retention-days: 14
+2026-10-15T00:07:26.6683463Z   if-no-files-found: warn
+2026-10-15T00:07:26.6684531Z   compression-level: 6
+2026-10-15T00:07:26.6685537Z   overwrite: false
+2026-10-15T00:07:26.6686526Z   include-hidden-files: false
+2026-10-15T00:07:26.6687592Z env:
+2026-10-15T00:07:26.6689197Z   OUTPUT: phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6
+2026-10-15T00:07:26.6691425Z ##[endgroup]
+2026-10-15T00:07:26.8559579Z (node:2288) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T00:07:26.8565060Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T00:07:26.8662618Z With the provided path, there will be 4 files uploaded
+2026-10-15T00:07:26.8668641Z Artifact name is valid!
+2026-10-15T00:07:26.8670950Z Root directory input is valid!
+2026-10-15T00:07:27.0810045Z Beginning upload of artifact content to blob storage
+2026-10-15T00:07:27.1064154Z (node:2288) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-15T00:07:27.1454142Z Uploaded bytes 2763
+2026-10-15T00:07:27.1639669Z Finished uploading artifact content to blob storage!
+2026-10-15T00:07:27.1644262Z SHA256 digest of uploaded artifact zip is ac12d1c651bfb9ee79cedfd1db3a6ce7fdcec919499bf8ddad09a5fb808c7787
+2026-10-15T00:07:27.1647261Z Finalizing artifact upload
+2026-10-15T00:07:27.3822641Z Artifact phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6.zip successfully finalized. Artifact ID 11937088922
+2026-10-15T00:07:27.3830685Z Artifact phase-a-38658177801-1-evidence-format-21a635f65ae798e4f4b9c32536c2c2ce955a7cd6 has been successfully uploaded! Final size is 2763 bytes. Artifact ID is 11937088922
+2026-10-15T00:07:27.3838632Z Artifact download URL: https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38658177801/artifacts/11937088922
+2026-10-15T00:07:27.4127430Z Post job cleanup.
+2026-10-15T00:07:27.5447335Z (node:2301) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T00:07:27.5450950Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T00:07:27.5699134Z Cleaning up orphan processes
+2026-10-15T00:07:27.6165458Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

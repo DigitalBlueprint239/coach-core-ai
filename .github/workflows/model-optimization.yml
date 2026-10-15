@@ -1,18 +1,60 @@
-name: Model Optimization Pipeline
+name: Model pipeline quarantine and Phase A evidence
 
+# Extend this existing workflow; product/security/emulator CI stays with its owners.
 on:
-  push:
-    paths:
-      - 'models/**'
-      - 'model_registry/**'
-      - '.github/workflows/model-optimization.yml'
   pull_request:
+    branches: [recovery/coach-core-mvp-2026, architecture/agent-command-center-2026]
     paths:
-      - 'models/**'
-      - 'model_registry/**'
+      - '.github/workflows/model-optimization.yml'
+      - '.github/scripts/validate-test-summary.mjs'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - 'docs/agents/**'
+      - 'SECURITY.md'
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
 
 jobs:
+  evidence-format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      OUTPUT: phase-a-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ github.sha }}
+    steps:
+      - name: Allocate unique evidence directory
+        run: mkdir "$OUTPUT"
+      - name: Read-only public checkout (no credential or submodule setup)
+        run: |
+          git init . 2>&1 | tee "$OUTPUT/checkout.log"
+          git remote add origin https://github.com/DigitalBlueprint239/coach-core-ai.git
+          git -c credential.helper= fetch --no-tags --depth=1 origin "$GITHUB_SHA" 2>&1 | tee -a "$OUTPUT/checkout.log"
+          git checkout --detach FETCH_HEAD 2>&1 | tee -a "$OUTPUT/checkout.log"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Synthetic format regression tests
+        run: node .github/scripts/validate-test-summary.mjs --self-test 2>&1 | tee "$OUTPUT/self-test.log"
+      - name: Validate evidence index (not product acceptance)
+        run: node .github/scripts/validate-test-summary.mjs docs/agents/test-summary.json "$OUTPUT/validation"
+      - name: Preserve output even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OUTPUT }}
+          path: ${{ env.OUTPUT }}/
+          retention-days: 14
+          if-no-files-found: warn
+
   model-optimization:
+    # Retained for review only; reactivation requires a separate approved design.
+    if: ${{ false }}
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     
     steps:
@@ -137,39 +179,6 @@ jobs:
           model_registry/configs/
         retention-days: 30
         
-    - name: Update Firestore schema version
-      if: steps.validation.outcome == 'success'
-      run: |
-        echo "Updating Firestore schema version..."
-        python -c "
-        import firebase_admin
-        from firebase_admin import credentials, firestore
-        import json
-        from datetime import datetime
-        
-        # Initialize Firebase (you'll need to set up credentials)
-        try:
-            cred = credentials.Certificate('firebase-credentials.json')
-            firebase_admin.initialize_app(cred)
-        except:
-            print('Firebase credentials not available - skipping schema update')
-            exit(0)
-            
-        db = firestore.client()
-        
-        # Update model version and schema
-        config_ref = db.collection('config').document('model_version')
-        config_ref.set({
-            'current_model_tag': 'v1.4',
-            'schema_version': '3.1',
-            'last_updated': datetime.now().isoformat(),
-            'optimization_run_id': '${{ github.run_id }}',
-            'performance_improvement': '${{ steps.validation.outputs.avg_improvement }}%'
-        })
-        
-        print('✅ Firestore schema updated')
-        "
-        
     - name: Generate benchmark report
       if: steps.validation.outcome == 'success'
       run: |
@@ -220,38 +229,3 @@ jobs:
         else:
             print('Improvement within expected range')
         "
-        
-    - name: Comment on PR
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const fs = require('fs');
-          
-          let comment = '## 🤖 Model Optimization Results\n\n';
-          
-          try {
-            const results = JSON.parse(fs.readFileSync('model_registry/optimization_results.json', 'utf8'));
-            
-            comment += `- ✅ **Optimization Status**: Success\n`;
-            comment += `- 📈 **Average Improvement**: ${results.average_improvement?.toFixed(1)}%\n`;
-            comment += `- 💾 **Average Compression**: ${results.average_compression?.toFixed(1)}x\n`;
-            comment += `- 🔧 **Models Optimized**: ${results.models_optimized || 'N/A'}\n\n`;
-            
-            if (results.average_improvement > 2.0) {
-              comment += '🚀 **Significant improvement detected!**\n\n';
-            }
-            
-            comment += '📊 [View detailed dashboard](https://your-dashboard-url.com)\n';
-            
-          } catch (error) {
-            comment += '❌ **Optimization failed**\n\n';
-            comment += 'Check the logs for details.';
-          }
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: comment
-          }); 
