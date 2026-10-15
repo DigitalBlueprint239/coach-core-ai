@@ -1,6 +1,6 @@
 # Staging readiness checklist (before requesting a staging deploy)
 
-Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-15: on test-only integrated candidate 8 `069c8f1`, ×10 on both engines gives **460/460 per engine**. **R1c verified fixed** (#69). L1, R1b and FX-03 are founder-accepted as passed. Open: N2/H2 underlying causes, FX-02, the R1c missing-team residual, R3, R4, touch exit, plus genuine hidden tabs, devices and staging, which are NOT MEASURED). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-15: test-only candidate 10 `186a743` = candidate 9b + identity visibility. Full ×10 matrix: **1,359/1,360** across desktop and phone widths. Proven team-creation gaps remain: N2 (saved but "Creating…", reproduced under fault), no recovery after stream resets, duplicate teams on retry. N3 is new. Open: H2, FX-02, R1c residual, R3, R4, touch exit; background tabs, devices and staging NOT MEASURED). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
 
 ## 1. Exact PR/commit combination
 
@@ -107,7 +107,7 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 | G2 | Founder decisions D5 (billing + controls) and D10 (legacy import), plus D1–D7 if film is in the deploy | Coach Drew | ✗ |
 | G3 | Founder read-only verification of §4 controls recorded | Coach Drew | ✗ |
 | G4 | PR #49 founder actions (§6 of the Day 2 report: old keys checked/rotated, web key restricted, Anonymous OFF, authorized domains) | Coach Drew | ✗ |
-| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ✔ in emulator at candidate 8 `069c8f1` (test-only): E2E ×10 **460/0 per engine**, 0 steps ≥ 10 s in 920 executions, release proof 13/13. Clean `npm ci`: jest 440/440, tsc 0, functions 73/73, prod audits 0. History kept: candidate 6 430/0; candidate 7 440/10 and 439/11 (R1c, H2) |
+| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ⚠ Candidate 10 `186a743` (job `116444776707`): desktop Chromium 530/0, Firefox 529/1 (D10-06b N3), phone Chromium 150/0, phone Firefox 150/0, release proof 13/13. Clean `npm ci`: jest 453/453, tsc 0, functions 73/73, prod audits 0. History kept: candidate 8 460/0 per engine; candidate 9 (#67) review |
 | G6 | Release-build proof re-run with the real staging web config at deploy time; manifest kept | deployer | prepared |
 | G7 | Staging config: `COACH_CORE_AI_ENABLED=false`, `COACH_CORE_ALLOWED_ORIGINS` as a JSON array, AI global cap 50/day | deployer | prepared |
 | G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
@@ -124,5 +124,7 @@ Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
 | R3: "Not now" on the D10 prompt is a permanent decline (no re-entry point) | Codex / Coach Drew | OPEN (disclosed limitation) |
 | R4: `D10_APPROVED = true` build constant, so the import prompt ships in release builds | Codex / deploy decision | OPEN |
 | Firefox instability: **H2** D10-07 timeout (1/10 `709e0f4`, 1/10 `d12d273`, 0/10 `4757eaf`, 0/10 `069c8f1`); **N2** team creation stuck on "Creating…" after the server write (Codex local); the false-confirm harness signature of local H2 and N1 is fixed (`5752d2b`); FX-02 unexplained 51 s stall; genuine hidden or background tabs NOT MEASURED | Claude / Codex | OPEN; per-step diagnostics in CI, no retries |
+| **Team creation reliability** (report §14.3): **N2** saved but "Creating…" (reproduced under fault, cause not proven); **D1** no retry or feedback after write-stream resets; **D2** duplicate team on retry while pending; **N3** submit produced no request (1/10 Firefox) | Codex (client) / Claude (diagnostics) | OPEN; fixes proposed on #39, product decisions with Coach Drew |
+| **Identity visibility** (account, team or no-team, sample-preview marker at every width) | Claude (candidate 10) | Implemented and tested (UI-01/UI-02 10/10 both engines); **design approval pending Coach Drew** |
 | Standalone Playbook touch exit (Windows, PR #3 repo) | Codex | OPEN |
 | Physical tablets/phones; staging real auth, CORS and token checks (RA-*, SEC-07..10) | Coach Drew / Claude | NOT MEASURED (requires approved staging) |
