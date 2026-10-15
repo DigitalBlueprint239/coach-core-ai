@@ -1,5 +1,7 @@
 # PR #67 — visual fidelity revision (approval pending)
 
+> Superseded after Coach Drew rejected this revision. Current narrow-preview evidence: [NARROW_PREVIEW_REVIEW.md](NARROW_PREVIEW_REVIEW.md). Historical evidence below is preserved.
+
 Coach Drew requested this revision because the previous implementation was **not visually approved**. The supplied concept board remains the visual-direction reference. This revision is submitted for visual approval, not marked accepted.
 
 ## What changed

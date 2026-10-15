@@ -1,0 +1,16 @@
+[
+  {
+    "engine": "chromium",
+    "safeArea": "32px additional inset simulated; not a physical device",
+    "controlsCleared": 19,
+    "wideViewport490Calendar": "PASS",
+    "mainFocusScroll": "PASS"
+  },
+  {
+    "engine": "firefox",
+    "safeArea": "32px additional inset simulated; not a physical device",
+    "controlsCleared": 19,
+    "wideViewport490Calendar": "PASS",
+    "mainFocusScroll": "PASS"
+  }
+]

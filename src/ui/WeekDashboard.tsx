@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, ClipboardList, Clock3, MapPin, Plus, Waypoints } from 'lucide-react';
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, ClipboardList, Clock3, MapPin, Plus } from 'lucide-react';
 import { Panel, Action, EmptyState } from './primitives';
 import type { Destination } from './AppShell';
 
@@ -88,13 +88,13 @@ export default function WeekDashboard({ teamName, events = [], loading = false, 
   const selectedEvents = source.filter(event => event.date === selected);
   const practice = source.find(event => event.id === selectedId && isPractice(event)) || selectedEvents.find(isPractice) || (!dayChosen ? nextPractice : undefined);
   const chooseDay = (day: string) => { setSelected(day); setSelectedId(null); setDayChosen(true); };
-  const chooseEvent = (event: WeekEvent) => { chooseDay(event.date); if (isPractice(event)) setSelectedId(event.id); if (!isPractice(event) || window.matchMedia?.('(max-width: 767px)')?.matches) setDetail(event); };
+  const chooseEvent = (event: WeekEvent, agenda: boolean) => { chooseDay(event.date); if (isPractice(event)) setSelectedId(event.id); if (!isPractice(event) || agenda) setDetail(event); };
   const changeWeek = (offset: number) => { setWeekOffset(offset); chooseDay(dateKey(addDays(today, -((today.getDay() + 6) % 7) + offset * 7))); };
-  const eventButton = (event: WeekEvent, timed = false) => <button key={event.id} type="button" className={`cc-event cc-event-${event.kind} ${practice?.id === event.id ? 'cc-event-selected' : ''}`}
+  const eventButton = (event: WeekEvent, timed = false, agenda = false) => <button key={event.id} type="button" className={`cc-event cc-event-${event.kind} ${practice?.id === event.id ? 'cc-event-selected' : ''}`}
     aria-label={`${event.title}, ${parseDay(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${event.time || 'time not set'}`}
     aria-pressed={isPractice(event) ? practice?.id === event.id : undefined}
     style={timed ? { top: `${((event.startMinute! - 420) / 900) * 100}%`, height: `${((event.endMinute! - event.startMinute!) / 900) * 100}%` } : undefined}
-    onClick={() => chooseEvent(event)}><strong>{event.title}</strong><span>{timed && event.startMinute !== undefined ? new Date(2000, 0, 1, Math.floor(event.startMinute / 60), event.startMinute % 60).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : event.time || 'Time not set'}</span></button>;
+    onClick={() => chooseEvent(event, agenda)}><strong>{event.title}</strong><span>{timed && event.startMinute !== undefined ? new Date(2000, 0, 1, Math.floor(event.startMinute / 60), event.startMinute % 60).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : event.time || 'Time not set'}</span></button>;
 
   return <>
     <div className="cc-dashboard-heading"><div><h1><span className="cc-desktop-title">My Week</span><span className="cc-phone-title">Today</span></h1>
@@ -121,8 +121,8 @@ export default function WeekDashboard({ teamName, events = [], loading = false, 
             <div className="cc-day-events">{source.filter(event => event.date === key).map(event => eventButton(event, preview && event.startMinute !== undefined))}</div>
           </div>; })}
         </div>
-        <div className="cc-selected-day"><h3>{parseDay(selected).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
-          {selectedEvents.length ? selectedEvents.map(event => eventButton(event)) : <p>No dated plans or events for this day.</p>}</div>
+        <div className="cc-selected-day" role="region" aria-label="Selected day agenda"><h3>{parseDay(selected).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
+          {selectedEvents.length ? selectedEvents.map(event => eventButton(event, false, true)) : <p>No dated plans or events for this day.</p>}</div>
         <div className="cc-calendar-note">{preview ? <><span className="cc-legend-dot" />Sample practices and events</> : loading ? 'Loading authorized practice plans…' : events.length ? 'Saved plans · start times not set. Scheduling unavailable.' : 'No dated practice plans yet. Scheduling unavailable.'}</div>
       </section>
 
@@ -132,12 +132,13 @@ export default function WeekDashboard({ teamName, events = [], loading = false, 
 
       <section className="cc-panel cc-today-panel" aria-label="Next practice">
         <p className="cc-kicker">Next up {preview && <span className="cc-inline-label">Sample</span>}</p>
-        {nextPractice ? <div className="cc-next-event"><h2>{nextPractice.title}</h2><p>{parseDay(nextPractice.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
-          <p><Clock3 size={16} aria-hidden="true" />{nextPractice.time || 'Time not set'}</p>{nextPractice.location && <p><MapPin size={16} aria-hidden="true" />{nextPractice.location}</p>}
+        {nextPractice ? <div className="cc-next-event"><div className="cc-next-summary"><span className="cc-next-icon"><ClipboardList size={21} aria-hidden="true" /></span><div>
+          <p className="cc-next-time">{nextPractice.time || 'Time not set'}</p><h2>{nextPractice.title}</h2>
+          <p className="cc-next-date">{parseDay(nextPractice.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+          {nextPractice.location && <p><MapPin size={14} aria-hidden="true" />{nextPractice.location}</p>}</div></div>
           <Action primary onClick={() => preview ? setDetail(nextPractice) : onNavigate('practice')}>{preview ? 'View practice preview' : 'Open practice plans'}<ArrowRight size={17} aria-hidden="true" /></Action>
         </div> : <EmptyState title={loading ? 'Loading your plans…' : 'A clear field ahead'}>{teamName ? 'No upcoming dated practice plans.' : 'Select or create your team to start planning.'}</EmptyState>}
-        <div className="cc-quick-actions">{!nextPractice && <Action primary onClick={() => onNavigate(teamName ? 'practice' : 'teams')}><Plus size={18} aria-hidden="true" />{teamName ? 'Create Practice Plan' : 'Manage Teams'}</Action>}
-          <Action onClick={() => onNavigate('playbook')}><Waypoints size={18} aria-hidden="true" />Smart Playbook</Action></div>
+        {!nextPractice && <div className="cc-quick-actions"><Action primary onClick={() => onNavigate(teamName ? 'practice' : 'teams')}><Plus size={18} aria-hidden="true" />{teamName ? 'Create Practice Plan' : 'Manage Teams'}</Action></div>}
       </section>
 
       <Panel title="Upcoming" className="cc-upcoming-panel">{nextEvents.length ? <ul className="cc-upcoming-list">{nextEvents.slice(0, 3).map(event => <li key={event.id}>

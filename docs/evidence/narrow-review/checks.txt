@@ -1,0 +1,18 @@
+Baseline and final: npx tsc --noEmit: zero diagnostics.
+Baseline: 31 suites / 443 tests PASS; production build PASS, inherited SmartPlaybook warnings.
+Final: CI=true npm test -- --watchAll=false --runInBand: 31 suites / 443 tests PASS.
+Final: CI=false npm run build: PASS, inherited SmartPlaybook warning files only; no UI/CSS warning. Gzip JS225.42kB / CSS4.43kB.
+Preview: node scripts/visual-preview.cjs 4317: localhost-only; auth/cloud module graph guard PASS; no external requests/page errors.
+Final preview rebuilt with --build-only; the running local server reads the refreshed artifacts.
+Chromium 156.0.8078.4 + Firefox 157.0: 375x812,430x932,490x900,834x1112,1440x1000: all 10 viewport cases PASS.
+Per viewport: no horizontal page overflow; zero fragmented event words; axe WCAG A/AA violations0; buttons>=44px high; navigation/main focus, truthful empty states and sample browser-storage isolation PASS.
+Agenda layouts: modal/Escape PASS.
+Each phone width: all 19 visible main content controls individually scrolled/focused above opaque nav; selected event + note clear bottom bar.
+Wide1440 viewport with calendar constrained490px: agenda PASS in both engines.
+Additional 32px nav inset simulation: all 19 controls clear nav in both engines, border-box observer updates; main focus does not scroll dashboard to bottom.
+Reduced motion + skip link + main focus PASS in both engines.
+Minified production CSS replay on isolated UI: all 5 widths PASS, overflow/agenda/nav clearance; not authenticated backend acceptance.
+Codex visually inspected requested 5 sizes, selected agenda and page-bottom captures; comparisons include supplied reference pixels.
+No physical-device, staging/authenticated or independent Claude acceptance claimed. Claude workflow review remains pending.
+Intermediate nested-fallback CSS minifier warning corrected; intermediate and final build logs retained separately. No acceptance harness changes.
+Existing archived/embedded @ts-nocheck suppressions inherited and untouched per scope; none added. firestore.ts addToOfflineQueue intact and single; quarantined sync behavior unchanged.
