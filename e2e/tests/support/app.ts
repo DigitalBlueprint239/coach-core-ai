@@ -141,7 +141,7 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
     const uid = await page.evaluate(() => (window as any).__coachCoreE2E?.uid?.() ?? null).catch(() => null);
     const saved = uid ? (await adminTeamsOwnedBy(uid)).map((t) => t.name) : 'uid unavailable';
     net.mark('gave-up');
-    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} net: ${net.summary()}` });
+    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} shown=${JSON.stringify(visible.map((v) => v.replace(/\s+/g, ' ').slice(0, 120))).slice(0, 500)} net: ${net.summary(1200)}` });
     throw new Error(`Team "${teamName}" not confirmed within ${Date.now() - t0} ms. modalOpen=${modalOpen} `
       + `creating=${creating} teamsInFirestore=${JSON.stringify(saved)} visible=${JSON.stringify(visible).slice(0, 300)}`, { cause: err });
   }
