@@ -899,3 +899,39 @@ Weaknesses it recorded:
 - Some "every execution" statements rest on truncated annotations.
 
 The corrected headline is **acceptance 1,259/1,260; diagnostics 100/100 (safety assertions only)**.
+
+### 14.8 N2 repair test preparation (2026-10-15; Codex owns the repair, Claude owns tests and evidence)
+
+Historical runs and failures in §14.3–14.7 and evidence 33–36 are unchanged.
+
+**New tests** (acceptance head `c4e087f`; contract posted on #39 for Codex):
+- **N2-A1 [acceptance]**, D1 fault (back channel reset during an 8 s outage, then restored). Requires:
+  - an explicit `role=status`/`alert` matching `/saving|connection|offline|retry/i` during the outage;
+  - the write sent after restore, within 30 s;
+  - **saved exactly once**, after a 3 s window;
+  - the UI recovered: dialog closed and the team heading shown.
+- **N2-A2 [acceptance]**, D2 fault (write held, so the create is pending). The coach cancels if possible, leaves Teams, returns and retries the same name if the UI allows it. Requires **exactly 1 team** after delivery and a 5 s window.
+- **N3 probe:** every `createTeamViaUI` call records, on failure only:
+  - signed-in at submit (boolean only);
+  - whether the DOM `submit` event fired;
+  - whether "Creating…" ever appeared;
+  - toast/alert texts;
+  - the Firestore request lifecycle;
+  - server persistence.
+
+  No uids, emails or tokens.
+- **N3-D5 [diagnostic]:** the D10-06b pattern of create, sign out, sign in as another coach, create immediately; 8 creations per execution.
+- The reporter now prints **acceptance** and **diagnostic** totals separately.
+
+**Pre-repair baseline**, to prove the tests discriminate:
+- Branch `claude/n2-baseline-pre-repair-2026-10-15` @ `a61dfcb`: runtime identical to candidate 10 `186a743`, which is itself unchanged.
+- Run `38758608712`, job `116504388863`, ×5, retries 0, filter `N2-|N3-`, Chromium 156 and Firefox 157 desktop (evidence 37, **not acceptance**).
+
+| Test | Chromium | Firefox |
+|---|---|---|
+| N2-A1 | **FAIL 5/5**: no status, write never sent after restore, 0 teams, no recovery | **FAIL 5/5** (same) |
+| N2-A2 | **FAIL 5/5**: 2 teams | **FAIL 5/5**: 2 teams |
+| N2-D0, D1, D2, D3, D4 | 25/25 (same behaviour as §14.3) | 25/25 |
+| N3-D5 | 5/5: 40 creations, **N3 not reproduced** | 5/5: 40 creations, not reproduced |
+
+**Status:** N2 repair **pending Codex's exact SHA**. N2's natural CI trigger is **not proven**. **N3 unresolved** (not reproduced in 80 targeted creations). MVP **NO-GO**.
