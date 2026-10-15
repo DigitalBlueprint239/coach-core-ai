@@ -1,0 +1,75 @@
+E2E emulator (Chromium + Firefox) success 2026-10-15T12:58:06Z 2026-10-15T13:10:20Z sha=7094c849fd1d993470cc7e70b460a2ebe4ff4faa
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[notice] E2E firefox diag data: 25 executions
+PASS N2-D0 #0: D0 server=139ms dialogClosed=151ms net: [click@1] | WP 63-71 200 | WG:xmlhttp 80-open | WP 93-122 200 | [end@152] | Listen: 2 req, 0 open
+PASS N2-D1 #0: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 65-75 200 | WG:xmlhttp 81-85 NS_ERROR_NET_RESET | WG:xmlhttp 112-113 NS_ERROR_NET_RESET | [unblock@8025] | [end@40042] | Listen: 2 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=1 server=139ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=148ms teams=1 net: [click@1] | WP 68-82 200 | WG:xmlhttp 86-open | WP 98-157 200 | [release@152] | [end@152] | Listen: 2 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8124ms teams=1 net: [click@1] | WP 67-76 200 | WG:xmlhttp 81-8057 200 | WG:xmlhttp 110-8059 200 | [release@8046] | WP 8065-8098 200 | WG:xmlhttp 8067-8099 200 | WG:xmlhttp 8114-open | [end@8125] | Listen: 2 req, 0 open
+PASS N2-D2 #0: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=594ms teamsNamedSame=2
+PASS N2-D0 #1: D0 server=144ms dialogClosed=158ms net: [click@1] | WP 63-70 200 | WG:xmlhttp 83-open | WP 88-122 200 | [end@159] | Listen: 2 req, 0 open
+PASS N2-D1 #1: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 66-83 200 | WG:xmlhttp 87-89 NS_ERROR_NET_RESET | WG:xmlhttp 128-130 NS_ERROR_NET_RESET | [unblock@8049] | [end@40030] | Listen: 2 req, 0 open
+PASS N2-D3 #1: D3 leg=write-response held=1 server=147ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=162ms teams=1 net: [click@0] | WP 66-78 200 | WG:xmlhttp 84-open | WP 96-175 200 | [release@164] | [end@164] | Listen: 2 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8115ms teams=1 net: [click@1] | WP 68-80 200 | WG:xmlhttp 85-8049 200 | WG:xmlhttp 122-8049 200 | [release@8037] | WP 8057-8091 200 | WG:xmlhttp 8059-8093 200 | WG:xmlhttp 8099-open | [end@8116] | Listen: 2 req, 0 open
+PASS N2-D2 #1: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=598ms teamsNamedSame=2
+PASS N2-D0 #2: D0 server=153ms dialogClosed=168ms net: [click@0] | WP 66-71 200 | WG:xmlhttp 82-open | WP 95-135 200 | [end@168] | Listen: 2 req, 0 open
+PASS N2-D1 #2: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 62-76 200 | WG:xmlhttp 81-84 NS_ERROR_NET_RESET | WG:xmlhttp 112-113 NS_ERROR_NET_RESET | [unblock@8059] | [end@40049] | Listen: 2 req, 0 open
+PASS N2-D3 #2: D3 leg=write-response held=1 server=150ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=166ms teams=1 net: [click@0] | WP 67-79 200 | WG:xmlhttp 85-open | WP 94-183 200 | [release@177] | [end@177] | Listen: 2 req, 0 open
+PASS N2-D4 #2: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8091ms teams=1 net: [click@0] | WP 64-78 200 | WG:xmlhttp 81-8026 200 | WG:xmlhttp 110-8027 200 | [release@8016] | WP 8034-8068 200 | WG:xmlhttp 8038-8069 200 | WG:xmlhttp 8074-open | [end@8091] | Listen: 2 req, 0 open
+PASS N2-D2 #2: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=619ms teamsNamedSame=2
+PASS N2-D0 #3: D0 server=153ms dialogClosed=154ms net: [click@1] | WP 61-69 200 | WG:xmlhttp 78-open | WP 90-132 200 | [end@155] | Listen: 2 req, 0 open
+PASS N2-D1 #3: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 67-78 200 | WG:xmlhttp 83-87 NS_ERROR_NET_RESET | WG:xmlhttp 111-113 NS_ERROR_NET_RESET | [unblock@8054] | [end@40031] | Listen: 2 req, 0 open
+PASS N2-D3 #3: D3 leg=write-response held=1 server=144ms 
+
+[notice] E2E firefox slow steps >= 10s: 0 of 25 executions
+none
+
+[notice] E2E firefox: 25 passed / 0 failed / 0 blocked / 0 skipped
+PASS 5/5 N2-D0 [2.2/2.2/2.2s]
+PASS 5/5 N2-D1 [41.0/41.0/41.1s]
+PASS 5/5 N2-D3 [1.1/1.2/1.2s]
+PASS 5/5 N2-D4 [9.1/9.1/9.2s]
+PASS 5/5 N2-D2 [4.6/4.6/4.7s]
+
+[notice] E2E chromium diag data: 25 executions
+PASS N2-D0 #0: D0 server=500ms dialogClosed=556ms net: [click@2] | WP 85-223 200 | WG:xmlhttp 220-open | WP 282-519 200 | [end@558] | Listen: 2 req, 1 open
+PASS N2-D1 #0: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 63-95 200 | WG:xmlhttp 91-97 net::ERR_CONNECTION_RESET | WG:xmlhttp 147-149 net::ERR_CONNECTION_RESET | [unblock@8028] | [end@40022] | Listen: 2 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=1 server=165ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=170ms teams=1 net: [click@1] | WP 48-70 200 | WG:xmlhttp 71-open | WP 86-185 200 | [release@177] | [end@177] | Listen: 2 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8079ms teams=1 net: [click@1] | WP 63-82 200 | WG:xmlhttp 83-8074 200 | WG:xmlhttp 126-8027 200 | [release@8014] | WP 8028-8065 200 | WG:xmlhttp 8029-8067 200 | WG:xmlhttp 8067-open | [end@8080] | Listen: 2 req, 0 open
+PASS N2-D2 #0: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=438ms teamsNamedSame=2
+PASS N2-D0 #1: D0 server=129ms dialogClosed=194ms net: [click@1] | WP 65-88 200 | WG:xmlhttp 88-open | WP 97-149 200 | [end@195] | Listen: 2 req, 0 open
+PASS N2-D1 #1: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 46-71 200 | WG:xmlhttp 72-79 net::ERR_CONNECTION_RESET | WG:xmlhttp 115-117 net::ERR_CONNECTION_RESET | [unblock@8020] | [end@40018] | Listen: 2 req, 0 open
+PASS N2-D3 #1: D3 leg=write-response held=1 server=104ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=173ms teams=1 net: [click@0] | WP 46-59 200 | WG:xmlhttp 60-open | WP 73-183 200 | [release@178] | [end@178] | Listen: 2 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8095ms teams=1 net: [click@0] | WP 48-69 200 | WG:xmlhttp 70-8090 200 | WG:xmlhttp 115-8040 200 | [release@8022] | WP 8038-8083 200 | WG:xmlhttp 8041-8087 200 | WG:xmlhttp 8087-open | [end@8095] | Listen: 2 req, 0 open
+PASS N2-D2 #1: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=419ms teamsNamedSame=2
+PASS N2-D0 #2: D0 server=120ms dialogClosed=137ms net: [click@1] | WP 63-80 200 | WG:xmlhttp 80-open | WP 89-128 200 | [end@138] | Listen: 2 req, 0 open
+PASS N2-D1 #2: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 47-68 200 | WG:xmlhttp 69-73 net::ERR_CONNECTION_RESET | WG:xmlhttp 113-115 net::ERR_CONNECTION_RESET | [unblock@8014] | [end@40034] | Listen: 2 req, 0 open
+PASS N2-D3 #2: D3 leg=write-response held=1 server=100ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=178ms teams=1 net: [click@0] | WP 46-57 200 | WG:xmlhttp 58-open | WP 72-188 200 | [release@183] | [end@183] | Listen: 2 req, 0 open
+PASS N2-D4 #2: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8100ms teams=1 net: [click@1] | WP 62-80 200 | WG:xmlhttp 82-8097 200 | WG:xmlhttp 118-8048 200 | [release@8036] | WP 8047-8077 200 | WG:xmlhttp 8049-8079 200 | WG:xmlhttp 8081-open | [end@8101] | Listen: 2 req, 0 open
+PASS N2-D2 #2: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=405ms teamsNamedSame=2
+PASS N2-D0 #3: D0 server=120ms dialogClosed=133ms net: [click@1] | WP 66-75 200 | WG:xmlhttp 76-open | WP 85-116 200 | [end@134] | Listen: 2 req, 0 open
+PASS N2-D1 #3: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 60-85 200 | WG:xmlhttp 74-87 net::ERR_CONNECTION_RESET | WG:xmlhttp 102-104 net::ERR_CONNECTION_RESET | [unblock@8043] | [end@40046] | Listen: 2 req, 0 ope
+
+[notice] E2E chromium slow steps >= 10s: 0 of 25 executions
+none
+
+[notice] E2E chromium: 25 passed / 0 failed / 0 blocked / 0 skipped
+PASS 5/5 N2-D0 [0.9/1.0/1.5s]
+PASS 5/5 N2-D1 [40.7/40.7/40.7s]
+PASS 5/5 N2-D3 [0.8/0.8/0.8s]
+PASS 5/5 N2-D4 [8.7/8.8/40.7s]
+PASS 5/5 N2-D2 [4.0/4.1/4.2s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
