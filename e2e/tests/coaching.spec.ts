@@ -411,7 +411,9 @@ test('CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the
   await page.reload();
   // Positive anchors: the signed-in dashboard for this team has rendered with the blob in place.
   await expect(dashboardFor(page, a.email)).toBeVisible();
-  await expect(page.getByText('Owls').first()).toBeVisible();
+  // Team loaded: its name is rendered (attached). #67 does not DISPLAY the team
+  // name on the phone-width dashboard, so visibility is not required here.
+  await expect(page.getByText('Owls').first()).toBeAttached();
   expect(await page.evaluate((t) => localStorage.getItem(`coach-core-ai-${t}`), a.teamId)).toBe(blob);
   // No destructive migration is offered.
   await expect(page.getByRole('button', { name: 'Migrate Now' })).toHaveCount(0);

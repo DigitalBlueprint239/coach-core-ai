@@ -16,6 +16,9 @@ on:
       repeat_each:
         description: 'Repeat each test N times (stability runs)'
         default: '1'
+      grep:
+        description: 'Optional test-title regex for targeted re-runs (empty = full suite)'
+        default: ''
 
 permissions:
   contents: read
@@ -75,6 +78,8 @@ jobs:
       - name: Run browser tests in the emulator suite
         env:
           REPEAT: ${{ github.event.inputs.repeat_each || '1' }}
+          # Passed as data via env (never interpolated into the shell command).
+          E2E_GREP: ${{ github.event.inputs.grep || '' }}
         run: |
           set -o pipefail
           mkdir -p e2e/test-results
