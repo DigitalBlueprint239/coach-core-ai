@@ -1,0 +1,569 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\drewl\\AppData\\Local\\hermes\\node\\node.exe",
+      "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-n2-validation\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "tests/team-creation/playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-n2-validation\\tests\\team-creation\\playwright.config.ts",
+    "rootDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-validation/tests/team-creation",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/n2-browser-results/run01",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-validation/tests/team-creation",
+        "testIgnore": [],
+        "testMatch": [
+          "team-creation.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/n2-browser-results/run01",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-validation/tests/team-creation",
+        "testIgnore": [],
+        "testMatch": [
+          "team-creation.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\n2-browser-results\\run01",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-n2-validation\\tests\\team-creation",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-n2-validation\\tests\\team-creation",
+        "testIgnore": [],
+        "testMatch": "team-creation.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\n2-browser-results\\run01",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-n2-validation\\tests\\team-creation",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-n2-validation\\tests\\team-creation",
+        "testIgnore": [],
+        "testMatch": "team-creation.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/n2-browser-results/run01/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node ../../e2e/scripts/serve.mjs ../../e2e/.app-build 3000",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "team-creation.spec.ts",
+      "file": "team-creation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pending create survives cancel/navigation: no second submit, exactly one confirmed server team",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5854,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 395
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 516
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:24.193Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-bcb55d4d50b7113725dd",
+          "file": "team-creation.spec.ts",
+          "line": 18,
+          "column": 5
+        },
+        {
+          "title": "response lost after server commit: safe retry confirms the same id without rewriting",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1461,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 250
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 80
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:30.478Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-6e194bda5c46ed1345ea",
+          "file": "team-creation.spec.ts",
+          "line": 37,
+          "column": 5
+        },
+        {
+          "title": "ten-second unconfirmed status permits retry at the same identity, never false success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13376,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 2072
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 108
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:31.955Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-b4d17b14bfe199cac19d",
+          "file": "team-creation.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "refresh and account switch preserve A operation without offering it or sending it under B",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2982,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 240
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 83
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 117
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 98
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 122
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 78
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:45.349Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-9ff33044728e0fa47b7a",
+          "file": "team-creation.spec.ts",
+          "line": 81,
+          "column": 5
+        },
+        {
+          "title": "pending create survives cancel/navigation: no second submit, exactly one confirmed server team",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5081,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 806
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 1395
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:49.404Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-4f433c546c827c84c5ff",
+          "file": "team-creation.spec.ts",
+          "line": 18,
+          "column": 5
+        },
+        {
+          "title": "response lost after server commit: safe retry confirms the same id without rewriting",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2303,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 372
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 174
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:56.295Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-85f310c6d0b452cb4f90",
+          "file": "team-creation.spec.ts",
+          "line": 37,
+          "column": 5
+        },
+        {
+          "title": "ten-second unconfirmed status permits retry at the same identity, never false success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12582,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 581
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 189
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:45:58.622Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-b2a42e68fe7116ae7658",
+          "file": "team-creation.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "refresh and account switch preserve A operation without offering it or sending it under B",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6544,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 456
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 171
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 454
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 177
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 345
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 240
+                    }
+                  ],
+                  "startTime": "2026-10-15T15:46:11.219Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3f93a7ac30f71a659ca-8e255b8cc8a87c53c0ad",
+          "file": "team-creation.spec.ts",
+          "line": 81,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-15T15:45:23.002Z",
+    "duration": 55952.161,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

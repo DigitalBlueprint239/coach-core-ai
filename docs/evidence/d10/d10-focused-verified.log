@@ -1,0 +1,35 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --testPathPattern=legacy-import
+
+PASS src/features/legacy-import/__tests__/firebase-import.test.ts
+PASS src/features/legacy-import/__tests__/import-legacy.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      57 | });
+      58 | test('consent UI explicitly accepts selected team and removes prompt only after verification', async () => {
+    > 59 |   render(<LegacyImport uid="coachA" teamId="teamA" teamName="Owls" backend={backend}/>);
+         |         ^
+      60 |   expect(screen.getByText(/into Owls/)).toBeInTheDocument();
+      61 |   expect(backend.copy).not.toHaveBeenCalled(); fireEvent.click(screen.getByText('Import plays'));
+      62 |   await waitFor(()=>expect(localStorage.getItem(decisionKey('coachA'))).not.toBeNull()); expect(screen.queryByRole('button', {name:'Import plays'})).not.toBeInTheDocument(); expect(stored.size).toBe(1);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-platform/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-platform/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-platform/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-platform/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:59:9)
+      at TestScheduler.scheduleTests (../main-platform/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-platform/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-platform/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-platform/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+Test Suites: 2 passed, 2 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        1.754 s, estimated 2 s
+Ran all test suites matching /legacy-import/i.

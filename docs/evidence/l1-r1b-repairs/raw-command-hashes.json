@@ -1,0 +1,102 @@
+[
+  {
+    "path": "l1-r1b-baseline-types.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "l1-r1b-baseline-tests.log",
+    "sha256": "255596450eb21176a79f9f22d2c84af49632f78bff5bce3e22c04313bcf1b594"
+  },
+  {
+    "path": "l1-r1b-baseline-build.log",
+    "sha256": "f89289af1a2d8475a064ec24eef2dc44c5c6f864ff9da7f6477119be1371574e"
+  },
+  {
+    "path": "l1-r1b-before-build.log",
+    "sha256": "fcb99e35a0eb9017ff59d32f031442260e9468fea151d95c53e258ddaa89595c"
+  },
+  {
+    "path": "l1-r1b-before-regressions.log",
+    "sha256": "60d95c4bf539a956e4e9675af76c15c5acdd0aed827001ffb3de3d4abb67e82b"
+  },
+  {
+    "path": "l1-r1b-before-complete-regressions.log",
+    "sha256": "5d7da8978646e0a85f7841488a31b05f7bcc4670d809a5ab83d3a2595b52e97b"
+  },
+  {
+    "path": "l1-r1b-after-types.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "l1-r1b-after-tests.log",
+    "sha256": "d7da129a314d347bd22186c837bf85e380b241e5d8e07f88dd864c5e76b876cc"
+  },
+  {
+    "path": "l1-r1b-after-build.log",
+    "sha256": "dbbf185bd800c8a0efa6329d295f662a0ebe91999bc304a0997f9b0efa87f553"
+  },
+  {
+    "path": "l1-r1b-emulator-build.log",
+    "sha256": "f89289af1a2d8475a064ec24eef2dc44c5c6f864ff9da7f6477119be1371574e"
+  },
+  {
+    "path": "l1-r1b-final-types.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "l1-r1b-final-tests.log",
+    "sha256": "3858b1dee5da3870661874f673e6a9cc3722cf0002d450b21181c74c4e8cc3dc"
+  },
+  {
+    "path": "l1-r1b-final-regressions.log",
+    "sha256": "ae65d8b111451200be671fb7dddeeb7349f33c282fb131d75479874a9c092c52"
+  },
+  {
+    "path": "l1-r1b-final-build.log",
+    "sha256": "6b5f38c34e0a6e500edc40b43fff6978c9726de86fd48c6da4cf81b3d6af4fff"
+  },
+  {
+    "path": "l1-r1b-final-emulator-build.log",
+    "sha256": "16d5396e08c95a87edf0af6bd4ce2885ef468e73d9b941ada7eea8d96133b926"
+  },
+  {
+    "path": "l1-r1b-final-canary.log",
+    "sha256": "0f403d7c4d1653ca652ba45fafd1182fadc51f9a328405f96418a287ff3e655f"
+  },
+  {
+    "path": "l1-r1b-final-audit.json",
+    "sha256": "3e435e736ba59e5872ab66c61fd60e1c33974e90089d34bc736707c0767c6688"
+  },
+  {
+    "path": "l1-r1b-final-all-audit.json",
+    "sha256": "9c66297186a3121fdc2a5e1ff23a6e189802965533c8b39f4e037811eac72bb1"
+  },
+  {
+    "path": "l1-r1b-browser-types.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "l1-r1b-browser-list.log",
+    "sha256": "b8ea5317271d01f07010f3481734b982d21475fe9ecda4799b97561c34bea596"
+  },
+  {
+    "path": "l1-r1b-browser-list-corrected.log",
+    "sha256": "381db537da59f58aa665933ff6b313bb55aecb164fdc8f5219e7200e3ea8fa85"
+  },
+  {
+    "path": "l1-r1b-browser-list-esm.log",
+    "sha256": "1b0dfab0ab8985489dae1f29e3705d2182a8c571d4891217a710c39051f5f20b"
+  },
+  {
+    "path": "l1-r1b-final-browser-list.log",
+    "sha256": "1b0dfab0ab8985489dae1f29e3705d2182a8c571d4891217a710c39051f5f20b"
+  },
+  {
+    "path": "l1-r1b-anchor-list.log",
+    "sha256": "d23032a2c1784fe62ac4866abe5e2bfb86ef127e614e3fce706dfa570790b403"
+  },
+  {
+    "path": "l1-r1b-browser-versions.txt",
+    "sha256": "ec4ca123a107cb72c094ec1064be4431f68364c2285d214b1f101224a7f003a6"
+  }
+]

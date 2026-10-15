@@ -7,9 +7,19 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 // Import the real Field component
-import Field from '../:components:SmartPlaybook:Field.js';
+import Field from '../Field';
 
 describe('Field memoization', () => {
+  let context;
+  beforeEach(() => {
+    context = Object.fromEntries(
+      ['clearRect', 'fillRect', 'beginPath', 'moveTo', 'lineTo', 'stroke',
+       'arc', 'fill', 'fillText', 'setLineDash', 'save', 'restore',
+       'translate', 'rotate', 'closePath'].map(name => [name, jest.fn()])
+    );
+    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(context);
+  });
+  afterEach(() => jest.restoreAllMocks());
   const basePlayers = [
     { id: 'p1', x: 100, y: 100, position: 'QB', number: 12, selected: false },
     { id: 'p2', x: 200, y: 100, position: 'WR', number: 80, selected: false },
@@ -41,6 +51,8 @@ describe('Field memoization', () => {
     const canvas = container.querySelector('canvas');
     expect(canvas).toBeTruthy();
 
+    const drawsBefore = context.clearRect.mock.calls.length;
+    expect(drawsBefore).toBeGreaterThan(0);
     // Re-render with new callback references but same visual data
     rerender(
       <Field
@@ -53,13 +65,12 @@ describe('Field memoization', () => {
 
     // Canvas should still be the same element (React didn't unmount/remount)
     expect(container.querySelector('canvas')).toBe(canvas);
+    expect(context.clearRect).toHaveBeenCalledTimes(drawsBefore);
   });
 
   it('re-renders when players array changes', () => {
-    const drawSpy = jest.spyOn(HTMLCanvasElement.prototype, 'getContext');
-
     const { rerender } = render(<Field {...baseProps} />);
-    const callsBefore = drawSpy.mock.calls.length;
+    const callsBefore = context.clearRect.mock.calls.length;
 
     // Update players — should trigger re-render
     const newPlayers = [
@@ -68,8 +79,8 @@ describe('Field memoization', () => {
     ];
     rerender(<Field {...baseProps} players={newPlayers} />);
 
-    expect(drawSpy.mock.calls.length).toBeGreaterThan(callsBefore);
-    drawSpy.mockRestore();
+    expect(context.clearRect.mock.calls.length).toBeGreaterThan(callsBefore);
+    expect(context.arc).toHaveBeenCalledWith(150, 100, expect.any(Number), 0, 2 * Math.PI);
   });
 
   it('canvas has correct aria attributes', () => {

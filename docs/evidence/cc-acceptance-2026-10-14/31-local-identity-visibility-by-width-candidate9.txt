@@ -1,0 +1,6 @@
+Local probe (uncommitted throwaway spec), candidate 9 runtime, Chromium 141 local, auth emulator.
+Signed-in identity 'Welcome, <email>' after sign-in, at three viewport widths:
+IDENTITY 1440px: box={"x":1029.6875,"y":17.75,"width":270.109375,"height":16.5} style={"display":"block","clip":"none","w":270.109375} signOutVisible=true
+IDENTITY 834px: box=null style={"display":"none","clip":"none","w":0} signOutVisible=true
+IDENTITY 390px: box={"x":374,"y":21.5,"width":1,"height":1} style={"display":"block","clip":"inset(50%)","w":1} signOutVisible=true
+Pre-#67 (069c8f1) Dashboard renders 'Welcome, {user.email}' with no responsive hiding.

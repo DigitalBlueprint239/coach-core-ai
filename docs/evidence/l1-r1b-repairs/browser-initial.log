@@ -1,0 +1,226 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node e2e/node_modules/@playwright/test/cli.js test --config tests/coaching-ui/legacy-repairs/playwright.config.ts
+[WebServer] (node:16296) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 34 tests using 1 worker
+
+(node:37300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10z-mv8jm7me-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  1 [chromium] › e2e\tests\legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id (20.2s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10a-mv8jmg20-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  2 [chromium] › e2e\tests\legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched (7.6s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10b-mv8jmm05-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  3 [chromium] › e2e\tests\legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach (6.9s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10c-mv8jmri1-4@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  4 [chromium] › e2e\tests\legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten (11.7s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10d-mv8jn044-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  5 [chromium] › e2e\tests\legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites (7.0s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10e-mv8jn5sa-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  6 [chromium] › e2e\tests\legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging (5.3s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10fa-mv8jn9un-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10fb-mv8jndxc-8@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  7 [chromium] › e2e\tests\legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies (10.1s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ga-mv8jnhnx-9@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10gb-mv8jnm1t-10@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  8 [chromium] › e2e\tests\legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B (10.3s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10h-mv8jnpp8-11@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok  9 [chromium] › e2e\tests\legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window) (11.0s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10i-mv8jny2x-12@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 10 [chromium] › e2e\tests\legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B (6.9s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ja-mv8jo321-13@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10jb-mv8jo7uy-14@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 11 [chromium] › e2e\tests\legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach (9.8s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ka-mv8joawx-15@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10kb-mv8joec2-16@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 12 [chromium] › e2e\tests\legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control (9.7s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10l-mv8joii7-17@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 13 [chromium] › e2e\tests\legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays (5.2s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10m-mv8joms3-18@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10m-mv8joms3-18@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 14 [chromium] › e2e\tests\legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact (10.0s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10n-mv8joul4-19@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 15 [chromium] › e2e\tests\legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded (2.7s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10oa-mv8jownb-20@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ob-mv8jozl2-21@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 16 [chromium] › e2e\tests\legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays (8.3s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l1repair-mv8jp2t3-22@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  17 [chromium] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload (1.0m)
+(node:24896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10z-mv8jqk31-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 18 [firefox] › e2e\tests\legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id (17.7s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10a-mv8jqvnw-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 19 [firefox] › e2e\tests\legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched (10.9s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10b-mv8jr3y3-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 20 [firefox] › e2e\tests\legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach (9.8s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10c-mv8jrbm3-4@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 21 [firefox] › e2e\tests\legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten (15.8s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10d-mv8jro7k-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 22 [firefox] › e2e\tests\legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites (10.2s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10e-mv8jrvq3-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 23 [firefox] › e2e\tests\legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging (11.3s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10fa-mv8js4tn-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10fb-mv8jsamm-8@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 24 [firefox] › e2e\tests\legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies (16.1s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ga-mv8jsh8w-9@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10gb-mv8jsoid-10@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 25 [firefox] › e2e\tests\legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B (17.1s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10h-mv8jsu5v-11@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 26 [firefox] › e2e\tests\legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window) (15.2s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10i-mv8jt60d-12@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 27 [firefox] › e2e\tests\legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B (12.4s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ja-mv8jtfof-13@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10jb-mv8jtkfz-14@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 28 [firefox] › e2e\tests\legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach (12.5s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ka-mv8jtp0b-15@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10kb-mv8jtvxe-16@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 29 [firefox] › e2e\tests\legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control (18.4s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10l-mv8ju3om-17@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 30 [firefox] › e2e\tests\legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays (9.1s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10m-mv8juaok-18@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10m-mv8juaok-18@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 31 [firefox] › e2e\tests\legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact (14.9s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10n-mv8jumdq-19@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 32 [firefox] › e2e\tests\legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded (5.5s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10oa-mv8juq9k-20@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as d10ob-mv8juw8v-21@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 33 [firefox] › e2e\tests\legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays (14.2s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l1repair-mv8jv1ab-22@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  x  34 [firefox] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload (1.0m)
+
+
+  1) [chromium] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /Practice Planner/ }).first()
+
+
+       at e2e\tests\support\app.ts:67
+
+      65 |
+      66 | export async function openTab(page: Page, name: string): Promise<void> {
+    > 67 |   await page.getByRole('button', { name: new RegExp(name) }).first().click();
+         |                                                                      ^
+      68 | }
+      69 |
+      70 | export async function createTeamViaUI(page: Page, teamName: string): Promise<void> {
+        at openTab (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\e2e\tests\support\app.ts:67:70)
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:21:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [firefox] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /Practice Planner/ }).first()
+
+
+       at e2e\tests\support\app.ts:67
+
+      65 |
+      66 | export async function openTab(page: Page, name: string): Promise<void> {
+    > 67 |   await page.getByRole('button', { name: new RegExp(name) }).first().click();
+         |                                                                      ^
+      68 | }
+      69 |
+      70 | export async function createTeamViaUI(page: Page, teamName: string): Promise<void> {
+        at openTab (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\e2e\tests\support\app.ts:67:70)
+        at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:21:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\l1-r1b-browser-results\tests-coaching-ui-legacy-r-ba7f5-er-dashboard-planner-reload-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload
+    [firefox] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload
+  32 passed (8.2m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "node e2e/node_modules/@playwright/test/cli.js test --config tests/coaching-ui/legacy-repairs/playwright.config.ts" exited with code 1

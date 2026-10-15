@@ -1,0 +1,21 @@
+{
+  "runtimeSha": "518e9e5817abd2a0e1bf1308468928f238fa8533",
+  "unit": {
+    "passed": 480,
+    "failed": 0,
+    "suites": 37
+  },
+  "typescript": {
+    "exitCode": 0,
+    "diagnostics": 0
+  },
+  "productionBuild": {
+    "exitCode": 0,
+    "warnings": "inherited SmartPlaybook warnings; retained in build.log"
+  },
+  "independentAcceptance": "PENDING CLAUDE",
+  "staging": "NOT MEASURED",
+  "physicalDevices": "NOT MEASURED",
+  "mvp": "NO-GO",
+  "contract": "https://github.com/DigitalBlueprint239/coach-core-ai/issues/39#issuecomment-6200909139"
+}

@@ -1,0 +1,21 @@
+{
+  "numPassedTests": 440,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTotalTests": 440,
+  "numPassedTestSuites": 30,
+  "numFailedTestSuites": 0,
+  "success": true,
+  "startTime": 1792022456209,
+  "applicationCommit": "82d46cc33b7933d4de19b84a0acc553553c51d44",
+  "environment": "Windows local, reused dependencies (not clean install)",
+  "independentAcceptance": "PENDING Claude candidate8",
+  "baseline": {
+    "frozenSource": "8f0d9f7c9494c46eddb6e81a31b0c8d22ea21ad0",
+    "newRegressionTests": 5,
+    "failed": 4,
+    "passed": 1
+  },
+  "invalidBaseline": "run-00 loaded edited code; NOT valid before evidence",
+  "finalOwnerResumeCases": 6
+}

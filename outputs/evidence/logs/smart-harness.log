@@ -1,0 +1,51 @@
+Could not load playbook from localStorage. Clearing corrupted data and reverting to default. Reason: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at getInitialPlaybook (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\smart-playbook-source\audit-harness.cjs:316:25)
+    at C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\smart-playbook-source\audit-harness.cjs:939:30
+    at check (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\smart-playbook-source\audit-harness.cjs:873:13)
+    at Object.run (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\smart-playbook-source\audit-harness.cjs:937:9)
+[
+  {
+    "name": "Default play initializes offense and defense",
+    "status": "PASS"
+  },
+  {
+    "name": "Apply offensive formation through context",
+    "status": "PASS"
+  },
+  {
+    "name": "Apply defensive formation preserving offense",
+    "status": "PASS"
+  },
+  {
+    "name": "Add generated route and edit points",
+    "status": "PASS"
+  },
+  {
+    "name": "Save and reload route labels and geometry",
+    "status": "PASS"
+  },
+  {
+    "name": "Drag move undo restores starting coordinates",
+    "status": "FAIL",
+    "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n760 !== 720\n"
+  },
+  {
+    "name": "Clear all players and undo restore",
+    "status": "PASS"
+  },
+  {
+    "name": "Malformed storage does not crash initializer",
+    "status": "PASS"
+  },
+  {
+    "name": "Incomplete stored play rejected safely",
+    "status": "FAIL",
+    "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  ok(Array.isArray(loaded.plays[loaded.installs[0].playIds[0]].routes))\n"
+  },
+  {
+    "name": "All formation coordinates finite on three hashes",
+    "status": "PASS"
+  }
+]
+

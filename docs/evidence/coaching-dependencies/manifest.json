@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-14",
+  "dependencyCommit": "92d162c1cd81e2ad994d44ca2f3b881b88136e45",
+  "testedApplicationAndLock": "da8ebe1c90a877102e1913770690ff98a3530d3f",
+  "testedBrowserCommit": "5d04077a1db88c8ea24ec2ee6ea3cae96d780ac2",
+  "runtimeEquivalence": "empty diff in coaching-dependency-runtime-equivalence.log",
+  "clientApplication": "ff9b421669c1154ab52288f9cda1c7516bfb1ed5",
+  "jest": {
+    "suites": 26,
+    "passed": 416,
+    "failed": 0
+  },
+  "typeScriptErrors": 0,
+  "productionBuild": "PASS with warnings",
+  "emulatorBuild": "PASS with warnings",
+  "browsers": {
+    "retries": 0,
+    "passed": 18,
+    "firefox": "157.0",
+    "failed": 0,
+    "chromium": "156.0.8078.4"
+  },
+  "productionAudit": {
+    "before": 10,
+    "compatible": 4,
+    "after": 0
+  },
+  "allAudit": {
+    "before": 107,
+    "after": 98
+  },
+  "canary": {
+    "failed": 0,
+    "passed": 12,
+    "source": "92d162c1cd81e2ad994d44ca2f3b881b88136e45"
+  },
+  "independentAcceptance": "PENDING Claude",
+  "physicalDevice": "NOT MEASURED",
+  "mvp": "NO-GO"
+}

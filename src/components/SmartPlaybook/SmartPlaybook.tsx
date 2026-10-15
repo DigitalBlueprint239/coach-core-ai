@@ -6,6 +6,15 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useAuth } from '../../hooks/useAuth';
+import { useTeam } from '../../contexts/TeamContext';
+import LegacyImport from '../../features/legacy-import/LegacyImport';
+import { useDocument } from '../../features/persistence/useDocument';
+import { Recovery, download } from '../../features/persistence/Recovery';
+import { equal, Fields } from '../../features/persistence/model';
+import EarlierDrafts from '../../features/persistence/EarlierDrafts';
+import {routesForView,routesForStorage} from '../../features/persistence/playRoutes';
+import DeviceRecovery from '../../features/persistence/DeviceRecovery';
 import DebugPanel from './DebugPanel';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
@@ -21,7 +30,6 @@ import {
   updatePlayerPosition,
   addRoute,
   removeRoute,
-  savePlay,
   undo,
   redo,
   shotgunFormation,
@@ -100,17 +108,19 @@ const FIELD_DIMENSIONS = {
 const TOUCH_THRESHOLD = 20; // pixels for touch detection
 
 const SmartPlaybook = () => {
+  const { user } = useAuth();
+  const { currentTeam } = useTeam();
+  const persistence = useDocument({uid:user!.uid,teamId:currentTeam!.id},'plays',{name:'',phase:'offense',type:'pass',players:[],routes:[]});
   // Core state
-  const [players, setPlayers] = useState<PlaybookPlayer[]>([]);
-  const [routes, setRoutes] = useState<PlaybookRoute[]>([]);
+  const [players, setPlayers] = useState<PlaybookPlayer[]>((persistence.fields.players || []) as unknown as PlaybookPlayer[]);
+  const [routes, setRoutes] = useState<PlaybookRoute[]>(routesForView(persistence.fields.routes) as unknown as PlaybookRoute[]);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [mode, setMode] = useState<PlaybookMode>('view');
-  const [savedPlays, setSavedPlays] = useState<SavedPlay[]>([]);
-  const [currentPlayName, setCurrentPlayName] = useState('');
-  const [currentPlayPhase, setCurrentPlayPhase] = useState('offense');
-  const [currentPlayType, setCurrentPlayType] = useState('pass');
-
+  const [currentPlayName, setCurrentPlayName] = useState(String(persistence.fields.name || ''));
+  const [currentPlayPhase, setCurrentPlayPhase] = useState(persistence.fields.phase === 'special_teams' ? 'special' : String(persistence.fields.phase || 'offense'));
+  const [currentPlayType, setCurrentPlayType] = useState(String(persistence.fields.type || 'pass'));
+  const openedRef = useRef(persistence.opened);
   // Route drawing state
   const [isDrawingRoute, setIsDrawingRoute] = useState(false);
   const [routePoints, setRoutePoints] = useState<Array<{ x: number; y: number }>>([]);
@@ -133,24 +143,24 @@ const SmartPlaybook = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastTouchRef = useRef<TouchEvent | null>(null);
 
-  // Load saved plays from localStorage on mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('smartPlaybook_plays');
-      if (saved) {
-        setSavedPlays(JSON.parse(saved));
-      }
-    } catch (error) {
-      console.error('Error loading saved plays:', error);
+  const playFields:Fields = {...persistence.fields,name:currentPlayName,phase:currentPlayPhase==='special'?'special_teams':currentPlayPhase,type:currentPlayType,
+    players:JSON.parse(JSON.stringify(players)),routes:routesForStorage(JSON.parse(JSON.stringify(routes)),persistence.fields.routes)};
+  if(persistence.fields.phase===undefined&&currentPlayPhase==='offense')delete playFields.phase;
+  if(persistence.fields.type===undefined&&currentPlayType==='pass')delete playFields.type;
+  const playStatus = persistence.saving ? 'saving' : persistence.error ? 'failed' : persistence.ack && equal(persistence.ack,playFields) ? 'saved' : 'unsaved';
+  useEffect(()=>{
+    if(openedRef.current !== persistence.opened){
+      openedRef.current=persistence.opened;
+      setPlayers((persistence.fields.players||[]) as unknown as PlaybookPlayer[]);
+      setRoutes(routesForView(persistence.fields.routes) as unknown as PlaybookRoute[]);
+      setCurrentPlayName(String(persistence.fields.name||''));
+      setCurrentPlayPhase(persistence.fields.phase==='special_teams'?'special':String(persistence.fields.phase||'offense'));
+      setCurrentPlayType(String(persistence.fields.type||'pass'));setUndoStack([]);setRedoStack([]);
+      setSelectedPlayerId(null);setSelectedRouteId(null);setIsDrawingRoute(false);setRoutePoints([]);setMode('view');return;
     }
-
-    // Check if onboarding is needed
-    const onboardingComplete = localStorage.getItem('smartPlaybook_onboarding_complete');
-    if (!onboardingComplete) {
-      setShowOnboarding(true);
-    }
-  }, []);
-
+    persistence.update(playFields);
+  });
+  useEffect(()=>{if(!localStorage.getItem('smartPlaybook_onboarding_complete'))setShowOnboarding(true);},[]);
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
@@ -200,15 +210,6 @@ const SmartPlaybook = () => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
-
-  // Save plays to localStorage when they change
-  useEffect(() => {
-    try {
-      localStorage.setItem('smartPlaybook_plays', JSON.stringify(savedPlays));
-    } catch (error) {
-      console.error('Error saving plays:', error);
-    }
-  }, [savedPlays]);
 
   // Save current state to undo stack
   const saveToUndoStack = useCallback((action: string) => {
@@ -454,47 +455,15 @@ const SmartPlaybook = () => {
   }, [saveToUndoStack]);
 
   // Save current play
-  const saveCurrentPlay = useCallback((name: string, phase: string, type: string) => {
-    if (!name.trim() || players.length === 0) {
-      addNotification('error', 'Please enter a play name and add at least one player.');
-      return;
-    }
-
-    const play = savePlay({
-      name: name.trim(),
-      phase: phase || currentPlayPhase,
-      type: type || currentPlayType,
-      players,
-      routes
-    }) as SavedPlay;
-
-    setSavedPlays(prev => [...prev, play]);
-    setShowSaveDialog(false);
-    setCurrentPlayName('');
-    addNotification('success', `Play "${name}" saved successfully`);
-  }, [players, routes, currentPlayPhase, currentPlayType, addNotification]);
-
-  // Load play
-  const loadPlay = useCallback((play: SavedPlay) => {
-    saveToUndoStack('load_play');
-    setPlayers([...play.players]);
-    setRoutes([...play.routes]);
-    setCurrentPlayName(play.name);
-    setCurrentPlayPhase(play.phase);
-    setCurrentPlayType(play.type);
-    setSelectedPlayerId(null);
-    setShowLibrary(false);
-    addNotification('success', `Play "${play.name}" loaded successfully`);
-  }, [saveToUndoStack, addNotification]);
-
-  // Delete play
-  const deletePlay = useCallback((playId: string) => {
-    if (window.confirm('Are you sure you want to delete this play?')) {
-      setSavedPlays(prev => prev.filter(play => play.id !== playId));
-      addNotification('success', 'Play deleted successfully');
-    }
-  }, [addNotification]);
-
+  const saveCurrentPlay = async () => {
+    persistence.update(playFields);
+    if(await persistence.save())setShowSaveDialog(false);
+  };
+  const loadPlay = (play:SavedPlay) => {
+    const record=persistence.records.find(r=>r.id===play.id);
+    if(record && (!persistence.hasWork||window.confirm('Open another play? Export your unsaved draft first if you need both.'))){persistence.open(record);setShowLibrary(false);}
+  };
+  const deletePlay = () => {addNotification('warning','Deletion is disabled. Your plays and originals are preserved.');};
   // Clear field
   const clearField = useCallback(() => {
     if (window.confirm('Are you sure you want to clear the field?')) {
@@ -551,7 +520,17 @@ const SmartPlaybook = () => {
   return (
     <ErrorBoundary>
       <div className="smart-playbook-app min-h-screen bg-gray-50">
-      {/* Header */}
+      {user && currentTeam && currentTeam.ownerId === user.uid && <LegacyImport key={`${user.uid}:${currentTeam.id}`} uid={user.uid} teamId={currentTeam.id} teamName={currentTeam.name} onImported={() => {void persistence.reload();}} />}
+        <EarlierDrafts scope={{uid:user!.uid,teamId:currentTeam!.id}} onOpen={record=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.open(record);}}/>
+        <p role="status" aria-label="Play save status">{playStatus}</p>
+        <DeviceRecovery scope={{uid:user!.uid,teamId:currentTeam!.id}} kind="plays" writer={persistence.writer} onResume={d=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.resume(d);}}/>
+        <button onClick={()=>{if(!persistence.hasWork||window.confirm('Start a new play? Export your current draft first if you need both.'))persistence.create({name:'',phase:'offense',type:'pass',players:[],routes:[]});}}>New play</button>
+        <button onClick={()=>download(playFields,'play-draft.json')}>Export draft</button>
+        <button onClick={()=>{void persistence.reload();}}>Refresh play library</button>
+        {persistence.error&&<p role="alert">{persistence.error}</p>}{persistence.listError&&<p role="alert">{persistence.listError}</p>}
+        {persistence.conflict&&<Recovery remote={persistence.conflict} fields={playFields} onReload={()=>persistence.open(persistence.conflict!)} onCopy={()=>{persistence.update(playFields);void persistence.save(true);}}/>}
+        {persistence.timestamps&&<p>Created {persistence.timestamps.createdAt}; last saved {persistence.timestamps.updatedAt}</p>}
+        {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -687,7 +666,7 @@ const SmartPlaybook = () => {
           <div className="lg:col-span-1">
             {showLibrary && (
               <PlayLibrary
-                savedPlays={savedPlays}
+                savedPlays={persistence.records.map(r => ({...r.fields,id:r.id,phase:r.fields.phase==='special_teams'?'special':r.fields.phase})) as unknown as SavedPlay[]}
                 onLoadPlay={loadPlay}
                 onDeletePlay={deletePlay}
                 onClose={() => setShowLibrary(false)}
@@ -706,7 +685,7 @@ const SmartPlaybook = () => {
         onPlayPhaseChange={setCurrentPlayPhase}
         onPlayTypeChange={setCurrentPlayType}
         onSave={() =>
-          saveCurrentPlay(currentPlayName, currentPlayPhase, currentPlayType)
+          void saveCurrentPlay()
         }
         onCancel={() => setShowSaveDialog(false)}
         canSave={!!currentPlayName.trim() && players.length > 0}
@@ -745,10 +724,14 @@ const SmartPlaybook = () => {
   );
 };
 
-const WrappedSmartPlaybook = () => (
-  <AIProvider>
-    <SmartPlaybook />
-  </AIProvider>
-);
+const WrappedSmartPlaybook = () => {
+  const { user } = useAuth();
+  const { currentTeam } = useTeam();
+  return (
+    <AIProvider>
+      {user && !user.isAnonymous && currentTeam?.ownerId === user.uid ? <SmartPlaybook key={`${user.uid}:${currentTeam.id}`} /> : <p role="alert">Select or create your authorized team before editing plays. No play has been saved.</p>}
+    </AIProvider>
+  );
+};
 
-export default WrappedSmartPlaybook; 
+export default WrappedSmartPlaybook;

@@ -1,0 +1,16 @@
+(node:12936) Warning: Failed to load the ES module: C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\e2e\tests\support\emulator.ts. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+SyntaxError: Unexpected token 'export'
+
+   at tests\coaching-ui\legacy-migration.spec.ts:2
+
+  1 | import { test, expect } from '../../e2e/node_modules/@playwright/test';
+> 2 | import { resetEmulators, adminQuery } from '../../e2e/tests/support/emulator';
+    | ^
+  3 | import { skipOnboarding, signInAsBetaCoach, coachEmail, createTeamViaUI, storage, openTab } from '../../e2e/tests/support/app';
+  4 |
+  5 | test('L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload', async ({ page, context }) => {
+    at Object.<anonymous> (C:\Users\drewl\Documents\Codex\2026-10-13\coach-core-ai-mvp-recovery-functional\work\main-l1-r1b-repairs\tests\coaching-ui\legacy-migration.spec.ts:2:1)
+Listing tests:
+Total: 0 tests in 0 files

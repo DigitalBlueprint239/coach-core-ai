@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTeam } from '../contexts/TeamContext';
 import { useToast } from './ToastManager';
 
@@ -132,30 +132,69 @@ export const TeamSelector: React.FC = () => {
   );
 };
 
-export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
+export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> = props => {
+  const {teamCreationAccount} = useTeam();
+  return <CreateTeamForm key={teamCreationAccount || 'signed-out'} {...props}/>;
+};
+
+const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen, 
   onClose 
 }) => {
   const [teamName, setTeamName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
-  const { createTeam } = useTeam();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { createTeam, teamCreation, confirmedTeams } = useTeam();
+  const [separateName, setSeparateName] = useState<string | null>(null);
+  const submitting = useRef(false);
   const { showToast } = useToast();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!teamName.trim()) return;
-
+  const pending = teamCreation.operation !== null && teamCreation.phase !== 'confirmed';
+  const saving = teamCreation.phase === 'saving';
+  const mounted = useRef(true);
+  const tracked = useRef<string | null>(null);
+  const notified = useRef<string | null>(null);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  const complete = (id: string) => {
+    if (!mounted.current || notified.current === id) return;
+    notified.current = id;
+    showToast('Team created successfully!', 'success');
+    setTeamName('');
+    onClose();
+  };
+  useEffect(() => {
+    if (!isOpen) return;
+    if (pending) tracked.current = teamCreation.operation!.id;
+    if (teamCreation.phase === 'confirmed' && tracked.current === teamCreation.operation?.id) {
+      complete(teamCreation.operation!.id);
+      tracked.current = null;
+    }
+  });
+  const submit = async (name: string) => {
+    if (!name || saving || submitting.current) return;
+    submitting.current = true;
+    setSeparateName(null);
+    setSubmitError(null);
     setIsCreating(true);
     try {
-      await createTeam(teamName.trim());
-      showToast('Team created successfully!', 'success');
-      setTeamName('');
-      onClose();
+      const id = await createTeam(name);
+      complete(id);
     } catch (error) {
-      showToast(error instanceof Error ? error.message : 'Failed to create team', 'error');
+      if (mounted.current) setSubmitError(error instanceof Error ? error.message : 'Team creation not confirmed.');
     } finally {
-      setIsCreating(false);
+      submitting.current = false;
+      if (mounted.current) setIsCreating(false);
     }
+  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting.current || separateName !== null) return;
+    const name = pending ? teamCreation.operation!.name : teamName.trim();
+    // A journalled retry is the existing operation, never a second creation.
+    if (!pending && confirmedTeams.some(team => team.name.trim() === name)) {
+      setSeparateName(name);
+      return;
+    }
+    void submit(name);
   };
 
   if (!isOpen) return null;
@@ -176,6 +215,13 @@ export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }>
             </button>
           </div>
           
+          {pending && <p role="status">{saving ? 'Saving your team. You may leave this dialog; the pending creation will be retained.' : 'Still saving. Check your connection. We are checking the server for this team; Check and retry uses the same team ID.'}</p>}
+          {(submitError || teamCreation.error) && <p role="alert">{submitError || teamCreation.error}</p>}
+          {separateName !== null && <div role="alertdialog" aria-label="Confirm separate team">
+            <p>You already have a team named {separateName}. Do you intend to create a separate team?</p>
+            <button type="button" onClick={() => setSeparateName(null)}>Go back</button>
+            <button type="button" onClick={() => {void submit(separateName);}}>Create a separate team</button>
+          </div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label htmlFor="team-name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -184,11 +230,13 @@ export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }>
               <input
                 type="text"
                 id="team-name"
-                value={teamName}
+                value={pending ? teamCreation.operation!.name : teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 placeholder="Enter your team name"
                 required
+                maxLength={80}
+                disabled={pending || isCreating}
                 autoFocus
               />
             </div>
@@ -203,16 +251,16 @@ export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }>
               </button>
               <button
                 type="submit"
-                disabled={isCreating || !teamName.trim()}
+                disabled={saving || isCreating || teamCreation.phase === 'blocked' || (!pending && !teamName.trim())}
                 className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isCreating ? (
+                {(saving || isCreating) ? (
                   <div className="flex items-center space-x-2">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                     <span>Creating...</span>
                   </div>
                 ) : (
-                  'Create Team'
+                  pending ? 'Check and retry' : 'Create Team'
                 )}
               </button>
             </div>
@@ -321,7 +369,7 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
 export const TeamManagement: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
-  const { currentTeam, userTeams, leaveTeam, switchTeam } = useTeam();
+  const { currentTeam, userTeams, leaveTeam, switchTeam, teamCreation } = useTeam();
   const { showToast } = useToast();
 
   const handleLeaveTeam = async () => {
@@ -360,6 +408,10 @@ export const TeamManagement: React.FC = () => {
         </div>
       </div>
 
+      {teamCreation.operation && teamCreation.phase !== 'confirmed' && <div role="status">
+        <p>Pending team: {teamCreation.operation.name}. {teamCreation.phase === 'saving' ? 'Waiting for server confirmation.' : 'Still saving; confirmation is unavailable.'}</p>
+        <button type="button" onClick={() => setShowCreateModal(true)}>Resume team creation</button>
+      </div>}
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">Current Team</h3>
@@ -424,4 +476,4 @@ export const TeamManagement: React.FC = () => {
       <JoinTeamModal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} />
     </div>
   );
-}; 
+};

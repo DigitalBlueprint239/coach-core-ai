@@ -1,0 +1,62 @@
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[failure] 
+Process completed with exit code 1.
+
+[failure] Rules emulator: 47 passed / 1 failed
+PASS cannot read or write any collection
+PASS is denied everywhere, even when its token carries beta/verified claims
+PASS denies a verified user without the beta claim
+PASS denies a beta user whose email is not verified
+PASS creates, reads, lists and updates own team
+PASS cannot delete a team from the client (prevents orphaned-data takeover)
+PASS creates, reads, lists, updates and deletes own plays
+PASS creates, reads, lists, updates and deletes own practice plans
+PASS bob cannot read, list, update or delete alice's team
+PASS bob cannot read, list, update or delete alice's plays and plans
+PASS bob cannot create content inside alice's team
+PASS bob cannot join alice's team by editing membership
+PASS owner cannot move a play or plan into another team
+PASS owner cannot create into a team id that does not exist
+PASS cannot change createdBy or ownerId
+PASS cannot create a team owned by someone else, or a play attributed to someone else
+PASS cannot list plays/plans/teams without a tenant filter
+PASS rejects unknown fields, oversized strings, bad enums and wrong types
+PASS no client may read or write them
+PASS owner saves a main-app play with phase/type/localId at revision 1
+PASS rejects an unknown phase, an oversized type and a create that starts above revision 1
+PASS save/reopen fidelity: what the owner writes is exactly what the owner reads back
+PASS accepts exactly revision + 1
+PASS denies a stale second writer (both editors started from revision 1)
+PASS denies skipping ahead, going backwards, or omitting the revision
+PASS legacy documents without a revision can be edited, and can opt in at revision 1
+PASS applies the same protection to practice plans
+PASS owner saves an AI plan with safety considerations and the gateway request id
+PASS stores the lossless coach-ai.v1 plan fields (age group, skill, contact level, hydration breaks)
+PASS rejects an unknown age group, skill or contact level and oversized hydration lists
+PASS rejects oversized safety lists, bad request ids and unknown source values
+PASS accepts a 200-character plan name and 5000-character notes; rejects 201 and 5001
+PASS play names stay capped at 120 characters
+FAIL a beta coach may read a play or plan id that does not exist (result: not found) -- 
+PASS non-beta and signed-out users still cannot read even a missing id
+PASS an existing play of another team stays unreadable (no change to tenancy)
+PASS coach B cannot read, edit (even with the right next revision) or create into team A
+PASS unauthenticated users cannot read or write
+PASS anonymous users cannot read or write, even with forged claims
+PASS team owner without the beta claim is denied
+PASS owner can upload, read and delete files in their own team
+PASS bob cannot read alice's team files
+PASS bob cannot write or delete in alice's team
+PASS nobody can use a team id that does not exist
+PASS rejects disallowed content types
+PASS rejects uploads over 5 MB
+PASS rejects empty uploads
+PASS denies read and write on old practice-plan, play-media, team-document and profile paths
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+

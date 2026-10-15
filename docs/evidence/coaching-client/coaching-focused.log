@@ -1,0 +1,102 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --testPathPattern=features/persistence
+
+FAIL src/features/persistence/__tests__/document.test.tsx (10.027 s)
+  ● P15/P16 edit -> acknowledged save -> close -> clean reopen preserves exact content
+
+    TypeError: Object.defineProperty called on non-object
+        at Function.defineProperty (<anonymous>)
+
+       9 | const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
+      10 | const gateway:Gateway={list:jest.fn(),save:jest.fn()};
+    > 11 | beforeEach(()=>{localStorage.clear();records=new Map();saves=0;Object.defineProperty(globalThis.crypto,'randomUUID',{configurable:true,value:()=>`id-${Math.random()}`});
+         |                                                                       ^
+      12 |  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
+      13 |  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
+      14 |   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:11:71)
+
+  ● never says saved before acknowledgement; edit while saving remains unsaved and retained
+
+    TypeError: Object.defineProperty called on non-object
+        at Function.defineProperty (<anonymous>)
+
+       9 | const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
+      10 | const gateway:Gateway={list:jest.fn(),save:jest.fn()};
+    > 11 | beforeEach(()=>{localStorage.clear();records=new Map();saves=0;Object.defineProperty(globalThis.crypto,'randomUUID',{configurable:true,value:()=>`id-${Math.random()}`});
+         |                                                                       ^
+      12 |  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
+      13 |  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
+      14 |   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:11:71)
+
+  ● P14 stale edit rejects overwrite; keep-as-copy preserves both versions
+
+    TypeError: Object.defineProperty called on non-object
+        at Function.defineProperty (<anonymous>)
+
+       9 | const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
+      10 | const gateway:Gateway={list:jest.fn(),save:jest.fn()};
+    > 11 | beforeEach(()=>{localStorage.clear();records=new Map();saves=0;Object.defineProperty(globalThis.crypto,'randomUUID',{configurable:true,value:()=>`id-${Math.random()}`});
+         |                                                                       ^
+      12 |  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
+      13 |  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
+      14 |   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:11:71)
+
+  ● failed save survives refresh; retry acknowledges exact draft
+
+    TypeError: Object.defineProperty called on non-object
+        at Function.defineProperty (<anonymous>)
+
+       9 | const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
+      10 | const gateway:Gateway={list:jest.fn(),save:jest.fn()};
+    > 11 | beforeEach(()=>{localStorage.clear();records=new Map();saves=0;Object.defineProperty(globalThis.crypto,'randomUUID',{configurable:true,value:()=>`id-${Math.random()}`});
+         |                                                                       ^
+      12 |  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
+      13 |  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
+      14 |   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:11:71)
+
+  ● P10/P17 unmounted account cannot clear new account draft on stale acknowledgement
+
+    TypeError: Object.defineProperty called on non-object
+        at Function.defineProperty (<anonymous>)
+
+       9 | const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
+      10 | const gateway:Gateway={list:jest.fn(),save:jest.fn()};
+    > 11 | beforeEach(()=>{localStorage.clear();records=new Map();saves=0;Object.defineProperty(globalThis.crypto,'randomUUID',{configurable:true,value:()=>`id-${Math.random()}`});
+         |                                                                       ^
+      12 |  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
+      13 |  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
+      14 |   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:11:71)
+
+  ● authorization denial stays failed, not a conflict; no foreign upload is offered
+
+    TypeError: Object.defineProperty called on non-object
+        at Function.defineProperty (<anonymous>)
+
+       9 | const stamp='2026-10-13T12:00:00.000Z';const scope={uid:'A',teamId:'T'};
+      10 | const gateway:Gateway={list:jest.fn(),save:jest.fn()};
+    > 11 | beforeEach(()=>{localStorage.clear();records=new Map();saves=0;Object.defineProperty(globalThis.crypto,'randomUUID',{configurable:true,value:()=>`id-${Math.random()}`});
+         |                                                                       ^
+      12 |  (gateway.list as jest.Mock).mockImplementation(async()=>Array.from(records.values()));
+      13 |  (gateway.save as jest.Mock).mockImplementation(async(_s,_k,id,rev,fields:Fields)=>{const prior=records.get(id);
+      14 |   if(prior&&prior.revision!==rev)throw new Conflict(prior);const next={id,revision:(rev??0)+1,fields,createdAt:prior?.createdAt??stamp,updatedAt:stamp};records.set(id,next);saves++;return next;});});
+
+      at Object.<anonymous> (src/features/persistence/__tests__/document.test.tsx:11:71)
+
+PASS src/features/persistence/__tests__/model.test.ts
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       6 failed, 10 passed, 16 total
+Snapshots:   0 total
+Time:        19.716 s
+Ran all test suites matching /features\\persistence/i.

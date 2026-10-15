@@ -1,0 +1,6 @@
+Listing tests:
+  [chromium] › coaching.spec.ts:376:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  [chromium] › coaching.spec.ts:398:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  [firefox] › coaching.spec.ts:376:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  [firefox] › coaching.spec.ts:398:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+Total: 4 tests in 1 file

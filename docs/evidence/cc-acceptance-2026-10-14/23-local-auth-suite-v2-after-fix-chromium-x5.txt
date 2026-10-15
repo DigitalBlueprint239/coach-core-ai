@@ -1,0 +1,307 @@
+i  emulators: Starting emulators: auth
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+⚠  hub: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+⚠  logging: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+⚠  auth: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json
+i  Running script: E2E_AUTH_ONLY=1 npm --prefix e2e run test:browser -- --repeat-each 5
+
+> test:browser
+> playwright test -c playwright.config.ts --repeat-each 5
+
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+
+Running 225 tests using 1 worker
+
+  -    1 [chromium] › tests/ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  -    2 [chromium] › tests/ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  ✓    3 [chromium] › tests/auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen (493ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a02-mv8lt2sh-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=fh5bSD3qq0xz6S1wHHVSJtA8lK4vNf3h6kEkIxhtd8MIMjaRpplC3U&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓    4 [chromium] › tests/auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted (894ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a03-mv8lt3i1-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=oknwps4FRtXLUfHlO3UkVYoMC0psdfWdENRt7QD9rn6jCIQ88tlHCu&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓    5 [chromium] › tests/auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first (1.1s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a04-mv8lt4do-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=SnNyAZpzSdjI2fLdMreyiNY1l8mUAL82rE5i6urm563xPg3Cduzyrc&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓    6 [chromium] › tests/auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed (1.1s)
+  ✓    7 [chromium] › tests/auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email" (538ms)
+  ✓    8 [chromium] › tests/auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in (549ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a07-mv8lt647-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=aDqfd0cLrfbcMLsIRPdtlolHkVEgs-ZmJcdNgXqKAlDnAvN7wzy6u-&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓    9 [chromium] › tests/auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical (1.2s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a08-mv8lt72u-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=KivHXL7Z-2oIzTfGYqI6rLmdDgtZSANeqQj2P4Betzkh-ndEQtK6iT&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   10 [chromium] › tests/auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check (717ms)
+  -   11 [chromium] › tests/auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8lt7rm-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=yOIJd7wQux_FIVx10poW5nYwSlhu6QBC9HFqiG4vYEKrdVvp9RQbdM&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   12 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.2s)
+  -   13 [chromium] › tests/coaching.spec.ts:70:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  -   14 [chromium] › tests/coaching.spec.ts:100:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  -   15 [chromium] › tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  -   16 [chromium] › tests/coaching.spec.ts:149:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  -   17 [chromium] › tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  -   18 [chromium] › tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  -   19 [chromium] › tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  -   20 [chromium] › tests/coaching.spec.ts:320:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  -   21 [chromium] › tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  -   22 [chromium] › tests/coaching.spec.ts:384:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  -   23 [chromium] › tests/coaching.spec.ts:406:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  -   24 [chromium] › tests/coaching.spec.ts:427:1 › CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write
+  -   25 [chromium] › tests/legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  -   26 [chromium] › tests/legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  -   27 [chromium] › tests/legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  -   28 [chromium] › tests/legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  -   29 [chromium] › tests/legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  -   30 [chromium] › tests/legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  -   31 [chromium] › tests/legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  -   32 [chromium] › tests/legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  -   33 [chromium] › tests/legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  -   34 [chromium] › tests/legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  -   35 [chromium] › tests/legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  -   36 [chromium] › tests/legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  -   37 [chromium] › tests/legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  -   38 [chromium] › tests/legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  -   39 [chromium] › tests/legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  -   40 [chromium] › tests/legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  -   41 [chromium] › tests/legacy-import.spec.ts:357:1 › D10-06d [founder rule: originals preserved, no dead end] after coach A declines ("Not now") an interrupted import, some account can still act on the device plays
+  -   42 [chromium] › tests/persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  -   43 [chromium] › tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  -   44 [chromium] › tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  -   45 [chromium] › tests/teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+  -   46 [chromium] › tests/ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  -   47 [chromium] › tests/ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  ✓   48 [chromium] › tests/auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen (517ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a02-mv8ltbs8-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=uV3VPmCD1IdUlskZ5ce5xvrt2obs5g4uSFPNE1SD2HAKJtBsxH2Vzn&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   49 [chromium] › tests/auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted (827ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a03-mv8ltcfd-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=vNwaCw9WwqPFF7jP_QPNPOgWAYHMDKGf7mVhK53hUPaFJuD9J3Csil&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   50 [chromium] › tests/auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first (1.1s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a04-mv8ltd9t-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=zRo6CC2hRjtcMUIF7g1Y3FMQtY0pDvGieOYmV2RsVoA1doNhtT9KEt&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   51 [chromium] › tests/auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed (1.2s)
+  ✓   52 [chromium] › tests/auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email" (557ms)
+  ✓   53 [chromium] › tests/auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in (470ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a07-mv8ltf02-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=ClmcmcOp4AnMZriFeUgp1v7KhiRFy6WpY7SoagooebB3-Rbru9aZe_&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   54 [chromium] › tests/auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical (1.2s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a08-mv8ltfyc-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=gpJwDFbTK8pIwaA6ZHXWc_SXjrV73bCCxD20dYv_zyrAmXo28b_SO8&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   55 [chromium] › tests/auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check (709ms)
+  -   56 [chromium] › tests/auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8ltgm9-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=Jwq9DQSU3YZX0Uq4H-6d_jptg2BWBGgPSn5USPyCkmNlinWSEfebDE&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   57 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.2s)
+  -   58 [chromium] › tests/coaching.spec.ts:70:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  -   59 [chromium] › tests/coaching.spec.ts:100:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  -   60 [chromium] › tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  -   61 [chromium] › tests/coaching.spec.ts:149:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  -   62 [chromium] › tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  -   63 [chromium] › tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  -   64 [chromium] › tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  -   65 [chromium] › tests/coaching.spec.ts:320:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  -   66 [chromium] › tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  -   67 [chromium] › tests/coaching.spec.ts:384:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  -   68 [chromium] › tests/coaching.spec.ts:406:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  -   69 [chromium] › tests/coaching.spec.ts:427:1 › CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write
+  -   70 [chromium] › tests/legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  -   71 [chromium] › tests/legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  -   72 [chromium] › tests/legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  -   73 [chromium] › tests/legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  -   74 [chromium] › tests/legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  -   75 [chromium] › tests/legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  -   76 [chromium] › tests/legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  -   77 [chromium] › tests/legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  -   78 [chromium] › tests/legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  -   79 [chromium] › tests/legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  -   80 [chromium] › tests/legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  -   81 [chromium] › tests/legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  -   82 [chromium] › tests/legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  -   83 [chromium] › tests/legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  -   84 [chromium] › tests/legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  -   85 [chromium] › tests/legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  -   86 [chromium] › tests/legacy-import.spec.ts:357:1 › D10-06d [founder rule: originals preserved, no dead end] after coach A declines ("Not now") an interrupted import, some account can still act on the device plays
+  -   87 [chromium] › tests/persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  -   88 [chromium] › tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  -   89 [chromium] › tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  -   90 [chromium] › tests/teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+  -   91 [chromium] › tests/ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  -   92 [chromium] › tests/ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  ✓   93 [chromium] › tests/auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen (522ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a02-mv8ltkhv-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=ANOXj63_JTJjkoKZ0tm1-CXRYHTPRQL8xTB8_ZcowqhA1vfGmiAxIT&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   94 [chromium] › tests/auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted (908ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a03-mv8ltl7m-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=iI99RobNozWPZILtjuwBU-d59SkdFDbHQMR3L-7fC6gPr-p3MzFObl&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   95 [chromium] › tests/auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first (1.2s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a04-mv8ltm4d-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=dseJWYSmT42cmXuwNB3AZnQHVwylA2Gx3hxIMUObf4SJeQ8noiHEOn&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   96 [chromium] › tests/auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed (1.1s)
+  ✓   97 [chromium] › tests/auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email" (485ms)
+  ✓   98 [chromium] › tests/auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in (445ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a07-mv8ltnqf-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=IklebOw6DggopfXPj4BPQNIQQMULv_xrbxd39tG9-UuA3mVoBHi-gZ&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓   99 [chromium] › tests/auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical (1.3s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a08-mv8ltorf-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=2s6QoCDK2NKKi9i-8aQOL9u8o_bjty20UU_oTKK2qkZtY6H_ZX0poj&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  100 [chromium] › tests/auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check (719ms)
+  -  101 [chromium] › tests/auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8ltpfj-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=SwN12tcLzFX6kYCtGPXfpj54bthIczkJWteqKGltV8MMpMMoHkAxgc&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  102 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.2s)
+  -  103 [chromium] › tests/coaching.spec.ts:70:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  -  104 [chromium] › tests/coaching.spec.ts:100:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  -  105 [chromium] › tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  -  106 [chromium] › tests/coaching.spec.ts:149:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  -  107 [chromium] › tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  -  108 [chromium] › tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  -  109 [chromium] › tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  -  110 [chromium] › tests/coaching.spec.ts:320:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  -  111 [chromium] › tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  -  112 [chromium] › tests/coaching.spec.ts:384:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  -  113 [chromium] › tests/coaching.spec.ts:406:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  -  114 [chromium] › tests/coaching.spec.ts:427:1 › CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write
+  -  115 [chromium] › tests/legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  -  116 [chromium] › tests/legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  -  117 [chromium] › tests/legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  -  118 [chromium] › tests/legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  -  119 [chromium] › tests/legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  -  120 [chromium] › tests/legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  -  121 [chromium] › tests/legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  -  122 [chromium] › tests/legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  -  123 [chromium] › tests/legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  -  124 [chromium] › tests/legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  -  125 [chromium] › tests/legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  -  126 [chromium] › tests/legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  -  127 [chromium] › tests/legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  -  128 [chromium] › tests/legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  -  129 [chromium] › tests/legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  -  130 [chromium] › tests/legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  -  131 [chromium] › tests/legacy-import.spec.ts:357:1 › D10-06d [founder rule: originals preserved, no dead end] after coach A declines ("Not now") an interrupted import, some account can still act on the device plays
+  -  132 [chromium] › tests/persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  -  133 [chromium] › tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  -  134 [chromium] › tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  -  135 [chromium] › tests/teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+  -  136 [chromium] › tests/ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  -  137 [chromium] › tests/ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  ✓  138 [chromium] › tests/auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen (525ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a02-mv8lttb2-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=iapzfPp2rW1eQFHizDBCH1NGNpD5uJtlST8AwSyAFRO06mkfmNrrgt&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  139 [chromium] › tests/auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted (823ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a03-mv8lttyq-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=5p_50ddcPSDvQPKkPSevX1bBaogOkafy8WalnCbIkQVS3NdnjLXgkP&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  140 [chromium] › tests/auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first (1.1s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a04-mv8ltuuo-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=KcqSjB3qJEQjeDfaC8Ouh0P76vp-yfzpeAXDxWwdKeWUBm6otAggHH&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  141 [chromium] › tests/auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed (1.4s)
+  ✓  142 [chromium] › tests/auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email" (495ms)
+  ✓  143 [chromium] › tests/auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in (462ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a07-mv8ltwnq-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=Vei3z8K6c2xart_v_cfNzeTJkejZOCp4AYMHQx8aTpXm_JvetrJdIR&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  144 [chromium] › tests/auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical (1.3s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a08-mv8ltxo1-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=lqWlSju2zyYcE5slTX1fWDpHNsnrqLBWXWNmasowlHOrtvert_HN0-&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  145 [chromium] › tests/auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check (755ms)
+  -  146 [chromium] › tests/auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8ltyei-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=kybSTbaExQz7GBhUt0hfmjzB84mgdeDqawLVQyy9hUiwO_VPcrJY_a&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  147 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.3s)
+  -  148 [chromium] › tests/coaching.spec.ts:70:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  -  149 [chromium] › tests/coaching.spec.ts:100:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  -  150 [chromium] › tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  -  151 [chromium] › tests/coaching.spec.ts:149:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  -  152 [chromium] › tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  -  153 [chromium] › tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  -  154 [chromium] › tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  -  155 [chromium] › tests/coaching.spec.ts:320:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  -  156 [chromium] › tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  -  157 [chromium] › tests/coaching.spec.ts:384:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  -  158 [chromium] › tests/coaching.spec.ts:406:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  -  159 [chromium] › tests/coaching.spec.ts:427:1 › CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write
+  -  160 [chromium] › tests/legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  -  161 [chromium] › tests/legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  -  162 [chromium] › tests/legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  -  163 [chromium] › tests/legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  -  164 [chromium] › tests/legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  -  165 [chromium] › tests/legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  -  166 [chromium] › tests/legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  -  167 [chromium] › tests/legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  -  168 [chromium] › tests/legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  -  169 [chromium] › tests/legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  -  170 [chromium] › tests/legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  -  171 [chromium] › tests/legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  -  172 [chromium] › tests/legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  -  173 [chromium] › tests/legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  -  174 [chromium] › tests/legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  -  175 [chromium] › tests/legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  -  176 [chromium] › tests/legacy-import.spec.ts:357:1 › D10-06d [founder rule: originals preserved, no dead end] after coach A declines ("Not now") an interrupted import, some account can still act on the device plays
+  -  177 [chromium] › tests/persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  -  178 [chromium] › tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  -  179 [chromium] › tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  -  180 [chromium] › tests/teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+  -  181 [chromium] › tests/ai-gateway.spec.ts:14:1 › E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved
+  -  182 [chromium] › tests/ai-gateway.spec.ts:28:1 › E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)
+  ✓  183 [chromium] › tests/auth.spec.ts:18:1 › E2E-A01 signed-out visitor sees only the sign-in screen (472ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a02-mv8lu2lq-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=lxIXEKTjdCXCeTWDDrdNOov3vF6L7rPLYICiWSjCzn-gDzNew7QHS0&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  184 [chromium] › tests/auth.spec.ts:27:1 › E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted (905ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a03-mv8lu3bn-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=EY1nMkrC9pHr-rq1Hgd2JsABpg4z7EmNXanjatFMBlxxqeDhoZauaB&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  185 [chromium] › tests/auth.spec.ts:42:1 › E2E-A03 [emulator email link] link opened on another device asks for the email first (1.1s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a04-mv8lu462-3@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=_QwFioNzu43vYJD4-4Vr2r2731qvc6xTbzWpLIRIrhEnlJMZ0Nsshm&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  186 [chromium] › tests/auth.spec.ts:58:1 › E2E-A04 [emulator email link] a used sign-in link cannot be replayed (1.2s)
+  ✓  187 [chromium] › tests/auth.spec.ts:76:1 › E2E-A05 [SDK-in-browser] unverified email account is held at "Verify your email" (448ms)
+  ✓  188 [chromium] › tests/auth.spec.ts:90:1 › E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in (595ms)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a07-mv8lu5wz-5@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=SXReGghoOTW5qUcV4OJqav3bKL9YsUKHWirkLmt5FdkqlsxsSLZq0U&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  189 [chromium] › tests/auth.spec.ts:100:1 › E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical (1.3s)
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a08-mv8lu6x2-6@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=0vvFlrQLne-XBImXFiR3dcgKxtdxbzT_jOsTw6EaKXus5tmbeu7zuy&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  190 [chromium] › tests/auth.spec.ts:126:1 › E2E-A08 [emulator] disabled account is signed out on the next access check (750ms)
+  -  191 [chromium] › tests/auth.spec.ts:136:1 › E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emulator popup and the beta gate
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as a10-mv8lu7nn-7@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=YnejQfzgOaP1bW299N2fRXBm38MJ1R0lAD3Fj08spN1xjsoZ1uPHzu&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ✓  192 [chromium] › tests/auth.spec.ts:172:1 › E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved (1.3s)
+  -  193 [chromium] › tests/coaching.spec.ts:70:1 › CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B
+  -  194 [chromium] › tests/coaching.spec.ts:100:1 › CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized
+  -  195 [chromium] › tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key
+  -  196 [chromium] › tests/coaching.spec.ts:149:1 › CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out
+  -  197 [chromium] › tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten
+  -  198 [chromium] › tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes
+  -  199 [chromium] › tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile
+  -  200 [chromium] › tests/coaching.spec.ts:320:1 › CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call
+  -  201 [chromium] › tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)
+  -  202 [chromium] › tests/coaching.spec.ts:384:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)
+  -  203 [chromium] › tests/coaching.spec.ts:406:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded
+  -  204 [chromium] › tests/coaching.spec.ts:427:1 › CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write
+  -  205 [chromium] › tests/legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  -  206 [chromium] › tests/legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  -  207 [chromium] › tests/legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  -  208 [chromium] › tests/legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  -  209 [chromium] › tests/legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  -  210 [chromium] › tests/legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  -  211 [chromium] › tests/legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  -  212 [chromium] › tests/legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  -  213 [chromium] › tests/legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  -  214 [chromium] › tests/legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  -  215 [chromium] › tests/legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  -  216 [chromium] › tests/legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  -  217 [chromium] › tests/legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  -  218 [chromium] › tests/legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  -  219 [chromium] › tests/legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  -  220 [chromium] › tests/legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  -  221 [chromium] › tests/legacy-import.spec.ts:357:1 › D10-06d [founder rule: originals preserved, no dead end] after coach A declines ("Not now") an interrupted import, some account can still act on the device plays
+  -  222 [chromium] › tests/persistence.spec.ts:24:1 › E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten
+  -  223 [chromium] › tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device
+  -  224 [chromium] › tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team
+  -  225 [chromium] › tests/teams.spec.ts:61:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it
+
+  180 skipped
+  45 passed (58.6s)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

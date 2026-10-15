@@ -1,0 +1,31 @@
+Coach Core UI milestone, 2026-10-14
+Application source ca5ca7296858f5dcde5dd353d9172d4884c767cb
+Base 4757eaffad31664dae727c34355aca8109fcc63c
+Node 22.23.1 / npm 10.9.8 / Windows headless browsers; no physical devices.
+
+npm ci --legacy-peer-deps --no-audit --no-fund: exit0,1540 packages.
+Untouched baseline npx tsc --noEmit: exit0.
+Untouched baseline npm test -- --watchAll=false --runInBand (CI=true): exit0,29 suites434/434.
+Untouched baseline npm run build (CI=false): exit0,existing warnings.
+UI npx tsc --noEmit: exit0,zero diagnostics (initial and final).
+UI targeted two new test files: exit0,2 suites7/7.
+UI full npm test -- --watchAll=false --runInBand (CI=true): exit0,31 suites441/441.
+UI npm run build (CI=false): exit0,existing warning files match baseline; no new UI warnings.
+node scripts/visual-preview.cjs4317: compilePASS,auth/cloud module checkPASS,localhost only.
+node work/verify-visual.cjs (local path setup): exit0 twice, before/after phone refinement.
+16 layouts each pass axe A/AA, no page overflow, no buttons below44px high, no page errors/external requests.
+Widths320,375,640,834,1024,1280,1440,1920; Chromium and Firefox.
+Both engines keyboard skip/main focus, dialog focus/Escape, reduced-motionPASS; sample localStorage0.
+HOST=127.0.0.1 PORT=4321 BROWSER=none CI=true npm start: webpack compiled with existing warnings,No issues found.
+Portable runner differs from executed work script only in filesystem/module path setup.
+
+Retained setup failures: premature typecheck missing lib/tsc.js and premature react-scripts not found while npm ci incomplete; neither counted as completed baseline checks.
+Raw baseline/UI logs remain locally in work/. Initial visual pass also retained locally; committed images/results are final refinement.
+No new authenticated-emulator acceptance, physical-device tests, staging or independent Claude UI review completed. Claude request on issue39comment6179875785 remains pending.
+PR64/auth/tenant/persistence/import/rules/functions/AI/package-lock/e2e/canvas unchanged.
+Observed browser versions: Chromium156.0.8078.4,Firefox157.0.
+
+Actual initial development boot without Firebase config: FAIL auth/invalid-api-key,retained.
+Demo-placeholder dev boot with external requests blocked: private-beta sign-in renders,PASS,pageErrors0,no real sign-in/backend operation.
+Focused modal focus-return check: Chromium/Firefox PASS.
+Configured development server stopped after verification; visual preview4317 remains running.

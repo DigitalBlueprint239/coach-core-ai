@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-14",
+  "applicationSource": "ff9b421669c1154ab52288f9cda1c7516bfb1ed5",
+  "node": "22.23.1",
+  "npm": "10.9.8",
+  "jest": {
+    "passed": 416,
+    "suites": 26,
+    "failed": 0
+  },
+  "typeScriptErrors": 0,
+  "productionBuild": "PASS with retained lint/Browserslist warnings",
+  "browserCheckpoint": {
+    "failed": 0,
+    "retries": 0,
+    "passed": 18,
+    "firefox": "157.0",
+    "applicationSource": "8dcf9a793910845f332fc6a56d5ee019d7e7ed4f",
+    "chromium": "156.0.8078.4",
+    "physicalDevice": "NOT MEASURED",
+    "source": "06e222e410640e91fea98deae34bbe901b081379"
+  },
+  "priorBrowserResults": [
+    "probe 0/8",
+    "corrected 6/8",
+    "frozen dacb189 12/12",
+    "reviewed a91264c 16/18"
+  ],
+  "independentAcceptance": "PENDING Claude",
+  "mvp": "NO-GO",
+  "rawAuthTraces": "retained locally; hashes published, no tokens published"
+}

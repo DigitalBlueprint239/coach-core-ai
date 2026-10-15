@@ -1,57 +1,44 @@
 rules_version = '2';
+
+// Coach Core AI — Cloud Storage security rules (private beta)
+//
+// Owner-only. The only writable path is teams/{teamId}/files/{fileName}, and
+// only for the private-beta owner of that team (checked against Firestore).
+// Legacy paths (practice-plans/*, plays/*/media, teams/*/documents,
+// users/*/profile) are denied until a reviewed need exists.
+//
+// NOTE for deploy: cross-service rules (firestore.get) require granting the
+// Storage service agent access to Firestore the first time these rules are
+// deployed. That is a live-project change and needs founder approval.
+
 service firebase.storage {
   match /b/{bucket}/o {
-    // Helper function to check if user is authenticated
-    function isAuthenticated() {
-      return request.auth != null;
+
+    function isBetaUser() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider != 'anonymous'
+        && request.auth.token.email_verified == true
+        && request.auth.token.beta == true;
     }
-    
-    // Helper function to check file size (max 10MB)
-    function isValidFileSize() {
-      return request.resource.size < 10 * 1024 * 1024;
+
+    function ownsTeam(teamId) {
+      return firestore.exists(/databases/(default)/documents/teams/$(teamId))
+        && firestore.get(/databases/(default)/documents/teams/$(teamId)).data.ownerId
+             == request.auth.uid;
     }
-    
-    // Helper function to check file type
-    function isValidFileType() {
-      return request.resource.contentType.matches('image/.*') ||
-             request.resource.contentType.matches('application/pdf') ||
-             request.resource.contentType.matches('text/.*');
+
+    // 5 MB, images and PDFs only.
+    function isAllowedUpload() {
+      return request.resource.size > 0
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/(png|jpeg|webp)|application/pdf');
     }
-    
-    // User profile images
-    match /users/{userId}/profile/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   request.auth.uid == userId &&
-                   isValidFileSize() &&
-                   isValidFileType();
+
+    match /teams/{teamId}/files/{fileName} {
+      allow read, delete: if isBetaUser() && ownsTeam(teamId);
+      allow create, update: if isBetaUser() && ownsTeam(teamId) && isAllowedUpload();
     }
-    
-    // Team documents
-    match /teams/{teamId}/documents/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   isValidFileSize() &&
-                   isValidFileType();
-    }
-    
-    // Practice plan attachments
-    match /practice-plans/{planId}/attachments/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   isValidFileSize() &&
-                   isValidFileType();
-    }
-    
-    // Play diagrams and media
-    match /plays/{playId}/media/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   isValidFileSize() &&
-                   isValidFileType();
-    }
-    
-    // Default deny all other access
+
     match /{allPaths=**} {
       allow read, write: if false;
     }

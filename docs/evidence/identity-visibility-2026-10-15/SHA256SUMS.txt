@@ -1,0 +1,13 @@
+d4e6960e27822b8e60d3a3d8e74e04960ab5198d741c70e75c53e5972e833efd  component-harness-team-sample-preview-1440.png
+6efbd3d7a78ecf21d06052600fec69f784bf27410c8c2307de67e7f101019eb6  component-harness-team-sample-preview-390.png
+bb30e9229ebb0743d5a0156cb89d3b2414fd1d916acd91509ae2571efbc23a62  component-harness-team-sample-preview-834.png
+9bf01aeece4aa57a86565d656c0f537b6187c325e0342f66e86090d917595d12  component-harness-team-saved-1440.png
+d9246e90bb7fadf3a457c1cb1f5b99074e47b44f88e57c986f5aa83c11d6e8ca  component-harness-team-saved-390.png
+cb1d6bd55d7c6aa1fd09053fd6b12b871ec80d1d0c10024828066817243e1ae0  component-harness-team-saved-834.png
+79c316f64aa351c0b07d25b641d255397e7f187624a006c421146c9d7aef24ae  real-app-no-team-sample-preview-1440.png
+332e024ee15df6de653df5ae84696f5363d0a5f4c499d186b5fb9e4b84fceaa4  real-app-no-team-sample-preview-390.png
+56bb92f103cfa2652c92e1f521e8e3881ca8b63c4d638ade10ee1dc19cc8c8cc  real-app-no-team-sample-preview-834.png
+c48822316de050b3bcb63dc71fbb080143d6cb6bff0a5c4449fba6e0b3cca547  real-app-no-team-saved-1440.png
+3a3fcf25f68d2f0d9152b6ee4f5c8c8c228a15830c0c1d9108f50f8d6aa0861d  real-app-no-team-saved-390.png
+57c27ff3e67640befb5707be23b376956ffeed921df6ffeaf9aaf84a0865819a  real-app-no-team-saved-834.png
+f362ccc3602ca36f4d80f446f5e0ee52f1c622093e7ab69a929501419e595354  README.md

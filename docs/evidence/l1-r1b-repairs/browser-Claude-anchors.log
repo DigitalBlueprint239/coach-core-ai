@@ -1,0 +1,36 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node e2e/node_modules/@playwright/test/cli.js test --config e2e/playwright.config.ts --grep "CC-L[01]"
+[WebServer] (node:27816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:15284) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l0-mv8k05cn-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 1 [chromium] › e2e\tests\coaching.spec.ts:376:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch) (16.9s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l1-mv8k0dgt-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 2 [chromium] › e2e\tests\coaching.spec.ts:398:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded (6.0s)
+(node:22764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l0-mv8k0m1q-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 3 [firefox] › e2e\tests\coaching.spec.ts:376:1 › CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch) (20.3s)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l1-mv8k11ik-2@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 4 [firefox] › e2e\tests\coaching.spec.ts:398:1 › CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive "Migrate Now", the blob stays byte-identical, nothing is uploaded (9.5s)
+
+  4 passed (1.0m)
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
