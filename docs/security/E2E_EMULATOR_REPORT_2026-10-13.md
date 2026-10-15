@@ -574,3 +574,88 @@ Codex's §11 preserves §§1–10 of `7b4747f` unchanged apart from two blank li
 | **W1** (NOT_FOUND on `userProfiles/<uid>`) | `onPlayCreated`/`onPracticePlanCreated` update `userProfiles`, which is created only by `createUserProfile` on `users/{uid}` | **Dormant product feature, not just a fixture gap.** Nothing creates `users/{uid}`: clients are denied by rules and there is no server path. Per-user stats are therefore never recorded in any environment. The errors are caught and logged. No data loss, no security impact; no client can read `userProfiles` | Recorded. Remove the dead stats updates or provision profiles at beta grant: a product decision, **not** changed now (no new features) |
 
 The acceptance-branch push CI on `5752d2b` (job `116161937978`): every test that uses the changed helpers passes in both engines. The only failures are the expected pre-#64 CC-L1 and D10-06c. Rules, functions, web-auth and bundle-scan jobs are green. This is harness validation, **not** acceptance.
+
+## 12. R1c repair (#69) and integrated candidate 8 (2026-10-15)
+
+§11 is reserved for Codex's attributed appendix (#68). Nothing earlier in this report is rewritten.
+
+### 12.1 Exact SHAs
+
+| | SHA |
+|---|---|
+| R1c repair, #69 | source **`82d46cc`**, final docs head `1500dbc`, base frozen #64 `8f0d9f7` (Codex) |
+| Acceptance head | **`30b3d2b`**: hardened team and library helpers `5752d2b`, reporter diagnostics, D10-06c, D10-06d (unchanged), new **D10-06e** (Claude) |
+| **Integrated candidate 8** (test-only, never merged) | **`069c8f1`** on `claude/integration-candidate-2026-10-14f` = candidate 7 `d12d273` + #69 `1500dbc` + `30b3d2b`. `src/`, `functions/src`, rules and packages are identical to `82d46cc`; `e2e/`, functions tests and `.github/` are identical to `30b3d2b` |
+| Discrimination run (diagnostic, **not counted**) | `ed528ed` on `claude/discrimination-pre-r1c-2026-10-15` = pre-R1c runtime (`src` identical to `8f0d9f7`) + `30b3d2b` tests |
+
+### 12.2 Code review of #69
+
+- "Not now" on an **unfinished** import returns `postponed`. It records **no** decline and keeps the device claim and the pending marker, so other accounts stay blocked (R1b).
+- `hasUnfinishedImport` re-offers the import to the original account on the original team, including devices left in the pre-repair "declined but pending" state.
+- Resume reuses deterministic copy ids, and completion still requires verified server readback.
+- A fresh decline (R3) is unchanged. A malformed pending marker now fails closed.
+- **Residual, tracked:** if the original team no longer exists, the device shows a permanent visible block. There is no release and no deletion, so data is safe but there is no exit.
+
+### 12.3 New positive test D10-06e
+
+The test interrupts the import mid-copy, then requires:
+1. "Not now" shows **"Unfinished import postponed"** and **Resume import**, and no decline is recorded. Resume returns to the offer.
+2. After a reload, the owner on the original team is re-offered the import. Originals are byte-identical.
+3. Coach B sees "unfinished import by another account" and gets no Import button.
+4. Coach A signs back in, is auto-selected onto the original team, and finishes with **exactly the 3 verified copy ids**, decision `imported`, originals byte-identical.
+
+**Discrimination** (evidence 27, ×1, not counted): on the pre-R1c runtime, D10-06e **FAILS** in both engines at step 1 (`legacy-import.spec.ts:404`) and D10-06d **FAILS** in both. The other 44 tests pass.
+
+### 12.4 Results, candidate 8 `069c8f1`, retries 0, workers 1
+
+**Clean preflight** (evidence 25):
+- `npm ci` OK;
+- jest **440/440** (30 suites);
+- tsc **0**;
+- functions **73/73**;
+- root and functions production audits **0**.
+
+**×10, run `38659607413`, job `116177633665`** (evidence 26):
+
+| | Chromium 156.0.8078.4 | Firefox 157.0 |
+|---|---|---|
+| PASS / FAIL / BLOCKED / SKIPPED | **460 / 0 / 0 / 0** | **460 / 0 / 0 / 0** |
+| Steps ≥ 10 s (all executions) | **0 of 460** | **0 of 460** |
+| Release-build proof | 13/13 | |
+
+All 46 tests pass 10/10 per engine, including:
+- D10-06c, D10-06d and **D10-06e**;
+- D10-01, D10-02 and D10-06 with the hardened library checks;
+- D10-05 and D10-07, which use the team-specific confirmation;
+- CC-L1, L0 and A10.
+
+D10-07 durations: Firefox 8.6–10.1 s, Chromium 6.4–7.3 s.
+
+### 12.5 Status after candidate 8
+
+| Item | Status |
+|---|---|
+| **R1c** | **Verified fixed (emulator)** at `069c8f1` (D10-06e 10/10 per engine, and it FAILS on the pre-repair runtime) |
+| L1, R1b, FX-03 | **Passed** (founder-accepted, §10), re-confirmed 10/10 per engine |
+| R0, R1, R2, R5, L0, CC02/CC03 | Verified, re-confirmed 10/10 per engine |
+| H2, N1, N2 | No recurrence in 920 executions, with 0 steps ≥ 10 s. The harness causes of the N1 and H2-local signatures are fixed. The **underlying team-creation/client stall (N2) and the older CI H2 cause remain OPEN**: passing batches do not close them |
+| FX-02 | **OPEN** |
+| Missing-original-team permanent block (R1c residual); R3; R4; touch exit | **OPEN / tracked** |
+| W1 dormant per-user stats | Recorded; product decision |
+| Genuine hidden-tab behaviour, physical devices, staging | **NOT MEASURED** |
+
+These are emulator results with demo data, and they do not establish production behaviour. **MVP: NO-GO.** No merge, deploy, spend, live change or AI activation.
+
+### 12.6 Independent verification of §12
+
+A separate agent re-checked §12 against git, the Checks API and the code. **Nothing was refuted.** It confirmed:
+- every SHA and empty diff;
+- both jobs' per-test results;
+- the D10-07 durations;
+- the evidence checksums, with files 01–24 unchanged;
+- that the #69 code has no bypass. B is never offered the import, resume still requires verified readback, postponing never writes a decline, and status-less legacy claims are handled correctly.
+
+It reported these **coverage gaps** (tracked, not fixed now):
+1. **Browser coverage of the pre-repair "declined but pending" state.** Its recovery is covered only by Codex's jest test (`owner-resume.test.tsx`). No browser test seeds that state.
+2. **Multi-team owner.** In D10-06e, A owns one team, so the original-team selection is trivial. Recovery when A has several teams and another one is selected is not browser-tested.
+3. **"Resume import" after a reload.** The button is only exercised in-session. After a reload the offer is recomputed, which is by design.

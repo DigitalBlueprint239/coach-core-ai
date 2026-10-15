@@ -8,6 +8,9 @@ import { defineConfig, devices } from '@playwright/test';
 // delivery, which needs an approved staging project (Day 6).
 const chromiumPath = process.env.E2E_CHROMIUM_PATH; // sandbox only; CI uses Playwright's own build
 
+// UI workflow tests (no SDK-in-browser shortcuts) re-run at phone width.
+const PHONE_WORKFLOWS = /(?:^|\s)(E2E-A07|E2E-A10|CC-P10|CC-P11|CC-P12|CC-P14|CC-P15|CC-P16|CC-P17|CC-L0|CC-L1|E2E-T01|E2E-T02|D10-01|D10-06e) /;
+
 export default defineConfig({
   testDir: './tests',
   outputDir: './test-results',
@@ -40,5 +43,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}) },
     },
     ...(process.env.E2E_SKIP_FIREFOX ? [] : [{ name: 'firefox', use: { ...devices['Desktop Firefox'] } }]),
+    // Phone-WIDTH workflow coverage for the responsive #67 shell (bottom navigation).
+    // Desktop engines at a 390x844 viewport: NOT device emulation, NOT physical phones.
+    ...(process.env.E2E_SKIP_PHONE ? [] : [
+      { name: 'phone-chromium', grep: PHONE_WORKFLOWS,
+        use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 }, ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}) } },
+      ...(process.env.E2E_SKIP_FIREFOX ? [] : [{ name: 'phone-firefox', grep: PHONE_WORKFLOWS,
+        use: { ...devices['Desktop Firefox'], viewport: { width: 390, height: 844 } } }]),
+    ]),
   ],
 });
