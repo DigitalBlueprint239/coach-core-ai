@@ -1,0 +1,15 @@
+candidate 9 6d613a8 clean preflight
+== npm ci
+  npm audit fix --force
+
+Run `npm audit` for details.
+== jest
+Test Suites: 32 passed, 32 total
+Tests:       449 passed, 449 total
+== tsc --noEmit exit 0
+== npm audit --omit=dev
+found 0 vulnerabilities
+== functions
+ℹ tests 73
+ℹ pass 73
+ℹ fail 0
