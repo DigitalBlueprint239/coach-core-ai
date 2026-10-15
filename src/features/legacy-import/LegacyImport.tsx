@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { D10_APPROVED, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, ImportBackend } from './import-legacy';
+import { D10_APPROVED, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, hasUnfinishedImport, ImportBackend } from './import-legacy';
 import { firebaseImport } from './firebase-import';
 export default function LegacyImport({ uid, teamId, teamName, backend = firebaseImport, onImported }: {
   uid: string; teamId: string; teamName: string; backend?: ImportBackend; onImported?: () => void;
@@ -9,11 +9,12 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
   const [count, setCount] = useState(0);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [postponed, setPostponed] = useState(false);
   useEffect(() => {
     current.current = session;
     const refreshOffer = () => {
-      setCount(0); setError('');
-      try { const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (D10_APPROVED && !localStorage.getItem(decisionKey(uid))) setCount(readLegacy(localStorage).length); }
+      setCount(0); setError(''); setPostponed(false);
+      try { const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (D10_APPROVED && (!localStorage.getItem(decisionKey(uid)) || hasUnfinishedImport(localStorage, {uid,teamId}))) setCount(readLegacy(localStorage).length); }
       catch { setError('Device library cannot be imported safely. Originals preserved.'); }
     };
     setBusy(false); refreshOffer();
@@ -34,10 +35,12 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
     finally { if (current.current === session) setBusy(false); }
   };
   return <section aria-label="Import device plays" className="p-4 border rounded bg-white">
-    {count > 0 && <><p>Import {count} plays saved on this device into {teamName} for this account?</p>
+    {count > 0 && postponed && <><p>Unfinished import postponed. Return on this account and {teamName} to finish. Original plays remain on this device.</p>
+      <button onClick={() => setPostponed(false)}>Resume import</button></>}
+    {count > 0 && !postponed && <><p>Import {count} plays saved on this device into {teamName} for this account?</p>
       <p>Review that these are your plays. Copies will be saved; the originals remain on this device.</p>
       <button disabled={busy} onClick={() => { void accept(); }}>{busy ? 'Verifying copies…' : 'Import plays'}</button>
-      <button disabled={busy} onClick={() => { try { declineImport(localStorage, { uid, teamId }); setCount(0); } catch { setError('Decision could not be saved.'); } }}>Not now</button></>}
+      <button disabled={busy} onClick={() => { try { if (declineImport(localStorage, { uid, teamId }) === 'postponed') setPostponed(true); else setCount(0); } catch { setError('Decision could not be saved.'); } }}>Not now</button></>}
     {error && <p role="alert">{error}</p>}
   </section>;
 }
