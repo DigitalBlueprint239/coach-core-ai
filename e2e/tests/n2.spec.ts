@@ -602,7 +602,7 @@ const dupPrompt = (page: Page) => page.getByRole('alertdialog').or(page.getByRol
 
 test('N2-R7 [acceptance] intentional same-name team: an explicit confirmation is required; declining creates nothing; confirming creates exactly one separate team', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2rr7'));
-  const name = 'N2 Same Name FC';
+  const name = 'N2 Dup Confirm FC'; // must not itself match DUP_TEXT
   await createTeamViaUI(page, name);
   const first = (await adminTeamsFull(uid)).filter((t) => t.name === name);
   expect(first, 'precondition: one team with this name').toHaveLength(1);
@@ -614,7 +614,7 @@ test('N2-R7 [acceptance] intentional same-name team: an explicit confirmation is
   const promptAt = await until(async () => (await dupPrompt(page).count()) > 0, t0, 8_000);
   await new Promise((r) => setTimeout(r, 3_000)); // nothing may be written while the question is open
   const beforeAnswer = (await adminTeamsFull(uid)).filter((t) => t.name === name).length;
-  const promptText = promptAt >= 0 ? (await dupPrompt(page).first().innerText()).replace(/\s+/g, ' ').slice(0, 160) : '';
+  const promptText = promptAt >= 0 ? (await dupPrompt(page).first().innerText({ timeout: 1_000 }).catch(() => '<vanished>')).replace(/\s+/g, ' ').slice(0, 160) : '';
   record(`R7 promptAt=${promptAt}ms teamsBeforeAnswer=${beforeAnswer} prompt="${promptText}"`);
   expect(promptAt, 'an explicit same-name confirmation is shown within 8 s').toBeGreaterThanOrEqual(0);
   expect(beforeAnswer, 'no second team before the coach confirms').toBe(1);
@@ -634,7 +634,9 @@ test('N2-R7 [acceptance] intentional same-name team: an explicit confirmation is
   t0 = Date.now();
   await submit(page).click();
   expect(await until(async () => (await dupPrompt(page).count()) > 0, t0, 8_000), 'confirmation shown again').toBeGreaterThanOrEqual(0);
-  await page.getByRole('button', { name: DUP_CONFIRM }).first().click();
+  const confirmBtn = page.getByRole('button', { name: DUP_CONFIRM });
+  expect(await confirmBtn.count(), 'an explicit confirm control exists').toBeGreaterThan(0);
+  await confirmBtn.first().click();
   const createdAt = await until(async () => (await adminTeamsFull(uid)).filter((t) => t.name === name).length >= 2, Date.now(), 20_000);
   await new Promise((r) => setTimeout(r, 3_000)); // late-duplicate window
   const teams = (await adminTeamsFull(uid)).filter((t) => t.name === name);
@@ -650,7 +652,7 @@ test('N2-R7 [acceptance] intentional same-name team: an explicit confirmation is
 
 test('N2-R7b [acceptance] a confirmed same-name creation whose commit is reset is retried as the SAME operation: no third team', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2rr7b'));
-  const name = 'N2 Same Name Retry';
+  const name = 'N2 Dup Confirm Retry'; // must not itself match DUP_TEXT
   await createTeamViaUI(page, name);
   const first = (await adminTeamsFull(uid)).filter((t) => t.name === name);
   expect(first, 'precondition: one team with this name').toHaveLength(1);
@@ -662,7 +664,9 @@ test('N2-R7b [acceptance] a confirmed same-name creation whose commit is reset i
   await openCreate(page, name);
   await submit(page).click();
   expect(await until(async () => (await dupPrompt(page).count()) > 0, Date.now(), 8_000), 'explicit same-name confirmation shown').toBeGreaterThanOrEqual(0);
-  await page.getByRole('button', { name: DUP_CONFIRM }).first().click();
+  const confirmBtn = page.getByRole('button', { name: DUP_CONFIRM });
+  expect(await confirmBtn.count(), 'an explicit confirm control exists').toBeGreaterThan(0);
+  await confirmBtn.first().click();
   const t0 = Date.now();
   const statusAt = await statusWithin(page, t0, 8_000);
   const op = await pendingOp(page, uid);
