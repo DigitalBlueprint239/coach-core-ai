@@ -116,9 +116,15 @@ export default class AnnotateReporter {
       });
       lines.sort((a, b) => (a.startsWith('FAIL') ? 0 : 1) - (b.startsWith('FAIL') ? 0 : 1));
       // Diagnostic tests ("[diagnostic]" in the title) are counted separately from acceptance.
+      // Tests tagged "[obsolete-fault-model]" (Coach Drew, 2026-10-15: original N2-A2,
+      // whose SDK-WebChannel fault no longer reaches the REST save path) still run
+      // and are reported, but are counted apart from acceptance and diagnostics.
       const diagT = (r) => /\[diagnostic\]/.test(r.title);
+      const obsT = (r) => /\[obsolete-fault-model\]/.test(r.title);
+      const accT = (r) => !diagT(r) && !obsT(r);
       const cnt = (pred, st) => rows.filter((r) => pred(r) && r.status === st).length;
-      const split = ` · acceptance ${cnt((r) => !diagT(r), 'PASS')}/${cnt((r) => !diagT(r), 'FAIL')} · diagnostic ${cnt(diagT, 'PASS')}/${cnt(diagT, 'FAIL')} (pass/fail)`;
+      const split = ` · acceptance ${cnt(accT, 'PASS')}/${cnt(accT, 'FAIL')} · diagnostic ${cnt(diagT, 'PASS')}/${cnt(diagT, 'FAIL')}`
+        + ` · obsolete-fault-model ${cnt(obsT, 'PASS')}/${cnt(obsT, 'FAIL')} (pass/fail)`;
       emit(level, `E2E ${p}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped${split}`, lines.join('\n'));
 
       // Failure diagnostics: the first failure of each distinct test first, so a
