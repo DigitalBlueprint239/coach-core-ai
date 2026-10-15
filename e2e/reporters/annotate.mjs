@@ -115,7 +115,11 @@ export default class AnnotateReporter {
         return `SKIPPED ${id(title)}`;
       });
       lines.sort((a, b) => (a.startsWith('FAIL') ? 0 : 1) - (b.startsWith('FAIL') ? 0 : 1));
-      emit(level, `E2E ${p}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped`, lines.join('\n'));
+      // Diagnostic tests ("[diagnostic]" in the title) are counted separately from acceptance.
+      const diagT = (r) => /\[diagnostic\]/.test(r.title);
+      const cnt = (pred, st) => rows.filter((r) => pred(r) && r.status === st).length;
+      const split = ` · acceptance ${cnt((r) => !diagT(r), 'PASS')}/${cnt((r) => !diagT(r), 'FAIL')} · diagnostic ${cnt(diagT, 'PASS')}/${cnt(diagT, 'FAIL')} (pass/fail)`;
+      emit(level, `E2E ${p}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped${split}`, lines.join('\n'));
 
       // Failure diagnostics: the first failure of each distinct test first, so a
       // test failing 10/10 cannot push a 1/10 intermittent out of the annotation.
