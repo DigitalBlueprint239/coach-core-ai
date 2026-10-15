@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Sensitive security reporting
+    url: https://github.com/DigitalBlueprint239/coach-core-ai/security/policy
+    about: Use the private routing in SECURITY.md. Never include secrets or private vulnerability details in public issues.

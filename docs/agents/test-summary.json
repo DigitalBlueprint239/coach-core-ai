@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-10-14",
+  "mvpStatus": "NO-GO",
+  "purpose": "Versioned evidence index; not a live dashboard, test execution or aggregate acceptance score. Runs overlap and MUST NOT be summed across candidates.",
+  "runs": [
+    {
+      "id": "local-root-jest",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "local",
+      "owner": "Codex",
+      "status": "PASS",
+      "passed": 434,
+      "failed": 0,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 434,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/68"
+    },
+    {
+      "id": "local-chromium-10-repeats",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "local",
+      "owner": "Codex",
+      "status": "FAIL",
+      "passed": 429,
+      "failed": 1,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 430,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/68"
+    },
+    {
+      "id": "local-firefox-10-repeats",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "local",
+      "owner": "Codex",
+      "status": "FAIL",
+      "passed": 426,
+      "failed": 4,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 430,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/68"
+    },
+    {
+      "id": "functions-explicit-default-concurrency",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "local",
+      "owner": "Codex",
+      "status": "FAIL",
+      "passed": 72,
+      "failed": 1,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 73,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/68"
+    },
+    {
+      "id": "functions-explicit-serial-followup",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "local",
+      "owner": "Codex",
+      "status": "PASS",
+      "passed": 73,
+      "failed": 0,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 73,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/68"
+    },
+    {
+      "id": "claude-candidate6-chromium",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "github-actions",
+      "owner": "Claude",
+      "status": "PASS",
+      "passed": 430,
+      "failed": 0,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 430,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38632770550"
+    },
+    {
+      "id": "claude-candidate6-firefox",
+      "commit": "4757eaffad31664dae727c34355aca8109fcc63c",
+      "environment": "github-actions",
+      "owner": "Claude",
+      "status": "PASS",
+      "passed": 430,
+      "failed": 0,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 430,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38632770550"
+    },
+    {
+      "id": "claude-candidate7-chromium",
+      "commit": "d12d273786ba76f76102ce0459e6bcb57cac0e2b",
+      "environment": "github-actions",
+      "owner": "Claude",
+      "status": "FAIL",
+      "passed": 440,
+      "failed": 10,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 450,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38638354889"
+    },
+    {
+      "id": "claude-candidate7-firefox",
+      "commit": "d12d273786ba76f76102ce0459e6bcb57cac0e2b",
+      "environment": "github-actions",
+      "owner": "Claude",
+      "status": "FAIL",
+      "passed": 439,
+      "failed": 11,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 450,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38638354889"
+    }
+  ],
+  "unmeasured": {
+    "filmUpload": "NOT MEASURED",
+    "filmTagReopen": "NOT MEASURED",
+    "filmAccuracy": "NOT MEASURED",
+    "aiQuality": "NOT MEASURED",
+    "aiLatency": "NOT MEASURED",
+    "aiCost": "NOT MEASURED",
+    "staging": "NOT MEASURED",
+    "physicalTablet": "NOT MEASURED"
+  },
+  "blockers": [
+    "R1c owner-resume repair/independent acceptance pending",
+    "H2 / FX-02 retained browser instability",
+    "Local N1 library loading checkpoint / N2 team acknowledgement / functions timing failure unresolved",
+    "Film Analyzer required under #50; implementation/acceptance blocked",
+    "Staging and physical-device acceptance unavailable"
+  ],
+  "missingHistoricalEvidence": "Original initial L1 ZIP/PNG missing. Earlier logs/results/DOM/hashes retained in #68; later runs do not replace the lost evidence.",
+  "limitations": [
+    "Local frozen 43-case browser suite omits candidate7 R1c probe.",
+    "Functions npm-script on Windows discovered zero tests; explicit-file measurements are listed separately.",
+    "Historical full dev audit 98 findings/3 critical was not remeasured; production audits 0 apply only to their exact candidate.",
+    "Touch emulation is not a physical tablet.",
+    "No AI provider calls, film/youth-media processing, staging or production operations."
+  ],
+  "classificationUpdate": {
+    "source": "https://github.com/DigitalBlueprint239/coach-core-ai/blob/16e6067131e16aee2819d20aedb39eb87b90dcab/docs/security/E2E_EMULATOR_REPORT_2026-10-13.md",
+    "N1": "Claude classified as harness race; positive/negative helpers hardened, historical failures retained.",
+    "H2": "Local helper false confirmation repaired; historic H2 / FX-02 remain OPEN.",
+    "N2": "App/SDK/host team acknowledgement unresolved; overwrite assertions were not reached.",
+    "F1": "Local mock APIConnectionError; discovery/diagnostics repaired by Claude; original failure retained.",
+    "W1": "Dormant profile statistics; product decision required, not measured statistics."
+  }
+}

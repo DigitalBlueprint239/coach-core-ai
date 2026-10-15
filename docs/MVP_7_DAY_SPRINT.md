@@ -33,3 +33,12 @@ Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands |
 - Do not add keys, personal player data, customer records, or credentials.
 - Preserve `master`, Smart Playbook `main`, existing Firebase projects.
 - If waiting on access or unresolved critical vulnerabilities, do not ship.
+
+
+## 2026-10-14 — #65 Phase A isolated review milestone
+
+Inventory completed before changes: recovery/charter has only legacy model CI; reviewed unmerged stack also has Claude's security and emulator gates. No duplicate CI/command center or acceptance suite. Phase A extends #66 with docs/agents/AGENT_RUNBOOK.md, missing issue/PR templates, private SECURITY.md routing, machine-readable test-summary.json and read-only evidence-format checks in existing model workflow. Legacy compute quarantined; credential-file Firestore/comment writes removed. Permissions contents:read, public standard Ubuntu runner capped5minutes; costs/retention documented before activation. No nightly agents/models/settings/deployments activated. See docs/agents/PHASE_A_VALIDATION.md for exact local and hosted observations.
+
+Acceptance repair first: R1c owner-resume code82d46cc33b7933d4de19b84a0acc553553c51d44 on isolated codex/r1c-owner-resume; #64 remains8f0d9f7 frozen. Independent candidate8 pending Claude; #63 at16e6067 classifies N1/helper races and F1 mock connection while N2/H2/FX-02 stay open. Earlier failed evidence and missing initial L1 ZIP/PNG remain disclosed in #68.
+
+F01–04 code fixes reported in #52 are distinct from unverified live prerequisites. Ordinary coaching protections independently verified on specific #63 candidates, not shipped acceptance. D1–D9 directions settled per founder; detailed existing approval source still required (#61 reconciliation), not nine reopened decisions. D10 implementation/testing approved; no deletion. Film Analyzer remains MVP-required #50, blocked; untested film/AI/staging/physical metrics NOT MEASURED. MVP NO-GO; AI generation disabled; BDN-AEO-001 queued. No protected merge, spending, live data/configuration, deployment or branch-protection change.

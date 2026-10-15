@@ -1,6 +1,6 @@
 # Coach Core AI — Agent Engineering Command Center (Design v1)
 Date: 2026-10-14
-Status: **Proposed governance and automation architecture, not deployed**.
+Status: **Phase A implementation in isolated review; broader automation proposed, not deployed.** See [runbook](AGENT_RUNBOOK.md) and [validation](PHASE_A_VALIDATION.md) for exact implemented scope/results.
 Product: Coach Core AI (main `DigitalBlueprint239/coach-core-ai`, recovery branch `recovery/coach-core-mvp-2026`; standalone `DigitalBlueprint239/Coach-Core-Smart-Playbook-`).
 Founder decision: Film Analyzer is MVP-required (Issue #50); OpenAI-only product API for MVP (Issue #46), while Claude Code remains a development/security agent. Do not confuse provider integrations with development agents.
 
@@ -31,7 +31,7 @@ Build a traceable, continually improving coaching platform from code submissions
 
 ## GitHub-first source of truth
 - Existing: `AGENTS.md`, `CLAUDE.md`, `docs/COACH_CORE_SHARED_CONTEXT.md`, `docs/MVP_7_DAY_SPRINT.md`.
-- Proposed: `docs/agents/TEAM_CHARTER.md` (this), `docs/agents/AGENT_RUNBOOK.md`, `docs/agents/DECISION_LOG.md`, `docs/agents/EVAL_SCORECARD.md`, `docs/agents/RELEASE_CHECKLIST.md`.
+- Phase A: this charter, `docs/agents/AGENT_RUNBOOK.md` and `docs/agents/test-summary.json` extend those authorities. Reuse #39 / the founder decision packet for decisions and #61 CC-007 for the release/rollback checklist; no parallel decision log or release package. Film/AI evaluation remains proposed and NOT MEASURED.
 - Every agent session starts by reading canonical files and issue/PR status. No system can guarantee that private memories in ChatGPT, Codex, Claude, Muse, or other providers are synchronized. PRs update GitHub docs; never silently rewrite cross-platform memory.
 
 ## Proposed CI pipeline (requires implementation PR and founder approval)
@@ -61,12 +61,12 @@ Build a traceable, continually improving coaching platform from code submissions
 Set numeric thresholds only after baseline collection and founders' approval.
 
 ## Release gates and responsibilities
-- **No-go now:** prior security findings F-01..F-04 unresolved, Film Analyzer required and not validated, integration incomplete. Passing tests in unmerged PRs do not count as shipped functionality.
+- **No-go now:** #52 reports F-01..F-04 fixed in code/emulator tests, with live/staging prerequisites still outstanding. #63 verifies L1/R1b/L0/FX-03 and ordinary play/plan protections on exact unmerged candidates; R1c and retained browser instability block acceptance. Required Film Analyzer (#50) remains unimplemented/unvalidated; film/AI metrics NOT MEASURED. See runbook evidence reconciliation; no blanket unresolved historical claims or shipped-functionality inference.
 - Required approvals: security lead for auth/rules/keys; QA lead for tests; product/founder for MVP acceptance; operator for production release.
 - All new third-party OSS code must have license verification and dependency security review before adoption.
 - Seven-day Oct 20 target is a milestone, not permission to bypass security or film scope.
 
 ## Initial 3-phase rollout
-**Phase A (now):** charter + GitHub issue templates/labels + PR checklist + protected branches + baseline CI (no deployment).
+**Phase A (now):** inventory + charter/runbook + missing issue/PR templates + machine-readable evidence + smallest safe improvement to existing CI. Labels/branch protection remain proposed; no settings changes. Product/security CI stays with existing owners. No deployment.
 **Phase B:** automatic PR test summaries and daily issue triage; targeted browser/rules/AI/film evals; human-reviewed repair PRs.
 **Phase C (after MVP):** opt-in coach feedback ingestion, nightly extended regression, measured experimentation, dashboards, guarded staging rollouts.

@@ -1,0 +1,42 @@
+name: Reproducible coaching defect
+description: Report a synthetic reproduction; route sensitive findings privately.
+title: '[Bug] '
+body:
+  - type: markdown
+    attributes:
+      value: 'Public issues are not a security inbox. Do not include credentials, tokens, youth media, personal records or raw auth traces. See the repository Security Policy for private routing.'
+  - type: input
+    id: component
+    attributes:
+      label: Component and existing task
+      description: Playbook, practice planner, required Film Analyzer (#50), or other; link related issues before opening duplicates.
+    validations:
+      required: true
+  - type: input
+    id: baseline
+    attributes:
+      label: Exact commit, runtime and browser
+      description: Include browser engine/version and distinguish emulation from physical devices.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Synthetic reproduction and expected versus observed behavior
+      description: Include account/team switching steps using demo identities only. No real coach or player data.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and limitations
+      description: Link sanitized logs/run ID/unique artifact directory. Preserve failures and report retries, skipped or unreached checks. If unavailable, write NOT MEASURED.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Public report check
+      options:
+        - label: This report uses synthetic/demo data and contains no secrets, private security details or personal records.
+          required: true

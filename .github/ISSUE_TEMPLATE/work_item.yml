@@ -1,0 +1,35 @@
+name: Scoped work or consented coach feedback
+description: Define ownership and measurable acceptance before implementation.
+title: '[Work] '
+body:
+  - type: markdown
+    attributes:
+      value: 'Use existing coordination #39 and related tasks; do not create another command center. Feedback is opt-in and redacted. Never paste secrets, personal records or youth footage.'
+  - type: textarea
+    id: objective
+    attributes:
+      label: Problem, existing issue and intended coaching outcome
+      description: For feedback, record permission to use a synthetic/redacted example; identifying consent records stay private.
+    validations:
+      required: true
+  - type: textarea
+    id: ownership
+    attributes:
+      label: Owner, reviewer, file scope and dependencies
+      description: Coordinate auth/rules/functions/security/harness files with Claude on #39 before editing. Include baseline SHA and frozen candidates.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance, evidence and rollback
+      description: Define pass/fail and unmeasured criteria, synthetic tests, unique evidence folder, rollback and required human decisions. Film remains required under #50; AI generation stays disabled.
+    validations:
+      required: true
+  - type: textarea
+    id: resources
+    attributes:
+      label: Permissions, runners and costs before activation
+      description: State minimal permissions and runtime caps; mark actual usage NOT MEASURED when unknown. No merge, deployment, spending or production-data changes are authorized by this template.
+    validations:
+      required: true
