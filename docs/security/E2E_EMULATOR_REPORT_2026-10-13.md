@@ -449,3 +449,128 @@ These are emulator results with demo data. They do not establish production beha
 | 19 | ×1 sanity, candidate 5 (not counted) |
 | 20 | Candidate 6 clean preflight |
 | 21 | **Candidate 6 ×10 final annotations** |
+
+### 9.7 Independent verification of §9, test hardening, and candidate 7
+
+A separate agent re-checked §9 against the Checks API, git and the code. It found **no refuted facts**: every SHA, ancestry claim, run, count, duration and hash was confirmed. It raised weaknesses, all addressed or recorded:
+
+1. **A10's "before" evidence was weaker than stated.** On pre-fix code, file 17 failed at the *new* "Signing out" status. That shows the fix is absent, not that the test catches the defect. A10 now:
+   - checks the defect's symptoms first (no "Welcome,", no sign-in email field, no Google button);
+   - runs a **MutationObserver in the old document** that records any sign-in form, including late renders;
+   - re-checks at the end that no later reload happened.
+
+   Against pre-fix `src` (`dda4107`), it **FAILS 3/3 at the sign-in email field**, which is the defect itself (evidence 22). On the fix, the auth suite passes ×5, 45/45 (evidence 23).
+2. **`bodyWatch` was possibly vacuous.** Firestore WebChannel bodies are form-urlencoded, and every marker contains spaces. The watch now matches raw *and* URL-decoded bodies, and CC-L1 uses it. **CC-W0 positive control:** a marker with spaces is detected on both the app's plan save and an SDK WebChannel write.
+
+   The earlier L0, P17 and L1 conclusions did not depend on the watch: each also checks the server through the Admin SDK, which is unaffected.
+3. **New defect R1c (Codex, `src/features/legacy-import/**`).** `declineImport` keeps the pending device claim and A's pending marker. If A clicks "Not now" on an interrupted import, A is never offered again, and every other account is told to return to A. That is a **dead end no account can act on**. Originals are kept. A pending claim whose original team is gone has the same problem. Probe **D10-06d**: it does not prescribe the fix, only that A is re-offered *or* B is offered.
+4. **Not covered by a test:** the malformed-claim fail-closed branch is confirmed by code reading only.
+5. **The 28 m 50 s duration is partly explained.** Earlier ×10 runs had 20–21 failing tests consuming timeouts.
+6. **The `repeat_each=10` dispatch input** is not returned by the REST API. It is inferred from 430 = 43 × 10 and from the reporter's "10/10" counts.
+7. **Low, pre-existing:** `loadOfflineQueue()` parses `offline_operations` without a try/catch at module load, so malformed bytes would crash start-up. Also, if sign-out cleanup ever hung, "Signing out…" has no timeout. No realistic path to that was found.
+
+**Candidate 7 `d12d273`** on `claude/integration-candidate-2026-10-14e` = candidate 6 + acceptance `e9952db`. It adds tests and docs only: `src/`, `functions/`, `firestore.rules`, `package*.json`, `tests/` and `.github/` are identical to `4757eaf`.
+
+**×10, retries 0, run `38638354889`, job `116107889507`** (evidence 24):
+
+| | Chromium 156.0.8078.4 | Firefox 157.0 |
+|---|---|---|
+| PASS / FAIL / BLOCKED / SKIPPED | **440 / 10 / 0 / 0** | **439 / 11 / 0 / 0** |
+| Failures | D10-06d 10/10 (**R1c**) | D10-06d 10/10 (**R1c**); **D10-07 1/10 timeout (H2 recurred)** |
+| Release-build proof | 13/13 | |
+
+All other 44 tests per engine pass 10/10, including hardened A10, CC-W0, CC-L1 and D10-06c.
+
+**H2 recurred** on the same runtime that passed 10/10 at `4757eaf`. Firefox D10-07 has now failed 2 of 40 counted executions: 1/10 at `709e0f4`, 0/10 at `c858d1d`, 0/10 at `4757eaf`, 1/10 at `d12d273`. The annotation records only "Test timeout of 60000ms". The run's results artifact holds the step detail (14-day retention) but cannot be downloaded from this workspace. Cause **OPEN**.
+
+### 9.8 Status after candidate 7
+
+| Item | Status |
+|---|---|
+| R0, R1, R2, R5, L0, CC02/CC03 scenarios, **L1, R1b, FX-03** | **Verified fixed** (10/10 per engine at `4757eaf` and `d12d273`) |
+| **R1c** "Not now" on an interrupted import leaves a dead end | **FAIL 10/10** both engines (D10-06d). Codex repair requested on #64 |
+| **H2** Firefox D10-07 timeout | **OPEN.** Recurred 1/10 at `d12d273` |
+| FX-02 delay; genuine hidden-tab; R3; R4; touch exit | **OPEN / NOT MEASURED** as in §9.5 |
+| Physical devices, staging | **NOT MEASURED** |
+
+**MVP: NO-GO.** The test-only candidates are not to be merged.
+
+## 10. H2 and FX-02 investigation from retained evidence (2026-10-14 night)
+
+Founder decision (Coach Drew, 2026-10-14): **L1, R1b and FX-03 are accepted as PASSED** on independent testing (§9). That record stands. **MVP remains NO-GO.** No test was repeated for this investigation.
+
+### 10.1 What the retained evidence shows
+
+**FX-02** (Codex, `docs/evidence/firefox-navigation/original-trace-analysis.json` on `codex/firefox-navigation-investigation` `bd341f7`; original Firefox P14 trace, sha256 `DCC5B745…`):
+
+| t (ms, trace clock) | Event |
+|---|---|
+| 110013 → 110449 | `goto('/')` completes (436 ms) |
+| 110957 | Click on "Email me a sign-in link" starts |
+| 113977 | Playwright's first "waiting for locator" log, **3.0 s after the action started** |
+| 162362 | Locator resolved, **48.4 s later** |
+| 162510 | Click done. The action took 51.6 s in total |
+| — | Auth `sendOobCode` 200 in **2.3 ms**; all Auth calls 1.7–2.8 ms |
+
+Code reading (`src/components/auth/AuthGate.tsx`, `SignInScreen`): that button is rendered statically with the form and is disabled **only** while `busy`, which is set only during a submit. The sign-in screen itself had already been asserted visible and the email field filled. No app state hides or replaces the button at this point.
+
+So the 48 s was spent before Playwright could even *find* a statically present button, and a further 3 s passed before its first wait log. **Assessment (not proof):** the stall is in browser, driver or host responsiveness, not in app logic or the Auth emulator. It was measured on Codex's local Windows host, not CI.
+
+**H2** (Claude CI, Linux, Firefox 157). D10-07 timed out at the 60 s test limit:
+- 1/10 at `709e0f4` (job `116004898887`);
+- 0/10 at `c858d1d`;
+- 0/10 at `4757eaf`;
+- 1/10 at `d12d273` (job `116107889507`).
+
+Annotations record only "Test timeout of 60000ms exceeded." That is the message Playwright gives when the pending operation has **no deadline of its own**, and D10-07 has three such points:
+- `net.waitFor(2)`, a custom promise;
+- every action, since `actionTimeout` is unset and actions are bounded only by the test timeout;
+- the 5 s observation sleep.
+
+D10-07 also begins with the same email-link sign-in as FX-02. **Hypothesis:** H2 is the same kind of stall as FX-02. One ~48 s stall during D10-07's sign-in would exhaust its 60 s budget. **Not confirmed:** the retained annotations have no per-step timings.
+
+### 10.2 Exact artifacts needed (no new runs required)
+
+Both are retained until **2026-10-28**. They live in GitHub's blob storage, which this workspace cannot reach; anyone with repository access can download them.
+
+| Defect | Artifact | File inside | Question it answers |
+|---|---|---|---|
+| H2 (2nd) | Run `38638354889`, artifact **`11930869453`** `e2e-results-d12d273786ba76f76102ce0459e6bcb57cac0e2b` | `test-results/results.json` (D10-07 Firefox entries) and `test-results/legacy-import-D10-07-*-firefox-repeat*/trace.zip` for the failed repeat | Which step was open at 60 s? Was it one long stall or general slowness? What did the DOM look like at the time? What do the 9 passing durations look like? |
+| H2 (1st) | Run `38608330808`, artifact **`11920325300`** `e2e-results-709e0f4baf9e076a703649bbb892ec5d40a8f1c4` | Same files | Same step as the 2nd occurrence? |
+| FX-02 | Codex's local raw trace, sha256 `DCC5B745…` (deliberately not published: it carries Auth tokens) | Action `fcwl@56`: the action-log *texts* between 113977 and 162362, and the "before" DOM snapshot | Was the button in the DOM during the 48 s (browser or driver stall), or absent (app re-render)? |
+
+### 10.3 Diagnostics added for the next counted run (`303f178`, observability only)
+
+These add no assertion, timeout or retry change, so candidate 8 diagnoses itself without extra runs.
+
+The CI reporter now emits:
+1. per-test min/median/max duration;
+2. for every failed execution: the step still open at the end (with spec:line), the slowest steps and every error line;
+3. a census of every action or expect step ≥ 10 s across **all** executions, passes included, so an FX-02-like stall is visible even when the test passes.
+
+D10-07's custom waits and the sign-in phases are now named steps. All of this was self-tested locally with a hung custom wait and a hung locator, and both were attributed correctly.
+
+A stricter `actionTimeout` (Codex used 10 s in their own lane) would make a stall fail *at* the responsible step. It is **not** applied: it would change the acceptance suite's failure semantics against every earlier run. It is offered as an option instead.
+
+**Status:** H2 OPEN. FX-02 OPEN. Genuine hidden-tab behaviour, devices and staging NOT MEASURED.
+
+### 10.4 First CI run with the diagnostics (push run `38647098863`, job `116136925139`, acceptance branch `183ff6a`)
+
+This was the normal push run of the acceptance branch. That branch **does not contain #64**, so CC-L1 and D10-06c fail there as expected. It is a reporter validation, **not acceptance evidence**.
+- **D10-07 baseline duration: 7.2 s in Firefox, 6.3 s in Chromium.** A 60 s timeout therefore implies ~53 s of extra time in one execution. That matches the size of the FX-02 stall (51.6 s for one click) and is **not** consistent with general slowness. H2 = FX-02-type stall remains a hypothesis; the artifacts in §10.2 or the next failure's diag annotation would confirm or refute it.
+- **D10-06d passes on code without #64.** With R1b broken, coach B is simply offered the plays. D10-06d is meaningful **only together with D10-06c** (R1b 10/10). For candidate 8 it will be paired with positive anchors for the owner's resume path, per the founder's R1c guidance.
+- Reporter fix: "last step" now ranks by end time, with a step still open at the end ranked last. It had named an instant check instead of the failing 10 s expect in one Chromium case. Re-self-tested locally.
+
+### 10.5 Classification of Codex's local findings (#68 `d617d2c`, §11 appendix)
+
+Codex's §11 preserves §§1–10 of `7b4747f` unchanged apart from two blank lines at the join (checked by diff). Its local results are Codex-run, Windows-host evidence. They are linked here, not merged into the independent counts.
+
+| Item | Evidence | Classification | Action (owner) |
+|---|---|---|---|
+| **H2 local** (D10-07 Firefox run03, `4757eaf`) | `d10-07-run03-last-actions.json`: the Bravo "Team created successfully!" expect started **100 ms** after the Create click. "Switch to" was then missing for 56.5 s; the final Teams DOM was Alpha-only | **Harness false confirmation (Claude).** The generic toast lives 5 s, so Alpha's toast confirmed Bravo while Bravo was still being created. The underlying stall is the team-creation client completion (as N2), cause unresolved. The older CI H2 failures may be this or an FX-02-type stall; still unconfirmed without the §10.2 artifacts | **Fixed in harness** `5752d2b`: `createTeamViaUI` now requires the dialog closed **and** a heading with exactly that team's name. A real stall now fails *at team creation*, with modal/creating/Firestore diagnostics. H2 stays **OPEN** |
+| **N2** (D10-05 Firefox run10) | Team in Firestore; UI still "Creating…" after 11.6 s | `createTeam` resolved late or never in the client after the server write. App/SDK timing (TeamContext, Codex client) versus host: **unresolved**. Not a data or overwrite defect: those assertions were not reached | Tracked **OPEN** (Codex client / Claude harness). The new helper diagnostics apply |
+| **N1** (D10-01 FF02/07, Chromium08) | One-shot `allInnerTexts` returned `[]` 68 ms into opening the library; server copies, decision and originals all verified | **Harness race (Claude).** "No plays saved." renders both while the cloud query loads and when the list is empty | **Fixed** `5752d2b`: positive library checks poll. The **negative** checks (D10-02, D10-06), which could have passed vacuously, now first wait for a server-seeded control play of the same coach and team |
+| **F1** (functions, explicit parallel discovery, Windows) | First integration request: `ProviderError unavailable "openai error: Error"`; serial run 73/73 | **Test-environment connection failure to the local mock server.** An `APIConnectionError` produces exactly that message and category (reproduced locally). The product failed closed as designed. Not a provider call, not a product defect | `5752d2b`: the test now records the raw SDK error and its cause chain (canary redacted). Also `npm test` discovered **0 tests on Windows** (quoted glob, cmd.exe); now unquoted, Node 22 expands it. 73/73, lint clean |
+| **W1** (NOT_FOUND on `userProfiles/<uid>`) | `onPlayCreated`/`onPracticePlanCreated` update `userProfiles`, which is created only by `createUserProfile` on `users/{uid}` | **Dormant product feature, not just a fixture gap.** Nothing creates `users/{uid}`: clients are denied by rules and there is no server path. Per-user stats are therefore never recorded in any environment. The errors are caught and logged. No data loss, no security impact; no client can read `userProfiles` | Recorded. Remove the dead stats updates or provision profiles at beta grant: a product decision, **not** changed now (no new features) |
+
+The acceptance-branch push CI on `5752d2b` (job `116161937978`): every test that uses the changed helpers passes in both engines. The only failures are the expected pre-#64 CC-L1 and D10-06c. Rules, functions, web-auth and bundle-scan jobs are green. This is harness validation, **not** acceptance.
