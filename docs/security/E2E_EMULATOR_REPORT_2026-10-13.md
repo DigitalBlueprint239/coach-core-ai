@@ -935,3 +935,93 @@ Historical runs and failures in §14.3–14.7 and evidence 33–36 are unchanged
 | N3-D5 | 5/5: 40 creations, **N3 not reproduced** | 5/5: 40 creations, not reproduced |
 
 **Status:** N2 repair **pending Codex's exact SHA**. N2's natural CI trigger is **not proven**. **N3 unresolved** (not reproduced in 80 targeted creations). MVP **NO-GO**.
+
+### 14.9 Independent validation of the N2 repair (PR #71, runtime `bdb06ae`) (2026-10-15)
+
+§14.1–14.8 and evidence 33–37 are unchanged. Candidate 10 `186a743`, candidate 9b, #67 and Codex's app files were not edited.
+
+**What was tested**
+- Runtime under test: `bdb06ae6d39ff9ed3fee7000f93468c8cf2f8fe7` (#71). The PR documentation head `dde8be9` was not tested as a runtime; relative to `bdb06ae` it changes only files under `docs/`, verified with `git diff --name-only`.
+- Candidate: `claude/n2-repair-acceptance-2026-10-15` @ `8ff5521`. Its `src/`, `functions/`, `public/`, `firestore.rules` and build configuration are byte-identical to `bdb06ae` (evidence 38).
+- Test harness: `26f7df8`, Claude files only.
+- Bounded source diff `186a743..bdb06ae`: 8 files under `src/`, +661/−76, plus Codex's own Playwright suite `tests/team-creation/` (3 files, +119; not run by this harness):
+  - `teamCreation.ts`, `teamCreationGateway.ts`, `TeamContext.tsx`, `TeamManagement.tsx`;
+  - their unit tests.
+- Inherited unmerged history on #71 was not treated as N2 work.
+- Implementation verified by reading the source. Team creation is a REST `POST …/documents:commit` with `currentDocument.exists=false` to the fixed path `teams/{operationId}`, followed by an authoritative `GET …/documents/teams/{id}` readback:
+  - success requires owner, name and code to match;
+  - `ALREADY_EXISTS` or `FAILED_PRECONDITION` is never treated as success without a matching readback.
+- The operation journal `coachcore:v1:{project}:{uid}:team-create` is written before the request.
+- The listener confirms a team only from server snapshots: not from cache, no pending writes.
+
+**Harness changes (no product code, no assertion, timeout or retry changes)**
+- New REST-path acceptance tests N2-R1…R6 in `e2e/tests/n2.spec.ts`. They inject faults with `page.route` on the REST commit and readback URLs, not on the old WebChannel.
+- The original N2-A1 and N2-A2, and D0–D5, are kept byte-identical in their bodies.
+- Added `adminTeamsFull`, and an `R` kind for REST readbacks in the network log.
+- CI is split into 4 parallel per-project jobs, because the full ×10 suite (~165 min) exceeded the unchanged 120-minute job limit. `--pass-with-no-tests` covers grep runs that select no phone tests.
+- Status requirement is unchanged: `role=status` or `role=alert` matching `/saving|connection|offline|retry/i` within **8 s**.
+
+| Test | Fault | Required |
+|---|---|---|
+| N2-R1 | commit held 8 s (not at server) | status ≤ 8 s; recovers; exactly one team = journal op (id, name, code, owner) |
+| N2-R1b | commit reset during 8 s outage | same |
+| N2-R1c | commit reaches server, response dropped | no false success; recovers; exactly one team at original id |
+| N2-R2 | commit pending → Cancel → My Week → Teams → retry | pending + Resume visible; same op id; exactly one team |
+| N2-R3 | commit pending → page reload | pending survives; same op id; exactly one team |
+| N2-R4 | A pending → sign out → B → A | B sees no Resume and no A team; nothing is created under B; A recovers once |
+| N2-R5 | fake commit 200, nothing on server | readback blocks success; recovers once at original id |
+| N2-R6 | different team pre-placed at op id | no success shown (also after Check and retry); existing doc unchanged; nothing created with submitted name |
+
+**Results (retries 0, workers 1, Chromium 156.0.8078.4 and Firefox 157.0, Playwright 1.64.0, demo-project emulators)**
+
+*Diagnostics:* N2 and N3 tests ×10, desktop. Run `38767248279`, evidence 39, **not acceptance**.
+
+| | Chromium | Firefox |
+|---|---|---|
+| N2-R1…R6 (8 tests) | 80/80 | 80/80 |
+| original N2-A1 | 10/10 | 10/10 |
+| original N2-A2 | **FAIL 10/10** | **FAIL 10/10** |
+| N2-D0, D1, D3, D4 | 40/40 | 40/40 |
+| N2-D2 | **FAIL 10/10** | **FAIL 10/10** |
+| N3-D5 (8 creations each) | 10/10, 80 creations, N3 not reproduced | 10/10, 80 creations, N3 not reproduced |
+
+*Full acceptance matrix:* ×10, no grep, retries 0. Run `38774326491`, evidence 40.
+
+| Job | Total pass/fail | Acceptance | Diagnostic | Failures |
+|---|---|---|---|---|
+| chromium 1280×720 | 626/14 | 570/10 | 56/4 | N2-A2 10/10; N2-D2 4/10 |
+| firefox 1280×720 | 626/14 | 570/10 | 56/4 | N2-A2 10/10; N2-D2 4/10 |
+| phone-chromium 390×844 | 149/1 | 149/1 | 0/0 | D10-06e 1/10 (line 425) |
+| phone-firefox 390×844 | 150/0 | 150/0 | 0/0 | none |
+| **Total** | **1551/29** | **1439/21** | **112/8** | |
+
+- In both desktop engines, N2-R1…R6 passed 10/10 each.
+- N3-D5 passed 10/10 per engine: another 160 creations, N3 not reproduced.
+- Release-build proof: 13/13 in every job.
+
+**Classification (evidence-based; causes stated only where shown)**
+
+1. **8-second status: met in every R1/R1b/R1c execution.** The qualifying status is the dialog's `role=status` "Saving your team. You may leave this dialog…", which appears at submit. Codex's 10-second "Still saving…" escalation is not what satisfies the requirement. Screenshots are in `docs/evidence/n2-repair-validation-2026-10-15/`.
+2. **Original N2-A2 (acceptance) fails 10/10 on `bdb06ae`. Recorded as a failure, not relabelled.** Its fault holds the SDK WebChannel Write stream, which the repaired REST path does not use, so the first create is confirmed at once. The test then shows one of two things:
+   - a 60 s timeout at the Cancel click (`n2.spec.ts:212`), because the dialog has already closed; or
+   - `teams=2` after it submits the same name again as a new, deliberate creation (`savedAfterRelease` 2–5 ms).
+
+   No duplicate of a *pending* operation was observed. N2-R2 and N2-R3, which hold the real REST commit, pass 10/10 in both runs. **Open product question for Coach Drew and Codex:** should a coach be able to create two teams with the same name? Today they can.
+3. **N2-D2 (diagnostic):** same fault-model mismatch, 10/10 and 4/10.
+4. **D10-06e line 425, "original team selected": inherited intermittent failure, not introduced by #71.**
+   - Targeted D10-06e ×50 on `8ff5521` (evidence 41): chromium 2/50 failures at line 425; phone-chromium 1/50, a different assertion at line 30 (`currentTeamId` undefined right after team creation); firefox and phone-firefox 50/50.
+   - Same ×50 on the **pre-repair runtime** `a61dfcb` = `186a743`, with an identical D10-06e harness (evidence 42): chromium **2/50 at line 425**; the other three projects 50/50.
+   - Both checks read `localStorage.currentTeamId` once, right after a UI step. Whether the cause is a harness timing race or app-side lag in persisting the selection is **not proven**.
+   - The line-30 variant was seen only on `bdb06ae` (1 of 200 executions versus 0 of 200 on the baseline). This is too few to call a regression. `bdb06ae` does move the `currentTeamId` write into the snapshot handler, and the team confirmed by the create path does not write it. Codex should review this.
+5. **Not tested:** a network failure *of the readback request itself*. R5 and R6 cover readback that finds no team and readback that finds a different team. Natural (unfaulted) SDK stalls were not reproduced.
+
+**Observations for Codex (not N2 acceptance results)**
+- The alert shows the raw browser text "Failed to fetch".
+- The Teams panel and the create dialog render unstyled. This is identical on `069c8f1`, `186a743` and `bdb06ae`, so it predates #71.
+
+**Status**
+- REST transport repair: **passes every REST-path acceptance test 10/10 in both desktop engines.**
+- The full matrix is **not clean**: 21 acceptance failures, all classified above. Original N2-A2 stays a recorded failure pending a decision on its fault model.
+- N3: not reproduced in 320 targeted creations on `bdb06ae` (D5 ×10 × 2 engines × 2 runs), plus 80 on the pre-repair baseline (§14.8). **Not claimed fixed.**
+- Natural SDK stall cause: **unresolved**.
+- No merge, deployment or live-data testing. MVP **NO-GO**.
