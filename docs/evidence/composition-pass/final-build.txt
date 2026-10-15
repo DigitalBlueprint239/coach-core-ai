@@ -10,7 +10,7 @@
 Creating an optimized production build...
 Compiled with warnings.
 
-[eslint] 
+[eslint]
 src\components\SmartPlaybook\DebugPanel.js
   Line 90:9:    The 'safeResults' conditional could make the dependencies of useMemo Hook (at line 95) change on every render. To fix this, wrap the initialization of 'safeResults' in its own useMemo() Hook   react-hooks/exhaustive-deps
   Line 90:9:    The 'safeResults' conditional could make the dependencies of useMemo Hook (at line 104) change on every render. To fix this, wrap the initialization of 'safeResults' in its own useMemo() Hook  react-hooks/exhaustive-deps

@@ -15,3 +15,5 @@ Visual inspection: desktop1440x900 and1280x800, phone375x812, narrow490 bottom c
 Initial browser selector failure matched hidden team text; corrected to assert direct visible demo text. Initial failure retained separately; no acceptance assertions/timeouts/retries changed.
 Inherited archived/embedded @ts-nocheck files unchanged, none added; firestore.ts offline queue intact and quarantined replay unchanged.
 No auth/team/persistence/rules/functions/AI/acceptance repairs/e2e/lockfile changes. No merge/deploy. Functional emulator walkthrough requested separately from Claude via issue39; not delivered or claimed here. No physical-device testing claimed.
+
+Evidence text copies normalize Windows CRLF to LF and remove trailing console padding for versioning; original command logs remain in work/. No application source changed in this formatting correction.
