@@ -1,32 +1,64 @@
-
-> coach-core-ai@0.1.0 test
-> react-scripts test --watchAll=false --runInBand --runTestsByPath src/contexts/teamCreation.test.ts src/contexts/teamCreationGateway.test.ts src/components/TeamManagement.creation.test.tsx
-
-PASS src/contexts/teamCreation.test.ts (23.524 s)
-PASS src/components/TeamManagement.creation.test.tsx (37.557 s)
-  ● Console
-
-    console.error
-      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
-
-      20 |   mockCreation = {operation, phase: 'unconfirmed', error: null};
-      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
-    > 22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
-         |         ^
-      23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
-      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
-      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
-
-      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-acceptance-verification/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
-      at ../main-acceptance-verification/node_modules/@testing-library/react/dist/act-compat.js:63:25
-      at renderRoot (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:159:26)
-      at render (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:246:10)
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:22:9)
-
-PASS src/contexts/teamCreationGateway.test.ts
-
-Test Suites: 3 passed, 3 total
-Tests:       20 passed, 20 total
-Snapshots:   0 total
-Time:        130.874 s
-Ran all test suites within paths "src/contexts/teamCreation.test.ts", "src/contexts/teamCreationGateway.test.ts", "src/components/TeamManagement.creation.test.tsx".
+
+
+> coach-core-ai@0.1.0 test
+
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/contexts/teamCreation.test.ts src/contexts/teamCreationGateway.test.ts src/components/TeamManagement.creation.test.tsx
+
+
+
+PASS src/contexts/teamCreation.test.ts (23.524 s)
+
+PASS src/components/TeamManagement.creation.test.tsx (37.557 s)
+
+  ● Console
+
+
+
+    console.error
+
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+
+
+      20 |   mockCreation = {operation, phase: 'unconfirmed', error: null};
+
+      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
+
+    > 22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
+
+         |         ^
+
+      23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
+
+      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
+
+      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
+
+
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-acceptance-verification/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+
+      at ../main-acceptance-verification/node_modules/@testing-library/react/dist/act-compat.js:63:25
+
+      at renderRoot (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:159:26)
+
+      at render (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:246:10)
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:22:9)
+
+
+
+PASS src/contexts/teamCreationGateway.test.ts
+
+
+
+Test Suites: 3 passed, 3 total
+
+Tests:       20 passed, 20 total
+
+Snapshots:   0 total
+
+Time:        130.874 s
+
+Ran all test suites within paths "src/contexts/teamCreation.test.ts", "src/contexts/teamCreationGateway.test.ts", "src/components/TeamManagement.creation.test.tsx".
+

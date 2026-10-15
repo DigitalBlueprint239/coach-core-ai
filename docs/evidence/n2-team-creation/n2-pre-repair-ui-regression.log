@@ -1,267 +1,534 @@
-
-> coach-core-ai@0.1.0 test
-> react-scripts test --watchAll=false --runInBand --runTestsByPath src/components/TeamManagement.creation.test.tsx
-
-  console.error
-    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
-
-      20 |   mockCreation = {operation, phase: 'unconfirmed', error: null};
-      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
-    > 22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
-         |         ^
-      23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
-      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
-      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
-
-      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-acceptance-verification/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
-      at ../main-acceptance-verification/node_modules/@testing-library/react/dist/act-compat.js:63:25
-      at renderRoot (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:159:26)
-      at render (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:246:10)
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:22:9)
-      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
-      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
-      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
-      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
-
-FAIL src/components/TeamManagement.creation.test.tsx (16.952 s)
-  × remounted modal retains pending team, locks new name and offers safe retry instead of a second create (668 ms)
-  × pending dialog may be dismissed, then reopened without losing its operation (544 ms)
-  × server-confirmed state closes a remounted pending modal, never an unconfirmed state (40 ms)
-  × account switch resets the previous modal draft and suppresses its late success (202 ms)
-  × authentication failure is visible; no false success or silent spinning (not a claim to fix N3) (939 ms)
-
-  ● remounted modal retains pending team, locks new name and offers safe retry instead of a second create
-
-    expect(element).toHaveValue(Pending Owls)
-
-    Expected the element to have value:
-      Pending Owls
-    Received:
-
-      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
-      22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
-    > 23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
-         |                                              ^
-      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
-      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
-      26 |   await act(async () => {fireEvent.click(screen.getByRole('button', {name: 'Check and retry'}));});
-
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:23:46)
-      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
-      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
-      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
-      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
-
-  ● pending dialog may be dismissed, then reopened without losing its operation
-
-    expect(element).toHaveValue(Pending Owls)
-
-    Expected the element to have value:
-      Pending Owls
-    Received:
-
-      37 |   view.rerender(<CreateTeamModal isOpen={false} onClose={close}/>);
-      38 |   view.rerender(<CreateTeamModal isOpen onClose={close}/>);
-    > 39 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
-         |                                              ^
-      40 |   expect(screen.getByRole('button', {name: 'Creating...'})).toBeDisabled();
-      41 |   expect(mockCreate).not.toHaveBeenCalled();
-      42 | });
-
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:39:46)
-      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
-      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
-      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
-      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
-
-  ● server-confirmed state closes a remounted pending modal, never an unconfirmed state
-
-    expect(jest.fn()).toHaveBeenCalledTimes(expected)
-
-    Expected number of calls: 1
-    Received number of calls: 0
-
-      49 |   mockCreation = {operation, phase: 'confirmed', error: null};
-      50 |   view.rerender(<CreateTeamModal isOpen onClose={close}/>);
-    > 51 |   expect(close).toHaveBeenCalledTimes(1);
-         |                 ^
-      52 |   expect(mockToast).toHaveBeenCalledWith('Team created successfully!', 'success');
-      53 | });
-      54 |
-
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:51:17)
-      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
-      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
-      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
-      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
-
-  ● account switch resets the previous modal draft and suppresses its late success
-
-    expect(element).toHaveValue()
-
-    Expected the element to have value:
-
-    Received:
-      A private draft
-
-      62 |   mockAccount = 'B';
-      63 |   view.rerender(<CreateTeamModal isOpen onClose={close}/>);
-    > 64 |   expect(screen.getByLabelText('Team Name')).toHaveValue('');
-         |                                              ^
-      65 |   await act(async () => {resolve(operation.id);});
-      66 |   expect(close).not.toHaveBeenCalled();
-      67 |   expect(mockToast).not.toHaveBeenCalled();
-
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:64:46)
-      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
-      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
-      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
-      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
-
-  ● authentication failure is visible; no false success or silent spinning (not a claim to fix N3)
-
-    TestingLibraryElementError: Unable to find an accessible element with the role "alert"
-
-    Here are the accessible roles:
-
-      heading:
-
-      Name "Create New Team":
-      <h2
-        class="text-xl font-semibold text-gray-900"
-      />
-
-      --------------------------------------------------
-      button:
-
-      Name "":
-      <button
-        class="text-gray-400 hover:text-gray-600 transition-colors"
-      />
-
-      Name "Cancel":
-      <button
-        class="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-        type="button"
-      />
-
-      Name "Create Team":
-      <button
-        class="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        type="submit"
-      />
-
-      --------------------------------------------------
-      textbox:
-
-      Name "Team Name":
-      <input
-        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-        id="team-name"
-        placeholder="Enter your team name"
-        required=""
-        type="text"
-        value="Owls"
-      />
-
-      --------------------------------------------------
-
-    Ignored nodes: comments, script, style
-    <body>
-      <div>
-        <div
-          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-        >
-          <div
-            class="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-200 ease-out"
-          >
-            <div
-              class="p-6"
-            >
-              <div
-                class="flex items-center justify-between mb-6"
-              >
-                <h2
-                  class="text-xl font-semibold text-gray-900"
-                >
-                  Create New Team
-                </h2>
-                <button
-                  class="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <svg
-                    class="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M6 18L18 6M6 6l12 12"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <form>
-                <div
-                  class="mb-6"
-                >
-                  <label
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    for="team-name"
-                  >
-                    Team Name
-                  </label>
-                  <input
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    id="team-name"
-                    placeholder="Enter your team name"
-                    required=""
-                    type="text"
-                    value="Owls"
-                  />
-                </div>
-                <div
-                  class="flex justify-end space-x-3"
-                >
-                  <button
-                    class="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-                    type="button"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    class="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    type="submit"
-                  >
-                    Create Team
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </body>
-
-      73 |   fireEvent.change(screen.getByLabelText('Team Name'), {target: {value: 'Owls'}});
-      74 |   await act(async () => {fireEvent.click(screen.getByRole('button', {name: 'Create Team'}));});
-    > 75 |   expect(screen.getByRole('alert')).toHaveTextContent('User must be authenticated');
-         |                 ^
-      76 |   expect(screen.getByRole('button', {name: 'Create Team'})).toBeEnabled();
-      77 |   expect(mockToast).not.toHaveBeenCalled();
-      78 | });
-
-      at Object.getElementError (../main-acceptance-verification/node_modules/@testing-library/dom/dist/config.js:37:19)
-      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
-      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
-      at getByRole (../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
-      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:75:17)
-
-Test Suites: 1 failed, 1 total
-Tests:       5 failed, 5 total
-Snapshots:   0 total
-Time:        69.687 s
-Ran all test suites within paths "src/components/TeamManagement.creation.test.tsx".
+
+
+> coach-core-ai@0.1.0 test
+
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/components/TeamManagement.creation.test.tsx
+
+
+
+  console.error
+
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+
+
+      20 |   mockCreation = {operation, phase: 'unconfirmed', error: null};
+
+      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
+
+    > 22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
+
+         |         ^
+
+      23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
+
+      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
+
+      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
+
+
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-acceptance-verification/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+
+      at ../main-acceptance-verification/node_modules/@testing-library/react/dist/act-compat.js:63:25
+
+      at renderRoot (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:159:26)
+
+      at render (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:246:10)
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:22:9)
+
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+
+FAIL src/components/TeamManagement.creation.test.tsx (16.952 s)
+
+  × remounted modal retains pending team, locks new name and offers safe retry instead of a second create (668 ms)
+
+  × pending dialog may be dismissed, then reopened without losing its operation (544 ms)
+
+  × server-confirmed state closes a remounted pending modal, never an unconfirmed state (40 ms)
+
+  × account switch resets the previous modal draft and suppresses its late success (202 ms)
+
+  × authentication failure is visible; no false success or silent spinning (not a claim to fix N3) (939 ms)
+
+
+
+  ● remounted modal retains pending team, locks new name and offers safe retry instead of a second create
+
+
+
+    expect(element).toHaveValue(Pending Owls)
+
+
+
+    Expected the element to have value:
+
+      Pending Owls
+
+    Received:
+
+
+
+      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
+
+      22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
+
+    > 23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
+
+         |                                              ^
+
+      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
+
+      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
+
+      26 |   await act(async () => {fireEvent.click(screen.getByRole('button', {name: 'Check and retry'}));});
+
+
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:23:46)
+
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+
+  ● pending dialog may be dismissed, then reopened without losing its operation
+
+
+
+    expect(element).toHaveValue(Pending Owls)
+
+
+
+    Expected the element to have value:
+
+      Pending Owls
+
+    Received:
+
+
+
+      37 |   view.rerender(<CreateTeamModal isOpen={false} onClose={close}/>);
+
+      38 |   view.rerender(<CreateTeamModal isOpen onClose={close}/>);
+
+    > 39 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
+
+         |                                              ^
+
+      40 |   expect(screen.getByRole('button', {name: 'Creating...'})).toBeDisabled();
+
+      41 |   expect(mockCreate).not.toHaveBeenCalled();
+
+      42 | });
+
+
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:39:46)
+
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+
+  ● server-confirmed state closes a remounted pending modal, never an unconfirmed state
+
+
+
+    expect(jest.fn()).toHaveBeenCalledTimes(expected)
+
+
+
+    Expected number of calls: 1
+
+    Received number of calls: 0
+
+
+
+      49 |   mockCreation = {operation, phase: 'confirmed', error: null};
+
+      50 |   view.rerender(<CreateTeamModal isOpen onClose={close}/>);
+
+    > 51 |   expect(close).toHaveBeenCalledTimes(1);
+
+         |                 ^
+
+      52 |   expect(mockToast).toHaveBeenCalledWith('Team created successfully!', 'success');
+
+      53 | });
+
+      54 |
+
+
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:51:17)
+
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+
+  ● account switch resets the previous modal draft and suppresses its late success
+
+
+
+    expect(element).toHaveValue()
+
+
+
+    Expected the element to have value:
+
+
+
+    Received:
+
+      A private draft
+
+
+
+      62 |   mockAccount = 'B';
+
+      63 |   view.rerender(<CreateTeamModal isOpen onClose={close}/>);
+
+    > 64 |   expect(screen.getByLabelText('Team Name')).toHaveValue('');
+
+         |                                              ^
+
+      65 |   await act(async () => {resolve(operation.id);});
+
+      66 |   expect(close).not.toHaveBeenCalled();
+
+      67 |   expect(mockToast).not.toHaveBeenCalled();
+
+
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:64:46)
+
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+
+  ● authentication failure is visible; no false success or silent spinning (not a claim to fix N3)
+
+
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "alert"
+
+
+
+    Here are the accessible roles:
+
+
+
+      heading:
+
+
+
+      Name "Create New Team":
+
+      <h2
+
+        class="text-xl font-semibold text-gray-900"
+
+      />
+
+
+
+      --------------------------------------------------
+
+      button:
+
+
+
+      Name "":
+
+      <button
+
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+
+      />
+
+
+
+      Name "Cancel":
+
+      <button
+
+        class="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+
+        type="button"
+
+      />
+
+
+
+      Name "Create Team":
+
+      <button
+
+        class="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+
+        type="submit"
+
+      />
+
+
+
+      --------------------------------------------------
+
+      textbox:
+
+
+
+      Name "Team Name":
+
+      <input
+
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+
+        id="team-name"
+
+        placeholder="Enter your team name"
+
+        required=""
+
+        type="text"
+
+        value="Owls"
+
+      />
+
+
+
+      --------------------------------------------------
+
+
+
+    Ignored nodes: comments, script, style
+
+    <body>
+
+      <div>
+
+        <div
+
+          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+
+        >
+
+          <div
+
+            class="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-200 ease-out"
+
+          >
+
+            <div
+
+              class="p-6"
+
+            >
+
+              <div
+
+                class="flex items-center justify-between mb-6"
+
+              >
+
+                <h2
+
+                  class="text-xl font-semibold text-gray-900"
+
+                >
+
+                  Create New Team
+
+                </h2>
+
+                <button
+
+                  class="text-gray-400 hover:text-gray-600 transition-colors"
+
+                >
+
+                  <svg
+
+                    class="w-6 h-6"
+
+                    fill="none"
+
+                    stroke="currentColor"
+
+                    viewBox="0 0 24 24"
+
+                  >
+
+                    <path
+
+                      d="M6 18L18 6M6 6l12 12"
+
+                      stroke-linecap="round"
+
+                      stroke-linejoin="round"
+
+                      stroke-width="2"
+
+                    />
+
+                  </svg>
+
+                </button>
+
+              </div>
+
+              <form>
+
+                <div
+
+                  class="mb-6"
+
+                >
+
+                  <label
+
+                    class="block text-sm font-medium text-gray-700 mb-2"
+
+                    for="team-name"
+
+                  >
+
+                    Team Name
+
+                  </label>
+
+                  <input
+
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+
+                    id="team-name"
+
+                    placeholder="Enter your team name"
+
+                    required=""
+
+                    type="text"
+
+                    value="Owls"
+
+                  />
+
+                </div>
+
+                <div
+
+                  class="flex justify-end space-x-3"
+
+                >
+
+                  <button
+
+                    class="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+
+                    type="button"
+
+                  >
+
+                    Cancel
+
+                  </button>
+
+                  <button
+
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+
+                    type="submit"
+
+                  >
+
+                    Create Team
+
+                  </button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </body>
+
+
+
+      73 |   fireEvent.change(screen.getByLabelText('Team Name'), {target: {value: 'Owls'}});
+
+      74 |   await act(async () => {fireEvent.click(screen.getByRole('button', {name: 'Create Team'}));});
+
+    > 75 |   expect(screen.getByRole('alert')).toHaveTextContent('User must be authenticated');
+
+         |                 ^
+
+      76 |   expect(screen.getByRole('button', {name: 'Create Team'})).toBeEnabled();
+
+      77 |   expect(mockToast).not.toHaveBeenCalled();
+
+      78 | });
+
+
+
+      at Object.getElementError (../main-acceptance-verification/node_modules/@testing-library/dom/dist/config.js:37:19)
+
+      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+
+      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+
+      at getByRole (../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:75:17)
+
+
+
+Test Suites: 1 failed, 1 total
+
+Tests:       5 failed, 5 total
+
+Snapshots:   0 total
+
+Time:        69.687 s
+
+Ran all test suites within paths "src/components/TeamManagement.creation.test.tsx".
+

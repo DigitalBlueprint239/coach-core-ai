@@ -1,19 +1,38 @@
-[WebServer] (node:34148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
-[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-
-Running 8 tests using 1 worker
-
-(node:15896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
-(Use `node --trace-warnings ...` to show where the warning was created)
-  ok 1 [chromium] › tests\team-creation\team-creation.spec.ts:18:5 › pending create survives cancel/navigation: no second submit, exactly one confirmed server team (5.9s)
-  ok 2 [chromium] › tests\team-creation\team-creation.spec.ts:37:5 › response lost after server commit: safe retry confirms the same id without rewriting (1.5s)
-  ok 3 [chromium] › tests\team-creation\team-creation.spec.ts:60:5 › ten-second unconfirmed status permits retry at the same identity, never false success (13.4s)
-  ok 4 [chromium] › tests\team-creation\team-creation.spec.ts:81:5 › refresh and account switch preserve A operation without offering it or sending it under B (3.0s)
-(node:26960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
-(Use `node --trace-warnings ...` to show where the warning was created)
-  ok 5 [firefox] › tests\team-creation\team-creation.spec.ts:18:5 › pending create survives cancel/navigation: no second submit, exactly one confirmed server team (5.1s)
-  ok 6 [firefox] › tests\team-creation\team-creation.spec.ts:37:5 › response lost after server commit: safe retry confirms the same id without rewriting (2.3s)
-  ok 7 [firefox] › tests\team-creation\team-creation.spec.ts:60:5 › ten-second unconfirmed status permits retry at the same identity, never false success (12.6s)
-  ok 8 [firefox] › tests\team-creation\team-creation.spec.ts:81:5 › refresh and account switch preserve A operation without offering it or sending it under B (6.5s)
-
-  8 passed (56.0s)
+[WebServer] (node:34148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+
+Running 8 tests using 1 worker
+
+
+
+(node:15896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+  ok 1 [chromium] › tests\team-creation\team-creation.spec.ts:18:5 › pending create survives cancel/navigation: no second submit, exactly one confirmed server team (5.9s)
+
+  ok 2 [chromium] › tests\team-creation\team-creation.spec.ts:37:5 › response lost after server commit: safe retry confirms the same id without rewriting (1.5s)
+
+  ok 3 [chromium] › tests\team-creation\team-creation.spec.ts:60:5 › ten-second unconfirmed status permits retry at the same identity, never false success (13.4s)
+
+  ok 4 [chromium] › tests\team-creation\team-creation.spec.ts:81:5 › refresh and account switch preserve A operation without offering it or sending it under B (3.0s)
+
+(node:26960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+  ok 5 [firefox] › tests\team-creation\team-creation.spec.ts:18:5 › pending create survives cancel/navigation: no second submit, exactly one confirmed server team (5.1s)
+
+  ok 6 [firefox] › tests\team-creation\team-creation.spec.ts:37:5 › response lost after server commit: safe retry confirms the same id without rewriting (2.3s)
+
+  ok 7 [firefox] › tests\team-creation\team-creation.spec.ts:60:5 › ten-second unconfirmed status permits retry at the same identity, never false success (12.6s)
+
+  ok 8 [firefox] › tests\team-creation\team-creation.spec.ts:81:5 › refresh and account switch preserve A operation without offering it or sending it under B (6.5s)
+
+
+
+  8 passed (56.0s)
+

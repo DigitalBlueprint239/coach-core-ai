@@ -1,46 +1,92 @@
-src/components/FirebaseTest.tsx(5,22): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
-src/components/SmartPlaybook/SmartPlaybook.tsx(732,108): error TS18047: 'currentTeam' is possibly 'null'.
-src/contexts/TeamContext.tsx(13,8): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/contexts/TeamContext.tsx(297,8): error TS7006: Parameter 'snapshot' implicitly has an 'any' type.
-src/contexts/TeamContext.tsx(300,27): error TS7006: Parameter 'doc' implicitly has an 'any' type.
-src/contexts/TeamContext.tsx(318,8): error TS7006: Parameter 'err' implicitly has an 'any' type.
-src/contexts/teamCreation.test.ts(40,10): error TS2532: Object is possibly 'undefined'.
-src/contexts/teamCreation.test.ts(40,31): error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
-src/contexts/teamCreation.test.ts(44,37): error TS2532: Object is possibly 'undefined'.
-src/contexts/teamCreation.test.ts(44,39): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
-src/e2e-support/emulator-hooks.ts(10,27): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
-src/e2e-support/emulator-hooks.ts(11,63): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
-src/e2e-support/emulator-hooks.ts(12,32): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/e2e-support/emulator-hooks.ts(13,111): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/e2e-support/emulator-hooks.ts(50,66): error TS7006: Parameter 'tx' implicitly has an 'any' type.
-src/features/legacy-import/__tests__/firebase-import.test.ts(5,72): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/features/legacy-import/firebase-import.ts(1,84): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/features/legacy-import/firebase-import.ts(21,30): error TS7006: Parameter 'd' implicitly has an 'any' type.
-src/features/legacy-import/firebase-import.ts(22,10): error TS7006: Parameter 'd' implicitly has an 'any' type.
-src/features/persistence/__tests__/gateway.test.ts(3,69): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/features/persistence/gateway.ts(1,110): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/features/persistence/gateway.ts(19,31): error TS7006: Parameter 'd' implicitly has an 'any' type.
-src/features/persistence/gateway.ts(19,66): error TS7006: Parameter 'd' implicitly has an 'any' type.
-src/features/persistence/gateway.ts(22,40): error TS7006: Parameter 'tx' implicitly has an 'any' type.
-src/firebase.ts(1,48): error TS7016: Could not find a declaration file for module 'firebase/app'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/app/dist/index.cjs.js' implicitly has an 'any' type.
-src/firebase.ts(2,57): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
-src/firebase.ts(3,72): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/firebase.ts(4,74): error TS7016: Could not find a declaration file for module 'firebase/storage'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/storage/dist/index.cjs.js' implicitly has an 'any' type.
-src/firebase.ts(5,56): error TS7016: Could not find a declaration file for module 'firebase/functions'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/functions/dist/index.cjs.js' implicitly has an 'any' type.
-src/firebase.ts(6,46): error TS7016: Could not find a declaration file for module 'firebase/analytics'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/analytics/dist/index.cjs.js' implicitly has an 'any' type.
-src/hooks/useAuth.tsx(28,8): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
-src/hooks/useAuth.tsx(235,47): error TS7006: Parameter 'u' implicitly has an 'any' type.
-src/services/__tests__/legacy-save-ack.test.ts(1,46): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/services/coach-ai-client.ts(8,61): error TS7016: Could not find a declaration file for module 'firebase/functions'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/functions/dist/index.cjs.js' implicitly has an 'any' type.
-src/services/firestore.ts(1,172): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/services/firestore.ts(2,68): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
-src/services/firestore.ts(85,27): error TS7006: Parameter 'user' implicitly has an 'any' type.
-src/services/firestore.ts(221,35): error TS7006: Parameter 'doc' implicitly has an 'any' type.
-src/services/firestore.ts(290,35): error TS7006: Parameter 'doc' implicitly has an 'any' type.
-src/services/firestore.ts(335,25): error TS7006: Parameter 'snapshot' implicitly has an 'any' type.
-src/services/firestore.ts(336,37): error TS7006: Parameter 'doc' implicitly has an 'any' type.
-src/services/firestore.ts(351,25): error TS7006: Parameter 'snapshot' implicitly has an 'any' type.
-src/services/firestore.ts(352,37): error TS7006: Parameter 'doc' implicitly has an 'any' type.
-src/types/firestore-schema.ts(2,39): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
-src/ui/AppShell.tsx(2,71): error TS2307: Cannot find module 'lucide-react' or its corresponding type declarations.
-src/ui/WeekDashboard.tsx(2,106): error TS2307: Cannot find module 'lucide-react' or its corresponding type declarations.
+src/components/FirebaseTest.tsx(5,22): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/components/SmartPlaybook/SmartPlaybook.tsx(732,108): error TS18047: 'currentTeam' is possibly 'null'.
+
+src/contexts/TeamContext.tsx(13,8): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/contexts/TeamContext.tsx(297,8): error TS7006: Parameter 'snapshot' implicitly has an 'any' type.
+
+src/contexts/TeamContext.tsx(300,27): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+
+src/contexts/TeamContext.tsx(318,8): error TS7006: Parameter 'err' implicitly has an 'any' type.
+
+src/contexts/teamCreation.test.ts(40,10): error TS2532: Object is possibly 'undefined'.
+
+src/contexts/teamCreation.test.ts(40,31): error TS2493: Tuple type '[]' of length '0' has no element at index '1'.
+
+src/contexts/teamCreation.test.ts(44,37): error TS2532: Object is possibly 'undefined'.
+
+src/contexts/teamCreation.test.ts(44,39): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+
+src/e2e-support/emulator-hooks.ts(10,27): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/e2e-support/emulator-hooks.ts(11,63): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/e2e-support/emulator-hooks.ts(12,32): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/e2e-support/emulator-hooks.ts(13,111): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/e2e-support/emulator-hooks.ts(50,66): error TS7006: Parameter 'tx' implicitly has an 'any' type.
+
+src/features/legacy-import/__tests__/firebase-import.test.ts(5,72): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/features/legacy-import/firebase-import.ts(1,84): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/features/legacy-import/firebase-import.ts(21,30): error TS7006: Parameter 'd' implicitly has an 'any' type.
+
+src/features/legacy-import/firebase-import.ts(22,10): error TS7006: Parameter 'd' implicitly has an 'any' type.
+
+src/features/persistence/__tests__/gateway.test.ts(3,69): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/features/persistence/gateway.ts(1,110): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/features/persistence/gateway.ts(19,31): error TS7006: Parameter 'd' implicitly has an 'any' type.
+
+src/features/persistence/gateway.ts(19,66): error TS7006: Parameter 'd' implicitly has an 'any' type.
+
+src/features/persistence/gateway.ts(22,40): error TS7006: Parameter 'tx' implicitly has an 'any' type.
+
+src/firebase.ts(1,48): error TS7016: Could not find a declaration file for module 'firebase/app'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/app/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/firebase.ts(2,57): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/firebase.ts(3,72): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/firebase.ts(4,74): error TS7016: Could not find a declaration file for module 'firebase/storage'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/storage/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/firebase.ts(5,56): error TS7016: Could not find a declaration file for module 'firebase/functions'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/functions/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/firebase.ts(6,46): error TS7016: Could not find a declaration file for module 'firebase/analytics'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/analytics/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/hooks/useAuth.tsx(28,8): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/hooks/useAuth.tsx(235,47): error TS7006: Parameter 'u' implicitly has an 'any' type.
+
+src/services/__tests__/legacy-save-ack.test.ts(1,46): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/services/coach-ai-client.ts(8,61): error TS7016: Could not find a declaration file for module 'firebase/functions'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/functions/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/services/firestore.ts(1,172): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/services/firestore.ts(2,68): error TS7016: Could not find a declaration file for module 'firebase/auth'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/auth/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/services/firestore.ts(85,27): error TS7006: Parameter 'user' implicitly has an 'any' type.
+
+src/services/firestore.ts(221,35): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+
+src/services/firestore.ts(290,35): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+
+src/services/firestore.ts(335,25): error TS7006: Parameter 'snapshot' implicitly has an 'any' type.
+
+src/services/firestore.ts(336,37): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+
+src/services/firestore.ts(351,25): error TS7006: Parameter 'snapshot' implicitly has an 'any' type.
+
+src/services/firestore.ts(352,37): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+
+src/types/firestore-schema.ts(2,39): error TS7016: Could not find a declaration file for module 'firebase/firestore'. 'C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-n2-team-creation/node_modules/firebase/firestore/dist/index.cjs.js' implicitly has an 'any' type.
+
+src/ui/AppShell.tsx(2,71): error TS2307: Cannot find module 'lucide-react' or its corresponding type declarations.
+
+src/ui/WeekDashboard.tsx(2,106): error TS2307: Cannot find module 'lucide-react' or its corresponding type declarations.
+
