@@ -1,0 +1,89 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/contexts/TeamContext.creation.test.tsx src/contexts/teamCreation.test.ts src/contexts/teamCreationGateway.test.ts src/components/TeamManagement.creation.test.tsx
+
+FAIL src/contexts/TeamContext.creation.test.tsx (17.245 s)
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      40 |
+      41 | test('cache and pending snapshots cannot confirm; authoritative owner snapshot can resolve a hung request', async () => {
+    > 42 |   render(<TeamProvider><Probe/></TeamProvider>);
+         |         ^
+      43 |   fireEvent.click(screen.getByText('Submit'));
+      44 |   act(() => {mockListeners[0](snapshot(true, false));});
+      45 |   expect(screen.getByTestId('state')).toHaveTextContent('saving');
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/contexts/TeamContext.creation.test.tsx:42:9)
+
+  ● cache and pending snapshots cannot confirm; authoritative owner snapshot can resolve a hung request
+
+    TypeError: Cannot read properties of null (reading 'id')
+
+      35 |   const op = JSON.parse(localStorage.getItem('coachcore:v1:demo-n2:A:team-create')!);
+      36 |   return {metadata: {fromCache, hasPendingWrites}, forEach: (visit: (d: unknown) => void) => {
+    > 37 |     visit({id: op.id, data: () => ({...op, ownerId: 'A', memberIds: ['A'], memberDetails: []})});
+         |                   ^
+      38 |   }};
+      39 | }
+      40 |
+
+      at Object.forEach (src/contexts/TeamContext.creation.test.tsx:37:19)
+      at Array._auth$currentUser6 (src/contexts/TeamContext.tsx:301:18)
+      at src/contexts/TeamContext.creation.test.tsx:44:30
+      at node_modules/@testing-library/react/dist/act-compat.js:64:24
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:789:22)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:22:20)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at Object.<anonymous> (src/contexts/TeamContext.creation.test.tsx:44:6)
+
+  ● switching accounts hides A pending operation and rejects late A snapshots immediately
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+      59 |   expect(screen.getByTestId('state')).toHaveTextContent('idle');
+      60 |   expect(screen.getByTestId('teams')).toBeEmptyDOMElement();
+    > 61 |   expect(localStorage.getItem('coachcore:v1:demo-n2:A:team-create')).not.toBeNull();
+         |                                                                          ^
+      62 |   expect(localStorage.getItem('coachcore:v1:demo-n2:B:team-create')).toBeNull();
+      63 | });
+      64 |
+
+      at Object.<anonymous> (src/contexts/TeamContext.creation.test.tsx:61:74)
+
+PASS src/components/TeamManagement.creation.test.tsx (6.732 s)
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      20 |   mockCreation = {operation, phase: 'unconfirmed', error: null};
+      21 |   mockCreate.mockRejectedValue(new Error('Still saving'));
+    > 22 |   render(<CreateTeamModal isOpen onClose={jest.fn()}/>);
+         |         ^
+      23 |   expect(screen.getByLabelText('Team Name')).toHaveValue('Pending Owls');
+      24 |   expect(screen.getByLabelText('Team Name')).toBeDisabled();
+      25 |   expect(screen.getByRole('status')).toHaveTextContent('same team ID');
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/components/TeamManagement.creation.test.tsx:22:9)
+
+PASS src/contexts/teamCreation.test.ts
+PASS src/contexts/teamCreationGateway.test.ts
+
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       2 failed, 22 passed, 24 total
+Snapshots:   0 total
+Time:        52.136 s
+Ran all test suites within paths "src/contexts/TeamContext.creation.test.tsx", "src/contexts/teamCreation.test.ts", "src/contexts/teamCreationGateway.test.ts", "src/components/TeamManagement.creation.test.tsx".
