@@ -1,0 +1,12 @@
+PR67 visual fidelity revision / 2026-10-14 / approval PENDING
+Baseline47c3c1b: npx tsc --noEmit exit0; npm test -- --watchAll=false --runInBand exit0,441/441; npm run build exit0 with existing warnings.
+Revision: targeted9/9PASS; full31suites443/443PASS; npx tsc --noEmit exit0; npm run build exit0 with same existing SmartPlaybook warning files and no new UI warnings.
+Node22.23.1/npm10.9.8; Chromium156.0.8078.4/Firefox157.0; Windows headless browser viewports, no physical-device testing.
+node scripts/visual-preview.cjs4317 compiles; auth/cloud module checkPASS; localhost only.
+verify-fidelity.cjs:18layoutsPASS at320/375/430/768/834/1024/1280/1440/1920; axeA/AA0,overflow0,pageErrors0,externalRequests0,buttons>=44px high.
+Desktop/tablet calendar spans workspace; selected detail beneath. Phone Today beginsnear top; primary actionbottom361px at320/375/430px widths.
+Both engines: keyboard skip/main focus; navigation; native dialog focus/Escape/return; reduced motion; sample local/sessionStorage0; empty statesPASS.
+Read-only plan projection + selection tests: valid savedmetadata displayed; no record mutation; no invented periods/starttimes; stale team responses excluded.
+Initial copied-draft UTF8 separator corruption: targeted8PASS1FAIL and browser label waitFAIL retained in local work/fidelity-targeted.log and fidelity-browser.log. Corrected encoding, intentional compact-label locator, reruns9/9 and18layoutsPASS. No acceptance assertions/timeouts/retries changed.
+Portable runner differs from executed work runner only in filesystem/module path setup. Comparison builder uses committed exact reference crops rather than the local original image path. Crops are resized proportionally, no generative reconstruction.
+Auth/team context/persistence/recovery/import/rules/functions/AI/canvas/locks/e2e unchanged; no new authenticated workflow acceptance, merge, deploy or broader feature rollout.

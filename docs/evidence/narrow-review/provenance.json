@@ -1,0 +1,30 @@
+{
+  "branch": "codex/visual-shell-dashboard",
+  "priorHead": "cb3eda53341bfe2a908e67a4cec909f4d42892f1",
+  "frozenBase": "4757eaffad31664dae727c34355aca8109fcc63c",
+  "sourceSHA256": {
+    "src/ui/AppShell.tsx": "e6f2de4bdca693c211c0658b43632a8f99ddae427a21017c5a7937727acd8267",
+    "src/ui/WeekDashboard.tsx": "dda6b1f0e3229f3ccc6eac12ead9b904ef28ed11754465693413f8b09e5baa9c",
+    "src/ui/coach-core.css": "4d634fa71ecb08dab4730fcf0131fee388e30ef296fedbea725a4a947d291172"
+  },
+  "referenceSHA256": "4fd303f6117632bdd42e2574970fff40023e79d233be092f1b19df7bcd35d7f7",
+  "referenceCrops": {
+    "desktop": [
+      155,
+      169,
+      706,
+      552
+    ],
+    "phone": [
+      739,
+      174,
+      906,
+      547
+    ]
+  },
+  "capture": "Actual Chromium screenshots; local shared UI; sample events relative to current date. Reference crops proportionally resized. No generated replacement pixels.",
+  "visualApproval": "Prior revision rejected; current revision awaiting Coach Drew",
+  "physicalDeviceTesting": false,
+  "independentClaudeReview": "Pending; requested through issue39",
+  "node": "v22.23.1"
+}
