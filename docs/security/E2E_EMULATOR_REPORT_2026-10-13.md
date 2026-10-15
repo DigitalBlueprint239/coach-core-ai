@@ -756,7 +756,7 @@ Coach Drew directive "Candidate 9b continuation". Controlled development, no pro
 | Candidate 8 | `069c8f1` (`claude/integration-candidate-2026-10-14f`) | Unchanged, evidence 25–27 unchanged |
 | Candidate 9b | `2446df2` (`claude/integration-candidate-2026-10-15-ui67`) | Unchanged, evidence 28–31 unchanged |
 | Design source | #67 `7f22c7a` | Codex's later #67 commits `6ee47fd..dd1fe0a` are **not** included |
-| **Candidate 10** (test-only, never merged) | **`186a743`** on `claude/identity-visibility-2026-10-15` = 9b + identity change (`d69ef8e`, `dec1ce1`) + tests/docs | Runtime differs from 9b in **4 files only**: `src/ui/AppShell.tsx`, `src/ui/coach-core.css`, `src/components/Dashboard.tsx` (one prop) and the new `src/ui/AppShell.test.tsx` |
+| **Candidate 10** (test-only, never merged) | **`186a743`** on `claude/identity-visibility-2026-10-15` = 9b + identity change (`d69ef8e`, `dec1ce1`) + tests/docs | Runtime differs from 9b in **3 source files** (`src/ui/AppShell.tsx`, `src/ui/coach-core.css`, `src/components/Dashboard.tsx` one prop) plus the new unit test `src/ui/AppShell.test.tsx` |
 
 No change to authentication, permissions, team data, persistence, rules, functions or server behaviour. Earlier evidence checksums are unchanged; new files were added only.
 
@@ -790,17 +790,17 @@ Diagnostic tests in `e2e/tests/n2.spec.ts`, reported separately from acceptance.
 
 | Test | Fault injected | Observation (all executions) |
 |---|---|---|
-| **N2-D0** baseline | none | Write WebChannel: handshake POST, then back-channel GET (stays open), then the POST carrying the write. Server has the team at ~100–165 ms; the dialog closes 10–30 ms later. 1 team |
-| **N2-D3** | write POST delivered, its **HTTP response held 8 s** | Dialog closes ~150–180 ms **while the response is still held**, so the **acknowledgement travels on the back channel**, not on the POST response |
-| **N2-D4** | back-channel GET **held 8 s**, then released | The write is **not sent until the back channel opens**; nothing on the server for 8 s. After release, normally the dialog closes at ~8.1 s with 1 team. **But in Chromium 3 of 25 executions (Firefox 0 of 25) the write was committed (teams = 1) and the dialog stayed on "Creating…" for ≥ 32 s after release: the exact N2 signature, reproduced.** In both stuck executions with full data, the stale first back channel finished after the new write exchange. So did 12 of 30 executions that recovered, so that ordering is **not sufficient** and not a root cause |
-| **N2-D1** | back channel **reset** twice right after opening | **The write is never sent and never retried for ≥ 32 s after connectivity returns**; dialog stuck on "Creating…", nothing saved, no error shown (no false success). Every execution in every run, both engines |
+| **N2-D0** baseline | none | Write WebChannel: handshake POST, then back-channel GET (stays open), then the POST carrying the write. Server has the team at ~100–600 ms; the dialog closes at about the same time (from a few ms before the 50 ms admin poll first sees the team, to ~235 ms after). 1 team |
+| **N2-D3** | write POST delivered, its **HTTP response held** (until the dialog closes, cap 8 s) | Dialog closes ~150–360 ms **while the response is still held**, so the **acknowledgement travels on the back channel**, not on the POST response |
+| **N2-D4** | back-channel GET **held 8 s**, then released | The write is **not sent until the back channel opens**; nothing on the server for 8 s. After release, normally the dialog closes at ~8.1 s with 1 team. **But in Chromium, at least 2 of 25 executions (16 of 25 visible in the truncated annotations; a third is inferred from a 40.7 s duration) the write was committed (teams = 1) and the dialog stayed open for ≥ 32 s after release. That is the N2 state ("Creating…" text itself not re-checked after release). Firefox: 0 of 25 (all ≤ 9.9 s).** The injection replays the held GETs late with stale channel parameters, which may itself contribute. In both stuck executions with full data, the stale first back channel finished after the new write exchange. So did 12 of 30 executions that recovered, so that ordering is **not sufficient** and not a root cause |
+| **N2-D1** | back channel **reset** twice right after opening (selective per-request resets, not a full loss of connectivity) | **The write is never sent and never retried for ≥ 32 s after the injected resets stop**; the dialog stays open ("Creating…" checked at 8 s), nothing saved, no false success. An error toast was not checked. Every execution in every run, both engines. Whether this is SDK or app behaviour is not separated |
 | **N2-D2** | write held (pending); the coach cancels, leaves Teams, returns, creates again | **Cancel and ✕ are enabled while "Creating…"**; the new dialog accepts the same submission, so **2 teams with the same name** after delivery. Every execution, both engines. The in-dialog double click *is* blocked |
 
 **Conclusion.**
-- **Mechanism:** the N2 state (team committed, dialog stuck) arises when the write's acknowledgement on the Write stream's back channel is not delivered to, or not processed by, the client after a back-channel disruption. It is now reproduced under fault injection.
+- **Mechanism (narrowed):** the N2 state (team committed, dialog stuck) occurs when the write's acknowledgement on the Write stream's back channel is not delivered to, or not processed by, the client after a back-channel disruption. A comparable state is reproduced under fault injection in Chromium, though the injection itself may contribute.
 - **The natural CI occurrence** (candidate 9, Firefox, no injected fault) has no network trace, so **its trigger is not proven**. The SDK-internal reason the acknowledgement is lost is also **not proven**.
 - **Proven related gaps**, in Codex's client `TeamContext`/`TeamManagement`:
-  - no recovery or feedback after back-channel resets (D1);
+  - no recovery after back-channel resets (D1; SDK versus app not separated; feedback not measured);
   - duplicate teams on retry while a write is pending or unacknowledged (D2).
 
   Together: a coach facing a stuck dialog who retries creates a **duplicate team**.
@@ -827,7 +827,7 @@ Clean preflight (evidence 32):
 
 | Project | Browser | Viewport | Tests selected | Executions | PASS / FAIL / BLOCKED / SKIPPED |
 |---|---|---|---|---|---|
-| chromium | Chromium 156.0.8078.4 | 1280×720 desktop | all 53 (46 acceptance, UI-01, UI-02, 5 N2 diagnostics) | 530 | **530 / 0 / 0 / 0** |
+| chromium | Chromium 156.0.8078.4 | 1280×720 desktop (UI-01/UI-02 set 1440, 834 and 390 px themselves) | all 53 (46 acceptance, UI-01, UI-02, 5 N2 diagnostics) | 530 | **530 / 0 / 0 / 0** |
 | firefox | Firefox 157.0 | 1280×720 desktop | all 53 | 530 | **529 / 1 / 0 / 0** |
 | phone-chromium | Chromium 156 | 390×844 (desktop engine at phone width, not emulation) | 15 UI workflows | 150 | **150 / 0 / 0 / 0** |
 | phone-firefox | Firefox 157 | 390×844 (same) | 15 UI workflows | 150 | **150 / 0 / 0 / 0** |
@@ -835,7 +835,7 @@ Clean preflight (evidence 32):
 
 Phone workflows: A07, A10, CC-P10, P11, P12, P14, P15, P16, P17, L0, L1, T01, T02, D10-01, D10-06e.
 
-Steps ≥ 10 s: 1 of 1,360 executions (the failure below).
+**Totals: acceptance 1,259 / 1,260** (desktop 48 tests × 10 × 2 + phone 15 × 10 × 2). **N2 diagnostics 100 / 100** pass their *safety* assertions, but they record defects. D1 passes only because its assertion was narrowed to safety facts in `d989f3e`; under the original assertion it failed 10/10 (run `38736770151`). Steps ≥ 10 s: 1 of 1,360 executions (the failure below).
 
 **The one failure: D10-06b, Firefox, repeat 5** (new intermittent **N3**):
 - creating team "Bravo Bulldogs", the dialog was still open after 10.1 s;
@@ -844,7 +844,7 @@ Steps ≥ 10 s: 1 of 1,360 executions (the failure below).
 - the captured trace shows **zero Firestore requests after the submit click**.
 
 So team creation never started. That differs from N2 (server write present).
-- The cause is **not proven**: the click did not submit, or `createTeam` failed before any request. The on-screen message was truncated in the diagnostics; `ac2dae1` now records it for the next occurrence.
+- The cause is **not proven**. Two candidates fit: the click did not submit, or `createTeam` failed before any request. For example, it throws "User must be authenticated" when `auth.currentUser` is null, which gives exactly `creating=false` and no request. The on-screen message was truncated; `ac2dae1` (acceptance branch, **not** in `186a743`) now records it for the next occurrence.
 - It is **not attributable** to the identity change, which touches only the top bar; the dialog and `TeamContext` are unchanged.
 - D10-06b passed 10/10 on candidates 6–9.
 
@@ -873,9 +873,29 @@ Every other acceptance test passed 10/10 in every project where it ran: the D10 
 ### 14.6 GO / NO-GO
 
 **MVP: NO-GO.**
-- Emulator acceptance is strong: 1,359/1,360 on candidate 10, with every workflow passing through the revised UI at desktop and phone widths.
+- Emulator acceptance is strong: **1,259/1,260** acceptance executions on candidate 10, with every workflow passing through the revised UI at desktop and phone widths.
 - But team creation has proven reliability gaps: a stuck "Creating…" with no recovery or feedback, and duplicate teams on retry, plus the unexplained N2 and N3 intermittents.
 - Staging, real devices and background tabs are not measured.
 - H2, FX-02, R1c residual, R3, R4 and touch exit remain open.
 
 No merge, deploy, live-data change or AI activation.
+
+### 14.7 Independent verification of §14
+
+A separate agent re-checked §14 against git, the Checks API, the evidence and the code. It **confirmed**:
+- the baselines and the code-change scope; the identity change is presentational only, with no auth or data changes;
+- that no CSS hides identity at any width;
+- all CI counts, the D10-06b failure data, D10-07 and UI-01/02 10/10;
+- that the run included the full test inventory (53 + 15 distinct tests, so no filter), and the 1280×720 desktop viewports;
+- the D1, D2 and D4-Firefox observations, and the "12 of 30" ordering statistic;
+- the N2 mechanism reasoning;
+- the evidence checksums, with files 01–31 unchanged.
+
+It **refuted** some D0/D3 timing ranges, the D3 "held 8 s" wording and the exact Chromium D4 count. All were corrected above.
+
+Weaknesses it recorded:
+- UI-01/02 do not check in-viewport position or how much of the email is readable after the ellipsis.
+- The unit test's "no uid" check is a text pattern.
+- Some "every execution" statements rest on truncated annotations.
+
+The corrected headline is **acceptance 1,259/1,260; diagnostics 100/100 (safety assertions only)**.
