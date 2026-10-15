@@ -1,6 +1,6 @@
 # Staging readiness checklist (before requesting a staging deploy)
 
-Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-15: test-only candidate 10 `186a743` = candidate 9b + identity visibility. Full ×10 matrix: **1,359/1,360** across desktop and phone widths. Proven team-creation gaps remain: N2 (saved but "Creating…", reproduced under fault), no recovery after stream resets, duplicate teams on retry. N3 is new. Open: H2, FX-02, R1c residual, R3, R4, touch exit; background tabs, devices and staging NOT MEASURED). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-15: test-only candidate 10 `186a743` = candidate 9b + identity visibility. Full ×10 matrix: **1,259/1,260 acceptance executions** across desktop and phone widths, plus 100/100 N2 diagnostics. Proven team-creation gaps remain: N2 (saved but "Creating…", reproduced under fault), no recovery after stream resets, duplicate teams on retry. N3 is new. Open: H2, FX-02, R1c residual, R3, R4, touch exit; background tabs, devices and staging NOT MEASURED). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
 
 ## 1. Exact PR/commit combination
 
