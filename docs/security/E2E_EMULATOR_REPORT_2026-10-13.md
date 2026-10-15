@@ -958,19 +958,19 @@ Historical runs and failures in §14.3–14.7 and evidence 33–36 are unchanged
 - New REST-path acceptance tests N2-R1…R6 in `e2e/tests/n2.spec.ts`. They inject faults with `page.route` on the REST commit and readback URLs, not on the old WebChannel.
 - The original N2-A1 and N2-A2, and D0–D5, are kept byte-identical in their bodies.
 - Added `adminTeamsFull`, and an `R` kind for REST readbacks in the network log.
-- CI is split into 4 parallel per-project jobs, because the full ×10 suite (~165 min) exceeded the unchanged 120-minute job limit. `--pass-with-no-tests` covers grep runs that select no phone tests.
+- CI is split into 4 parallel per-project jobs, because the full ×10 suite was projected at roughly the unchanged 120-minute job limit (an estimate, not measured: candidate 10 took 79 min, plus about 42 min of new R tests; the split run's jobs took 47, 57, 7 and 10 min). `--pass-with-no-tests` covers grep runs that select no phone tests.
 - Status requirement is unchanged: `role=status` or `role=alert` matching `/saving|connection|offline|retry/i` within **8 s**.
 
 | Test | Fault | Required |
 |---|---|---|
 | N2-R1 | commit held 8 s (not at server) | status ≤ 8 s; recovers; exactly one team = journal op (id, name, code, owner) |
 | N2-R1b | commit reset during 8 s outage | same |
-| N2-R1c | commit reaches server, response dropped | no false success; recovers; exactly one team at original id |
+| N2-R1c | commit reaches server, response dropped | commit 200 at server; status ≤ 8 s; UI recovers; exactly one team at original id (no explicit no-false-success assertion) |
 | N2-R2 | commit pending → Cancel → My Week → Teams → retry | pending + Resume visible; same op id; exactly one team |
 | N2-R3 | commit pending → page reload | pending survives; same op id; exactly one team |
 | N2-R4 | A pending → sign out → B → A | B sees no Resume and no A team; nothing is created under B; A recovers once |
 | N2-R5 | fake commit 200, nothing on server | readback blocks success; recovers once at original id |
-| N2-R6 | different team pre-placed at op id | no success shown (also after Check and retry); existing doc unchanged; nothing created with submitted name |
+| N2-R6 | different team pre-placed at op id | no success shown; alert shown; Check and retry is clicked *if present* (the click itself is not asserted); existing doc unchanged; nothing created with submitted name |
 
 **Results (retries 0, workers 1, Chromium 156.0.8078.4 and Firefox 157.0, Playwright 1.64.0, demo-project emulators)**
 
@@ -1003,14 +1003,14 @@ Historical runs and failures in §14.3–14.7 and evidence 33–36 are unchanged
 
 1. **8-second status: met in every R1/R1b/R1c execution.** The qualifying status is the dialog's `role=status` "Saving your team. You may leave this dialog…", which appears at submit. Codex's 10-second "Still saving…" escalation is not what satisfies the requirement. Screenshots are in `docs/evidence/n2-repair-validation-2026-10-15/`.
 2. **Original N2-A2 (acceptance) fails 10/10 on `bdb06ae`. Recorded as a failure, not relabelled.** Its fault holds the SDK WebChannel Write stream, which the repaired REST path does not use, so the first create is confirmed at once. The test then shows one of two things:
-   - a 60 s timeout at the Cancel click (`n2.spec.ts:212`), because the dialog has already closed; or
+   - a 60 s timeout at the Cancel step (`n2.spec.ts:211–212`, `isEnabled` or click), because the dialog has already closed; or
    - `teams=2` after it submits the same name again as a new, deliberate creation (`savedAfterRelease` 2–5 ms).
 
    No duplicate of a *pending* operation was observed. N2-R2 and N2-R3, which hold the real REST commit, pass 10/10 in both runs. **Open product question for Coach Drew and Codex:** should a coach be able to create two teams with the same name? Today they can.
 3. **N2-D2 (diagnostic):** same fault-model mismatch, 10/10 and 4/10.
 4. **D10-06e line 425, "original team selected": inherited intermittent failure, not introduced by #71.**
    - Targeted D10-06e ×50 on `8ff5521` (evidence 41): chromium 2/50 failures at line 425; phone-chromium 1/50, a different assertion at line 30 (`currentTeamId` undefined right after team creation); firefox and phone-firefox 50/50.
-   - Same ×50 on the **pre-repair runtime** `a61dfcb` = `186a743`, with an identical D10-06e harness (evidence 42): chromium **2/50 at line 425**; the other three projects 50/50.
+   - Same ×50 on the **pre-repair runtime** `a61dfcb` = `186a743`, with an identical D10-06e test and `legacy.ts` helper (`support/app.ts` differs by one network-log classifier line, which shifts its line numbers) (evidence 42): chromium **2/50 at line 425**; the other three projects 50/50.
    - Both checks read `localStorage.currentTeamId` once, right after a UI step. Whether the cause is a harness timing race or app-side lag in persisting the selection is **not proven**.
    - The line-30 variant was seen only on `bdb06ae` (1 of 200 executions versus 0 of 200 on the baseline). This is too few to call a regression. `bdb06ae` does move the `currentTeamId` write into the snapshot handler, and the team confirmed by the create path does not write it. Codex should review this.
 5. **Not tested:** a network failure *of the readback request itself*. R5 and R6 cover readback that finds no team and readback that finds a different team. Natural (unfaulted) SDK stalls were not reproduced.
