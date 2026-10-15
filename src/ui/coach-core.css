@@ -41,6 +41,9 @@
 .cc-team-context svg {flex-shrink:0}
 .cc-account {display:flex;align-items:center;justify-content:flex-end;gap:16px;min-width:0;flex-wrap:wrap}
 .cc-welcome {color:var(--cc-muted);font-size:11px;overflow-wrap:anywhere;min-width:0}
+/* Identity visibility (2026-10-15): account, team and sample-preview state at every width. */
+.cc-visually-hidden {position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.cc-mode-badge {display:inline-flex;align-items:center;padding:2px 6px;border:1px solid #b7791f;border-radius:4px;color:#f6c76b;font-size:11px;font-weight:600;white-space:nowrap}
 .cc-signout {display:flex;align-items:center;gap:6px;min-height:44px;padding:8px;color:var(--cc-secondary);background:transparent;border:0;border-radius:4px;font-size:12px}
 .cc-signout:hover {background:var(--cc-raised)}
 .cc-badge,.cc-inline-label,.cc-sample-label {display:inline-flex;align-items:center;gap:6px;color:var(--cc-secondary);font-size:11px;font-weight:500;line-height:1.4;white-space:nowrap}
@@ -150,17 +153,19 @@
   .cc-app {grid-template-columns:72px minmax(0,1fr)}
   .cc-sidebar {padding-inline:8px}.cc-brand {justify-content:center;padding:0}.cc-brand>span:first-child {display:none}.cc-brand-compact {display:inline;color:var(--cc-accent)}
   .cc-desktop-nav button {justify-content:center}.cc-desktop-nav button span,.cc-roadmap,.cc-sidebar-foot {display:none}
-  .cc-welcome {display:none}.cc-main {padding:16px}.cc-topbar {padding-inline:16px}
+  .cc-welcome {max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cc-main {padding:16px}.cc-topbar {padding-inline:16px}
   .cc-practice-summary {align-items:flex-start}.cc-practice-actions {flex-direction:column;align-items:stretch}
   .cc-periods {grid-template-columns:repeat(3,minmax(0,1fr))}
   .cc-upcoming-list button {flex-direction:column;align-items:flex-start;gap:3px}.cc-upcoming-date {width:72px}
 }
 @media(max-width:767px){
   .cc-app {display:block}.cc-sidebar {display:none}.cc-workspace {min-height:100dvh;padding-bottom:calc(var(--cc-nav-height,68px) + 16px)}
-  .cc-topbar {min-height:44px;padding:0 16px;position:sticky;top:0;z-index:10;background:#06121e}
+  .cc-topbar {min-height:44px;padding:2px 16px 6px;position:sticky;top:0;z-index:10;background:#06121e;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"brand account" "team team";column-gap:8px;row-gap:0}
+  .cc-mobile-brand {grid-area:brand;align-self:center}.cc-account {grid-area:account;flex-wrap:nowrap;gap:8px}
+  .cc-team-context {grid-area:team;font-size:11px;flex-wrap:wrap;row-gap:2px}
   .cc-mobile-brand {display:block;font-size:13px;font-weight:750;letter-spacing:.2px;white-space:nowrap}
-  .cc-team-context,.cc-account>.cc-badge {display:none}
-  .cc-welcome {position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .cc-account>.cc-badge {display:none}
+  .cc-welcome {min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .cc-signout {font-size:11px}.cc-main {padding:16px}
   .cc-desktop-title {display:none}.cc-phone-title {display:inline}
   .cc-dashboard-heading {align-items:flex-start;margin-bottom:10px;gap:8px}

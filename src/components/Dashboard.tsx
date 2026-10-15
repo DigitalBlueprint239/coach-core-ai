@@ -49,7 +49,7 @@ const Dashboard:React.FC<{demoMode?:boolean;onDemoChange?:(value:boolean)=>void}
   if(!user)return null;
   const live=library.scope===scope&&scope?library:null;
   const changePreview=(value:boolean)=>{setPreview(value);onDemoChange?.(value);};
-  return <AppShell active={active} onNavigate={setActive} teamName={currentTeam?.name} email={user.email||'Coach'} onSignOut={()=>{void logout();}}>
+  return <AppShell active={active} onNavigate={setActive} teamName={currentTeam?.name} email={user.email||'Coach'} onSignOut={()=>{void logout();}} samplePreview={preview&&active==='overview'}>
     <div className="cc-recovery"><DraftSignOut/></div>
     {active==='overview'&&<WeekDashboard key={scope||'no-team'} teamName={currentTeam?.name} events={live?.events||[]} loading={teamLoading||(!preview&&!!scope&&(!live||live.loading))} error={live?.error} preview={preview} onPreviewChange={changePreview} onNavigate={setActive}/>}
     {active!=='overview'&&<div className="cc-feature-surface"><ErrorBoundary>{active==='teams'?<TeamManagement/>:active==='practice'?<PracticePlanner/>:<SmartPlaybook/>}</ErrorBoundary></div>}

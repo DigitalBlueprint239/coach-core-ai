@@ -9,9 +9,11 @@ const destinations = [
   { id: 'practice' as const, label: 'Practice Plans', accessible: 'Practice Plans', short: 'Practice', icon: ClipboardList },
   { id: 'playbook' as const, label: 'Smart Playbook', accessible: 'Smart Playbook', short: 'Playbook', icon: Waypoints },
 ];
-export default function AppShell({ active, onNavigate, teamName, email, onSignOut, children, standalone = false }: {
+export default function AppShell({ active, onNavigate, teamName, email, onSignOut, children, standalone = false, samplePreview = false }: {
   active: Destination; onNavigate: (view: Destination) => void; teamName?: string; email: string;
   onSignOut?: () => void; children: React.ReactNode; standalone?: boolean;
+  /** True only while sample (non-saved) data is on screen. */
+  samplePreview?: boolean;
 }) {
   const app = useRef<HTMLDivElement>(null); const nav = useRef<HTMLElement>(null);
   const main = useRef<HTMLElement>(null); const previous = useRef(active);
@@ -46,8 +48,12 @@ export default function AppShell({ active, onNavigate, teamName, email, onSignOu
       <span className="cc-sidebar-foot">Private beta</span>
     </aside>
     <div className="cc-workspace">
-      <header className="cc-topbar"><div className="cc-mobile-brand">COACH CORE <b>AI</b></div><div className="cc-team-context"><Users size={16} aria-hidden="true" /><span>{teamName || 'No team selected'}</span></div>
-        <div className="cc-account"><span className="cc-welcome">Welcome, {email}</span>{onSignOut && <button type="button" className="cc-signout" onClick={onSignOut}><LogOut size={16} aria-hidden="true" /><span>Sign out</span></button>}{standalone && <span className="cc-badge">Local preview</span>}</div>
+      <header className="cc-topbar"><div className="cc-mobile-brand">COACH CORE <b>AI</b></div>
+        {/* Identity is shown at every width (shared devices): active team or an explicit no-team state, and a
+            badge whenever sample data, not saved team data, is on screen. */}
+        <div className="cc-team-context"><Users size={16} aria-hidden="true" /><span><span className="cc-visually-hidden">Active team: </span>{teamName || 'No team selected'}</span>
+          {samplePreview && <span className="cc-mode-badge">Sample preview · not saved</span>}</div>
+        <div className="cc-account"><span className="cc-welcome" title={email}>Welcome, {email}</span>{onSignOut && <button type="button" className="cc-signout" onClick={onSignOut}><LogOut size={16} aria-hidden="true" /><span>Sign out</span></button>}{standalone && <span className="cc-badge">Local preview</span>}</div>
       </header>
       <main id="cc-main" className="cc-main" ref={main} tabIndex={-1}>{children}</main>
     </div>
