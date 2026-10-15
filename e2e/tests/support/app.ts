@@ -69,7 +69,13 @@ export async function signOutViaUI(page: Page): Promise<void> {
 }
 
 export async function openTab(page: Page, name: string): Promise<void> {
-  await page.getByRole('button', { name: new RegExp(name) }).first().click();
+  // #67 shell (2026-10-15): the same destination exists in the desktop sidebar
+  // and the phone bottom bar, only one of which is displayed. Click the VISIBLE
+  // navigation button; fall back to the pre-#67 in-page tabs.
+  const re = new RegExp(name);
+  const nav = page.getByRole('navigation').getByRole('button', { name: re }).filter({ visible: true });
+  if (await nav.count()) { await nav.first().click(); return; }
+  await page.getByRole('button', { name: re }).filter({ visible: true }).first().click();
 }
 
 export async function createTeamViaUI(page: Page, teamName: string): Promise<void> {
