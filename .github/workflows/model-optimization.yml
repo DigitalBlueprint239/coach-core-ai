@@ -26,14 +26,18 @@ jobs:
     env:
       OUTPUT: phase-a-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ github.sha }}
     steps:
-      - uses: actions/checkout@v5
-        with:
-          persist-credentials: false
+      - name: Allocate unique evidence directory
+        run: mkdir "$OUTPUT"
+      - name: Read-only public checkout (no credential or submodule setup)
+        run: |
+          git init . 2>&1 | tee "$OUTPUT/checkout.log"
+          git remote add origin https://github.com/DigitalBlueprint239/coach-core-ai.git
+          git -c credential.helper= fetch --no-tags --depth=1 origin "$GITHUB_SHA" 2>&1 | tee -a "$OUTPUT/checkout.log"
+          git checkout --detach FETCH_HEAD 2>&1 | tee -a "$OUTPUT/checkout.log"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - name: Allocate unique evidence directory
-        run: mkdir "$OUTPUT"
       - name: Synthetic format regression tests
         run: node .github/scripts/validate-test-summary.mjs --self-test 2>&1 | tee "$OUTPUT/self-test.log"
       - name: Validate evidence index (not product acceptance)
