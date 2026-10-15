@@ -166,7 +166,7 @@
   .cc-mobile-brand {display:block;font-size:13px;font-weight:750;letter-spacing:.2px;white-space:nowrap}
   .cc-account>.cc-badge {display:none}
   .cc-welcome {min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .cc-signout {font-size:11px}.cc-main {padding:16px}
+  .cc-signout {font-size:11px;white-space:nowrap;flex-shrink:0}.cc-main {padding:16px}
   .cc-desktop-title {display:none}.cc-phone-title {display:inline}
   .cc-dashboard-heading {align-items:flex-start;margin-bottom:10px;gap:8px}
   .cc-dashboard-heading h1 {font-size:26px}.cc-heading-team {display:none}
