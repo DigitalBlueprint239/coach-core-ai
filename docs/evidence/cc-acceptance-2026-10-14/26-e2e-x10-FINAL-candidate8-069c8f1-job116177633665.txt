@@ -1,0 +1,118 @@
+E2E emulator (Chromium + Firefox) success 2026-10-15T00:22:31Z 2026-10-15T01:11:48Z sha=069c8f11cc42c4a2672db9441b84ad8e0319e695
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[notice] E2E firefox slow steps >= 10s: 0 of 460 executions
+none
+
+[notice] E2E firefox: 460 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 E2E-AI01 [3.8/4.6/4.9s]
+PASS 10/10 E2E-AI01b [1.8/2.5/2.9s]
+PASS 10/10 E2E-A01 [0.8/1.0/1.2s]
+PASS 10/10 E2E-A02 [0.9/1.0/1.0s]
+PASS 10/10 E2E-A03 [1.3/1.3/1.5s]
+PASS 10/10 E2E-A04 [1.4/1.4/1.5s]
+PASS 10/10 E2E-A05 [0.5/0.5/0.6s]
+PASS 10/10 E2E-A06 [1.4/1.5/1.6s]
+PASS 10/10 E2E-A07 [1.5/1.6/1.6s]
+PASS 10/10 E2E-A08 [0.9/0.9/0.9s]
+PASS 10/10 E2E-A09 [1.6/1.6/1.8s]
+PASS 10/10 E2E-A10 [1.4/1.5/1.5s]
+PASS 10/10 CC-P10 [3.1/4.3/4.4s]
+PASS 10/10 CC-P10b [4.8/5.6/6.0s]
+PASS 10/10 CC-P11 [2.8/4.4/4.8s]
+PASS 10/10 CC-P12 [3.0/3.9/4.6s]
+PASS 10/10 CC-P14 [7.8/8.4/9.1s]
+PASS 10/10 CC-P15 [6.0/6.4/6.8s]
+PASS 10/10 CC-P16 [4.0/4.8/4.9s]
+PASS 10/10 CC-P16b [3.5/4.4/5.3s]
+PASS 10/10 CC-P17 [5.3/6.4/7.2s]
+PASS 10/10 CC-L0 [3.0/3.3/4.0s]
+PASS 10/10 CC-L1 [2.6/2.9/3.1s]
+PASS 10/10 CC-W0 [2.8/3.5/4.2s]
+PASS 10/10 D10-00 [1.9/2.6/2.8s]
+PASS 10/10 D10-01 [3.1/3.9/4.0s]
+PASS 10/10 D10-02 [3.2/3.8/4.3s]
+PASS 10/10 D10-03 [3.6/5.4/5.7s]
+PASS 10/10 D10-04 [4.0/5.8/6.1s]
+PASS 10/10 D10-05 [2.8/3.4/4.1s]
+PASS 10/10 D10-06 [6.4/7.5/9.3s]
+PASS 10/10 D10-06b [5.6/6.8/8.0s]
+PASS 10/10 D10-07 [8.6/9.6/10.1s]
+PASS 10/10 D10-07b [3.7/4.7/5.5s]
+PASS 10/10 D10-08 [4.5/5.7/6.2s]
+PASS 10/10 D10-09 [5.8/7.6/8.9s]
+PASS 10/10 D10-10 [3.5/4.8/5.5s]
+PASS 10/10 D10-11 [4.8/6.1/7.5s]
+PASS 10/10 D10-12 [1.4/1.6/1.8s]
+PASS 10/10 D10-06c [4.6/4.8/5.1s]
+PASS 10/10 D10-06d [5.6/6.2/6.5s]
+PASS 10/10 D10-06e [7.6/9.1/9.8s]
+PASS 10/10 E2E-C01 [3.6/4.0/4.4s]
+PASS 10/10 E2E-T01 [3.2/3.5/3.8s]
+PASS 10/10 E2E-T02 [5.1/5.3/5.7s]
+PASS 10/10 E2E-T03 [5.0/6.0/6.9s]
+
+[notice] E2E chromium slow steps >= 10s: 0 of 460 executions
+none
+
+[notice] E2E chromium: 460 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 E2E-AI01 [1.4/1.6/2.3s]
+PASS 10/10 E2E-AI01b [0.8/1.1/2.3s]
+PASS 10/10 E2E-A01 [0.3/0.4/0.5s]
+PASS 10/10 E2E-A02 [0.5/0.6/0.6s]
+PASS 10/10 E2E-A03 [0.7/0.8/0.8s]
+PASS 10/10 E2E-A04 [0.8/0.8/0.9s]
+PASS 10/10 E2E-A05 [0.3/0.3/0.4s]
+PASS 10/10 E2E-A06 [0.3/0.3/0.3s]
+PASS 10/10 E2E-A07 [0.9/0.9/0.9s]
+PASS 10/10 E2E-A08 [0.5/0.5/0.6s]
+PASS 10/10 E2E-A09 [0.9/1.0/1.3s]
+PASS 10/10 E2E-A10 [0.9/0.9/0.9s]
+PASS 10/10 CC-P10 [1.7/2.1/2.2s]
+PASS 10/10 CC-P10b [2.0/2.3/2.7s]
+PASS 10/10 CC-P11 [1.4/1.8/2.2s]
+PASS 10/10 CC-P12 [1.4/1.7/2.1s]
+PASS 10/10 CC-P14 [2.7/3.1/4.2s]
+PASS 10/10 CC-P15 [2.2/2.7/2.8s]
+PASS 10/10 CC-P16 [1.8/2.1/2.4s]
+PASS 10/10 CC-P16b [1.2/1.5/1.9s]
+PASS 10/10 CC-P17 [2.2/2.6/3.5s]
+PASS 10/10 CC-L0 [1.2/1.5/1.7s]
+PASS 10/10 CC-L1 [1.0/1.2/1.4s]
+PASS 10/10 CC-W0 [1.2/1.3/1.6s]
+PASS 10/10 D10-00 [0.9/1.1/1.3s]
+PASS 10/10 D10-01 [1.3/1.4/1.6s]
+PASS 10/10 D10-02 [1.6/1.8/2.2s]
+PASS 10/10 D10-03 [1.7/1.9/2.7s]
+PASS 10/10 D10-04 [1.3/1.8/2.4s]
+PASS 10/10 D10-05 [1.1/1.3/2.1s]
+PASS 10/10 D10-06 [2.3/2.8/3.7s]
+PASS 10/10 D10-06b [1.9/2.6/3.3s]
+PASS 10/10 D10-07 [6.4/6.9/7.3s]
+PASS 10/10 D10-07b [1.4/1.9/2.2s]
+PASS 10/10 D10-08 [1.8/2.3/2.7s]
+PASS 10/10 D10-09 [2.0/2.8/4.3s]
+PASS 10/10 D10-10 [1.2/1.6/2.3s]
+PASS 10/10 D10-11 [1.9/2.4/3.1s]
+PASS 10/10 D10-12 [0.7/0.8/0.9s]
+PASS 10/10 D10-06c [1.9/2.2/3.0s]
+PASS 10/10 D10-06d [2.3/2.8/3.1s]
+PASS 10/10 D10-06e [3.3/4.0/5.7s]
+PASS 10/10 E2E-C01 [1.3/1.6/1.8s]
+PASS 10/10 E2E-T01 [1.3/1.7/1.8s]
+PASS 10/10 E2E-T02 [2.2/2.5/3.7s]
+PASS 10/10 E2E-T03 [1.8/2.6/3.5s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
