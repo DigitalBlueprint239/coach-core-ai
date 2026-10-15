@@ -744,3 +744,138 @@ Before #67 (`069c8f1`) the account email showed at every width. On a **shared de
 - Genuine hidden tabs, physical devices and staging: **NOT MEASURED**.
 
 **MVP NO-GO.** #67 visual approval is pending Coach Drew. No merge, deploy, spend, live change or AI activation.
+
+## 14. Candidate 9b continuation: identity visibility, N2 investigation, full regression (2026-10-15)
+
+Coach Drew directive "Candidate 9b continuation". Controlled development, no production release. Coach Drew keeps final release and design approval.
+
+### 14.1 Baselines preserved
+
+| | SHA | Status |
+|---|---|---|
+| Candidate 8 | `069c8f1` (`claude/integration-candidate-2026-10-14f`) | Unchanged, evidence 25–27 unchanged |
+| Candidate 9b | `2446df2` (`claude/integration-candidate-2026-10-15-ui67`) | Unchanged, evidence 28–31 unchanged |
+| Design source | #67 `7f22c7a` | Codex's later #67 commits `6ee47fd..dd1fe0a` are **not** included |
+| **Candidate 10** (test-only, never merged) | **`186a743`** on `claude/identity-visibility-2026-10-15` = 9b + identity change (`d69ef8e`, `dec1ce1`) + tests/docs | Runtime differs from 9b in **4 files only**: `src/ui/AppShell.tsx`, `src/ui/coach-core.css`, `src/components/Dashboard.tsx` (one prop) and the new `src/ui/AppShell.test.tsx` |
+
+No change to authentication, permissions, team data, persistence, rules, functions or server behaviour. Earlier evidence checksums are unchanged; new files were added only.
+
+### 14.2 Phase 1: identity visibility
+
+- **Account:** "Welcome, *email*" is displayed at desktop, tablet and phone widths.
+  - On narrow screens long addresses are shortened with an ellipsis; the full text stays in the DOM (screen readers) and the `title`.
+  - Only the coach's own email is shown, as on desktop before #67. No uid, claims or other account data.
+- **Team:** the top-bar team chip is displayed at every width.
+  - Screen readers hear the prefix "Active team:".
+  - With no team it shows the explicit "No team selected".
+- **Sample vs saved:** the top bar shows **"Sample preview · not saved"** only while sample data is on the dashboard. It never appears on saved team data or on the editors. The existing "Sample data · preview" / "Team workspace" label is unchanged.
+- **Phone layout:** the top bar becomes two rows (brand, account and Sign out; then team and badge). "Sign out" is kept on one line.
+- **Tests:**
+  - unit `AppShell.test.tsx`: account, team, no-team, preview, and no uid/claims exposure;
+  - e2e **UI-01**: account and explicit no-team **displayed** (box ≥ 24 px) and accessible at 1440, 834 and 390 px;
+  - e2e **UI-02**: active team at every width, the sample marker shown only while preview is on, and gone on editors.
+- **Screenshots:** `docs/evidence/identity-visibility-2026-10-15/` (README and checksums).
+  - Real app: no-team, saved and sample-preview, at 1440, 834 and 390 px.
+  - Labelled component harness: active team "Alpha Eagles", saved and sample, at each width.
+  - The real-app active-team proof is UI-02 in CI.
+
+### 14.3 Phase 2: N2 investigation (evidence; **root cause not proven**)
+
+Instrumentation (harness only, metadata only, no bodies):
+- a Firestore channel lifecycle logger;
+- `createTeamViaUI` records it when a creation is not confirmed;
+- the reporter publishes `diag-data`.
+
+Diagnostic tests in `e2e/tests/n2.spec.ts`, reported separately from acceptance. Runs `38736770151`, `38738745657` and `38740685365` (evidence 34–36, **not acceptance**), plus 10/10 inside the full run.
+
+| Test | Fault injected | Observation (all executions) |
+|---|---|---|
+| **N2-D0** baseline | none | Write WebChannel: handshake POST, then back-channel GET (stays open), then the POST carrying the write. Server has the team at ~100–165 ms; the dialog closes 10–30 ms later. 1 team |
+| **N2-D3** | write POST delivered, its **HTTP response held 8 s** | Dialog closes ~150–180 ms **while the response is still held**, so the **acknowledgement travels on the back channel**, not on the POST response |
+| **N2-D4** | back-channel GET **held 8 s**, then released | The write is **not sent until the back channel opens**; nothing on the server for 8 s. After release, normally the dialog closes at ~8.1 s with 1 team. **But in Chromium 3 of 25 executions (Firefox 0 of 25) the write was committed (teams = 1) and the dialog stayed on "Creating…" for ≥ 32 s after release: the exact N2 signature, reproduced.** In both stuck executions with full data, the stale first back channel finished after the new write exchange. So did 12 of 30 executions that recovered, so that ordering is **not sufficient** and not a root cause |
+| **N2-D1** | back channel **reset** twice right after opening | **The write is never sent and never retried for ≥ 32 s after connectivity returns**; dialog stuck on "Creating…", nothing saved, no error shown (no false success). Every execution in every run, both engines |
+| **N2-D2** | write held (pending); the coach cancels, leaves Teams, returns, creates again | **Cancel and ✕ are enabled while "Creating…"**; the new dialog accepts the same submission, so **2 teams with the same name** after delivery. Every execution, both engines. The in-dialog double click *is* blocked |
+
+**Conclusion.**
+- **Mechanism:** the N2 state (team committed, dialog stuck) arises when the write's acknowledgement on the Write stream's back channel is not delivered to, or not processed by, the client after a back-channel disruption. It is now reproduced under fault injection.
+- **The natural CI occurrence** (candidate 9, Firefox, no injected fault) has no network trace, so **its trigger is not proven**. The SDK-internal reason the acknowledgement is lost is also **not proven**.
+- **Proven related gaps**, in Codex's client `TeamContext`/`TeamManagement`:
+  - no recovery or feedback after back-channel resets (D1);
+  - duplicate teams on retry while a write is pending or unacknowledged (D2).
+
+  Together: a coach facing a stuck dialog who retries creates a **duplicate team**.
+- **Proposed** (on #39), **not implemented**:
+  - (a) a pending-creation state that survives navigation, with duplicate-name confirmation;
+  - (b) "Still saving…" after ~10 s, and reconciling with the teams listener;
+  - (c) recovery after back-channel resets, for example an online/visibility `disableNetwork`/`enableNetwork` cycle or long-polling auto-detection.
+
+  Product decisions belong to Coach Drew.
+
+### 14.4 Phase 3: full regression on `186a743` (complete matrix, no targeted substitution)
+
+Clean preflight (evidence 32):
+- `npm ci` OK;
+- jest **453/453** (33 suites);
+- tsc 0;
+- functions 73/73;
+- root and functions production audits 0.
+
+**Run `38741662437`, job `116444776707`** (evidence 33):
+- `repeat_each=10`, retries 0, workers 1, no `grep` filter;
+- Playwright 1.64.0, Linux `ubuntu-latest`, headless;
+- 2026-10-15 13:19–14:38 UTC.
+
+| Project | Browser | Viewport | Tests selected | Executions | PASS / FAIL / BLOCKED / SKIPPED |
+|---|---|---|---|---|---|
+| chromium | Chromium 156.0.8078.4 | 1280×720 desktop | all 53 (46 acceptance, UI-01, UI-02, 5 N2 diagnostics) | 530 | **530 / 0 / 0 / 0** |
+| firefox | Firefox 157.0 | 1280×720 desktop | all 53 | 530 | **529 / 1 / 0 / 0** |
+| phone-chromium | Chromium 156 | 390×844 (desktop engine at phone width, not emulation) | 15 UI workflows | 150 | **150 / 0 / 0 / 0** |
+| phone-firefox | Firefox 157 | 390×844 (same) | 15 UI workflows | 150 | **150 / 0 / 0 / 0** |
+| Release-build proof | | | | | 13/13 |
+
+Phone workflows: A07, A10, CC-P10, P11, P12, P14, P15, P16, P17, L0, L1, T01, T02, D10-01, D10-06e.
+
+Steps ≥ 10 s: 1 of 1,360 executions (the failure below).
+
+**The one failure: D10-06b, Firefox, repeat 5** (new intermittent **N3**):
+- creating team "Bravo Bulldogs", the dialog was still open after 10.1 s;
+- **not** in the "Creating…" state;
+- **no team on the server**;
+- the captured trace shows **zero Firestore requests after the submit click**.
+
+So team creation never started. That differs from N2 (server write present).
+- The cause is **not proven**: the click did not submit, or `createTeam` failed before any request. The on-screen message was truncated in the diagnostics; `ac2dae1` now records it for the next occurrence.
+- It is **not attributable** to the identity change, which touches only the top bar; the dialog and `TeamContext` are unchanged.
+- D10-06b passed 10/10 on candidates 6–9.
+
+Every other acceptance test passed 10/10 in every project where it ran: the D10 import set (including R1b and R1c), CC02/CC03 (team switching, plan and play save/reopen, recovery, conflicts, sign-out), L0, L1, A10, UI-01, UI-02 and T01–T03. H2's D10-07 passed 10/10 in both engines.
+
+### 14.5 Phase 4: open inventory (explicit)
+
+| Item | Status |
+|---|---|
+| H2 Firefox D10-07 timeout | **OPEN** (0/10 here; 2/50 counted Firefox executions historically; cause unexplained) |
+| FX-02 51 s delay | **OPEN** |
+| **N2** team saved but "Creating…" | **OPEN.** Mechanism narrowed and signature reproduced (Chromium 3/25 under fault); natural trigger and SDK cause not proven |
+| **N2-D1** no recovery after back-channel resets | **OPEN** (new, proven, client) |
+| **N2-D2** duplicate team on retry while pending | **OPEN** (new, proven, client) |
+| **N3** submit produced no request (D10-06b 1/10 Firefox) | **OPEN** (new, cause not proven) |
+| R1c residual: device blocked when the original team is gone | **OPEN** |
+| R3 "Not now" permanent on a fresh offer | **OPEN** |
+| R4 `D10_APPROVED` release control | **OPEN** |
+| Standalone touch exit | **OPEN** |
+| Background / hidden-tab behaviour | **NOT MEASURED** |
+| Real devices | **NOT MEASURED** |
+| Staging acceptance | **NOT MEASURED** |
+| W1 dormant per-user stats | Recorded (product decision) |
+| #67 visual approval, identity design approval | **Pending Coach Drew** |
+
+### 14.6 GO / NO-GO
+
+**MVP: NO-GO.**
+- Emulator acceptance is strong: 1,359/1,360 on candidate 10, with every workflow passing through the revised UI at desktop and phone widths.
+- But team creation has proven reliability gaps: a stuck "Creating…" with no recovery or feedback, and duplicate teams on retry, plus the unexplained N2 and N3 intermittents.
+- Staging, real devices and background tabs are not measured.
+- H2, FX-02, R1c residual, R3, R4 and touch exit remain open.
+
+No merge, deploy, live-data change or AI activation.
