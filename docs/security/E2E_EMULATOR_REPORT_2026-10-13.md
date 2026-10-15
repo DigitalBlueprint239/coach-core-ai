@@ -659,3 +659,88 @@ It reported these **coverage gaps** (tracked, not fixed now):
 1. **Browser coverage of the pre-repair "declined but pending" state.** Its recovery is covered only by Codex's jest test (`owner-resume.test.tsx`). No browser test seeds that state.
 2. **Multi-team owner.** In D10-06e, A owns one team, so the original-team selection is trivial. Recovery when A has several teams and another one is selected is not browser-tested.
 3. **"Resume import" after a reload.** The button is only exercised in-session. After a reload the offer is recomputed, which is by design.
+
+## 13. Independent workflow review of #67 (revised shell and dashboard) on integration candidate 9 (2026-10-15)
+
+Scope: workflows through the revised UI. **Visual approval is not assessed here; it remains pending Coach Drew.** Candidate 8 (`069c8f1`) and its evidence are preserved unchanged.
+
+### 13.1 Exact SHAs
+
+| | SHA |
+|---|---|
+| #67 head reviewed | **`7f22c7a`** (`codex/visual-shell-dashboard`, based on candidate 6 `4757eaf`) |
+| **Candidate 9** (test-only, never merged) | **`6d613a8`** on `claude/integration-candidate-2026-10-15-ui67` = candidate 8 `069c8f1` (accepted R1c #69 `82d46cc`) + #67 `7f22c7a` + harness `8185d3d` |
+| Candidate 9b (harness-only follow-up) | **`2446df2`** = `6d613a8` + harness `2966f38`. Runtime identical to `6d613a8` |
+
+`src` in candidate 9 differs from candidate 8 **only** in #67's 10 UI files (`App.tsx`, `Dashboard.tsx` and its test, `OnboardingModal.tsx`, `src/ui/*`), which are byte-identical to `7f22c7a`. Persistence, auth, import, team context, rules, functions and packages are identical to candidate 8. The only merge conflict was `.gitattributes`, resolved as the union.
+
+### 13.2 Code review of #67 (workflow-relevant)
+
+- **Navigation:** one `AppShell`, with each destination as a button in the desktop sidebar and in the phone bottom bar (≤767 px). Accessible names: Teams, Practice Plans, Smart Playbook, Overview · My Week.
+- **Sign out:** the top-bar button calls `logout()`. That still runs every registered sign-out guard, and `DraftSignOut` is still mounted, so the unsynced-draft dialog cannot be bypassed. Confirmed in the browser by CC-P12 and A10.
+- **Dashboard data:** it only **reads** saved plans (`cloud.list`, and only for a team the coach owns). Sample preview is static, labelled "Sample data · preview", and never writes.
+- **Removed:** the old in-page tabs and the obsolete `MigrationBanner` mount (it already rendered nothing).
+
+### 13.3 Harness changes for this review (Claude files; no assertion weakened)
+
+- `openTab` clicks the **visible** navigation button, falling back to the pre-#67 tabs.
+- New `phone-chromium` and `phone-firefox` projects run the 15 UI workflow tests at **390×844**: A07, A10, CC-P10, P11, P12, P14, P15, P16, P17, L0, L1, T01, T02, D10-01 and D10-06e. These are desktop engines at phone width, **not device emulation and not physical phones**.
+- An optional `grep` dispatch input (passed as data through env) allows targeted re-runs.
+- After the first run, two locators were rescoped (§13.5).
+
+### 13.4 Results (retries 0, workers 1, Chromium 156.0.8078.4 / Firefox 157.0)
+
+**Clean preflight `6d613a8`** (evidence 28):
+- `npm ci` OK;
+- jest **449/449** (32 suites, including #67's new UI tests);
+- tsc 0;
+- functions 73/73;
+- production audit 0.
+
+**×10, run `38721496752`, job `116377013111`** (evidence 29):
+
+| Project | PASS / FAIL | Failures |
+|---|---|---|
+| Desktop Chromium (46 tests) | 450 / 10 | E2E-T02 10/10 |
+| Desktop Firefox (46 tests) | 449 / 11 | E2E-T02 10/10; CC-P16 1/10 (**N2**) |
+| Phone Chromium (15 workflows) | 130 / 20 | E2E-T02 10/10; CC-L1 10/10 |
+| Phone Firefox (15 workflows) | 130 / 20 | E2E-T02 10/10; CC-L1 10/10 |
+| Release-build proof | 13/13 | |
+
+**Targeted ×10 after the locator fixes, `2446df2`, run `38730605415`, job `116407177855`** (evidence 30): CC-L1 and E2E-T02 pass **10/10 in all four projects**, with 0 steps ≥ 10 s.
+
+Workflows exercised through the revised UI, all 10/10 in every project where they ran:
+- **Team switching:** CC-P11, T01, T02.
+- **Practice save and reopen:** P16, P16b.
+- **Play save and reopen:** P15.
+- **Recovery:** P10, P12, P17, L0, D10-01, D10-06e.
+- **Conflicts:** P14, C01.
+- **Sign-out:** A07, A10, P12.
+
+### 13.5 Classification
+
+**A. #67 regressions in workflows: none found.**
+
+**B. Test-harness adjustments caused by #67's markup** (not product defects; fixed, re-measured):
+
+| Test | Cause | Fix |
+|---|---|---|
+| E2E-T02 | "No team selected" now appears twice (new top bar and Teams page), so the locator was ambiguous. Both copies correctly showed that B has no team | Scoped to the main content |
+| CC-L1 (phone) | The team-name anchor matched the top-bar label, which #67 hides at ≤767 px | Anchor requires the team name rendered (attached); the visible-dashboard anchor stays |
+
+**C. #67 observations for Coach Drew's review** (new behaviour, not workflow failures; evidence 31, local probe):
+
+| Width | Signed-in account ("Welcome, email") | Active team name |
+|---|---|---|
+| 1440 px | Visible | Visible (top bar) |
+| 834 px (tablet) | **Not rendered** (`display:none`; not even screen readers get it) | Visible (top bar) |
+| 390 px (phone) | **Visually hidden** (1 px clip; screen readers only) | **Not displayed** on the dashboard (top-bar label and heading suffix hidden) |
+
+Before #67 (`069c8f1`) the account email showed at every width. On a **shared device**, which the D10 rules are built around, a coach on a tablet or phone can't see which account, and on a phone which team, is active before editing. **Recommendation:** a compact account and team indicator at every width. This is a product/UI decision; nothing was changed.
+
+**D. Inherited open issues seen in this run** (not #67: the files involved are unchanged):
+- **N2:** desktop Firefox CC-P16, repeat 1. The Create Team click completed quickly. Then the dialog stayed "Creating…" for 10.1 s while `teams` in Firestore already held "Owls". This is the first N2 capture in CI with diagnostics. `TeamContext.createTeam` is unchanged since before #67, and Codex saw the same signature on `4757eaf`. **OPEN.**
+- H2, FX-02, the R1c missing-team residual, R3, R4 and the standalone touch exit: unchanged, **OPEN**.
+- Genuine hidden tabs, physical devices and staging: **NOT MEASURED**.
+
+**MVP NO-GO.** #67 visual approval is pending Coach Drew. No merge, deploy, spend, live change or AI activation.
