@@ -88,7 +88,8 @@ export function firestoreNetLog(page: Page) {
   type Row = { k: string; m?: string; type?: string; s: number; e: number; st?: number; f?: string; label?: string };
   const rows: Row[] = [];
   const byReq = new Map<object, Row>();
-  const kind = (u: string) => (/Firestore\/Write\/channel/.test(u) ? 'W' : /Firestore\/Listen\/channel/.test(u) ? 'L' : /documents:commit/.test(u) ? 'C' : '');
+  // W/L = SDK WebChannel Write/Listen; C = REST documents:commit; R = REST team readback (N2 repair).
+  const kind = (u: string) => (/Firestore\/Write\/channel/.test(u) ? 'W' : /Firestore\/Listen\/channel/.test(u) ? 'L' : /documents:commit/.test(u) ? 'C' : /\/v1\/projects\/[^/]+\/databases\/\(default\)\/documents\/teams\//.test(u) ? 'R' : '');
   const onRequest = (r: import('@playwright/test').Request) => {
     const k = kind(r.url()); if (!k) return;
     const q = new URL(r.url()).searchParams;

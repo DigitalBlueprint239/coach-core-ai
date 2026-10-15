@@ -5,7 +5,7 @@
 // submitted; no loss of the submitted team). They do not prescribe a fix and
 // are reported separately from acceptance tests.
 import { test, expect, type Page, type Route } from '@playwright/test';
-import { resetEmulators, adminTeamsOwnedBy, AUTH_ONLY } from './support/emulator';
+import { resetEmulators, adminTeamsOwnedBy, adminTeamsFull, AUTH_ONLY } from './support/emulator';
 import { coachEmail, skipOnboarding, signInAsBetaCoach, openTab, firestoreNetLog, createTeamViaUI, signOutViaUI } from './support/app';
 
 test.beforeEach(async ({ context }) => {
@@ -155,6 +155,12 @@ test('N2-D2 [diagnostic] write held (pending, not on the server): coach cancels,
 });
 
 // ---------------------------------------------------------------------------
+// WebChannel-model tests N2-W1/N2-W2 (2026-10-15). Written as N2-A1/N2-A2 at
+// c4e087f and measured pre-repair as such (evidence 37). The repair (#71
+// bdb06ae) moved team creation to REST, which these faults no longer touch,
+// so they are kept unchanged in substance as DIAGNOSTICS; the REST-path
+// acceptance tests N2-A1..A4 follow below.
+// Original header:
 // N2 repair ACCEPTANCE tests (2026-10-15, Coach Drew N2-repair directive).
 // They state the required behaviour; they are expected to FAIL on code without
 // the repair (candidate 10 `186a743`) and are counted as acceptance tests once
@@ -164,7 +170,7 @@ test('N2-D2 [diagnostic] write held (pending, not on the server): coach cancels,
 // ---------------------------------------------------------------------------
 const savingStatus = (page: Page) => page.getByRole('status').or(page.getByRole('alert')).filter({ hasText: /saving|connection|offline|retry/i });
 
-test('N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed', async ({ page }) => {
+test('N2-W1 [diagnostic] (was N2-A1 at c4e087f; WebChannel fault model, pre-repair evidence 37) after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2a1'));
   const name = 'N2 Recovered';
   await openCreate(page, name);
@@ -195,7 +201,7 @@ test('N2-A1 [acceptance] after the Write stream is reset and connectivity restor
   expect(recoveredAt, 'the UI must recover: dialog closed and the team shown').toBeGreaterThanOrEqual(0);
 });
 
-test('N2-A2 [acceptance] cancelling or leaving during a pending create and trying again never produces a duplicate team', async ({ page }) => {
+test('N2-W2 [diagnostic] (was N2-A2 at c4e087f; WebChannel fault model, pre-repair evidence 37) cancelling or leaving during a pending create and trying again never produces a duplicate team', async ({ page }) => {
   const uid = await signInAsBetaCoach(page, coachEmail('n2a2'));
   const name = 'N2 No Duplicate';
   await openCreate(page, name);
@@ -261,4 +267,240 @@ test('N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth
   }
   record(`N3-D5 cycles=${rows.join(' ')}`);
   expect(failures, 'an N3-like creation failure occurred (see diag-data for the probe)').toBe(0);
+});
+
+
+// ---------------------------------------------------------------------------
+// N2 REPAIR ACCEPTANCE on the actual transport (2026-10-15; #71 `bdb06ae`).
+// Team creation now uses REST: POST .../documents:commit (create-only, fixed
+// team id saved on the device first) then GET .../documents/teams/{id}
+// (authoritative readback). These tests fault THAT path. Requirements are not
+// relaxed: an accessible role=status/alert matching the agreed wording within
+// the 8 s outage; afterwards the same operation completes, exactly one team
+// exists, and owner/ID/name/code on the server match the device's pending
+// operation and the UI. Recovery may be automatic or via the UI's own retry
+// control ("Check and retry" / "Resume team creation"); the mode is recorded.
+// ---------------------------------------------------------------------------
+const COMMIT = /\/documents:commit(\?|$)/;
+const READBACK = /\/v1\/projects\/[^/]+\/databases\/\(default\)\/documents\/teams\/[A-Za-z0-9]{20}(\?|$)/;
+
+/** The device's pending operation for uid (id, name, code); read for assertions only, never logged. */
+async function pendingOp(page: Page, uid: string): Promise<{ id: string; name: string; code: string } | null> {
+  return page.evaluate((u) => {
+    const key = Object.keys(localStorage).find((k) => k.endsWith(`:${u}:team-create`));
+    if (!key) return null;
+    try { const o = JSON.parse(localStorage.getItem(key) || ''); return { id: o.id, name: o.name, code: o.code }; } catch { return null; }
+  }, uid);
+}
+/** Ms from `since` until the agreed accessible status/alert is present, or -1 within `windowMs`. */
+async function statusWithin(page: Page, since: number, windowMs: number) {
+  return until(async () => (await savingStatus(page).count()) > 0, since, windowMs);
+}
+/** Recover as a coach would: wait for automatic completion, else use the UI's own retry controls. */
+async function recover(page: Page, name: string): Promise<{ mode: string; ms: number }> {
+  const done = async () => (await dialog(page).count()) === 0 && (await page.getByRole('heading', { name, exact: true }).count()) > 0;
+  const t0 = Date.now();
+  if (await until(done, t0, 12_000) >= 0) return { mode: 'automatic', ms: Date.now() - t0 };
+  if ((await dialog(page).count()) === 0) {
+    const resume = page.getByRole('button', { name: 'Resume team creation' });
+    if (await resume.count()) await resume.click();
+  }
+  const retry = page.getByRole('button', { name: 'Check and retry' });
+  if (await retry.count()) await retry.click();
+  const ms = await until(done, Date.now(), 20_000);
+  return { mode: ms >= 0 ? 'ui-retry' : 'not-recovered', ms: ms >= 0 ? Date.now() - t0 : -1 };
+}
+/** Authoritative agreement: exactly one team for uid, and it IS the pending operation (id, name, code, owner). */
+async function expectExactlyTheOperation(uid: string, op: { id: string; name: string; code: string } | null, label: string) {
+  expect(op, `${label}: a pending operation was recorded on the device before the request`).not.toBeNull();
+  const teams = (await adminTeamsFull(uid)).filter((t) => t.name === op!.name);
+  expect(teams, `${label}: exactly one team for this owner and name`).toHaveLength(1);
+  expect(teams[0], `${label}: the server team is the same operation (id, name, code, owner)`)
+    .toEqual({ id: op!.id, name: op!.name, code: op!.code, ownerId: uid });
+}
+
+test('N2-A1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2ra1'));
+  const name = 'N2 REST Held';
+  await openCreate(page, name);
+  const releases: Array<() => void> = []; let holding = true; let held = 0;
+  await page.route(COMMIT, async (route: Route) => {
+    if (holding) { held += 1; await new Promise<void>((r) => releases.push(r)); }
+    await route.continue().catch(() => {});
+  });
+  const net = firestoreNetLog(page);
+  const t0 = Date.now(); net.mark('click');
+  await submit(page).click();
+  const statusAt = await statusWithin(page, t0, 8_000);
+  const op = await pendingOp(page, uid);
+  const serverDuring = (await adminTeamsFull(uid)).length;
+  await new Promise((r) => setTimeout(r, Math.max(0, 8_000 - (Date.now() - t0))));
+  holding = false; releases.splice(0).forEach((r) => r()); net.mark('restore');
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 3_000)); // late-duplicate window
+  net.mark('end');
+  record(`A1 heldCommits=${held} statusAt=${statusAt}ms serverDuringOutage=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  net.stop(); await page.unroute(COMMIT);
+  expect(statusAt, 'accessible saving/connection status within the 8 s outage').toBeGreaterThanOrEqual(0);
+  expect(serverDuring, 'nothing on the server while the request is held').toBe(0);
+  expect(rec.mode, 'the operation completes after recovery and the UI shows the team').not.toBe('not-recovered');
+  await expectExactlyTheOperation(uid, op, 'A1');
+  expect(await pendingOp(page, uid), 'pending operation cleared after confirmation').toBeNull();
+});
+
+test('N2-A1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2ra1b'));
+  const name = 'N2 REST Reset';
+  await openCreate(page, name);
+  let blocking = true; let resets = 0;
+  await page.route(COMMIT, async (route: Route) => {
+    if (blocking) { resets += 1; await route.abort('connectionreset').catch(() => {}); return; }
+    await route.continue().catch(() => {});
+  });
+  const net = firestoreNetLog(page);
+  const t0 = Date.now(); net.mark('click');
+  await submit(page).click();
+  const statusAt = await statusWithin(page, t0, 8_000);
+  const op = await pendingOp(page, uid);
+  await new Promise((r) => setTimeout(r, Math.max(0, 8_000 - (Date.now() - t0))));
+  const serverDuring = (await adminTeamsFull(uid)).length;
+  blocking = false; net.mark('restore');
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 3_000));
+  net.mark('end');
+  record(`A1b resets=${resets} statusAt=${statusAt}ms serverDuringOutage=${serverDuring} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  net.stop(); await page.unroute(COMMIT);
+  expect(statusAt, 'accessible saving/connection status within the 8 s outage').toBeGreaterThanOrEqual(0);
+  expect(serverDuring, 'nothing on the server during the outage').toBe(0);
+  expect(rec.mode, 'the operation completes after restore and the UI shows the team').not.toBe('not-recovered');
+  await expectExactlyTheOperation(uid, op, 'A1b');
+});
+
+test('N2-A1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2ra1c'));
+  const name = 'N2 REST Lost Response';
+  await openCreate(page, name);
+  let dropping = true; let dropped = 0; let committedStatus = 0;
+  await page.route(COMMIT, async (route: Route) => {
+    if (dropping) {
+      dropping = false; // only the first commit
+      const response = await route.fetch(); // reaches the server and commits
+      committedStatus = response.status(); dropped += 1;
+      await route.abort('connectionreset').catch(() => {}); return; // the client never sees the reply
+    }
+    await route.continue().catch(() => {});
+  });
+  const net = firestoreNetLog(page);
+  const t0 = Date.now(); net.mark('click');
+  await submit(page).click();
+  const statusAt = await statusWithin(page, t0, 8_000);
+  const op = await pendingOp(page, uid);
+  const serverAfterCommit = (await adminTeamsFull(uid)).length;
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 3_000));
+  net.mark('end');
+  record(`A1c dropped=${dropped} serverCommitStatus=${committedStatus} statusAt=${statusAt}ms serverAfterCommit=${serverAfterCommit} recovery=${rec.mode}/${rec.ms}ms net: ${net.summary(900)}`);
+  net.stop(); await page.unroute(COMMIT);
+  expect(committedStatus, 'the commit really reached the server').toBe(200);
+  expect(statusAt, 'accessible saving/connection status within 8 s').toBeGreaterThanOrEqual(0);
+  expect(rec.mode, 'the UI recovers and shows the team').not.toBe('not-recovered');
+  await expectExactlyTheOperation(uid, op, 'A1c');
+});
+
+test('N2-A2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2ra2'));
+  const name = 'N2 REST Pending';
+  await openCreate(page, name);
+  const releases: Array<() => void> = []; let holding = true;
+  await page.route(COMMIT, async (route: Route) => {
+    if (holding) await new Promise<void>((r) => releases.push(r));
+    await route.continue().catch(() => {});
+  });
+  await submit(page).click();
+  await expect(savingStatus(page).first()).toBeVisible(); // positive anchor: pending, with status
+  const op = await pendingOp(page, uid);
+  const cancel = page.getByRole('button', { name: 'Cancel' });
+  if (await cancel.count() && await cancel.isEnabled()) await cancel.click();
+  await openTab(page, 'My Week');
+  await openTab(page, 'Teams');
+  const resumeVisible = await page.getByRole('button', { name: 'Resume team creation' }).isVisible().catch(() => false);
+  // Try every route to a second submission the UI allows.
+  let secondSubmit = false;
+  const create = page.getByRole('button', { name: 'Create Team', exact: true }).first();
+  if (await create.count() && await create.isEnabled()) {
+    await create.click();
+    const field = page.getByLabel('Team Name');
+    if (await field.count() && await field.isEnabled()) await field.fill(name);
+    const btn = submit(page);
+    if (await btn.count() && await btn.isEnabled()) { await btn.click(); secondSubmit = true; }
+  }
+  holding = false; releases.splice(0).forEach((r) => r());
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 5_000)); // late-duplicate window
+  record(`A2 resumeVisibleWhilePending=${resumeVisible} secondSubmitPossible=${secondSubmit} recovery=${rec.mode}/${rec.ms}ms`);
+  await page.unroute(COMMIT);
+  expect(resumeVisible, 'the pending creation stays visible and resumable on Teams').toBe(true);
+  expect(rec.mode, 'the pending creation completes').not.toBe('not-recovered');
+  await expectExactlyTheOperation(uid, op, 'A2');
+});
+
+test('N2-A3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('n2ra3'));
+  const name = 'N2 REST Refresh';
+  await openCreate(page, name);
+  let holding = true;
+  await page.route(COMMIT, async (route: Route) => {
+    if (holding) { await route.abort('connectionreset').catch(() => {}); return; } // never reaches the server
+    await route.continue().catch(() => {});
+  });
+  await submit(page).click();
+  await expect(savingStatus(page).first()).toBeVisible();
+  const op = await pendingOp(page, uid);
+  await page.reload();
+  holding = false;
+  await openTab(page, 'Teams');
+  await expect(page.getByRole('button', { name: 'Resume team creation' }), 'pending creation survives refresh').toBeVisible();
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 3_000));
+  record(`A3 recovery=${rec.mode}/${rec.ms}ms`);
+  await page.unroute(COMMIT);
+  expect(rec.mode).not.toBe('not-recovered');
+  await expectExactlyTheOperation(uid, op, 'A3');
+});
+
+test('N2-A4 [acceptance] account isolation A -> B -> A: B cannot see or resume A\'s pending team; A recovers it once', async ({ page }) => {
+  const emailA = coachEmail('n2ra4a');
+  const uidA = await signInAsBetaCoach(page, emailA);
+  const name = 'N2 REST Isolation';
+  await openCreate(page, name);
+  let holding = true;
+  await page.route(COMMIT, async (route: Route) => {
+    if (holding) { await route.abort('connectionreset').catch(() => {}); return; }
+    await route.continue().catch(() => {});
+  });
+  await submit(page).click();
+  await expect(savingStatus(page).first()).toBeVisible();
+  const opA = await pendingOp(page, uidA);
+  const cancel = page.getByRole('button', { name: 'Cancel' });
+  if (await cancel.count() && await cancel.isEnabled()) await cancel.click();
+  holding = false;
+  await signOutViaUI(page);
+  const uidB = await signInAsBetaCoach(page, coachEmail('n2ra4b'));
+  await openTab(page, 'Teams');
+  // Positive anchor for B's Teams page, then isolation checks.
+  await expect(page.getByRole('main').getByText('No team selected')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Resume team creation' }), 'B cannot resume A\'s pending team').toHaveCount(0);
+  await expect(page.getByText(name), 'A\'s pending team name is not shown to B').toHaveCount(0);
+  expect(await pendingOp(page, uidB), 'B has no pending operation').toBeNull();
+  await signOutViaUI(page);
+  await signInAsBetaCoach(page, emailA);
+  await openTab(page, 'Teams');
+  await expect(page.getByRole('button', { name: 'Resume team creation' }), 'A can resume').toBeVisible();
+  const rec = await recover(page, name);
+  await new Promise((r) => setTimeout(r, 3_000));
+  record(`A4 recovery=${rec.mode}/${rec.ms}ms`);
+  await page.unroute(COMMIT);
+  expect(rec.mode).not.toBe('not-recovered');
+  await expectExactlyTheOperation(uidA, opA, 'A4');
+  expect((await adminTeamsFull(uidB)).filter((t) => t.name === name), 'nothing under B').toHaveLength(0);
 });

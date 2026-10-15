@@ -139,3 +139,20 @@ export async function adminTeamsOwnedBy(uid: string): Promise<Array<{ id: string
     name: x.document.fields?.name?.stringValue,
   }));
 }
+
+/** Authoritative team records for an owner: id, name, code, ownerId (N2 repair acceptance, 2026-10-15). */
+export async function adminTeamsFull(uid: string): Promise<Array<{ id: string; name: string; code: string; ownerId: string }>> {
+  const r = await call(`${docsUrl}:runQuery`, {
+    method: 'POST', headers: OWNER,
+    body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: 'teams' }],
+      where: { fieldFilter: { field: { fieldPath: 'ownerId' }, op: 'EQUAL', value: { stringValue: uid } } },
+    } }),
+  });
+  return r.filter((x: any) => x.document).map((x: any) => ({
+    id: x.document.name.split('/').pop(),
+    name: x.document.fields?.name?.stringValue,
+    code: x.document.fields?.code?.stringValue,
+    ownerId: x.document.fields?.ownerId?.stringValue,
+  }));
+}
