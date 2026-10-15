@@ -68,9 +68,14 @@ export default class AnnotateReporter {
         + ` | last step: ${last ? `${last.path.slice(0, 160)} (${sec(last.duration)})` : 'none'}`
         + ` | slowest: ${top.map((s) => `${s.title.slice(0, 90)} ${sec(s.duration)}`).join('; ')}`;
     }
+    // Runtime diagnostic data (type 'diag-data'), e.g. the N2 network lifecycle.
+    const seenData = new Set();
+    const data = [...(result.annotations || []), ...test.annotations]
+      .filter((a) => a.type === 'diag-data' && a.description && !seenData.has(a.description) && seenData.add(a.description))
+      .map((a) => a.description);
     this.rows.push({
       project, title: test.title, status, msg, ms: result.duration, diag, rep: test.repeatEachIndex,
-      slow: slow.map((s) => `${s.title.slice(0, 90)} ${sec(s.duration)}`),
+      slow: slow.map((s) => `${s.title.slice(0, 90)} ${sec(s.duration)}`), data,
     });
   }
 
@@ -126,6 +131,12 @@ export default class AnnotateReporter {
       const slowRows = rows.filter((r) => r.slow.length);
       const body = slowRows.map((r) => `${r.status} ${id(r.title)} #${r.rep}: ${r.slow.join('; ')}`).join('\n');
       emit('notice', `E2E ${p} slow steps >= ${SLOW_MS / 1000}s: ${slowRows.length} of ${rows.length} executions`, body || 'none');
+      // Diagnostic data, one annotation per project (failures first), capped by LIMIT.
+      const dataRows = rows.filter((r) => r.data.length).sort((a, b) => (a.status === 'FAIL' ? 0 : 1) - (b.status === 'FAIL' ? 0 : 1));
+      if (dataRows.length) {
+        emit('notice', `E2E ${p} diag data: ${dataRows.length} executions`,
+          dataRows.map((r) => `${r.status} ${id(r.title)} #${r.rep}: ${r.data.join(' ')}`).join('\n'));
+      }
     }
   }
 }
