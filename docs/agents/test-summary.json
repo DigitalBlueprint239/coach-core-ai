@@ -120,6 +120,20 @@
       "skipped": 0,
       "total": 450,
       "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38638354889"
+    },
+    {
+      "id": "r1c-client-unit",
+      "commit": "82d46cc33b7933d4de19b84a0acc553553c51d44",
+      "environment": "local",
+      "owner": "Codex",
+      "status": "PASS",
+      "passed": 440,
+      "failed": 0,
+      "blocked": 0,
+      "skipped": 0,
+      "total": 440,
+      "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/69",
+      "limitations": "Unit/DOM/mocked backend only; reused dependencies, not fresh install. Independent owner-resume acceptance pending Claude candidate8."
     }
   ],
   "unmeasured": {
@@ -133,7 +147,7 @@
     "physicalTablet": "NOT MEASURED"
   },
   "blockers": [
-    "R1c owner-resume repair/independent acceptance pending",
+    "R1c client repair delivered in #69 source82d46cc; independent candidate8 acceptance PENDING Claude",
     "H2 / FX-02 retained browser instability",
     "Local N1 library loading checkpoint / N2 team acknowledgement / functions timing failure unresolved",
     "Film Analyzer required under #50; implementation/acceptance blocked",
@@ -154,5 +168,14 @@
     "N2": "App/SDK/host team acknowledgement unresolved; overwrite assertions were not reached.",
     "F1": "Local mock APIConnectionError; discovery/diagnostics repaired by Claude; original failure retained.",
     "W1": "Dormant profile statistics; product decision required, not measured statistics."
+  },
+  "governanceCI": {
+    "head": "724f1a7d29299792d3bb19118fbec86b5002c3ad",
+    "mergeCommit": "21a635f65ae798e4f4b9c32536c2c2ce955a7cd6",
+    "status": "PASS",
+    "formatChecksPassed": 12,
+    "productAcceptance": false,
+    "evidence": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38658177801",
+    "priorFailurePreserved": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38657911581"
   }
 }
