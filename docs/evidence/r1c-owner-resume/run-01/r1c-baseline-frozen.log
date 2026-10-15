@@ -1,0 +1,137 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/features/legacy-import/__tests__/owner-resume.test.tsx
+
+  console.error
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      18 | test('Not now postpones unfinished import, preserves ownership and offers immediate and remounted recovery', () => {
+      19 |   const backend = { copy: jest.fn(), read: jest.fn() };
+    > 20 |   const view = render(<LegacyImport {...owner} backend={backend} />);
+         |                      ^
+      21 |   fireEvent.click(screen.getByRole('button', { name: 'Not now' }));
+      22 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+      23 |   expect(localStorage.getItem(CLAIM_KEY)).toBe(claim);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-acceptance-verification/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-acceptance-verification/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/owner-resume.test.tsx:20:22)
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+FAIL src/features/legacy-import/__tests__/owner-resume.test.tsx
+  × Not now postpones unfinished import, preserves ownership and offers immediate and remounted recovery (75 ms)
+  × pre-repair declined unfinished owner resumes with readback (device claim=true) (6 ms)
+  × pre-repair declined unfinished owner resumes with readback (device claim=false) (4 ms)
+  × postponed owner cannot record success on failed verification; B and other teams remain blocked (2 ms)
+  √ a fresh offer still declines permanently without writes (4 ms)
+
+  ● Not now postpones unfinished import, preserves ownership and offers immediate and remounted recovery
+
+    expect(received).toBeNull()
+
+    Received: "{\"decision\":\"declined\"}"
+
+      20 |   const view = render(<LegacyImport {...owner} backend={backend} />);
+      21 |   fireEvent.click(screen.getByRole('button', { name: 'Not now' }));
+    > 22 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+         |                                                  ^
+      23 |   expect(localStorage.getItem(CLAIM_KEY)).toBe(claim);
+      24 |   expect(localStorage.getItem(pendingKey('A'))).toBe(pending);
+      25 |   fireEvent.click(screen.getByRole('button', { name: 'Resume import' }));
+
+      at Object.<anonymous> (src/features/legacy-import/__tests__/owner-resume.test.tsx:22:50)
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● pre-repair declined unfinished owner resumes with readback (device claim=true)
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Import plays"
+
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div />
+    </body>
+
+      41 |   const onImported = jest.fn();
+      42 |   render(<LegacyImport {...owner} backend={backend} onImported={onImported} />);
+    > 43 |   fireEvent.click(screen.getByRole('button', { name: 'Import plays' }));
+         |                          ^
+      44 |   await waitFor(() => expect(onImported).toHaveBeenCalledTimes(1));
+      45 |   expect(backend.read).toHaveBeenCalledTimes(1);
+      46 |   expect(copies.size).toBe(1);
+
+      at Object.getElementError (../main-acceptance-verification/node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at getByRole (../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at src/features/legacy-import/__tests__/owner-resume.test.tsx:43:26
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● pre-repair declined unfinished owner resumes with readback (device claim=false)
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Import plays"
+
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div />
+    </body>
+
+      41 |   const onImported = jest.fn();
+      42 |   render(<LegacyImport {...owner} backend={backend} onImported={onImported} />);
+    > 43 |   fireEvent.click(screen.getByRole('button', { name: 'Import plays' }));
+         |                          ^
+      44 |   await waitFor(() => expect(onImported).toHaveBeenCalledTimes(1));
+      45 |   expect(backend.read).toHaveBeenCalledTimes(1);
+      46 |   expect(copies.size).toBe(1);
+
+      at Object.getElementError (../main-acceptance-verification/node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at getByRole (../main-acceptance-verification/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at src/features/legacy-import/__tests__/owner-resume.test.tsx:43:26
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● postponed owner cannot record success on failed verification; B and other teams remain blocked
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: []
+
+      52 |   declineImport(localStorage, owner);
+      53 |   const backend = { copy: jest.fn(async () => 'A:alpha:p1'), read: jest.fn(async () => { throw new Error('offline'); }) };
+    > 54 |   await expect(importLegacy(localStorage, owner, () => true, backend)).rejects.toThrow('offline');
+         |         ^
+      55 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+      56 |   await expect(importLegacy(localStorage, other, () => true, backend)).rejects.toThrow('another account');
+      57 |   await expect(importLegacy(localStorage, { ...owner, teamId: 'missing' }, () => true, backend)).rejects.toThrow('Alpha');
+
+      at expect (../main-acceptance-verification/node_modules/expect/build/index.js:178:15)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/owner-resume.test.tsx:54:9)
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 1 passed, 5 total
+Snapshots:   0 total
+Time:        3.221 s
+Ran all test suites within paths "src/features/legacy-import/__tests__/owner-resume.test.tsx".

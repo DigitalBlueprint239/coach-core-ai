@@ -28,6 +28,7 @@ export function importNotice(storage: Storage, session: ImportSession): string {
   const pending = storage.getItem(pendingKey(session.uid));
   if (pending) {
     const value = JSON.parse(pending);
+    if (!value || typeof value.teamId !== 'string' || !value.teamId) throw new Error('Device import ownership cannot be verified. Originals preserved.');
     if (value.teamId !== session.teamId) return `An import into ${value.teamName || value.teamId} was started and not finished. Switch to ${value.teamName || value.teamId} to finish it.`;
   }
   return '';
@@ -80,14 +81,26 @@ export const sameContent = (a: unknown, b: unknown): boolean => {
     : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(k => [k, canonical(value[k])])) : value;
   return JSON.stringify(canonical(a)) === JSON.stringify(canonical(b));
 };
+// Recovery is restricted to the original account/team, even when an older
+// client stored a permanent decline while its import was still unfinished.
+export function hasUnfinishedImport(storage: Storage, session: ImportSession): boolean {
+  if (importNotice(storage, session)) return false;
+  const claim = storage.getItem(CLAIM_KEY);
+  if (claim) return JSON.parse(claim).status === 'pending';
+  return !!storage.getItem(pendingKey(session.uid));
+}
 export function declineImport(storage: Storage, session: ImportSession) {
+  const notice = importNotice(storage, session);
+  if (notice) throw new Error(notice);
+  if (hasUnfinishedImport(storage, session)) return 'postponed';
   storage.setItem(decisionKey(session.uid), JSON.stringify({ decision: 'declined' }));
+  return 'declined';
 }
 export async function importLegacy(storage: Storage, session: ImportSession, stillCurrent: () => boolean, backend: ImportBackend) {
   if (!D10_APPROVED || !stillCurrent()) throw new Error('Account or team changed.');
   const notice = importNotice(storage, session);
   if (notice) throw new Error(notice);
-  if (storage.getItem(decisionKey(session.uid))) return [];
+  if (storage.getItem(decisionKey(session.uid)) && !hasUnfinishedImport(storage, session)) return [];
   const plays = readLegacy(storage);
   if (!plays.length) return [];
   // Durable device ownership precedes every cloud request. Interrupted imports

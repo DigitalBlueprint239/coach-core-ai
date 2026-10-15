@@ -1,0 +1,37 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/features/legacy-import/__tests__/owner-resume.test.tsx
+
+  console.error
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      18 | test('Not now postpones unfinished import, preserves ownership and offers immediate and remounted recovery', () => {
+      19 |   const backend = { copy: jest.fn(), read: jest.fn() };
+    > 20 |   const view = render(<LegacyImport {...owner} backend={backend} />);
+         |                      ^
+      21 |   fireEvent.click(screen.getByRole('button', { name: 'Not now' }));
+      22 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+      23 |   expect(localStorage.getItem(CLAIM_KEY)).toBe(claim);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-acceptance-verification/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-acceptance-verification/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-acceptance-verification/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/owner-resume.test.tsx:20:22)
+      at TestScheduler.scheduleTests (../main-acceptance-verification/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-acceptance-verification/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-acceptance-verification/node_modules/@jest/core/build/cli/index.js:173:3)
+
+PASS src/features/legacy-import/__tests__/owner-resume.test.tsx (23.338 s)
+  √ Not now postpones unfinished import, preserves ownership and offers immediate and remounted recovery (153 ms)
+  √ pre-repair declined unfinished owner resumes with readback (device claim=true) (27 ms)
+  √ pre-repair declined unfinished owner resumes with readback (device claim=false) (25 ms)
+  √ postponed owner cannot record success on failed verification; B and other teams remain blocked (18 ms)
+  √ a fresh offer still declines permanently without writes (4 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        56.137 s
+Ran all test suites within paths "src/features/legacy-import/__tests__/owner-resume.test.tsx".
