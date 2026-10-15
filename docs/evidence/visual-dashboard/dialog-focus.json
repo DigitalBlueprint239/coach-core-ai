@@ -1,0 +1,10 @@
+[
+  {
+    "engine": "chromium",
+    "dialogFocusReturn": "PASS"
+  },
+  {
+    "engine": "firefox",
+    "dialogFocusReturn": "PASS"
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-15",
+  "branch": "codex/visual-shell-dashboard",
+  "previousCommit": "7f22c7a2d4c27bf8149fce691e4e56b181f0bc1d",
+  "sourceSHA256": {
+    "src/ui/WeekDashboard.tsx": "578b5f0fd20b50209f7dae7cb2efa1a32790f058962f59cebf576e920d34f172",
+    "src/ui/coach-core.css": "e61038d2c989c130e1b05094907e71df8547b5d9fe69fa34b13422dbdaeee6e3",
+    "src/ui/preview.tsx": "47034c21edf184c75ff0c0a7828f56f3785f505afaa64d70bbb1fcc753041bd1",
+    "scripts/visual-preview.cjs": "1001564b2b1b01d2bd4581fce909ad62170f224f14aac5d2be62123dd31c8809",
+    "src/ui/WeekDashboard.test.tsx": "4a5c223b9cd29f54cfcc371d4741b2755c70398b2b72c80fec492c216f9ef157"
+  },
+  "referenceSHA256": "4fd303f6117632bdd42e2574970fff40023e79d233be092f1b19df7bcd35d7f7",
+  "referenceCrops": {
+    "desktop": [
+      155,
+      169,
+      706,
+      552
+    ],
+    "phone": [
+      739,
+      174,
+      906,
+      547
+    ]
+  },
+  "demoWeek": "2026-10-12 through 2026-10-18, initially2026-10-14",
+  "capture": "Actual Chromium shared UI screenshots. Reference crops proportionally resized, equal presented widths. No generated replacement pixels.",
+  "scope": "Standalone sample UI; not authenticated emulator walkthrough",
+  "node": "v22.23.1",
+  "visualApproval": "Pending Coach Drew",
+  "physicalDeviceTesting": false
+}

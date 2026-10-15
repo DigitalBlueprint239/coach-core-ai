@@ -1,0 +1,14 @@
+BASELINE
+
+Test Suites: 31 passed, 31 total
+Tests:       443 passed, 443 total
+Snapshots:   0 total
+Time:        25.174 s, estimated 44 s
+Ran all test suites.
+POST-CHANGE
+
+Test Suites: 31 passed, 31 total
+Tests:       445 passed, 445 total
+Snapshots:   0 total
+Time:        107.498 s
+Ran all test suites.

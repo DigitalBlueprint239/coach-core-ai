@@ -1,0 +1,1150 @@
+{
+  "results": [
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "narrow-phone",
+      "width": 320,
+      "height": 740,
+      "geometry": {
+        "viewport": 320,
+        "page": 320,
+        "main": {
+          "x": 0,
+          "y": 44,
+          "width": 320,
+          "height": 1434.96875,
+          "bottom": 1478.96875,
+          "right": 320
+        },
+        "calendar": {
+          "x": 16,
+          "y": 907.46875,
+          "width": 288,
+          "height": 555.5,
+          "bottom": 1462.96875,
+          "right": 304
+        },
+        "practice": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "today": {
+          "x": 16,
+          "y": 142,
+          "width": 288,
+          "height": 291.6875,
+          "bottom": 433.6875,
+          "right": 304
+        },
+        "primary": {
+          "x": 33,
+          "y": 312.6875,
+          "width": 254,
+          "height": 48,
+          "bottom": 360.6875,
+          "right": 287
+        },
+        "nav": {
+          "x": 0,
+          "y": 671,
+          "width": 320,
+          "height": 69,
+          "bottom": 740,
+          "right": 320
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "phone",
+      "width": 375,
+      "height": 812,
+      "geometry": {
+        "viewport": 375,
+        "page": 375,
+        "main": {
+          "x": 0,
+          "y": 44,
+          "width": 375,
+          "height": 1434.96875,
+          "bottom": 1478.96875,
+          "right": 375
+        },
+        "calendar": {
+          "x": 16,
+          "y": 907.46875,
+          "width": 343,
+          "height": 555.5,
+          "bottom": 1462.96875,
+          "right": 359
+        },
+        "practice": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "today": {
+          "x": 16,
+          "y": 142,
+          "width": 343,
+          "height": 291.6875,
+          "bottom": 433.6875,
+          "right": 359
+        },
+        "primary": {
+          "x": 33,
+          "y": 312.6875,
+          "width": 309,
+          "height": 48,
+          "bottom": 360.6875,
+          "right": 342
+        },
+        "nav": {
+          "x": 0,
+          "y": 743,
+          "width": 375,
+          "height": 69,
+          "bottom": 812,
+          "right": 375
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "large-phone",
+      "width": 430,
+      "height": 932,
+      "geometry": {
+        "viewport": 430,
+        "page": 430,
+        "main": {
+          "x": 0,
+          "y": 44,
+          "width": 430,
+          "height": 1434.96875,
+          "bottom": 1478.96875,
+          "right": 430
+        },
+        "calendar": {
+          "x": 16,
+          "y": 907.46875,
+          "width": 398,
+          "height": 555.5,
+          "bottom": 1462.96875,
+          "right": 414
+        },
+        "practice": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "today": {
+          "x": 16,
+          "y": 142,
+          "width": 398,
+          "height": 291.6875,
+          "bottom": 433.6875,
+          "right": 414
+        },
+        "primary": {
+          "x": 33,
+          "y": 312.6875,
+          "width": 364,
+          "height": 48,
+          "bottom": 360.6875,
+          "right": 397
+        },
+        "nav": {
+          "x": 0,
+          "y": 863,
+          "width": 430,
+          "height": 69,
+          "bottom": 932,
+          "right": 430
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "small-tablet",
+      "width": 768,
+      "height": 1024,
+      "geometry": {
+        "viewport": 768,
+        "page": 768,
+        "main": {
+          "x": 72,
+          "y": 52,
+          "width": 696,
+          "height": 1127.078125,
+          "bottom": 1179.078125,
+          "right": 768
+        },
+        "calendar": {
+          "x": 88,
+          "y": 138.1875,
+          "width": 664,
+          "height": 492.5,
+          "bottom": 630.6875,
+          "right": 752
+        },
+        "practice": {
+          "x": 88,
+          "y": 644.6875,
+          "width": 664,
+          "height": 268,
+          "bottom": 912.6875,
+          "right": 752
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "tablet",
+      "width": 834,
+      "height": 1112,
+      "geometry": {
+        "viewport": 834,
+        "page": 834,
+        "main": {
+          "x": 72,
+          "y": 52,
+          "width": 762,
+          "height": 1127.078125,
+          "bottom": 1179.078125,
+          "right": 834
+        },
+        "calendar": {
+          "x": 88,
+          "y": 138.1875,
+          "width": 730,
+          "height": 492.5,
+          "bottom": 630.6875,
+          "right": 818
+        },
+        "practice": {
+          "x": 88,
+          "y": 644.6875,
+          "width": 730,
+          "height": 268,
+          "bottom": 912.6875,
+          "right": 818
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "small-desktop",
+      "width": 1024,
+      "height": 900,
+      "geometry": {
+        "viewport": 1024,
+        "page": 1024,
+        "main": {
+          "x": 72,
+          "y": 52,
+          "width": 952,
+          "height": 1127.078125,
+          "bottom": 1179.078125,
+          "right": 1024
+        },
+        "calendar": {
+          "x": 88,
+          "y": 138.1875,
+          "width": 920,
+          "height": 492.5,
+          "bottom": 630.6875,
+          "right": 1008
+        },
+        "practice": {
+          "x": 88,
+          "y": 644.6875,
+          "width": 920,
+          "height": 268,
+          "bottom": 912.6875,
+          "right": 1008
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "desktop-1280",
+      "width": 1280,
+      "height": 900,
+      "geometry": {
+        "viewport": 1280,
+        "page": 1280,
+        "main": {
+          "x": 184,
+          "y": 52,
+          "width": 1096,
+          "height": 1091.171875,
+          "bottom": 1143.171875,
+          "right": 1280
+        },
+        "calendar": {
+          "x": 208,
+          "y": 142.1875,
+          "width": 1048,
+          "height": 492.5,
+          "bottom": 634.6875,
+          "right": 1256
+        },
+        "practice": {
+          "x": 208,
+          "y": 648.6875,
+          "width": 1048,
+          "height": 225.09375,
+          "bottom": 873.78125,
+          "right": 1256
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "geometry": {
+        "viewport": 1440,
+        "page": 1440,
+        "main": {
+          "x": 184,
+          "y": 52,
+          "width": 1256,
+          "height": 1068.671875,
+          "bottom": 1120.671875,
+          "right": 1440
+        },
+        "calendar": {
+          "x": 208,
+          "y": 142.1875,
+          "width": 1208,
+          "height": 492.5,
+          "bottom": 634.6875,
+          "right": 1416
+        },
+        "practice": {
+          "x": 208,
+          "y": 648.6875,
+          "width": 1208,
+          "height": 202.59375,
+          "bottom": 851.28125,
+          "right": 1416
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "version": "156.0.8078.4",
+      "name": "wide-desktop",
+      "width": 1920,
+      "height": 1080,
+      "geometry": {
+        "viewport": 1920,
+        "page": 1920,
+        "main": {
+          "x": 212,
+          "y": 52,
+          "width": 1680,
+          "height": 1068.671875,
+          "bottom": 1120.671875,
+          "right": 1892
+        },
+        "calendar": {
+          "x": 244,
+          "y": 146.1875,
+          "width": 1616,
+          "height": 492.5,
+          "bottom": 638.6875,
+          "right": 1860
+        },
+        "practice": {
+          "x": 244,
+          "y": 652.6875,
+          "width": 1616,
+          "height": 202.59375,
+          "bottom": 855.28125,
+          "right": 1860
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "chromium",
+      "keyboard": "PASS",
+      "reducedMotion": "PASS"
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "narrow-phone",
+      "width": 320,
+      "height": 740,
+      "geometry": {
+        "viewport": 320,
+        "page": 320,
+        "main": {
+          "x": 0,
+          "y": 44,
+          "width": 320,
+          "height": 1435,
+          "bottom": 1479,
+          "right": 320
+        },
+        "calendar": {
+          "x": 16,
+          "y": 907.5,
+          "width": 288,
+          "height": 555.5,
+          "bottom": 1463,
+          "right": 304
+        },
+        "practice": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "today": {
+          "x": 16,
+          "y": 142,
+          "width": 288,
+          "height": 291.70001220703125,
+          "bottom": 433.70001220703125,
+          "right": 304
+        },
+        "primary": {
+          "x": 33,
+          "y": 312.70001220703125,
+          "width": 254,
+          "height": 48,
+          "bottom": 360.70001220703125,
+          "right": 287
+        },
+        "nav": {
+          "x": 0,
+          "y": 671,
+          "width": 320,
+          "height": 69,
+          "bottom": 740,
+          "right": 320
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "phone",
+      "width": 375,
+      "height": 812,
+      "geometry": {
+        "viewport": 375,
+        "page": 375,
+        "main": {
+          "x": 0,
+          "y": 44,
+          "width": 375,
+          "height": 1435,
+          "bottom": 1479,
+          "right": 375
+        },
+        "calendar": {
+          "x": 16,
+          "y": 907.5,
+          "width": 343,
+          "height": 555.5,
+          "bottom": 1463,
+          "right": 359
+        },
+        "practice": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "today": {
+          "x": 16,
+          "y": 142,
+          "width": 343,
+          "height": 291.70001220703125,
+          "bottom": 433.70001220703125,
+          "right": 359
+        },
+        "primary": {
+          "x": 33,
+          "y": 312.70001220703125,
+          "width": 309,
+          "height": 48,
+          "bottom": 360.70001220703125,
+          "right": 342
+        },
+        "nav": {
+          "x": 0,
+          "y": 743,
+          "width": 375,
+          "height": 69,
+          "bottom": 812,
+          "right": 375
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "large-phone",
+      "width": 430,
+      "height": 932,
+      "geometry": {
+        "viewport": 430,
+        "page": 430,
+        "main": {
+          "x": 0,
+          "y": 44,
+          "width": 430,
+          "height": 1435,
+          "bottom": 1479,
+          "right": 430
+        },
+        "calendar": {
+          "x": 16,
+          "y": 907.5,
+          "width": 398,
+          "height": 555.5,
+          "bottom": 1463,
+          "right": 414
+        },
+        "practice": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "today": {
+          "x": 16,
+          "y": 142,
+          "width": 398,
+          "height": 291.70001220703125,
+          "bottom": 433.70001220703125,
+          "right": 414
+        },
+        "primary": {
+          "x": 33,
+          "y": 312.70001220703125,
+          "width": 364,
+          "height": 48,
+          "bottom": 360.70001220703125,
+          "right": 397
+        },
+        "nav": {
+          "x": 0,
+          "y": 863,
+          "width": 430,
+          "height": 69,
+          "bottom": 932,
+          "right": 430
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "small-tablet",
+      "width": 768,
+      "height": 1024,
+      "geometry": {
+        "viewport": 768,
+        "page": 768,
+        "main": {
+          "x": 72,
+          "y": 52,
+          "width": 696,
+          "height": 1127.0999755859375,
+          "bottom": 1179.0999755859375,
+          "right": 768
+        },
+        "calendar": {
+          "x": 88,
+          "y": 138.1999969482422,
+          "width": 664,
+          "height": 492.5,
+          "bottom": 630.6999969482422,
+          "right": 752
+        },
+        "practice": {
+          "x": 88,
+          "y": 644.7000122070312,
+          "width": 664,
+          "height": 268,
+          "bottom": 912.7000122070312,
+          "right": 752
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "tablet",
+      "width": 834,
+      "height": 1112,
+      "geometry": {
+        "viewport": 834,
+        "page": 834,
+        "main": {
+          "x": 72,
+          "y": 52,
+          "width": 762,
+          "height": 1127.0999755859375,
+          "bottom": 1179.0999755859375,
+          "right": 834
+        },
+        "calendar": {
+          "x": 88,
+          "y": 138.1999969482422,
+          "width": 730,
+          "height": 492.5,
+          "bottom": 630.6999969482422,
+          "right": 818
+        },
+        "practice": {
+          "x": 88,
+          "y": 644.7000122070312,
+          "width": 730,
+          "height": 268,
+          "bottom": 912.7000122070312,
+          "right": 818
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "small-desktop",
+      "width": 1024,
+      "height": 900,
+      "geometry": {
+        "viewport": 1024,
+        "page": 1024,
+        "main": {
+          "x": 72,
+          "y": 52,
+          "width": 952,
+          "height": 1127.0999755859375,
+          "bottom": 1179.0999755859375,
+          "right": 1024
+        },
+        "calendar": {
+          "x": 88,
+          "y": 138.1999969482422,
+          "width": 920,
+          "height": 492.5,
+          "bottom": 630.6999969482422,
+          "right": 1008
+        },
+        "practice": {
+          "x": 88,
+          "y": 644.7000122070312,
+          "width": 920,
+          "height": 268,
+          "bottom": 912.7000122070312,
+          "right": 1008
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "desktop-1280",
+      "width": 1280,
+      "height": 900,
+      "geometry": {
+        "viewport": 1280,
+        "page": 1280,
+        "main": {
+          "x": 184,
+          "y": 52,
+          "width": 1096,
+          "height": 1068.699951171875,
+          "bottom": 1120.699951171875,
+          "right": 1280
+        },
+        "calendar": {
+          "x": 208,
+          "y": 142.1999969482422,
+          "width": 1048,
+          "height": 492.5,
+          "bottom": 634.6999969482422,
+          "right": 1256
+        },
+        "practice": {
+          "x": 208,
+          "y": 648.7000122070312,
+          "width": 1048,
+          "height": 202.60000610351562,
+          "bottom": 851.3000183105469,
+          "right": 1256
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "geometry": {
+        "viewport": 1440,
+        "page": 1440,
+        "main": {
+          "x": 184,
+          "y": 52,
+          "width": 1256,
+          "height": 1068.699951171875,
+          "bottom": 1120.699951171875,
+          "right": 1440
+        },
+        "calendar": {
+          "x": 208,
+          "y": 142.1999969482422,
+          "width": 1208,
+          "height": 492.5,
+          "bottom": 634.6999969482422,
+          "right": 1416
+        },
+        "practice": {
+          "x": 208,
+          "y": 648.7000122070312,
+          "width": 1208,
+          "height": 202.60000610351562,
+          "bottom": 851.3000183105469,
+          "right": 1416
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "version": "157.0",
+      "name": "wide-desktop",
+      "width": 1920,
+      "height": 1080,
+      "geometry": {
+        "viewport": 1920,
+        "page": 1920,
+        "main": {
+          "x": 212,
+          "y": 52,
+          "width": 1680,
+          "height": 1068.699951171875,
+          "bottom": 1120.699951171875,
+          "right": 1892
+        },
+        "calendar": {
+          "x": 244,
+          "y": 146.1999969482422,
+          "width": 1616,
+          "height": 492.5,
+          "bottom": 638.6999969482422,
+          "right": 1860
+        },
+        "practice": {
+          "x": 244,
+          "y": 652.7000122070312,
+          "width": 1616,
+          "height": 202.60000610351562,
+          "bottom": 855.3000183105469,
+          "right": 1860
+        },
+        "today": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "primary": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        },
+        "nav": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "right": 0
+        }
+      },
+      "axeViolations": 0,
+      "overflow": false,
+      "pageErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "engine": "firefox",
+      "keyboard": "PASS",
+      "reducedMotion": "PASS"
+    }
+  ],
+  "failures": [],
+  "scope": "Shared-component local visual preview; no authenticated workflow or physical-device acceptance"
+}
