@@ -1,10 +1,11 @@
-// A4a (release-gate queue, 2026-10-16): the N2 repair moved team CREATION to REST, but
-// practice-plan / play EDITS still go through the SDK Write channel (runTransaction in
-// features/persistence/gateway.ts) with a getDocFromServer acknowledgement. These are
-// DIAGNOSTIC tests: they apply the D1 (reset) and D4 (back-channel hold) faults that
-// reproduced N2 on the old create path to an EDIT, record what the coach sees, and
-// assert only safety facts: never "saved" without the server holding the edit, never
-// more than one document, and the edit never lost. Recovery mode is recorded, not required.
+// A4a (release-gate queue, 2026-10-16). Practice-plan EDITS go through runTransaction in
+// features/persistence/gateway.ts. Evidence 55 (first version of these tests) showed that
+// path never touches the SDK Write STREAM (/Firestore/Write/channel): faultHits=0 in 40/40,
+// because SDK transactions use the unary documents:commit RPC. These DIAGNOSTIC tests
+// therefore fault THAT transport during an edit: a connection reset, and a hold of the
+// commit POST (request not yet at the server). They record what the coach sees and assert
+// only safety facts: never "saved" without the server holding the edit, exactly one
+// document, the edit never lost. Recovery mode is recorded, not required.
 import { test, expect, type Page, type Route } from '@playwright/test';
 import { resetEmulators, adminQuery, AUTH_ONLY } from './support/emulator';
 import { coachEmail, skipOnboarding, signInAsBetaCoach, openTab, createTeamViaUI } from './support/app';
@@ -38,15 +39,15 @@ async function savedPlan(page: Page, label: string) {
 }
 
 /** Apply `fault` to the SDK Write channel for 8 s around an edit save; record and safety-check. */
-async function editUnderFault(page: Page, label: string, fault: 'reset' | 'hold-backchannel') {
+const COMMIT = /\/documents:commit(\?|$)/;
+async function editUnderFault(page: Page, label: string, fault: 'commit-reset' | 'commit-hold') {
   const { uid, id } = await savedPlan(page, label);
   const edited = 'Edit path plan v2';
   await field(page, 'Plan.name').fill(edited);
   let faulting = true; let hits = 0; const releases: Array<() => void> = [];
-  await page.route(/Firestore\/Write\/channel/, async (route: Route) => {
-    const req = route.request();
-    if (faulting && fault === 'reset') { hits += 1; await route.abort('connectionreset').catch(() => {}); return; }
-    if (faulting && fault === 'hold-backchannel' && req.method() === 'GET') { hits += 1; await new Promise<void>((r) => releases.push(r)); }
+  await page.route(COMMIT, async (route: Route) => {
+    if (faulting && fault === 'commit-reset') { hits += 1; await route.abort('connectionreset').catch(() => {}); return; }
+    if (faulting && fault === 'commit-hold') { hits += 1; await new Promise<void>((r) => releases.push(r)); }
     await route.continue().catch(() => {});
   });
   const t0 = Date.now();
@@ -70,7 +71,7 @@ async function editUnderFault(page: Page, label: string, fault: 'reset' | 'hold-
   const finalDocs = await plansOf(uid);
   const finalStatus = (await planStatus(page).textContent().catch(() => '?'))?.trim();
   record(`${label} fault=${fault} faultHits=${hits} statusSeries=${JSON.stringify(seen)} serverAt8s=${JSON.stringify(serverAt8)} alertsAt8s=${JSON.stringify(errorAt8.map((t) => t.slice(0, 80)))} recoveredAfterRestore=${recoveredAt >= 0 ? recoveredAt + 'ms' : 'NOT within 45 s'} finalStatus=${finalStatus} finalDocs=${JSON.stringify(finalDocs.map((d) => ({ rev: d.data.revision, name: d.data.name })))}`);
-  await page.unroute(/Firestore\/Write\/channel/);
+  await page.unroute(COMMIT);
   // Safety facts only.
   expect(hits, 'the fault was applied').toBeGreaterThan(0);
   expect(falseSaved, 'never "saved" while the server lacks the edit').toBe(false);
@@ -81,9 +82,9 @@ async function editUnderFault(page: Page, label: string, fault: 'reset' | 'hold-
   if (!landed) expect(finalStatus, 'an unsaved edit is never shown as saved').not.toBe('saved');
 }
 
-test('CC-E1 [diagnostic] SDK edit path: Write channel reset for 8 s during a practice-plan edit save — what the coach sees; never false "saved"; one document; edit not lost', async ({ page }) => {
-  await editUnderFault(page, 'e1', 'reset');
+test('CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save — what the coach sees; never false "saved"; one document; edit not lost', async ({ page }) => {
+  await editUnderFault(page, 'e1', 'commit-reset');
 });
-test('CC-E2 [diagnostic] SDK edit path: Write back channel held (not reset) for 8 s during a practice-plan edit save — does the save hang on "saving"?', async ({ page }) => {
-  await editUnderFault(page, 'e2', 'hold-backchannel');
+test('CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save — does the save hang on "saving"?', async ({ page }) => {
+  await editUnderFault(page, 'e2', 'commit-hold');
 });
