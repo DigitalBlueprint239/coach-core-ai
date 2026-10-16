@@ -29,16 +29,26 @@ concurrency:
 
 jobs:
   e2e:
-    # One job per Playwright project (2026-10-15). The union is the complete
-    # matrix; nothing is filtered out. Split only because the full suite now
-    # exceeds one job's existing 120-minute limit, which is NOT raised.
-    name: E2E emulator (${{ matrix.project }})
+    # One job per Playwright project (2026-10-15) AND per result bucket (B11,
+    # Coach Drew, 2026-10-16). The union of the twelve jobs is the complete
+    # matrix: the three buckets partition every project's tests by title tag
+    # (acceptance = untagged; diagnostic = "[diagnostic]"; obsolete-fault-model =
+    # "[obsolete-fault-model]"), so nothing is filtered out, no assertion,
+    # repetition or retries=0 setting changes, and the ACCEPTANCE job's
+    # conclusion stands on its own. Diagnostic and obsolete results are still
+    # published as annotations and artifacts and still investigated; they are
+    # simply no longer able to turn the acceptance job red. Phone projects carry
+    # no diagnostic/obsolete tests, so those jobs legitimately run zero tests
+    # (--pass-with-no-tests). The existing 120-minute limit is NOT raised.
+    # Branch-protection settings are not changed by this workflow.
+    name: E2E ${{ matrix.bucket }} (${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         project: [chromium, firefox, phone-chromium, phone-firefox]
+        bucket: [acceptance, diagnostic, obsolete-fault-model]
     env:
       GCLOUD_PROJECT: demo-coach-core-e2e
       OPENAI_API_KEY: ''
@@ -87,6 +97,7 @@ jobs:
           REPEAT: ${{ github.event.inputs.repeat_each || '1' }}
           # Passed as data via env (never interpolated into the shell command).
           E2E_GREP: ${{ github.event.inputs.grep || '' }}
+          E2E_BUCKET: ${{ matrix.bucket }}
           PROJECT: ${{ matrix.project }}
         run: |
           set -o pipefail
@@ -109,6 +120,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-results-${{ matrix.project }}-${{ github.sha }}
+          name: e2e-results-${{ matrix.bucket }}-${{ matrix.project }}-${{ github.sha }}
           path: e2e/test-results
           retention-days: 14

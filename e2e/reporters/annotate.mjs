@@ -10,6 +10,7 @@
 //    when it ended and the slowest steps (one "diag" annotation per project);
 //  - a census of every step >= SLOW_MS across ALL executions, pass or fail,
 //    so a stall like FX-02 (48 s locator wait) is visible even when it passes.
+import { appendFileSync } from 'node:fs';
 const SLOW_MS = Number(process.env.E2E_SLOW_MS) || 10_000;
 const LIMIT = 3900; // stay under the observed ~4 KB annotation message cut-off
 
@@ -81,6 +82,9 @@ export default class AnnotateReporter {
 
   onEnd() {
     if (!process.env.GITHUB_ACTIONS) return;
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      try { appendFileSync(process.env.GITHUB_STEP_SUMMARY, '| project [bucket] | pass | fail | blocked | skipped | buckets (pass/fail) |\n|---|---|---|---|---|---|\n'); } catch { /* best-effort */ }
+    }
     const esc = (s) => String(s).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
     // Commas separate annotation properties, so titles must not contain one.
     const emit = (level, title, body) => process.stdout.write(`::${level} title=${esc(title)}::${esc(body.slice(0, LIMIT))}\n`);
@@ -125,7 +129,16 @@ export default class AnnotateReporter {
       const cnt = (pred, st) => rows.filter((r) => pred(r) && r.status === st).length;
       const split = ` · acceptance ${cnt(accT, 'PASS')}/${cnt(accT, 'FAIL')} · diagnostic ${cnt(diagT, 'PASS')}/${cnt(diagT, 'FAIL')}`
         + ` · obsolete-fault-model ${cnt(obsT, 'PASS')}/${cnt(obsT, 'FAIL')} (pass/fail)`;
-      emit(level, `E2E ${p}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped${split}`, lines.join('\n'));
+      const bucket = process.env.E2E_BUCKET && process.env.E2E_BUCKET !== 'all' ? ` [${process.env.E2E_BUCKET}]` : '';
+      emit(level, `E2E ${p}${bucket}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped${split}`, lines.join('\n'));
+      // B11: one line per job in the GitHub job summary so the three bucket conclusions
+      // can be read without opening annotations. Same numbers as the annotation title.
+      if (process.env.GITHUB_STEP_SUMMARY) {
+        try {
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+            `| ${p}${bucket} | ${n('PASS')} | ${n('FAIL')} | ${n('BLOCKED')} | ${n('SKIPPED')} |${split.replace(/ · /g, ' ').trim()} |\n`);
+        } catch { /* summary is best-effort */ }
+      }
 
       // Failure diagnostics: the first failure of each distinct test first, so a
       // test failing 10/10 cannot push a 1/10 intermittent out of the annotation.
