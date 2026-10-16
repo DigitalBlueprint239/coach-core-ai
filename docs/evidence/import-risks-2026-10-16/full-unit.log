@@ -730,7 +730,7 @@ PASS src/ui/AppShell.test.tsx
        6 | // no-team state) and the sample-preview distinction are always rendered.
     >  7 | const shell = (props: Partial<React.ComponentProps<typeof AppShell>> = {}) => render(
          |                                                                                     ^
-       8 |   <AppShell active="overview" onNavigate={() => {}} email="coach@example.test" onSignOut={() => {}} {...props}>
+       8 |   <AppShell active="overview" onNavigate={() => {}} email="[SYNTHETIC EMAIL REDACTED]" onSignOut={() => {}} {...props}>
        9 |     <p>content</p>
       10 |   </AppShell>,
 

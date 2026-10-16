@@ -211,3 +211,8 @@ candidate SHA; inherited PR workflow results are not that new independent proof.
 R3 re-entry decision, R4 release-config choice, and missing-original-team recovery
 policy remain open, with concrete choices above. Only the already-authorized
 legacy pending-state detection repair is implemented. No merge/deployment or MVP GO.
+
+Evidence-export correction: initial scan found one synthetic example.test address
+in full-unit.log (zero JWT/Bearer matches). It is redacted in the final export;
+original raw logs and their hashes are unchanged. No actual credential was found.
+Final SHA256SUMS and Git-blob verification follow the corrected export.
