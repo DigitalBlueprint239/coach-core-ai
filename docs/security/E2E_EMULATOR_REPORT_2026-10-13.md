@@ -1239,3 +1239,27 @@ The repair (six lines in `hasUnfinishedImport`): a claim with no `status` field,
 Full matrix on candidate `f2271ce` (×10, retries 0, no filter): run `38918657153`, results in §14.17 when complete. No merge or deployment; PR #72 stays draft.
 
 **Status.** A4b coverage complete on both paths; decision pending Coach Drew. PR #72 verified on its targeted tests; full matrix pending. N3 and stall probes armed (no new recurrence in these runs). **MVP NO-GO.**
+
+### 14.17 PR #72 full matrix; D10-11 readiness; A4b assessment (2026-10-16, late)
+
+**PR #72 full matrix** (candidate `f2271ce` = runtime `35e0d77887ba87d2714706f0cdbb2511b442d1a2` + harness `1006595`; run `38918657153`, ×10, retries 0, no filter; evidence 61). **Separate from `518e9e5` acceptance.**
+
+| Job | Acceptance | Diagnostic | Obsolete (N2-A2) | Release proof | Notes |
+|---|---|---|---|---|---|
+| chromium 1280×720 | **650/0** | 84/16 | 3/7 | 13/13 | diagnostic: N2-D2 6/10; **CC-E4 10/10 = known harness locator fault**, fixed in `5c58794` (not in this candidate) |
+| firefox 1280×720 | **649/1** | 85/15 | 6/4 | 13/13 | **D10-11 1/10** (below); N2-D2 5/10; CC-E4 10/10 harness fault |
+| phone-chromium 390×844 | **150/0** | — | — | 13/13 | |
+| phone-firefox 390×844 | **150/0** | — | — | 13/13 | |
+| **Total** | **1,599/1** | 169/31 | 9/11 | | acceptance includes D10-08a–d 10/10 per engine |
+
+Desktop jobs took 90 and 102 minutes (the suite now carries CC-E1–E4 and D10-08a–d); the unchanged 120-minute job limit is getting close and the CI split proposal (B11) would also relieve this.
+
+**D10-11 (Firefox 1/10): new, first occurrence in any run.** "Play Library should list the imported plays" timed out after a *fresh-profile* sign-in. The step pattern is the one corrected for D10-06e in §14.14: `signInAsBetaCoach` returns on identity readiness, while the library is scoped to the selected team, which is chosen asynchronously. The failing code is the cloud listing, not PR #72's `hasUnfinishedImport` change, and D10-11 was 10/10 in every `518e9e5` run (evidence 48, 51, 52, 54), so 1/10 here against 0/40 there is not evidence against PR #72 either way. One capture does not prove the class; the readiness anchor was applied to that step on the same source reasoning (`awaitOwnedTeamReady` after the p2 sign-in; existing timeout; assertions unchanged; harness `7d56300`), and **D10-11 ×50 per engine on candidate `77cd6c5` (`35e0d77` + `7d56300`): 100/100** (run `38933603674`, evidence 62). Recorded as consistent with the readiness class, not proven for the single capture; the anchor's classifier would name `still-loading` / `genuine-no-team` / `server-has-teams` on any future timeout.
+
+**PR #72 verdict (independent):** the targeted behaviour is verified (D10-08a/d discriminate; 08b/08c isolation held; evidence 57–58), the full matrix on its runtime is clean apart from the known diagnostic/obsolete buckets and the one D10-11 capture above, and account/team isolation, original data and failed-readback protections are intact. Ready for Coach Drew's merge decision — **not approved here**; no merge or deployment performed.
+
+**A4b assessment** (facts in §14.16): manual re-save after a transient commit failure is **safe** (no false "saved", no duplicate, no overwrite, edits retained in editor and device draft on both edit paths) but **inconsistent** with the auto-recovering create path and relies on the coach noticing "failed". Acceptable as a *disclosed* private-beta limitation; otherwise a Codex change (retry affordance or automatic retry on connectivity recovery). Decision open; not assumed approved.
+
+**N3 / stall probes:** armed through every run today (`38842101522`, `38896954298`, `38918657153`, targeted runs); no recurrence. N3 remains an unresolved risk.
+
+**SHAs at close:** N2 runtime `518e9e5817abd2a0e1bf1308468928f238fa8533`, harness `7d56300` on `claude/n2-repair-acceptance-518e9e5` (acceptance figure from `c822b6e`, evidence 54); PR #72 runtime `35e0d77887ba87d2714706f0cdbb2511b442d1a2`, candidates `f2271ce` (matrix) and `77cd6c5` (D10-11 ×50). **MVP NO-GO.**
