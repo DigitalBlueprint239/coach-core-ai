@@ -56,6 +56,31 @@ export async function signInAsBetaCoach(page: Page, email: string): Promise<stri
   return uid;
 }
 
+/**
+ * Owned-team readiness (D10-06e line-425 correction, 2026-10-16). `signInAsBetaCoach`
+ * returns on IDENTITY readiness (Welcome), while TeamContext still resubscribes and
+ * selects the owned team asynchronously (evidence 52: storage read 1 ms after Welcome
+ * saw `undefined`; the team was selected 12 ms later). This waits, within the existing
+ * expect timeout and with no sleep, for the identity strip to show the exact owned
+ * team. On timeout it classifies what the UI shows instead so loading, genuine
+ * no-team and a query failure (server has the team, UI never shows it) stay distinct.
+ */
+export async function awaitOwnedTeamReady(page: Page, teamName: string, uid?: string): Promise<void> {
+  const active = page.getByText(`Active team: ${teamName}`, { exact: true });
+  try {
+    await expect(active).toBeVisible();
+  } catch (err) {
+    const shown = (await page.getByText(/^Active team: /).allInnerTexts().catch(() => [])).map((t) => t.replace(/\s+/g, ' ').trim());
+    const loading = await page.getByText(/Loading your plans…|Loading authorized practice plans…/).first().isVisible().catch(() => false);
+    const clearField = await page.getByText('A clear field ahead').first().isVisible().catch(() => false);
+    const server = uid ? (await adminTeamsOwnedBy(uid)).map((t) => t.name) : 'uid not given';
+    const state = loading ? 'still-loading' : clearField && Array.isArray(server) && server.length === 0 ? 'genuine-no-team'
+      : clearField ? 'no-team-shown-but-server-has-teams (query failure or selection defect)' : 'unknown';
+    test.info().annotations.push({ type: 'diag-data', description: `ownedTeamReady "${teamName}" NOT reached: state=${state} identity=${JSON.stringify(shown)} serverTeams=${JSON.stringify(server)}` });
+    throw new Error(`Owned team "${teamName}" never became the active team within the expect timeout: ${state}; identity shows ${JSON.stringify(shown)}; server teams ${JSON.stringify(server)}`, { cause: err });
+  }
+}
+
 export async function waitForE2EHooks(page: Page): Promise<void> {
   await page.waitForFunction(() => Boolean((window as any).__coachCoreE2E));
 }

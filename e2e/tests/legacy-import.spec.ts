@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 import { resetEmulators, adminSet, adminGet, adminTeamsFull, AUTH_ONLY } from './support/emulator';
 import {
   coachEmail, skipOnboarding, signInAsBetaCoach, signOutViaUI, createTeamViaUI, openTab,
-  storage, waitForE2EHooks,
+  storage, waitForE2EHooks, awaitOwnedTeamReady,
 } from './support/app';
 import {
   LEGACY_PLAYS, seedDevice, deviceState, expectOriginalsUntouched, openPlaybook, importPrompt,
@@ -422,9 +422,11 @@ test('D10-06e [founder rule: R1c recovery] "Not now" postpones an unfinished imp
   // 4. The original coach returns, resumes, and finishes: exactly the verified copies, no duplicates.
   await signOutViaUI(page);
   await signInAsBetaCoach(page, a.email);
-  // A3 diagnostic (2026-10-15): the intermittent line-425 failure's Received value is
-  // truncated in CI annotations and the artifact store is unreachable from the agent
-  // workspace. Record what was selected and what the server holds; the assertion is unchanged.
+  // Readiness anchor (2026-10-16, evidence 52 + Codex trace of run 38842101522): Welcome is identity
+  // readiness, not team readiness. Wait for the identity strip to show the exact original team
+  // (existing expect timeout, no sleep), then assert the exact original ID as before.
+  await awaitOwnedTeamReady(page, 'Alpha Eagles', a.uid);
+  // A3 diagnostic (2026-10-15): kept so a mismatch AFTER readiness is fully described.
   const selectedOnReturn = (await storage(page)).currentTeamId;
   if (selectedOnReturn !== a.teamId) {
     const aTeams = (await adminTeamsFull(a.uid)).map((t) => ({ id: t.id, name: t.name }));
