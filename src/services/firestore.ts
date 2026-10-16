@@ -152,29 +152,10 @@ function loadOfflineQueue() {
 }
 
 async function syncOfflineQueue() {
-  if (!isOnline || offlineQueue.length === 0) {
-    return;
-  }
-
-  const queue = [...offlineQueue];
-  offlineQueue = [];
-  saveOfflineQueue();
-
-  for (const operation of queue) {
-    try {
-      await executeOperation(operation);
-    } catch (error: unknown) {
-      console.error('Failed to sync offline operation:', error);
-      // Only add back to queue if it's not a permanent error
-      if (!(error instanceof Error && error.message?.includes('permission-denied'))) {
-        offlineQueue.push(operation);
-      }
-    }
-  }
-
-  if (offlineQueue.length > 0) {
-    saveOfflineQueue();
-  }
+  // Legacy global operations have no trustworthy account/team/revision envelope.
+  // Preserve their original bytes; never replay them under the current account.
+  // Current coaching clients use scoped recovery drafts and acknowledged transactions.
+  return;
 }
 
 async function executeOperation(operation: any) {
@@ -200,8 +181,14 @@ async function executeOperation(operation: any) {
 // Initialize offline queue
 loadOfflineQueue();
 
+// The legacy global queue is quarantined, so it cannot acknowledge new writes.
+function requireAcknowledgedSave(): void {
+  if (!isOnline) throw new Error('Offline: cloud persistence was not acknowledged. Keep your work and retry when connected.');
+}
+
 // PRACTICE PLANS API
 export async function savePracticePlan(teamId: string, planData: Omit<PracticePlan, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+  requireAcknowledgedSave();
   const user = getCurrentUser();
   
   const plan = {
@@ -216,16 +203,6 @@ export async function savePracticePlan(teamId: string, planData: Omit<PracticePl
     const docRef = await addDoc(collection(db, 'practicePlans'), plan);
     return docRef.id;
   } catch (error) {
-    if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
-      addToOfflineQueue({
-        type: 'create',
-        collection: 'practicePlans',
-        data: plan,
-        tempId
-      });
-      return tempId;
-    }
     throw error;
   }
 }
@@ -252,6 +229,7 @@ export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> 
 }
 
 export async function updatePracticePlan(teamId: string, planId: string, updates: Partial<PracticePlan>): Promise<void> {
+  requireAcknowledgedSave();
   getCurrentUser(); // Ensure authenticated
   
   const data = {
@@ -262,39 +240,24 @@ export async function updatePracticePlan(teamId: string, planId: string, updates
   try {
     await updateDoc(doc(db, 'practicePlans', planId), data);
   } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'practicePlans',
-        docId: planId,
-        data
-      });
-      return;
-    }
     throw error;
   }
 }
 
 export async function deletePracticePlan(teamId: string, planId: string): Promise<void> {
+  requireAcknowledgedSave();
   getCurrentUser(); // Ensure authenticated
   
   try {
     await deleteDoc(doc(db, 'practicePlans', planId));
   } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'delete',
-        collection: 'practicePlans',
-        docId: planId
-      });
-      return;
-    }
     throw error;
   }
 }
 
 // SMART PLAYBOOK API
 export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
+  requireAcknowledgedSave();
   const user = getCurrentUser();
   
   const play = {
@@ -309,16 +272,6 @@ export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'team
     const docRef = await addDoc(collection(db, 'plays'), play);
     return docRef.id;
   } catch (error) {
-    if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
-      addToOfflineQueue({
-        type: 'create',
-        collection: 'plays',
-        data: play,
-        tempId
-      });
-      return tempId;
-    }
     throw error;
   }
 }
@@ -345,6 +298,7 @@ export async function getPlays(teamId: string): Promise<Play[]> {
 }
 
 export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>): Promise<void> {
+  requireAcknowledgedSave();
   getCurrentUser(); // Ensure authenticated
   
   const data = {
@@ -355,33 +309,17 @@ export async function updatePlay(teamId: string, playId: string, updates: Partia
   try {
     await updateDoc(doc(db, 'plays', playId), data);
   } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'plays',
-        docId: playId,
-        data
-      });
-      return;
-    }
     throw error;
   }
 }
 
 export async function deletePlay(teamId: string, playId: string): Promise<void> {
+  requireAcknowledgedSave();
   getCurrentUser(); // Ensure authenticated
   
   try {
     await deleteDoc(doc(db, 'plays', playId));
   } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'delete',
-        collection: 'plays',
-        docId: playId
-      });
-      return;
-    }
     throw error;
   }
 }
@@ -419,48 +357,8 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
   });
 }
 
-export async function migrateFromLocalStorage(teamId: string): Promise<void> {
-  // Migrate any data from localStorage to Firestore
-  const localStorageKey = `coach-core-ai-${teamId}`;
-  const localData = localStorage.getItem(localStorageKey);
-  
-  if (localData) {
-    try {
-      const data = JSON.parse(localData);
-      // Migrate plays
-      if (data.plays && Array.isArray(data.plays)) {
-        for (const play of data.plays) {
-          await savePlay(teamId, {
-            name: play.name,
-            formation: play.formation,
-            description: play.description || '',
-            routes: play.routes || [],
-            players: play.players || [],
-            tags: play.tags || [],
-            difficulty: play.difficulty || 'beginner',
-            sport: play.sport || 'football'
-          });
-        }
-      }
-      // Migrate practice plans
-      if (data.plans && Array.isArray(data.plans)) {
-        for (const plan of data.plans) {
-          await savePracticePlan(teamId, {
-            name: plan.name,
-            date: plan.date,
-            duration: plan.duration,
-            periods: plan.periods || [],
-            goals: plan.goals || [],
-            notes: plan.notes || ''
-          });
-        }
-      }
-      // Clear localStorage after successful migration
-      localStorage.removeItem(localStorageKey);
-    } catch (error) {
-      console.error('Error migrating from localStorage:', error);
-    }
-  }
+export async function migrateFromLocalStorage(_teamId: string): Promise<void> {
+  throw new Error('Legacy migration is disabled. Originals are preserved; use the consent-based Playbook import.');
 }
 
 export { db, auth };

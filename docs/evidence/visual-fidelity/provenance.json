@@ -1,0 +1,43 @@
+{
+  "status": "Visual approval pending Coach Drew",
+  "baselineCommit": "47c3c1b9b5642c672290594de1259a66f753d55f",
+  "referenceFile": "Coach Core AI feature overview.png",
+  "referenceSHA256": "4fd303f6117632bdd42e2574970fff40023e79d233be092f1b19df7bcd35d7f7",
+  "referenceCrops": {
+    "desktop": [
+      155,
+      169,
+      706,
+      552
+    ],
+    "phone": [
+      739,
+      174,
+      906,
+      547
+    ]
+  },
+  "tabletReference": "No tablet reference supplied; desktop interface used for responsive adaptation comparison",
+  "screenshots": {
+    "desktop": [
+      1440,
+      1000
+    ],
+    "tablet": [
+      834,
+      1112
+    ],
+    "phone": [
+      375,
+      812
+    ]
+  },
+  "applicationFileSHA256": {
+    "src/ui/AppShell.tsx": "40f77a2862050c3455f0bce721e8d3816530c96a7c3f263c6828f1c6c879c4b2",
+    "src/ui/WeekDashboard.tsx": "e54d5462a58c05b0a7e434ccbd73b997a6698bdf14f34df6918221c63859c4b8",
+    "src/ui/coach-core.css": "814d8ddd64153257ee5389e8efbd21066c4cf9ef8cf3b7c4151e35ae53c76038",
+    "src/components/Dashboard.tsx": "054afbffd12aea17cf487ddf48615d96d81dd5b23e1187968c7a56bf52153704"
+  },
+  "physicalDeviceTesting": false,
+  "authenticatedWorkflowAcceptance": "Not measured; remains separate"
+}

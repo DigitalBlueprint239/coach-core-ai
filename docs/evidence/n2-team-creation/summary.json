@@ -1,0 +1,111 @@
+{
+  "task": "N2",
+  "date": "2026-10-15",
+  "owner": "Codex implementation evidence, not independent acceptance",
+  "base": "186a7435ef2236470a2ed9e2f94e8f614f6e6feb",
+  "source": "bdb06ae6d39ff9ed3fee7000f93468c8cf2f8fe7",
+  "branch": "codex/n2-team-creation-reliability",
+  "runtime": {
+    "node": "22.23.1",
+    "npm": "10.9.8",
+    "playwright": "1.64.0",
+    "chromium": "156.0.8078.4",
+    "firefox": "157.0",
+    "platform": "Windows desktop",
+    "physicalDevices": "NOT MEASURED"
+  },
+  "baseline": {
+    "unitPass": 453,
+    "unitFail": 0,
+    "typescriptDiagnostics": 0,
+    "productionBuild": "PASS",
+    "preRepairModalRegressionFail": 5
+  },
+  "repaired": {
+    "unitPass": 477,
+    "unitFail": 0,
+    "suites": 37,
+    "typescriptDiagnostics": 0,
+    "productionBuild": "PASS with inherited SmartPlaybook warnings",
+    "emulatorBuild": "PASS with inherited warnings",
+    "browserPass": 8,
+    "browserFail": 0,
+    "browserSkipped": 0,
+    "retries": 0,
+    "developmentServer": {
+      "host": "127.0.0.1",
+      "port": 4320,
+      "compile": "PASS with inherited warnings; No issues found",
+      "httpStatus": 200,
+      "earlierProbe": "45s timeout while compiling; retained as startup probe, not an acceptance retry",
+      "stoppedAfterCheck": true
+    }
+  },
+  "preservedFailures": [
+    {
+      "phase": "validation before npm ci completed",
+      "classification": "invalid setup, not product baseline"
+    },
+    {
+      "phase": "initial owned full suite",
+      "pass": 473,
+      "fail": 2,
+      "cause": "new fixture factory mocks reset by CRA"
+    },
+    {
+      "phase": "second owned full suite",
+      "pass": 475,
+      "fail": 2,
+      "cause": "same fixture, plus two added journal tests"
+    },
+    {
+      "phase": "focused correction 03",
+      "pass": 22,
+      "fail": 2,
+      "cause": "Jest fixture missing deterministic Web Crypto"
+    },
+    {
+      "phase": "fixture correction 04",
+      "pass": 2,
+      "fail": 0
+    },
+    {
+      "phase": "first focused compilation",
+      "diagnostics": 1,
+      "cause": "test helper missing arguments; corrected"
+    }
+  ],
+  "dependencyAudit": {
+    "fullGraph": 98,
+    "critical": 3,
+    "high": 75,
+    "moderate": 14,
+    "low": 6,
+    "production": "NOT MEASURED afresh; no dependency changes"
+  },
+  "emulators": {
+    "project": "demo-coach-core-n2",
+    "auth": "127.0.0.1:9099",
+    "firestore": "127.0.0.1:8080",
+    "app": "http://localhost:3000",
+    "productionDataUsed": false
+  },
+  "applicationSourceSha256": {
+    "src/contexts/TeamContext.tsx": "0073a0ccb38fdc6c2b7465eddbf3251121ba2a1c77a36cb35f7726e818031dc3",
+    "src/components/TeamManagement.tsx": "f2411bf1592cee64a49c02b5dacce8f12fff85c5fb598a66225c300eef7703ab",
+    "src/contexts/teamCreation.ts": "38f5faa6dd19a751003829f5d9c4225bb4093c53f263f1eb681c9d30ac85187b",
+    "src/contexts/teamCreationGateway.ts": "57766710b89aac681733cc12f5a68fac628f300134a0bd5d31162562f0d3d7ad"
+  },
+  "remaining": [
+    "Claude independent REST fault/repeat acceptance",
+    "N3 unproven",
+    "natural SDK N2 trigger",
+    "H2",
+    "FX-02",
+    "existing import residual/R3/R4/touch exit",
+    "missing original L1 ZIP/PNG remain disclosed",
+    "hidden tabs, physical devices, staging NOT MEASURED"
+  ],
+  "mvp": "NO-GO",
+  "temporaryServicesStopped": true
+}

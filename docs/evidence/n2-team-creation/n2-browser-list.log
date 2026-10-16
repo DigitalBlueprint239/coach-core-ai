@@ -1,0 +1,20 @@
+Listing tests:
+
+  [chromium] › team-creation.spec.ts:18:5 › pending create survives cancel/navigation: no second submit, exactly one confirmed server team
+
+  [chromium] › team-creation.spec.ts:37:5 › response lost after server commit: safe retry confirms the same id without rewriting
+
+  [chromium] › team-creation.spec.ts:60:5 › ten-second unconfirmed status permits retry at the same identity, never false success
+
+  [chromium] › team-creation.spec.ts:81:5 › refresh and account switch preserve A operation without offering it or sending it under B
+
+  [firefox] › team-creation.spec.ts:18:5 › pending create survives cancel/navigation: no second submit, exactly one confirmed server team
+
+  [firefox] › team-creation.spec.ts:37:5 › response lost after server commit: safe retry confirms the same id without rewriting
+
+  [firefox] › team-creation.spec.ts:60:5 › ten-second unconfirmed status permits retry at the same identity, never false success
+
+  [firefox] › team-creation.spec.ts:81:5 › refresh and account switch preserve A operation without offering it or sending it under B
+
+Total: 8 tests in 1 file
+

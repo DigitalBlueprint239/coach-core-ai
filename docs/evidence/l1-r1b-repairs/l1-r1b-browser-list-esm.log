@@ -1,0 +1,36 @@
+Listing tests:
+  [chromium] › e2e\tests\legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  [chromium] › e2e\tests\legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  [chromium] › e2e\tests\legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  [chromium] › e2e\tests\legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  [chromium] › e2e\tests\legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  [chromium] › e2e\tests\legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  [chromium] › e2e\tests\legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  [chromium] › e2e\tests\legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  [chromium] › e2e\tests\legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  [chromium] › e2e\tests\legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  [chromium] › e2e\tests\legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  [chromium] › e2e\tests\legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  [chromium] › e2e\tests\legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  [chromium] › e2e\tests\legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  [chromium] › e2e\tests\legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  [chromium] › e2e\tests\legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  [chromium] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload
+  [firefox] › e2e\tests\legacy-import.spec.ts:52:1 › D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id
+  [firefox] › e2e\tests\legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  [firefox] › e2e\tests\legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  [firefox] › e2e\tests\legacy-import.spec.ts:90:1 › D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten
+  [firefox] › e2e\tests\legacy-import.spec.ts:108:1 › D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites
+  [firefox] › e2e\tests\legacy-import.spec.ts:130:1 › D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging
+  [firefox] › e2e\tests\legacy-import.spec.ts:147:1 › D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies
+  [firefox] › e2e\tests\legacy-import.spec.ts:166:1 › D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B
+  [firefox] › e2e\tests\legacy-import.spec.ts:184:1 › D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)
+  [firefox] › e2e\tests\legacy-import.spec.ts:211:1 › D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B
+  [firefox] › e2e\tests\legacy-import.spec.ts:235:1 › D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach
+  [firefox] › e2e\tests\legacy-import.spec.ts:253:1 › D10-09 [SDK-in-browser] cross-team denial with an authorized positive control
+  [firefox] › e2e\tests\legacy-import.spec.ts:284:1 › D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays
+  [firefox] › e2e\tests\legacy-import.spec.ts:301:1 › D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact
+  [firefox] › e2e\tests\legacy-import.spec.ts:323:1 › D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded
+  [firefox] › e2e\tests\legacy-import.spec.ts:336:1 › D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays
+  [firefox] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload
+Total: 34 tests in 2 files

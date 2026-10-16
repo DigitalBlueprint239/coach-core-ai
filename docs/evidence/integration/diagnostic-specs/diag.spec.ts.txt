@@ -1,0 +1,183 @@
+import { test, expect, type Page } from '@playwright/test';
+import { completePlaybook } from '../fixtures';
+import type { Playbook } from '../../types';
+import fs from 'node:fs';
+import type Konva from 'konva';
+import { getDocument, OPS, ImageKind } from 'pdfjs-dist/legacy/build/pdf.mjs';
+const safety = new WeakMap<Page, {pageErrors:number;aiRequests:number}>();
+
+test.beforeAll(async ({browser}, info) => console.log('Browser evidence', {
+  version: browser.version(), channel: 'msedge', project: info.project.name,
+}));
+
+test.beforeEach(async ({ page }, info) => {
+  const counts = {pageErrors:0,aiRequests:0}; safety.set(page,counts);
+  page.on('pageerror', () => counts.pageErrors++);
+  const fixture = completePlaybook();
+  if (info.title.includes('route waypoint')) {
+    fixture.plays['qa-play-a'].routes[0].treeId = null;
+    fixture.plays['qa-play-a'].routes[0].points = [{x:816,y:276},{x:876,y:288}];
+  }
+  if (info.title.includes('long coaching notes'))
+    fixture.plays['qa-play-a'].notes = Array.from({length:80},(_,i)=>`NOTE-${i}: Keep all coaching instructions intact.`).join('\n');
+  await page.addInitScript(book => {
+    if (!localStorage.getItem('qa-seeded')) {
+      localStorage.setItem('coachcore-playbook', JSON.stringify(book));
+      localStorage.setItem('qa-seeded', 'true');
+    }
+  }, fixture);
+  await page.route('**/*', async route => {
+    const url = new URL(route.request().url());
+    if (/generativelanguage|api\.openai\.com|anthropic/.test(url.hostname) || url.pathname.startsWith('/api/ai/')) counts.aiRequests++;
+    if (url.hostname === '127.0.0.1' || url.protocol === 'data:') await route.continue();
+    else await route.abort();
+  });
+  await page.goto('/');
+  await expect(page.locator('canvas').first()).toBeVisible();
+});
+test.afterEach(async ({page}) => {
+  expect(safety.get(page)?.pageErrors).toBe(0);
+  expect(safety.get(page)?.aiRequests).toBe(0);
+});
+
+async function saved(page: Page): Promise<Playbook> {
+  return page.evaluate(() => JSON.parse(localStorage.getItem('coachcore-playbook') ?? '{}'));
+}
+
+async function coords(page: Page, x: number, y: number) {
+  return page.evaluate(({x,y}) => {
+    const stage = (window as unknown as {Konva:{stages:Konva.Stage[]}}).Konva.stages[0];
+    const point = stage.getAbsoluteTransform().point({x,y});
+    const box = stage.container().getBoundingClientRect();
+    return {x:point.x+box.left,y:point.y+box.top};
+  }, {x,y});
+}
+async function gesture(page: Page, from: {x:number;y:number}, to: {x:number;y:number}, touch: boolean) {
+  if (touch) {
+    const session = await page.context().newCDPSession(page);
+    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...from,id:1}]});
+    for (let i=1;i<=10;i++) await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:from.x+(to.x-from.x)*i/10,y:from.y+(to.y-from.y)*i/10,id:1}]});
+    await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    await session.detach();
+  } else {
+    await page.mouse.move(from.x,from.y); await page.mouse.down();
+    await page.mouse.move(to.x,to.y,{steps:12}); await page.mouse.up();
+  }
+}
+async function press(page: Page, label: string, touch: boolean) {
+  const button = page.getByRole('button',{name:label,exact:true});
+  if (touch) await button.tap(); else await button.click();
+}
+async function checkpoint(page: Page) {
+  await expect(page.getByText('Unsaved changes',{exact:true}).or(page.getByText('Saved',{exact:true}))).toBeVisible();
+  const save = page.getByRole('button',{name:'Save Now'});
+  if (await save.isEnabled()) await save.click();
+  await expect(page.getByText('Saved',{exact:true})).toBeVisible();
+}
+
+
+test.beforeEach(async ({page}) => {
+  // Diagnostic instrumentation only: wrap setItem at runtime (no reload, no DOM observers).
+  await page.evaluate(() => {
+    const w = window as any; w.__log = []; const t0 = performance.now();
+    const orig = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (k: string, v: string) {
+      if (k === 'coachcore-playbook') {
+        try { const r = JSON.parse(v).plays['qa-play-a'].routes[0];
+          w.__log.push({t: Math.round(performance.now()-t0), ev: 'write', depth: r.depthYds, p0: r.points[0], flipped: r.isFlipped}); } catch { /* ignore */ }
+      }
+      return orig.call(this, k, v);
+    };
+  });
+});
+
+async function mark(page: Page, label: string) {
+  await page.evaluate((label) => { const w = window as any; w.__log.push({t: Math.round(performance.now()), ev: 'step', label}); }, label);
+}
+async function snapshot(page: Page) {
+  const s = await saved(page); const r = s.plays['qa-play-a'].routes[0];
+  return {depth: r.depthYds, p0: r.points[0], flipped: r.isFlipped};
+}
+async function settled(page: Page) {
+  // Wait until 'Saved' is shown AND storage has not changed for 2 consecutive polls 500ms apart (diagnostic only).
+  let prev = JSON.stringify(await snapshot(page)); let stable = 0;
+  for (let i = 0; i < 20 && stable < 2; i++) {
+    await page.waitForTimeout(500);
+    const cur = JSON.stringify(await snapshot(page));
+    stable = cur === prev ? stable + 1 : 0; prev = cur;
+  }
+  return JSON.parse(prev);
+}
+
+test('DIAG real route waypoint property undo', async ({page}, info) => {
+  const touch = info.project.name === 'tablet-touch';
+  const out: any = {project: info.project.name, browser: page.context().browser()?.version(), steps: []};
+  const step = async (label: string) => {
+    const atCheckpoint = await snapshot(page);
+    const afterSettle = await settled(page);
+    out.steps.push({label, atCheckpoint, afterSettle, staleAtCheckpoint: JSON.stringify(atCheckpoint) !== JSON.stringify(afterSettle)});
+  };
+  await press(page,'Collapse Tools & Inspector',touch);
+  const before = await snapshot(page); out.before = before;
+  const select = await coords(page,828,282.4);
+  if (touch) await page.touchscreen.tap(select.x,select.y); else await page.mouse.click(select.x,select.y);
+  const r0 = (await saved(page)).plays['qa-play-a'].routes[0];
+  await mark(page,'drag');
+  await gesture(page, await coords(page,r0.points[0].x,r0.points[0].y),await coords(page,r0.points[0].x+36,r0.points[0].y+48),touch);
+  await checkpoint(page); await step('drag');
+  await mark(page,'undo1'); await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); await step('undo-drag');
+  await mark(page,'redo1'); await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); await step('redo-drag');
+  await press(page,'Expand Tools & Inspector',touch);
+  await page.getByRole('button',{name:'Design',exact:true}).last().click();
+  await mark(page,'depth'); await page.getByLabel('Depth (yds)',{exact:true}).fill('20');
+  await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page); await step('depth=20');
+  await mark(page,'undo2'); await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); await step('undo-depth');
+  out.uiDepthAfterUndo = await page.getByLabel('Depth (yds)',{exact:true}).inputValue().catch(() => 'n/a');
+  await mark(page,'redo2'); await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); await step('redo-depth');
+  await mark(page,'flip'); await press(page,'Flip Horizontal',touch); await checkpoint(page); await step('flip');
+  out.log = await page.evaluate(() => (window as any).__log);
+  await page.reload(); await expect(page.locator('canvas').first()).toBeVisible();
+  out.afterReload = await snapshot(page);
+  fs.mkdirSync('diag', {recursive: true});
+  fs.writeFileSync(`diag/${info.project.name}-${info.repeatEachIndex}.json`, JSON.stringify(out, null, 1));
+});
+
+test('DIAG2 real route waypoint original timing', async ({page}, info) => {
+  // Same actions and timing as the product test; observation only at the undo-after-property-edit point.
+  const touch = info.project.name === 'tablet-touch';
+  const out: any = {project: info.project.name, browser: page.context().browser()?.version()};
+  await press(page,'Collapse Tools & Inspector',touch);
+  const before = (await saved(page)).plays['qa-play-a'].routes[0];
+  const select = await coords(page,828,282.4);
+  if (touch) await page.touchscreen.tap(select.x,select.y); else await page.mouse.click(select.x,select.y);
+  const endpoint = before.points[0];
+  await gesture(page, await coords(page,endpoint.x,endpoint.y),await coords(page,endpoint.x+36,endpoint.y+48),touch);
+  await checkpoint(page);
+  const moved = (await saved(page)).plays['qa-play-a'].routes[0];
+  out.dragPersisted = JSON.stringify(moved.points) !== JSON.stringify(before.points);
+  await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+  out.undoDragAtCheckpoint = JSON.stringify((await saved(page)).plays['qa-play-a'].routes[0]) === JSON.stringify(before);
+  await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page);
+  out.redoDragAtCheckpoint = JSON.stringify((await saved(page)).plays['qa-play-a'].routes[0]) === JSON.stringify(moved);
+  await press(page,'Expand Tools & Inspector',touch);
+  await page.getByRole('button',{name:'Design',exact:true}).last().click();
+  await page.getByLabel('Depth (yds)',{exact:true}).fill('20');
+  await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+  out.depth20AtCheckpoint = (await saved(page)).plays['qa-play-a'].routes[0].depthYds;
+  await mark(page,'undo-depth');
+  await press(page,'Undo (Cmd+Z)',touch);
+  const statusRightAfterUndo = await page.getByText(/^(Saved|Unsaved changes|Saving\.\.\.)$/).first().textContent().catch(() => 'n/a');
+  await checkpoint(page);
+  out.statusRightAfterUndo = statusRightAfterUndo;
+  out.undoDepthAtCheckpoint = (await saved(page)).plays['qa-play-a'].routes[0].depthYds;
+  out.uiDepthAtCheckpoint = await page.getByLabel('Depth (yds)',{exact:true}).inputValue().catch(() => 'n/a');
+  out.canRedoAtCheckpoint = await page.getByRole('button',{name:'Redo (Cmd+Y)'}).isEnabled();
+  // Observation window (diagnostic only; the product test must not sleep).
+  await page.waitForTimeout(3000);
+  out.undoDepthAfter3s = (await saved(page)).plays['qa-play-a'].routes[0].depthYds;
+  out.uiDepthAfter3s = await page.getByLabel('Depth (yds)',{exact:true}).inputValue().catch(() => 'n/a');
+  out.log = await page.evaluate(() => (window as any).__log);
+  fs.mkdirSync('diag2', {recursive: true});
+  fs.writeFileSync(`diag2/${info.project.name}-${info.repeatEachIndex}.json`, JSON.stringify(out, null, 1));
+});

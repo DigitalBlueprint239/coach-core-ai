@@ -1,0 +1,239 @@
+E2E emulator (Chromium + Firefox) failure 2026-10-15T10:37:05Z 2026-10-15T11:50:21Z sha=6d613a8ceeb642245c2b3298c752326c8fef5226
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[failure] 
+Process completed with exit code 1.
+
+[notice] E2E phone-firefox slow steps >= 10s: 10 of 150 executions
+FAIL CC-L1 #0: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #1: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #2: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #3: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #4: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #5: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #6: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #7: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #8: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #9: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+
+[warning] E2E phone-firefox diag: 20 failed executions
+CC-L1 #0 failed 13.0s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Expect "toBeVisible"@app.ts:52 0.2s
+E2E-T02 #0 failed 4.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@app.ts:52 0.2s; Wait for function@app.ts:67 0.2s
+CC-L1 #1 failed 13.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Reload@coaching.spec.ts:411 0.1s
+E2E-T02 #1 failed 4.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.4s; Wait for function@app.ts:67 0.2s; Navigate@app.ts:31 0.2s
+CC-L1 #2 failed 13.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@app.ts:32 0.2s
+E2E-T02 #2 failed 4.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@app.ts:52 0.3s; Wait for function@app.ts:67 0.2s
+CC-L1 #3 failed 13.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@coaching.spec.ts:413 0.1s
+E2E-T02 #3 failed 4.1s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.3s; Wait for function@app.ts:67 0.2s; Navigate@app.ts:44 0.1s
+CC-L1 #4 failed 13.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Reload@coaching.spec.ts:411 0.1s
+E2E-T02 #4 failed 4.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.3s; Wait for function@app.ts:67 0.2s; Navigate@app.ts:31 0.1s
+CC-L1 #5 failed 13.9s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@app.ts:32 0.3s
+E2E-T02 #5 failed 4.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@app.ts:32 0.2s; Expect "toBeVisible"@app.ts:52 0.2s
+CC-L1 #6 failed 13.9s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisible"@coaching.spec.ts:413 0.3s
+E2E-T02 #6 failed 4.1s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 1.3s; Wait for function@app.ts:67 0.2s; Navigate@app.ts:31 0.1s
+CC-L1 #7 failed 13.7s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 1.3s; Expect "toBeVisibl
+
+[failure] E2E phone-firefox: 130 passed / 20 failed / 0 blocked / 0 skipped
+FAIL 10/10 CC-L1 [13.0/13.6/13.9s] -- Error: expect(locator).toBeVisible() failed | Locator:  getByText('Owls').first() | Expected: visible | Received: hidden
+FAIL 10/10 E2E-T02 [4.1/4.4/5.0s] -- Error: expect(locator).toBeVisible() failed | Locator: getByText('No team selected') | Expected: visible | Error: strict
+PASS 10/10 E2E-A07 [2.8/3.3/4.3s]
+PASS 10/10 E2E-A10 [1.2/1.3/1.5s]
+PASS 10/10 CC-P10 [4.2/5.0/5.4s]
+PASS 10/10 CC-P11 [4.6/5.4/5.5s]
+PASS 10/10 CC-P12 [4.6/5.7/6.5s]
+PASS 10/10 CC-P14 [10.2/11.6/12.6s]
+PASS 10/10 CC-P15 [6.7/7.7/8.7s]
+PASS 10/10 CC-P16 [5.4/6.6/7.4s]
+PASS 10/10 CC-P17 [8.1/8.8/10.1s]
+PASS 10/10 CC-L0 [3.4/4.1/4.9s]
+PASS 10/10 D10-01 [6.9/7.6/8.5s]
+PASS 10/10 D10-06e [10.2/11.6/12.4s]
+PASS 10/10 E2E-T01 [3.5/4.3/4.8s]
+
+[notice] E2E phone-chromium slow steps >= 10s: 10 of 150 executions
+FAIL CC-L1 #0: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #1: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #2: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #3: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #4: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #5: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #6: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #7: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #8: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+FAIL CC-L1 #9: Expect "toBeVisible"@coaching.spec.ts:414 10.0s
+
+[warning] E2E phone-chromium diag: 20 failed executions
+CC-L1 #0 failed 12.1s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #0 failed 2.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+CC-L1 #1 failed 12.1s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #1 failed 2.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+CC-L1 #2 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #2 failed 2.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s; Wait for function@app.ts:67 0.1s
+CC-L1 #3 failed 12.3s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #3 failed 2.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+CC-L1 #4 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #4 failed 2.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+CC-L1 #5 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #5 failed 2.8s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s; Wait for function@app.ts:67 0.1s
+CC-L1 #6 failed 12.3s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #6 failed 2.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+CC-L1 #7 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@coaching.spec.ts:414 (10.0s) | slowest: Expect "toBeVisible"@coaching.spec.ts:414 10.0s; Expect "toHaveCount"@app.ts:93 0.8s; Navigate@app.ts:31 0.1s
+E2E-T02 #7 failed 3.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s
+
+[failure] E2E phone-chromium: 130 passed / 20 failed / 0 blocked / 0 skipped
+FAIL 10/10 CC-L1 [12.1/12.2/12.7s] -- Error: expect(locator).toBeVisible() failed | Locator:  getByText('Owls').first() | Expected: visible | Received: hidden
+FAIL 10/10 E2E-T02 [2.5/2.6/3.2s] -- Error: expect(locator).toBeVisible() failed | Locator: getByText('No team selected') | Expected: visible | Error: strict
+PASS 10/10 E2E-A07 [1.5/1.6/1.7s]
+PASS 10/10 E2E-A10 [0.8/0.8/0.8s]
+PASS 10/10 CC-P10 [3.1/3.2/3.6s]
+PASS 10/10 CC-P11 [3.3/3.4/3.9s]
+PASS 10/10 CC-P12 [3.1/3.3/4.0s]
+PASS 10/10 CC-P14 [6.9/7.4/8.4s]
+PASS 10/10 CC-P15 [4.6/4.7/5.2s]
+PASS 10/10 CC-P16 [3.6/3.7/4.2s]
+PASS 10/10 CC-P17 [5.2/5.3/5.9s]
+PASS 10/10 CC-L0 [2.4/2.5/3.0s]
+PASS 10/10 D10-01 [4.3/4.7/5.4s]
+PASS 10/10 D10-06e [6.5/7.5/8.2s]
+PASS 10/10 E2E-T01 [2.4/2.9/3.3s]
+
+[notice] E2E firefox slow steps >= 10s: 1 of 460 executions
+FAIL CC-P16 #1: Expect "toHaveCount"@app.ts:93 10.0s
+
+[warning] E2E firefox diag: 11 failed executions
+E2E-T02 #0 failed 2.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.3s; Expect "toBeVisible"@app.ts:32 0.2s; Wait for function@app.ts:67 0.1s
+CC-P16 #1 failed 11.3s | errors: Error: Team "Owls" not confirmed within 10119 ms. modalOpen=true creating=true teamsInFirestore=["Owls"] visible=["Create New Team\nTeam Nam | last step: Evaluate@app.ts:101 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 10.0s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+E2E-T02 #1 failed 3.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toBeVisible"@app.ts:52 0.3s; Expect "toHaveCount"@app.ts:93 0.3s; Wait for function@app.ts:67 0.2s
+E2E-T02 #2 failed 3.0s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.2s; Navigate@app.ts:31 0.1s
+E2E-T02 #3 failed 3.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Expect "toBeVisible"@app.ts:52 0.3s; Wait for function@app.ts:67 0.2s
+E2E-T02 #4 failed 3.7s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.3s; Navigate@app.ts:31 0.3s
+E2E-T02 #5 failed 4.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toBeVisible"@app.ts:32 0.8s; Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.5s
+E2E-T02 #6 failed 3.9s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toBeVisible"@app.ts:52 0.8s; Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.2s
+E2E-T02 #7 failed 3.7s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Expect "toBeVisible"@app.ts:52 0.3s; Expect "toBeVisible"@app.ts:32 0.2s
+E2E-T02 #8 failed 4.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Wait for function@app.ts:67 0.3s; Expect "toBeVisible"@app.ts:32 0.2s
+E2E-T02 #9 failed 3.8s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.8s; Expect "toBeVisible"@app.ts:32 0.3s; Expect "toBeVisible"@app.ts:32 0.2s
+
+[failure] E2E firefox: 449 passed / 11 failed / 0 blocked / 0 skipped
+FAIL 1/10 CC-P16 [3.3/4.6/11.3s] -- Error: Team "Owls" not confirmed within 10119 ms. modalOpen=true creating=true teamsInFirestore=["Owls"] visible=["Creat
+FAIL 10/10 E2E-T02 [2.6/3.7/4.6s] -- Error: expect(locator).toBeVisible() failed | Locator: getByText('No team selected') | Expected: visible | Error: strict
+PASS 10/10 E2E-AI01 [2.8/4.3/4.6s]
+PASS 10/10 E2E-AI01b [1.5/2.3/4.7s]
+PASS 10/10 E2E-A01 [0.6/0.9/1.6s]
+PASS 10/10 E2E-A02 [0.8/0.9/1.7s]
+PASS 10/10 E2E-A03 [1.0/1.4/1.8s]
+PASS 10/10 E2E-A04 [1.2/1.3/1.8s]
+PASS 10/10 E2E-A05 [0.4/0.5/0.5s]
+PASS 10/10 E2E-A06 [1.1/1.3/2.1s]
+PASS 10/10 E2E-A07 [1.2/1.4/2.7s]
+PASS 10/10 E2E-A08 [0.7/0.9/1.1s]
+PASS 10/10 E2E-A09 [1.3/1.5/1.6s]
+PASS 10/10 E2E-A10 [1.2/1.4/3.0s]
+PASS 10/10 CC-P10 [3.2/4.1/4.3s]
+PASS 10/10 CC-P10b [3.6/5.4/6.2s]
+PASS 10/10 CC-P11 [2.6/4.2/4.8s]
+PASS 10/10 CC-P12 [2.6/3.8/4.3s]
+PASS 10/10 CC-P14 [5.3/7.9/9.0s]
+PASS 10/10 CC-P15 [4.5/6.0/6.5s]
+PASS 10/10 CC-P16b [2.5/4.1/5.1s]
+PASS 10/10 CC-P17 [3.8/6.2/6.6s]
+PASS 10/10 CC-L0 [2.4/3.0/3.4s]
+PASS 10/10 CC-L1 [1.9/2.6/3.1s]
+PASS 10/10 CC-W0 [2.0/3.4/3.5s]
+PASS 10/10 D10-00 [1.7/2.5/2.7s]
+PASS 10/10 D10-01 [2.2/3.6/4.2s]
+PASS 10/10 D10-02 [2.2/3.4/4.2s]
+PASS 10/10 D10-03 [3.3/5.1/5.4s]
+PASS 10/10 D10-04 [3.2/4.5/5.7s]
+PASS 10/10 D10-05 [1.9/3.1/3.8s]
+PASS 10/10 D10-06 [4.3/6.7/8.7s]
+PASS 10/10 D10-06b [4.1/6.4/7.0s]
+PASS 10/10 D10-07 [7.8/9.2/9.6s]
+PASS 10/10 D10-07b [2.9/4.2/5.9s]
+PASS 10/10 D10-08 [3.3/5.2/5.7s]
+PASS 10/10 D10-09 [4.3/7.1/7.8s]
+PASS 10/10 D10-10 [2.5/4.3/4.7s]
+PASS 10/10 D10-11 [3.8/5.9/6.2s]
+PASS 10/10 D10-12 [1.1/1.5/1.7s]
+PASS 10/10 D10-06c [3.7/4.5/4.8s]
+PASS 10/10 D10-06d [4.0/5.7/6.9s]
+PASS 10/10 D10-06e [6.0/9.0/10.1s]
+PASS 10/10 E2E-C01 [2.4/3.8/4.4s]
+PASS 10/10 E2E-T01 [2.4/3.2/4.3s]
+PASS 10/10 E2E-T03 [4.7/6.6/7.2s]
+
+[notice] E2E chromium slow steps >= 10s: 0 of 460 executions
+none
+
+[warning] E2E chromium diag: 10 failed executions
+E2E-T02 #0 failed 1.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s; Expect "toHaveCount"@app.ts:93 0.1s
+E2E-T02 #1 failed 1.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s; Expect "toHaveCount"@app.ts:93 0.1s
+E2E-T02 #2 failed 1.4s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s; Expect "toHaveCount"@app.ts:93 0.1s
+E2E-T02 #3 failed 1.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.2s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+E2E-T02 #4 failed 1.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.2s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+E2E-T02 #5 failed 1.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.2s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+E2E-T02 #6 failed 1.5s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.2s; Navigate@app.ts:31 0.1s; Wait for function@app.ts:67 0.1s
+E2E-T02 #7 failed 1.6s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.3s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+E2E-T02 #8 failed 1.7s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.3s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+E2E-T02 #9 failed 1.7s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@teams.spec.ts:48 (0.0s) | slowest: Expect "toHaveCount"@app.ts:93 0.3s; Wait for function@app.ts:67 0.1s; Navigate@app.ts:31 0.1s
+
+[failure] E2E chromium: 450 passed / 10 failed / 0 blocked / 0 skipped
+FAIL 10/10 E2E-T02 [1.4/1.5/1.7s] -- Error: expect(locator).toBeVisible() failed | Locator: getByText('No team selected') | Expected: visible | Error: strict
+PASS 10/10 E2E-AI01 [1.1/1.5/2.2s]
+PASS 10/10 E2E-AI01b [0.8/0.9/1.9s]
+PASS 10/10 E2E-A01 [0.3/0.3/0.4s]
+PASS 10/10 E2E-A02 [0.5/0.6/0.6s]
+PASS 10/10 E2E-A03 [0.6/0.6/0.6s]
+PASS 10/10 E2E-A04 [0.7/0.7/0.7s]
+PASS 10/10 E2E-A05 [0.3/0.3/0.3s]
+PASS 10/10 E2E-A06 [0.3/0.3/0.3s]
+PASS 10/10 E2E-A07 [0.8/0.8/0.9s]
+PASS 10/10 E2E-A08 [0.4/0.5/0.5s]
+PASS 10/10 E2E-A09 [0.8/1.0/1.1s]
+PASS 10/10 E2E-A10 [0.8/0.8/0.9s]
+PASS 10/10 CC-P10 [1.7/1.9/2.0s]
+PASS 10/10 CC-P10b [1.8/2.1/2.5s]
+PASS 10/10 CC-P11 [1.4/1.7/1.9s]
+PASS 10/10 CC-P12 [1.4/1.5/1.7s]
+PASS 10/10 CC-P14 [2.5/2.8/3.5s]
+PASS 10/10 CC-P15 [2.0/2.3/2.7s]
+PASS 10/10 CC-P16 [1.8/1.9/2.1s]
+PASS 10/10 CC-P16b [1.1/1.3/1.7s]
+PASS 10/10 CC-P17 [2.0/2.4/2.8s]
+PASS 10/10 CC-L0 [1.2/1.4/1.6s]
+PASS 10/10 CC-L1 [0.9/1.1/1.3s]
+PASS 10/10 CC-W0 [1.1/1.2/1.5s]
+PASS 10/10 D10-00 [0.8/1.0/1.2s]
+PASS 10/10 D10-01 [1.2/1.4/1.5s]
+PASS 10/10 D10-02 [1.4/1.6/1.9s]
+PASS 10/10 D10-03 [1.5/1.9/2.6s]
+PASS 10/10 D10-04 [1.3/1.7/2.1s]
+PASS 10/10 D10-05 [1.0/1.1/1.5s]
+PASS 10/10 D10-06 [1.9/2.5/3.5s]
+PASS 10/10 D10-06b [1.9/2.4/3.2s]
+PASS 10/10 D10-07 [6.4/6.6/7.1s]
+PASS 10/10 D10-07b [1.4/1.7/2.0s]
+PASS 10/10 D10-08 [1.7/2.0/2.5s]
+PASS 10/10 D10-09 [1.9/2.5/3.2s]
+PASS 10/10 D10-10 [1.1/1.5/2.0s]
+PASS 10/10 D10-11 [1.8/2.2/2.9s]
+PASS 10/10 D10-12 [0.6/0.7/0.8s]
+PASS 10/10 D10-06c [1.8/2.0/2.2s]
+PASS 10/10 D10-06d [2.2/2.6/2.9s]
+PASS 10/10 D10-06e [3.0/3.6/4.5s]
+PASS 10/10 E2E-C01 [1.3/1.5/1.6s]
+PASS 10/10 E2E-T01 [1.3/1.5/1.7s]
+PASS 10/10 E2E-T03 [1.9/2.3/2.9s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+

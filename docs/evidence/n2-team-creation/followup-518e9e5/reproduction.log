@@ -1,0 +1,4 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/contexts/TeamContext.followup.test.tsx src/components/TeamManagement.followup.test.tsx --testNamePattern=REST-confirmed creation persists|same trimmed name requires
+

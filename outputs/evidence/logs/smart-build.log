@@ -1,0 +1,21 @@
+
+> coach-core-–-smart-playbook@0.0.0 build
+> vite build
+
+vite v6.4.4 building for production...
+transforming...
+✓ 544 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              1.62 kB │ gzip:   0.66 kB
+dist/assets/purify.es-CAi2OJFm.js           30.47 kB │ gzip:  11.73 kB
+dist/assets/index.es-CS3YPcNi.js           159.74 kB │ gzip:  53.52 kB
+dist/assets/html2canvas.esm-QH1iLAAe.js    202.38 kB │ gzip:  48.04 kB
+dist/assets/index-BGJiqxb9.js            1,448.81 kB │ gzip: 449.62 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 36.59s
+

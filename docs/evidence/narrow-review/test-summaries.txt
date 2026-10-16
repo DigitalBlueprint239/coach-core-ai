@@ -1,0 +1,14 @@
+BASELINE
+
+Test Suites: 31 passed, 31 total
+Tests:       443 passed, 443 total
+Snapshots:   0 total
+Time:        78.037 s
+Ran all test suites.
+FINAL
+
+Test Suites: 31 passed, 31 total
+Tests:       443 passed, 443 total
+Snapshots:   0 total
+Time:        96.428 s, estimated 192 s
+Ran all test suites.

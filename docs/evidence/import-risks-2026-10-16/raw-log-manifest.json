@@ -1,0 +1,42 @@
+[
+  {
+    "file": "unit.log",
+    "rawSha256": "fbb72d3b8737c73f0982fe0e507848bab22c0d20d8055e32497c4e08185a836d",
+    "publishedSha256": "ae21c7c926ef203003220626cd54f7826658596bea21302fde2846f325ca184d"
+  },
+  {
+    "file": "unit-final.log",
+    "rawSha256": "3613336e67fa09ac6a404c0aeeaad2983fbb9956555e2a1f6cab3ceee5e427b3",
+    "publishedSha256": "e894f2373b8437235c0eac5894e1978e448aaab3b61e203bffa3ffb616e31e01"
+  },
+  {
+    "file": "statusless-before.log",
+    "rawSha256": "d573ad140902fc45eca0f4ba1bcf26c549efa9e89f48613db0e22100c341cc33",
+    "publishedSha256": "cab7ee432c0c2cac5ea2c7c1cfe0ff196f656bb347ee3e9a76e2fb02cc8faa05"
+  },
+  {
+    "file": "full-unit.log",
+    "rawSha256": "b6dc05f127bc816a4f61896a40fd325bcef2586eedd8bb39a99f8a554e45d0bf",
+    "publishedSha256": "949a145db858e226974db474ff4b47f348a2b8f9611f50abb5ab0fa3102ef899"
+  },
+  {
+    "file": "types.log",
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "types-final.log",
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "types-repair.log",
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "build.log",
+    "rawSha256": "8bab4f19f848916737a9de91c5427835ef953586e024fd8186bbf3a401809b72",
+    "publishedSha256": "81acf01a828f6780777a8de76fc0928b0a445d30d45d1f12b3b30113f3708133"
+  }
+]

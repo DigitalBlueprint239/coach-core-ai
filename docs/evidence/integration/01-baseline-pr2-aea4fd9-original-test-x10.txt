@@ -1,0 +1,414 @@
+
+Running 20 tests using 1 worker
+
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   1 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✘   2 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (4.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   3 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (9.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✘   4 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (4.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   5 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   6 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (6.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   7 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✘   8 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (6.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   9 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (6.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓  10 [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  11 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  12 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (7.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  13 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (9.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  14 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (8.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  15 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  16 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (6.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  17 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (5.0s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  18 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (8.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  19 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (6.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✘  20 [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo (4.7s)
+
+
+  1) [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791905666147",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      136 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:138:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-desktop-mouse-repeat1/error-context.md
+
+  2) [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791905684218",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      136 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:138:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-desktop-mouse-repeat3/error-context.md
+
+  3) [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,10 +1,10 @@
+      Object {
+        "depthYds": 20,
+        "fromId": "p_LT_1791905716045",
+        "id": "qa-route",
+    -   "isFlipped": false,
+    +   "isFlipped": true,
+        "isMotion": false,
+        "name": "Go",
+        "points": Array [
+          Object {
+            "x": 851.5555555555554,
+
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+      142 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+    > 143 |   expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+          |                                                            ^
+      144 |   await page.screenshot({path:`docs/evidence/core-workflows/${info.project.name}-route.png`});
+      145 | });
+      146 |
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:143:60
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-desktop-mouse-repeat7/error-context.md
+
+  4) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791905740736",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      136 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:138:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch/error-context.md
+
+  5) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791905781416",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      136 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:138:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch-repeat4/error-context.md
+
+  6) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+    > 141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+          |                                                                      ^
+      142 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+      143 |   expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      144 |   await page.screenshot({path:`docs/evidence/core-workflows/${info.project.name}-route.png`});
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:141:70
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch-repeat5/error-context.md
+
+  7) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791905797130",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      136 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:138:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch-repeat6/error-context.md
+
+  8) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,10 +1,10 @@
+      Object {
+        "depthYds": 20,
+        "fromId": "p_LT_1791905803982",
+        "id": "qa-route",
+    -   "isFlipped": false,
+    +   "isFlipped": true,
+        "isMotion": false,
+        "name": "Go",
+        "points": Array [
+          Object {
+            "x": 851.9999656677248,
+
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+      142 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+    > 143 |   expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+          |                                                            ^
+      144 |   await page.screenshot({path:`docs/evidence/core-workflows/${info.project.name}-route.png`});
+      145 | });
+      146 |
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:143:60
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch-repeat7/error-context.md
+
+  9) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 20,
+    +   "depthYds": 13,
+        "fromId": "p_LT_1791905814115",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+      138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+    > 139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+          |                                                                                                                            ^
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+      142 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:139:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch-repeat8/error-context.md
+
+  10) [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,7 +1,7 @@
+      Object {
+    -   "depthYds": 13,
+    +   "depthYds": 20,
+        "fromId": "p_LT_1791905822529",
+        "id": "qa-route",
+        "isFlipped": false,
+        "isMotion": false,
+        "name": "Go",
+
+      136 |   await page.getByLabel('Depth (yds)',{exact:true}).press('Tab'); await checkpoint(page);
+      137 |   const changed = (await saved(page)).plays['qa-play-a'].routes[0]; expect(changed.depthYds).toBe(20);
+    > 138 |   await press(page,'Undo (Cmd+Z)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(moved);
+          |                                                                                                                            ^
+      139 |   await press(page,'Redo (Cmd+Y)',touch); await checkpoint(page); expect((await saved(page)).plays['qa-play-a'].routes[0]).toEqual(changed);
+      140 |   await press(page,'Flip Horizontal',touch); await checkpoint(page);
+      141 |   expect((await saved(page)).plays['qa-play-a'].routes[0].isFlipped).toBe(true);
+        at /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/pb2/tests/browser/core-workflows.spec.ts:138:124
+
+    Error Context: test-results/core-workflows-real-route--3441d-erty-transactions-undo-redo-tablet-touch-repeat9/error-context.md
+
+  10 failed
+    [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [desktop-mouse] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+    [tablet-touch] › tests/browser/core-workflows.spec.ts:120:1 › real route waypoint drag and property transactions undo redo 
+  10 passed (2.9m)
+EXIT=1

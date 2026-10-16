@@ -1,0 +1,30 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node e2e/node_modules/@playwright/test/cli.js test --config tests/coaching-ui/legacy-repairs/playwright.config.ts --grep "L1 disabled"
+[WebServer] (node:12508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:35628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l1repair-mv8jy4df-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 1 [chromium] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload (23.4s)
+(node:37208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+!  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as l1repair-mv8jykw0-1@e2e.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=[REDACTED]&apiKey=[REDACTED]&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ok 2 [firefox] › tests\coaching-ui\legacy-repairs\legacy-migration.spec.ts:5:1 › L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload (23.5s)
+
+  2 passed (59.5s)
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

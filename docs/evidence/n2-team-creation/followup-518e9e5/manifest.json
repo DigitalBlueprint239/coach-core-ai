@@ -1,0 +1,32 @@
+[
+  {
+    "file": "before.log",
+    "rawSha256": "c089d5eb2197831b81cf73f83b4da4aebfd9eef5832d9cd8278a55a2d95e6608",
+    "publishedSha256": "5088e03c17d9fc49ba4bc1afa9e9ecf3849a6c4e31c67a819ef227507194872a"
+  },
+  {
+    "file": "unit.log",
+    "rawSha256": "3ca584b54f2619c5cd817d438e37a497a8fbd715c0732a0532c284fdd875290c",
+    "publishedSha256": "da7f8e4f4b5410afc976fe925a66b9a7f2f2ab30a06c7608eca47071302986b3"
+  },
+  {
+    "file": "types.log",
+    "rawSha256": "b46ef8014dca3b3588d80a5cb5bbdb7c073e6fcafe352d3c2030edf6c4a7ce04",
+    "publishedSha256": "1270fc863f0bfe82212441d13b43eb841039469d46fabc903fe6f5137b9576e0"
+  },
+  {
+    "file": "types-final.log",
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "publishedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "reproduction.log",
+    "rawSha256": "9120f85828c5df80fc250f3615f3aaee5ea224d333f0cbce54b14ddd7dbb0b01",
+    "publishedSha256": "c208338b7a0aa0df973f64967ee57aadbe77b861d9b3926c3aca1c4a6e2faa51"
+  },
+  {
+    "file": "build.log",
+    "rawSha256": "399d287c64b5665ccb3c2ddbdf9609c0e259bf984c57f54723020d166bc21bdd",
+    "publishedSha256": "d931eca74d8107395c612ef46348249442031983b137a0485c62d107fbc566b2"
+  }
+]
