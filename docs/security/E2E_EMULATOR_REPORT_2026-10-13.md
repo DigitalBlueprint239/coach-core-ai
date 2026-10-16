@@ -1263,3 +1263,19 @@ Desktop jobs took 90 and 102 minutes (the suite now carries CC-E1–E4 and D10-0
 **N3 / stall probes:** armed through every run today (`38842101522`, `38896954298`, `38918657153`, targeted runs); no recurrence. N3 remains an unresolved risk.
 
 **SHAs at close:** N2 runtime `518e9e5817abd2a0e1bf1308468928f238fa8533`, harness `7d56300` on `claude/n2-repair-acceptance-518e9e5` (acceptance figure from `c822b6e`, evidence 54); PR #72 runtime `35e0d77887ba87d2714706f0cdbb2511b442d1a2`, candidates `f2271ce` (matrix) and `77cd6c5` (D10-11 ×50). **MVP NO-GO.**
+
+### 14.18 B11 CI job split — implemented as draft PR #73, validated (2026-10-16, evening)
+
+Coach Drew approved B11 on 2026-10-16. Implementation: branch `claude/ci-split-b11` @ `e25272b`, one commit, three files (`.github/workflows/e2e-emulator.yml`, `e2e/playwright.config.ts`, `e2e/reporters/annotate.mjs`); base `claude/n2-repair-acceptance-518e9e5` @ `7d56300`; runtime `518e9e5817abd2a0e1bf1308468928f238fa8533` unchanged. **Draft PR #73; no merge or deployment; branch protection untouched.**
+
+- Matrix: 4 projects × {acceptance, diagnostic, obsolete-fault-model} = 12 jobs; `E2E_BUCKET` partitions by title tag inside the Playwright config, composing (AND) with the `grep` input and the phone-project filter; unset/`all` keeps the whole suite; an unknown value throws. Reporter adds the bucket to the annotation title and a job-summary row. Artifacts `e2e-results-<bucket>-<project>-<sha>`.
+- Preserved, verified by `--list`: 65 + 10 + 1 = 76 per desktop project (= unfiltered), 15 + 0 + 0 = 15 per phone project; no overlap; acceptance holds zero tagged tests. `retries: 0`, timeouts, `repeat_each`, projects, test bodies, 120-minute limit: unchanged (`git diff 7d56300 e25272b`).
+
+| Run | Result |
+|---|---|
+| ×1 structural `38969487220` (ev. 63) | acceptance desktop 63/2 ×2 (the 2 = D10-08a/08d, PR #72 behaviour absent on `518e9e5`), phone 15/0 ×2; diagnostic desktop 9/1 (N2-D2), phone 0 tests; obsolete 0/1 and 1/0, phone 0 tests. Twelve artifacts |
+| ×10 comparison `38971253773` (ev. 64) | **acceptance** chromium 630/20, firefox 630/20 (both 20 = D10-08a/08d ×10; the other 63 tests 630/0), phone 150/0 ×2; **diagnostic** 90/10 ×2 (N2-D2 10/10 this run; CC-E1–E4 100/100); **obsolete** N2-A2 0/10 and 1/9. Per desktop project 650 + 100 + 10 = **760 = 76 × 10**, the full union |
+
+Comparison with the pre-split union (run `38896954298`, evidence 54, 61 acceptance tests): the 61 shared acceptance tests are 610/0 there and 610/0 here; the four acceptance tests added since (D10-08a–d) account for the 20 expected failures on this runtime. Wall-clock: desktop acceptance jobs **61 min (Chromium) and 70 min (Firefox)** versus 90–102 min combined before (C8 margin now ≥ 50 min); diagnostic desktop 29 min; obsolete 12 min.
+
+Independent review requested from Codex (#39 comment 6225270504): partition counts, no assertion/timeout/retry change, acceptance set equality per project, artifacts for all twelve jobs. Merge decision is Coach Drew's. **MVP NO-GO.**
