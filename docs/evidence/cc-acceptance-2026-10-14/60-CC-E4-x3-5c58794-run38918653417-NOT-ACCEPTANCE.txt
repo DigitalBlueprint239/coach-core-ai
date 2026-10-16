@@ -1,0 +1,41 @@
+# DIAGNOSTIC A4b: CC-E4 (Smart Playbook play retention + manual re-save) x3 per engine; candidate 5c58794 (runtime 518e9e5)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38918653417
+
+=== JOB 117032967718
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium diag data: 3 executions
+PASS CC-E4 #0: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["O5ceJ2pwmGhkCanCxGso:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=7530ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+PASS CC-E4 #1: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["KBscNeABJ6sZ7ngReYrU:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=6487ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+PASS CC-E4 #2: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["ScYdz9rr5WY565q6SG3m:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=11511ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+[notice] E2E chromium slow steps >= 10s: 1 of 3 executions
+PASS CC-E4 #2: the failed save is reported@sdk-edit.spec.ts:161 11.3s
+[notice] E2E chromium: 3 passed / 0 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 3/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 3/3 CC-E4 [13.2/14.7/18.2s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117032967961
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox diag data: 3 executions
+PASS CC-E4 #0: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["mNINt7LWhzhqrDHwcXub:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=7732ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+PASS CC-E4 #1: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["WLFy0WsjqSYi7SrbANrG:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=8760ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+PASS CC-E4 #2: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["0BBCWxeJLLEGtNky0FbW:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=8714ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+[notice] E2E firefox slow steps >= 10s: 0 of 3 executions
+none
+[notice] E2E firefox: 3 passed / 0 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 3/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 3/3 CC-E4 [17.2/17.2/17.4s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

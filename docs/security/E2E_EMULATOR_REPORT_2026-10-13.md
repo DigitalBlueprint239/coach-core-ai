@@ -1201,3 +1201,41 @@ Readiness always resolved and the correct ID always followed, so there is **no a
 **Classification.** Not a safety defect on the asserted facts: no false "saved", no duplicate. Whether the typed edit remains in the editor after "failed" was not asserted (follow-up: add a field read-back and a manual re-save to CC-E1). It is a **confirmed behaviour** for Codex/Coach Drew to rule on (queue A4b): after transient commit failures the edit path reports failure and waits for a manual re-save; the `online`-event retry only covers an offline→online transition, not connection resets. The coach-facing text is "Connection failed." (readable, unlike the raw "Failed to fetch" on team create). A manual re-save was not exercised by these diagnostics.
 
 **Status.** A4a complete. Harness line ends at `aadbe3d` (runtime `518e9e5`). MVP **NO-GO**.
+
+### 14.16 A4b draft-retention coverage; PR #72 (import R1c) independent acceptance (2026-10-16)
+
+**SHAs.** N2 runtime unchanged `518e9e5817abd2a0e1bf1308468928f238fa8533` (harness `5c58794` for A4b diagnostics). PR #72 tested source `35e0d77887ba87d2714706f0cdbb2511b442d1a2`; candidate `f2271ce` on `claude/import-r1c-acceptance-35e0d77` = `35e0d77` + harness `1006595` (`e2e/`, `.github/` only; runtime paths byte-identical to `35e0d77`). PR #72's own diff from `518e9e5` outside docs/tests: `src/features/legacy-import/import-legacy.ts` +7/−1. **PR #72 results are kept separate from `518e9e5` acceptance.**
+
+#### A4b: what happens to a coach's edit when the real commit fails, on both reachable edit paths
+
+CC-E3 (practice plan: name + notes) and CC-E4 (Smart Playbook play: name) on `518e9e5`, `documents:commit` reset until the UI reports failure, then connectivity restored and the coach re-saves with the existing button. Evidence 59 (E3 ×3 per engine) and 60 (E4 ×3 per engine); earlier harness-only failures in runs `38914690109` (E3 used a `periods.0` field a new plan does not have; E4 matched two name inputs because the Save dialog stays open after failure) are recorded in evidence 59, not counted.
+
+| Step | Practice plan (CC-E3) | Play (CC-E4) |
+|---|---|---|
+| After 5 commit attempts are reset | status **"failed"**, alert **"Connection failed."** | same |
+| Every edited field in the editor | name and notes hold the unsaved values (3/3 ×2) | editor **and** the still-open Save dialog both hold the edit (3/3 ×2) |
+| Device draft containing the edit | 1 draft under the coach's scope | 1 draft under the coach's scope |
+| Server during failure | revision 1, original values (no false "saved") | same |
+| Automatic recovery after restore | none within 5 s (recorded) | none within 5 s (recorded) |
+| Manual re-save (existing control) | "saved"; authoritative readback: **exactly one** document, same id, revision 2, intended name and notes; periods, duration, goals, createdAt unchanged | "saved"; exactly one document, same id, revision 2, intended name; players and routes unchanged |
+
+**Coverage.** Reachable edit paths on `518e9e5`: practice plan (`PracticePlanner` → `useDocument` → `cloud.save` transaction) and play (`SmartPlaybook` → same gateway). Both covered. **Gaps:** (1) other practice-plan fields (periods, goals, duration) were not edited in E3 — only their non-overwrite was checked; (2) the play test edits the name only, not players/routes; (3) a failure during the *first* save (REST create-only path) is covered by CC-P17 (offline) and CC-P11 (held), not by a reset-until-failed variant; (4) a failure while the coach switches team or signs out mid-save is covered for creates (CC-P11/P12), not for edits; (5) no device/staging measurement.
+
+**Is manual re-save an acceptable MVP limitation?** *Assessment, not approval — Coach Drew has not ruled on A4b.* The facts in favour: nothing is lost (editor, device draft and server all consistent), the failure is explicit and readable ("Connection failed."), re-saving with the normal button recovers exactly once with no duplicate or overwrite. The facts against: after a transient network blip the app does not retry on its own, so a coach who navigates away or closes the laptop believing the save "went through" relies on the draft-recovery path they have not seen; the create path (team creation) does auto-recover, so behaviour is inconsistent across the app. Recommendation for the decision: acceptable for a private beta **if** disclosed in the checklist and the "failed" state is visibly actionable; otherwise a small "Retry save" affordance or an automatic retry on connectivity recovery (`useDocument` retries only on the `online` event today). Either is a product change for Codex, not for this harness.
+
+#### PR #72: status-less legacy claim recovery, independently verified
+
+The repair (six lines in `hasUnfinishedImport`): a claim with no `status` field, written by the pre-repair producer, no longer masks the account's pending marker — but only when the claim's `teamId` equals the current team. New tests D10-08a–d seed exactly that device state (status-less claim + pending marker + recorded decline) and reuse the D10 fixtures (deterministic copy ids, byte-identical originals, verified readback).
+
+| Test | Requirement | Pre-repair `518e9e5` ×3 (ev. 57) | `35e0d77` ×10 per engine (ev. 58) |
+|---|---|---|---|
+| D10-08a owner + original team | resume offered; nothing copied before consent; exact verified copies; decision `imported`; claim `imported`; pending cleared; originals byte-identical; second visit offers nothing and copies nothing | **FAIL 3/3** (no resume) | **PASS 10/10 / 10/10** |
+| D10-08b same coach, claim for another team | "An import into Old Team was started and not finished…"; no Import button; nothing copied | PASS | PASS 10/10 / 10/10 |
+| D10-08c another account on the device | "…another account"; no Import button; nothing under B or A; A's claim byte-identical | PASS | PASS 10/10 / 10/10 |
+| D10-08d resume with a mismatching document at the deterministic id | error, never success; existing document not overwritten; no `imported` decision; claim stays `pending`; originals untouched | FAIL 3/3 (no resume to exercise) | **PASS 10/10 / 10/10** |
+
+08a and 08d discriminate (fail pre-repair, pass post-repair); 08b/08c prove the isolation rules the repair must not loosen were already held and still hold. One harness correction on the way: my first 08d expected the gateway's internal wording; the UI maps every import failure to "Import not completed. Original plays preserved. Retry or review your team access." (instrumented run `38915003832` in evidence 58 shows the tampered document unchanged and the claim pending). Observation for Codex, not a defect: the coach is not told *why* (e.g. "changed elsewhere").
+
+Full matrix on candidate `f2271ce` (×10, retries 0, no filter): run `38918657153`, results in §14.17 when complete. No merge or deployment; PR #72 stays draft.
+
+**Status.** A4b coverage complete on both paths; decision pending Coach Drew. PR #72 verified on its targeted tests; full matrix pending. N3 and stall probes armed (no new recurrence in these runs). **MVP NO-GO.**
