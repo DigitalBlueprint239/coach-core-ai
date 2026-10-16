@@ -738,22 +738,24 @@ test('N2-R8 [acceptance] authoritative readback fails at the network level (and 
   await expectExactlyTheOperation(uid, op, 'R8');
 });
 
-test('N2-R8b [acceptance] commit reaches the server but the authoritative readback returns 503 while the SDK listener is unavailable: no false success, no duplicate, no overwrite; the same operation is confirmed once after restore', async ({ page }) => {
-  // Reconciliation (2026-10-15): without holding the listener, the SDK snapshot
-  // confirms the team milliseconds after the real commit and the readback is
-  // aborted before it is issued, so the 503 fault was applied in only some
-  // executions (evidence 44/46/48: readbacksFailed=0). The listener is now held
-  // (request not sent, as in N2-D4) for the fault window, so the readback is
-  // the only confirmation path, and the fault MUST have been applied to pass.
+test('N2-R8b [acceptance] SDK listener unavailable, commit reaches the server, authoritative readback returns 503: no false success, no duplicate, no overwrite; the same operation is confirmed once after restore', async ({ page }) => {
+  // Reconciliation (2026-10-15, evidence 44/46/48/49): with a live listener the
+  // SDK snapshot confirms the team milliseconds after a real commit and the
+  // readback is aborted before it is issued, so the 503 fault was served in
+  // only some executions and never decided the outcome. A route installed
+  // mid-test cannot stop the listener's long-poll that is already in flight
+  // (evidence 49: listenHeld=0), so the Listen channel is blocked from BEFORE
+  // sign-in (the SDK falls back to from-cache snapshots, which the app never
+  // treats as confirmation). The readback is then the only confirmation path
+  // during the window, and the fault MUST have been served for the test to pass.
+  let faulting = true; let listenBlocked = 0; let readFailed = 0;
+  await page.route(/Firestore\/Listen\/channel/, async (route: Route) => {
+    if (faulting) { listenBlocked += 1; await route.abort('connectionrefused').catch(() => {}); return; }
+    await route.continue().catch(() => {});
+  });
   const uid = await signInAsBetaCoach(page, coachEmail('n2rr8b'));
   const name = 'N2 REST Readback 503';
   await openCreate(page, name);
-  let faulting = true; let readFailed = 0; let listenHeld = 0;
-  const releases: Array<() => void> = [];
-  await page.route(/Firestore\/Listen\/channel/, async (route: Route) => {
-    if (faulting && route.request().method() === 'GET') { listenHeld += 1; await new Promise<void>((r) => releases.push(r)); }
-    await route.continue().catch(() => {});
-  });
   await page.route(READBACK, async (route: Route) => {
     if (faulting && route.request().method() === 'GET') {
       readFailed += 1;
@@ -771,15 +773,16 @@ test('N2-R8b [acceptance] commit reaches the server but the authoritative readba
   await new Promise((r) => setTimeout(r, Math.max(0, 8_000 - (Date.now() - t0))));
   const noFalseSuccess = await noSuccessShown(page, name);
   const readFailedDuringOutage = readFailed;
-  faulting = false; releases.splice(0).forEach((r) => r());
+  faulting = false;
   const rec = await recover(page, name);
   await new Promise((r) => setTimeout(r, 3_000));
-  record(`R8b readbacksFailed=${readFailedDuringOutage} listenHeld=${listenHeld} statusAt=${statusAt}ms committedAt=${committedAt}ms noFalseSuccessAt8s=${noFalseSuccess} recovery=${rec.mode}/${rec.ms}ms`);
+  record(`R8b listenBlocked=${listenBlocked} readbacksFailed=${readFailedDuringOutage} statusAt=${statusAt}ms committedAt=${committedAt}ms noFalseSuccessAt8s=${noFalseSuccess} recovery=${rec.mode}/${rec.ms}ms`);
   await page.unroute(READBACK); await page.unroute(/Firestore\/Listen\/channel/);
+  expect(listenBlocked, 'the listener fault was applied').toBeGreaterThan(0);
   expect(readFailedDuringOutage, 'the readback fault was applied (the 503 was actually served)').toBeGreaterThan(0);
   expect(statusAt, 'accessible saving/connection status within 8 s').toBeGreaterThanOrEqual(0);
   expect(committed, 'the commit itself reached the server').toHaveLength(1);
-  expect(noFalseSuccess, 'a 503 readback is never reported as success').toBe(true);
+  expect(noFalseSuccess, 'a 503 readback with no listener confirmation is never reported as success').toBe(true);
   expect(rec.mode, 'the UI recovers and shows the team after restore').not.toBe('not-recovered');
   await expectExactlyTheOperation(uid, op, 'R8b');
   expect((await adminTeamsFull(uid))[0], 'the committed team was not overwritten').toEqual(committed[0]);
