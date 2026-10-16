@@ -1,0 +1,18 @@
+{
+  "applicationRuntime": "518e9e5817abd2a0e1bf1308468928f238fa8533",
+  "ciCandidate": "cf6377f8bca24acb678e41bb6a60098a9e8fdf4b",
+  "d10CapturedFailure": "PREMATURE HARNESS READ BEFORE TEAM READY; preserved, independent rerun pending",
+  "fx02": "TEXTS AND REDACTED DOM RECOVERED; CAUSE UNRESOLVED",
+  "n3": "NO NEW DISCRIMINATOR FAILURE IN LATEST FIREFOX JOB; PRIOR SYMPTOM UNRESOLVED",
+  "appReadinessDiagnostic": {
+    "uniqueCases": 1,
+    "passed": 1,
+    "originalElapsedSeconds": 28123.533,
+    "directRerunElapsedSeconds": 4.842,
+    "measurement": "mocked app correctness; original walltime anomaly retained, no performance inference"
+  },
+  "typescriptDiagnostics": 0,
+  "newBuild": "NOT RUN: production source unchanged",
+  "newIndependentBrowserAcceptance": "NOT RUN",
+  "mvp": "NO-GO"
+}

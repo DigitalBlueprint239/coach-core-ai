@@ -152,3 +152,10 @@ Claude owns R7/R7b/R8/R8b and full browser matrix on this exact runtime. No new
 independent/staging/physical acceptance claimed. N2-A2 obsolete-fault-model,
 historical failures and missing evidence retained. Candidate10/9b/#67 and harness,
 auth/rules/functions unchanged. No merge/deploy; MVP NO-GO; AIoff/film blocked.
+
+
+## Release-gate D10-06e / FX-02 / N3 investigation (2026-10-15)
+
+Isolated codex/release-gate-d10-fx02-2026-10-15 from280ee48; app518e9e5 and PR71 unchanged. Runtime paths on cf6377f8bca24acb678e41bb6a60098a9e8fdf4b verified identical. Run38842101522/job116784614845 artifact hash matches CI. Captured D10-06e undefined storage read is premature identity-vs-team readiness: Welcome visible30117.941ms, storage read while team loads, original Alpha Eagles DOM30137.801ms, exact original ID at later diagnostic read. Claude owns readiness-anchor correction and rerun; failure preserved, no sleep/harness changes by Codex. Other historical variants remain separate.
+
+FX02 original DCC5B745 trace reverified; redacted full action log and decoded before DOM recovered in docs/evidence/release-gate-d10-fx02. Enabled button present before click starts and near end; no intervening DOM snapshots establish continuous presence. Cause open. N3 probes coordinated with Claude, no speculative app/auth change. See RELEASE_GATE_D10_FX02_INVESTIGATION_2026-10-15.md for exact references, app-owned diagnostic validation and limitations. Raw artifacts private/unchanged, missing original L1 ZIP/PNG still disclosed. No new independent browser/staging/device acceptance; AIoff/film blocked, MVP NO-GO; no merge/deploy/live changes.

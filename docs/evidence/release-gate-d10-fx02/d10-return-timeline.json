@@ -1,0 +1,115 @@
+{
+  "traceSha256": "c7f2372e481b508172893e69f2cb80d804464fa8c2c7cded1a2dd490a1d0c4e2",
+  "actions": [
+    {
+      "type": "after",
+      "callId": "seoc@2557",
+      "endTime": 30045.019
+    },
+    {
+      "type": "before",
+      "callId": "seoc@2559",
+      "method": "expect",
+      "startTime": 30048.333,
+      "operation": "internal:role=heading[name=\"Waiting for beta access\"i] >> internal:or=\"internal:text=\\\"Welcome, [EMAIL REDACTED]\\\"i\""
+    },
+    {
+      "type": "after",
+      "callId": "seoc@2559",
+      "endTime": 30081.355
+    },
+    {
+      "type": "before",
+      "callId": "seoc@2561",
+      "method": "isVisible",
+      "startTime": 30099.921,
+      "operation": "internal:role=heading[name=\"Waiting for beta access\"i]"
+    },
+    {
+      "type": "after",
+      "callId": "seoc@2561",
+      "endTime": 30107.584
+    },
+    {
+      "type": "before",
+      "callId": "seoc@2563",
+      "method": "expect",
+      "startTime": 30110.184,
+      "operation": "internal:text=\"Welcome, [EMAIL REDACTED]\"i"
+    },
+    {
+      "type": "after",
+      "callId": "seoc@2563",
+      "endTime": 30116.011
+    },
+    {
+      "type": "before",
+      "callId": "seoc@2565",
+      "method": "evaluateExpression",
+      "startTime": 30118.775,
+      "operation": "() => Object.fromEntries(Object.entries(window.localStorage))"
+    },
+    {
+      "type": "after",
+      "callId": "seoc@2565",
+      "endTime": 30123.726
+    },
+    {
+      "type": "before",
+      "callId": "seoc@2567",
+      "method": "evalOnSelectorAll",
+      "startTime": 30133.572,
+      "operation": "internal:role=heading"
+    }
+  ],
+  "snapshots": [
+    {
+      "callId": "seoc@2561",
+      "phase": "before",
+      "time": 30104.83,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  No team selected Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16 Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Next up  Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2561",
+      "phase": "after",
+      "time": 30108.967,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  No team selected Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16 Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Next up  Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2563",
+      "phase": "before",
+      "time": 30112.817,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  No team selected Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16 Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Next up  Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2563",
+      "phase": "after",
+      "time": 30117.941,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  No team selected Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16 Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Next up  Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2565",
+      "phase": "before",
+      "time": 30120.31,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  No team selected Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16 Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Next up  Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2565",
+      "phase": "after",
+      "time": 30125.79,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  No team selected Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16 Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Next up  Loading your plans\u2026 Select or create your team to start planning.   Manage Teams Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2567",
+      "phase": "before",
+      "time": 30137.801,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  Alpha Eagles Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16  \u00b7  Alpha Eagles Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 No upcoming dated practice plans.   Create Practice Plan Next up  Loading your plans\u2026 No upcoming dated practice plans.   Create Practice Plan Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    },
+    {
+      "callId": "seoc@2567",
+      "phase": "after",
+      "time": 30164.896,
+      "bodyText": " Skip to main content COACH CORE  AI CC           My Week     Teams       Practice Plans        Smart Playbook Planned features Film review \u00b7 unavailable Roster & attendance \u00b7 unavailable Player development \u00b7 unavailable Private beta COACH CORE  AI     Active team:  Alpha Eagles Welcome,  [EMAIL REDACTED]    Sign out  My Week Today Fri, Oct 16  \u00b7  Alpha Eagles Team workspace Sample preview Weekly calendar  Oct 12  \u2013  Oct 18, 2026  Today Week Mon 12  Tue 13  Wed 14  Thu 15  Fri 16  Sat 17  Sun 18  Friday, Oct 16 No dated plans or events for this day. Loading authorized practice plans\u2026 Loading your plans\u2026 No upcoming dated practice plans.   Create Practice Plan Next up  Loading your plans\u2026 No upcoming dated practice plans.   Create Practice Plan Upcoming Loading upcoming plans\u2026 Dated saved practice plans will appear here. Assignments Unavailable Assignment tracking is planned No connected task feed yet.           Today     Teams       Practice        Playbook "
+    }
+  ]
+}

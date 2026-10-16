@@ -1,0 +1,100 @@
+[
+  {
+    "time": 110049.201,
+    "callId": "fcwl@50",
+    "phase": "before",
+    "emailLinkButtons": []
+  },
+  {
+    "time": 110411.547,
+    "callId": "fcwl@50",
+    "phase": "after",
+    "emailLinkButtons": []
+  },
+  {
+    "time": 110582.457,
+    "callId": "fcwl@52",
+    "phase": "before",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 110695.728,
+    "callId": "fcwl@52",
+    "phase": "after",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 110727.401,
+    "callId": "fcwl@54",
+    "phase": "before",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 110830.724,
+    "callId": "fcwl@54",
+    "phase": "action",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 110907.004,
+    "callId": "fcwl@54",
+    "phase": "after",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 162323.134,
+    "callId": "fcwl@56",
+    "phase": "before",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 162411.336,
+    "callId": "fcwl@56",
+    "phase": "action",
+    "emailLinkButtons": [
+      {
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "time": 162525.969,
+    "callId": "fcwl@56",
+    "phase": "after",
+    "emailLinkButtons": [
+      {
+        "disabled": true
+      }
+    ]
+  },
+  {
+    "time": 162559.987,
+    "callId": "fcwl@58",
+    "phase": "before",
+    "emailLinkButtons": []
+  }
+]

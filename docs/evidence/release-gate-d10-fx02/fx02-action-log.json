@@ -1,0 +1,50 @@
+{
+  "sourceSha256": "dcc5b745bff5f31d8ff7659a89dc038dcb6633785b7c447e32286f028382cbb0",
+  "callId": "fcwl@56",
+  "logs": [
+    {
+      "time": 113977.692,
+      "message": "waiting for getByRole('button', { name: 'Email me a sign-in link' })"
+    },
+    {
+      "time": 162362.19,
+      "message": "  locator resolved to <button type=\"submit\" class=\"w-full border border-blue-600 text-blue-700 py-2 px-6 rounded-lg hover:bg-blue-50 disabled:opacity-50\">Email me a sign-in link</button>"
+    },
+    {
+      "time": 162368.417,
+      "message": "attempting click action"
+    },
+    {
+      "time": 162368.909,
+      "message": "  waiting for element to be visible, enabled and stable"
+    },
+    {
+      "time": 162378.192,
+      "message": "  element is visible, enabled and stable"
+    },
+    {
+      "time": 162378.221,
+      "message": "  scrolling into view if needed"
+    },
+    {
+      "time": 162381.246,
+      "message": "  done scrolling"
+    },
+    {
+      "time": 162447.208,
+      "message": "  performing click action"
+    },
+    {
+      "time": 162509.789,
+      "message": "  click action done"
+    },
+    {
+      "time": 162509.813,
+      "message": "  waiting for scheduled navigations to finish"
+    },
+    {
+      "time": 162511.401,
+      "message": "  navigations have finished"
+    }
+  ]
+}

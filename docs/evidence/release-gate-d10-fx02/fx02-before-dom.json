@@ -1,0 +1,100 @@
+{
+  "sourceSha256": "dcc5b745bff5f31d8ff7659a89dc038dcb6633785b7c447e32286f028382cbb0",
+  "callId": "fcwl@56",
+  "phase": "before",
+  "timestamp": 162323.134,
+  "redaction": "attribute allowlist; no input values, URLs, scripts, styles, headers or bodies; emails/tokens redacted",
+  "dom": [
+    "HTML",
+    {},
+    "",
+    [
+      "BODY",
+      {},
+      [
+        "DIV",
+        {
+          "id": "root"
+        },
+        [
+          "DIV",
+          {
+            "class": "min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4"
+          },
+          [
+            "DIV",
+            {
+              "class": "bg-white p-8 rounded-xl shadow-2xl max-w-md w-full",
+              "role": "main"
+            },
+            [
+              "H1",
+              {
+                "class": "text-3xl font-bold text-center text-gray-900 mb-2"
+              },
+              "Coach Core AI"
+            ],
+            [
+              "H2",
+              {
+                "class": "text-lg text-center text-gray-700 mb-6"
+              },
+              "Private beta sign-in"
+            ],
+            [
+              "BUTTON",
+              {
+                "type": "button",
+                "class": "w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors mb-6"
+              },
+              "Continue with Google"
+            ],
+            [
+              "FORM",
+              {
+                "class": "space-y-3"
+              },
+              [
+                "LABEL",
+                {
+                  "class": "block text-sm font-medium text-gray-700"
+                },
+                "Or get a sign-in link by email"
+              ],
+              [
+                "INPUT",
+                {
+                  "id": "signin-email",
+                  "autocomplete": "email",
+                  "class": "w-full px-3 py-2 border rounded focus:outline-none focus:ring",
+                  "type": "email"
+                }
+              ],
+              [
+                "BUTTON",
+                {
+                  "type": "submit",
+                  "class": "w-full border border-blue-600 text-blue-700 py-2 px-6 rounded-lg hover:bg-blue-50 disabled:opacity-50"
+                },
+                "Email me a sign-in link"
+              ]
+            ],
+            [
+              "P",
+              {
+                "class": "mt-6 text-xs text-gray-500 text-center"
+              },
+              "Access is limited to invited coaches during the private beta."
+            ]
+          ]
+        ],
+        [
+          "DIV",
+          {
+            "class": "fixed top-4 right-4 z-50 space-y-2"
+          }
+        ]
+      ]
+    ]
+  ]
+}

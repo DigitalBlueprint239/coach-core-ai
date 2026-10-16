@@ -1,0 +1,29 @@
+  console.error
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      41 |
+      42 | test('authenticated identity is not team readiness: delayed owner snapshot restores selection without a sleep', async () => {
+    > 43 |   render(<TeamProvider><Probe/></TeamProvider>);
+         |         ^
+      44 |   // Auth already exposes coach A, but the owner query has not delivered.
+      45 |   expect(screen.getByTestId('loading')).toHaveTextContent('true');
+      46 |   expect(screen.getByTestId('selected')).toBeEmptyDOMElement();
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-n2-team-creation/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-n2-team-creation/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-n2-team-creation/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-n2-team-creation/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/contexts/TeamContext.readiness.test.tsx:43:9)
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+PASS src/contexts/TeamContext.readiness.test.tsx
+  √ authenticated identity is not team readiness: delayed owner snapshot restores selection without a sleep (105 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        4.842 s, estimated 28071 s
+Ran all test suites within paths "src/contexts/TeamContext.readiness.test.tsx".

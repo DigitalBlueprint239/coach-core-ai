@@ -1,0 +1,13 @@
+{
+  "applicationRuntime": "518e9e5817abd2a0e1bf1308468928f238fa8533",
+  "preservedPr71Head": "280ee484cf0b24ba2fb0eb7d803ea9c85c743489",
+  "ciCandidate": "cf6377f8bca24acb678e41bb6a60098a9e8fdf4b",
+  "run": 38842101522,
+  "job": 116784614845,
+  "artifact": 12021584689,
+  "artifactSha256": "7b8988f4ff7d2812ff1d48e200659b1f29eb20b1b8ff1e5088bb932690b83063",
+  "d10TraceSha256": "c7f2372e481b508172893e69f2cb80d804464fa8c2c7cded1a2dd490a1d0c4e2",
+  "fx02TraceSha256": "dcc5b745bff5f31d8ff7659a89dc038dcb6633785b7c447e32286f028382cbb0",
+  "evidenceType": "retained synthetic CI trace + retained local trace; no new browser acceptance",
+  "rawArtifacts": "retained privately outside repo; ZIPs/screenshots/headers/Auth bodies not published"
+}
