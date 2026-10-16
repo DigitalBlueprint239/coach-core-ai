@@ -162,3 +162,10 @@ Claude owns R7/R7b/R8/R8b and full browser matrix on this exact runtime. No new
 independent/staging/physical acceptance claimed. N2-A2 obsolete-fault-model,
 historical failures and missing evidence retained. Candidate10/9b/#67 and harness,
 auth/rules/functions unchanged. No merge/deploy; MVP NO-GO; AIoff/film blocked.
+
+
+## Import risk review / bounded R1c compatibility repair - 2026-10-16
+
+Isolated codex/import-risks-2026-10-16 from frozen PR71 head280ee48; source35e0d77887ba87d2714706f0cdbb2511b442d1a2. Runtime518e9e5/PR71/frozen candidates/identity unchanged. Read39 and Claude queue46cd807 first; no Claude-owned tests/readiness/auth/rules/functions edits. Fresh R3 decline is per-account/device and survives remount/team/library changes; ask-once approval6150970144 and founder packet244-246 remain settled. Re-entry is a separate product choice, not implemented. R4 literal D10_APPROVED=true remains unchanged; default-off public env gate proposed with both UI/executor/release-proof coverage, no live config changed.
+
+Missing-original-team R1c dead end reproduced with seeded client mocks; no transfer/release/delete. Restoring original authorized access in mock resumes verified copy. Support/disclosure vs new backend recovery policy needs founder choice. Separate legacy status-less claim plus own pending marker and prior decline reproducibly hid recovery (3PASS/1FAIL on unchanged implementation). Older producer8dcf9a7 confirms write ordering. Six-line same-team fallback repairs already-authorized pre-repair owner recovery; explicit imported/no marker/conflicting/foreign cases remain blocked. Full489/489,38suites,TS0; build result in IMPORT_RISK_REVIEW_2026-10-16.md/evidence. No independent browser/staging/device claim. Claude next legacy-state acceptance x10 both engines then matrix. R1c missing-team policy still open; FX02 gap/N3/readiness ownership preserved; AIoff/film blocked, MVP NO-GO. No merge/deploy/spend/live changes.

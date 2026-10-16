@@ -1,0 +1,34 @@
+{
+  "base": "280ee484cf0b24ba2fb0eb7d803ea9c85c743489",
+  "preservedRuntime": "518e9e5817abd2a0e1bf1308468928f238fa8533",
+  "repairSource": "35e0d77887ba87d2714706f0cdbb2511b442d1a2",
+  "oldProducer": "8dcf9a793910845f332fc6a56d5ee019d7e7ed4f",
+  "preRepairRegression": {
+    "passed": 3,
+    "failed": 1,
+    "kind": "mocked app; frozen production files"
+  },
+  "postRepairUnit": {
+    "passed": 489,
+    "failed": 0,
+    "suites": 38
+  },
+  "typescript": {
+    "diagnostics": 0,
+    "exitCode": 0
+  },
+  "productionBuild": {
+    "exitCode": 0,
+    "result": "PASS with inherited SmartPlaybook warnings",
+    "bundle": "main.82f56b00.js"
+  },
+  "independentAcceptance": "PENDING CLAUDE",
+  "R3": "UNCHANGED; recorded fresh ask-once decline, optional re-entry requires product decision",
+  "R4": "UNCHANGED; default-off public build configuration proposed, operational choice pending",
+  "R1cMissingTeam": "CONDITIONAL CLIENT DEAD END REPRODUCED IN MOCK; no real or emulator team deletion/access test; recovery policy pending",
+  "R1cLegacyClaim": "REPAIRED IN ISOLATION; awaiting independent acceptance",
+  "staging": "NOT MEASURED",
+  "physicalDevices": "NOT MEASURED",
+  "mvp": "NO-GO",
+  "pullRequest": 72
+}

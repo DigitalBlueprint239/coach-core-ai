@@ -1,0 +1,61 @@
+  console.error
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      14 | test('R3 fresh Not now remains declined after remount and team switch, with no writes', async () => {
+      15 |   const backend = {copy: jest.fn(), read: jest.fn()};
+    > 16 |   const view = render(<LegacyImport {...owner} backend={backend}/>);
+         |                      ^
+      17 |   fireEvent.click(screen.getByRole('button', {name: 'Not now'}));
+      18 |   const decision = localStorage.getItem(decisionKey('A'));
+      19 |   expect(JSON.parse(decision!)).toEqual({decision: 'declined'});
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../main-n2-team-creation/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../main-n2-team-creation/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../main-n2-team-creation/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../main-n2-team-creation/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/risk-characterization.test.tsx:16:22)
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+FAIL src/features/legacy-import/__tests__/risk-characterization.test.tsx (6.03 s)
+  √ R3 fresh Not now remains declined after remount and team switch, with no writes (413 ms)
+  √ R3 decision is account-wide, not tied to legacy contents; replacing the library does not re-offer it (56 ms)
+  √ R1c absent original team leaves owner on replacement and coach B blocked; restoring original access permits verified resume (190 ms)
+  × R1c legacy status-less claim plus pending marker remains recoverable after a prior decline (25 ms)
+
+  ● R1c legacy status-less claim plus pending marker remains recoverable after a prior decline
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Import plays"
+
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div />
+    </body>
+
+      78 |   const backend = {copy: jest.fn(async () => 'copy-p1'), read: jest.fn(async () => play)};
+      79 |   render(<LegacyImport {...owner} backend={backend}/>);
+    > 80 |   fireEvent.click(screen.getByRole('button', {name: 'Import plays'}));
+         |                          ^
+      81 |   await waitFor(() => expect(JSON.parse(localStorage.getItem(decisionKey('A'))!).decision).toBe('imported'));
+      82 |   expect(backend.copy).toHaveBeenCalledTimes(1);
+      83 |   expect(backend.read).toHaveBeenCalledTimes(1);
+
+      at Object.getElementError (../main-n2-team-creation/node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../main-n2-team-creation/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../main-n2-team-creation/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at getByRole (../main-n2-team-creation/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/risk-characterization.test.tsx:80:26)
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        7.045 s
+Ran all test suites within paths "src/features/legacy-import/__tests__/risk-characterization.test.tsx".
