@@ -126,10 +126,19 @@ export function firestoreNetLog(page: Page) {
 export async function teamCreateProbe(page: Page) {
   await page.evaluate(() => {
     const w = window as any;
-    w.__n3 = { submitFired: 0, creatingSeen: false, shown: [] as string[] };
+    w.__n3 = { submitFired: 0, creatingSeen: false, shown: [] as string[], clicks: [] as string[] };
+    // N3 (2026-10-15, 518e9e5 Firefox D10-06c/UI-02): submitFired=0 after a delivered click.
+    // Tag the live submit button so a later read can tell whether React replaced the node.
+    const btn = Array.from(document.querySelectorAll('button[type=submit]')).find((b) => /Create Team/.test(b.textContent || '')) as HTMLElement | undefined;
+    if (btn) btn.dataset.n3Tag = String(Date.now());
+    w.__n3.tag = btn?.dataset.n3Tag ?? null;
     if (w.__n3Installed) return;
     w.__n3Installed = true;
     document.addEventListener('submit', () => { w.__n3.submitFired += 1; }, true);
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement | null;
+      if (w.__n3.clicks.length < 6) w.__n3.clicks.push(`${t?.tagName?.toLowerCase() ?? '?'}${t?.getAttribute?.('type') ? '[' + t.getAttribute('type') + ']' : ''}${(t as any)?.disabled ? '(disabled)' : ''}:${(t?.textContent || '').trim().slice(0, 20)}`);
+    }, true);
     new MutationObserver((records) => {
       for (const r of records) for (const n of Array.from(r.addedNodes)) {
         const el = n.nodeType === 1 ? (n as Element) : n.parentElement;
@@ -147,7 +156,16 @@ export async function teamCreateProbe(page: Page) {
   });
   return {
     signedInAtSubmit,
-    read: async () => page.evaluate(() => (window as any).__n3 as { submitFired: number; creatingSeen: boolean; shown: string[] }),
+    read: async () => page.evaluate(() => {
+      const w = window as any;
+      const form = document.querySelector('form') as HTMLFormElement | null;
+      const input = document.getElementById('team-name') as HTMLInputElement | null;
+      const tagged = w.__n3.tag ? document.querySelector(`[data-n3-tag="${w.__n3.tag}"]`) as HTMLButtonElement | null : null;
+      const btn = Array.from(document.querySelectorAll('button[type=submit]')).find((b) => /Create Team|Creating/.test(b.textContent || '')) as HTMLButtonElement | undefined;
+      return { ...w.__n3, formValid: form ? form.checkValidity() : null, inputValueLength: input ? input.value.length : null,
+        inputValid: input ? input.validity.valid : null, taggedButtonStillInDom: Boolean(tagged), submitButtonDisabled: btn ? btn.disabled : null } as
+        { submitFired: number; creatingSeen: boolean; shown: string[]; clicks: string[]; formValid: boolean | null; inputValueLength: number | null; inputValid: boolean | null; taggedButtonStillInDom: boolean; submitButtonDisabled: boolean | null };
+    }),
   };
 }
 
@@ -179,7 +197,7 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
     const saved = uid ? (await adminTeamsOwnedBy(uid)).map((t) => t.name) : 'uid unavailable';
     net.mark('gave-up');
     const n3 = await probe.read().catch(() => null);
-    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} shown=${JSON.stringify(visible.map((v) => v.replace(/\s+/g, ' ').slice(0, 120))).slice(0, 500)} n3={signedInAtSubmit:${probe.signedInAtSubmit},submitFired:${n3?.submitFired},creatingSeen:${n3?.creatingSeen},toasts:${JSON.stringify(n3?.shown ?? []).slice(0, 400)}} net: ${net.summary(1200)}` });
+    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} shown=${JSON.stringify(visible.map((v) => v.replace(/\s+/g, ' ').slice(0, 120))).slice(0, 500)} n3={signedInAtSubmit:${probe.signedInAtSubmit},submitFired:${n3?.submitFired},creatingSeen:${n3?.creatingSeen},clicks:${JSON.stringify(n3?.clicks ?? [])},formValid:${n3?.formValid},inputLen:${n3?.inputValueLength},inputValid:${n3?.inputValid},buttonSameNode:${n3?.taggedButtonStillInDom},buttonDisabled:${n3?.submitButtonDisabled},toasts:${JSON.stringify(n3?.shown ?? []).slice(0, 300)}} net: ${net.summary(1200)}` });
     throw new Error(`Team "${teamName}" not confirmed within ${Date.now() - t0} ms. modalOpen=${modalOpen} `
       + `creating=${creating} teamsInFirestore=${JSON.stringify(saved)} visible=${JSON.stringify(visible).slice(0, 300)}`, { cause: err });
   }
