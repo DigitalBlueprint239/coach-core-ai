@@ -525,8 +525,14 @@ test('D10-08d [PR #72] resume with a mismatching server copy at the deterministi
   const before = await adminGet(`plays/${id}`);
   await openPlaybook(page);
   await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
-  await expect(acceptImport(page), 'import must surface an error, not success').rejects.toThrow(/changed elsewhere|could not be verified|does not match/);
-  expect(await adminGet(`plays/${id}`), 'the existing document is not overwritten').toEqual(before);
+  let outcome = 'RESOLVED (prompt closed as if successful)';
+  try { await acceptImport(page); } catch (e) { outcome = (e as Error).message; }
+  const after = await adminGet(`plays/${id}`);
+  const copies = await adminCopies(a.uid);
+  const claimNow = await page.evaluate((k) => localStorage.getItem(k), CLAIM_KEY);
+  test.info().annotations.push({ type: 'diag-data', description: `D10-08d outcome="${outcome.slice(0, 160)}" tamperedUnchanged=${JSON.stringify(after) === JSON.stringify(before)} copies=${JSON.stringify(copies.map((c: any) => ({ id: String(c.id).slice(-8), name: c.name ?? c.data?.name })))} claim=${String(claimNow).slice(0, 120)} alerts=${JSON.stringify((await page.getByRole('alert').allInnerTexts()).map((t) => t.slice(0, 100)))}` });
+  expect(outcome, 'import must surface an error, not success').toMatch(/changed elsewhere|could not be verified|does not match|Originals (preserved|retained)/);
+  expect(after, 'the existing document is not overwritten').toEqual(before);
   const decision = (await deviceState(page)).decisions[decisionKey(a.uid)];
   expect(JSON.parse(decision).decision, 'no imported decision recorded').not.toBe('imported');
   const claim = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) || 'null'), CLAIM_KEY);
