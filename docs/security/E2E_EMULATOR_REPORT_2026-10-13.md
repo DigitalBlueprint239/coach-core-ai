@@ -1128,3 +1128,32 @@ Acceptance **130/0** per engine. Harness label note: the R7 `declineButton=Cance
 | N2-R8b | **PASS 10/10** — `listenBlocked` 5–6, `readbacksFailed=1`, `noFalseSuccessAt8s=true`, recovery automatic 0.35–5.8 s after restore | **PASS 10/10** — same, recovery 0.54–5.6 s |
 
 **Result.** On `518e9e5`, with the listener unavailable and the authoritative readback returning 503, the app shows no success, creates no duplicate, overwrites nothing, and confirms the same operation once when connectivity returns. The readback-failure requirement is now **proven for every execution**, not inferred. The 1,520/0 full-matrix figure in §14.11 stands numerically, but its R8b component is vacuous for this claim; the proof is evidence 50. The full matrix has **not** been re-run on harness `4cc7ccf`.
+
+### 14.13 C5: full matrix on the corrected harness `4cc7ccf`, runtime `518e9e5` (2026-10-15)
+
+**Candidate** `4cc7ccf` (runtime paths byte-identical to `518e9e5817abd2a0e1bf1308468928f238fa8533`; only `e2e/`, `.github/` differ). Run `38835170412`, ×10, retries 0, no filter, Chromium 156.0.8078.4 / Firefox 157.0 / Playwright 1.64.0. Evidence 51. Historical results (evidence 33–50) and the R8b correction (§14.12) are unchanged.
+
+| Job | Acceptance | Diagnostic | Obsolete fault model (N2-A2) | Release proof | Acceptance failures |
+|---|---|---|---|---|---|
+| chromium 1280×720 | **609/1** | 54/6 (N2-D2) | 6/4 | 13/13 | D10-06e 1/10 @425 (inherited, A3) |
+| firefox 1280×720 | **608/2** | 57/3 (N2-D2) | 6/4 | 13/13 | **D10-06c 1/10, UI-02 1/10 — N3 signature** |
+| phone-chromium 390×844 | **150/0** | — | — | 13/13 | — |
+| phone-firefox 390×844 | **150/0** | — | — | 13/13 | — |
+| **Total** | **1,517/3** | **111/9** | **12/8** | | |
+
+- **N2-R8b passed 10/10 in both engines in this same run with the faults proven** (`listenBlocked` 5–6, `readbacksFailed=1`, `noFalseSuccessAt8s=true` in the captured executions). The acceptance figure and the readback-failure proof now come from one run, closing C5's purpose; the run is **not clean**.
+- N2-R1…R7b, R8, N2-A1, D10-07 (H2), UI-01: 10/10 per engine. N3-D5 10/10 per engine (another 160 scripted creations without the symptom).
+- Slow-step census: 10 (Chromium) and 9 (Firefox) executions ≥ 10 s, all in failing N2-D2/N2-A2 rows; no FX-02-type stall in any passing execution.
+
+**N3 reproduced with the probe armed (first time).** Two Firefox acceptance failures in ordinary `createTeamViaUI` calls, 10 s after the Create Team click:
+
+| Execution | Probe (recorded on failure only) |
+|---|---|
+| D10-06c #5, "Bravo Bulldogs" | `signedInAtSubmit=true, submitFired=0, creatingSeen=false, toasts=[]`; net: no commit, `Listen: 0 req`; dialog open, button not "Creating…", server has no team |
+| UI-02 #9, "Alpha Eagles" | identical signature |
+
+What this establishes: the click step completed (≈0.1 s), the coach was signed in, and the form's DOM `submit` event **never fired**, so no request was made and nothing was lost or duplicated. What it does **not** establish: why. Candidate mechanisms, none yet shown: (a) the input's `required` constraint blocked submission because the controlled input's DOM value was empty at click time; (b) the submit button was `disabled` (`!teamName.trim()`) at the instant of the click; (c) React replaced the button node between pointer-down and pointer-up so the click target was no longer the button; (d) a Firefox/driver click-dispatch issue. Harness `cf6377f` adds, on failure only: click targets reaching `document`, `form.checkValidity()`, input value length and validity, whether the tagged button node is still in the DOM, and the button's disabled state. No assertion changed. Run `38842101522` is in progress on `cf6377f`.
+
+**Classification.** N3 is a **reproduced symptom with an unestablished cause**: 3 occurrences in total (1 at `186a743`, 2 at `518e9e5`), roughly 2 in ≈1,200 Firefox team creations in this run, 0 in Chromium. It is recorded as an **unresolved reliability risk**, not yet a confirmed defect, because app-side causation (a–c) is not separated from (d). It remains **separate from the original N2 SDK stall**, which is also an unresolved reliability risk: the audit in the gate queue (A4) found SDK `Write`-channel traffic still in MVP flows (play and practice-plan add/update/delete in `src/services/firestore.ts`; cloud edits via `runTransaction` in `features/persistence/gateway.ts`; team update/delete in `TeamContext`), so the stall class routed around for team *creation* can still affect edits; no fault-injected coverage exists for those paths yet.
+
+**Status.** MVP **NO-GO**. The acceptance matrix on the final harness is 1,517/3; the three failures are the inherited D10-06e intermittent and two N3 occurrences, all under investigation with diagnostics armed. No merge, deployment or new features.
