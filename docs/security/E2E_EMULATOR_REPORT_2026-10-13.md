@@ -1068,17 +1068,17 @@ The UI wording for R7 is Codex's choice; the contract (locators above, confirm `
 - Runtime: `518e9e5817abd2a0e1bf1308468928f238fa8533`. Docs/evidence head `280ee484…` differs from it only under `docs/` (verified).
 - Harness: `f325a23` (unchanged from §14.10; no assertion, timeout or retry change).
 - Candidate: `5911f7e` on `claude/n2-repair-acceptance-518e9e5`: `src/`, `functions/`, `public/`, rules, indexes, `package*.json`, `tsconfig.json` byte-identical to `518e9e5`; `e2e/`, `.github/` byte-identical to `f325a23`; no other paths differ.
-- Bounded diff `bdb06ae..518e9e5`: `TeamManagement.tsx` (+29/−8), `TeamContext.tsx` (+16/−1), two unit-test files. Nothing outside `src/` and `docs/`.
+- Bounded diff `bdb06ae..518e9e5`: `TeamManagement.tsx` (+24/−5), `TeamContext.tsx` (+15/−1), two unit-test files (4 files, +78/−8 in total). Also present: a `submitting` re-entry guard and a `{...doc.data(), id}` ordering change. Nothing outside `src/` and `docs/`.
 - Implementation read: a `role="alertdialog"` "You already have a team named X. Do you intend to create a separate team?" with **Go back** / **Create a separate team**, shown only when `!pending` and a *confirmed* team has the same trimmed name (so a journalled retry never prompts); `confirmedTeams` is fed only from non-cache, non-pending snapshots or the confirmed REST readback; `currentTeamId` is now persisted by an effect on `currentTeam` (either path), not only by the SDK listener.
 
 **Stage 1: N2/N3 ×10, grep `N2-|N3-`, retries 0.** Run `38811068246`, evidence 46.
 
 | Test | Chromium | Firefox |
 |---|---|---|
-| N2-R7 same-name confirmation | **PASS 10/10** (prompt at ~56 ms; 1 team while open; decline → 1; confirm → exactly 2, distinct ids/codes) | **PASS 10/10** |
-| N2-R7b confirmed same-name, commit reset → same op | **PASS 10/10** (resets=1, status ≤ 8 s, recovered, reprompts=0, exactly 2) | **PASS 10/10** |
+| N2-R7 same-name confirmation | **PASS 10/10** (asserted every execution: 1 team while the prompt is open; decline → 1; confirm → exactly 2 with distinct ids/codes; prompt at 56 ms in the captured #0) | **PASS 10/10** (76 ms in #0) |
+| N2-R7b confirmed same-name, commit reset → same op | **PASS 10/10** (asserted: fault applied, status within 8 s, recovered as the journalled op, exactly 2 teams; `reprompts` is recorded only, 0 in the captured #0) | **PASS 10/10** |
 | N2-R8 / R8b readback failure | PASS 10/10 / 10/10 | PASS 10/10 / 10/10 |
-| N2-R1…R6, N2-A1 | 70/70 | 70/70 |
+| N2-R1…R6 (8 tests), N2-A1 | 90/90 | 90/90 |
 | N3-D5 (diagnostic) | 10/10, 80 creations, N3 not reproduced | 10/10, 80 creations, not reproduced |
 | N2-D0/D1/D3/D4 (diagnostic) | 40/40 | 40/40 |
 | N2-D2 (diagnostic, WebChannel fault) | FAIL 6/10 | FAIL 10/10 |
@@ -1109,6 +1109,6 @@ Acceptance **130/0** per engine. Harness label note: the R7 `declineButton=Cance
 
 - Every acceptance test, including D10-06e (10/10 in all four projects this run), N2-R1…R8b and N2-A1, passed.
 - N2-D2 and N2-A2 failures are the WebChannel-hold fault model (§14.9 item 2–3), reported separately and not counted against the repair. N2-A2's partial passes on `518e9e5` are a side effect of the new confirmation blocking its second submit; the body is unchanged.
-- N3-D5: 10/10 per engine, another 160 creations. **N3 is kept separate from the original N2 SDK stall**: N3 (submit produced no request, 1/10 Firefox on `186a743`) has not recurred in 640 targeted creations across `bdb06ae` and `518e9e5`; it is **not claimed fixed**. The natural cause of the original N2 SDK stall is likewise **unresolved**; the repair routes around the SDK write path rather than explaining it.
+- N3-D5: 10/10 per engine, another 160 creations. **N3 is kept separate from the original N2 SDK stall**: N3 (submit produced no request, 1/10 Firefox on `186a743`) has not recurred in 800 targeted creations (480 on `bdb06ae`: evidence 39, 40, 43; 320 on `518e9e5`: evidence 46, 48); it is **not claimed fixed**. The natural cause of the original N2 SDK stall is likewise **unresolved**; the repair routes around the SDK write path rather than explaining it.
 
-**Status:** On `518e9e5` the acceptance matrix is clean (1,520/0) and all REST-path, same-name-confirmation and readback-failure tests pass 10/10 per engine. Inherited: D10-06e line-425 intermittent (not N2). Open: N3 (not reproduced), natural SDK stall cause, Codex's observations (raw "Failed to fetch" text, unstyled team UI). No merge, deployment or live-data testing. **MVP NO-GO** until the release gates in the readiness checklist are closed.
+**Status:** All three GitHub runs conclude `failure` because the diagnostic/obsolete buckets (N2-D2, N2-A2) and stage 2's D10-06e are red; the reporter's buckets are what separate them. On `518e9e5` the **acceptance** bucket is clean (1,520/0) and all REST-path, same-name-confirmation and readback-failure tests pass 10/10 per engine. Inherited: D10-06e line-425 intermittent (not N2). Open: N3 (not reproduced), natural SDK stall cause, Codex's observations (raw "Failed to fetch" text, unstyled team UI). No merge, deployment or live-data testing. **MVP NO-GO** until the release gates in the readiness checklist are closed.
