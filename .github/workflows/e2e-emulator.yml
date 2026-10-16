@@ -29,9 +29,16 @@ concurrency:
 
 jobs:
   e2e:
-    name: E2E emulator (Chromium + Firefox)
+    # One job per Playwright project (2026-10-15). The union is the complete
+    # matrix; nothing is filtered out. Split only because the full suite now
+    # exceeds one job's existing 120-minute limit, which is NOT raised.
+    name: E2E emulator (${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, phone-chromium, phone-firefox]
     env:
       GCLOUD_PROJECT: demo-coach-core-e2e
       OPENAI_API_KEY: ''
@@ -80,12 +87,13 @@ jobs:
           REPEAT: ${{ github.event.inputs.repeat_each || '1' }}
           # Passed as data via env (never interpolated into the shell command).
           E2E_GREP: ${{ github.event.inputs.grep || '' }}
+          PROJECT: ${{ matrix.project }}
         run: |
           set -o pipefail
           mkdir -p e2e/test-results
           npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
             --only auth,firestore,functions \
-            "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT}" 2>&1 | tee e2e/test-results/run.log
+            "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT} --project=${PROJECT} --pass-with-no-tests" 2>&1 | tee e2e/test-results/run.log
       - name: Emulator diagnostics (functions load/requests, no secrets)
         if: always()
         run: |
@@ -101,6 +109,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-results-${{ github.sha }}
+          name: e2e-results-${{ matrix.project }}-${{ github.sha }}
           path: e2e/test-results
           retention-days: 14

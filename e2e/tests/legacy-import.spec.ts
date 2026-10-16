@@ -4,10 +4,10 @@
 // selected authorized team; originals byte-for-byte; no duplicate imports or
 // cross-account exposure; decline leaves originals unchanged; no deletion.
 import { test, expect } from '@playwright/test';
-import { resetEmulators, adminSet, adminGet, AUTH_ONLY } from './support/emulator';
+import { resetEmulators, adminSet, adminGet, adminTeamsFull, AUTH_ONLY } from './support/emulator';
 import {
   coachEmail, skipOnboarding, signInAsBetaCoach, signOutViaUI, createTeamViaUI, openTab,
-  storage, waitForE2EHooks,
+  storage, waitForE2EHooks, awaitOwnedTeamReady,
 } from './support/app';
 import {
   LEGACY_PLAYS, seedDevice, deviceState, expectOriginalsUntouched, openPlaybook, importPrompt,
@@ -422,11 +422,114 @@ test('D10-06e [founder rule: R1c recovery] "Not now" postpones an unfinished imp
   // 4. The original coach returns, resumes, and finishes: exactly the verified copies, no duplicates.
   await signOutViaUI(page);
   await signInAsBetaCoach(page, a.email);
-  expect((await storage(page)).currentTeamId, 'original team selected').toBe(a.teamId);
+  // Readiness anchor (2026-10-16, evidence 52 + Codex trace of run 38842101522): Welcome is identity
+  // readiness, not team readiness. Wait for the identity strip to show the exact original team
+  // (existing expect timeout, no sleep), then assert the exact original ID as before.
+  await awaitOwnedTeamReady(page, 'Alpha Eagles', a.uid);
+  // A3 diagnostic (2026-10-15): kept so a mismatch AFTER readiness is fully described.
+  const selectedOnReturn = (await storage(page)).currentTeamId;
+  if (selectedOnReturn !== a.teamId) {
+    const aTeams = (await adminTeamsFull(a.uid)).map((t) => ({ id: t.id, name: t.name }));
+    const visible = await page.getByRole('heading').allInnerTexts().catch(() => []);
+    const again = await new Promise((r) => setTimeout(r, 1_500)).then(() => storage(page)).then((st) => st.currentTeamId);
+    test.info().annotations.push({ type: 'diag-data', description: `D10-06e@425 selected=${JSON.stringify(selectedOnReturn)} expected=${a.teamId} after1.5s=${JSON.stringify(again)} aTeamsOnServer=${JSON.stringify(aTeams)} headings=${JSON.stringify(visible.slice(0, 8))}` });
+  }
+  expect(selectedOnReturn, 'original team selected').toBe(a.teamId);
   await openPlaybook(page);
   await acceptImport(page);
   expectFaithfulCopies(await adminCopies(a.uid), a.uid, a.teamId);
   const decision = JSON.parse((await deviceState(page)).decisions[decisionKey(a.uid)]);
   expect(decision).toEqual({ decision: 'imported', teamId: a.teamId, ids: LEGACY_PLAYS.map((p) => expectedCopyId(a.uid, a.teamId, p)) });
+  await expectOriginalsUntouched(page);
+});
+
+// ---------------------------------------------------------------------------
+// PR #72 (runtime 35e0d77, Codex): an older, status-less device claim written by the
+// pre-repair producer no longer masks a matching pending import after a prior decline;
+// recovery is limited to the claim's own account AND team. Independent acceptance
+// (Claude, 2026-10-16). Seeds exactly the old producer's state; assertions reuse the
+// D10 fixtures (deterministic copy IDs, byte-identical originals, verified readback).
+// Expected on the pre-repair runtime 518e9e5: D10-08a FAILS (no resume prompt).
+// ---------------------------------------------------------------------------
+const CLAIM_KEY = 'coachcore:v1:legacyImportClaim';
+const pendingKey = (uid: string) => `coachcore:v1:${uid}:legacyImportPending`;
+/** Old producer state: status-less claim + per-account pending marker + a recorded decline. */
+async function seedStatusLessClaim(page: import('@playwright/test').Page, uid: string, teamId: string, teamName: string) {
+  await page.evaluate(([ck, pk, dk, u, t, n]) => {
+    localStorage.setItem(ck, JSON.stringify({ uid: u, teamId: t, teamName: n })); // no status field
+    localStorage.setItem(pk, JSON.stringify({ teamId: t, teamName: n, startedAt: '2026-10-10T12:00:00.000Z' }));
+    localStorage.setItem(dk, JSON.stringify({ decision: 'declined' }));
+  }, [CLAIM_KEY, pendingKey(uid), decisionKey(uid), uid, teamId, teamName]);
+  await page.reload();
+}
+
+test('D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched', async ({ page }) => {
+  const a = await coachWithTeam(page, 'd10ha', 'Alpha Eagles');
+  await seedStatusLessClaim(page, a.uid, a.teamId, 'Alpha Eagles');
+  await awaitOwnedTeamReady(page, 'Alpha Eagles', a.uid);
+  await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' }), 'resume offered to the original coach/team').toBeVisible();
+  expect(await adminCopies(a.uid), 'nothing copied before consent').toEqual([]);
+  await acceptImport(page);
+  expectFaithfulCopies(await adminCopies(a.uid), a.uid, a.teamId);
+  const state = await deviceState(page);
+  expect(JSON.parse(state.decisions[decisionKey(a.uid)])).toEqual({ decision: 'imported', teamId: a.teamId, ids: LEGACY_PLAYS.map((p) => expectedCopyId(a.uid, a.teamId, p)) });
+  const claim = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) || 'null'), CLAIM_KEY);
+  expect(claim).toMatchObject({ uid: a.uid, teamId: a.teamId, status: 'imported' });
+  expect(await page.evaluate((k) => localStorage.getItem(k), pendingKey(a.uid)), 'pending marker cleared').toBeNull();
+  await expectOriginalsUntouched(page);
+  // Idempotent: a second visit offers nothing and copies nothing more.
+  await page.reload(); await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toHaveCount(0);
+  expectFaithfulCopies(await adminCopies(a.uid), a.uid, a.teamId);
+});
+
+test('D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched', async ({ page }) => {
+  const a = await coachWithTeam(page, 'd10hb', 'Alpha Eagles');
+  await seedStatusLessClaim(page, a.uid, 'OtherTeam000000000000', 'Old Team');
+  await awaitOwnedTeamReady(page, 'Alpha Eagles', a.uid);
+  await openPlaybook(page);
+  await expect(importPrompt(page)).toContainText('An import into Old Team was started and not finished');
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toHaveCount(0);
+  await new Promise((r) => setTimeout(r, 2_000));
+  expect(await adminCopies(a.uid)).toEqual([]);
+  await expectOriginalsUntouched(page);
+});
+
+test('D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A\'s claim and originals untouched', async ({ page }) => {
+  const a = await coachWithTeam(page, 'd10hc', 'Alpha Eagles');
+  await seedStatusLessClaim(page, a.uid, a.teamId, 'Alpha Eagles');
+  await awaitOwnedTeamReady(page, 'Alpha Eagles', a.uid);
+  const claimBefore = await page.evaluate((k) => localStorage.getItem(k), CLAIM_KEY);
+  await signOutViaUI(page);
+  const bUid = await signInAsBetaCoach(page, coachEmail('d10hcb'));
+  await createTeamViaUI(page, 'Bravo Bulldogs');
+  await openPlaybook(page);
+  await expect(importPrompt(page)).toContainText(/another account/);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toHaveCount(0);
+  await new Promise((r) => setTimeout(r, 2_000));
+  expect(await adminCopies(bUid), 'nothing under B').toEqual([]);
+  expect(await adminCopies(a.uid), 'nothing under A either').toEqual([]);
+  expect(await page.evaluate((k) => localStorage.getItem(k), CLAIM_KEY), 'A\'s claim untouched').toBe(claimBefore);
+  await expectOriginalsUntouched(page);
+});
+
+test('D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched', async ({ page }) => {
+  const a = await coachWithTeam(page, 'd10hd', 'Alpha Eagles');
+  await seedStatusLessClaim(page, a.uid, a.teamId, 'Alpha Eagles');
+  await awaitOwnedTeamReady(page, 'Alpha Eagles', a.uid);
+  // A different document already occupies the first play's deterministic copy ID (same owner/team).
+  const id = expectedCopyId(a.uid, a.teamId, LEGACY_PLAYS[0]);
+  const t = new Date();
+  await adminSet(`plays/${id}`, { name: 'Tampered copy', phase: 'offense', type: 'run', localId: LEGACY_PLAYS[0].id, players: [], routes: [], teamId: a.teamId, createdBy: a.uid, createdAt: t, updatedAt: t });
+  const before = await adminGet(`plays/${id}`);
+  await openPlaybook(page);
+  await expect(importPrompt(page).getByRole('button', { name: 'Import plays' })).toBeVisible();
+  await expect(acceptImport(page), 'import must surface an error, not success').rejects.toThrow(/changed elsewhere|could not be verified|does not match/);
+  expect(await adminGet(`plays/${id}`), 'the existing document is not overwritten').toEqual(before);
+  const decision = (await deviceState(page)).decisions[decisionKey(a.uid)];
+  expect(JSON.parse(decision).decision, 'no imported decision recorded').not.toBe('imported');
+  const claim = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) || 'null'), CLAIM_KEY);
+  expect(claim).toMatchObject({ uid: a.uid, teamId: a.teamId, status: 'pending' });
   await expectOriginalsUntouched(page);
 });
