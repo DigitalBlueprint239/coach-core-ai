@@ -1186,3 +1186,18 @@ Readiness always resolved and the correct ID always followed, so there is **no a
 **A4a (SDK edit path).** New Claude-owned diagnostics `CC-E1`/`CC-E2` (`e2e/tests/sdk-edit.spec.ts`, harness `dcab257`) apply the D1 reset and D4 back-channel hold to the SDK Write channel during a practice-plan **edit** (`runTransaction` path), sample the save status for 8 s, and assert safety only: never "saved" while the server lacks the edit, exactly one document, the edit never lost; recovery mode is recorded. Run `38907606048` dispatched; results in §14.15.
 
 **Status.** Acceptance on `518e9e5` with harness `c822b6e`: **1,520/0**. Open: N3 (unresolved risk), SDK stall class on edits (A4a pending), FX-02/H2 (open, now instrumented), A09 intermittent, non-N2 release gates. **MVP NO-GO.** No merge, deployment, new feature or branch-protection change.
+
+### 14.15 A4a: SDK edit-path fault diagnostics; audit correction (2026-10-16)
+
+**Audit correction.** §14.13 and queue A4 said SDK `Write`-channel traffic remained in MVP flows for edits. Evidence 55 (CC-E1/E2 first version, harness `dcab257`, run `38907606048`, ×10 per engine) shows `faultHits=0` in all 40 executions with the edit landing at revision 2 in ≈300 ms: the practice-plan edit path (`runTransaction` in `features/persistence/gateway.ts`) uses Firestore's **unary `documents:commit` RPC**, not the Write *stream*. Re-reading the remaining Write-stream call sites on `518e9e5`: `leaveTeam` throws before any write (disabled in private beta), `joinTeam` is disabled, and `src/services/firestore.ts`/`useFirestore` are reachable only from `FirebaseTest.tsx`, which is not routed. **On `518e9e5` no reachable MVP flow writes through the SDK Write stream.** The N2 stall class reproduced under D1/D4 therefore has no live path; its natural cause remains unproven and the class stays recorded as an unresolved risk only insofar as dead code could be re-enabled.
+
+**CC-E1 / CC-E2 retargeted to `documents:commit`** (harness `aadbe3d`, run `38908863624`, ×10 per engine, retries 0; evidence 56). Safety assertions (never "saved" while the server lacks the edit; exactly one document; the edit never lost) **held in 40/40**. Behaviour recorded:
+
+| Fault during an 8 s window | Coach sees | After restore |
+|---|---|---|
+| CC-E2 commit **held** (request not at the server) | "saving" throughout; no alert | automatic completion 0.1–0.3 s after release; revision 2 with the edit |
+| CC-E1 commit **reset** | SDK retries 4–5 times; "saving" until retries are exhausted, then **"failed"** with alert **"Connection failed."** | **no automatic retry** when connectivity returns: status stays "failed", server stays at revision 1, draft retained (test durations: Chromium ≥ 5/10 and Firefox < 5/10 executions hit the 45 s no-recovery window; the remainder recovered in 1.1–1.7 s because a retry fell after the window) |
+
+**Classification.** Not a safety defect: no false "saved", no duplicate, no loss. It is a **confirmed behaviour** for Codex/Coach Drew to rule on (queue A4b): after transient commit failures the edit path reports failure and waits for a manual re-save; the `online`-event retry only covers an offline→online transition, not connection resets. The coach-facing text is "Connection failed." (readable, unlike the raw "Failed to fetch" on team create). A manual re-save was not exercised by these diagnostics.
+
+**Status.** A4a complete. Harness line ends at `aadbe3d` (runtime `518e9e5`). MVP **NO-GO**.
