@@ -88,3 +88,89 @@ test('CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a 
 test('CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save — does the save hang on "saving"?', async ({ page }) => {
   await editUnderFault(page, 'e2', 'commit-hold');
 });
+
+// ---------------------------------------------------------------------------
+// A4b draft-retention coverage (2026-10-16). After the real edit commit FAILS (resets
+// until the SDK gives up and the UI shows "failed"), every edited field must still hold
+// the unsaved value; then connectivity returns and the coach re-saves with the existing
+// button; the server must then hold exactly the intended values (authoritative readback),
+// with no false "saved" before, exactly one record, and untouched fields unchanged.
+// Diagnostic tag kept: these record behaviour; the safety facts are asserted.
+// ---------------------------------------------------------------------------
+/** Reset every documents:commit until restored; the caller waits for the UI's own "failed" state. */
+async function resetCommits(page: Page, label: string) {
+  let faulting = true; let hits = 0; const t0 = Date.now();
+  await page.route(COMMIT, async (route: Route) => {
+    if (faulting) { hits += 1; await route.abort('connectionreset').catch(() => {}); return; }
+    await route.continue().catch(() => {});
+  });
+  return { restore: async () => { faulting = false; await page.unroute(COMMIT); record(`${label} commitResets=${hits} faultWindow=${Date.now() - t0}ms`); expect(hits, 'the fault was applied').toBeGreaterThan(0); } };
+}
+
+test('CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values', async ({ page }) => {
+  const { uid, id } = await savedPlan(page, 'e3');
+  const v1 = (await plansOf(uid))[0];
+  const edits = { 'Plan.name': 'Edit path plan v2', 'Plan.notes': 'Retention notes ' + 'x'.repeat(200), 'Plan.periods.0.focus': 'Route timing after failure' } as const;
+  const originalFocus = await field(page, 'Plan.periods.0.focus').inputValue();
+  for (const [k, v] of Object.entries(edits)) await field(page, k).fill(v);
+  await expect(planStatus(page)).toHaveText('unsaved');
+  const fault = await resetCommits(page, 'E3');
+  await savePlan(page);
+  await expect(planStatus(page), 'the failed save is reported').toHaveText('failed', { timeout: 45_000 });
+  // 1. Every edited field still holds the unsaved value; the server still holds v1.
+  for (const [k, v] of Object.entries(edits)) await expect(field(page, k), `${k} retained after failure`).toHaveValue(v);
+  const alert = (await page.getByRole('alert').allInnerTexts()).join(' | ');
+  expect((await plansOf(uid)).map((d) => ({ id: d.id, rev: d.data.revision, name: d.data.name }))).toEqual([{ id, rev: 1, name: 'Edit path plan' }]);
+  // 2. Restore connectivity; nothing changes on its own within a short observation window (recorded, not required).
+  await fault.restore();
+  const autoAt = await until(async () => (await planStatus(page).textContent())?.trim() === 'saved', Date.now(), 5_000);
+  // 3. Manual re-save with the existing control.
+  await savePlan(page);
+  await expect(planStatus(page)).toHaveText('saved', { timeout: 45_000 });
+  // 4. Authoritative readback: exactly one record, revision 2, intended values, untouched fields unchanged.
+  const docs = await plansOf(uid);
+  record(`E3 alertAfterFailure="${alert.slice(0, 80)}" autoRecoveredWithin5s=${autoAt >= 0} finalDocs=${JSON.stringify(docs.map((d) => ({ rev: d.data.revision, name: d.data.name })))}`);
+  expect(docs).toHaveLength(1);
+  expect(docs[0].id).toBe(id);
+  expect(docs[0].data).toMatchObject({ revision: 2, name: edits['Plan.name'], notes: edits['Plan.notes'], teamId: v1.data.teamId, createdBy: uid });
+  expect(docs[0].data.periods[0].focus).toBe(edits['Plan.periods.0.focus']);
+  expect(docs[0].data.periods.length, 'period count unchanged').toBe(v1.data.periods.length);
+  expect(docs[0].data.periods.slice(1), 'other periods unchanged').toEqual(v1.data.periods.slice(1));
+  expect(docs[0].data.duration, 'untouched field unchanged').toEqual(v1.data.duration);
+  expect(originalFocus).not.toBe(edits['Plan.periods.0.focus']);
+  expect(Date.parse(docs[0].data.createdAt?.toDate?.() ?? docs[0].data.createdAt ?? 0) || 0).toBe(Date.parse(v1.data.createdAt?.toDate?.() ?? v1.data.createdAt ?? 0) || 0);
+});
+
+test('CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged', async ({ page }) => {
+  const uid = await signInAsBetaCoach(page, coachEmail('e4'));
+  await createTeamViaUI(page, 'Edit Path Owls');
+  await openTab(page, 'Smart Playbook');
+  await page.getByRole('button', { name: /Shotgun/ }).click();
+  await page.getByPlaceholder('Enter play name...').fill('Mesh');
+  await page.getByRole('button', { name: 'Save Play', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Save Play', exact: true }).last().click();
+  const status = page.getByRole('status', { name: 'Play save status' });
+  await expect(status).toHaveText('saved');
+  const [v1] = await adminQuery('plays', 'createdBy', uid);
+  expect(v1.data).toMatchObject({ name: 'Mesh', revision: 1 });
+  await page.getByPlaceholder('Enter play name...').fill('Mesh after failure');
+  await expect(status).toHaveText('unsaved');
+  const fault = await resetCommits(page, 'E4');
+  await page.getByRole('button', { name: 'Save Play', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Save Play', exact: true }).last().click();
+  await expect(status, 'the failed save is reported').toHaveText('failed', { timeout: 45_000 });
+  await expect(page.getByPlaceholder('Enter play name...'), 'edited name retained after failure').toHaveValue('Mesh after failure');
+  expect((await adminQuery('plays', 'createdBy', uid)).map((d) => ({ id: d.id, rev: d.data.revision, name: d.data.name }))).toEqual([{ id: v1.id, rev: 1, name: 'Mesh' }]);
+  await fault.restore();
+  const autoAt = await until(async () => (await status.textContent())?.trim() === 'saved', Date.now(), 5_000);
+  await page.getByRole('button', { name: 'Save Play', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Save Play', exact: true }).last().click();
+  await expect(status).toHaveText('saved', { timeout: 45_000 });
+  const docs = await adminQuery('plays', 'createdBy', uid);
+  record(`E4 autoRecoveredWithin5s=${autoAt >= 0} finalDocs=${JSON.stringify(docs.map((d) => ({ rev: d.data.revision, name: d.data.name })))}`);
+  expect(docs).toHaveLength(1);
+  expect(docs[0].id).toBe(v1.id);
+  expect(docs[0].data).toMatchObject({ name: 'Mesh after failure', revision: 2, teamId: v1.data.teamId, createdBy: uid });
+  expect(docs[0].data.players).toEqual(v1.data.players);
+  expect(docs[0].data.routes).toEqual(v1.data.routes);
+});
