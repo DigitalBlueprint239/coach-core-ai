@@ -159,11 +159,17 @@ test('CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed comm
   await page.getByRole('button', { name: 'Save Play', exact: true }).first().click();
   await page.getByRole('button', { name: 'Save Play', exact: true }).last().click();
   await expect(status, 'the failed save is reported').toHaveText('failed', { timeout: 45_000 });
-  const nameNow = await page.getByPlaceholder('Enter play name...').inputValue();
+  // After a failed save the Save dialog (with its own name field) can remain open: record both.
+  const nameInputs = await page.getByPlaceholder('Enter play name...').all();
+  const nameValues = await Promise.all(nameInputs.map((l) => l.inputValue()));
+  const nameNow = nameValues[0];
   const draftsWithEdit = await page.evaluate((u) => Object.entries(localStorage).filter(([k, v]) => k.startsWith(`coachcore:v1:${u}:`) && k.includes(':drafts:') && v.includes('Mesh after failure')).map(([k]) => k.split(':').slice(3, 5).join(':')), uid);
   const alerts = (await page.getByRole('alert').allInnerTexts()).map((t) => t.slice(0, 100));
-  record(`E4 afterFailure nameField=${JSON.stringify(nameNow)} draftsWithEdit=${JSON.stringify(draftsWithEdit)} status=${(await status.textContent())?.trim()} alerts=${JSON.stringify(alerts)}`);
-  await expect(page.getByPlaceholder('Enter play name...'), 'edited name retained after failure').toHaveValue('Mesh after failure');
+  record(`E4 afterFailure nameFields=${JSON.stringify(nameValues)} draftsWithEdit=${JSON.stringify(draftsWithEdit)} status=${(await status.textContent())?.trim()} alerts=${JSON.stringify(alerts)}`);
+  expect(nameNow, 'edited name retained in the editor after failure').toBe('Mesh after failure');
+  expect(nameValues.every((v) => v === 'Mesh after failure'), 'every visible name field holds the edit').toBe(true);
+  // Close a still-open Save dialog, if any, via its own Cancel/close control before re-saving.
+  if (nameInputs.length > 1) { const cancel = page.getByRole('button', { name: /^(Cancel|Close)$/ }).last(); if (await cancel.count()) await cancel.click(); }
   expect((await adminQuery('plays', 'createdBy', uid)).map((d) => ({ id: d.id, rev: d.data.revision, name: d.data.name }))).toEqual([{ id: v1.id, rev: 1, name: 'Mesh' }]);
   await fault.restore();
   const autoAt = await until(async () => (await status.textContent())?.trim() === 'saved', Date.now(), 5_000);
