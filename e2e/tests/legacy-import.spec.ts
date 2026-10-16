@@ -531,7 +531,10 @@ test('D10-08d [PR #72] resume with a mismatching server copy at the deterministi
   const copies = await adminCopies(a.uid);
   const claimNow = await page.evaluate((k) => localStorage.getItem(k), CLAIM_KEY);
   test.info().annotations.push({ type: 'diag-data', description: `D10-08d outcome="${outcome.slice(0, 160)}" tamperedUnchanged=${JSON.stringify(after) === JSON.stringify(before)} copies=${JSON.stringify(copies.map((c: any) => ({ id: String(c.id).slice(-8), name: c.name ?? c.data?.name })))} claim=${String(claimNow).slice(0, 120)} alerts=${JSON.stringify((await page.getByRole('alert').allInnerTexts()).map((t) => t.slice(0, 100)))}` });
-  expect(outcome, 'import must surface an error, not success').toMatch(/changed elsewhere|could not be verified|does not match|Originals (preserved|retained)/);
+  // The UI maps the gateway's reason ('Imported copy changed elsewhere…') to one coach-facing message; the
+  // specific reason is not shown (observation for Codex). Any of these is an error, never success.
+  expect(outcome, 'import must surface an error, not success').toMatch(/Import not completed|changed elsewhere|could not be verified|does not match|Original plays preserved/);
+  expect(outcome).not.toMatch(/^RESOLVED/);
   expect(after, 'the existing document is not overwritten').toEqual(before);
   const decision = (await deviceState(page)).decisions[decisionKey(a.uid)];
   expect(JSON.parse(decision).decision, 'no imported decision recorded').not.toBe('imported');
