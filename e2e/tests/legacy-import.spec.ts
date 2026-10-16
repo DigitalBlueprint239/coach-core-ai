@@ -312,6 +312,9 @@ test('D10-11 cloud reopen: a fresh browser profile with no device data shows the
     await p2.goto('/');
     await p2.evaluate(() => localStorage.setItem('smartPlaybook_onboarding_complete', 'true'));
     await signInAsBetaCoach(p2, a.email);
+    // Readiness anchor (2026-10-16, evidence 61: D10-11 1/10 Firefox, library empty after a fresh-profile
+    // sign-in): identity readiness is not team readiness; the library is scoped to the selected team.
+    await awaitOwnedTeamReady(p2, 'Alpha Eagles', a.uid);
     await openPlaybook(p2);
     await expect(importPrompt(p2)).toHaveCount(0); // nothing on this device to import
     await expectLibraryContains(p2, LEGACY_PLAYS.map((p) => p.name));
