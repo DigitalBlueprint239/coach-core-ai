@@ -1,0 +1,105 @@
+# RECONCILIATION run (not acceptance): grep N2-R8, x10, retries 0, candidate d5864e9 (runtime 518e9e5; harness adds to R8b: Listen-channel hold installed mid-test + assertion that the 503 was actually served)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38832121304
+# RESULT: R8b FAIL 10/10 per engine on the NEW assertion; listenHeld=0 in every execution (a route installed after sign-in cannot stop the listener long-poll already in flight), readbacksFailed=0 in 13/20 executions, and where the 503 was served (7/20) the SDK listener confirmed the team first (recovery=automatic ~5-13 ms, noFalseSuccessAt8s=false because the success shown was genuine).
+# Conclusion: the pre-reconciliation R8b passes in evidence 44/46/48 did NOT prove readback-failure handling; they proved that a real commit is confirmed by the listener. Not an app defect. Superseded by harness 4cc7ccf (Listen blocked from before sign-in).
+
+=== JOB 116753473899
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 20 executions
+FAIL N2-R8b #0: R8b readbacksFailed=0 listenHeld=0 statusAt=55ms committedAt=91ms noFalseSuccessAt8s=false recovery=automatic/5ms
+FAIL N2-R8b #1: R8b readbacksFailed=1 listenHeld=0 statusAt=56ms committedAt=83ms noFalseSuccessAt8s=false recovery=automatic/4ms
+FAIL N2-R8b #2: R8b readbacksFailed=1 listenHeld=0 statusAt=54ms committedAt=130ms noFalseSuccessAt8s=false recovery=automatic/5ms
+FAIL N2-R8b #3: R8b readbacksFailed=0 listenHeld=0 statusAt=51ms committedAt=94ms noFalseSuccessAt8s=false recovery=automatic/5ms
+FAIL N2-R8b #4: R8b readbacksFailed=0 listenHeld=0 statusAt=47ms committedAt=72ms noFalseSuccessAt8s=false recovery=automatic/6ms
+FAIL N2-R8b #5: R8b readbacksFailed=0 listenHeld=0 statusAt=67ms committedAt=96ms noFalseSuccessAt8s=false recovery=automatic/5ms
+FAIL N2-R8b #6: R8b readbacksFailed=1 listenHeld=0 statusAt=50ms committedAt=78ms noFalseSuccessAt8s=false recovery=automatic/5ms
+FAIL N2-R8b #7: R8b readbacksFailed=0 listenHeld=0 statusAt=52ms committedAt=79ms noFalseSuccessAt8s=false recovery=automatic/5ms
+FAIL N2-R8b #8: R8b readbacksFailed=1 listenHeld=0 statusAt=55ms committedAt=86ms noFalseSuccessAt8s=false recovery=automatic/4ms
+FAIL N2-R8b #9: R8b readbacksFailed=0 listenHeld=0 statusAt=46ms committedAt=60ms noFalseSuccessAt8s=false recovery=automatic/5ms
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=138ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12247ms
+PASS N2-R8 #1: R8 fakedCommits=1 readbacksFailed=1 statusAt=51ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12139ms
+PASS N2-R8 #2: R8 fakedCommits=1 readbacksFailed=1 statusAt=47ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12128ms
+PASS N2-R8 #3: R8 fakedCommits=1 readbacksFailed=1 statusAt=50ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12123ms
+PASS N2-R8 #4: R8 fakedCommits=1 readbacksFailed=1 statusAt=55ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12145ms
+PASS N2-R8 #5: R8 fakedCommits=1 readbacksFailed=1 statusAt=64ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12100ms
+PASS N2-R8 #6: R8 fakedCommits=1 readbacksFailed=1 statusAt=66ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12126ms
+PASS N2-R8 #7: R8 fakedCommits=1 readbacksFailed=1 statusAt=63ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12106ms
+PASS N2-R8 #8: R8 fakedCommits=1 readbacksFailed=1 statusAt=54ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12124ms
+PASS N2-R8 #9: R8 fakedCommits=1 readbacksFailed=1 statusAt=54ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12128ms
+[notice] E2E chromium slow steps >= 10s: 0 of 20 executions
+none
+[warning] E2E chromium diag: 10 failed executions
+N2-R8b #0 failed 11.6s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.0s; Click@n2.spec.ts:766 0.0s
+N2-R8b #1 failed 11.6s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Click@app.ts:77 0.1s; Expect "toBeVisible"@app.ts:55 0.0s
+N2-R8b #2 failed 11.6s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.0s; Navigate@app.ts:44 0.0s
+N2-R8b #3 failed 11.7s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+N2-R8b #4 failed 11.7s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.0s
+N2-R8b #5 failed 11.7s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Click@app.ts:77 0.1s; Click@n2.spec.ts:766 0.1s
+N2-R8b #6 failed 11.7s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.1s; Click@app.ts:77 0.0s
+N2-R8b #7 failed 11.7s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Click@app.ts:77 0.1s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-R8b #8 failed 11.7s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.0s
+N2-R8b #9 failed 11.7s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Expect "toBeVisible"@app.ts:55 0.1s; Click@app.ts:77 0.1s
+[failure] E2E chromium: 10 passed / 10 failed / 0 blocked / 0 skipped · acceptance 10/10 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 10/10 N2-R8b [11.6/11.7/11.7s] -- Error: the readback fault was applied (the 503 was actually served) | expect(received).toBeGreaterThan(expected) | Expec
+PASS 10/10 N2-R8 [23.8/23.8/24.0s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116753474121
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 20 executions
+FAIL N2-R8b #0: R8b readbacksFailed=0 listenHeld=0 statusAt=78ms committedAt=113ms noFalseSuccessAt8s=false recovery=automatic/13ms
+FAIL N2-R8b #1: R8b readbacksFailed=0 listenHeld=0 statusAt=79ms committedAt=114ms noFalseSuccessAt8s=false recovery=automatic/11ms
+FAIL N2-R8b #2: R8b readbacksFailed=0 listenHeld=0 statusAt=72ms committedAt=102ms noFalseSuccessAt8s=false recovery=automatic/11ms
+FAIL N2-R8b #3: R8b readbacksFailed=0 listenHeld=0 statusAt=65ms committedAt=93ms noFalseSuccessAt8s=false recovery=automatic/12ms
+FAIL N2-R8b #4: R8b readbacksFailed=1 listenHeld=0 statusAt=67ms committedAt=94ms noFalseSuccessAt8s=false recovery=automatic/12ms
+FAIL N2-R8b #5: R8b readbacksFailed=0 listenHeld=0 statusAt=68ms committedAt=93ms noFalseSuccessAt8s=false recovery=automatic/12ms
+FAIL N2-R8b #6: R8b readbacksFailed=0 listenHeld=0 statusAt=63ms committedAt=83ms noFalseSuccessAt8s=false recovery=automatic/11ms
+FAIL N2-R8b #7: R8b readbacksFailed=1 listenHeld=0 statusAt=74ms committedAt=92ms noFalseSuccessAt8s=false recovery=automatic/11ms
+FAIL N2-R8b #8: R8b readbacksFailed=1 listenHeld=0 statusAt=62ms committedAt=76ms noFalseSuccessAt8s=false recovery=automatic/10ms
+FAIL N2-R8b #9: R8b readbacksFailed=0 listenHeld=0 statusAt=80ms committedAt=102ms noFalseSuccessAt8s=false recovery=automatic/10ms
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=161ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12298ms
+PASS N2-R8 #1: R8 fakedCommits=1 readbacksFailed=1 statusAt=79ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12171ms
+PASS N2-R8 #2: R8 fakedCommits=1 readbacksFailed=1 statusAt=82ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12135ms
+PASS N2-R8 #3: R8 fakedCommits=1 readbacksFailed=1 statusAt=68ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12135ms
+PASS N2-R8 #4: R8 fakedCommits=1 readbacksFailed=1 statusAt=83ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12154ms
+PASS N2-R8 #5: R8 fakedCommits=1 readbacksFailed=1 statusAt=82ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12130ms
+PASS N2-R8 #6: R8 fakedCommits=1 readbacksFailed=1 statusAt=81ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12133ms
+PASS N2-R8 #7: R8 fakedCommits=1 readbacksFailed=1 statusAt=83ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12129ms
+PASS N2-R8 #8: R8 fakedCommits=1 readbacksFailed=1 statusAt=76ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12123ms
+PASS N2-R8 #9: R8 fakedCommits=1 readbacksFailed=1 statusAt=83ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12169ms
+[notice] E2E firefox slow steps >= 10s: 0 of 20 executions
+none
+[warning] E2E firefox diag: 10 failed executions
+N2-R8b #0 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-R8b #1 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@n2.spec.ts:766 0.1s
+N2-R8b #2 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-R8b #3 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:36 0.1s
+N2-R8b #4 failed 11.9s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:36 0.1s
+N2-R8b #5 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:36 0.1s
+N2-R8b #6 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-R8b #7 failed 12.0s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-R8b #8 failed 12.0s | errors: Error: a 503 readback is never reported as success | last step: a 503 readback is never reported as success@n2.spec.ts:782 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-R8b #9 failed 12.0s | errors: Error: the readback fault was applied (the 503 was actually served) | last step: the readback fault was applied (the 503 was actually served)@n2.spec.ts:779 (0.0s) | slowest: Navigate@app.ts:44 0.1s; Navigate@app.ts:31 0.1s; Click@app.ts:77 0.1s
+[failure] E2E firefox: 10 passed / 10 failed / 0 blocked / 0 skipped · acceptance 10/10 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 10/10 N2-R8b [11.9/12.0/12.0s] -- Error: the readback fault was applied (the 503 was actually served) | expect(received).toBeGreaterThan(expected) | Expec
+PASS 10/10 N2-R8 [24.7/24.8/25.1s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
