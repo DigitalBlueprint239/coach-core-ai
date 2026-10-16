@@ -4,7 +4,7 @@
 // selected authorized team; originals byte-for-byte; no duplicate imports or
 // cross-account exposure; decline leaves originals unchanged; no deletion.
 import { test, expect } from '@playwright/test';
-import { resetEmulators, adminSet, adminGet, AUTH_ONLY } from './support/emulator';
+import { resetEmulators, adminSet, adminGet, adminTeamsFull, AUTH_ONLY } from './support/emulator';
 import {
   coachEmail, skipOnboarding, signInAsBetaCoach, signOutViaUI, createTeamViaUI, openTab,
   storage, waitForE2EHooks,
@@ -422,7 +422,17 @@ test('D10-06e [founder rule: R1c recovery] "Not now" postpones an unfinished imp
   // 4. The original coach returns, resumes, and finishes: exactly the verified copies, no duplicates.
   await signOutViaUI(page);
   await signInAsBetaCoach(page, a.email);
-  expect((await storage(page)).currentTeamId, 'original team selected').toBe(a.teamId);
+  // A3 diagnostic (2026-10-15): the intermittent line-425 failure's Received value is
+  // truncated in CI annotations and the artifact store is unreachable from the agent
+  // workspace. Record what was selected and what the server holds; the assertion is unchanged.
+  const selectedOnReturn = (await storage(page)).currentTeamId;
+  if (selectedOnReturn !== a.teamId) {
+    const aTeams = (await adminTeamsFull(a.uid)).map((t) => ({ id: t.id, name: t.name }));
+    const visible = await page.getByRole('heading').allInnerTexts().catch(() => []);
+    const again = await new Promise((r) => setTimeout(r, 1_500)).then(() => storage(page)).then((st) => st.currentTeamId);
+    test.info().annotations.push({ type: 'diag-data', description: `D10-06e@425 selected=${JSON.stringify(selectedOnReturn)} expected=${a.teamId} after1.5s=${JSON.stringify(again)} aTeamsOnServer=${JSON.stringify(aTeams)} headings=${JSON.stringify(visible.slice(0, 8))}` });
+  }
+  expect(selectedOnReturn, 'original team selected').toBe(a.teamId);
   await openPlaybook(page);
   await acceptImport(page);
   expectFaithfulCopies(await adminCopies(a.uid), a.uid, a.teamId);
