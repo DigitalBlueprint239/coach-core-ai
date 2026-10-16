@@ -25,17 +25,61 @@ export const dashboardFor = (page: Page, email: string) => page.getByText(`Welco
  * Email-link sign-in through the real UI, completed on the SAME device.
  * EMULATOR AUTH: the emulator records the link instead of emailing it.
  */
+/**
+ * FX-02 / H2 stall probe (2026-10-16, diagnostics only). Codex's redacted trace of FX-02
+ * shows the "before" snapshot of the stalled click landing ~51 s after the call began,
+ * i.e. the page was not servicing injected-script work during the gap — but that is an
+ * inference. This records, inside the page: a 250 ms timer heartbeat and a rAF heartbeat
+ * (gaps => page execution suspended/throttled), visibilitychange events (background tab),
+ * and add/remove mutations of the email-link submit button (app remove/reinsert). It is
+ * read only when the sign-in step is slow, and reported as diag-data. No timing changed.
+ */
+async function installStallProbe(page: Page) {
+  await page.evaluate(() => {
+    const w = window as any;
+    if (w.__stall) return;
+    const p = { t0: performance.now(), timerGaps: [] as string[], rafGaps: [] as string[], visibility: [] as string[], button: [] as string[], lastTimer: performance.now(), lastRaf: performance.now() };
+    w.__stall = p;
+    const stamp = () => Math.round(performance.now() - p.t0);
+    setInterval(() => { const n = performance.now(); if (n - p.lastTimer > 2_000 && p.timerGaps.length < 6) p.timerGaps.push(`${stamp()}ms:gap${Math.round(n - p.lastTimer)}ms`); p.lastTimer = n; }, 250);
+    const raf = () => { const n = performance.now(); if (n - p.lastRaf > 2_000 && p.rafGaps.length < 6) p.rafGaps.push(`${stamp()}ms:gap${Math.round(n - p.lastRaf)}ms`); p.lastRaf = n; requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+    document.addEventListener('visibilitychange', () => { if (p.visibility.length < 8) p.visibility.push(`${stamp()}ms:${document.visibilityState}`); });
+    p.visibility.push(`${stamp()}ms:${document.visibilityState}`);
+    const isBtn = (n: Node) => n.nodeType === 1 && /Email me a sign-in link/.test((n as Element).textContent || '') && ((n as Element).matches?.('button') || Boolean((n as Element).querySelector?.('button')));
+    new MutationObserver((records) => {
+      for (const r of records) {
+        for (const n of Array.from(r.addedNodes)) if (isBtn(n) && p.button.length < 10) p.button.push(`${stamp()}ms:+`);
+        for (const n of Array.from(r.removedNodes)) if (isBtn(n) && p.button.length < 10) p.button.push(`${stamp()}ms:-`);
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }).catch(() => {});
+}
+async function readStallProbe(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    const p = (window as any).__stall; if (!p) return 'no-probe';
+    return `timerGaps=${JSON.stringify(p.timerGaps)} rafGaps=${JSON.stringify(p.rafGaps)} visibility=${JSON.stringify(p.visibility)} buttonMutations=${JSON.stringify(p.button)} visibleNow=${document.visibilityState}`;
+  }).catch(() => 'probe-unreadable');
+}
+
 export async function requestEmailLink(page: Page, email: string): Promise<URL> {
   // Named phases so a stall (FX-02: 48 s before this button resolved) is attributed in CI diagnostics.
   await test.step('sign-in: open app and wait for sign-in screen', async () => {
     await page.goto('/');
     await expect(signInScreen(page)).toBeVisible();
   });
-  await test.step('sign-in: request email link', async () => {
-    await page.getByLabel('Or get a sign-in link by email').fill(email);
-    await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
-    await expect(page.getByText(`Check ${email} for a sign-in link`)).toBeVisible();
-  });
+  await installStallProbe(page);
+  const t0 = Date.now();
+  try {
+    await test.step('sign-in: request email link', async () => {
+      await page.getByLabel('Or get a sign-in link by email').fill(email);
+      await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
+      await expect(page.getByText(`Check ${email} for a sign-in link`)).toBeVisible();
+    });
+  } finally {
+    // Report the probe only when this phase was slow (FX-02-class) or failed; otherwise stay quiet.
+    if (Date.now() - t0 > 5_000) test.info().annotations.push({ type: 'diag-data', description: `stallProbe sign-in ${Date.now() - t0}ms: ${await readStallProbe(page)}` });
+  }
   return latestSignInLink(email);
 }
 
