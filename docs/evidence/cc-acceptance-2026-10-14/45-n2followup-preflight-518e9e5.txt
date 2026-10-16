@@ -1,0 +1,17 @@
+# N2 repair follow-up (#71) preflight, 2026-10-15
+# Handoff: issue #39 comment 6202191138
+runtime (tested app source) = 518e9e5817abd2a0e1bf1308468928f238fa8533
+docs/evidence head           = 280ee484cf0b24ba2fb0eb7d803ea9c85c743489 (differs from runtime only under docs/, verified: git diff --name-only)
+harness                      = f325a231c52f148db904743da84aeb85760d01c3 (e2e/, .github/ only)
+candidate                    = 5911f7e17c1897c207fd8dc32bedff2f33c3f1bd on claude/n2-repair-acceptance-518e9e5
+candidate runtime check: src, functions, public, firestore.rules, firestore.indexes.json, package.json, package-lock.json, tsconfig.json byte-identical to 518e9e5; e2e/ and .github/ byte-identical to f325a23; no other paths differ
+
+bounded source diff bdb06ae..518e9e5 (src/):
+ src/components/TeamManagement.creation.test.tsx | 32 +++++++++++++++++++++++--
+ src/components/TeamManagement.tsx               | 29 ++++++++++++++++++----
+ src/contexts/TeamContext.creation.test.tsx      |  9 +++++++
+ src/contexts/TeamContext.tsx                    | 16 ++++++++++++-
+ 4 files changed, 78 insertions(+), 8 deletions(-)
+
+non-src/non-docs diff bdb06ae..518e9e5:
+(empty = none)

@@ -1,0 +1,74 @@
+# DIAGNOSTIC (not acceptance): D10-06e only, x50, retries 0, candidate 5911f7e (runtime 518e9e5 incl. selected-team persistence fix)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38818999500
+# Compare: evidence 41 (bdb06ae: chromium 2/50 @425, phone-chromium 1/50 @30), evidence 42 (pre-repair 186a743: chromium 2/50 @425)
+# IDs shown are synthetic demo-project emulator IDs.
+
+=== JOB 116710675881
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium slow steps >= 10s: 0 of 50 executions
+none
+[warning] E2E chromium diag: 2 failed executions
+D10-06e #0 failed 5.1s | errors: Error: original team selected | last step: original team selected@legacy-import.spec.ts:425 (0.0s) | slowest: Expect "toHaveCount"@app.ts:169 0.8s; Navigate@legacy.ts:44 0.2s; Wait for function@app.ts:67 0.2s
+D10-06e #1 failed 3.9s | errors: Error: original team selected | last step: original team selected@legacy-import.spec.ts:425 (0.0s) | slowest: Navigate@legacy.ts:44 0.2s; Wait for function@app.ts:67 0.2s; Wait for function@app.ts:67 0.1s
+[failure] E2E chromium: 48 passed / 2 failed / 0 blocked / 0 skipped · acceptance 48/2 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 2/50 D10-06e [3.7/4.0/5.1s] -- Error: original team selected | expect(received).toBe(expected) // Object.is equality | Expected: "4kX5ItUxkODwnmgvRjkL"
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116710675946
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E firefox: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 50/50 D10-06e [5.1/5.4/7.3s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116710675697
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 50 executions
+none
+[warning] E2E phone-chromium diag: 1 failed executions
+D10-06e #0 failed 5.0s | errors: Error: original team selected | last step: original team selected@legacy-import.spec.ts:425 (0.0s) | slowest: Expect "toHaveCount"@app.ts:169 0.3s; Navigate@legacy.ts:44 0.2s; Wait for function@app.ts:67 0.2s
+[failure] E2E phone-chromium: 49 passed / 1 failed / 0 blocked / 0 skipped · acceptance 49/1 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 1/50 D10-06e [3.6/3.8/5.0s] -- Error: original team selected | expect(received).toBe(expected) // Object.is equality | Expected: "2nwLltf0Vreros1zx0IW"
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116710676131
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E phone-firefox: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 50/50 D10-06e [6.6/6.8/8.9s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

@@ -1059,3 +1059,56 @@ The UI wording for R7 is Codex's choice; the contract (locators above, confirm `
 **Classification.** R7/R7b failures are a **product gap on `bdb06ae`** (the confirmation decided in (1) is not implemented), not a regression of the REST repair. R8/R8b close the "readback failure not tested" limitation from §14.9. The §14.9 full-matrix totals are unchanged; re-counting that run under the new column would give acceptance 1,439/1 (D10-06e, inherited) and obsolete-fault-model 0/20, but that is a re-labelling of evidence 40, not a new run.
 
 **Status:** REST repair holds on every REST-path test, including readback failure. The same-name confirmation is **not implemented**. The full matrix on the final harness has not yet been re-run. N3 unresolved; MVP **NO-GO**.
+
+### 14.11 Independent validation of the #71 follow-up runtime `518e9e5` (2026-10-15)
+
+**Supersession note.** §14.10's finding "same-name confirmation unimplemented" is a finding **on `bdb06ae`**. It is superseded by the implementation in `518e9e5`, verified below. §14.9–14.10 and evidence 37–44 are unchanged.
+
+**What was tested** (handoff: #39 comment 6202191138; evidence 45)
+- Runtime: `518e9e5817abd2a0e1bf1308468928f238fa8533`. Docs/evidence head `280ee484…` differs from it only under `docs/` (verified).
+- Harness: `f325a23` (unchanged from §14.10; no assertion, timeout or retry change).
+- Candidate: `5911f7e` on `claude/n2-repair-acceptance-518e9e5`: `src/`, `functions/`, `public/`, rules, indexes, `package*.json`, `tsconfig.json` byte-identical to `518e9e5`; `e2e/`, `.github/` byte-identical to `f325a23`; no other paths differ.
+- Bounded diff `bdb06ae..518e9e5`: `TeamManagement.tsx` (+29/−8), `TeamContext.tsx` (+16/−1), two unit-test files. Nothing outside `src/` and `docs/`.
+- Implementation read: a `role="alertdialog"` "You already have a team named X. Do you intend to create a separate team?" with **Go back** / **Create a separate team**, shown only when `!pending` and a *confirmed* team has the same trimmed name (so a journalled retry never prompts); `confirmedTeams` is fed only from non-cache, non-pending snapshots or the confirmed REST readback; `currentTeamId` is now persisted by an effect on `currentTeam` (either path), not only by the SDK listener.
+
+**Stage 1: N2/N3 ×10, grep `N2-|N3-`, retries 0.** Run `38811068246`, evidence 46.
+
+| Test | Chromium | Firefox |
+|---|---|---|
+| N2-R7 same-name confirmation | **PASS 10/10** (prompt at ~56 ms; 1 team while open; decline → 1; confirm → exactly 2, distinct ids/codes) | **PASS 10/10** |
+| N2-R7b confirmed same-name, commit reset → same op | **PASS 10/10** (resets=1, status ≤ 8 s, recovered, reprompts=0, exactly 2) | **PASS 10/10** |
+| N2-R8 / R8b readback failure | PASS 10/10 / 10/10 | PASS 10/10 / 10/10 |
+| N2-R1…R6, N2-A1 | 70/70 | 70/70 |
+| N3-D5 (diagnostic) | 10/10, 80 creations, N3 not reproduced | 10/10, 80 creations, not reproduced |
+| N2-D0/D1/D3/D4 (diagnostic) | 40/40 | 40/40 |
+| N2-D2 (diagnostic, WebChannel fault) | FAIL 6/10 | FAIL 10/10 |
+| N2-A2 (obsolete fault model) | 3/7 | 0/10 |
+
+Acceptance **130/0** per engine. Harness label note: the R7 `declineButton=Cancel` diag string is read after the decline click dismissed the dialog; the control present and clicked was "Go back" (its text is in the captured prompt). The assertion `teamsAfterDecline=1` is unaffected.
+
+**Stage 2: selected-team persistence, D10-06e ×50 per project.** Run `38818999500`, evidence 47.
+
+| Project | `518e9e5` | `bdb06ae` (ev. 41) | pre-repair `186a743` (ev. 42) |
+|---|---|---|---|
+| chromium | 2/50 fail @425 | 2/50 @425 | 2/50 @425 |
+| phone-chromium | 1/50 fail @425 | 1/50 **@30** | 0/50 |
+| firefox, phone-firefox | 50/50 | 50/50 | 50/50 |
+
+- The **line-30 variant** (`currentTeamId` unset immediately after creation), seen 1/200 on `bdb06ae` only, did **not** recur in 200 executions on `518e9e5`. Consistent with the persistence fix; 1 → 0 in 200 is not statistical proof.
+- The **line-425 variant** (returning coach A, selected team ≠ A's team) is unchanged at 2/50 on all three runtimes: **inherited, cause not proven**, not addressed by #71. Its `Received` value is truncated in the annotation and the CI artifact/log store is not reachable from this workspace; the artifacts remain in CI for Codex.
+
+**Stage 3: full matrix ×10, no filter, retries 0.** Run `38820119320`, evidence 48. Chromium 156.0.8078.4, Firefox 157.0, Playwright 1.64.0.
+
+| Job | Acceptance | Diagnostic | Obsolete fault model (N2-A2) | Release proof |
+|---|---|---|---|---|
+| chromium 1280×720 | **610/0** | 54/6 (N2-D2 6/10) | 4/6 | 13/13 |
+| firefox 1280×720 | **610/0** | 54/6 (N2-D2 6/10) | 5/5 | 13/13 |
+| phone-chromium 390×844 | **150/0** | — | — | 13/13 |
+| phone-firefox 390×844 | **150/0** | — | — | 13/13 |
+| **Total** | **1,520/0** | **108/12** | **9/11** | |
+
+- Every acceptance test, including D10-06e (10/10 in all four projects this run), N2-R1…R8b and N2-A1, passed.
+- N2-D2 and N2-A2 failures are the WebChannel-hold fault model (§14.9 item 2–3), reported separately and not counted against the repair. N2-A2's partial passes on `518e9e5` are a side effect of the new confirmation blocking its second submit; the body is unchanged.
+- N3-D5: 10/10 per engine, another 160 creations. **N3 is kept separate from the original N2 SDK stall**: N3 (submit produced no request, 1/10 Firefox on `186a743`) has not recurred in 640 targeted creations across `bdb06ae` and `518e9e5`; it is **not claimed fixed**. The natural cause of the original N2 SDK stall is likewise **unresolved**; the repair routes around the SDK write path rather than explaining it.
+
+**Status:** On `518e9e5` the acceptance matrix is clean (1,520/0) and all REST-path, same-name-confirmation and readback-failure tests pass 10/10 per engine. Inherited: D10-06e line-425 intermittent (not N2). Open: N3 (not reproduced), natural SDK stall cause, Codex's observations (raw "Failed to fetch" text, unstyled team UI). No merge, deployment or live-data testing. **MVP NO-GO** until the release gates in the readiness checklist are closed.
