@@ -86,7 +86,13 @@ export const sameContent = (a: unknown, b: unknown): boolean => {
 export function hasUnfinishedImport(storage: Storage, session: ImportSession): boolean {
   if (importNotice(storage, session)) return false;
   const claim = storage.getItem(CLAIM_KEY);
-  if (claim) return JSON.parse(claim).status === 'pending';
+  if (claim) {
+    const value = JSON.parse(claim);
+    if (value.status !== undefined) return value.status === 'pending';
+    // Older clients could stop after writing a status-less claim but before
+    // recording completion/clearing pending. Resume only its original team.
+    if (value.teamId !== session.teamId) return false;
+  }
   return !!storage.getItem(pendingKey(session.uid));
 }
 export function declineImport(storage: Storage, session: ImportSession) {
