@@ -84,6 +84,8 @@ jobs:
           # parse and the gateway then refuses every browser origin (fail closed).
           printf 'COACH_CORE_AI_ENABLED=false\nCOACH_CORE_ALLOWED_ORIGINS=["http://localhost:3000"]\n' > functions/.env.local
           printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\n' > functions/.secret.local
+      - name: Reporter self-checks (annotation/summary contract, incl. empty jobs)
+        run: npm --prefix e2e run test:reporter
       - name: Build web app for emulators (demo project)
         run: |
           npm --prefix e2e run build:app
@@ -117,6 +119,16 @@ jobs:
         run: |
           v=$(cd e2e && node -e "const {chromium,firefox}=require('@playwright/test');(async()=>{for(const b of [chromium,firefox]){const x=await b.launch();console.log(b.name()+' '+x.version());await x.close()}})()" | tr '\n' ' ')
           echo "::notice title=E2E browsers::${v} (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      - name: Artifact manifest (file names, sizes and results.json digest; no contents)
+        if: always()
+        run: |
+          d=e2e/test-results
+          [ -d "$d" ] || { echo "::notice title=E2E artifact manifest (${{ matrix.bucket }} ${{ matrix.project }})::no test-results directory"; exit 0; }
+          files=$(find "$d" -type f | wc -l); bytes=$(du -sb "$d" | cut -f1)
+          digest=$([ -f "$d/results.json" ] && sha256sum "$d/results.json" | cut -c1-16 || echo none)
+          tests=$([ -f "$d/results.json" ] && node -e "const r=require('./$d/results.json');const c=(s)=>s.specs.reduce((n,x)=>n+x.tests.reduce((m,t)=>m+t.results.length,0),0)+(s.suites||[]).reduce((n,x)=>n+c(x),0);console.log((r.suites||[]).reduce((n,s)=>n+c(s),0))" || echo 0)
+          top=$(find "$d" -maxdepth 1 -mindepth 1 | sed "s#$d/##" | sort | head -40 | tr '\n' ',' | sed 's/,$//')
+          echo "::notice title=E2E artifact manifest (${{ matrix.bucket }} ${{ matrix.project }})::files=${files} bytes=${bytes} results.json=${digest} executions_in_results_json=${tests} top-level: ${top}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
