@@ -14,7 +14,25 @@ const PHONE_WORKFLOWS = /(?:^|\s)(E2E-A07|E2E-A10|CC-P10|CC-P11|CC-P12|CC-P14|CC
 // Optional targeted re-run filter (CI dispatch input `grep`). Combined with each
 // project's own filter (AND), so phone projects still run only their workflows.
 const EXTRA = process.env.E2E_GREP ? new RegExp(process.env.E2E_GREP) : undefined;
-const both = (r: RegExp) => (EXTRA ? new RegExp(`(?=[\\s\\S]*(?:${EXTRA.source}))${r.source}`) : r);
+
+// B11 (Coach Drew, 2026-10-16): CI runs each browser project as three jobs so the
+// ACCEPTANCE conclusion stands alone. Nothing is removed or weakened: the three
+// buckets partition the suite by title tag, every test still runs with the same
+// assertions, timeouts and retries=0, and local/unset runs keep the whole suite.
+//   acceptance           = every test NOT tagged [diagnostic] or [obsolete-fault-model]
+//   diagnostic           = tests tagged [diagnostic]
+//   obsolete-fault-model = tests tagged [obsolete-fault-model] (original N2-A2)
+const DIAG = /\[diagnostic\]/;
+const OBSOLETE = /\[obsolete-fault-model\]/;
+const BUCKET = process.env.E2E_BUCKET || 'all';
+if (!['all', 'acceptance', 'diagnostic', 'obsolete-fault-model'].includes(BUCKET)) throw new Error(`Unknown E2E_BUCKET "${BUCKET}"`);
+const BUCKET_GREP = BUCKET === 'diagnostic' ? DIAG : BUCKET === 'obsolete-fault-model' ? OBSOLETE : undefined;
+const BUCKET_INVERT = BUCKET === 'acceptance' ? new RegExp(`${DIAG.source}|${OBSOLETE.source}`) : undefined;
+
+// AND-combine the optional filters with a base regex via lookaheads.
+const ANDS = [EXTRA, BUCKET_GREP].filter((r): r is RegExp => Boolean(r));
+const both = (r: RegExp) => (ANDS.length ? new RegExp(`${ANDS.map((a) => `(?=[\\s\\S]*(?:${a.source}))`).join('')}${r.source}`) : r);
+const TOP_GREP = ANDS.length ? both(/[\s\S]*/) : undefined;
 
 export default defineConfig({
   testDir: './tests',
@@ -22,7 +40,8 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1, // one shared emulator; tests reset it in beforeEach
   retries: 0,
-  ...(EXTRA ? { grep: EXTRA } : {}),
+  ...(TOP_GREP ? { grep: TOP_GREP } : {}),
+  ...(BUCKET_INVERT ? { grepInvert: BUCKET_INVERT } : {}),
   forbidOnly: true,
   timeout: 60_000,
   expect: { timeout: 10_000 },

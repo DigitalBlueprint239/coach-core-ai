@@ -10,6 +10,7 @@
 //    when it ended and the slowest steps (one "diag" annotation per project);
 //  - a census of every step >= SLOW_MS across ALL executions, pass or fail,
 //    so a stall like FX-02 (48 s locator wait) is visible even when it passes.
+import { appendFileSync } from 'node:fs';
 const SLOW_MS = Number(process.env.E2E_SLOW_MS) || 10_000;
 const LIMIT = 3900; // stay under the observed ~4 KB annotation message cut-off
 
@@ -35,7 +36,16 @@ function flatten(steps, parent = '') {
 }
 
 export default class AnnotateReporter {
-  constructor() { this.rows = []; }
+  constructor() { this.rows = []; this.selected = new Map(); this.configuredProjects = []; }
+
+  /** Record what was SELECTED per project so an empty job can say so explicitly (B11 review). */
+  onBegin(config, suite) {
+    this.configuredProjects = (config?.projects || []).map((p) => p.name);
+    for (const t of suite?.allTests?.() || []) {
+      const name = t.parent?.project()?.name || 'unknown';
+      this.selected.set(name, (this.selected.get(name) || 0) + 1);
+    }
+  }
 
   onTestEnd(test, result) {
     const project = test.parent?.project()?.name || 'unknown';
@@ -79,11 +89,44 @@ export default class AnnotateReporter {
     });
   }
 
-  onEnd() {
+  onEnd(result) {
     if (!process.env.GITHUB_ACTIONS) return;
+    const summary = (line) => { if (process.env.GITHUB_STEP_SUMMARY) { try { appendFileSync(process.env.GITHUB_STEP_SUMMARY, line); } catch { /* best-effort */ } } };
+    summary('| project [bucket] | pass | fail | blocked | skipped | buckets (pass/fail) |\n|---|---|---|---|---|---|\n');
     const esc = (s) => String(s).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
     // Commas separate annotation properties, so titles must not contain one.
     const emit = (level, title, body) => process.stdout.write(`::${level} title=${esc(title)}::${esc(body.slice(0, LIMIT))}\n`);
+    const bucketName = process.env.E2E_BUCKET && process.env.E2E_BUCKET !== 'all' ? process.env.E2E_BUCKET : '';
+    const bucketTag = bucketName ? ` [${bucketName}]` : '';
+    // Run-level outcome first, so a cancelled or interrupted job is never read as a quiet pass.
+    const runStatus = result?.status || 'unknown';
+    if (runStatus !== 'passed' && runStatus !== 'failed') {
+      emit('error', `E2E run ${runStatus}${bucketTag}`, `The Playwright run ended with status "${runStatus}" (interrupted/cancelled/timed out). Per-test counts below are PARTIAL and must not be read as a complete result.`);
+      summary(`| (run) ${bucketTag.trim() || 'all'} | — | — | — | — | **run ${runStatus}: partial results** |\n`);
+    }
+    // Projects with no completed results. Two different situations, never conflated
+    // (Codex re-review of e5b33ef): (a) the selection was genuinely EMPTY (0 selected),
+    // or (b) tests WERE selected but none completed (interrupted/timed out/setup error
+    // before the first result). Zero tests are never reported as passed tests.
+    const targeted = process.env.PROJECT ? [process.env.PROJECT] : this.configuredProjects;
+    const grep = process.env.E2E_GREP ? ` and grep "${process.env.E2E_GREP}"` : '';
+    for (const p of targeted) {
+      if (this.rows.some((r) => r.project === p)) continue;
+      const sel = this.selected.get(p) || 0;
+      if (sel > 0) {
+        emit('error', `E2E ${p}${bucketTag}: ${sel} tests selected but NONE completed (run ${runStatus})`,
+          `Project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}: ${sel} tests selected, 0 completed, 0 passed, 0 failed. The run ended with status "${runStatus}" before the first result (interrupted, timed out, or a setup/global error). This is an INCOMPLETE run: tests were selected and did not finish. It is not a pass.`);
+        summary(`| ${p}${bucketTag} | **${sel} selected, 0 completed** | — | — | — | **incomplete: run ${runStatus} before any result** |\n`);
+        continue;
+      }
+      // Genuinely empty: explain it as the result of the CURRENT filters. Whether the bucket
+      // has no tests at all for this project is established only when no grep narrows it.
+      const why = grep ? `the current filters (project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}${grep}) selected no tests`
+        : bucketName ? `no "${bucketName}" tests exist for project "${p}" under its own filter` : `project "${p}"'s own filter selected no tests`;
+      emit('notice', `E2E ${p}${bucketTag}: 0 tests selected (empty selection; nothing ran)`,
+        `Project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}: 0 tests selected, 0 executed, 0 passed, 0 failed; ${why}. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.`);
+      summary(`| ${p}${bucketTag} | 0 tests selected | — | — | — | empty selection (${why}); nothing ran |\n`);
+    }
     const projects = [...new Set(this.rows.map((r) => r.project))];
     for (const p of projects) {
       const rows = this.rows.filter((r) => r.project === p);
@@ -125,7 +168,11 @@ export default class AnnotateReporter {
       const cnt = (pred, st) => rows.filter((r) => pred(r) && r.status === st).length;
       const split = ` · acceptance ${cnt(accT, 'PASS')}/${cnt(accT, 'FAIL')} · diagnostic ${cnt(diagT, 'PASS')}/${cnt(diagT, 'FAIL')}`
         + ` · obsolete-fault-model ${cnt(obsT, 'PASS')}/${cnt(obsT, 'FAIL')} (pass/fail)`;
-      emit(level, `E2E ${p}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped${split}`, lines.join('\n'));
+      const bucket = bucketTag;
+      emit(level, `E2E ${p}${bucket}: ${n('PASS')} passed / ${n('FAIL')} failed / ${n('BLOCKED')} blocked / ${n('SKIPPED')} skipped${split}`, lines.join('\n'));
+      // B11: one line per job in the GitHub job summary so the three bucket conclusions
+      // can be read without opening annotations. Same numbers as the annotation title.
+      summary(`| ${p}${bucket} | ${n('PASS')} | ${n('FAIL')} | ${n('BLOCKED')} | ${n('SKIPPED')} |${split.replace(/ · /g, ' ').trim()} |\n`);
 
       // Failure diagnostics: the first failure of each distinct test first, so a
       // test failing 10/10 cannot push a 1/10 intermittent out of the annotation.
