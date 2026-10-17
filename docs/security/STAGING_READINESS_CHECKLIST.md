@@ -1,0 +1,130 @@
+# Staging readiness checklist (before requesting a staging deploy)
+
+Claude, 2026-10-13. **Status: NOT READY TO REQUEST DEPLOYMENT. MVP NO-GO** (updated 2026-10-15: test-only candidate 10 `186a743` = candidate 9b + identity visibility. Full ×10 matrix: **1,259/1,260 acceptance executions** across desktop and phone widths, plus 100/100 N2 diagnostics. Proven team-creation gaps remain: N2 (saved but "Creating…", reproduced under fault), no recovery after stream resets, duplicate teams on retry. N3 is new. Open: H2, FX-02, R1c residual, R3, R4, touch exit; background tabs, devices and staging NOT MEASURED). Items marked ✗ or ⚠ below must be closed first. Nothing here merges, deploys, spends or changes live configuration.
+
+## 1. Exact PR/commit combination
+
+The test-only candidate is **`claude/integration-candidate-2026-10-13b` @ `9b84573`** (`c112b68` + PR #54's A09 diagnostics). It is evidence only, never merged and has no PR. It was built from `recovery/coach-core-mvp-2026` @ `3992d8d` in this order:
+
+| # | PR | Head | Review state | Contents |
+|---|---|---|---|---|
+| 1 | #40 Codex tests | `dd7fe83` | open | test repairs (FieldMemo etc.) |
+| 2 | #42 Claude Day 1 | `498c4cc` | open | audit docs |
+| 3 | #45 Codex shared docs (draft) | `503af06` | draft | docs. Conflicts with #42 in `docs/COACH_CORE_SHARED_CONTEXT.md`; resolved in the candidate by keeping both, and needs the same manual resolution on the real merge |
+| 4 | #49 Claude Day 2 | `341e95b` | open | auth gate, rules, AI gateway, prebuild guard |
+| 5 | #51 Codex film plan (draft) | `1da86e3` | draft | docs only (film not implemented) |
+| 6 | #52 Claude Day 3 docs | `007ce2a` + this commit | open | security docs, decision packet, evidence |
+| 7 | #53 persistence contract (draft) | `a4cea1e` | draft, **accepted by Codex** | rules + boundary tests |
+| 8 | #54 E2E harness + readiness tooling | `f9ba83c` | open | emulator mode (fail-closed), E2E, release proof, staging probe |
+
+**Gates at the candidate:**
+- web jest **366/366**, 18/18 suites (at `8fabcec`; `66dfadf` adds only scripts and docs);
+- tsc **0**;
+- release-build proof **13/13** (§2; local and CI);
+- CI: rules, functions and web-auth+bundle scan green.
+- E2E ×10 at `9b84573` (run `38436729577`): **Chromium 140/140, Firefox 140/140**, 80 BLOCKED each. Release proof 13/13 in CI.
+- One earlier A09 failure on `c112b68` remains an **open intermittent** (1 in ~90 executions; cause not established; diagnostics added).
+
+**Not in the candidate (✗ dependencies):**
+- Codex client work for P-10..P-17: per-coach drafts, cloud play save, plan edit/save, conflict UI, offline replay. **None has landed yet.** The 8 E2E placeholders stay BLOCKED until each lands with a real test.
+- Standalone Smart Playbook PR #3 (separate repo). It is approved on Chromium and has Firefox 30/30 on the persistence tests; the full Firefox suite ×10 is requested. Its integration into the main app is the Day 5 decision.
+- #47 (ADR, OpenAI-only amendment) is still open.
+
+**Outstanding critical dependency findings** (main app, `npm audit --omit=dev`): **3 critical, 5 high, 2 moderate**. Functions and rules tests: **0**.
+
+| Severity | Package (path) | Reaches browsers? | Fix |
+|---|---|---|---|
+| critical | `protobufjs` 7.5.3 (firebase → @firebase/firestore → @grpc/proto-loader) | **No.** Node-only Firestore transport; the bundle contains only a `type.googleapis.com/google.protobuf.*` string | update `firebase` (non-major fix available) |
+| critical | `websocket-driver` 0.7.4 (firebase → @firebase/database → faye-websocket) | **No.** Node-only Realtime Database transport | update `firebase` |
+| critical | `tar` 7.4.3 (@tailwindcss/postcss → @tailwindcss/oxide) | **No.** Build machine only (risk is to the build/CI host) | update `@tailwindcss/postcss` |
+| high | `@grpc/grpc-js`, `browserslist`, `nanoid`, `postcss` (direct), `source-map-js` | Node/build-time; `postcss` is a direct dependency | `npm audit fix` (all non-major) |
+| moderate | `@protobufjs/utf8`, `yaml` | Node/build-time | same |
+
+⚠ **Gate:** Codex lands the dependency update (non-major fixes are available for all 10), or Coach Drew accepts the remainder in writing. Then re-run the full regression on the new candidate SHA.
+
+## 2. Production-build proof: test hooks and emulator config are absent
+
+`bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239` (PR #54; also a CI step) passes 13/13 at `c112b68`:
+
+- **The guard refuses an emulator build for the real staging project.** It also refuses for any non-`demo-*` project, at runtime in `src/firebase.ts`.
+- **`.env.production` pins `REACT_APP_USE_FIREBASE_EMULATORS=false`**, so webpack removes the emulator/hook branch entirely.
+- **A staging-shaped build contains none of:**
+  - the `__coachCoreE2E` marker or the `e2e-support`/`emulator-hooks` modules;
+  - emulator ports 9099/8080/5001/9199;
+  - `demo-*` values or e2e placeholders.
+
+  It does contain the staging project ID.
+- **Negative control:** the same patterns **do** match the emulator build, so the scan is not vacuous.
+- **SHA-256 manifest** of the built files is written.
+
+⚠ **At deploy time** the founder's deploy must:
+1. run this script with the real staging web config (public identifiers, no secrets);
+2. deploy **that** `build/` without rebuilding;
+3. keep the manifest.
+
+The proof build above uses a placeholder web key, so its bytes intentionally differ from the deployed build.
+
+## 3. Staging tests prepared (run only after an approved deploy)
+
+| Area | IDs | How |
+|---|---|---|
+| Real authentication | RA-01..RA-08 | Manual, `e2e/staging/REAL_AUTH_CHECKS.md`: real email link, link reuse, cross-device, real Google, beta grant/revoke, **Anonymous disabled server-side**, unauthorized domain |
+| Invalid-token rejection | SEC-08, 08b, 08c, 08d | `e2e/staging/gateway-probe.mjs`: forged RS256 token and malformed token must return 401 `UNAUTHENTICATED` from the gateway; a forged token must also get 401 from Firestore |
+| Origin handling | SEC-07, SEC-09 | Same probe: an unlisted origin gets no `allow-origin`; the staging origin does. `COACH_CORE_ALLOWED_ORIGINS` must be a **JSON array** |
+| Probe validity | — | Self-test on the emulator correctly **FAILS** SEC-07/08 (the emulator allows all origins and skips token checks). The probe refuses any project except `coach-core-mvp-staging-239` |
+| Existing smoke plan | AUTH, ISO, WF, FILM, SEC-01..10 | `STAGING_SMOKE_TEST_PLAN.md` |
+
+## 4. Spending controls: availability in our accounts
+
+✗ **Not verified in our accounts from this session.** Google Cloud APIs are refused by this session's network policy (403 at the proxy), and there is no console or OpenAI access. No setting was read, enabled or changed. Availability per vendor documentation (re-checked 2026-10-13):
+
+| Control | Vendor scope (✔ docs) | Founder read-only check (change nothing) | Record |
+|---|---|---|---|
+| Firebase spend cap | Preview; **Blaze** plan required; covers Cloud Functions (Cloud Run functions), App Hosting, AI Logic and Extensions. **Not** Storage, Firestore or Hosting. Enforcement can lag several minutes | Firebase console → `coach-core-mvp-staging-239` → Settings → Usage and billing → Details & settings: note the **plan** and whether a **"Service-level spend caps"** card is shown | Screenshot: plan + card present/absent |
+| Budget + alerts | Notify only; Pub/Sub messages several times a day, first may take hours | Cloud console → Billing → Budgets & alerts: list existing budgets. Or read-only `gcloud billing budgets list --billing-account=<ID>` | List of budgets (or none) |
+| Billing link | — | `gcloud billing projects describe coach-core-mvp-staging-239` (read-only) | `billingEnabled` true/false |
+| OpenAI hard spend limit | Per project or organization; blocks with HTTP 429 `project_spend_limit_exceeded`; slight overshoot possible | platform.openai.com → the staging project → Settings → Limits → Spend: confirm **"Enforce a hard limit"** is offered. **Do not save** | Screenshot of the option |
+| OpenAI model access | `gpt-6.1-sol` in the staging project | Project → Limits → Models (read) | Screenshot |
+
+## 5. Revised cost language
+
+Used in `FOUNDER_DECISION_PACKET.md` §4 and required in all status updates:
+
+- **Thresholds:** budget alerts at $25/$50/$100 **only notify**. A threshold is a trigger point, not a maximum.
+- **Delayed enforcement:**
+  - OpenAI hard limit $50: stops new AI requests, **possibly slightly above $50**.
+  - Firebase spend cap $20: **pauses Cloud Functions only**, after up to several minutes; Preview feature.
+  - App AI quotas: immediate, counted per request.
+- **Uncapped:** Firestore, Cloud Storage (at rest and downloads), Hosting, Cloud Logging, Cloud Build/Artifact Registry, Pub/Sub. These are limited only by invite-only access, app limits, alerts and a person acting on them.
+- **Estimates, not quotes:** ≈$0–15/month infrastructure + ≈$17 AI at expected beta use.
+- The shutdown switch is **designed, not built** (`SHUTDOWN_SWITCH_DESIGN.md`).
+
+## 6. Go/no-go before requesting deployment
+
+| # | Item | Owner | Status |
+|---|---|---|---|
+| G1 | Dependency findings fixed or accepted in writing; regression re-run on the new candidate SHA | Codex / Coach Drew | ⚠ Production `npm audit` **0** after #60 (verified on candidate-4 clean install); full-graph dev/tooling advisories remain as disclosed in #60 and need fixing or written acceptance |
+| G2 | Founder decisions D5 (billing + controls) and D10 (legacy import), plus D1–D7 if film is in the deploy | Coach Drew | ✗ |
+| G3 | Founder read-only verification of §4 controls recorded | Coach Drew | ✗ |
+| G4 | PR #49 founder actions (§6 of the Day 2 report: old keys checked/rotated, web key restricted, Anonymous OFF, authorized domains) | Coach Drew | ✗ |
+| G5 | Candidate CI green: rules, functions, web+bundle, E2E Chromium+Firefox | Claude | ⚠ Latest: candidate `c822b6e` (= `518e9e5` runtime, D10-06e readiness anchor), run `38896954298`: **acceptance 1,520/0**, diagnostic 109/11 (N2-D2), obsolete 10/10, release proof 13/13 ×4 (evidence 54); runs still conclude red from the diagnostic/obsolete buckets (B11). Previous: `4cc7ccf` run `38835170412` acceptance 1,517/3 (D10-06e ×1 — harness race, closed A3; N3 ×2 Firefox — unresolved A5), evidence 51. Earlier: N2 follow-up candidate `5911f7e` (= `518e9e5` runtime), full ×10 run `38820119320`: **acceptance 1,520/0**, diagnostic 108/12, obsolete-fault-model 9/11, release proof 13/13 per job (evidence 48); runs show red because diagnostic/obsolete buckets fail. Earlier: N2 repair candidate `8ff5521` (= `bdb06ae` runtime), full ×10 run `38774326491`: acceptance 1,439/21, diagnostic 112/8, release proof 13/13 per job; **not green**, see team-creation row. Earlier: Candidate 10 `186a743` (job `116444776707`): desktop Chromium 530/0, Firefox 529/1 (D10-06b N3), phone Chromium 150/0, phone Firefox 150/0, release proof 13/13. Clean `npm ci`: jest 453/453, tsc 0, functions 73/73, prod audits 0. History kept: candidate 8 460/0 per engine; candidate 9 (#67) review |
+| G6 | Release-build proof re-run with the real staging web config at deploy time; manifest kept | deployer | prepared |
+| G7 | Staging config: `COACH_CORE_AI_ENABLED=false`, `COACH_CORE_ALLOWED_ORIGINS` as a JSON array, AI global cap 50/day | deployer | prepared |
+| G8 | Smoke plan + RA/SEC checks scheduled with synthetic accounts and test-pattern video only | Claude + Coach Drew | prepared |
+| G9 | Client features the demo needs (Codex P-10..P-17) landed with real E2E tests | Codex / Claude | ✔ in emulator (reconciled with G12, 2026-10-15): CC-P10..P17 (+P10b, P16b) PASS **10/10** on Chromium 156 and Firefox 157 at `709e0f4`, `c858d1d` (PR #63), `069c8f1`, and in every full matrix through `518e9e5` (evidence 48). Devices and staging NOT MEASURED (queue C2/C3) |
+| G10 | Shutdown switch: approve build before film upload, or accept the exposure in writing | Coach Drew | open decision |
+| G11 | D10 legacy import (#55) accepted in real browsers | Codex (R1, R2, R5, R1b, R1c) / Claude (re-test) | ✔ in emulator: R1, R2, R5, R1b and **R1c** verified fixed (D10-06b, 07b, 12, 06c, 06d, **06e** at 10/10 both engines, `069c8f1`). D10-06e fails on the pre-repair runtime. History kept: FAIL 2026-10-14 (§7, PR #56). **Residual:** if the original team is missing the device stays visibly blocked (no data loss). R3 and R4 stay open |
+| G13 | Legacy device data never deleted: quarantined `offline_operations` on sign-out (#61 escalation), Migration Banner (L1) | Claude (auth) / Codex (banner) | ✔ in emulator: sign-out preserves the queue (Claude `12e386f`, CC-L0 10/10). The banner is removed and legacy migration never deletes (#64, **CC-L1 10/10** both engines at `4757eaf`/`d12d273`; the re-anchored test failed on pre-repair code). Still emulator-only |
+| G12 | CC02 cloud edit/conflict/sign-out recovery and CC03 practice-plan save/reopen implemented, with independent acceptance P-10..P-12b, P-14..P-17 | Codex / Claude | ✔ in emulator: every scenario 10/10 both engines at `069c8f1`; FX-03 fixed (A10). Emulator-only: devices, staging and genuine hidden tabs NOT MEASURED |
+
+## Tracked limitations (kept open until closed with evidence)
+
+| Item | Owner | Status |
+|---|---|---|
+| R3: "Not now" on the D10 prompt is a permanent decline (no re-entry point) | Codex / Coach Drew | OPEN (disclosed limitation) |
+| R4: `D10_APPROVED = true` build constant, so the import prompt ships in release builds | Codex / deploy decision | OPEN |
+| Firefox instability: **H2** D10-07 timeout (1/10 `709e0f4`, 1/10 `d12d273`, 0/10 `4757eaf`, 0/10 `069c8f1`); **N2** team creation stuck on "Creating…" after the server write (Codex local); the false-confirm harness signature of local H2 and N1 is fixed (`5752d2b`); FX-02 unexplained 51 s stall; genuine hidden or background tabs NOT MEASURED | Claude / Codex | OPEN; per-step diagnostics in CI, no retries |
+| **Team creation reliability** (report §14.3, §14.8): **N2** saved but "Creating…" (reproduced under fault; natural cause not proven); **D1** no retry or feedback after write-stream resets; **D2** duplicate team on retry while pending; **N3** submit produced no request (1/10 Firefox; not reproduced in 80 targeted creations) | Codex (repair) / Claude (tests, evidence) | OPEN. Pre-repair runtime: N2-A1 and N2-A2 **FAIL 5/5 per engine** (evidence 37). **Repair #71 `bdb06ae` (candidate `8ff5521`, harness `26f7df8`; report §14.9):** REST-path acceptance tests N2-R1…R6 (8-second status, dropped or delayed commit, lost response after commit, cancel/navigate/reload, A→B→A, fake success, conflicting existing team) **pass 10/10 per test** in desktop Chromium and Firefox, both in the diagnostic ×10 run (evidence 39) and in the full ×10 run (evidence 40). Original N2-A1 passes 10/10. Original **N2-A2 FAILS 10/10** per engine; this is recorded, not relabelled. Its WebChannel fault does not hold the REST path, and it creates a same-name team after the first create is confirmed. Product decision pending: should same-name teams be allowed? Full ×10 acceptance: 1,439/21 (desktop 570/10 per engine, phone-chromium 149/1, phone-firefox 150/0). D10-06e's intermittent failure is **inherited**: 2/50 on the pre-repair runtime and 2/50 on bdb06ae (evidence 41, 42), cause not proven. N3 is not reproduced in 320 creations on bdb06ae, and is **not claimed fixed**. Readback failure now tested: **N2-R8/R8b pass 10/10** per engine (evidence 44). **Coach Drew decisions 2026-10-15:** same-name teams only after explicit confirmation; retry of one op never creates a second team; original N2-A2 reported as *obsolete fault model* (counted separately, body and evidence unchanged). **N2-R7/R7b FAIL 10/10 on bdb06ae** (confirmation unimplemented; finding on bdb06ae, report §14.10) — **superseded by runtime `518e9e5`** (#71 follow-up; candidate `5911f7e`, harness `f325a23`, report §14.11): R7/R7b/R8/R8b **PASS 10/10 per engine**; full ×10 matrix **acceptance 1,520/0** (desktop 610/0 ×2, phone 150/0 ×2), diagnostic 108/12 (N2-D2 WebChannel fault model), obsolete-fault-model N2-A2 9/11 reported separately; release proof 13/13 ×4 (evidence 45–48). Selected-team persistence: the line-30 variant 0/200 on 518e9e5 (was 1/200 on bdb06ae); D10-06e line-425 intermittent unchanged at 2/50 — inherited, cause not proven. N3 kept separate from the original N2 SDK stall: not reproduced in 800 creations, **not claimed fixed**; SDK stall cause unresolved. **R8b reconciliation (§14.12):** the R8b passes in evidence 44/46/48 were vacuous for readback failure (fault served in a minority of executions, listener confirmed first); harness `4cc7ccf` blocks the listener from before sign-in and asserts both faults — **PASS 10/10 per engine with faults proven** (evidence 50). **2026-10-16 (§14.14–14.15): D10-06e line-425 was a premature harness checkpoint (confirmed by Codex trace + Claude diag); corrected within existing timeouts → D10-06e 200/200 ×4 projects (ev. 53), full matrix on `c822b6e` acceptance 1,520/0 (ev. 54). SDK Write stream has no reachable MVP path on 518e9e5 (ev. 55); edit-path commit faults: hold recovers, reset ends 'failed' without auto-retry — decision A4b (ev. 56). N3 unresolved (no recurrence, probe armed). FX-02 evidence reviewed, cause open, stall probe armed.** Previous: C5 (evidence 51, §14.13): full ×10 on `4cc7ccf` = acceptance 1,517/3 — D10-06e 1/10 Chromium (inherited), and **N3 reproduced twice on Firefox** (D10-06c, UI-02: `submitFired=0`, no request). N3 and the SDK stall are **unresolved reliability risks**; the SDK Write path is still used for play/practice-plan edits (queue A4a). Release-gate queue: `MVP_RELEASE_GATE_QUEUE_2026-10-15.md` |
+| **Identity visibility** (account, team or no-team, sample-preview marker at every width) | Claude (candidate 10) | ✔ Implemented and tested (UI-01/UI-02 10/10 both engines); **approved by Coach Drew for the MVP** (2026-10-15) |
+| Standalone Playbook touch exit (Windows, PR #3 repo) | Codex | OPEN |
+| Physical tablets/phones; staging real auth, CORS and token checks (RA-*, SEC-07..10) | Coach Drew / Claude | NOT MEASURED (requires approved staging) |
