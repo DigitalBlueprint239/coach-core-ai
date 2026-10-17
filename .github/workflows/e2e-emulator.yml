@@ -112,14 +112,28 @@ jobs:
         run: |
           v=$(cd e2e && node -e "const {chromium,firefox}=require('@playwright/test');(async()=>{for(const b of [chromium,firefox]){const x=await b.launch();console.log(b.name()+' '+x.version());await x.close()}})()" | tr '\n' ' ')
           echo "::notice title=E2E browsers::${v} (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
-      - name: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing)
+      - name: Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)
+        id: finalize
         if: always()
         run: |
+          set -e
           bash e2e/scripts/evidence.sh finalize e2e/ci-evidence e2e/test-results \
             e2e/ci-evidence/run.log e2e/ci-evidence/release-build-manifest.sha256 e2e/test-results/results.json
-          echo "::notice title=E2E evidence inventory (${{ matrix.project }})::$(grep -vc '^#' e2e/ci-evidence/INVENTORY.sha256) files; $(cat e2e/ci-evidence/REDACTION.txt 2>/dev/null)"
+          test -s e2e/ci-evidence/UPLOAD_OK
+          n=$(grep -vc '^#' e2e/ci-evidence/INVENTORY.sha256)
+          r=$(cat e2e/ci-evidence/REDACTION.txt 2>/dev/null || echo "no run.log")
+          echo "::notice title=E2E evidence inventory (${{ matrix.project }})::${n} files; ${r}; UPLOAD_OK present"
+          echo "eligible=true" >> "$GITHUB_OUTPUT"
+      - name: Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)
+        if: always() && steps.finalize.outputs.eligible != 'true'
+        run: |
+          echo "::error title=E2E evidence withheld (${{ matrix.project }})::finalize did not succeed, so no artifact is uploaded for this job. The browser-test step's own result is unchanged. Re-run after fixing the evidence pipeline."
+          exit 1
       - uses: actions/upload-artifact@v4
-        if: always()
+        # Gate (Codex review of 04d4be8): runs on success AND failure of the tests, but ONLY when
+        # finalize completed (redaction verified + inventory verified). always() alone would publish
+        # an unsanitized log after a finalize failure.
+        if: always() && steps.finalize.outputs.eligible == 'true'
         with:
           name: e2e-results-${{ matrix.project }}-${{ github.sha }}
           path: |
