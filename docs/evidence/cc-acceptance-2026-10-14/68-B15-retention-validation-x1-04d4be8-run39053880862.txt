@@ -1,0 +1,219 @@
+# B15 evidence-retention repair — bounded validation x1, grep 'D10-01|N2-A2'; branch claude/ci-evidence-retention-b15 @ 04d4be80bd55a0131e51daa1b9235fa1e603cff9 (base 7d56300; runtime 518e9e5 unchanged; PR #74 draft)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39053880862
+# Mechanism verified before editing: Playwright 1.64 runner 'clear output' task (createRemoveOutputDirsTask) deletes outputDir at run start; reproduced locally (files in outputDir deleted incl. output through a still-open fd; sibling dir untouched) and asserted by e2e/scripts/evidence.test.mjs check #1.
+# Result: desktop jobs FAIL on N2-A2 (test step failure preserved) and still finalize 9-file inventories; phone jobs pass with 6-file inventories; Finalize step success on all 4; artifact sizes phone 7773/7741 B (were 4730/4701 B in run 38969487220), chromium 579303 B, firefox 497919 B.
+# LIMITATION: artifact ZIP contents NOT inspected (archive_download_url -> blob storage, blocked at the workspace proxy). The inventory notice and size growth are consistent with, but do not prove, archive contents.
+# Local focused checks: node e2e/scripts/evidence.test.mjs -> 6/6 (also green as a step in all 4 jobs).
+
+=== JOB 117457911093 :: E2E emulator (chromium)
+  step: Set up job -> success
+  step: Run actions/checkout@v5 -> success
+  step: Run actions/setup-node@v5 -> success
+  step: Run actions/setup-java@v5 -> success
+  step: Run actions/cache@v4 -> success
+  step: Install -> success
+  step: Install browsers -> success
+  step: Emulator-only function config (placeholders, AI off) -> success
+  step: Evidence self-checks (B15 retention contract) -> success
+  step: Build web app for emulators (demo project) -> success
+  step: Release-build proof (no hooks / emulator wiring in a staging-shaped build) -> success
+  step: Run browser tests in the emulator suite -> failure
+  step: Emulator diagnostics (functions load/requests, no secrets) -> success
+  step: Browser versions -> success
+  step: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing) -> success
+  step: Run actions/upload-artifact@v4 -> success
+  step: Post Run actions/cache@v4 -> skipped
+  step: Post Run actions/setup-java@v5 -> success
+  step: Post Run actions/setup-node@v5 -> skipped
+  step: Post Run actions/checkout@v5 -> success
+  step: Complete job -> success
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E evidence inventory (chromium)
+9 files; run.log redaction: bytes_before=22717 bytes_after=22625
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E emulator log (functions)
+^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local
+^[[32m^[[1m✔  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.
+^[[32m^[[1m✔  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).
+^[[32m^[[1m✔  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).
+^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.
+^[[32m^[[1m✔  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).
+^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local
+^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of "us-central1-onPlayCreated"
+^[[90m> ^[[39m {"severity":"ERROR","message":"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \"dev~demo-coach-core-e2e\"\npath <\n  Element {\n    type: \"teams\"\n    name: \"lOaQgcN1qXokZFfAbhrH\"\n  }\n>\n\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\nfor call at\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\nCaused by: Error\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/co
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium slow steps >= 10s: 1 of 2 executions
+FAIL N2-A2 #0: Click@n2.spec.ts:212 59.2s
+[warning] E2E chromium diag: 1 failed executions
+N2-A2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.2s) | slowest: Click@n2.spec.ts:212 59.2s; Navigate@app.ts:68 0.2s; Expect "toBeVisible"@app.ts:99 0.1s
+[failure] E2E chromium: 1 passed / 1 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/1 (pass/fail)
+FAIL 1/1 N2-A2 [60.1/60.1/60.1s] -- Test timeout of 60000ms exceeded.
+PASS 1/1 D10-01 [2.8/2.8/2.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117457911262 :: E2E emulator (firefox)
+  step: Set up job -> success
+  step: Run actions/checkout@v5 -> success
+  step: Run actions/setup-node@v5 -> success
+  step: Run actions/setup-java@v5 -> success
+  step: Run actions/cache@v4 -> success
+  step: Install -> success
+  step: Install browsers -> success
+  step: Emulator-only function config (placeholders, AI off) -> success
+  step: Evidence self-checks (B15 retention contract) -> success
+  step: Build web app for emulators (demo project) -> success
+  step: Release-build proof (no hooks / emulator wiring in a staging-shaped build) -> success
+  step: Run browser tests in the emulator suite -> failure
+  step: Emulator diagnostics (functions load/requests, no secrets) -> success
+  step: Browser versions -> success
+  step: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing) -> success
+  step: Run actions/upload-artifact@v4 -> success
+  step: Post Run actions/cache@v4 -> skipped
+  step: Post Run actions/setup-java@v5 -> success
+  step: Post Run actions/setup-node@v5 -> skipped
+  step: Post Run actions/checkout@v5 -> success
+  step: Complete job -> success
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E evidence inventory (firefox)
+9 files; run.log redaction: bytes_before=22236 bytes_after=22144
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E emulator log (functions)
+^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local
+^[[32m^[[1m✔  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.
+^[[32m^[[1m✔  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).
+^[[32m^[[1m✔  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).
+^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.
+^[[32m^[[1m✔  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).
+^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local
+^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of "us-central1-onPlayCreated"
+^[[90m> ^[[39m {"severity":"ERROR","message":"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \"dev~demo-coach-core-e2e\"\npath <\n  Element {\n    type: \"teams\"\n    name: \"FiclVPv8nfnCVe81DZgp\"\n  }\n>\n\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\nfor call at\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\nCaused by: Error\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/co
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox slow steps >= 10s: 0 of 2 executions
+none
+[warning] E2E firefox diag: 1 failed executions
+N2-A2 #0 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Query count@n2.spec.ts:211 (0.0s) | slowest: Navigate@app.ts:88 0.2s; Navigate@app.ts:68 0.2s; Click@app.ts:76 0.1s
+[failure] E2E firefox: 1 passed / 1 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/1 (pass/fail)
+FAIL 1/1 N2-A2 [60.3/60.3/60.3s] -- Test timeout of 60000ms exceeded.
+PASS 1/1 D10-01 [3.9/3.9/3.9s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117457911287 :: E2E emulator (phone-chromium)
+  step: Set up job -> success
+  step: Run actions/checkout@v5 -> success
+  step: Run actions/setup-node@v5 -> success
+  step: Run actions/setup-java@v5 -> success
+  step: Run actions/cache@v4 -> success
+  step: Install -> success
+  step: Install browsers -> success
+  step: Emulator-only function config (placeholders, AI off) -> success
+  step: Evidence self-checks (B15 retention contract) -> success
+  step: Build web app for emulators (demo project) -> success
+  step: Release-build proof (no hooks / emulator wiring in a staging-shaped build) -> success
+  step: Run browser tests in the emulator suite -> success
+  step: Emulator diagnostics (functions load/requests, no secrets) -> success
+  step: Browser versions -> success
+  step: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing) -> success
+  step: Run actions/upload-artifact@v4 -> success
+  step: Post Run actions/cache@v4 -> success
+  step: Post Run actions/setup-java@v5 -> success
+  step: Post Run actions/setup-node@v5 -> success
+  step: Post Run actions/checkout@v5 -> success
+  step: Complete job -> success
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E evidence inventory (phone-chromium)
+6 files; run.log redaction: bytes_before=19126 bytes_after=19080
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E emulator log (functions)
+^[[32m^[[1m✔  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).
+^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.
+^[[32m^[[1m✔  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).
+^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local
+^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator
+^[[36m^[[1mi  functions:^[[22m^[[39m Waiting for all functions to finish...
+^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of "us-central1-onPlayCreated"
+^[[90m> ^[[39m {"severity":"ERROR","message":"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \"dev~demo-coach-core-e2e\"\npath <\n  Element {\n    type: \"userProfiles\"\n    name: \"N6OX9pD4KfsGAZuUvVz0eicbdbPe\"\n  }\n>\n\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\nfor call at\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\nCaused by: Error\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E phone-chromium: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 D10-01 [2.8/2.8/2.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117457911315 :: E2E emulator (phone-firefox)
+  step: Set up job -> success
+  step: Run actions/checkout@v5 -> success
+  step: Run actions/setup-node@v5 -> success
+  step: Run actions/setup-java@v5 -> success
+  step: Run actions/cache@v4 -> success
+  step: Install -> success
+  step: Install browsers -> success
+  step: Emulator-only function config (placeholders, AI off) -> success
+  step: Evidence self-checks (B15 retention contract) -> success
+  step: Build web app for emulators (demo project) -> success
+  step: Release-build proof (no hooks / emulator wiring in a staging-shaped build) -> success
+  step: Run browser tests in the emulator suite -> success
+  step: Emulator diagnostics (functions load/requests, no secrets) -> success
+  step: Browser versions -> success
+  step: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing) -> success
+  step: Run actions/upload-artifact@v4 -> success
+  step: Post Run actions/cache@v4 -> success
+  step: Post Run actions/setup-java@v5 -> success
+  step: Post Run actions/setup-node@v5 -> success
+  step: Post Run actions/checkout@v5 -> success
+  step: Complete job -> success
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E evidence inventory (phone-firefox)
+6 files; run.log redaction: bytes_before=19120 bytes_after=19074
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E emulator log (functions)
+^[[32m^[[1m✔  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.
+^[[32m^[[1m✔  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).
+^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.
+^[[32m^[[1m✔  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).
+^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local
+^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of "us-central1-onPlayCreated"
+^[[90m> ^[[39m {"severity":"ERROR","message":"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \"dev~demo-coach-core-e2e\"\npath <\n  Element {\n    type: \"userProfiles\"\n    name: \"G6fDIEJZ8dIzSlbIGkP0jNpbjlCD\"\n  }\n>\n\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\nfor call at\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\nCaused by: Error\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@o
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E phone-firefox: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 D10-01 [3.2/3.2/3.2s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
