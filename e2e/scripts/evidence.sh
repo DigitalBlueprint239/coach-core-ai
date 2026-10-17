@@ -26,35 +26,60 @@ case "$cmd" in
     exit "$status"
     ;;
   finalize)
+    # Fail-closed (Codex review of 04d4be8): every processing step is checked; any failure ->
+    # exit 1, a ::error naming the step (never the content), and NO "UPLOAD_OK" marker. The
+    # workflow uploads only when the marker exists, so an always() upload cannot publish an
+    # unredacted log or an uninventoried directory.
     dir="$1"; results="$2"; shift 2
-    mkdir -p "$dir"
+    marker="$dir/UPLOAD_OK"
+    rm -f "$marker" 2>/dev/null || true
+    fail() { echo "::error title=E2E evidence finalize failed::$1 (evidence NOT eligible for upload)"; exit 1; }
+    mkdir -p "$dir" 2>/dev/null || fail "cannot create evidence dir"
+    [ -w "$dir" ] || fail "evidence dir is not writable"
     missing=0
     for f in "$@"; do
       if [ ! -s "$f" ]; then echo "::error title=E2E evidence missing::required evidence file missing or empty: $f"; missing=1; fi
     done
     if [ -f "$dir/run.log" ]; then
-      # Redact token-shaped material (emulator OOB codes, bearer/JWT strings, API keys). Synthetic
-      # emulator e-mail addresses used by the tests are not personal data and are kept for diagnosis.
-      before=$(wc -c < "$dir/run.log")
-      sed -E -i \
+      [ -r "$dir/run.log" ] && [ -w "$dir/run.log" ] || fail "run.log is not readable/writable; cannot sanitize"
+      # Redact token-shaped material (emulator OOB codes, bearer/JWT strings, API keys) into a NEW
+      # file, verify it, then replace. Synthetic emulator e-mail addresses used by the tests are not
+      # personal data and are kept for diagnosis. Only run.log is sanitized by this step.
+      before=$(wc -c < "$dir/run.log") || fail "cannot size run.log"
+      tmp="$dir/.run.log.redacting"
+      sed -E \
         -e 's/(oobCode=)[A-Za-z0-9_-]+/\1[REDACTED]/g' \
         -e 's/(Bearer )[A-Za-z0-9._-]+/\1[REDACTED]/g' \
         -e 's/eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/[REDACTED-JWT]/g' \
         -e 's/([?&](key|apiKey|token|access_token|id_token|refresh_token)=)[^&[:space:]"]+/\1[REDACTED]/g' \
-        "$dir/run.log"
-      echo "run.log redaction: bytes_before=$before bytes_after=$(wc -c < "$dir/run.log")" > "$dir/REDACTION.txt"
+        "$dir/run.log" > "$tmp" || { rm -f "$tmp"; fail "redaction (sed) failed"; }
+      # Post-redaction verification: none of the token shapes may remain.
+      if grep -Eq 'oobCode=[A-Za-z0-9_-]|Bearer [A-Za-z0-9._-]{8,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|[?&](key|apiKey|token|access_token|id_token|refresh_token)=[^&[:space:]"\[]' "$tmp"; then
+        rm -f "$tmp"; fail "redaction verification failed: token-shaped content remains"
+      fi
+      mv -f "$tmp" "$dir/run.log" || { rm -f "$tmp"; fail "cannot replace run.log with the redacted copy"; }
+      echo "run.log redaction: bytes_before=$before bytes_after=$(wc -c < "$dir/run.log")" > "$dir/REDACTION.txt" || fail "cannot write REDACTION.txt"
     fi
     inv="$dir/INVENTORY.sha256"
-    {
+    tmpinv="$dir/.INVENTORY.sha256.tmp"
+    (
+      set -o pipefail
       echo "# Upload-aligned inventory: every regular file under the upload paths, hidden files INCLUDED (upload uses include-hidden-files: true)."
       echo "# paths: $dir $results"
       for root in "$dir" "$results"; do
         [ -d "$root" ] || { echo "# (absent) $root"; continue; }
-        find "$root" -type f ! -name INVENTORY.sha256 -print0 | sort -z | xargs -0 -r sha256sum
+        find "$root" -type f ! -name INVENTORY.sha256 ! -name '.INVENTORY.sha256.tmp' ! -name UPLOAD_OK -print0 | sort -z | xargs -0 -r sha256sum || exit 99
       done
-    } > "$inv"
-    echo "evidence inventory: $(grep -vc '^#' "$inv") files listed in $inv"
-    exit "$missing"
+    ) > "$tmpinv" || { rm -f "$tmpinv"; fail "inventory creation failed (find/sha256sum/write)"; }
+    [ -s "$tmpinv" ] || { rm -f "$tmpinv"; fail "inventory is empty"; }
+    mv -f "$tmpinv" "$inv" || { rm -f "$tmpinv"; fail "cannot write INVENTORY.sha256"; }
+    # Re-verify every listed digest against the bytes on disk (post-redaction) before declaring eligibility.
+    if ! grep -v '^#' "$inv" | sha256sum -c --quiet --status -; then fail "inventory verification failed: a listed digest does not match the file"; fi
+    n=$(grep -vc '^#' "$inv")
+    echo "evidence inventory: $n files listed in $inv"
+    if [ "$missing" -ne 0 ]; then echo "::error title=E2E evidence finalize failed::required evidence missing (see above); evidence NOT eligible for upload"; exit 1; fi
+    echo "ok: redacted and inventoried $n files at $(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$marker" || fail "cannot write UPLOAD_OK marker"
+    exit 0
     ;;
   *) echo "usage: evidence.sh run <dir> -- <cmd...> | finalize <dir> <results-dir> <required>..." >&2; exit 2 ;;
 esac

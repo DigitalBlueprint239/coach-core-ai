@@ -135,14 +135,28 @@ jobs:
           tests=$([ -f "$d/results.json" ] && node -e "const r=require('./$d/results.json');const c=(s)=>s.specs.reduce((n,x)=>n+x.tests.reduce((m,t)=>m+t.results.length,0),0)+(s.suites||[]).reduce((n,x)=>n+c(x),0);console.log((r.suites||[]).reduce((n,s)=>n+c(s),0))" || echo 0)
           top=$(find "$d" -maxdepth 1 -mindepth 1 | sed "s#$d/##" | sort | head -40 | tr '\n' ',' | sed 's/,$//')
           echo "::notice title=E2E artifact manifest (${{ matrix.bucket }} ${{ matrix.project }})::files=${files} bytes=${bytes} results.json=${digest} executions_in_results_json=${tests} top-level: ${top}"
-      - name: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing)
+      - name: Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)
+        id: finalize
         if: always()
         run: |
+          set -e
           bash e2e/scripts/evidence.sh finalize e2e/ci-evidence e2e/test-results \
             e2e/ci-evidence/run.log e2e/ci-evidence/release-build-manifest.sha256 e2e/test-results/results.json
-          echo "::notice title=E2E evidence inventory (${{ matrix.project }})::$(grep -vc '^#' e2e/ci-evidence/INVENTORY.sha256) files; $(cat e2e/ci-evidence/REDACTION.txt 2>/dev/null)"
+          test -s e2e/ci-evidence/UPLOAD_OK
+          n=$(grep -vc '^#' e2e/ci-evidence/INVENTORY.sha256)
+          r=$(cat e2e/ci-evidence/REDACTION.txt 2>/dev/null || echo "no run.log")
+          echo "::notice title=E2E evidence inventory (${{ matrix.project }})::${n} files; ${r}; UPLOAD_OK present"
+          echo "eligible=true" >> "$GITHUB_OUTPUT"
+      - name: Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)
+        if: always() && steps.finalize.outputs.eligible != 'true'
+        run: |
+          echo "::error title=E2E evidence withheld (${{ matrix.project }})::finalize did not succeed, so no artifact is uploaded for this job. The browser-test step's own result is unchanged. Re-run after fixing the evidence pipeline."
+          exit 1
       - uses: actions/upload-artifact@v4
-        if: always()
+        # Gate (Codex review of 04d4be8): runs on success AND failure of the tests, but ONLY when
+        # finalize completed (redaction verified + inventory verified). always() alone would publish
+        # an unsanitized log after a finalize failure.
+        if: always() && steps.finalize.outputs.eligible == 'true'
         with:
           name: e2e-results-${{ matrix.bucket }}-${{ matrix.project }}-${{ github.sha }}
           path: |
