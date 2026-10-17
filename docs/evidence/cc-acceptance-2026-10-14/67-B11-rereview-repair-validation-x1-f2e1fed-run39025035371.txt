@@ -1,0 +1,201 @@
+# B11 re-review repair — bounded validation x1, grep 'D10-01|N2-D0'; claude/ci-split-b11 @ f2e1fed (base 7d56300; runtime 518e9e5 unchanged)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39025035371 (12 jobs, all green: reporter self-check step 10/10 in every job). Not an acceptance result.
+# Note: obsolete desktop jobs are genuinely empty here because the grep excludes N2-A2 -> annotation must cite the filters incl. the grep, not 'no tests exist'.
+# The selected-but-unexecuted path cannot be produced on demand in CI without terminating a runner; it is covered by the reporter checks (cases 4-6).
+
+=== JOB 117374393447 :: E2E obsolete-fault-model (firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (obsolete-fault-model firefox)
+files=2 bytes=16979 results.json=07883c2e7c7bd9be executions_in_results_json=0 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)
+Project "firefox", bucket "obsolete-fault-model": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project "firefox", bucket "obsolete-fault-model" and grep "D10-01|N2-D0") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393569 :: E2E diagnostic (phone-chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (diagnostic phone-chromium)
+files=2 bytes=17044 results.json=7d8f78e212572e91 executions_in_results_json=0 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)
+Project "phone-chromium", bucket "diagnostic": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project "phone-chromium", bucket "diagnostic" and grep "D10-01|N2-D0") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393596 :: E2E obsolete-fault-model (phone-firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (obsolete-fault-model phone-firefox)
+files=2 bytes=17006 results.json=07127c8fc7f7a7ad executions_in_results_json=0 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)
+Project "phone-firefox", bucket "obsolete-fault-model": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project "phone-firefox", bucket "obsolete-fault-model" and grep "D10-01|N2-D0") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393617 :: E2E acceptance (firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (acceptance firefox)
+files=2 bytes=18664 results.json=f89034416a675e04 executions_in_results_json=1 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E firefox [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 D10-01 [4.5/4.5/4.5s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393628 :: E2E diagnostic (chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (diagnostic chromium)
+files=2 bytes=19114 results.json=5386248c895a0b97 executions_in_results_json=1 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium diag data: 1 executions
+PASS N2-D0 #0: D0 server=449ms dialogClosed=514ms net: [click@1] | CP 65-457 net::ERR_ABORTED | [end@515] | Listen: 1 req, 1 open
+[notice] E2E chromium slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E chromium [diagnostic]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 1/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 N2-D0 [1.6/1.6/1.6s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393632 :: E2E obsolete-fault-model (phone-chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (obsolete-fault-model phone-chromium)
+files=2 bytes=17034 results.json=f688c711dd9dd75a executions_in_results_json=0 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)
+Project "phone-chromium", bucket "obsolete-fault-model": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project "phone-chromium", bucket "obsolete-fault-model" and grep "D10-01|N2-D0") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393637 :: E2E acceptance (chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (acceptance chromium)
+files=2 bytes=18712 results.json=e84751bf4a817cc2 executions_in_results_json=1 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E chromium [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 D10-01 [1.8/1.8/1.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393649 :: E2E diagnostic (firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (diagnostic firefox)
+files=2 bytes=19115 results.json=dd5af199de63273f executions_in_results_json=1 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox diag data: 1 executions
+PASS N2-D0 #0: D0 server=575ms dialogClosed=659ms net: [click@2] | CP 109-594 200 | RG 600-610 NS_BINDING_ABORTED | [end@661] | Listen: 1 req, 1 open
+[notice] E2E firefox slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E firefox [diagnostic]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 1/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 N2-D0 [3.2/3.2/3.2s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393656 :: E2E acceptance (phone-chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (acceptance phone-chromium)
+files=2 bytes=18732 results.json=605b9bca356e322a executions_in_results_json=1 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E phone-chromium [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 D10-01 [2.8/2.8/2.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393691 :: E2E acceptance (phone-firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (acceptance phone-firefox)
+files=2 bytes=18692 results.json=9fc4229ae9dfd538 executions_in_results_json=1 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E phone-firefox [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 D10-01 [3.9/3.9/3.9s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393695 :: E2E diagnostic (phone-firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (diagnostic phone-firefox)
+files=2 bytes=17006 results.json=247346d6e4871710 executions_in_results_json=0 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)
+Project "phone-firefox", bucket "diagnostic": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project "phone-firefox", bucket "diagnostic" and grep "D10-01|N2-D0") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117374393699 :: E2E obsolete-fault-model (chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E artifact manifest (obsolete-fault-model chromium)
+files=2 bytes=17016 results.json=015dae497d419c57 executions_in_results_json=0 top-level: .last-run.json,results.json
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)
+Project "chromium", bucket "obsolete-fault-model": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project "chromium", bucket "obsolete-fault-model" and grep "D10-01|N2-D0") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
