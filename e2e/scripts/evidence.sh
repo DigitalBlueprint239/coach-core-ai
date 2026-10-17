@@ -53,10 +53,17 @@ case "$cmd" in
         -e 's/eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/[REDACTED-JWT]/g' \
         -e 's/([?&](key|apiKey|token|access_token|id_token|refresh_token)=)[^&[:space:]"]+/\1[REDACTED]/g' \
         "$dir/run.log" > "$tmp" || { rm -f "$tmp"; fail "redaction (sed) failed"; }
-      # Post-redaction verification: none of the token shapes may remain.
-      if grep -Eq 'oobCode=[A-Za-z0-9_-]|Bearer [A-Za-z0-9._-]{8,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|[?&](key|apiKey|token|access_token|id_token|refresh_token)=[^&[:space:]"\[]' "$tmp"; then
-        rm -f "$tmp"; fail "redaction verification failed: token-shaped content remains"
-      fi
+      # Post-redaction verification: none of the token shapes may remain. grep's status is
+      # handled EXPLICITLY (Codex review of 3befdf1): 0 = prohibited pattern found -> reject;
+      # 1 = clean scan -> continue; 2 or anything else = the verifier itself failed -> reject.
+      # A verifier that could not run is never treated as a clean scan.
+      grep -Eq 'oobCode=[A-Za-z0-9_-]|Bearer [A-Za-z0-9._-]{8,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|[?&](key|apiKey|token|access_token|id_token|refresh_token)=[^&[:space:]"\[]' "$tmp" 2>/dev/null
+      vst=$?
+      case "$vst" in
+        0) rm -f "$tmp"; fail "redaction verification failed: token-shaped content remains" ;;
+        1) ;;
+        *) rm -f "$tmp"; fail "redaction verification could not run (grep exit $vst); sanitization is UNPROVEN" ;;
+      esac
       mv -f "$tmp" "$dir/run.log" || { rm -f "$tmp"; fail "cannot replace run.log with the redacted copy"; }
       echo "run.log redaction: bytes_before=$before bytes_after=$(wc -c < "$dir/run.log")" > "$dir/REDACTION.txt" || fail "cannot write REDACTION.txt"
     fi
@@ -68,14 +75,35 @@ case "$cmd" in
       echo "# paths: $dir $results"
       for root in "$dir" "$results"; do
         [ -d "$root" ] || { echo "# (absent) $root"; continue; }
-        find "$root" -type f ! -name INVENTORY.sha256 ! -name '.INVENTORY.sha256.tmp' ! -name UPLOAD_OK -print0 | sort -z | xargs -0 -r sha256sum || exit 99
+        find "$root" -type f ! -name INVENTORY.sha256 ! -name '.INVENTORY.sha256.tmp' ! -name '.INVENTORY.entries.tmp' ! -name UPLOAD_OK -print0 | sort -z | xargs -0 -r sha256sum || exit 99
       done
     ) > "$tmpinv" || { rm -f "$tmpinv"; fail "inventory creation failed (find/sha256sum/write)"; }
     [ -s "$tmpinv" ] || { rm -f "$tmpinv"; fail "inventory is empty"; }
     mv -f "$tmpinv" "$inv" || { rm -f "$tmpinv"; fail "cannot write INVENTORY.sha256"; }
-    # Re-verify every listed digest against the bytes on disk (post-redaction) before declaring eligibility.
-    if ! grep -v '^#' "$inv" | sha256sum -c --quiet --status -; then fail "inventory verification failed: a listed digest does not match the file"; fi
-    n=$(grep -vc '^#' "$inv")
+    # Re-verify every listed digest against the bytes on disk (post-redaction) before declaring
+    # eligibility. Each verifier's status is handled explicitly: extracting the digest lines
+    # (grep: 0 = lines found -> continue; 1 = NO digest lines -> reject; other = grep failed -> reject),
+    # counting them, and sha256sum -c (0 = all match; anything else = reject). No pipelines, so no
+    # status can be masked.
+    entries="$dir/.INVENTORY.entries.tmp"
+    grep -v '^#' "$inv" > "$entries" 2>/dev/null
+    gst=$?
+    case "$gst" in
+      0) ;;
+      1) rm -f "$entries"; fail "inventory has no digest lines (nothing was hashed)" ;;
+      *) rm -f "$entries"; fail "inventory read failed (grep exit $gst); digests UNVERIFIED" ;;
+    esac
+    n=$(wc -l < "$entries") || { rm -f "$entries"; fail "cannot count inventory entries"; }
+    case "$n" in ''|*[!0-9]*) rm -f "$entries"; fail "inventory entry count is not a number" ;; esac
+    [ "$n" -ge 1 ] || { rm -f "$entries"; fail "inventory has no digest lines (nothing was hashed)"; }
+    sha256sum -c --quiet --status -- "$entries" 2>/dev/null
+    sst=$?
+    rm -f "$entries"
+    case "$sst" in
+      0) ;;
+      1) fail "inventory verification failed: a listed digest does not match the file" ;;
+      *) fail "inventory verification could not run (sha256sum exit $sst); digests UNVERIFIED" ;;
+    esac
     echo "evidence inventory: $n files listed in $inv"
     if [ "$missing" -ne 0 ]; then echo "::error title=E2E evidence finalize failed::required evidence missing (see above); evidence NOT eligible for upload"; exit 1; fi
     echo "ok: redacted and inventoried $n files at $(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$marker" || fail "cannot write UPLOAD_OK marker"
