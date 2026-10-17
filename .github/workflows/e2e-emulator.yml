@@ -86,13 +86,18 @@ jobs:
           printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\n' > functions/.secret.local
       - name: Reporter self-checks (annotation/summary contract, incl. empty jobs)
         run: npm --prefix e2e run test:reporter
+      - name: Evidence self-checks (B15 retention contract)
+        run: node e2e/scripts/evidence.test.mjs
       - name: Build web app for emulators (demo project)
         run: |
           npm --prefix e2e run build:app
-          mkdir -p e2e/test-results
+          # B15 (2026-10-17): evidence that must survive the run lives in e2e/ci-evidence.
+          # Playwright's "clear output" task deletes outputDir (e2e/test-results) at run
+          # start, which previously destroyed run.log and the release manifest before upload.
+          mkdir -p e2e/test-results e2e/ci-evidence
       - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build)
         run: |
-          RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/test-results/release-build-manifest.sha256 \
+          RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/ci-evidence/release-build-manifest.sha256 \
             bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239
       - name: Run browser tests in the emulator suite
         env:
@@ -102,15 +107,16 @@ jobs:
           E2E_BUCKET: ${{ matrix.bucket }}
           PROJECT: ${{ matrix.project }}
         run: |
-          set -o pipefail
-          mkdir -p e2e/test-results
-          npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
+          mkdir -p e2e/test-results e2e/ci-evidence
+          # evidence.sh tees to e2e/ci-evidence/run.log and exits with the TEST process's status.
+          bash e2e/scripts/evidence.sh run e2e/ci-evidence -- \
+            npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
             --only auth,firestore,functions \
-            "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT} --project=${PROJECT} --pass-with-no-tests" 2>&1 | tee e2e/test-results/run.log
+            "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT} --project=${PROJECT} --pass-with-no-tests"
       - name: Emulator diagnostics (functions load/requests, no secrets)
         if: always()
         run: |
-          f=e2e/test-results/run.log
+          f=e2e/ci-evidence/run.log
           [ -f "$f" ] || exit 0
           d=$(grep -E "functions|coachAI|Loaded functions|params|secret|Error" "$f" | grep -v "^\s*$" | tail -25 | sed 's/%/%25/g' | tr '\n' '\r' | sed 's/\r/%0A/g')
           echo "::notice title=E2E emulator log (functions)::${d}"
@@ -129,9 +135,19 @@ jobs:
           tests=$([ -f "$d/results.json" ] && node -e "const r=require('./$d/results.json');const c=(s)=>s.specs.reduce((n,x)=>n+x.tests.reduce((m,t)=>m+t.results.length,0),0)+(s.suites||[]).reduce((n,x)=>n+c(x),0);console.log((r.suites||[]).reduce((n,s)=>n+c(s),0))" || echo 0)
           top=$(find "$d" -maxdepth 1 -mindepth 1 | sed "s#$d/##" | sort | head -40 | tr '\n' ',' | sed 's/,$//')
           echo "::notice title=E2E artifact manifest (${{ matrix.bucket }} ${{ matrix.project }})::files=${files} bytes=${bytes} results.json=${digest} executions_in_results_json=${tests} top-level: ${top}"
+      - name: Finalize evidence (redact tokens, inventory with full SHA-256, fail if required evidence is missing)
+        if: always()
+        run: |
+          bash e2e/scripts/evidence.sh finalize e2e/ci-evidence e2e/test-results \
+            e2e/ci-evidence/run.log e2e/ci-evidence/release-build-manifest.sha256 e2e/test-results/results.json
+          echo "::notice title=E2E evidence inventory (${{ matrix.project }})::$(grep -vc '^#' e2e/ci-evidence/INVENTORY.sha256) files; $(cat e2e/ci-evidence/REDACTION.txt 2>/dev/null)"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: e2e-results-${{ matrix.bucket }}-${{ matrix.project }}-${{ github.sha }}
-          path: e2e/test-results
+          path: |
+            e2e/test-results
+            e2e/ci-evidence
+          include-hidden-files: true
+          if-no-files-found: error
           retention-days: 14

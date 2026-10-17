@@ -11,7 +11,8 @@
     "test": "cd .. && firebase emulators:exec --project demo-coach-core-e2e --only auth,firestore,functions \"npm --prefix e2e run test:browser\"",
     "test:auth-only": "cd .. && firebase emulators:exec --project demo-coach-core-e2e --only auth \"E2E_AUTH_ONLY=1 npm --prefix e2e run test:browser\"",
     "test:browser": "playwright test -c playwright.config.ts",
-    "test:reporter": "node reporters/annotate.test.mjs"
+    "test:reporter": "node reporters/annotate.test.mjs",
+    "test:evidence": "node scripts/evidence.test.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0",
