@@ -5,6 +5,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 export REACT_APP_USE_FIREBASE_EMULATORS=true
+# Explicit, emulator-only testing opt-in. Release builds retain the default OFF.
+export REACT_APP_ENABLE_LEGACY_IMPORT=true
 export REACT_APP_FIREBASE_PROJECT_ID="${E2E_PROJECT_ID:-demo-coach-core-e2e}"
 export REACT_APP_FIREBASE_API_KEY=demo-e2e-web-key
 export REACT_APP_FIREBASE_AUTH_DOMAIN="${REACT_APP_FIREBASE_PROJECT_ID}.firebaseapp.com"
