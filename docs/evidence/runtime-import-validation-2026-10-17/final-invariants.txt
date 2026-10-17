@@ -1,0 +1,15 @@
+Candidate: 61448f0feee198a8796f4077f32a52f7b863f90d
+Base: efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc
+PR76 stacked target: codex/integrate-b11-b15-2026-10-17
+Original harness: 7d56300c2a59ee0081a9971036e83599ccfff217
+Compared accepted CI base -> candidate, identical:
+.github/workflows/, e2e/playwright.config.ts, e2e/reporters/, e2e/scripts/evidence.sh and evidence.test.mjs, all e2e/tests/, src/App.tsx, src/ui/, firestore.rules, functions/, root package.json/package-lock.json.
+Actual Playwright --list --reporter=json membership compared original harness -> candidate:
+chromium76/firefox76/phone-chromium15/phone-firefox15. Complete nonoverlapping bucket union.
+Acceptance65/65/15/15; diagnostic10/10/0/0; obsolete1/1/0/0.
+Dispatch D10-08[a-d]: acceptance4/4/0/0; other buckets0. Repeat10 requested.
+Dispatch D10-: acceptance22/22/2/2; other buckets0. Repeat1 requested.
+Browser test bodies/assertions and existing per-test timeouts unchanged. Workflow still workers1/retries0/test60s/expect10s/webserver30s/job120min/fail-fast false. Dispatch-selected repeat is recorded explicitly; no source default repetition change.
+Local default-off release-shaped build: exit0,10 passed/0failed, 11-file full manifest. No emulator negative-control bundle was available locally; Actions includes emulator build and its negative controls.
+PR72 remains draft/open at48f44730f6e300cd3085b51ffd2533a279988d44, no submitted PR reviews. Only source35e0d77887ba87d2714706f0cdbb2511b442d1a2 cherry-picked, not inherited history.
+Original PR73/74/75 branches verified unchanged. Candidate worktree clean at exact tested head.

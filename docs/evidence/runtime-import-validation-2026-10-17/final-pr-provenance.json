@@ -1,0 +1,52 @@
+{
+  "72": {
+    "number": 72,
+    "state": "open",
+    "draft": true,
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/72",
+    "head": "48f44730f6e300cd3085b51ffd2533a279988d44",
+    "head_branch": "codex/import-risks-2026-10-16",
+    "base": "3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53",
+    "base_branch": "recovery/coach-core-mvp-2026"
+  },
+  "73": {
+    "number": 73,
+    "state": "open",
+    "draft": true,
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/73",
+    "head": "f2e1fed1241590c5afa4073938d3dae7d0809199",
+    "head_branch": "claude/ci-split-b11",
+    "base": "7d56300c2a59ee0081a9971036e83599ccfff217",
+    "base_branch": "claude/n2-repair-acceptance-518e9e5"
+  },
+  "74": {
+    "number": 74,
+    "state": "open",
+    "draft": true,
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/74",
+    "head": "ffb40455c266c6d12171d5ce71923fe9313155f2",
+    "head_branch": "claude/ci-evidence-retention-b15",
+    "base": "7d56300c2a59ee0081a9971036e83599ccfff217",
+    "base_branch": "claude/n2-repair-acceptance-518e9e5"
+  },
+  "75": {
+    "number": 75,
+    "state": "open",
+    "draft": true,
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/75",
+    "head": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "head_branch": "codex/integrate-b11-b15-2026-10-17",
+    "base": "7d56300c2a59ee0081a9971036e83599ccfff217",
+    "base_branch": "claude/n2-repair-acceptance-518e9e5"
+  },
+  "76": {
+    "number": 76,
+    "state": "open",
+    "draft": true,
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/76",
+    "head": "61448f0feee198a8796f4077f32a52f7b863f90d",
+    "head_branch": "codex/runtime-import-integration-2026-10-17",
+    "base": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "base_branch": "codex/integrate-b11-b15-2026-10-17"
+  }
+}

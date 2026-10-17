@@ -1,0 +1,14 @@
+{
+  "id": 39079505765,
+  "name": "E2E (emulator, real browsers)",
+  "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d",
+  "head_branch": "codex/runtime-import-integration-2026-10-17",
+  "event": "workflow_dispatch",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39079505765",
+  "created_at": "2026-10-17T23:33:46Z",
+  "updated_at": "2026-10-17T23:38:45Z",
+  "run_started_at": "2026-10-17T23:33:46Z",
+  "run_attempt": 1
+}

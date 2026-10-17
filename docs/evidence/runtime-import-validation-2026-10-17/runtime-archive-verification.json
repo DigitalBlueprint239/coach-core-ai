@@ -1,0 +1,3400 @@
+[
+  {
+    "run": 39079505765,
+    "id": 12118855363,
+    "name": "e2e-results-acceptance-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:2a4fab29e66f5971383ccb24913579e827d61dcffb57cb2d7c0d91646cfd49b7",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:48.351Z",
+      "duration": 170684.836,
+      "expected": 40,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4814
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4196
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5275
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2644
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4005
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3949
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5234
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2404
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4033
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4017
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5288
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2284
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4140
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4028
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5247
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2221
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3980
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3987
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5223
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2119
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4014
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3941
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5312
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2180
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4055
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4024
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5240
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2208
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3975
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3984
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5291
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2201
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3994
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3948
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5305
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2249
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3982
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4046
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5335
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2249
+          }
+        ]
+      }
+    ],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 10,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "  40 passed (2.8m)",
+      "::notice title=E2E firefox [acceptance]: 40 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 40/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)::PASS 10/10 D10-08a [4.0/4.0/4.8s]%0APASS 10/10 D10-08b [3.9/4.0/4.2s]%0APASS 10/10 D10-08c [5.2/5.3/5.3s]%0APASS 10/10 D10-08d [2.1/2.2/2.6s]",
+      "::notice title=E2E firefox slow steps >= 10s: 0 of 40 executions::none",
+      "::notice title=E2E firefox diag data: 10 executions::PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"57c8cae9\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"ShLs7NiiQJl7kNWjFeJH9UmmcOHY\",\"status\":\"pending\",\"teamId\":\"h30Ovqc30pbIN6Ia9t9c\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #1: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"fa98ec6b\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"tZU42vPvJ37VXVaRMuUjvgGbTjqq\",\"status\":\"pending\",\"teamId\":\"Uyl0goW36dDrViXR0eQ3\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #2: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"3c1619b7\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"As1t4EqH5M2PCycXE4z6tbOeG5lB\",\"status\":\"pending\",\"teamId\":\"XOggXItm5snz6UwBFGGG\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #3: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"288f1583\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"LJpgFggdiJkSSkCGGwo9fXj02N0a\",\"status\":\"pending\",\"teamId\":\"P4WtzH7xYXlg0PIIAb4O\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #4: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"f85c45d6\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"T5TW8irgb5R8RNLLUff0plkHQQCm\",\"status\":\"pending\",\"teamId\":\"5sE4KdjBTjqVLBMIXfpc\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #5: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"4254e81e\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"46fF6GmaIx2avwDsuEoK4M32Qml2\",\"status\":\"pending\",\"teamId\":\"cgKhzUc1JVcsXZ2VRoCT\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #6: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"d0980b80\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"nsoV3MMatfgu1XCFOd9AUKLk17VB\",\"status\":\"pending\",\"teamId\":\"Tn3dczRlQeB3NFvhTLAI\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #7: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"a970fc8d\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"vgKq5RZ0FIhoEs6o0eRuYt7AAtao\",\"status\":\"pending\",\"teamId\":\"IO1RZsGqpoFOlklAx11N\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #8: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"5759237f\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"Jd9xasIJ7uoBjgnLYmDlFY3I"
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118710699,
+    "name": "e2e-results-obsolete-fault-model-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:57da173f41cdbac8a4bf62a20b50c712f202378b803fc807a3e50543a9f7f724",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:36:02.105Z",
+      "duration": 654.9519999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"firefox\", bucket \"obsolete-fault-model\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118586456,
+    "name": "e2e-results-diagnostic-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:bb95fbeb5a8158aff34b2ff4bb7a625aa5035350df148154ff6ba8555ec597e0",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:46.880Z",
+      "duration": 681.1460000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"chromium\", bucket \"diagnostic\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118541800,
+    "name": "e2e-results-diagnostic-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:7c6b39bdfa99651cced83292c63352abeb16b1626327381c6c9a456ac79960c5",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:36:00.050Z",
+      "duration": 696.5470000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"firefox\", bucket \"diagnostic\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118427499,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:4ceef4a46fab624bc2d3b608a276f93f9b3ecc82278e08f448f0779cf384ad58",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:54.781Z",
+      "duration": 687.9440000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"phone-firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"obsolete-fault-model\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118411488,
+    "name": "e2e-results-obsolete-fault-model-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:75b9cdc5db85621f7d4eb982d1e6e837c873ac14fdc22ab9e4453b266fb67986",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:44.947Z",
+      "duration": 649.6859999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"chromium\", bucket \"obsolete-fault-model\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118326953,
+    "name": "e2e-results-acceptance-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:6c2f3e389c1fa7046cb8e9ebcb87ee9c44860a95580fb962f2999310600b6343",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:51.915Z",
+      "duration": 120661.276,
+      "expected": 40,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3430
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3600
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4219
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1787
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2475
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3325
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4115
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1602
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2486
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3354
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4135
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1499
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2286
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3300
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4131
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1467
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2187
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3270
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4100
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1439
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1998
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3235
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4022
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1424
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2224
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3287
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4014
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1396
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2227
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3335
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4175
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1417
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2237
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3284
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4174
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1487
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2254
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3286
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4205
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1404
+          }
+        ]
+      }
+    ],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 10,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "  40 passed (2.0m)",
+      "::notice title=E2E chromium [acceptance]: 40 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 40/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)::PASS 10/10 D10-08a [2.0/2.3/3.4s]%0APASS 10/10 D10-08b [3.2/3.3/3.6s]%0APASS 10/10 D10-08c [4.0/4.1/4.2s]%0APASS 10/10 D10-08d [1.4/1.5/1.8s]",
+      "::notice title=E2E chromium slow steps >= 10s: 0 of 40 executions::none",
+      "::notice title=E2E chromium diag data: 10 executions::PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"6901fb41\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"SU9czUcsVnh0CzXfe0XMAgC1hOGR\",\"status\":\"pending\",\"teamId\":\"4S3k6SPUhZVRK6WshoQl\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #1: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"c38d2a44\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"zI3oKy8MXs0ReiRM7uskZwyf7j2b\",\"status\":\"pending\",\"teamId\":\"yUuvmPscFoGbJntcTeKT\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #2: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"7a6fc88a\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"Y9oApURy9ncs0ntarCK9RLNEkClU\",\"status\":\"pending\",\"teamId\":\"52gCwtoEjgEimUvupLGb\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #3: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"061eee29\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"dq8rcj0xzDQRymj0tPO5kKWbiqoi\",\"status\":\"pending\",\"teamId\":\"pSEzp7dGENA2Fg8jEbO4\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #4: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"47378851\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"qBZmIeD2ZYgiHm2oBHhcEydrWU74\",\"status\":\"pending\",\"teamId\":\"hEhaAuvFGH6YTovHus3r\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #5: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"70955e8d\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"J0kIML0V7HRGg7wkJjjgEqlC56BT\",\"status\":\"pending\",\"teamId\":\"MwQkJRriLeslgP7pj5BI\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #6: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"f05a9c30\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"5kUxSTwBFyU46FLgxBW7r3Tofi8Q\",\"status\":\"pending\",\"teamId\":\"fU7yetz09gESLJHBndKO\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #7: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"6417cfa1\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"B5706g4Qy3l5qbLLc1XYAgqfevzi\",\"status\":\"pending\",\"teamId\":\"g65imjjDK3HevPRl9do5\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]%0APASS D10-08d #8: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"b4ae85ca\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"HFXsLHlAzt8ABe9bOkRww6lD"
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118312914,
+    "name": "e2e-results-acceptance-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:2b2c3407b8159ddb077d52d5812e6517b8c77e4b13fb6eda0666f440b8780041",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:45.730Z",
+      "duration": 661.423,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-chromium [acceptance]: 0 tests selected (empty selection; nothing ran)::Project \"phone-chromium\", bucket \"acceptance\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"acceptance\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118143300,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:12d24e2871965bac6d1bf9da420851f78bd67e6bda1c1889de74dcea9545d44b",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:51.608Z",
+      "duration": 675.3720000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"phone-chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"obsolete-fault-model\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12118132060,
+    "name": "e2e-results-acceptance-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:e0c3235d2a2676c68043b8c47432e9c4e4787651ca1efbd86d953548edd1dde8",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:18.198Z",
+      "duration": 460.322,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-firefox [acceptance]: 0 tests selected (empty selection; nothing ran)::Project \"phone-firefox\", bucket \"acceptance\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"acceptance\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12117773581,
+    "name": "e2e-results-diagnostic-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:a636974241c53065255215647842cd609eae01a95efdda41c2da063beb670395",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:52.873Z",
+      "duration": 691.034,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"phone-firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"diagnostic\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079505765,
+    "id": 12117569079,
+    "name": "e2e-results-diagnostic-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:d35056bd1d6fac8fff2cead257e1937abebeb6f4671ce93c7fd13a04d2752717",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:35:56.464Z",
+      "duration": 692.166,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"phone-chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"diagnostic\" and grep \"D10-08[a-d]\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12119000001,
+    "name": "e2e-results-acceptance-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:ddee2857ddd092cabaf67fe73557b8221fbd0be3c679138be424d795ca49e4a0",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:40:59.711Z",
+      "duration": 12363.118999999999,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 59,
+        "project": "phone-firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3993
+          }
+        ]
+      },
+      {
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 395,
+        "project": "phone-firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 6427
+          }
+        ]
+      }
+    ],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "  2 passed (12.4s)",
+      "::notice title=E2E phone-firefox [acceptance]: 2 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 2/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)::PASS 1/1 D10-01 [4.0/4.0/4.0s]%0APASS 1/1 D10-06e [6.4/6.4/6.4s]",
+      "::notice title=E2E phone-firefox slow steps >= 10s: 0 of 2 executions::none"
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12118940315,
+    "name": "e2e-results-diagnostic-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:065398f8786c46716b14f9dab79f6df2ade077f34aedd798d0768d902ff6a9fa",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:03.359Z",
+      "duration": 686.9309999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"chromium\", bucket \"diagnostic\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12118845584,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:3cbca067447a9b63d12b17bd18ce1dbad2fe55d71c3e86891151111fbc8cba59",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:04.420Z",
+      "duration": 665.144,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"phone-firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"obsolete-fault-model\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12118751075,
+    "name": "e2e-results-acceptance-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:561c1977917e857961954105ad4474ca2d8a56949a92873ee6b294e6ffe630e2",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:09.473Z",
+      "duration": 75556.49799999999,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id",
+        "file": "legacy-import.spec.ts",
+        "line": 52,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3109
+          }
+        ]
+      },
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 59,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2661
+          }
+        ]
+      },
+      {
+        "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+        "file": "legacy-import.spec.ts",
+        "line": 76,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2710
+          }
+        ]
+      },
+      {
+        "title": "D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten",
+        "file": "legacy-import.spec.ts",
+        "line": 91,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3376
+          }
+        ]
+      },
+      {
+        "title": "D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites",
+        "file": "legacy-import.spec.ts",
+        "line": 109,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2341
+          }
+        ]
+      },
+      {
+        "title": "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging",
+        "file": "legacy-import.spec.ts",
+        "line": 131,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1767
+          }
+        ]
+      },
+      {
+        "title": "D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies",
+        "file": "legacy-import.spec.ts",
+        "line": 148,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3628
+          }
+        ]
+      },
+      {
+        "title": "D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B",
+        "file": "legacy-import.spec.ts",
+        "line": 168,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3336
+          }
+        ]
+      },
+      {
+        "title": "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)",
+        "file": "legacy-import.spec.ts",
+        "line": 186,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 7392
+          }
+        ]
+      },
+      {
+        "title": "D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B",
+        "file": "legacy-import.spec.ts",
+        "line": 213,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2772
+          }
+        ]
+      },
+      {
+        "title": "D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach",
+        "file": "legacy-import.spec.ts",
+        "line": 237,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2942
+          }
+        ]
+      },
+      {
+        "title": "D10-09 [SDK-in-browser] cross-team denial with an authorized positive control",
+        "file": "legacy-import.spec.ts",
+        "line": 255,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3647
+          }
+        ]
+      },
+      {
+        "title": "D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays",
+        "file": "legacy-import.spec.ts",
+        "line": 286,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2043
+          }
+        ]
+      },
+      {
+        "title": "D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact",
+        "file": "legacy-import.spec.ts",
+        "line": 303,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3486
+          }
+        ]
+      },
+      {
+        "title": "D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded",
+        "file": "legacy-import.spec.ts",
+        "line": 328,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1206
+          }
+        ]
+      },
+      {
+        "title": "D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays",
+        "file": "legacy-import.spec.ts",
+        "line": 341,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2946
+          }
+        ]
+      },
+      {
+        "title": "D10-06d [founder rule: originals preserved, no dead end] after coach A declines (\"Not now\") an interrupted import, some account can still act on the device plays",
+        "file": "legacy-import.spec.ts",
+        "line": 362,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3817
+          }
+        ]
+      },
+      {
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 395,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 6162
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2848
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3841
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5071
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "firefox",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2051
+          }
+        ]
+      }
+    ],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "  22 passed (1.3m)",
+      "::notice title=E2E firefox [acceptance]: 22 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 22/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)::PASS 1/1 D10-00 [3.1/3.1/3.1s]%0APASS 1/1 D10-01 [2.7/2.7/2.7s]%0APASS 1/1 D10-02 [2.7/2.7/2.7s]%0APASS 1/1 D10-03 [3.4/3.4/3.4s]%0APASS 1/1 D10-04 [2.3/2.3/2.3s]%0APASS 1/1 D10-05 [1.8/1.8/1.8s]%0APASS 1/1 D10-06 [3.6/3.6/3.6s]%0APASS 1/1 D10-06b [3.3/3.3/3.3s]%0APASS 1/1 D10-07 [7.4/7.4/7.4s]%0APASS 1/1 D10-07b [2.8/2.8/2.8s]%0APASS 1/1 D10-08 [2.9/2.9/2.9s]%0APASS 1/1 D10-09 [3.6/3.6/3.6s]%0APASS 1/1 D10-10 [2.0/2.0/2.0s]%0APASS 1/1 D10-11 [3.5/3.5/3.5s]%0APASS 1/1 D10-12 [1.2/1.2/1.2s]%0APASS 1/1 D10-06c [2.9/2.9/2.9s]%0APASS 1/1 D10-06d [3.8/3.8/3.8s]%0APASS 1/1 D10-06e [6.2/6.2/6.2s]%0APASS 1/1 D10-08a [2.8/2.8/2.8s]%0APASS 1/1 D10-08b [3.8/3.8/3.8s]%0APASS 1/1 D10-08c [5.1/5.1/5.1s]%0APASS 1/1 D10-08d [2.1/2.1/2.1s]",
+      "::notice title=E2E firefox slow steps >= 10s: 0 of 22 executions::none",
+      "::notice title=E2E firefox diag data: 1 executions::PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"4ba41be2\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"3J99tvDpFlpTkKbEZqLBS0FYYQhV\",\"status\":\"pending\",\"teamId\":\"hHgLNfiuGGLmwfMqCYXp\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]"
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12118681310,
+    "name": "e2e-results-diagnostic-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:3eb0dfd4a30051613cd62d75d1759aeb70234baa5540e002b3013f65b51962c6",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:40:27.574Z",
+      "duration": 440.67100000000005,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"phone-chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"diagnostic\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12118661350,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:7f379cf6dadd848be2295042654b88b7d0e3b56bf1d4818c8342ff28f27d1b8f",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:05.781Z",
+      "duration": 681.06,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"phone-chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"obsolete-fault-model\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12118482675,
+    "name": "e2e-results-obsolete-fault-model-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:8d60a56375a333f3341b08fc6412e7edd820a98eed056ae4fe866284f178c192",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:40:33.574Z",
+      "duration": 461.21000000000004,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"firefox\", bucket \"obsolete-fault-model\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12117958175,
+    "name": "e2e-results-diagnostic-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:76810af601906315295dd92e392c67cef4b41ad98cdd3843b63814bb3ddf2079",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:40:38.332Z",
+      "duration": 511.442,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"phone-firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"diagnostic\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12117823833,
+    "name": "e2e-results-acceptance-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:73fd8924368e185d11f355d51ae6c798fb2e26d372aa7db5e8c735402ca3e767",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:02.912Z",
+      "duration": 9222.739000000001,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 59,
+        "project": "phone-chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2336
+          }
+        ]
+      },
+      {
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 395,
+        "project": "phone-chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4562
+          }
+        ]
+      }
+    ],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "  2 passed (9.2s)",
+      "::notice title=E2E phone-chromium [acceptance]: 2 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 2/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)::PASS 1/1 D10-01 [2.3/2.3/2.3s]%0APASS 1/1 D10-06e [4.6/4.6/4.6s]",
+      "::notice title=E2E phone-chromium slow steps >= 10s: 0 of 2 executions::none"
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12117773994,
+    "name": "e2e-results-diagnostic-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:55b48dd69b41663cd6fea51d0310a47fbcada49be7ccd63a93fa5a7518252992",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:06.160Z",
+      "duration": 669.8910000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)::Project \"firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"firefox\", bucket \"diagnostic\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12117689299,
+    "name": "e2e-results-acceptance-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:b755e3bd8f37266999a52233d3af73267c6f27e026281387b048e57d5ab4df77",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:07.748Z",
+      "duration": 53815.367999999995,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id",
+        "file": "legacy-import.spec.ts",
+        "line": 52,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2124
+          }
+        ]
+      },
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 59,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2120
+          }
+        ]
+      },
+      {
+        "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+        "file": "legacy-import.spec.ts",
+        "line": 76,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1973
+          }
+        ]
+      },
+      {
+        "title": "D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten",
+        "file": "legacy-import.spec.ts",
+        "line": 91,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2639
+          }
+        ]
+      },
+      {
+        "title": "D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites",
+        "file": "legacy-import.spec.ts",
+        "line": 109,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1790
+          }
+        ]
+      },
+      {
+        "title": "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging",
+        "file": "legacy-import.spec.ts",
+        "line": 131,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1185
+          }
+        ]
+      },
+      {
+        "title": "D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies",
+        "file": "legacy-import.spec.ts",
+        "line": 148,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2548
+          }
+        ]
+      },
+      {
+        "title": "D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B",
+        "file": "legacy-import.spec.ts",
+        "line": 168,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2294
+          }
+        ]
+      },
+      {
+        "title": "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)",
+        "file": "legacy-import.spec.ts",
+        "line": 186,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 6520
+          }
+        ]
+      },
+      {
+        "title": "D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B",
+        "file": "legacy-import.spec.ts",
+        "line": 213,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1601
+          }
+        ]
+      },
+      {
+        "title": "D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach",
+        "file": "legacy-import.spec.ts",
+        "line": 237,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1987
+          }
+        ]
+      },
+      {
+        "title": "D10-09 [SDK-in-browser] cross-team denial with an authorized positive control",
+        "file": "legacy-import.spec.ts",
+        "line": 255,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2641
+          }
+        ]
+      },
+      {
+        "title": "D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays",
+        "file": "legacy-import.spec.ts",
+        "line": 286,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1322
+          }
+        ]
+      },
+      {
+        "title": "D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact",
+        "file": "legacy-import.spec.ts",
+        "line": 303,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2396
+          }
+        ]
+      },
+      {
+        "title": "D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded",
+        "file": "legacy-import.spec.ts",
+        "line": 328,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 765
+          }
+        ]
+      },
+      {
+        "title": "D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays",
+        "file": "legacy-import.spec.ts",
+        "line": 341,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1967
+          }
+        ]
+      },
+      {
+        "title": "D10-06d [founder rule: originals preserved, no dead end] after coach A declines (\"Not now\") an interrupted import, some account can still act on the device plays",
+        "file": "legacy-import.spec.ts",
+        "line": 362,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2589
+          }
+        ]
+      },
+      {
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 395,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3435
+          }
+        ]
+      },
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 469,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1659
+          }
+        ]
+      },
+      {
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 490,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3238
+          }
+        ]
+      },
+      {
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 502,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3909
+          }
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "file": "legacy-import.spec.ts",
+        "line": 520,
+        "project": "chromium",
+        "status": "expected",
+        "executions": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1367
+          }
+        ]
+      }
+    ],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "  22 passed (53.8s)",
+      "::notice title=E2E chromium [acceptance]: 22 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 22/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)::PASS 1/1 D10-00 [2.1/2.1/2.1s]%0APASS 1/1 D10-01 [2.1/2.1/2.1s]%0APASS 1/1 D10-02 [2.0/2.0/2.0s]%0APASS 1/1 D10-03 [2.6/2.6/2.6s]%0APASS 1/1 D10-04 [1.8/1.8/1.8s]%0APASS 1/1 D10-05 [1.2/1.2/1.2s]%0APASS 1/1 D10-06 [2.5/2.5/2.5s]%0APASS 1/1 D10-06b [2.3/2.3/2.3s]%0APASS 1/1 D10-07 [6.5/6.5/6.5s]%0APASS 1/1 D10-07b [1.6/1.6/1.6s]%0APASS 1/1 D10-08 [2.0/2.0/2.0s]%0APASS 1/1 D10-09 [2.6/2.6/2.6s]%0APASS 1/1 D10-10 [1.3/1.3/1.3s]%0APASS 1/1 D10-11 [2.4/2.4/2.4s]%0APASS 1/1 D10-12 [0.8/0.8/0.8s]%0APASS 1/1 D10-06c [2.0/2.0/2.0s]%0APASS 1/1 D10-06d [2.6/2.6/2.6s]%0APASS 1/1 D10-06e [3.4/3.4/3.4s]%0APASS 1/1 D10-08a [1.7/1.7/1.7s]%0APASS 1/1 D10-08b [3.2/3.2/3.2s]%0APASS 1/1 D10-08c [3.9/3.9/3.9s]%0APASS 1/1 D10-08d [1.4/1.4/1.4s]",
+      "::notice title=E2E chromium slow steps >= 10s: 0 of 22 executions::none",
+      "::notice title=E2E chromium diag data: 1 executions::PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"7354eb45\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"y7R1CtoN9ZyhRsI2XVocoLxVEP8c\",\"status\":\"pending\",\"teamId\":\"MzlKrpkPVBGCntLQeVMW\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]"
+    ]
+  },
+  {
+    "run": 39079835692,
+    "id": 12117629233,
+    "name": "e2e-results-obsolete-fault-model-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "digest": "sha256:467e65f468981c6acc1d2ae31ecbc388985d504151293ef2b28d1da28d91990c",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:41:13.985Z",
+      "duration": 650.664,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "result_config": {
+      "workers": 1,
+      "fullyParallel": false,
+      "maxFailures": 0,
+      "globalTimeout": 0,
+      "projects": [
+        {
+          "name": "chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-chromium",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        },
+        {
+          "name": "phone-firefox",
+          "repeatEach": 1,
+          "retries": 0,
+          "timeout": 60000,
+          "grep": null,
+          "grepInvert": null
+        }
+      ]
+    },
+    "release_manifest_entries": 11,
+    "log_execution_summary": [
+      "::notice title=E2E chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)::Project \"chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"chromium\", bucket \"obsolete-fault-model\" and grep \"D10-\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+    ]
+  }
+]

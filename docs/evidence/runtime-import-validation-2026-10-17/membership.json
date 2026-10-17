@@ -1,0 +1,1143 @@
+{
+  "base": "7d56300c2a59ee0081a9971036e83599ccfff217",
+  "accepted_ci_base": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+  "head": "61448f0feee198a8796f4077f32a52f7b863f90d",
+  "base_equals_head_membership": true,
+  "complete_nonoverlapping_buckets": true,
+  "project_counts": {
+    "chromium": 76,
+    "firefox": 76,
+    "phone-chromium": 15,
+    "phone-firefox": 15
+  },
+  "bucket_counts": {
+    "acceptance": {
+      "chromium": 65,
+      "firefox": 65,
+      "phone-chromium": 15,
+      "phone-firefox": 15
+    },
+    "diagnostic": {
+      "chromium": 10,
+      "firefox": 10
+    },
+    "obsolete-fault-model": {
+      "chromium": 1,
+      "firefox": 1
+    }
+  },
+  "dispatch_counts": {
+    "D10-08[a-d]": {
+      "acceptance": {
+        "chromium": 4,
+        "firefox": 4
+      },
+      "diagnostic": {},
+      "obsolete-fault-model": {}
+    },
+    "D10-": {
+      "acceptance": {
+        "chromium": 22,
+        "firefox": 22,
+        "phone-chromium": 2,
+        "phone-firefox": 2
+      },
+      "diagnostic": {},
+      "obsolete-fault-model": {}
+    }
+  },
+  "test_identities": [
+    [
+      "chromium",
+      "ai-gateway.spec.ts",
+      14,
+      "E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved"
+    ],
+    [
+      "chromium",
+      "ai-gateway.spec.ts",
+      28,
+      "E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)"
+    ],
+    [
+      "firefox",
+      "ai-gateway.spec.ts",
+      14,
+      "E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved"
+    ],
+    [
+      "firefox",
+      "ai-gateway.spec.ts",
+      28,
+      "E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      18,
+      "E2E-A01 signed-out visitor sees only the sign-in screen"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      27,
+      "E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      42,
+      "E2E-A03 [emulator email link] link opened on another device asks for the email first"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      58,
+      "E2E-A04 [emulator email link] a used sign-in link cannot be replayed"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      76,
+      "E2E-A05 [SDK-in-browser] unverified email account is held at \"Verify your email\""
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      90,
+      "E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      100,
+      "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      126,
+      "E2E-A08 [emulator] disabled account is signed out on the next access check"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      136,
+      "E2E-A09 [emulator Google IdP] \"Continue with Google\" goes through the emulator popup and the beta gate"
+    ],
+    [
+      "chromium",
+      "auth.spec.ts",
+      172,
+      "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      18,
+      "E2E-A01 signed-out visitor sees only the sign-in screen"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      27,
+      "E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      42,
+      "E2E-A03 [emulator email link] link opened on another device asks for the email first"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      58,
+      "E2E-A04 [emulator email link] a used sign-in link cannot be replayed"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      76,
+      "E2E-A05 [SDK-in-browser] unverified email account is held at \"Verify your email\""
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      90,
+      "E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      100,
+      "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      126,
+      "E2E-A08 [emulator] disabled account is signed out on the next access check"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      136,
+      "E2E-A09 [emulator Google IdP] \"Continue with Google\" goes through the emulator popup and the beta gate"
+    ],
+    [
+      "firefox",
+      "auth.spec.ts",
+      172,
+      "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved"
+    ],
+    [
+      "phone-chromium",
+      "auth.spec.ts",
+      100,
+      "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical"
+    ],
+    [
+      "phone-chromium",
+      "auth.spec.ts",
+      172,
+      "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved"
+    ],
+    [
+      "phone-firefox",
+      "auth.spec.ts",
+      100,
+      "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical"
+    ],
+    [
+      "phone-firefox",
+      "auth.spec.ts",
+      172,
+      "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      70,
+      "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      100,
+      "CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      121,
+      "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      149,
+      "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      187,
+      "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      244,
+      "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      288,
+      "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      320,
+      "CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      347,
+      "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      384,
+      "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      406,
+      "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded"
+    ],
+    [
+      "chromium",
+      "coaching.spec.ts",
+      429,
+      "CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      70,
+      "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      100,
+      "CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      121,
+      "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      149,
+      "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      187,
+      "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      244,
+      "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      288,
+      "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      320,
+      "CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      347,
+      "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      384,
+      "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      406,
+      "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded"
+    ],
+    [
+      "firefox",
+      "coaching.spec.ts",
+      429,
+      "CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      70,
+      "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      121,
+      "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      149,
+      "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      187,
+      "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      244,
+      "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      288,
+      "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      347,
+      "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      384,
+      "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)"
+    ],
+    [
+      "phone-chromium",
+      "coaching.spec.ts",
+      406,
+      "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      70,
+      "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      121,
+      "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      149,
+      "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      187,
+      "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      244,
+      "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      288,
+      "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      347,
+      "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      384,
+      "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)"
+    ],
+    [
+      "phone-firefox",
+      "coaching.spec.ts",
+      406,
+      "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      52,
+      "D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      59,
+      "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      76,
+      "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      91,
+      "D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      109,
+      "D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      131,
+      "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      148,
+      "D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      168,
+      "D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      186,
+      "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      213,
+      "D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      237,
+      "D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      255,
+      "D10-09 [SDK-in-browser] cross-team denial with an authorized positive control"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      286,
+      "D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      303,
+      "D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      328,
+      "D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      341,
+      "D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      362,
+      "D10-06d [founder rule: originals preserved, no dead end] after coach A declines (\"Not now\") an interrupted import, some account can still act on the device plays"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      395,
+      "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      469,
+      "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      490,
+      "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      502,
+      "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched"
+    ],
+    [
+      "chromium",
+      "legacy-import.spec.ts",
+      520,
+      "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      52,
+      "D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      59,
+      "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      76,
+      "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      91,
+      "D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      109,
+      "D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      131,
+      "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      148,
+      "D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      168,
+      "D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      186,
+      "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      213,
+      "D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      237,
+      "D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      255,
+      "D10-09 [SDK-in-browser] cross-team denial with an authorized positive control"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      286,
+      "D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      303,
+      "D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      328,
+      "D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      341,
+      "D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      362,
+      "D10-06d [founder rule: originals preserved, no dead end] after coach A declines (\"Not now\") an interrupted import, some account can still act on the device plays"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      395,
+      "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      469,
+      "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      490,
+      "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      502,
+      "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched"
+    ],
+    [
+      "firefox",
+      "legacy-import.spec.ts",
+      520,
+      "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched"
+    ],
+    [
+      "phone-chromium",
+      "legacy-import.spec.ts",
+      59,
+      "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched"
+    ],
+    [
+      "phone-chromium",
+      "legacy-import.spec.ts",
+      395,
+      "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched"
+    ],
+    [
+      "phone-firefox",
+      "legacy-import.spec.ts",
+      59,
+      "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched"
+    ],
+    [
+      "phone-firefox",
+      "legacy-import.spec.ts",
+      395,
+      "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      35,
+      "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      51,
+      "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      115,
+      "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      119,
+      "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      123,
+      "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      167,
+      "N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      198,
+      "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      243,
+      "N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      317,
+      "N2-R1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      346,
+      "N2-R1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      374,
+      "N2-R1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      405,
+      "N2-R2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      442,
+      "N2-R3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      466,
+      "N2-R4 [acceptance] account isolation A -> B -> A: B cannot see or resume A's pending team; A recovers it once"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      511,
+      "N2-R5 [acceptance] commit appears to succeed but the authoritative readback finds nothing: no success is reported; after recovery the same operation is created once at the original ID"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      546,
+      "N2-R6 [acceptance] a different team already exists at the operation's document ID: no success, no overwrite, no second team, even after Check and retry"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      603,
+      "N2-R7 [acceptance] intentional same-name team: an explicit confirmation is required; declining creates nothing; confirming creates exactly one separate team"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      653,
+      "N2-R7b [acceptance] a confirmed same-name creation whose commit is reset is retried as the SAME operation: no third team"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      707,
+      "N2-R8 [acceptance] authoritative readback fails at the network level (and nothing is on the server): no success; after restore the same operation is created once"
+    ],
+    [
+      "chromium",
+      "n2.spec.ts",
+      741,
+      "N2-R8b [acceptance] SDK listener unavailable, commit reaches the server, authoritative readback returns 503: no false success, no duplicate, no overwrite; the same operation is confirmed once after restore"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      35,
+      "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      51,
+      "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      115,
+      "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      119,
+      "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      123,
+      "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      167,
+      "N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      198,
+      "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      243,
+      "N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      317,
+      "N2-R1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      346,
+      "N2-R1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      374,
+      "N2-R1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      405,
+      "N2-R2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      442,
+      "N2-R3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      466,
+      "N2-R4 [acceptance] account isolation A -> B -> A: B cannot see or resume A's pending team; A recovers it once"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      511,
+      "N2-R5 [acceptance] commit appears to succeed but the authoritative readback finds nothing: no success is reported; after recovery the same operation is created once at the original ID"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      546,
+      "N2-R6 [acceptance] a different team already exists at the operation's document ID: no success, no overwrite, no second team, even after Check and retry"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      603,
+      "N2-R7 [acceptance] intentional same-name team: an explicit confirmation is required; declining creates nothing; confirming creates exactly one separate team"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      653,
+      "N2-R7b [acceptance] a confirmed same-name creation whose commit is reset is retried as the SAME operation: no third team"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      707,
+      "N2-R8 [acceptance] authoritative readback fails at the network level (and nothing is on the server): no success; after restore the same operation is created once"
+    ],
+    [
+      "firefox",
+      "n2.spec.ts",
+      741,
+      "N2-R8b [acceptance] SDK listener unavailable, commit reaches the server, authoritative readback returns 503: no false success, no duplicate, no overwrite; the same operation is confirmed once after restore"
+    ],
+    [
+      "chromium",
+      "persistence.spec.ts",
+      24,
+      "E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten"
+    ],
+    [
+      "firefox",
+      "persistence.spec.ts",
+      24,
+      "E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten"
+    ],
+    [
+      "chromium",
+      "sdk-edit.spec.ts",
+      85,
+      "CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save \u2014 what the coach sees; never false \"saved\"; one document; edit not lost"
+    ],
+    [
+      "chromium",
+      "sdk-edit.spec.ts",
+      88,
+      "CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save \u2014 does the save hang on \"saving\"?"
+    ],
+    [
+      "chromium",
+      "sdk-edit.spec.ts",
+      110,
+      "CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values"
+    ],
+    [
+      "chromium",
+      "sdk-edit.spec.ts",
+      144,
+      "CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged"
+    ],
+    [
+      "firefox",
+      "sdk-edit.spec.ts",
+      85,
+      "CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save \u2014 what the coach sees; never false \"saved\"; one document; edit not lost"
+    ],
+    [
+      "firefox",
+      "sdk-edit.spec.ts",
+      88,
+      "CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save \u2014 does the save hang on \"saving\"?"
+    ],
+    [
+      "firefox",
+      "sdk-edit.spec.ts",
+      110,
+      "CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values"
+    ],
+    [
+      "firefox",
+      "sdk-edit.spec.ts",
+      144,
+      "CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged"
+    ],
+    [
+      "chromium",
+      "teams.spec.ts",
+      17,
+      "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device"
+    ],
+    [
+      "chromium",
+      "teams.spec.ts",
+      36,
+      "E2E-T02 account switching on one browser profile shows each coach only their own team"
+    ],
+    [
+      "chromium",
+      "teams.spec.ts",
+      63,
+      "E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it"
+    ],
+    [
+      "firefox",
+      "teams.spec.ts",
+      17,
+      "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device"
+    ],
+    [
+      "firefox",
+      "teams.spec.ts",
+      36,
+      "E2E-T02 account switching on one browser profile shows each coach only their own team"
+    ],
+    [
+      "firefox",
+      "teams.spec.ts",
+      63,
+      "E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it"
+    ],
+    [
+      "phone-chromium",
+      "teams.spec.ts",
+      17,
+      "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device"
+    ],
+    [
+      "phone-chromium",
+      "teams.spec.ts",
+      36,
+      "E2E-T02 account switching on one browser profile shows each coach only their own team"
+    ],
+    [
+      "phone-firefox",
+      "teams.spec.ts",
+      17,
+      "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device"
+    ],
+    [
+      "phone-firefox",
+      "teams.spec.ts",
+      36,
+      "E2E-T02 account switching on one browser profile shows each coach only their own team"
+    ],
+    [
+      "chromium",
+      "ui-shell.spec.ts",
+      23,
+      "UI-01 [identity] signed-in account and explicit no-team state are displayed and accessible at 1440, 834 and 390 px"
+    ],
+    [
+      "chromium",
+      "ui-shell.spec.ts",
+      36,
+      "UI-02 [identity] the active team is displayed at every width; sample preview is marked \"not saved\" only while shown"
+    ],
+    [
+      "firefox",
+      "ui-shell.spec.ts",
+      23,
+      "UI-01 [identity] signed-in account and explicit no-team state are displayed and accessible at 1440, 834 and 390 px"
+    ],
+    [
+      "firefox",
+      "ui-shell.spec.ts",
+      36,
+      "UI-02 [identity] the active team is displayed at every width; sample preview is marked \"not saved\" only while shown"
+    ]
+  ]
+}

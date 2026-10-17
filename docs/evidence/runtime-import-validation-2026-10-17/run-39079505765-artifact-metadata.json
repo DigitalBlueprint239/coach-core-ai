@@ -1,0 +1,254 @@
+[
+  {
+    "id": 12118855363,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODg1NTM2Mw==",
+    "name": "e2e-results-acceptance-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 14999,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118855363",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118855363/zip",
+    "expired": false,
+    "digest": "sha256:2a4fab29e66f5971383ccb24913579e827d61dcffb57cb2d7c0d91646cfd49b7",
+    "created_at": "2026-10-17T23:38:42Z",
+    "updated_at": "2026-10-17T23:38:42Z",
+    "expires_at": "2026-10-31T23:38:41Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118710699,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODcxMDY5OQ==",
+    "name": "e2e-results-obsolete-fault-model-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5240,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118710699",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118710699/zip",
+    "expired": false,
+    "digest": "sha256:57da173f41cdbac8a4bf62a20b50c712f202378b803fc807a3e50543a9f7f724",
+    "created_at": "2026-10-17T23:36:06Z",
+    "updated_at": "2026-10-17T23:36:06Z",
+    "expires_at": "2026-10-31T23:36:06Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118586456,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODU4NjQ1Ng==",
+    "name": "e2e-results-diagnostic-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5261,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118586456",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118586456/zip",
+    "expired": false,
+    "digest": "sha256:bb95fbeb5a8158aff34b2ff4bb7a625aa5035350df148154ff6ba8555ec597e0",
+    "created_at": "2026-10-17T23:35:50Z",
+    "updated_at": "2026-10-17T23:35:50Z",
+    "expires_at": "2026-10-31T23:35:50Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118541800,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODU0MTgwMA==",
+    "name": "e2e-results-diagnostic-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5234,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118541800",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118541800/zip",
+    "expired": false,
+    "digest": "sha256:7c6b39bdfa99651cced83292c63352abeb16b1626327381c6c9a456ac79960c5",
+    "created_at": "2026-10-17T23:36:06Z",
+    "updated_at": "2026-10-17T23:36:06Z",
+    "expires_at": "2026-10-31T23:36:05Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118427499,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODQyNzQ5OQ==",
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5246,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118427499",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118427499/zip",
+    "expired": false,
+    "digest": "sha256:4ceef4a46fab624bc2d3b608a276f93f9b3ecc82278e08f448f0779cf384ad58",
+    "created_at": "2026-10-17T23:35:58Z",
+    "updated_at": "2026-10-17T23:35:58Z",
+    "expires_at": "2026-10-31T23:35:58Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118411488,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODQxMTQ4OA==",
+    "name": "e2e-results-obsolete-fault-model-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5268,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118411488",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118411488/zip",
+    "expired": false,
+    "digest": "sha256:75b9cdc5db85621f7d4eb982d1e6e837c873ac14fdc22ab9e4453b266fb67986",
+    "created_at": "2026-10-17T23:35:48Z",
+    "updated_at": "2026-10-17T23:35:48Z",
+    "expires_at": "2026-10-31T23:35:48Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118326953,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODMyNjk1Mw==",
+    "name": "e2e-results-acceptance-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 14956,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118326953",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118326953/zip",
+    "expired": false,
+    "digest": "sha256:6c2f3e389c1fa7046cb8e9ebcb87ee9c44860a95580fb962f2999310600b6343",
+    "created_at": "2026-10-17T23:37:56Z",
+    "updated_at": "2026-10-17T23:37:56Z",
+    "expires_at": "2026-10-31T23:37:55Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118312914,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODMxMjkxNA==",
+    "name": "e2e-results-acceptance-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5268,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118312914",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118312914/zip",
+    "expired": false,
+    "digest": "sha256:2b2c3407b8159ddb077d52d5812e6517b8c77e4b13fb6eda0666f440b8780041",
+    "created_at": "2026-10-17T23:35:49Z",
+    "updated_at": "2026-10-17T23:35:49Z",
+    "expires_at": "2026-10-31T23:35:49Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118143300,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODE0MzMwMA==",
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5277,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118143300",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118143300/zip",
+    "expired": false,
+    "digest": "sha256:12d24e2871965bac6d1bf9da420851f78bd67e6bda1c1889de74dcea9545d44b",
+    "created_at": "2026-10-17T23:35:56Z",
+    "updated_at": "2026-10-17T23:35:56Z",
+    "expires_at": "2026-10-31T23:35:55Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12118132060,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExODEzMjA2MA==",
+    "name": "e2e-results-acceptance-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5238,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118132060",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12118132060/zip",
+    "expired": false,
+    "digest": "sha256:e0c3235d2a2676c68043b8c47432e9c4e4787651ca1efbd86d953548edd1dde8",
+    "created_at": "2026-10-17T23:35:22Z",
+    "updated_at": "2026-10-17T23:35:22Z",
+    "expires_at": "2026-10-31T23:35:21Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12117773581,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExNzc3MzU4MQ==",
+    "name": "e2e-results-diagnostic-phone-firefox-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5237,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12117773581",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12117773581/zip",
+    "expired": false,
+    "digest": "sha256:a636974241c53065255215647842cd609eae01a95efdda41c2da063beb670395",
+    "created_at": "2026-10-17T23:35:56Z",
+    "updated_at": "2026-10-17T23:35:56Z",
+    "expires_at": "2026-10-31T23:35:56Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  },
+  {
+    "id": 12117569079,
+    "node_id": "MDg6QXJ0aWZhY3QxMjExNzU2OTA3OQ==",
+    "name": "e2e-results-diagnostic-phone-chromium-61448f0feee198a8796f4077f32a52f7b863f90d",
+    "size_in_bytes": 5269,
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12117569079",
+    "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12117569079/zip",
+    "expired": false,
+    "digest": "sha256:d35056bd1d6fac8fff2cead257e1937abebeb6f4671ce93c7fd13a04d2752717",
+    "created_at": "2026-10-17T23:36:00Z",
+    "updated_at": "2026-10-17T23:36:00Z",
+    "expires_at": "2026-10-31T23:36:00Z",
+    "workflow_run": {
+      "id": 39079505765,
+      "repository_id": 1018633922,
+      "head_repository_id": 1018633922,
+      "head_branch": "codex/runtime-import-integration-2026-10-17",
+      "head_sha": "61448f0feee198a8796f4077f32a52f7b863f90d"
+    },
+    "run": 39079505765
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "run": 39079505765,
+    "job": "E2E acceptance (phone-firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E diagnostic (chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E acceptance (firefox)",
+    "executions": 40,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": false,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E diagnostic (firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E acceptance (phone-chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E obsolete-fault-model (chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E acceptance (chromium)",
+    "executions": 40,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": false,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E diagnostic (phone-firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E obsolete-fault-model (firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E diagnostic (phone-chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E obsolete-fault-model (phone-firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079505765,
+    "job": "E2E obsolete-fault-model (phone-chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E acceptance (firefox)",
+    "executions": 22,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": false,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E diagnostic (phone-firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E diagnostic (firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E obsolete-fault-model (chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E obsolete-fault-model (firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E diagnostic (chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E acceptance (phone-firefox)",
+    "executions": 2,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": false,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E obsolete-fault-model (phone-chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E acceptance (phone-chromium)",
+    "executions": 2,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": false,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E obsolete-fault-model (phone-firefox)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E diagnostic (phone-chromium)",
+    "executions": 0,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": true,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  },
+  {
+    "run": 39079835692,
+    "job": "E2E acceptance (chromium)",
+    "executions": 22,
+    "reporter_annotation_matches_results": true,
+    "dispatch_filters_in_empty_annotation": false,
+    "artifact_manifest_matches_uploaded_results": true,
+    "inventory_annotation_matches_retained_inventory": true,
+    "release_proof_13_passed": true
+  }
+]
