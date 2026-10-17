@@ -2,3 +2,5 @@ node_modules/
 .app-build/
 test-results/
 playwright-report/
+ci-evidence/
+b15-fixture-tmp/
