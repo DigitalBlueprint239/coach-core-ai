@@ -1,0 +1,115 @@
+Evidence 71 — Independent review of integration draft PR #75 (accepted B11 + B15 combined)
+========================================================================================
+Reviewer: Claude (independent test/evidence owner). Date: 2026-10-17/18 (UTC). Sources: GitHub REST API, local execution on the exact candidate tree.
+Candidate: efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc (branch codex/integrate-b11-b15-2026-10-17)   Base: 7d56300c2a59ee0081a9971036e83599ccfff217
+Tested implementation head: fd933ed30f814b22c095f0a69149f254971ec190 (efc9116 adds docs/evidence only — verified: git diff fd933ed..efc9116 touches 20 files, all under docs/).
+Accepted inputs: B11 PASS f2e1fed (PR #73 comment 6238489931); B15 PASS ffb4045 (PR #74 comment 6242108352). Runtime 518e9e5 (src byte-identical).
+
+1. PROVENANCE / CONFLICT RESOLUTION
+  - Neither f2e1fed nor ffb4045 is an ancestor of efc9116: six commits were cherry-picked. For every source->candidate pair the
+    non-conflict content patch-id is IDENTICAL (excluding .github/ and e2e/package.json, the two union-resolved files):
+      e25272b->c2e750f 31d726abfc91 | e5b33ef->4e1abaa 28164b3864ea | f2e1fed->5216591 4f06fb02c7fb
+      04d4be8->fc518df 07da2d4c07cb | 3befdf1->4534689 f076ae1da84e | ffb4045->fd933ed 959115bb085b
+  - Byte-identical to accepted heads: e2e/playwright.config.ts, e2e/reporters/annotate.mjs, e2e/reporters/annotate.test.mjs (vs f2e1fed);
+    e2e/scripts/evidence.sh, e2e/scripts/evidence.test.mjs, e2e/.gitignore (vs ffb4045).
+  - e2e/package.json: clean union (test:reporter + test:evidence); lockfile identical to base.
+  - Workflow: diff vs f2e1fed adds ONLY B15 content (evidence self-check step, ci-evidence dir, manifest destination, run wrapper, finalize/withheld/gated
+    upload, two upload paths + hidden files + if-no-files-found); diff vs ffb4045 adds ONLY B11 content (12-job matrix, bucket names, E2E_BUCKET,
+    reporter self-checks, artifact-manifest notice, bucket-qualified artifact name). Nothing from either accepted workflow is lost.
+    B11's `set -o pipefail` in the test step is superseded by evidence.sh run (PIPESTATUS[0]) — equivalent exit-status semantics.
+  - src/, functions/, public/, root package files: identical to base and to runtime 518e9e5. e2e/tests: unchanged vs base. PR #72 (35e0d77) NOT an
+    ancestor; src/features/legacy-import differs from PR #72 (its changes absent); import-legacy.ts still `D10_APPROVED = true`; no
+    REACT_APP_ENABLE_LEGACY_IMPORT in src. => PR #72, default-off import configuration and recovery integration are EXCLUDED (dependencies).
+
+2. FOCUSED CHECKS ON THE CANDIDATE TREE (local, Node 22, Playwright 1.64.0 via the acceptance worktree's identical node_modules)
+  - node reporters/annotate.test.mjs: 10/10 pass.
+  - node scripts/evidence.test.mjs: 19 checks, 18 pass, 1 skipped (check 7 unwritable-dir skipped under root; CI ran it: all 24 CI jobs' self-check
+    steps succeeded). Checks 6/13/19 read the COMBINED workflow: artifact name carries every matrix dimension (bucket+project+sha); upload gated on
+    steps.finalize.outputs.eligible; extracted finalize run block emits eligible only on success.
+  Independent probes (beyond the suites), all on the combined tree:
+  - Real interrupted Playwright run through evidence.sh run with annotate.mjs (SIGINT during test 1 of 2, GITHUB_ACTIONS=true): reporter emitted
+    `::error title=E2E run interrupted [acceptance]` (PARTIAL) + tally 0 passed/1 failed; evidence.sh preserved exit 130 (run.exit=130).
+  - Extracted finalize step block from the COMBINED workflow on that fixture with a seeded stale UPLOAD_OK and injected oobCode=/Bearer/?key= strings:
+    exit 0, eligible=true, run.log shows only [REDACTED] forms, inventory digest of run.log == sha256 of final redacted bytes
+    (e4ea3c63bd557cca9045d7f67302a41a48e3b629850886b7939c43161d84f6cd), `sha256sum -c` from repo root OK, run.exit untouched (130).
+  - grep -Eq exit-2 injection: step exit 1, no eligible output, marker absent, error "redaction verification could not run (grep exit 2)".
+  - sha256sum -c exit-2 injection: step exit 1, no eligible output, marker absent, error "inventory verification could not run (sha256sum exit 2)".
+
+3. MEMBERSHIP AND EXECUTION SETTINGS (playwright --list --reporter=json on the candidate; identities = title@file:line)
+  - chromium: unset 76 = acceptance 65 + diagnostic 10 + obsolete 1; union == unset, 0 overlaps. Tags: diagnostic bucket all [diagnostic], obsolete
+    all [obsolete-fault-model], acceptance contains neither tag.
+  - phone-chromium: unset 15 = 15 + 0 + 0; union == unset, 0 overlaps (phone filter composes with bucket/grep via lookaheads; grepInvert inherited).
+  - Dispatch grep "D10-01|N2-A2": chromium 2 = 1 + 0 + 1; phone-chromium 1 = 1 + 0 + 0; union == unset.
+  - Base 7d56300 unset membership identical to candidate unset membership (chromium 76, phone-chromium 15). Firefox projects use the same filters.
+  - Config diff vs base is limited to grep/grepInvert composition; retries 0, timeout 60 s, expect 10 s, workers 1, webServer 30 s, job 120 min unchanged.
+  - Codex's membership-summary.json (dispatch grep 'N2-|D10-0': 38=32/5/1, 2=2/0/0) is consistent; their evidence SHA256SUMS verify (17 files).
+
+4. ACTUAL CI ON THE EXACT COMBINED SHA (workflow_dispatch; PR #75 itself triggers NO workflow — 0 check runs existed on efc9116 before my dispatch)
+  Run 39078328001 (repeat 1, grep "D10-01|N2-D0|N2-A2"): 12/12 jobs success. Per job: reporter self-checks ✅, evidence self-checks ✅, finalize ✅,
+    withheld step skipped, upload ✅, "UPLOAD_OK present".
+    acceptance x4: D10-01 PASS (1/0). diagnostic chromium/firefox: N2-D0 PASS; diagnostic phone-*: "0 tests selected (empty selection; nothing ran)".
+    obsolete chromium/firefox: N2-A2 PASS in 6.2 s / 7.2 s; obsolete phone-*: empty selection.
+    OBSERVATION (diagnostic, not an integration defect): N2-A2 [obsolete-fault-model] PASSED here when run ALONE in its job, whereas it timed out at
+    60 s in every prior desktop execution where it ran after other tests (runs 39059137056, 39062364060, and all full matrices). Its timeout appears
+    order/state-dependent. It is bucketed out of acceptance, so this cannot colour the acceptance context; recorded for the N2/N3 history.
+  Run 39078584595 (repeat 1, grep "D10-08a" — a known missing-behaviour failure on this pre-PR #72 runtime, chosen to exercise a FAILING acceptance
+    job on the combined workflow): acceptance chromium/firefox FAILURE (D10-08a "resume offered to the original coach/team"), finalize ✅ (9 files,
+    failure outputs retained), withheld skipped, upload ✅ (986291 B / 2675007 B); the other 10 jobs: empty selection explained by the filters
+    (project, bucket AND grep), finalize ✅, upload ✅. Test failure status preserved at job level.
+  Artifact metadata (24 ZIPs) recorded below. ZIP CONTENTS NOT VERIFIED BY THIS REVIEWER: downloads via gh api and gh run download both end at
+  productionresultssa*.blob.core.windows.net with "Forbidden" from the workspace proxy (re-attempted 2026-10-17). Codex's standalone ZIP verification
+  of run 39059137056 does not cover these combined-run artifacts.
+
+5. REQUIRED-CHECK PROPOSAL vs ACTUAL TARGETS (read-only; no settings changed)
+  - Live facts: recovery/coach-core-mvp-2026 = 3992d8d (matches proposal); claude/n2-repair-acceptance-518e9e5 = 7d56300; both "Branch not protected";
+    repository rulesets: 0; default branch master.
+  - Draft target (this PR): the workflow does not run on it at all (pull_request restricted to recovery; push restricted to claude/** and recovery;
+    head is codex/**). Any required context on PR #75 would stay "expected" forever; only manual dispatches populate the SHA.
+  - PROVEN, not theoretical: my grep-limited workflow_dispatch created check runs named exactly `E2E acceptance (chromium|firefox|phone-chromium|
+    phone-firefox)` on efc9116, all green with ONE test each. A name-only required-status-check rule is therefore satisfiable by a targeted dispatch;
+    the proposal's "Coach Core merge eligibility" aggregate (trusted event + run + full selection + evidence) is necessary, not optional.
+  - Eventual target (recovery): pull_request trigger present and context names match the proposal. Missing/non-triggering: no merge_group trigger
+    (required if a merge queue is enabled); pull_request types are the defaults (opened/synchronize/reopened) so ready_for_review is not a trigger
+    (low impact: synchronize covers new pushes); concurrency cancel-in-progress on github.ref leaves CANCELLED check runs when a PR is pushed again —
+    the aggregate must treat cancelled/missing as ineligible (the proposal says so); push-to-recovery runs are post-merge only.
+  - Inventory baseline in the proposal (65 acceptance per desktop engine, 15 per phone) matches my --list results today.
+  - Simpler hardening slice to consider alongside the aggregate: give workflow_dispatch jobs distinct check names (e.g., suffix the event name) so a
+    dispatch can never satisfy a required context by name; the aggregate is still needed to prove complete selection.
+  - Release-relevant fact: on THIS runtime the acceptance bucket contains D10-08a–d (PR #72 tests), and D10-08a fails deterministically (run 2).
+    A full acceptance context cannot be green until PR #72 (35e0d77) is integrated and re-validated — a dependency, not something this PR fixes.
+
+6. MINOR / NON-BLOCKING
+  - Finalize notice and withheld error titles use matrix.project only ("E2E evidence inventory (chromium)") — with 12 jobs the title no longer
+    identifies the bucket; the job name does. Cosmetic.
+  - evidence.sh header comment still promises marker removal on every failure; Codex already noted the unwritable-dir exception; the output gate protects it.
+
+VERDICT: PASS for PR #75 as an isolated B11+B15 integration candidate at efc9116 (delivery scope). No defect found in the combined workflow, scripts,
+membership or execution settings. Not a release approval; MVP remains NO-GO.
+
+Artifacts run 39078328001 (grep D10-01|N2-D0|N2-A2), names suffixed -efc9116…:
+12117952189 e2e-results-acceptance-chromium 7257B sha256:6106fbcb6e718d9ce7b8639677b439eae5d1d23228958fdd39f587b310827acf
+12118335763 e2e-results-acceptance-firefox 7229B sha256:d450ae75d714b31ece3d435a4e8b686a6e46597392a9b7fd74918c33f0a2d7a3
+12117932667 e2e-results-acceptance-phone-chromium 7264B sha256:867a6dcb3e664acd46a8f8d1eadeea7aec48ed30f12b1bd811f7cb86a8e2aa7a
+12118256008 e2e-results-acceptance-phone-firefox 7241B sha256:3c6304fc9618b074cc0a9253bee0c4204b330d384b56a00d536108de0a131710
+12117423004 e2e-results-diagnostic-chromium 6171B sha256:417dc2a6bf5b54657b5ec0b2493f1caca4ddf6fcc59e414de45fcba3195445b0
+12117502905 e2e-results-diagnostic-firefox 6123B sha256:3e6103af70cd95372e606cff6baa37a82645737767477d885e8fbb0b54cf6e05
+12118185589 e2e-results-diagnostic-phone-chromium 5292B sha256:369d65c1838f812764e30137beb5c2d711b193218590c71a21b53abaacf0a8ef
+12117887964 e2e-results-diagnostic-phone-firefox 5259B sha256:94bdec2d3a221ed16b4f47c9cb4d2fa8132c7e53bb9f7adcfcef8e430c7810b6
+12118235904 e2e-results-obsolete-fault-model-chromium 6110B sha256:39b15cb028b63686e04a3d303b7737a498cc9fb57169061983db470787bfc42b
+12117348074 e2e-results-obsolete-fault-model-firefox 6072B sha256:c7d89d3038effbe769763660adcb7decc5e9d82847855518bf79e849b9f45805
+12118166179 e2e-results-obsolete-fault-model-phone-chromium 5292B sha256:846c0e2c1cb0caff96d363713adc499967bf44e1adea80603f9a47028cdb2bf5
+12118390572 e2e-results-obsolete-fault-model-phone-firefox 5264B sha256:b87e8ccdccf7efccbabf18e5064b392fbd7e8256ba821cc87605333890a8d905
+
+Artifacts run 39078584595 (grep D10-08a):
+12117853485 e2e-results-acceptance-chromium 986291B sha256:0f31ed64296a29d9ef8acf98694cfa40744b72dfc326247d76e2552747d373a5
+12118416005 e2e-results-acceptance-firefox 2675007B sha256:e68808c912376576b061c4475d4f6954b1f38568cd30562df9ac8579a1b61803
+12118221511 e2e-results-acceptance-phone-chromium 5169B sha256:8842bf61d0bb6dec0c7067edee1de8aff159528046307a649b1dabb0cd53dfb0
+12118500446 e2e-results-acceptance-phone-firefox 5129B sha256:eddebee1582e56a7cb22ef5bef613ffba5cd4ddf51687665db60b4cba8ed22a6
+12118111050 e2e-results-diagnostic-chromium 5156B sha256:d60dc6f2b57d1c0c29c6c4a24f978841c70fda9f3c7b24799b7cca6711d0d6b8
+12118241350 e2e-results-diagnostic-firefox 5125B sha256:d69b5ff239b5e2ae2628c0438c1b39d3669dda91d262396eff452356f489718c
+12118565140 e2e-results-diagnostic-phone-chromium 5169B sha256:40b06a8ee68969d6e7b6248e8f154e35cae94b6c9f170141164329e2567ddc0f
+12117509558 e2e-results-diagnostic-phone-firefox 5133B sha256:37eea8e32d5473abb8b4d72b71e2c99f81d913494e7810055df4881d21578c1a
+12117858411 e2e-results-obsolete-fault-model-chromium 5159B sha256:bbde76efe827177cf53b40b801e1326d9801bf1fc237cb9031536ef1ae29a214
+12117373327 e2e-results-obsolete-fault-model-firefox 5128B sha256:85d3e4b4679057245ee4a3ce4b415780eb291c3fa361a811c46c05404d82975d
+12117763691 e2e-results-obsolete-fault-model-phone-chromium 5170B sha256:15d5e56d87afad1cffad2ca1590fdaccba7f7491a44139f5728c7dd631f0143d
+12117748661 e2e-results-obsolete-fault-model-phone-firefox 5142B sha256:10518a9b8ed31c7edf19814edcb3dde888187c674b4552be24c72aba2a137f27

@@ -1,0 +1,22 @@
+
+> test:reporter
+> node reporters/annotate.test.mjs
+
+✔ empty job: explicit zero-tests annotation and summary row; never "passed" (3.495584ms)
+✔ empty job without a bucket (local/all) still names the project and reason (1.205769ms)
+✔ empty selection under a dispatch grep is explained by the filters, not as bucket absence (0.670091ms)
+✔ REGRESSION (Codex re-review of e5b33ef): selected > 0 but no result before interruption is reported as INCOMPLETE, never as an empty selection or a pass (1.902471ms)
+✔ REGRESSION: run-level timedout with a non-empty selection and no results is INCOMPLETE (0.68939ms)
+✔ REGRESSION: a setup/global error (run failed) with a non-empty selection and zero results is INCOMPLETE, not empty (0.564642ms)
+✔ passing job: tally annotation, acceptance bucket count, summary row; no empty-selection notice (1.67644ms)
+✔ failing job: error-level annotation, FAIL line with the first error, diag annotation; buckets split by tag (1.051557ms)
+✔ interrupted run: an error annotation marks results as partial, in addition to any per-test rows (0.999208ms)
+✔ outside GitHub Actions the reporter is silent (0.350609ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20.11628

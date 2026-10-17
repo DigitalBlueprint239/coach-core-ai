@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "development",
+    "explicit_override": null,
+    "flag": null,
+    "enabled": false
+  },
+  {
+    "mode": "production",
+    "explicit_override": null,
+    "flag": "false",
+    "enabled": false
+  },
+  {
+    "mode": "test",
+    "explicit_override": null,
+    "flag": "true",
+    "enabled": true
+  },
+  {
+    "mode": "production",
+    "explicit_override": "true",
+    "flag": "true",
+    "enabled": true
+  }
+]

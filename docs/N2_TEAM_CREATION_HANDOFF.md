@@ -170,3 +170,23 @@ Rollback: retain the frozen base and the repair commit. If review rejects the
 transport, do not merge or deploy it. Do not clear journals or replay an older
 random-ID create while an operation is unconfirmed; reconcile its ID with the
 server first. No rollback deployment or data operation is authorized here.
+
+## 2026-10-17/18 — N2-A2 bucket/order observation (diagnostic only)
+
+Independent PR75 review, comment6243036404, evidence71 on accepted
+`efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc`, recorded N2-A2
+`[obsolete-fault-model]` passing in 6.2s Chromium / 7.2s Firefox when it ran
+alone in its bucket in run39078328001. It had timed out at60s in reviewed
+runs39059137056/39062364060 where it followed other tests. Older runs also
+contain occasional Firefox passes; do not generalize this observation into an
+all-runs rule. The task integrator verified all24 new PR75 artifacts, including
+that run and failing-acceptance run39078584595, with their exact digests/inventories.
+
+Inference: timeout may depend on order, prior state or browser lifecycle. Cause
+is NOT established. N2-A2 intercepts SDK WebChannel traffic and is obsolete for
+the repaired REST creation path; passing it is NOT acceptance of a new runtime
+repair. Keep N2-D2 and N3 (separate no-submit symptom) distinct. No timeout,
+assertion, routing, reset behavior or production fix is changed by recording this.
+N3/FX-02 stay open under their existing discriminating probes. Any experiment to
+isolate order/state is a separately scoped investigation, not part of this import
+integration candidate.
