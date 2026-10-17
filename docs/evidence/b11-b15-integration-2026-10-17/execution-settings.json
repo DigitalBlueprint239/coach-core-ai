@@ -1,0 +1,66 @@
+{
+  "base": {
+    "workers": 1,
+    "projects": [
+      {
+        "name": "chromium",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      },
+      {
+        "name": "firefox",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      },
+      {
+        "name": "phone-chromium",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      },
+      {
+        "name": "phone-firefox",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      }
+    ]
+  },
+  "candidate": {
+    "workers": 1,
+    "projects": [
+      {
+        "name": "chromium",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      },
+      {
+        "name": "firefox",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      },
+      {
+        "name": "phone-chromium",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      },
+      {
+        "name": "phone-firefox",
+        "repeatEach": 1,
+        "retries": 0,
+        "timeout": 60000
+      }
+    ]
+  },
+  "source_limits": {
+    "expect_timeout_ms": 10000,
+    "webserver_timeout_ms": 30000,
+    "job_timeout_minutes": 120,
+    "repeat_input_unchanged": true
+  }
+}

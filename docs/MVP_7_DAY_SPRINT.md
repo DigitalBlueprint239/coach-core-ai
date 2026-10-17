@@ -137,3 +137,17 @@ Isolated codex/n2-team-creation-reliability, draft #71, source bdb06ae6d39ff9ed3
 Baseline453/453,TS0,buildPASS; final477/477,TS0,production/emulator buildsPASS with inherited warnings. Owned pre-repair modal regression5FAIL/5; initial fixture failures retained; corrected listener testsPASS. Real focused emulator browser8/8 (Chromium156.0.8078.4/Firefox157.0, retries0/skips0). Clean install, dependencies unchanged/full graph98 findings. docs/N2_TEAM_CREATION_HANDOFF.md and docs/evidence/n2-team-creation contain commands, failures, results, hashes, limits and rollback. This is implementation evidence, not Claude independent acceptance.
 
 Claude next: independently fault the new REST path and run existing full coaching/identity matrix on a separate candidate; original Write-channel diagnostics alone do not test the new transport. Historical H2/FX02/N3/import residual/R3/R4/touch/missing initial ZIP/PNG preserved; staging/physical/hidden tabs NOT MEASURED. D1–D9 directions settled with exact approval provenance still missing per CC007; no film/AI activation. MVP NO-GO, BDN-AEO-001 queued; no merge/deploy/spend/live changes/deletion.
+
+
+## 2026-10-17 — isolated B11+B15 delivery (independent review pending)
+
+Task branch `codex/integrate-b11-b15-2026-10-17`, exact base `7d56300c2a59ee0081a9971036e83599ccfff217`, tested implementation `fd933ed30f814b22c095f0a69149f254971ec190`.
+Accepted B11 f2e1fed and B15 ffb40455 combined with workflow/package union resolutions;
+application runtime remains 518e9e5. Focused reporter10/10 and evidence19/19;
+real Playwright discovery identities equal base (desktop76, phone15; dispatch38/2),
+zero bucket overlap, execution settings unchanged. Raw outputs, inventories and hashes
+in `docs/evidence/b11-b15-integration-2026-10-17/`.
+[Delivery plan, dependencies, enforcement proposal and independent checklist](B11_B15_INTEGRATION_CANDIDATE_2026-10-17.md).
+This is NOT independent combined-candidate acceptance. Bounded combined CI/ZIP review,
+PR72/default-off import configuration and recovery integration remain separate.
+No full matrix, merge, deployment, protection change or AI activation; MVP NO-GO.
