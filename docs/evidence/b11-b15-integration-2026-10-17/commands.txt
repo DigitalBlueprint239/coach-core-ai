@@ -1,0 +1,14 @@
+Tested implementation: fd933ed30f814b22c095f0a69149f254971ec190
+Base: 7d56300c2a59ee0081a9971036e83599ccfff217
+Runtime: 518e9e5817abd2a0e1bf1308468928f238fa8533
+Node v24.19.0, npm 11.9.0, Playwright 1.64.0, Linux
+npm --prefix e2e run test:reporter
+npm --prefix e2e run test:evidence
+Discovery command in base/candidate e2e directories:
+node node_modules/playwright/cli.js test --list --reporter=json
+Base E2E_BUCKET unset. Candidate E2E_BUCKET unset/all/acceptance/diagnostic/obsolete-fault-model.
+Each repeated with E2E_GREP unset and E2E_GREP=N2-|D10-0.
+Discovery JSON flattened to sorted [projectName,file,line,column,title] identities; full tuple union and duplicate checks, not count-only comparison.
+Execution settings compared from actual discovery JSON config; source expect/webServer/workflow limits checked against base.
+Isolated dependency symlink to installed @playwright/test1.64.0 (not committed); no install/lockfile change in repository.
+No browser test matrix, emulator, release build or combined workflow dispatched.

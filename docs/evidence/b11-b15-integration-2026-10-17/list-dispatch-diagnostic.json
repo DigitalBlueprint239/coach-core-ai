@@ -1,0 +1,72 @@
+[
+  [
+    "chromium",
+    "n2.spec.ts",
+    35,
+    1,
+    "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    51,
+    1,
+    "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    115,
+    1,
+    "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    119,
+    1,
+    "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    123,
+    1,
+    "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    35,
+    1,
+    "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    51,
+    1,
+    "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    115,
+    1,
+    "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    119,
+    1,
+    "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    123,
+    1,
+    "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?"
+  ]
+]

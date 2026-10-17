@@ -1,0 +1,16 @@
+[
+  [
+    "chromium",
+    "n2.spec.ts",
+    198,
+    1,
+    "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    198,
+    1,
+    "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team"
+  ]
+]

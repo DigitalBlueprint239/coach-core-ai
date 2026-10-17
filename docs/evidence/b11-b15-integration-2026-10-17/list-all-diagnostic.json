@@ -1,0 +1,142 @@
+[
+  [
+    "chromium",
+    "n2.spec.ts",
+    35,
+    1,
+    "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    51,
+    1,
+    "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    115,
+    1,
+    "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    119,
+    1,
+    "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    123,
+    1,
+    "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?"
+  ],
+  [
+    "chromium",
+    "n2.spec.ts",
+    243,
+    1,
+    "N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text"
+  ],
+  [
+    "chromium",
+    "sdk-edit.spec.ts",
+    85,
+    1,
+    "CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save \u2014 what the coach sees; never false \"saved\"; one document; edit not lost"
+  ],
+  [
+    "chromium",
+    "sdk-edit.spec.ts",
+    88,
+    1,
+    "CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save \u2014 does the save hang on \"saving\"?"
+  ],
+  [
+    "chromium",
+    "sdk-edit.spec.ts",
+    110,
+    1,
+    "CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values"
+  ],
+  [
+    "chromium",
+    "sdk-edit.spec.ts",
+    144,
+    1,
+    "CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    35,
+    1,
+    "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    51,
+    1,
+    "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    115,
+    1,
+    "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    119,
+    1,
+    "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    123,
+    1,
+    "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?"
+  ],
+  [
+    "firefox",
+    "n2.spec.ts",
+    243,
+    1,
+    "N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text"
+  ],
+  [
+    "firefox",
+    "sdk-edit.spec.ts",
+    85,
+    1,
+    "CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save \u2014 what the coach sees; never false \"saved\"; one document; edit not lost"
+  ],
+  [
+    "firefox",
+    "sdk-edit.spec.ts",
+    88,
+    1,
+    "CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save \u2014 does the save hang on \"saving\"?"
+  ],
+  [
+    "firefox",
+    "sdk-edit.spec.ts",
+    110,
+    1,
+    "CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values"
+  ],
+  [
+    "firefox",
+    "sdk-edit.spec.ts",
+    144,
+    1,
+    "CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged"
+  ]
+]
