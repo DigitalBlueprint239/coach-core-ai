@@ -44,7 +44,7 @@ test('empty job: explicit zero-tests annotation and summary row; never "passed"'
   const { stdout, summary } = run({ env: { E2E_BUCKET: 'diagnostic', PROJECT: 'phone-chromium' }, begin: { config, suite: emptySuite } });
   assert.match(stdout, /::notice title=E2E phone-chromium \[diagnostic\]: 0 tests selected \(empty selection; nothing ran\)::/);
   assert.match(stdout, /0 tests selected%2C 0 executed%2C 0 passed%2C 0 failed|0 tests selected, 0 executed, 0 passed, 0 failed/);
-  assert.match(stdout, /no "diagnostic" tests exist for this project/);
+  assert.match(stdout, /no "diagnostic" tests exist for project "phone-chromium"/);
   assert.doesNotMatch(stdout, /\d+ passed \/ \d+ failed/, 'an empty job must not print a pass/fail tally');
   assert.match(summary, /\| phone-chromium \[diagnostic\] \| 0 tests selected \| — \| — \| — \| empty selection/);
   assert.doesNotMatch(summary, /\| phone-chromium \[diagnostic\] \| [1-9]/);
@@ -53,7 +53,44 @@ test('empty job: explicit zero-tests annotation and summary row; never "passed"'
 test('empty job without a bucket (local/all) still names the project and reason', () => {
   const { stdout } = run({ env: { PROJECT: 'phone-firefox' }, begin: { config, suite: emptySuite } });
   assert.match(stdout, /E2E phone-firefox: 0 tests selected/);
-  assert.match(stdout, /the filters selected no tests/);
+  assert.match(stdout, /project "phone-firefox"'s own filter selected no tests/);
+});
+
+test('empty selection under a dispatch grep is explained by the filters, not as bucket absence', () => {
+  const { stdout, summary } = run({ env: { E2E_BUCKET: 'acceptance', PROJECT: 'chromium', E2E_GREP: 'N2-D0' }, begin: { config, suite: emptySuite } });
+  assert.match(stdout, /0 tests selected \(empty selection; nothing ran\)/);
+  assert.match(stdout, /the current filters \(project "chromium"%2C bucket "acceptance" and grep "N2-D0"\) selected no tests|the current filters \(project "chromium", bucket "acceptance" and grep "N2-D0"\) selected no tests/);
+  assert.doesNotMatch(stdout, /tests exist/);
+  assert.match(summary, /grep "N2-D0"/);
+});
+
+test('REGRESSION (Codex re-review of e5b33ef): selected > 0 but no result before interruption is reported as INCOMPLETE, never as an empty selection or a pass', () => {
+  const a = fakeTest('UI-01 identity strip', 'chromium'); const b = fakeTest('UI-02 no-team state', 'chromium');
+  const { stdout, summary } = run({ env: { E2E_BUCKET: 'acceptance', PROJECT: 'chromium' }, begin: { config, suite: { allTests: () => [a, b] } }, ends: [], runStatus: 'interrupted' });
+  assert.match(stdout, /::error title=E2E run interrupted \[acceptance\]::.*PARTIAL/);
+  assert.match(stdout, /::error title=E2E chromium \[acceptance\]: 2 tests selected but NONE completed \(run interrupted\)::/);
+  assert.match(stdout, /2 tests selected%2C 0 completed%2C 0 passed%2C 0 failed|2 tests selected, 0 completed, 0 passed, 0 failed/);
+  assert.doesNotMatch(stdout, /empty selection/);
+  assert.doesNotMatch(stdout, /0 tests selected/);
+  assert.doesNotMatch(stdout, /pass-with-no-tests/);
+  assert.match(summary, /\| chromium \[acceptance\] \| \*\*2 selected, 0 completed\*\* \| — \| — \| — \| \*\*incomplete: run interrupted before any result\*\* \|/);
+  assert.doesNotMatch(summary, /empty selection/);
+});
+
+test('REGRESSION: run-level timedout with a non-empty selection and no results is INCOMPLETE', () => {
+  const a = fakeTest('CC-P10 shared profile', 'firefox');
+  const { stdout, summary } = run({ env: { PROJECT: 'firefox' }, begin: { config, suite: { allTests: () => [a] } }, ends: [], runStatus: 'timedout' });
+  assert.match(stdout, /::error title=E2E run timedout::/);
+  assert.match(stdout, /::error title=E2E firefox: 1 tests selected but NONE completed \(run timedout\)::/);
+  assert.doesNotMatch(stdout, /empty selection/);
+  assert.match(summary, /incomplete: run timedout before any result/);
+});
+
+test('REGRESSION: a setup/global error (run failed) with a non-empty selection and zero results is INCOMPLETE, not empty', () => {
+  const a = fakeTest('E2E-A01 sign-in', 'chromium');
+  const { stdout } = run({ env: { E2E_BUCKET: 'acceptance', PROJECT: 'chromium' }, begin: { config, suite: { allTests: () => [a] } }, ends: [], runStatus: 'failed' });
+  assert.match(stdout, /1 tests selected but NONE completed \(run failed\)/);
+  assert.doesNotMatch(stdout, /empty selection|pass-with-no-tests/);
 });
 
 test('passing job: tally annotation, acceptance bucket count, summary row; no empty-selection notice', () => {

@@ -104,15 +104,27 @@ export default class AnnotateReporter {
       emit('error', `E2E run ${runStatus}${bucketTag}`, `The Playwright run ended with status "${runStatus}" (interrupted/cancelled/timed out). Per-test counts below are PARTIAL and must not be read as a complete result.`);
       summary(`| (run) ${bucketTag.trim() || 'all'} | — | — | — | — | **run ${runStatus}: partial results** |\n`);
     }
-    // Empty selection: say so explicitly for the project this job targeted. Zero tests are
-    // never reported as passed tests; the job is green only because of --pass-with-no-tests.
+    // Projects with no completed results. Two different situations, never conflated
+    // (Codex re-review of e5b33ef): (a) the selection was genuinely EMPTY (0 selected),
+    // or (b) tests WERE selected but none completed (interrupted/timed out/setup error
+    // before the first result). Zero tests are never reported as passed tests.
     const targeted = process.env.PROJECT ? [process.env.PROJECT] : this.configuredProjects;
+    const grep = process.env.E2E_GREP ? ` and grep "${process.env.E2E_GREP}"` : '';
     for (const p of targeted) {
       if (this.rows.some((r) => r.project === p)) continue;
       const sel = this.selected.get(p) || 0;
-      const why = bucketName ? `no "${bucketName}" tests exist for this project` : 'the filters selected no tests';
+      if (sel > 0) {
+        emit('error', `E2E ${p}${bucketTag}: ${sel} tests selected but NONE completed (run ${runStatus})`,
+          `Project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}: ${sel} tests selected, 0 completed, 0 passed, 0 failed. The run ended with status "${runStatus}" before the first result (interrupted, timed out, or a setup/global error). This is an INCOMPLETE run: tests were selected and did not finish. It is not a pass.`);
+        summary(`| ${p}${bucketTag} | **${sel} selected, 0 completed** | — | — | — | **incomplete: run ${runStatus} before any result** |\n`);
+        continue;
+      }
+      // Genuinely empty: explain it as the result of the CURRENT filters. Whether the bucket
+      // has no tests at all for this project is established only when no grep narrows it.
+      const why = grep ? `the current filters (project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}${grep}) selected no tests`
+        : bucketName ? `no "${bucketName}" tests exist for project "${p}" under its own filter` : `project "${p}"'s own filter selected no tests`;
       emit('notice', `E2E ${p}${bucketTag}: 0 tests selected (empty selection; nothing ran)`,
-        `Project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}: ${sel} tests selected, 0 executed, 0 passed, 0 failed. ${why}. The job succeeds only via --pass-with-no-tests; this is an expected empty selection, not a passing test result.`);
+        `Project "${p}"${bucketName ? `, bucket "${bucketName}"` : ''}: 0 tests selected, 0 executed, 0 passed, 0 failed; ${why}. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result.`);
       summary(`| ${p}${bucketTag} | 0 tests selected | — | — | — | empty selection (${why}); nothing ran |\n`);
     }
     const projects = [...new Set(this.rows.map((r) => r.project))];
