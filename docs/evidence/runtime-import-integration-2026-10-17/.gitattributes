@@ -1,0 +1,2 @@
+# Raw command evidence is preserved byte-for-byte.
+*.txt -whitespace
