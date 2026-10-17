@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { D10_APPROVED, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, hasUnfinishedImport, ImportBackend } from './import-legacy';
+import { isLegacyImportEnabled, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, hasUnfinishedImport, ImportBackend } from './import-legacy';
 import { firebaseImport } from './firebase-import';
 export default function LegacyImport({ uid, teamId, teamName, backend = firebaseImport, onImported }: {
   uid: string; teamId: string; teamName: string; backend?: ImportBackend; onImported?: () => void;
@@ -10,11 +10,18 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [postponed, setPostponed] = useState(false);
+  const enabled = isLegacyImportEnabled();
   useEffect(() => {
     current.current = session;
     const refreshOffer = () => {
       setCount(0); setError(''); setPostponed(false);
-      try { const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (D10_APPROVED && (!localStorage.getItem(decisionKey(uid)) || hasUnfinishedImport(localStorage, {uid,teamId}))) setCount(readLegacy(localStorage).length); }
+      try {
+        if (!enabled) {
+          if (localStorage.getItem(LEGACY_KEY)) setError('Device-play import is disabled in this build. Original plays and unfinished imports remain on this device.');
+          return;
+        }
+        const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (!localStorage.getItem(decisionKey(uid)) || hasUnfinishedImport(localStorage, {uid,teamId})) setCount(readLegacy(localStorage).length);
+      }
       catch { setError('Device library cannot be imported safely. Originals preserved.'); }
     };
     setBusy(false); refreshOffer();
@@ -24,7 +31,7 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
     };
     window.addEventListener('storage', onStorage);
     return () => { current.current = ''; window.removeEventListener('storage', onStorage); };
-  }, [uid, teamId]);
+  }, [uid, teamId, enabled]);
   if (!count && !error) return null;
   const accept = async () => {
     setBusy(true); setError('');
@@ -42,5 +49,6 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
       <button disabled={busy} onClick={() => { void accept(); }}>{busy ? 'Verifying copies…' : 'Import plays'}</button>
       <button disabled={busy} onClick={() => { try { if (declineImport(localStorage, { uid, teamId }) === 'postponed') setPostponed(true); else setCount(0); } catch { setError('Decision could not be saved.'); } }}>Not now</button></>}
     {error && <p role="alert">{error}</p>}
+    {error && <p>If the original team is unavailable, contact support. Recovery requires verified account and team ownership; this screen cannot transfer or release an import.</p>}
   </section>;
 }

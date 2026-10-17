@@ -1,0 +1,39 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/features/legacy-import/__tests__/import-configuration.test.tsx
+
+  console.error
+    `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      26 |   const backend = { copy: jest.fn(), read: jest.fn() };
+      27 |   expect(isLegacyImportEnabled()).toBe(false);
+    > 28 |   render(<LegacyImport {...owner} backend={backend} />);
+         |         ^
+      29 |   expect(screen.getByRole('alert')).toHaveTextContent('disabled in this build');
+      30 |   expect(screen.queryByRole('button', { name: 'Import plays' })).not.toBeInTheDocument();
+      31 |   expect(screen.queryByRole('button', { name: 'Not now' })).not.toBeInTheDocument();
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at src/features/legacy-import/__tests__/import-configuration.test.tsx:28:9
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+PASS src/features/legacy-import/__tests__/import-configuration.test.tsx
+  ✓ configuration undefined fails closed without changing originals, decisions, claims or pending recovery (71 ms)
+  ✓ configuration  fails closed without changing originals, decisions, claims or pending recovery (7 ms)
+  ✓ configuration false fails closed without changing originals, decisions, claims or pending recovery (6 ms)
+  ✓ configuration TRUE fails closed without changing originals, decisions, claims or pending recovery (5 ms)
+  ✓ configuration 1 fails closed without changing originals, decisions, claims or pending recovery (5 ms)
+  ✓ explicit opt-in restores the original owner offer, but does not consent, transfer ownership or copy anything (21 ms)
+  ✓ disabled build without a device library adds no import screen or actions (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.731 s, estimated 1 s
+Ran all test suites within paths "src/features/legacy-import/__tests__/import-configuration.test.tsx".
