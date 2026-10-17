@@ -43,7 +43,7 @@ test('switch during pending write discards stale completion and records neither 
   await expect(importLegacy(localStorage,session,()=>current,backend)).rejects.toThrow('Account or team changed');
   expect(localStorage.getItem(decisionKey('coachA'))).toBeNull(); expect(backend.read).not.toHaveBeenCalled();
   expect(localStorage.getItem(pendingKey('coachA'))).not.toBeNull();
-  expect(localStorage.getItem(CLAIM_KEY)).toBeNull();
+  expect(JSON.parse(localStorage.getItem(CLAIM_KEY)!)).toMatchObject({uid:'coachA',teamId:'teamA',status:'pending'});
 });
 test('unfinished import names its original team and blocks another team before writes', async () => {
   backend.read.mockRejectedValueOnce(new Error('network'));

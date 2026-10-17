@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { D10_APPROVED, decisionKey, readLegacy, importLegacy, declineImport, importNotice, ImportBackend } from './import-legacy';
+import { D10_APPROVED, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, ImportBackend } from './import-legacy';
 import { firebaseImport } from './firebase-import';
 export default function LegacyImport({ uid, teamId, teamName, backend = firebaseImport, onImported }: {
   uid: string; teamId: string; teamName: string; backend?: ImportBackend; onImported?: () => void;
@@ -11,10 +11,18 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
   const [busy, setBusy] = useState(false);
   useEffect(() => {
     current.current = session;
-    setCount(0); setError(''); setBusy(false);
-    try { const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (D10_APPROVED && !localStorage.getItem(decisionKey(uid))) setCount(readLegacy(localStorage).length); }
-    catch { setError('Device library cannot be imported safely. Originals preserved.'); }
-    return () => { current.current = ''; };
+    const refreshOffer = () => {
+      setCount(0); setError('');
+      try { const notice = importNotice(localStorage, {uid,teamId}); if(notice) setError(notice); else if (D10_APPROVED && !localStorage.getItem(decisionKey(uid))) setCount(readLegacy(localStorage).length); }
+      catch { setError('Device library cannot be imported safely. Originals preserved.'); }
+    };
+    setBusy(false); refreshOffer();
+    const onStorage = (event: StorageEvent) => {
+      if (event.storageArea === localStorage && (event.key === null || event.key === CLAIM_KEY || event.key === LEGACY_KEY
+        || event.key === decisionKey(uid) || event.key?.endsWith(':legacyImportPending'))) refreshOffer();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => { current.current = ''; window.removeEventListener('storage', onStorage); };
   }, [uid, teamId]);
   if (!count && !error) return null;
   const accept = async () => {
