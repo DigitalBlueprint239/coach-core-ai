@@ -1,0 +1,18 @@
+N2 repair candidate preflight (clean npm ci). Runtime = #71 bdb06ae6d39ff9ed3fee7000f93468c8cf2f8fe7.
+Measured on fc5e81b8951e796c4d5c6de265ab2cf8cd1a038d; final candidate 8ff552135b960625d6daf9d4aecf1699e709e998 differs only in .github/workflows/e2e-emulator.yml (runtime and test bytes identical).
+== npm ci --legacy-peer-deps
+  npm audit fix --force
+
+Run `npm audit` for details.
+== jest
+Test Suites: 37 passed, 37 total
+Tests:       477 passed, 477 total
+== tsc --noEmit exit 0
+== npm audit --omit=dev (root)
+found 0 vulnerabilities
+== functions
+ℹ tests 73
+ℹ pass 73
+ℹ fail 0
+== functions npm audit --omit=dev
+found 0 vulnerabilities

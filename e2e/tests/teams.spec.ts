@@ -45,7 +45,9 @@ test('E2E-T02 account switching on one browser profile shows each coach only the
 
   const uidB = await signInAsBetaCoach(page, b);
   await openTab(page, 'Teams');
-  await expect(page.getByText('No team selected')).toBeVisible();
+  // #67 shows "No team selected" both in the top bar and on the Teams page;
+  // the Teams page (main content) must say it, and no element may say otherwise.
+  await expect(page.getByRole('main').getByText('No team selected')).toBeVisible();
   await expect(page.getByText('Alpha Eagles')).toHaveCount(0);
   await createTeamViaUI(page, 'Bravo Bulldogs');
   expect((await storage(page)).currentTeamId).not.toBe(alphaId);

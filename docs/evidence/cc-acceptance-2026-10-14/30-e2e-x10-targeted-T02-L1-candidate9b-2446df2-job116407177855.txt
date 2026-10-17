@@ -1,0 +1,44 @@
+E2E emulator (Chromium + Firefox) success 2026-10-15T11:53:53Z 2026-10-15T12:00:10Z sha=2446df2d3d8e2697601ecd7f267da698f0fb5cd0
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 20 executions
+none
+
+[notice] E2E phone-firefox: 20 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 CC-L1 [2.9/3.0/3.0s]
+PASS 10/10 E2E-T02 [3.5/3.6/3.7s]
+
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 20 executions
+none
+
+[notice] E2E phone-chromium: 20 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 CC-L1 [1.2/1.3/1.4s]
+PASS 10/10 E2E-T02 [2.2/2.3/2.3s]
+
+[notice] E2E firefox slow steps >= 10s: 0 of 20 executions
+none
+
+[notice] E2E firefox: 20 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 CC-L1 [2.9/3.0/3.1s]
+PASS 10/10 E2E-T02 [3.6/3.6/3.7s]
+
+[notice] E2E chromium slow steps >= 10s: 0 of 20 executions
+none
+
+[notice] E2E chromium: 20 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 CC-L1 [1.4/1.5/2.4s]
+PASS 10/10 E2E-T02 [2.3/2.5/2.7s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+

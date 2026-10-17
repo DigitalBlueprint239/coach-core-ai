@@ -8,7 +8,7 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "node --test --test-reporter=spec 'test/*.test.js'",
+    "test": "node --test --test-reporter=spec test/*.test.js",
     "test:ci": "ANNOTATE_LABEL='Functions gateway' node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout 'test/*.test.js'"
   },
   "engines": {

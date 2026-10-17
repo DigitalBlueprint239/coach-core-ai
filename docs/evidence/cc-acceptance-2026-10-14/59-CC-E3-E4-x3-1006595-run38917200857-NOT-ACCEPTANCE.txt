@@ -1,0 +1,125 @@
+# DIAGNOSTIC A4b: CC-E3 (practice plan retention + manual re-save) 3/3 per engine; CC-E4 harness locator fault (two name inputs); candidate 1006595 (runtime 518e9e5)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38917200857
+# Earlier runs: 38914690109 (E3 harness bug: periods.0 field absent on a new plan; E4 same two-input ambiguity), 38916989992 cancelled by a push to the same ref.
+
+##### RUN 38917200857
+=== JOB 117027614824
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 3 executions
+PASS CC-E3 #0: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=7471ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E3 #1: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=9941ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E3 #2: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=7942ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+[notice] E2E chromium slow steps >= 10s: 0 of 6 executions
+none
+[warning] E2E chromium diag: 3 failed executions
+CC-E4 #0 failed 7.7s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (5.8s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 5.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E4 #1 failed 10.6s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.9s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E4 #2 failed 10.5s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.8s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+[failure] E2E chromium: 3 passed / 3 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 3/3 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 3/3 CC-E4 [7.7/10.5/10.6s] -- Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: 
+PASS 3/3 CC-E3 [14.7/15.3/16.7s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117027614834
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 3 executions
+PASS CC-E3 #0: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=6507ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E3 #1: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=6987ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E3 #2: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=10034ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+[notice] E2E firefox slow steps >= 10s: 0 of 6 executions
+none
+[warning] E2E firefox diag: 3 failed executions
+CC-E4 #0 failed 10.5s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.4s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.4s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.1s
+CC-E4 #1 failed 9.3s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.4s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.4s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.1s
+CC-E4 #2 failed 11.3s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (9.4s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 9.4s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.1s
+[failure] E2E firefox: 3 passed / 3 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 3/3 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 3/3 CC-E4 [9.3/10.5/11.3s] -- Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: 
+PASS 3/3 CC-E3 [14.6/14.8/17.6s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
+##### RUN 38914690109
+=== JOB 117019730876
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium slow steps >= 10s: 0 of 20 executions
+none
+[warning] E2E chromium diag: 20 failed executions
+CC-E3 #0 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Expect "toHaveCount"@app.ts:256 0.3s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.3s; Navigate@app.ts:68 0.2s
+CC-E4 #0 failed 10.3s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.0s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.3s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E3 #1 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #1 failed 9.7s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.0s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E3 #2 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #2 failed 10.2s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.0s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.3s; Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s
+CC-E3 #3 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #3 failed 10.2s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.0s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.3s; Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s
+CC-E3 #4 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #4 failed 10.1s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.0s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.3s; Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s
+CC-E3 #5 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #5 failed 8.6s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.0s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 6.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E3 #6 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Expect "toBeVisible"@app.ts:99 0.1s
+CC-E4 #6 failed 9.0s | errors: Error: edited nam
+[failure] E2E chromium: 0 passed / 20 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 0/20 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 10/10 CC-E3 [60.2/60.2/60.2s] -- Test timeout of 60000ms exceeded.
+FAIL 10/10 CC-E4 [8.6/10.1/11.2s] -- Error: edited name retained after failure | expect(locator).toHaveValue(expected) failed | Locator: getByPlaceholder('En
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117019730803
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox slow steps >= 10s: 0 of 20 executions
+none
+[warning] E2E firefox diag: 20 failed executions
+CC-E3 #0 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Expect "toHaveText"@sdk-edit.spec.ts:35 0.4s; Expect "toHaveCount"@app.ts:256 0.3s; Navigate@app.ts:68 0.3s
+CC-E4 #0 failed 9.7s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 5.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.4s; Navigate@app.ts:68 0.3s
+CC-E3 #1 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.4s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s; Navigate@app.ts:88 0.2s
+CC-E4 #1 failed 13.1s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 9.4s; Navigate@app.ts:68 0.4s; Click@app.ts:76 0.3s
+CC-E3 #2 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.3s; Click@app.ts:76 0.3s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s
+CC-E4 #2 failed 13.0s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 9.4s; Navigate@app.ts:68 0.3s; Click@app.ts:76 0.3s
+CC-E3 #3 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.3s; Click@app.ts:76 0.3s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s
+CC-E4 #3 failed 10.9s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.4s; Navigate@app.ts:68 0.3s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s
+CC-E3 #4 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.3s; Click@app.ts:76 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s
+CC-E4 #4 failed 11.5s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.9s; Navigate@app.ts:68 0.3s; Click@app.ts:76 0.3s
+CC-E3 #5 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.4s; Click@app.ts:76 0.3s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s
+CC-E4 #5 failed 12.1s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.4s; Navigate@app.ts:68 0.3s; Click@app.ts:76 0.3s
+CC-E3 #6 timedOut 60.6s | errors: Test timeout of 60000ms exceeded. || Error: locator.inputValue: Test timeout of 60000ms exceeded. | last step: Expect "toMatchObject"@sdk-edit.spec.ts:37 (0.0s) | slowest: Navigate@app.ts:68 0.4s; Click@app.ts:76 0.3s; Expect "toHaveText"@sdk-edit.spec.ts:35 0.2s
+CC-E4 #6 failed 13.0s | errors: Error: edited name retained after failure | last step: edited name retained after failure@sdk-edit.spec.ts:162 (0.1s) | slowest: the failed sa
+[failure] E2E firefox: 0 passed / 20 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 0/20 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 10/10 CC-E3 [60.6/60.6/60.6s] -- Test timeout of 60000ms exceeded.
+FAIL 10/10 CC-E4 [9.7/13.0/13.6s] -- Error: edited name retained after failure | expect(locator).toHaveValue(expected) failed | Locator: getByPlaceholder('En
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

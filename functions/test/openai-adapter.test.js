@@ -121,9 +121,27 @@ describe("OpenAI adapter (integration: real SDK, local mock server)", () => {
   });
   after(() => new Promise((r) => server.close(r)));
 
+  // F1 follow-up (2026-10-14): the provider deliberately hides SDK error
+  // details, so a transient failure read only "openai error: Error". Record
+  // the raw SDK error (canary redacted) so a failing test names its cause.
+  const rawErrors = [];
   const provider = () => createOpenAIProvider({
     apiKey: CANARY_KEY, model: "test-model",
-    createClient: (key) => new OpenAI({apiKey: key, baseURL, maxRetries: 0}),
+    createClient: (key) => {
+      const client = new OpenAI({apiKey: key, baseURL, maxRetries: 0});
+      const parse = client.responses.parse.bind(client.responses);
+      client.responses.parse = (...args) => parse(...args).catch((e) => {
+        // Walk the cause chain (APIConnectionError -> fetch TypeError -> socket error code).
+        let cause = "";
+        for (let c = e && e.cause, i = 0; c && i < 3; c = c.cause, i++) {
+          cause += ` cause=${c.code || c.name || ""}:${c.message || ""}`;
+        }
+        rawErrors.push(`${e && e.constructor ? e.constructor.name : typeof e}: ${e && e.message}${cause}`
+            .split(CANARY_KEY).join("<canary>"));
+        throw e;
+      });
+      return client;
+    },
   });
 
   const completed = (data) => ({status: 200, body: {
@@ -137,7 +155,9 @@ describe("OpenAI adapter (integration: real SDK, local mock server)", () => {
   for (const task of ["practice_plan", "drill_recommendations", "coach_assistant"]) {
     it(`round-trips ${task} through /v1/responses`, async () => {
       reply = () => completed(SAMPLE_OUTPUTS[task]());
-      const res = await provider().generate(baseReq(task));
+      const res = await provider().generate(baseReq(task)).catch((e) => {
+        throw new Error(`${e.message} (category ${e.category}); raw SDK error: ${rawErrors[rawErrors.length - 1] || "none recorded"}`);
+      });
       assert.deepEqual(res.data, SAMPLE_OUTPUTS[task]());
       assert.deepEqual(res.usage, {inputTokens: 111, outputTokens: 222});
       const last = seen[seen.length - 1];

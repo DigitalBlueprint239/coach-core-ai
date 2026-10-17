@@ -1,0 +1,70 @@
+# DISCRIMINATION (not acceptance): D10-08a-d x3 on the PRE-repair runtime 518e9e5 (candidate e9244e2 = 518e9e5 + harness with the new tests)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38913820913
+# D10-08a and D10-08d FAIL 3/3 per engine (no resume offered: the status-less claim masks the pending import); D10-08b/08c PASS (other-team and other-account blocks already held pre-repair).
+
+=== JOB 117016745971
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium slow steps >= 10s: 6 of 15 executions
+FAIL D10-08a #0: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s
+FAIL D10-08d #0: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s
+FAIL D10-08a #1: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s
+FAIL D10-08d #1: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s
+FAIL D10-08a #2: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s
+FAIL D10-08d #2: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s
+[warning] E2E chromium diag: 6 failed executions
+D10-08a #0 failed 11.3s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:471 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s; Navigate@legacy.ts:44 0.2s; Expect "toBeVisible"@app.ts:115 0.1s
+D10-08d #0 failed 11.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:527 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s; Navigate@legacy.ts:44 0.1s; Reload@legacy-import.spec.ts:463 0.1s
+D10-08a #1 failed 11.2s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:471 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s; Navigate@legacy.ts:44 0.1s; Expect "toBeVisible"@app.ts:115 0.1s
+D10-08d #1 failed 11.1s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:527 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s; Navigate@legacy.ts:44 0.1s; Click@app.ts:146 0.1s
+D10-08a #2 failed 11.1s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:471 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s; Navigate@legacy.ts:44 0.1s; Click@app.ts:146 0.1s
+D10-08d #2 failed 11.1s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:527 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s; Navigate@legacy.ts:44 0.1s; Expect "toBeVisible"@app.ts:115 0.1s
+[failure] E2E chromium: 9 passed / 6 failed / 0 blocked / 0 skipped · acceptance 9/6 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 3/3 D10-08a [11.1/11.2/11.3s] -- Error: resume offered to the original coach/team | expect(locator).toBeVisible() failed | Locator: getByRole('region', {
+FAIL 3/3 D10-08d [11.1/11.1/11.2s] -- Error: expect(locator).toBeVisible() failed | Locator: getByRole('region', { name: 'Import device plays' }).getByRole('b
+PASS 3/3 D10-08 [1.9/2.0/3.1s]
+PASS 3/3 D10-08b [3.1/3.2/3.6s]
+PASS 3/3 D10-08c [3.8/3.8/3.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117016746536
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox slow steps >= 10s: 6 of 15 executions
+FAIL D10-08a #0: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s
+FAIL D10-08d #0: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s
+FAIL D10-08a #1: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s
+FAIL D10-08d #1: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s
+FAIL D10-08a #2: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s
+FAIL D10-08d #2: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s
+[warning] E2E firefox diag: 6 failed executions
+D10-08a #0 failed 12.1s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:471 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.1s
+D10-08d #0 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:527 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.2s
+D10-08a #1 failed 12.2s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:471 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.2s
+D10-08d #1 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:527 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.2s
+D10-08a #2 failed 12.2s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:471 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:471 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.2s
+D10-08d #2 failed 12.2s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:527 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:527 10.0s; Navigate@legacy.ts:44 0.2s; Expect "toBeVisible"@app.ts:115 0.2s
+[failure] E2E firefox: 9 passed / 6 failed / 0 blocked / 0 skipped · acceptance 9/6 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 3/3 D10-08a [12.1/12.2/12.2s] -- Error: resume offered to the original coach/team | expect(locator).toBeVisible() failed | Locator: getByRole('region', {
+FAIL 3/3 D10-08d [12.2/12.2/12.2s] -- Error: expect(locator).toBeVisible() failed | Locator: getByRole('region', { name: 'Import device plays' }).getByRole('b
+PASS 3/3 D10-08 [4.2/4.3/4.9s]
+PASS 3/3 D10-08b [5.1/5.2/5.2s]
+PASS 3/3 D10-08c [5.2/5.3/5.4s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

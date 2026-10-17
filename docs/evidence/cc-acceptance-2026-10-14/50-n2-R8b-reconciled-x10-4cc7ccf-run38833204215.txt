@@ -1,0 +1,56 @@
+# N2-R8b reconciled: grep N2-R8b, x10, retries 0, candidate 4cc7ccf (runtime 518e9e5817abd2a0e1bf1308468928f238fa8533 unchanged; harness blocks the SDK Listen channel from before sign-in and asserts both faults were served)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38833204215 ; jobs chromium 116756824010, firefox 116756824208
+# Every execution: listenBlocked>=5, readbacksFailed=1 (503 served), noFalseSuccessAt8s=true, recovery automatic after restore, exactly one team = the journalled operation, committed doc unchanged.
+
+=== JOB 116756824010
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium diag data: 10 executions
+PASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=82ms committedAt=670ms noFalseSuccessAt8s=true recovery=automatic/5786ms
+PASS N2-R8b #1: R8b listenBlocked=5 readbacksFailed=1 statusAt=69ms committedAt=117ms noFalseSuccessAt8s=true recovery=automatic/1735ms
+PASS N2-R8b #2: R8b listenBlocked=5 readbacksFailed=1 statusAt=90ms committedAt=132ms noFalseSuccessAt8s=true recovery=automatic/1180ms
+PASS N2-R8b #3: R8b listenBlocked=5 readbacksFailed=1 statusAt=70ms committedAt=113ms noFalseSuccessAt8s=true recovery=automatic/2136ms
+PASS N2-R8b #4: R8b listenBlocked=5 readbacksFailed=1 statusAt=79ms committedAt=120ms noFalseSuccessAt8s=true recovery=automatic/1688ms
+PASS N2-R8b #5: R8b listenBlocked=6 readbacksFailed=1 statusAt=65ms committedAt=111ms noFalseSuccessAt8s=true recovery=automatic/5167ms
+PASS N2-R8b #6: R8b listenBlocked=5 readbacksFailed=1 statusAt=88ms committedAt=126ms noFalseSuccessAt8s=true recovery=automatic/683ms
+PASS N2-R8b #7: R8b listenBlocked=5 readbacksFailed=1 statusAt=76ms committedAt=107ms noFalseSuccessAt8s=true recovery=automatic/1736ms
+PASS N2-R8b #8: R8b listenBlocked=6 readbacksFailed=1 statusAt=67ms committedAt=118ms noFalseSuccessAt8s=true recovery=automatic/3294ms
+PASS N2-R8b #9: R8b listenBlocked=5 readbacksFailed=1 statusAt=66ms committedAt=97ms noFalseSuccessAt8s=true recovery=automatic/352ms
+[notice] E2E chromium slow steps >= 10s: 0 of 10 executions
+none
+[notice] E2E chromium: 10 passed / 0 failed / 0 blocked / 0 skipped · acceptance 10/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 10/10 N2-R8b [12.3/13.7/17.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116756824208
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox diag data: 10 executions
+PASS N2-R8b #0: R8b listenBlocked=5 readbacksFailed=1 statusAt=89ms committedAt=518ms noFalseSuccessAt8s=true recovery=automatic/552ms
+PASS N2-R8b #1: R8b listenBlocked=5 readbacksFailed=1 statusAt=94ms committedAt=138ms noFalseSuccessAt8s=true recovery=automatic/557ms
+PASS N2-R8b #2: R8b listenBlocked=5 readbacksFailed=1 statusAt=113ms committedAt=153ms noFalseSuccessAt8s=true recovery=automatic/2277ms
+PASS N2-R8b #3: R8b listenBlocked=5 readbacksFailed=1 statusAt=92ms committedAt=133ms noFalseSuccessAt8s=true recovery=automatic/1066ms
+PASS N2-R8b #4: R8b listenBlocked=5 readbacksFailed=1 statusAt=96ms committedAt=154ms noFalseSuccessAt8s=true recovery=automatic/723ms
+PASS N2-R8b #5: R8b listenBlocked=6 readbacksFailed=1 statusAt=105ms committedAt=151ms noFalseSuccessAt8s=true recovery=automatic/5630ms
+PASS N2-R8b #6: R8b listenBlocked=6 readbacksFailed=1 statusAt=103ms committedAt=139ms noFalseSuccessAt8s=true recovery=automatic/3466ms
+PASS N2-R8b #7: R8b listenBlocked=5 readbacksFailed=1 statusAt=98ms committedAt=127ms noFalseSuccessAt8s=true recovery=automatic/543ms
+PASS N2-R8b #8: R8b listenBlocked=6 readbacksFailed=1 statusAt=108ms committedAt=150ms noFalseSuccessAt8s=true recovery=automatic/3142ms
+PASS N2-R8b #9: R8b listenBlocked=5 readbacksFailed=1 statusAt=113ms committedAt=167ms noFalseSuccessAt8s=true recovery=automatic/1304ms
+[notice] E2E firefox slow steps >= 10s: 0 of 10 executions
+none
+[notice] E2E firefox: 10 passed / 0 failed / 0 blocked / 0 skipped · acceptance 10/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 10/10 N2-R8b [13.9/14.9/19.0s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

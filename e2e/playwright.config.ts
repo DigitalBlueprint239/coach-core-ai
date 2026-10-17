@@ -8,12 +8,21 @@ import { defineConfig, devices } from '@playwright/test';
 // delivery, which needs an approved staging project (Day 6).
 const chromiumPath = process.env.E2E_CHROMIUM_PATH; // sandbox only; CI uses Playwright's own build
 
+// UI workflow tests (no SDK-in-browser shortcuts) re-run at phone width.
+const PHONE_WORKFLOWS = /(?:^|\s)(E2E-A07|E2E-A10|CC-P10|CC-P11|CC-P12|CC-P14|CC-P15|CC-P16|CC-P17|CC-L0|CC-L1|E2E-T01|E2E-T02|D10-01|D10-06e) /;
+
+// Optional targeted re-run filter (CI dispatch input `grep`). Combined with each
+// project's own filter (AND), so phone projects still run only their workflows.
+const EXTRA = process.env.E2E_GREP ? new RegExp(process.env.E2E_GREP) : undefined;
+const both = (r: RegExp) => (EXTRA ? new RegExp(`(?=[\\s\\S]*(?:${EXTRA.source}))${r.source}`) : r);
+
 export default defineConfig({
   testDir: './tests',
   outputDir: './test-results',
   fullyParallel: false,
   workers: 1, // one shared emulator; tests reset it in beforeEach
   retries: 0,
+  ...(EXTRA ? { grep: EXTRA } : {}),
   forbidOnly: true,
   timeout: 60_000,
   expect: { timeout: 10_000 },
@@ -40,5 +49,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}) },
     },
     ...(process.env.E2E_SKIP_FIREFOX ? [] : [{ name: 'firefox', use: { ...devices['Desktop Firefox'] } }]),
+    // Phone-WIDTH workflow coverage for the responsive #67 shell (bottom navigation).
+    // Desktop engines at a 390x844 viewport: NOT device emulation, NOT physical phones.
+    ...(process.env.E2E_SKIP_PHONE ? [] : [
+      { name: 'phone-chromium', grep: both(PHONE_WORKFLOWS),
+        use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 }, ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}) } },
+      ...(process.env.E2E_SKIP_FIREFOX ? [] : [{ name: 'phone-firefox', grep: both(PHONE_WORKFLOWS),
+        use: { ...devices['Desktop Firefox'], viewport: { width: 390, height: 844 } } }]),
+    ]),
   ],
 });

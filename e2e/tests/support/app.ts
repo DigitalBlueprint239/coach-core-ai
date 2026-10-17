@@ -1,4 +1,4 @@
-import { expect, type Page, type BrowserContext } from '@playwright/test';
+import { test, expect, type Page, type BrowserContext } from '@playwright/test';
 import { latestSignInLink, grantBeta, adminTeamsOwnedBy } from './emulator';
 
 export const LEGACY_PLAYS_KEY = 'smartPlaybook_plays';
@@ -26,11 +26,16 @@ export const dashboardFor = (page: Page, email: string) => page.getByText(`Welco
  * EMULATOR AUTH: the emulator records the link instead of emailing it.
  */
 export async function requestEmailLink(page: Page, email: string): Promise<URL> {
-  await page.goto('/');
-  await expect(signInScreen(page)).toBeVisible();
-  await page.getByLabel('Or get a sign-in link by email').fill(email);
-  await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
-  await expect(page.getByText(`Check ${email} for a sign-in link`)).toBeVisible();
+  // Named phases so a stall (FX-02: 48 s before this button resolved) is attributed in CI diagnostics.
+  await test.step('sign-in: open app and wait for sign-in screen', async () => {
+    await page.goto('/');
+    await expect(signInScreen(page)).toBeVisible();
+  });
+  await test.step('sign-in: request email link', async () => {
+    await page.getByLabel('Or get a sign-in link by email').fill(email);
+    await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
+    await expect(page.getByText(`Check ${email} for a sign-in link`)).toBeVisible();
+  });
   return latestSignInLink(email);
 }
 
@@ -64,7 +69,86 @@ export async function signOutViaUI(page: Page): Promise<void> {
 }
 
 export async function openTab(page: Page, name: string): Promise<void> {
-  await page.getByRole('button', { name: new RegExp(name) }).first().click();
+  // #67 shell (2026-10-15): the same destination exists in the desktop sidebar
+  // and the phone bottom bar, only one of which is displayed. Click the VISIBLE
+  // navigation button; fall back to the pre-#67 in-page tabs.
+  const re = new RegExp(name);
+  const nav = page.getByRole('navigation').getByRole('button', { name: re }).filter({ visible: true });
+  if (await nav.count()) { await nav.first().click(); return; }
+  await page.getByRole('button', { name: re }).filter({ visible: true }).first().click();
+}
+
+/**
+ * N2 investigation (2026-10-15): records Firestore channel traffic (Write/Listen
+ * WebChannel and REST commits) relative to a start time, plus named marks.
+ * Metadata only (method, channel, TYPE/RID params, timing, status); no bodies.
+ */
+export function firestoreNetLog(page: Page) {
+  const t0 = Date.now();
+  type Row = { k: string; m?: string; type?: string; s: number; e: number; st?: number; f?: string; label?: string };
+  const rows: Row[] = [];
+  const byReq = new Map<object, Row>();
+  // W/L = SDK WebChannel Write/Listen; C = REST documents:commit; R = REST team readback (N2 repair).
+  const kind = (u: string) => (/Firestore\/Write\/channel/.test(u) ? 'W' : /Firestore\/Listen\/channel/.test(u) ? 'L' : /documents:commit/.test(u) ? 'C' : /\/v1\/projects\/[^/]+\/databases\/\(default\)\/documents\/teams\//.test(u) ? 'R' : '');
+  const onRequest = (r: import('@playwright/test').Request) => {
+    const k = kind(r.url()); if (!k) return;
+    const q = new URL(r.url()).searchParams;
+    const row: Row = { k, m: r.method()[0], type: q.get('TYPE') || (q.get('RID') === 'rpc' ? 'rpc' : ''), s: Date.now() - t0, e: -1 };
+    byReq.set(r, row); rows.push(row);
+  };
+  const onFinished = async (r: import('@playwright/test').Request) => {
+    const row = byReq.get(r); if (!row) return;
+    row.e = Date.now() - t0;
+    try { row.st = (await r.response())?.status() ?? 0; } catch { /* gone */ }
+  };
+  const onFailed = (r: import('@playwright/test').Request) => { const row = byReq.get(r); if (row) { row.e = Date.now() - t0; row.f = r.failure()?.errorText || 'failed'; } };
+  page.on('request', onRequest); page.on('requestfinished', onFinished); page.on('requestfailed', onFailed);
+  return {
+    stop: () => { page.off('request', onRequest); page.off('requestfinished', onFinished); page.off('requestfailed', onFailed); },
+    mark: (label: string) => rows.push({ k: 'MARK', label, s: Date.now() - t0, e: -1 }),
+    /** Compact text: marks and Write/commit requests in full; Listen requests counted. */
+    summary: (max = 1600) => {
+      const listen = rows.filter((r) => r.k === 'L');
+      const parts = rows.filter((r) => r.k !== 'L').map((r) => (r.k === 'MARK' ? `[${r.label}@${r.s}]`
+        : `${r.k}${r.m}${r.type ? `:${r.type}` : ''} ${r.s}-${r.e < 0 ? 'open' : r.e}${r.st ? ` ${r.st}` : ''}${r.f ? ` ${r.f}` : ''}`));
+      return `${parts.join(' | ')} | Listen: ${listen.length} req, ${listen.filter((r) => r.e < 0).length} open`.slice(0, max);
+    },
+  };
+}
+
+/**
+ * N3 probe (2026-10-15): what happened between the Create Team click and the
+ * first Firestore request. Records booleans and short UI texts only; never
+ * uids, emails or tokens. "submitFired" is the DOM submit event (React's
+ * onSubmit runs on it); "creatingSeen" proves the handler set its pending state;
+ * "shown" holds toast/alert/status texts that appeared (e.g. an auth error).
+ */
+export async function teamCreateProbe(page: Page) {
+  await page.evaluate(() => {
+    const w = window as any;
+    w.__n3 = { submitFired: 0, creatingSeen: false, shown: [] as string[] };
+    if (w.__n3Installed) return;
+    w.__n3Installed = true;
+    document.addEventListener('submit', () => { w.__n3.submitFired += 1; }, true);
+    new MutationObserver((records) => {
+      for (const r of records) for (const n of Array.from(r.addedNodes)) {
+        const el = n.nodeType === 1 ? (n as Element) : n.parentElement;
+        if (!el) continue;
+        const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+        if (/Creating\.\.\./.test(text)) w.__n3.creatingSeen = true;
+        const toast = el.closest('[role=alert],[role=status],.fixed.top-4.right-4');
+        if (toast && text && w.__n3.shown.length < 8 && !w.__n3.shown.includes(text.slice(0, 120))) w.__n3.shown.push(text.slice(0, 120));
+      }
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  });
+  const signedInAtSubmit = await page.evaluate(() => {
+    const hooks = (window as any).__coachCoreE2E;
+    return hooks?.uid ? Boolean(hooks.uid()) : 'unknown';
+  });
+  return {
+    signedInAtSubmit,
+    read: async () => page.evaluate(() => (window as any).__n3 as { submitFired: number; creatingSeen: boolean; shown: string[] }),
+  };
 }
 
 export async function createTeamViaUI(page: Page, teamName: string): Promise<void> {
@@ -72,9 +156,19 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
   await page.getByRole('button', { name: 'Create Team', exact: true }).first().click();
   await page.getByLabel('Team Name').fill(teamName);
   const t0 = Date.now();
+  const net = firestoreNetLog(page); // N2: network lifecycle, reported only on failure
+  const probe = await teamCreateProbe(page); // N3: auth state, submit, pending state, UI texts
+  net.mark('submit');
   await page.getByRole('button', { name: 'Create Team', exact: true }).last().click();
   try {
-    await expect(page.getByText('Team created successfully!')).toBeVisible();
+    // Team-specific confirmation (H2 follow-up, 2026-10-14): the generic
+    // "Team created successfully!" toast lives 5 s, so after creating a FIRST
+    // team it could falsely confirm a SECOND one still "Creating..." (Codex's
+    // local D10-07 trace: Bravo never rendered, "Switch to" missing). Now the
+    // dialog must close and a heading with exactly this team's name must show.
+    await expect(page.getByRole('heading', { name: 'Create New Team' })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: teamName, exact: true }).first()).toBeVisible();
+    net.stop();
   } catch (err) {
     // Diagnostics only (Firefox intermittent, 2026-10-14): what the coach saw,
     // whether the modal is still open, and whether the team reached Firestore.
@@ -83,6 +177,9 @@ export async function createTeamViaUI(page: Page, teamName: string): Promise<voi
     const creating = await page.getByText('Creating...').isVisible().catch(() => false);
     const uid = await page.evaluate(() => (window as any).__coachCoreE2E?.uid?.() ?? null).catch(() => null);
     const saved = uid ? (await adminTeamsOwnedBy(uid)).map((t) => t.name) : 'uid unavailable';
+    net.mark('gave-up');
+    const n3 = await probe.read().catch(() => null);
+    test.info().annotations.push({ type: 'diag-data', description: `N2 createTeam "${teamName}" modalOpen=${modalOpen} creating=${creating} server=${JSON.stringify(saved)} shown=${JSON.stringify(visible.map((v) => v.replace(/\s+/g, ' ').slice(0, 120))).slice(0, 500)} n3={signedInAtSubmit:${probe.signedInAtSubmit},submitFired:${n3?.submitFired},creatingSeen:${n3?.creatingSeen},toasts:${JSON.stringify(n3?.shown ?? []).slice(0, 400)}} net: ${net.summary(1200)}` });
     throw new Error(`Team "${teamName}" not confirmed within ${Date.now() - t0} ms. modalOpen=${modalOpen} `
       + `creating=${creating} teamsInFirestore=${JSON.stringify(saved)} visible=${JSON.stringify(visible).slice(0, 300)}`, { cause: err });
   }

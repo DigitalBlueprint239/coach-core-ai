@@ -128,7 +128,7 @@ describe('AuthGate', () => {
     expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
   });
 
-  it('revoked session: SDK sign-out after a live session clears user data and explains why', async () => {
+  it('revoked session: SDK sign-out after a live session clears session data, preserves the quarantined legacy queue, and explains why', async () => {
     window.localStorage.setItem('currentTeamId', 'team-1');
     window.localStorage.setItem('offline_operations', '[{"type":"update"}]');
     window.localStorage.setItem('unrelated', 'keep');
@@ -139,7 +139,8 @@ describe('AuthGate', () => {
     expect(await screen.findByText(/Your session ended/)).toBeInTheDocument();
     expect(screen.queryByText('PROTECTED COACHING CONTENT')).toBeNull();
     expect(window.localStorage.getItem('currentTeamId')).toBeNull();
-    expect(window.localStorage.getItem('offline_operations')).toBeNull();
+    // Quarantined legacy queue is preserved byte-for-byte (never replayed).
+    expect(window.localStorage.getItem('offline_operations')).toBe('[{"type":"update"}]');
     expect(window.localStorage.getItem('unrelated')).toBe('keep');
   });
 
@@ -181,6 +182,31 @@ describe('logout', () => {
     await screen.findByText('out:signed_out');
     expect(mockSignOut).toHaveBeenCalled();
     expect(window.localStorage.getItem('currentTeamId')).toBeNull();
+  });
+});
+
+describe('sign-out in progress (FX-03)', () => {
+  function GateWithLogout() {
+    const { logout } = useAuth();
+    return <button onClick={() => { void logout(); }}>PROTECTED SIGN OUT</button>;
+  }
+  it('shows only a non-interactive signing-out screen until sign-out completes; the SDK signed-out event cannot show the form early', async () => {
+    let finishSignOut: () => void = () => undefined;
+    mockSignOut.mockImplementation(() => new Promise<void>((r) => { finishSignOut = r; }));
+    window.localStorage.setItem('coachcore:v1:coach-1:t:drafts:plays', 'draft-bytes');
+    render(<AuthProvider><AuthGate><GateWithLogout /></AuthGate></AuthProvider>);
+    await emit(fakeUser(BETA));
+    fireEvent.click(await screen.findByText('PROTECTED SIGN OUT'));
+    expect(await screen.findByText('Signing out…')).toBeInTheDocument();
+    expect(screen.queryByText('PROTECTED SIGN OUT')).toBeNull();            // private content unmounted
+    expect(screen.queryByLabelText('Or get a sign-in link by email')).toBeNull();
+    await emit(null);                                                      // SDK fires before cleanup/reload
+    expect(screen.getByText('Signing out…')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Continue with Google' })).toBeNull();
+    await act(async () => { finishSignOut(); });
+    // Test environment has no reload: the gate then shows sign-in.
+    expect(await screen.findByRole('button', { name: 'Continue with Google' })).toBeInTheDocument();
+    expect(window.localStorage.getItem('coachcore:v1:coach-1:t:drafts:plays')).toBe('draft-bytes');
   });
 });
 

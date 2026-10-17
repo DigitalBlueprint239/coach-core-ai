@@ -1,0 +1,338 @@
+# PR #72 full acceptance matrix x10, retries 0, no filter; candidate f2271cebc015dc2895a30f777d04a40f5316d991 = runtime 35e0d77887ba87d2714706f0cdbb2511b442d1a2 + harness 1006595 (CC-E4 locator fix 5c58794 NOT included: its 10/10 failures are the known harness strict-mode fault, diagnostic bucket)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38918657153 ; jobs chromium 117032591803, firefox 117032591632, phone-chromium 117032591241, phone-firefox 117032591657
+# Kept separate from runtime 518e9e5 acceptance.
+
+=== JOB 117032591803
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 227 executions
+PASS D10-08d #0: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"a9bc0d7d","name":"Tampered copy"}] claim={"uid":"H709OdIH4GljeMnfQe2AjPHUu4Kl","status":"pending","teamId":"3MEhzvNK3B1DFudBk4Dk","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS N2-D0 #0: D0 server=51ms dialogClosed=115ms net: [click@1] | CP 39-84 net::ERR_ABORTED | [end@116] | Listen: 0 req, 0 open
+PASS N2-D1 #0: D1 server=47ms stuckAt8s=true creatingAt8s=true abortedBackchannel=0 dialogClosed=8008ms teams=1 net: [click@0] | CP 36-96 net::ERR_ABORTED | [unblock@8003] | [end@8008] | Listen: 0 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=0 server=64ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=135ms teams=1 net: [click@1] | CP 50-103 net::ERR_ABORTED | [release@139] | [end@139] | Listen: 0 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=0 server=122ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=132ms teams=1 net: [click@1] | CP 50-121 net::ERR_ABORTED | RG 115-121 net::ERR_ABORTED | [release@138] | [end@138] | Listen: 0 req, 0 open
+PASS N2-A1 #0: A1 statusAt=65ms savedAfterRestore=5ms recoveredAfterRestore=19ms teams=1 net: [click@1] | CP 51-109 net::ERR_ABORTED | RG 108-109 net::ERR_ABORTED | [restore@8003] | [end@11029] | Listen: 0 req, 0 open
+PASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS N2-R1 #0: R1 heldCommits=1 statusAt=59ms serverDuringOutage=0 recovery=automatic/67ms net: [click@1] | CP 49-8051 net::ERR_ABORTED | [restore@8005] | RG 8049-8051 net::ERR_ABORTED | [end@11073] | Listen: 0 req, 0 open
+PASS N2-R1b #0: R1b resets=1 statusAt=64ms serverDuringOutage=0 recovery=ui-retry/12125ms net: [click@0] | CP 49-60 net::ERR_CONNECTION_RESET | [restore@8007] | CP 20060-20116 net::ERR_ABORTED | RG 20116-20116 net::ERR_ABORTED | [end@23132] | Listen: 0 req, 0 open
+PASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=72ms serverAfterCommit=1 recovery=automatic/76ms net: [click@0] | CP 48-134 net::ERR_ABORTED | [end@3166] | Listen: 0 req, 0 open
+PASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/77ms
+PASS N2-R3 #0: R3 recovery=ui-retry/12164ms
+PASS N2-R4 #0: R4 recovery=ui-retry/12215ms
+PASS N2-R5 #0: R5 fakedCommits=1 statusAt=65ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12152ms net: [click@1] | CP 50-75 net::ERR_ABORTED | RG 63-75 net::ERR_ABORTED | [restore@8025] | CP 20094-20144 net::ERR_ABORTED | RG 20143-20144 net::ERR_ABORTED | [end@23177] | Listen: 0 req, 0 open
+PASS N2-R6 #0: R6 statusAt=65ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0
+PASS N2-R7 #0: R7 promptAt=54ms teamsBeforeAnswer=1 prompt="You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=58ms teamsWithName=2 distinctIds=2 distinctCodes=2
+PASS N2-R7b #0: R7b resets=1 statusAt=8ms serverDuring=1 recoveredAt=8 reprompts=0 teamsWithName=2
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=66ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12124ms
+PASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=49ms committedAt=64ms noFalseSuccessAt8s=true recovery=automatic/4245ms
+PASS CC-E1 #0: e1 fault=commit-reset faultHits=5 statusSeries=["57ms:saving","313ms:saving","568ms:saving","824ms:saving","1080ms:saving","1335ms:saving","1590ms:saving","1846ms:saving","2101ms:saving","2357ms:saving","2613ms:saving","2867ms:saving","3124ms:saving","3380ms:saving","3636ms:saving","3891ms:saving","4147ms:saving","4403ms:saving","4659ms:saving","4915ms:saving","5170ms:s
+[notice] E2E chromium slow steps >= 10s: 15 of 760 executions
+FAIL N2-D2 #0: Click@n2.spec.ts:138 59.4s
+FAIL N2-A2 #0: Click@n2.spec.ts:212 59.3s
+FAIL N2-D2 #4: Fill "N2 Retry"@n2.spec.ts:142 58.9s
+FAIL N2-A2 #4: Fill "N2 No Duplicate"@n2.spec.ts:221 58.9s
+PASS CC-E3 #4: the failed save is reported@sdk-edit.spec.ts:118 10.8s
+FAIL N2-D2 #5: Fill "N2 Retry"@n2.spec.ts:142 59.0s
+FAIL N2-A2 #5: Fill "N2 No Duplicate"@n2.spec.ts:221 58.9s
+FAIL N2-D2 #6: Fill "N2 Retry"@n2.spec.ts:142 59.0s
+FAIL N2-A2 #6: Fill "N2 No Duplicate"@n2.spec.ts:221 58.9s
+FAIL N2-D2 #7: Fill "N2 Retry"@n2.spec.ts:142 58.8s
+FAIL N2-A2 #7: Fill "N2 No Duplicate"@n2.spec.ts:221 58.8s
+FAIL N2-A2 #8: Fill "N2 No Duplicate"@n2.spec.ts:221 58.8s
+FAIL N2-D2 #9: Fill "N2 Retry"@n2.spec.ts:142 58.7s
+FAIL N2-A2 #9: Fill "N2 No Duplicate"@n2.spec.ts:221 58.5s
+PASS CC-E3 #9: the failed save is reported@sdk-edit.spec.ts:118 10.8s
+[warning] E2E chromium diag: 23 failed executions
+N2-D2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.4s) | slowest: Click@n2.spec.ts:138 59.4s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+N2-A2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.3s) | slowest: Click@n2.spec.ts:212 59.3s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #0 failed 9.4s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.8s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.8s; Navigate@app.ts:68 0.2s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.1s
+CC-E4 #1 failed 9.9s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.3s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.3s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E4 #2 failed 6.6s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (4.8s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 4.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Expect "toHaveCount"@app.ts:256 0.2s
+CC-E4 #3 failed 10.7s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.8s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Expect "toHaveCount"@app.ts:256 0.2s
+N2-D2 #4 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.fill: Test timeout of 60000ms exceeded. | last step: Fill "N2 Retry"@n2.spec.ts:142 (58.9s) | slowest: Fill "N2 Retry"@n2.spec.ts:142 58.9s; Navigate@app.ts:68 0.2s; Click@n2.spec.ts:141 0.1s
+N2-A2 #4 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.fill: Test timeout of 60000ms exceeded. | last step: Fill "N2 No Duplicate"@n2.spec.ts:221 (58.9s) | slowest: Fill "N2 No Duplicate"@n2.spec.ts:221 58.9s; Navigate@app.ts:68 0.2s; Expect "toBeVisible"@app.ts:99 0.1s
+CC-E4 #4 failed 10.5s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.3s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.3s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.3s; Expect "toHaveCount"@app.ts:256 0.3s
+N2-D2 #5 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.fill: Test timeout of 60000ms exceeded. | last step: Fill "N2 Retry"@n2.spec.ts:142 (59.0s) | slowest: Fill "N2 Retry"@n2.spec.ts:142 59.0s; Navigate@app.ts:68 0.2s; Click@app.ts:98 0.1s
+N2-A2 #5 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.fill: Test timeout of 60000ms exceeded. | last step: Fill "N2 No Duplicate"@n2.spec.ts:221 (58.9s) | slowest: Fill "N2 No Duplicate"@n2.spec.ts:221 58.9s; Navigate@app.ts:68 0.2s; Expect "toBeVisible"@app.ts:99 0.1s
+CC-E4 #5 failed 7.9s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (5.8s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 5.8s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.3s; Expect "toHaveCount"@app.ts:256 0.3s
+N2-D2 #6 timedOut 60.1s | errors: T
+[failure] E2E chromium: 737 passed / 23 failed / 0 blocked / 0 skipped · acceptance 650/0 · diagnostic 84/16 · obsolete-fault-model 3/7 (pass/fail)
+FAIL 6/10 N2-D2 [43.7/60.1/60.2s] -- Test timeout of 60000ms exceeded.
+FAIL 7/10 N2-A2 [6.1/60.1/60.2s] -- Test timeout of 60000ms exceeded.
+FAIL 10/10 CC-E4 [6.6/10.6/12.7s] -- Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: 
+PASS 10/10 E2E-AI01 [1.3/2.4/3.3s]
+PASS 10/10 E2E-AI01b [0.9/1.3/2.2s]
+PASS 10/10 E2E-A01 [0.3/0.5/0.7s]
+PASS 10/10 E2E-A02 [0.6/0.6/0.7s]
+PASS 10/10 E2E-A03 [0.7/0.8/0.8s]
+PASS 10/10 E2E-A04 [0.8/0.8/0.9s]
+PASS 10/10 E2E-A05 [0.3/0.3/0.4s]
+PASS 10/10 E2E-A06 [0.3/0.3/0.4s]
+PASS 10/10 E2E-A07 [0.9/1.0/1.0s]
+PASS 10/10 E2E-A08 [0.5/0.5/0.5s]
+PASS 10/10 E2E-A09 [1.0/1.0/1.3s]
+PASS 10/10 E2E-A10 [0.9/1.0/1.0s]
+PASS 10/10 CC-P10 [1.9/2.4/3.5s]
+PASS 10/10 CC-P10b [2.1/2.8/4.6s]
+PASS 10/10 CC-P11 [1.6/2.4/3.8s]
+PASS 10/10 CC-P12 [1.5/2.1/3.3s]
+PASS 10/10 CC-P14 [2.8/4.4/7.0s]
+PASS 10/10 CC-P15 [2.4/3.0/4.8s]
+PASS 10/10 CC-P16 [2.1/2.5/3.8s]
+PASS 10/10 CC-P16b [1.4/2.0/3.8s]
+PASS 10/10 CC-P17 [2.4/3.2/5.5s]
+PASS 10/10 CC-L0 [1.4/1.8/2.5s]
+PASS 10/10 CC-L1 [1.1/1.5/2.4s]
+PASS 10/10 CC-W0 [1.3/1.8/3.0s]
+PASS 10/10 D10-00 [1.0/1.4/2.1s]
+PASS 10/10 D10-01 [1.4/1.7/2.6s]
+PASS 10/10 D10-02 [1.7/2.2/3.5s]
+PASS 10/10 D10-03 [2.0/2.5/4.6s]
+PASS 10/10 D10-04 [1.4/2.3/5.1s]
+PASS 10/10 D10-05 [1.1/1.7/3.2s]
+PASS 10/10 D10-06 [2.3/3.9/6.8s]
+PASS 10/10 D10-06b [2.4/3.4/5.8s]
+PASS 10/10 D10-07 [6.5/7.4/8.8s]
+PASS 10/10 D10-07b [1.5/2.4/4.0s]
+PASS 10/10 D10-08 [2.0/2.6/4.6s]
+PASS 10/10 D10-09 [2.5/3.6/6.0s]
+PASS 10/10 D10-10 [1.4/2.2/4.4s]
+PASS 10/10 D10-11 [2.2/3.5/5.1s]
+PASS 10/10 D10-12 [0.8/0.9/1.2s]
+PASS 10/10 D10-06c [2.0/2.4/4.0s]
+PASS 10/10 D10-06d [2.6/3.2/5.1s]
+PASS 10/10 D10-06e [3.5/5.0/7.6s]
+PASS 10/10 D10-08a [1.8/2.8/4.7s]
+PASS 10/10 D10-08b [3.2/3.6/4.5s]
+PASS 10/10 D10-08c [3.9/4.6/6.0s]
+PASS 10/10 D10-08d [1.4/1.9/3.5s]
+PASS 10/10 N2-D0 [0.8/1.3/1.7s]
+PASS 10/10 N2-D1 [8.8/8.9/9.2s]
+PASS 10/10 N2-D3 [0.9/1.2/1.9s]
+PASS 10/10 N2-D4 [0.8/1.2/1.8s]
+PASS 10/10 N2-A1 [11.7/12.1/12.5s]
+PASS 10/10 N3-D5 [6.4/8.7/13.4s]
+PASS 10/10 N2-R1 [11.8/12.2/12.7s]
+PASS 10/10 N2-R1b [23.9/24.3/24.9s]
+PASS 10/10 N2-R1c [3.9/4.3/4.8s]
+PASS 10/10 N2-R2 [6.1/6.5/7.1s]
+PASS 10/10 N2-R3 [16.2/16.6/17.2s]
+PASS 10/10 N2-R4 [17.3/17.6/18.2s]
+PASS 10/10 N2-R5 [23.9/24.3/24.8s]
+PASS 10/10 N2-R6 [20.9/21.3/21.8s]
+PASS 10/10 N2-R7 [10.3/10.6/11.3s]
+PASS 10/10 N2-R7b [29.1/29.6/30.4s]
+PASS 10/10 N2-R8 [23.9/24.3/24.8s]
+PASS 10/10 N2-R8b [12.0/14.3/18.3s]
+PASS 10/10 E2E-C01 [1.5/1.9/2.7s]
+PASS 10/10 CC-E1 [10.7/12.9/56.2s]
+PASS 10/10 CC-E2 [9.5/10.3/12.0s]
+PASS 10/10 CC-E3 [13.4/16.1/19.8s]
+PASS 10/10 E2E-T01 [1.8/2.1/2.9s]
+PASS 10/10 E2E-T02 [2.3/3.0/4.4s]
+PASS 10/10 E2E-T03 [2.0/3.1/5.1s]
+PASS 10/10 UI-01 [0.8/1.1/1.8s]
+PASS 10/10 UI-02 [1.5/1.8/2.2s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117032591632
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 231 executions
+PASS D10-08d #0: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"4c8f4fd0","name":"Tampered copy"}] claim={"uid":"SwAO0p0IHfMtOEz4KVtXVwUy3ZnH","status":"pending","teamId":"uy9NF3oDOswLQE9BEdzm","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS N2-D0 #0: D0 server=81ms dialogClosed=143ms net: [click@1] | CP 64-114 200 | RG 117-118 NS_BINDING_ABORTED | [end@144] | Listen: 0 req, 0 open
+PASS N2-D1 #0: D1 server=143ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8013ms teams=1 net: [click@1] | CP 76-126 200 | [unblock@8001] | [end@8014] | Listen: 0 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=0 server=130ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=139ms teams=1 net: [click@1] | CP 60-113 NS_BINDING_ABORTED | [release@157] | [end@157] | Listen: 0 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=0 server=124ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=133ms teams=1 net: [click@1] | CP 59-104 200 | RG 107-110 NS_BINDING_ABORTED | [release@138] | [end@138] | Listen: 0 req, 0 open
+PASS N2-A1 #0: A1 statusAt=98ms savedAfterRestore=6ms recoveredAfterRestore=26ms teams=1 net: [click@1] | CP 75-132 200 | [restore@8002] | [end@11033] | Listen: 0 req, 0 open
+PASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS N2-R1 #0: R1 heldCommits=1 statusAt=105ms serverDuringOutage=0 recovery=automatic/87ms net: [click@0] | CP 80-8058 200 | [restore@8000] | [end@11087] | Listen: 0 req, 0 open
+PASS N2-R1b #0: R1b resets=1 statusAt=82ms serverDuringOutage=0 recovery=ui-retry/12176ms net: [click@1] | CP 64-67 NS_ERROR_NET_RESET | [restore@8006] | CP 20093-20152 200 | [end@23182] | Listen: 0 req, 0 open
+PASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=85ms serverAfterCommit=1 recovery=automatic/88ms net: [click@3] | CP 64-131 NS_BINDING_ABORTED | [end@3201] | Listen: 0 req, 0 open
+PASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/76ms
+PASS N2-R3 #0: R3 recovery=ui-retry/12256ms
+PASS N2-R4 #0: R4 recovery=ui-retry/12250ms
+PASS N2-R5 #0: R5 fakedCommits=1 statusAt=77ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12174ms net: [click@1] | CP 59-63 200 | RG 70-89 403 | [restore@8033] | CP 20124-20171 200 | [end@23207] | Listen: 0 req, 0 open
+PASS N2-R6 #0: R6 statusAt=78ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0
+PASS N2-R7 #0: R7 promptAt=85ms teamsBeforeAnswer=1 prompt="You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=59ms teamsWithName=2 distinctIds=2 distinctCodes=2
+PASS N2-R7b #0: R7b resets=1 statusAt=9ms serverDuring=1 recoveredAt=15 reprompts=0 teamsWithName=2
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=87ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12165ms
+PASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=86ms committedAt=104ms noFalseSuccessAt8s=true recovery=automatic/4591ms
+PASS CC-E1 #0: e1 fault=commit-reset faultHits=5 statusSeries=["76ms:saving","337ms:saving","595ms:saving","853ms:saving","1111ms:saving","1369ms:saving","1627ms:saving","1886ms:saving","2145ms:saving","2404ms:saving","2663ms:saving","2921ms:saving","3178ms:saving","3436ms:saving","3693ms:saving","3951ms:saving","4210ms:saving","4469ms:saving","4728ms:saving","4985ms:saving","5243ms:saving","5506ms:saving","5766ms:saving","6026ms:saving","6285ms:saving","6544ms:saving","6801ms:saving","7070ms:saving","7336ms:failed","7595ms:failed","7854ms:failed"] serverAt8s=[{"rev":1,"name":"Edit path 
+[notice] E2E firefox slow steps >= 10s: 9 of 760 executions
+FAIL N2-D2 #0: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #0: Click@n2.spec.ts:212 59.1s
+FAIL N2-D2 #1: Click@n2.spec.ts:138 59.1s
+FAIL N2-A2 #1: Click@n2.spec.ts:212 59.1s
+FAIL N2-D2 #7: Fill "N2 Retry"@n2.spec.ts:142 58.5s
+FAIL N2-A2 #7: Fill "N2 No Duplicate"@n2.spec.ts:221 58.4s
+FAIL N2-D2 #8: Fill "N2 Retry"@n2.spec.ts:142 58.5s
+FAIL N2-A2 #8: Fill "N2 No Duplicate"@n2.spec.ts:221 58.5s
+FAIL N2-D2 #9: Fill "N2 Retry"@n2.spec.ts:142 58.4s
+[warning] E2E firefox diag: 20 failed executions
+N2-D2 #0 timedOut 60.4s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+N2-A2 #0 timedOut 60.4s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.1s) | slowest: Click@n2.spec.ts:212 59.1s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #0 failed 9.9s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.4s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.4s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+D10-11 #6 failed 15.2s | errors: Error: Play Library should list the imported plays | last step: Close context@legacy-import.spec.ts:321 (0.0s) | slowest: Play Library should list the imported plays@legacy.ts:93 9.0s; Expect "poll toBe"@legacy.ts:142 1.9s; Expect "toHaveCount"@app.ts:256 0.3s
+N2-D2 #1 timedOut 60.4s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.1s) | slowest: Click@n2.spec.ts:138 59.1s; Navigate@app.ts:68 0.1s; Navigate@app.ts:88 0.1s
+N2-A2 #1 timedOut 60.4s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.1s) | slowest: Click@n2.spec.ts:212 59.1s; Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s
+CC-E4 #1 failed 10.7s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.9s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.2s; Navigate@app.ts:68 0.2s
+CC-E4 #2 failed 10.7s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.9s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.3s; Expect "toHaveCount"@app.ts:256 0.2s
+CC-E4 #3 failed 10.7s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.9s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.3s; Expect "toHaveCount"@app.ts:256 0.2s
+CC-E4 #4 failed 10.9s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (7.9s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 7.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.3s; Expect "toHaveCount"@app.ts:256 0.2s
+CC-E4 #5 failed 12.0s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (8.9s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 8.9s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.3s; Expect "toHaveCount"@app.ts:256 0.3s
+CC-E4 #6 failed 13.5s | errors: Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: | last step: the failed save is reported@sdk-edit.spec.ts:161 (9.4s) | slowest: the failed save is reported@sdk-edit.spec.ts:161 9.4s; Expect "toHaveText"@sdk-edit.spec.ts:153 0.8s; Expect "toHaveCount"@app.ts:256 0.8s
+N2-D2 #7
+[failure] E2E firefox: 740 passed / 20 failed / 0 blocked / 0 skipped · acceptance 649/1 · diagnostic 85/15 · obsolete-fault-model 6/4 (pass/fail)
+FAIL 1/10 D10-11 [3.6/4.5/15.2s] -- Error: Play Library should list the imported plays | Play Library should list the imported plays | expect(received).toEq
+FAIL 5/10 N2-D2 [44.2/60.4/60.4s] -- Test timeout of 60000ms exceeded.
+FAIL 4/10 N2-A2 [6.7/7.3/60.4s] -- Test timeout of 60000ms exceeded.
+FAIL 10/10 CC-E4 [9.9/11.2/14.2s] -- Error: locator.inputValue: Error: strict mode violation: getByPlaceholder('Enter play name...') resolved to 2 elements: 
+PASS 10/10 E2E-AI01 [3.0/3.7/4.5s]
+PASS 10/10 E2E-AI01b [1.4/1.8/2.9s]
+PASS 10/10 E2E-A01 [0.5/0.7/0.9s]
+PASS 10/10 E2E-A02 [0.9/1.0/1.0s]
+PASS 10/10 E2E-A03 [1.2/1.3/1.5s]
+PASS 10/10 E2E-A04 [1.4/1.5/1.6s]
+PASS 10/10 E2E-A05 [0.5/0.7/0.8s]
+PASS 10/10 E2E-A06 [1.2/1.3/1.5s]
+PASS 10/10 E2E-A07 [1.5/1.6/1.7s]
+PASS 10/10 E2E-A08 [0.8/0.9/0.9s]
+PASS 10/10 E2E-A09 [1.5/1.5/1.6s]
+PASS 10/10 E2E-A10 [1.5/1.5/1.6s]
+PASS 10/10 CC-P10 [3.0/3.3/4.3s]
+PASS 10/10 CC-P10b [3.1/3.8/5.6s]
+PASS 10/10 CC-P11 [2.3/2.8/4.4s]
+PASS 10/10 CC-P12 [2.3/2.8/3.9s]
+PASS 10/10 CC-P14 [4.4/5.4/8.5s]
+PASS 10/10 CC-P15 [4.6/5.2/6.3s]
+PASS 10/10 CC-P16 [3.2/3.6/4.8s]
+PASS 10/10 CC-P16b [2.0/2.4/4.5s]
+PASS 10/10 CC-P17 [3.6/4.7/6.5s]
+PASS 10/10 CC-L0 [2.2/2.5/3.3s]
+PASS 10/10 CC-L1 [1.9/2.1/3.0s]
+PASS 10/10 CC-W0 [1.8/2.3/3.6s]
+PASS 10/10 D10-00 [1.5/1.9/2.6s]
+PASS 10/10 D10-01 [3.1/3.4/3.9s]
+PASS 10/10 D10-02 [2.3/2.7/3.7s]
+PASS 10/10 D10-03 [2.8/3.6/5.3s]
+PASS 10/10 D10-04 [2.3/3.4/4.8s]
+PASS 10/10 D10-05 [1.8/2.2/3.2s]
+PASS 10/10 D10-06 [3.6/4.8/7.4s]
+PASS 10/10 D10-06b [3.5/4.5/6.8s]
+PASS 10/10 D10-07 [7.4/7.8/9.5s]
+PASS 10/10 D10-07b [2.5/3.2/4.8s]
+PASS 10/10 D10-08 [2.9/3.8/5.5s]
+PASS 10/10 D10-09 [4.0/5.3/7.7s]
+PASS 10/10 D10-10 [2.0/3.0/4.7s]
+PASS 10/10 D10-12 [1.2/1.5/2.8s]
+PASS 10/10 D10-06c [3.3/3.7/5.0s]
+PASS 10/10 D10-06d [4.1/4.8/6.2s]
+PASS 10/10 D10-06e [5.8/6.8/9.3s]
+PASS 10/10 D10-08a [2.9/3.8/5.7s]
+PASS 10/10 D10-08b [4.3/5.0/5.7s]
+PASS 10/10 D10-08c [5.3/5.9/7.1s]
+PASS 10/10 D10-08d [2.2/2.7/3.6s]
+PASS 10/10 N2-D0 [1.3/1.6/2.2s]
+PASS 10/10 N2-D1 [9.2/9.3/9.7s]
+PASS 10/10 N2-D3 [1.3/1.7/2.2s]
+PASS 10/10 N2-D4 [1.3/1.6/2.2s]
+PASS 10/10 N2-A1 [12.3/13.3/13.7s]
+PASS 10/10 N3-D5 [11.4/12.5/17.5s]
+PASS 10/10 N2-R1 [12.2/12.7/13.1s]
+PASS 10/10 N2-R1b [24.3/24.7/25.3s]
+PASS 10/10 N2-R1c [4.4/4.8/5.3s]
+PASS 10/10 N2-R2 [6.6/7.1/7.7s]
+PASS 10/10 N2-R3 [16.8/17.3/17.8s]
+PASS 10/10 N2-R4 [18.5/19.1/19.4s]
+PASS 10/10 N2-R5 [24.4/24.9/25.5s]
+PASS 10/10 N2-R6 [21.5/22.0/22.4s]
+PASS 10/10 N2-R7 [10.9/11.4/12.3s]
+PASS 10/10 N2-R7b [29.9/30.6/30.9s]
+PASS 10/10 N2-R8 [24.4/24.9/25.3s]
+PASS 10/10 N2-R8b [12.7/13.8/16.8s]
+PASS 10/10 E2E-C01 [2.4/2.8/3.6s]
+PASS 10/10 CC-E1 [11.7/55.3/56.7s]
+PASS 10/10 CC-E2 [10.1/11.2/12.4s]
+PASS 10/10 CC-E3 [13.0/17.4/18.4s]
+PASS 10/10 E2E-T01 [3.6/3.9/4.7s]
+PASS 10/10 E2E-T02 [3.7/4.7/5.5s]
+PASS 10/10 E2E-T03 [3.3/4.3/6.0s]
+PASS 10/10 UI-01 [1.3/1.5/2.0s]
+PASS 10/10 UI-02 [2.4/2.6/3.1s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117032591241
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 150 executions
+none
+[notice] E2E phone-chromium: 150 passed / 0 failed / 0 blocked / 0 skipped · acceptance 150/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 10/10 E2E-A07 [1.1/1.2/1.3s]
+PASS 10/10 E2E-A10 [0.9/0.9/1.0s]
+PASS 10/10 CC-P10 [1.9/2.0/2.3s]
+PASS 10/10 CC-P11 [1.5/1.6/1.8s]
+PASS 10/10 CC-P12 [1.5/1.6/2.1s]
+PASS 10/10 CC-P14 [2.9/2.9/3.5s]
+PASS 10/10 CC-P15 [2.3/2.5/2.7s]
+PASS 10/10 CC-P16 [1.9/2.1/2.2s]
+PASS 10/10 CC-P17 [2.3/2.4/2.7s]
+PASS 10/10 CC-L0 [1.3/1.4/1.5s]
+PASS 10/10 CC-L1 [1.1/1.1/1.3s]
+PASS 10/10 D10-01 [1.4/1.6/1.7s]
+PASS 10/10 D10-06e [3.4/3.7/4.0s]
+PASS 10/10 E2E-T01 [1.4/1.5/1.6s]
+PASS 10/10 E2E-T02 [2.2/2.3/2.4s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117032591657
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 150 executions
+none
+[notice] E2E phone-firefox: 150 passed / 0 failed / 0 blocked / 0 skipped · acceptance 150/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 10/10 E2E-A07 [2.0/2.1/2.4s]
+PASS 10/10 E2E-A10 [1.1/1.2/1.4s]
+PASS 10/10 CC-P10 [2.4/2.5/2.8s]
+PASS 10/10 CC-P11 [1.9/1.9/2.1s]
+PASS 10/10 CC-P12 [2.0/2.1/2.2s]
+PASS 10/10 CC-P14 [3.5/3.8/4.0s]
+PASS 10/10 CC-P15 [2.9/3.0/3.3s]
+PASS 10/10 CC-P16 [3.1/3.2/3.3s]
+PASS 10/10 CC-P17 [2.7/2.9/3.3s]
+PASS 10/10 CC-L0 [1.7/1.8/1.9s]
+PASS 10/10 CC-L1 [1.4/1.5/1.5s]
+PASS 10/10 D10-01 [1.6/1.9/2.0s]
+PASS 10/10 D10-06e [4.6/4.7/4.9s]
+PASS 10/10 E2E-T01 [1.8/1.9/2.0s]
+PASS 10/10 E2E-T02 [2.9/3.0/3.3s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

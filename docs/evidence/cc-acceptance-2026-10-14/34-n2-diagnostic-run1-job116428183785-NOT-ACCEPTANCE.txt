@@ -1,0 +1,87 @@
+E2E emulator (Chromium + Firefox) failure 2026-10-15T12:43:35Z 2026-10-15T12:54:45Z sha=7adc40b8045f3f660d477a841ff529d92871b981
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[failure] 
+Process completed with exit code 1.
+
+[notice] E2E firefox diag data: 15 executions
+FAIL N2-D1 #0: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 66-78 200 | WG:xmlhttp 86-90 NS_ERROR_NET_RESET | WG:xmlhttp 121-123 NS_ERROR_NET_RESET | [unblock@8032] | [end@40019] | Listen: 2 req, 0 open
+FAIL N2-D1 #1: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 62-76 200 | WG:xmlhttp 82-89 NS_ERROR_NET_RESET | WG:xmlhttp 122-124 NS_ERROR_NET_RESET | [unblock@8066] | [end@40034] | Listen: 2 req, 0 open
+FAIL N2-D1 #2: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 65-84 200 | WG:xmlhttp 88-91 NS_ERROR_NET_RESET | WG:xmlhttp 134-137 NS_ERROR_NET_RESET | [unblock@8042] | [end@40028] | Listen: 2 req, 0 open
+FAIL N2-D1 #3: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 64-78 200 | WG:xmlhttp 83-89 NS_ERROR_NET_RESET | WG:xmlhttp 115-117 NS_ERROR_NET_RESET | [unblock@8051] | [end@40020] | Listen: 2 req, 0 open
+FAIL N2-D1 #4: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 63-79 200 | WG:xmlhttp 85-90 NS_ERROR_NET_RESET | WG:xmlhttp 124-126 NS_ERROR_NET_RESET | [unblock@8034] | [end@40023] | Listen: 2 req, 0 open
+PASS N2-D0 #0: D0 server=162ms dialogClosed=181ms net: [click@1] | WP 77-83 200 | WG:xmlhttp 102-open | WP 112-149 200 | [end@181] | Listen: 2 req, 0 open
+PASS N2-D2 #0: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=667ms teamsNamedSame=2
+PASS N2-D0 #1: D0 server=163ms dialogClosed=174ms net: [click@1] | WP 72-85 200 | WG:xmlhttp 89-open | WP 109-152 200 | [end@175] | Listen: 2 req, 0 open
+PASS N2-D2 #1: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=636ms teamsNamedSame=2
+PASS N2-D0 #2: D0 server=163ms dialogClosed=174ms net: [click@1] | WP 65-75 200 | WG:xmlhttp 82-open | WP 93-139 200 | [end@175] | Listen: 2 req, 0 open
+PASS N2-D2 #2: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=644ms teamsNamedSame=2
+PASS N2-D0 #3: D0 server=150ms dialogClosed=164ms net: [click@1] | WP 64-71 200 | WG:xmlhttp 81-open | WP 98-135 200 | [end@165] | Listen: 2 req, 0 open
+PASS N2-D2 #3: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=653ms teamsNamedSame=2
+PASS N2-D0 #4: D0 server=144ms dialogClosed=175ms net: [click@1] | WP 61-69 200 | WG:xmlhttp 79-open | WP 89-149 200 | [end@175] | Listen: 2 req, 0 open
+PASS N2-D2 #4: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=667ms teamsNamedSame=2
+
+[notice] E2E firefox slow steps >= 10s: 0 of 25 executions
+none
+
+[warning] E2E firefox diag: 5 failed executions
+N2-D1 #0 failed 42.1s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s; Click@n2.spec.ts:62 0.1s
+N2-D1 #1 failed 42.1s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s; Expect "toBeVisible"@app.ts:52 0.1s
+N2-D1 #2 failed 42.1s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:36 0.1s
+N2-D1 #3 failed 42.1s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@n2.spec.ts:62 0.1s
+N2-D1 #4 failed 42.1s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Expect "toBeVisible"@app.ts:52 0.1s
+
+[failure] E2E firefox: 20 passed / 5 failed / 0 blocked / 0 skipped
+FAIL 5/5 N2-D1 [42.1/42.1/42.1s] -- Error: never more teams than submitted (1), and the submitted team is not lost | expect(received).toBe(expected) // Obje
+PASS 5/5 N2-D0 [2.4/2.5/2.5s]
+PASS 5/5 N2-D2 [5.9/5.9/5.9s]
+PASS 5/5 UI-01 [1.3/1.3/1.3s]
+PASS 5/5 UI-02 [2.4/2.4/2.5s]
+
+[notice] E2E chromium diag data: 15 executions
+FAIL N2-D1 #0: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 64-96 200 | WG:xmlhttp 96-102 net::ERR_CONNECTION_RESET | WG:xmlhttp 146-148 net::ERR_CONNECTION_RESET | [unblock@8014] | [end@40040] | Listen: 2 req, 0 open
+FAIL N2-D1 #1: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 60-85 200 | WG:xmlhttp 80-89 net::ERR_CONNECTION_RESET | WG:xmlhttp 121-123 net::ERR_CONNECTION_RESET | [unblock@8065] | [end@40033] | Listen: 2 req, 0 open
+FAIL N2-D1 #2: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@1] | WP 59-79 200 | WG:xmlhttp 81-89 net::ERR_CONNECTION_RESET | WG:xmlhttp 125-127 net::ERR_CONNECTION_RESET | [unblock@8046] | [end@40050] | Listen: 2 req, 0 open
+FAIL N2-D1 #3: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 58-83 200 | WG:xmlhttp 78-86 net::ERR_CONNECTION_RESET | WG:xmlhttp 117-119 net::ERR_CONNECTION_RESET | [unblock@8021] | [end@40012] | Listen: 2 req, 0 open
+FAIL N2-D1 #4: D1 server=-1ms stuckAt8s=true creatingAt8s=true abortedBackchannel=2 dialogClosed=-1ms teams=0 net: [click@0] | WP 61-77 200 | WG:xmlhttp 78-84 net::ERR_CONNECTION_RESET | WG:xmlhttp 114-118 net::ERR_CONNECTION_RESET | [unblock@8017] | [end@40024] | Listen: 2 req, 0 open
+PASS N2-D0 #0: D0 server=600ms dialogClosed=597ms net: [click@2] | WP 96-291 200 | WG:xmlhttp 295-open | WP 310-583 200 | [end@602] | Listen: 2 req, 1 open
+PASS N2-D2 #0: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=515ms teamsNamedSame=2
+PASS N2-D0 #1: D0 server=129ms dialogClosed=155ms net: [click@1] | WP 59-87 200 | WG:xmlhttp 88-open | WP 98-150 200 | [end@156] | Listen: 2 req, 0 open
+PASS N2-D2 #1: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=533ms teamsNamedSame=2
+PASS N2-D0 #2: D0 server=124ms dialogClosed=145ms net: [click@1] | WP 61-83 200 | WG:xmlhttp 84-open | WP 101-141 200 | [end@146] | Listen: 2 req, 0 open
+PASS N2-D2 #2: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=522ms teamsNamedSame=2
+PASS N2-D0 #3: D0 server=132ms dialogClosed=150ms net: [click@1] | WP 64-83 200 | WG:xmlhttp 84-open | WP 91-138 200 | [end@151] | Listen: 2 req, 0 open
+PASS N2-D2 #3: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=499ms teamsNamedSame=2
+PASS N2-D0 #4: D0 server=126ms dialogClosed=149ms net: [click@1] | WP 62-85 200 | WG:xmlhttp 90-open | WP 94-141 200 | [end@150] | Listen: 2 req, 0 open
+PASS N2-D2 #4: D2 serverWhilePending=0 cancelEnabledWhileCreating=true retrySubmitEnabled=true heldPosts=1 dialogSettled=494ms teamsNamedSame=2
+
+[notice] E2E chromium slow steps >= 10s: 0 of 25 executions
+none
+
+[warning] E2E chromium diag: 5 failed executions
+N2-D1 #0 failed 40.8s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+N2-D1 #1 failed 40.9s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+N2-D1 #2 failed 41.0s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+N2-D1 #3 failed 40.8s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-D1 #4 failed 40.9s | errors: Error: never more teams than submitted (1), and the submitted team is not lost | last step: never more teams than submitted (1), and the submitted team is not lost@n2.spec.ts:73 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+
+[failure] E2E chromium: 20 passed / 5 failed / 0 blocked / 0 skipped
+FAIL 5/5 N2-D1 [40.8/40.9/41.0s] -- Error: never more teams than submitted (1), and the submitted team is not lost | expect(received).toBe(expected) // Obje
+PASS 5/5 N2-D0 [1.1/1.1/1.5s]
+PASS 5/5 N2-D2 [4.4/4.4/4.4s]
+PASS 5/5 UI-01 [0.8/0.8/0.9s]
+PASS 5/5 UI-02 [1.5/1.6/1.7s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
