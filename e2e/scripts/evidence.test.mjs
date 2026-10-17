@@ -208,3 +208,116 @@ test('workflow: the upload is gated on the finalize eligibility output, and a wi
   assert.match(wf, /echo "eligible=true" >> "\$GITHUB_OUTPUT"/);
   assert.match(wf, /if: always\(\) && steps\.finalize\.outputs\.eligible != 'true'[\s\S]*?::error title=E2E evidence withheld/);
 });
+
+// ---------------------------------------------------------------------------
+// Verifier-operational-failure checks (Codex review of 3befdf1): a verifier that
+// could not run (grep/sha256sum exit 2 or anything unexpected) is NOT a clean result.
+// Only grep=1 (no match) may proceed. Every such failure must exit non-zero, leave no
+// UPLOAD_OK, and report the step without printing content.
+// ---------------------------------------------------------------------------
+const REAL = Object.fromEntries(['grep', 'sha256sum'].map((t) => [t, spawnSync('bash', ['-c', `command -v ${t}`], { encoding: 'utf8' }).stdout.trim()]));
+// A grep that fails operationally (exit 2) ONLY for the named flag, forwarding every other call to the real grep.
+const brokenGrep = (flag) => {
+  const bin = mkdtempSync(join(tmpdir(), 'bin-'));
+  writeFileSync(join(bin, 'grep'), `#!/usr/bin/env bash\nif [ "$1" = "${flag}" ]; then echo "grep: synthetic operational failure" >&2; exit 2; fi\nexec ${REAL.grep} "$@"\n`); chmodSync(join(bin, 'grep'), 0o755);
+  return bin;
+};
+const withBin = (bin) => ({ env: { ...process.env, PATH: `${bin}:${process.env.PATH}` } });
+
+test('REGRESSION: redaction verification grep exits 2 (operational failure) -> non-zero, no UPLOAD_OK, no inventory, original log untouched, no content printed', () => {
+  const { ev, res, req } = fixture();
+  const r = sh(['finalize', ev, res, ...req], withBin(brokenGrep('-Eq')));
+  assert.notEqual(r.status, 0, 'a verifier that could not run must not finalize');
+  assert.match(r.stdout + r.stderr, /::error title=E2E evidence finalize failed::redaction verification could not run \(grep exit 2\); sanitization is UNPROVEN \(evidence NOT eligible for upload\)/);
+  assert.ok(!existsSync(join(ev, 'UPLOAD_OK')), 'no eligibility marker');
+  assert.ok(!existsSync(join(ev, 'INVENTORY.sha256')), 'no inventory after a failed verifier');
+  assert.ok(!existsSync(join(ev, '.run.log.redacting')), 'temp redaction file removed');
+  assert.ok(!(r.stdout + r.stderr).includes('SYNTHETIC-SENTINEL-TOKEN'), 'content never printed');
+});
+
+test('REGRESSION: grep exit 1 (clean scan) is the ONLY status that proceeds; grep exit 0 (match) still rejects', () => {
+  // Control for the check above: with the real grep, the same fixture finalizes (sed removes the sentinel -> grep=1).
+  const ok = fixture();
+  const r0 = sh(['finalize', ok.ev, ok.res, ...ok.req]);
+  assert.equal(r0.status, 0, r0.stdout + r0.stderr);
+  assert.ok(existsSync(join(ok.ev, 'UPLOAD_OK')));
+  // A grep forced to report a match (exit 0) for the verification call rejects even a correctly redacted log.
+  const bin = mkdtempSync(join(tmpdir(), 'bin-'));
+  writeFileSync(join(bin, 'grep'), `#!/usr/bin/env bash\nif [ "$1" = "-Eq" ]; then exit 0; fi\nexec ${REAL.grep} "$@"\n`); chmodSync(join(bin, 'grep'), 0o755);
+  const bad = fixture();
+  const r = sh(['finalize', bad.ev, bad.res, ...bad.req], withBin(bin));
+  assert.notEqual(r.status, 0);
+  assert.match(r.stdout + r.stderr, /redaction verification failed: token-shaped content remains/);
+  assert.ok(!existsSync(join(bad.ev, 'UPLOAD_OK')));
+});
+
+test('REGRESSION: inventory digest-line extraction grep exits 2 -> non-zero, no UPLOAD_OK (log already redacted)', () => {
+  const { ev, res, req } = fixture();
+  const r = sh(['finalize', ev, res, ...req], withBin(brokenGrep('-v')));
+  assert.notEqual(r.status, 0);
+  assert.match(r.stdout + r.stderr, /inventory read failed \(grep exit 2\); digests UNVERIFIED/);
+  assert.ok(!existsSync(join(ev, 'UPLOAD_OK')));
+  assert.ok(!existsSync(join(ev, '.INVENTORY.entries.tmp')), 'temp entries file removed');
+  assert.match(readFileSync(join(ev, 'run.log'), 'utf8'), /Bearer \[REDACTED\]/);
+  assert.ok(!(r.stdout + r.stderr).includes('SYNTHETIC-SENTINEL-TOKEN'));
+});
+
+test('REGRESSION: sha256sum -c exits 2 (operational failure, not a mismatch) -> non-zero, no UPLOAD_OK', () => {
+  const { ev, res, req } = fixture();
+  const bin = mkdtempSync(join(tmpdir(), 'bin-'));
+  writeFileSync(join(bin, 'sha256sum'), `#!/usr/bin/env bash\nif [ "$1" = "-c" ]; then exit 2; fi\nexec ${REAL.sha256sum} "$@"\n`); chmodSync(join(bin, 'sha256sum'), 0o755);
+  const r = sh(['finalize', ev, res, ...req], withBin(bin));
+  assert.notEqual(r.status, 0);
+  assert.match(r.stdout + r.stderr, /inventory verification could not run \(sha256sum exit 2\); digests UNVERIFIED/);
+  assert.ok(!existsSync(join(ev, 'UPLOAD_OK')));
+});
+
+test('REGRESSION: an inventory with zero digest lines (nothing hashed) is rejected, not treated as verified', () => {
+  const d = mkdtempSync(join(tmpdir(), 'ev-')); const ev = join(d, 'ci-evidence'); mkdirSync(ev);
+  // Empty evidence dir, absent results dir, no required files: the inventory would contain only comment lines.
+  const r = sh(['finalize', ev, join(d, 'absent-results')]);
+  assert.notEqual(r.status, 0);
+  assert.match(r.stdout + r.stderr, /inventory has no digest lines \(nothing was hashed\)/);
+  assert.ok(!existsSync(join(ev, 'UPLOAD_OK')));
+});
+
+test('WORKFLOW STEP EMULATION (script-level, not a CI run): the finalize step\'s exact run block emits eligible=true only on success; with a failing verifier it exits non-zero and emits no eligibility, so the upload condition is false and the withheld step\'s condition is true', () => {
+  const wf = readFileSync(join(repo, '.github', 'workflows', 'e2e-emulator.yml'), 'utf8');
+  const block = /id: finalize\n\s+if: always\(\)\n\s+run: \|\n([\s\S]*?)\n\s+- name: Evidence NOT uploaded/.exec(wf);
+  assert.ok(block, 'finalize step run block located');
+  const runText = block[1].split('\n').map((l) => l.replace(/^ {10}/, '')).join('\n').replace(/\$\{\{ matrix\.project \}\}/g, 'emulated-project');
+  assert.match(runText, /^set -e/m);
+  // The conditions, exactly as written in the workflow, evaluated the way Actions would for each eligible value.
+  const uploadIf = /uses: actions\/upload-artifact@v4[\s\S]*?if: (.*)\n/.exec(wf)[1];
+  const withheldIf = /name: Evidence NOT uploaded[\s\S]*?if: (.*)\n/.exec(wf)[1];
+  assert.equal(uploadIf, "always() && steps.finalize.outputs.eligible == 'true'");
+  assert.equal(withheldIf, "always() && steps.finalize.outputs.eligible != 'true'");
+  const evalIf = (expr, eligible) => expr.replace('always()', 'true').replace("steps.finalize.outputs.eligible == 'true'", String(eligible === 'true')).replace("steps.finalize.outputs.eligible != 'true'", String(eligible !== 'true')) === 'true && true';
+  // Repo-shaped temp tree: e2e/scripts/evidence.sh + fixture dirs, run from its root like the workflow does.
+  const runStep = (bin) => {
+    const root = mkdtempSync(join(tmpdir(), 'wf-'));
+    mkdirSync(join(root, 'e2e', 'scripts'), { recursive: true }); mkdirSync(join(root, 'e2e', 'ci-evidence')); mkdirSync(join(root, 'e2e', 'test-results'));
+    writeFileSync(join(root, 'e2e', 'scripts', 'evidence.sh'), readFileSync(script));
+    writeFileSync(join(root, 'e2e', 'ci-evidence', 'run.log'), `line ${SENTINEL}\n`);
+    writeFileSync(join(root, 'e2e', 'ci-evidence', 'release-build-manifest.sha256'), 'abc  f\n');
+    writeFileSync(join(root, 'e2e', 'test-results', 'results.json'), '{}');
+    const out = join(root, 'github_output'); writeFileSync(out, '');
+    const env = { ...process.env, GITHUB_OUTPUT: out, ...(bin ? { PATH: `${bin}:${process.env.PATH}` } : {}) };
+    const r = spawnSync('bash', ['-c', runText], { cwd: root, encoding: 'utf8', env });
+    const eligible = /^eligible=(.*)$/m.exec(readFileSync(out, 'utf8'))?.[1];
+    return { r, eligible, marker: existsSync(join(root, 'e2e', 'ci-evidence', 'UPLOAD_OK')) };
+  };
+  const good = runStep(null);
+  assert.equal(good.r.status, 0, good.r.stdout + good.r.stderr);
+  assert.equal(good.eligible, 'true'); assert.ok(good.marker);
+  assert.match(good.r.stdout, /::notice title=E2E evidence inventory \(emulated-project\)::\d+ files; run\.log redaction: bytes_before=\d+ bytes_after=\d+; UPLOAD_OK present/);
+  assert.ok(evalIf(uploadIf, good.eligible) && !evalIf(withheldIf, good.eligible), 'success: upload runs, withheld step skipped');
+  const bad = runStep(brokenGrep('-Eq'));
+  assert.notEqual(bad.r.status, 0, 'step fails when the verifier cannot run');
+  assert.equal(bad.eligible, undefined, 'no eligible output is ever written');
+  assert.ok(!bad.marker, 'no UPLOAD_OK');
+  assert.match(bad.r.stdout + bad.r.stderr, /redaction verification could not run \(grep exit 2\)/);
+  assert.ok(!bad.r.stdout.includes('UPLOAD_OK present'), 'no success notice');
+  assert.ok(!(bad.r.stdout + bad.r.stderr).includes('SYNTHETIC-SENTINEL-TOKEN'));
+  assert.ok(!evalIf(uploadIf, bad.eligible) && evalIf(withheldIf, bad.eligible), 'failure: upload condition false, withheld-step condition true');
+});
