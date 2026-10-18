@@ -20,29 +20,36 @@
 //   scan <build-dir>            -> PASS only if the SHIPPED import implementation is OFF
 //   negative-control <build-dir> -> PASS only if the SHIPPED import implementation is ON
 //
-// How `scan` decides (redesigned after the second independent review, R1–R3):
-//   1. Only chunks referenced by <script src> in <build-dir>/index.html are considered.
-//   2. Each chunk is PARSED (acorn; comments never reach the AST). The import UI component is
-//      the single function containing the literal "Import plays".
-//   3. The "Import plays" and "Not now" buttons' onClick handlers are followed with EVERY direct
-//      call accounted for: an onClick may either perform the import call itself or call exactly
-//      one component-local handler; inside that body exactly one call may be import code (an
-//      inline function or a module-scope function); every other call must be a component-local
-//      setter/prop; any member-expression call, unresolved callee, second handler, extra await
-//      or ambiguity is INCONCLUSIVE (fails). Actual arguments are never substituted.
-//   4. OFF is decided STATICALLY and soundly: the bound function's first statement must be an
-//      unconditional `throw new <Ctor>(<msg>)` whose message is the disabled literal or a const
-//      bound to that literal, with <Ctor> neither declared in scope nor assigned/redefined as a
-//      global anywhere in the chunk. No closure is reconstructed, no environment is synthesised:
-//      an unconditional first-statement throw cannot reach a backend whatever the arguments,
-//      closures or global state are.
-//   5. ON is proved by EXECUTION only when every free identifier of the bound function is a pure
-//      builtin, a module-scope function, or a module-scope const bound to an immutable literal,
-//      none reassigned or mutated anywhere (scope-aware). Backend reads, copies and storage
-//      writes are all counted. Anything else is inconclusive.
-//   6. The component's own "data-import-config" literal must agree with the verdict.
-//   Decoy comments/orphans/prose, mutable or global-dependent closures, dropped arguments,
-//   extra backend calls before an inlined throw, ambiguous handlers and backend reads all FAIL.
+// How `scan` decides (third revision, after independent reviews R1–R3 and D1–D3):
+//   1. Only chunks referenced by <script src> in <build-dir>/index.html are considered; a scope-aware
+//      assignment/redefinition index is built over ALL of them (identifier and member assignments,
+//      computed keys resolved statically, Object.defineProperty/assign/Reflect.* on global objects,
+//      eval/Function presence). Writes of non-constructible values (arrows, literals, objects) cannot
+//      hijack `new Error`, so only constructible writes under unknown/relevant keys distrust globals.
+//   2. Each chunk is parsed (comments never reach the AST). The import UI component is the single
+//      function containing the literal "Import plays"; its props are read from its destructured
+//      first parameter (uid/teamId/teamName/backend/onImported).
+//   3. The accept button's onClick must be exactly `()=>{y()}` to a component-local zero-parameter
+//      handler; the decline onClick is itself the handler. In the handler EVERY node evaluated before
+//      the single import call, plus the enclosing try's catch/finally, must fit a recognised
+//      effect-free grammar: literals, local reads, `ref.current` reads of a verified React useRef,
+//      calls to verified React useState setters (`const [s, set] = (0, r.useState)(x)` where r is
+//      the webpack-required React module, checked by its own source) with effect-free arguments.
+//      Member reads, unverified calls, parameters/defaults on the onClick/handler/callee, extra
+//      awaits or second handlers are INCONCLUSIVE. Import-call arguments must be effect-free too.
+//   4. OFF is decided statically: the callee has ZERO parameters and its first statement is
+//      `throw new Error(<msg>)` with <msg> the disabled literal or a const bound to it, and `Error`
+//      exactly the engine binding (not shadowed, not assigned/redefined as a global anywhere).
+//      Nothing is reconstructed or synthesised for OFF.
+//   5. ON is proved by executing the callee with the ACTUAL call-site arguments mapped by role
+//      (localStorage, backend prop, uid/teamId/teamName, literals, `()=>ref.current===x`) under an
+//      immutable closure (pure builtins, module functions, literal consts, none reassigned); plain
+//      identifier parameters only. Backend reads, copies and storage writes are all counted.
+//   6. The component's "data-import-config" literal must agree with the verdict.
+//   Documented host assumptions: a strict-mode chunk (`this` is never the global in plain calls;
+//   this.method()[k]=v is an object write), a native runtime whose globals are not rewritten by
+//   code outside the shipped entry chunks, and no dynamic code other than webpack's
+//   `new Function("return this")` (any other eval/Function call fails closed).
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -102,11 +109,24 @@ function resolve(root, nodeEnv) {
 
 // ---------------------------------------------------------------- AST helpers ------------
 const isFn = (n) => n && (n.type === 'FunctionExpression' || n.type === 'ArrowFunctionExpression' || n.type === 'FunctionDeclaration');
+// Generic parent linking over EVERY node (acorn-walk's full walk skips pattern identifiers such as
+// assignment targets and declaration ids, which scope resolution needs).
+function setParents(node, parent) {
+  node.parent = parent;
+  for (const key of Object.keys(node)) {
+    if (key === 'parent') continue;
+    const v = node[key];
+    if (Array.isArray(v)) { for (const c of v) if (c && typeof c.type === 'string') setParents(c, node); }
+    else if (v && typeof v === 'object' && typeof v.type === 'string') setParents(v, node);
+  }
+}
 function parseChunk(code) {
   const ast = acorn.parse(code, { ecmaVersion: 'latest', sourceType: 'script', ranges: true, allowHashBang: true });
-  walk.fullAncestor(ast, (node, _st, ancestors) => { node.parent = ancestors.length > 1 ? ancestors[ancestors.length - 2] : null; });
+  setParents(ast, null);
   return ast;
 }
+// Visit every node (patterns included), unlike acorn-walk's full walk.
+function eachNode(node, fn) { fn(node); for (const key of Object.keys(node)) { if (key === 'parent') continue; const v = node[key]; if (Array.isArray(v)) { for (const c of v) if (c && typeof c.type === 'string') eachNode(c, fn); } else if (v && typeof v === 'object' && typeof v.type === 'string') eachNode(v, fn); } }
 function patternNames(p, out = []) {
   if (!p) return out;
   switch (p.type) {
@@ -119,25 +139,30 @@ function patternNames(p, out = []) {
   }
   return out;
 }
-// Declarations visible in a scope-creating node, by name.
+const declCache = new WeakMap();
 function declsOf(scope) {
+  if (declCache.has(scope)) return declCache.get(scope);
   const m = new Map();
   const add = (name, decl) => { if (!m.has(name)) m.set(name, decl); };
-  const fromStatements = (stmts) => {
-    for (const s of stmts || []) {
-      if (s.type === 'VariableDeclaration') for (const d of s.declarations) { if (d.id.type === 'Identifier') add(d.id.name, { kind: 'var', node: d }); else for (const n of patternNames(d.id)) add(n, { kind: 'pattern', node: d }); }
-      else if (s.type === 'FunctionDeclaration' && s.id) add(s.id.name, { kind: 'function', node: s });
-      else if (s.type === 'ClassDeclaration' && s.id) add(s.id.name, { kind: 'class', node: s });
-    }
+  const addDeclaration = (s) => {
+    if (s.type === 'VariableDeclaration') for (const d of s.declarations) { if (d.id.type === 'Identifier') add(d.id.name, { kind: 'var', node: d }); else for (const n of patternNames(d.id)) add(n, { kind: 'pattern', node: d }); }
+    else if (s.type === 'FunctionDeclaration' && s.id) add(s.id.name, { kind: 'function', node: s });
+    else if (s.type === 'ClassDeclaration' && s.id) add(s.id.name, { kind: 'class', node: s });
   };
-  if (isFn(scope)) { for (const p of scope.params) for (const n of patternNames(p)) add(n, { kind: 'param', node: scope }); if (scope.type === 'FunctionExpression' && scope.id) add(scope.id.name, { kind: 'function', node: scope }); if (scope.body && scope.body.type === 'BlockStatement') fromStatements(scope.body.body); }
-  else if (scope.type === 'Program' || scope.type === 'BlockStatement') fromStatements(scope.body);
+  // Hoisted `var` (and function declarations) anywhere inside a function body, excluding nested functions.
+  const hoisted = (root) => { walk.full(root, (n) => { if (n !== root && isFn(n)) return; if (n.type === 'VariableDeclaration' && n.kind === 'var' && enclosingFn(n) === (isFn(root) ? root : enclosingFn(root))) addDeclaration(n); if (n.type === 'FunctionDeclaration' && n !== root && enclosingFn(n) === (isFn(root) ? root : enclosingFn(root))) addDeclaration(n); }); };
+  if (isFn(scope)) {
+    for (const p of scope.params) for (const n of patternNames(p)) add(n, { kind: 'param', node: scope });
+    if (scope.type === 'FunctionExpression' && scope.id) add(scope.id.name, { kind: 'function', node: scope });
+    if (scope.body && scope.body.type === 'BlockStatement') { for (const st of scope.body.body) addDeclaration(st); hoisted(scope); }
+  } else if (scope.type === 'Program') { for (const st of scope.body) addDeclaration(st); walk.full(scope, (n) => { if (n.type === 'VariableDeclaration' && n.kind === 'var' && !enclosingFn(n)) addDeclaration(n); if (n.type === 'FunctionDeclaration' && !enclosingFn(n)) addDeclaration(n); }); }
+  else if (scope.type === 'BlockStatement') { for (const st of scope.body) if (st.type === 'FunctionDeclaration' || st.type === 'ClassDeclaration' || (st.type === 'VariableDeclaration' && st.kind !== 'var')) addDeclaration(st); }
   else if (scope.type === 'CatchClause' && scope.param) for (const n of patternNames(scope.param)) add(n, { kind: 'param', node: scope });
-  else if ((scope.type === 'ForStatement' || scope.type === 'ForInStatement' || scope.type === 'ForOfStatement')) { const init = scope.init || scope.left; if (init && init.type === 'VariableDeclaration') fromStatements([init]); }
+  else if ((scope.type === 'ForStatement' || scope.type === 'ForInStatement' || scope.type === 'ForOfStatement')) { const init = scope.init || scope.left; if (init && init.type === 'VariableDeclaration' && init.kind !== 'var') addDeclaration(init); }
+  declCache.set(scope, m);
   return m;
 }
 const isScope = (n) => isFn(n) || n.type === 'Program' || n.type === 'BlockStatement' || n.type === 'CatchClause' || n.type === 'ForStatement' || n.type === 'ForInStatement' || n.type === 'ForOfStatement';
-// Resolve an identifier name from a node upward; returns { decl, scope } or null (global/unresolved).
 function resolveName(name, from) {
   for (let p = from.parent; p; p = p.parent) {
     if (!isScope(p)) continue;
@@ -147,7 +172,6 @@ function resolveName(name, from) {
   return null;
 }
 const within = (node, container) => node.range[0] >= container.range[0] && node.range[1] <= container.range[1];
-// Identifier nodes that are variable REFERENCES (not property keys, member property names, labels or declarations).
 function isReference(id) {
   const p = id.parent;
   if (!p) return false;
@@ -162,237 +186,418 @@ function isReference(id) {
   if (p.type === 'CatchClause' && p.param === id) return false;
   return true;
 }
-// Pure builtins the ON-detection execution may reference. Nothing that reads environment or
-// mutable global state (no globalThis/window/self/document/localStorage/fetch/console).
-const PURE_GLOBALS = new Set(['Object', 'Array', 'JSON', 'Error', 'TypeError', 'RangeError', 'Number', 'Date', 'Set', 'Map', 'Promise', 'Math', 'String', 'Boolean', 'Symbol', 'undefined', 'NaN', 'Infinity', 'isFinite', 'isNaN', 'parseInt', 'parseFloat', 'encodeURIComponent', 'decodeURIComponent']);
-const isImmutableLiteral = (n) => n && ((n.type === 'Literal' && (typeof n.value === 'string' || typeof n.value === 'number' || typeof n.value === 'boolean' || n.value === null)) || (n.type === 'TemplateLiteral' && n.expressions.length === 0));
+const enclosingFn = (n) => { for (let p = n.parent; p; p = p.parent) if (isFn(p)) return p; return null; };
 const declKind = (d) => { for (let p = d.parent; p; p = p.parent) if (p.type === 'VariableDeclaration') return p.kind; return null; };
-
-// Scope-aware assignment tracking. Minified names are reused across scopes, so an assignment
-// counts against a binding only when the assignment target RESOLVES to that same declaration.
-//   decls   : Set of declaration ranges that are reassigned/updated (or whose object is mutated)
-//   globals : names assigned as globals — bare `Error = ...`, or `globalThis.Error = ...`,
-//             `self.x = ...`, `window.x = ...`, `global.x = ...` anywhere in the chunk
+const isImmutableLiteral = (n) => n && ((n.type === 'Literal' && (typeof n.value === 'string' || typeof n.value === 'number' || typeof n.value === 'boolean' || n.value === null)) || (n.type === 'TemplateLiteral' && n.expressions.length === 0));
+const PURE_GLOBALS = new Set(['Object', 'Array', 'JSON', 'Error', 'TypeError', 'RangeError', 'Number', 'Date', 'Set', 'Map', 'Promise', 'Math', 'String', 'Boolean', 'Symbol', 'undefined', 'NaN', 'Infinity', 'isFinite', 'isNaN', 'parseInt', 'parseFloat', 'encodeURIComponent', 'decodeURIComponent']);
 const GLOBAL_OBJECTS = new Set(['globalThis', 'self', 'window', 'global']);
-function assignmentIndex(ast) {
-  const decls = new Set(); const globals = new Set();
-  const mark = (t) => {
-    if (!t) return;
-    if (t.type === 'Identifier') { const r = resolveName(t.name, t); if (r) decls.add(r.decl.node.range[0]); else globals.add(t.name); return; }
-    if (t.type === 'MemberExpression') {
-      let o = t; while (o.type === 'MemberExpression') o = o.object;
-      if (o.type === 'Identifier') {
-        const r = resolveName(o.name, o);
-        if (r) decls.add(r.decl.node.range[0]);                       // object held by a binding is mutated
-        else if (GLOBAL_OBJECTS.has(o.name) && t.object === o && !t.computed && t.property.type === 'Identifier') globals.add(t.property.name); // globalThis.X = ... REPLACES a global
-        // A property assignment on an unresolved global (e.g. Error.stackTraceLimit = 10) mutates the
-        // object but does not replace the binding; `throw new Error(...)` still throws. Not recorded.
-      }
-      return;
-    }
-    if (t.type === 'ObjectPattern' || t.type === 'ArrayPattern' || t.type === 'AssignmentPattern' || t.type === 'RestElement') {
-      walk.full(t, (n) => { if (n.type === 'Identifier' && isReference(n) === false && n.parent && (n.parent.type !== 'Property' || n.parent.value === n)) { const r = resolveName(n.name, n); if (r) decls.add(r.decl.node.range[0]); else globals.add(n.name); } });
-    }
-  };
-  walk.full(ast, (n) => {
-    if (n.type === 'AssignmentExpression') mark(n.left);
-    else if (n.type === 'UpdateExpression') mark(n.argument);
-    else if ((n.type === 'ForInStatement' || n.type === 'ForOfStatement') && n.left.type !== 'VariableDeclaration') mark(n.left);
-    else if (n.type === 'CallExpression' && n.callee.type === 'MemberExpression' && !n.callee.computed && n.callee.object.type === 'Identifier' && n.callee.property.type === 'Identifier') {
-      // Object.defineProperty(globalThis, 'Error', ...) / Reflect.set(self, 'Error', ...) / Object.assign(window, {...})
-      const obj = n.callee.object.name, fn = n.callee.property.name, a0 = n.arguments[0];
-      if (((obj === 'Object' && (fn === 'defineProperty' || fn === 'defineProperties' || fn === 'assign')) || (obj === 'Reflect' && (fn === 'set' || fn === 'defineProperty'))) && a0 && a0.type === 'Identifier' && GLOBAL_OBJECTS.has(a0.name) && !resolveName(a0.name, a0)) {
-        const a1 = n.arguments[1];
-        if (a1 && a1.type === 'Literal' && typeof a1.value === 'string') globals.add(a1.value);
-        else if (a1 && a1.type === 'ObjectExpression') for (const pr of a1.properties) { if (pr.type === 'Property' && !pr.computed) globals.add(pr.key.type === 'Identifier' ? pr.key.name : String(pr.key.value)); }
-        else globals.add('*'); // dynamic redefinition of globals: trust nothing builtin
-      }
+
+// Scope-aware assignment / redefinition index, unioned over every entry chunk.
+//   decls   : declaration ranges that are reassigned/updated or whose object is mutated
+//   globals : global names assigned or redefined: `Error = ...`, `globalThis.Error = ...`,
+//             `globalThis["Error"] = ...`, Object.defineProperty/defineProperties/assign or
+//             Reflect.set/defineProperty on a global object ('*' when the key is not a literal)
+function assignmentIndex(ast, into = { decls: new Set(), globals: new Set() }) {
+  const { decls, globals } = into;
+  // Pass 1: every assignment/update target and global-redefinition call in this chunk.
+  const targets = []; const calls = []; const valueOf = new Map();
+  eachNode(ast, (n) => {
+    if (n.type === 'AssignmentExpression') { targets.push(n.left); valueOf.set(n.left, n.right); }
+    else if (n.type === 'UpdateExpression') { targets.push(n.argument); valueOf.set(n.argument, { type: 'Literal', value: 0 }); }
+    else if ((n.type === 'ForInStatement' || n.type === 'ForOfStatement') && n.left.type !== 'VariableDeclaration') targets.push(n.left);
+    else if (n.type === 'CallExpression' && n.callee.type === 'MemberExpression' && !n.callee.computed && n.callee.object.type === 'Identifier' && n.callee.property.type === 'Identifier') calls.push(n);
+    else if ((n.type === 'CallExpression' || n.type === 'NewExpression') && n.callee.type === 'Identifier' && (n.callee.name === 'eval' || n.callee.name === 'Function') && !resolveName(n.callee.name, n.callee)) {
+      // Dynamic code can rewrite anything. The only tolerated form is webpack's global-object fallback
+      // `new Function("return this")`; every other eval/Function call distrusts all globals ('*').
+      const a0 = n.arguments[0];
+      if (!(n.callee.name === 'Function' && n.arguments.length === 1 && a0 && a0.type === 'Literal' && a0.value === 'return this')) globals.add('*');
     }
   });
-  return { decls, globals };
+  const rootOf = (t) => { let o = t; while (o.type === 'MemberExpression') o = o.object; return o; };
+  const markDecl = (id) => { const r = resolveName(id.name, id); if (r) decls.add(r.decl.node.range[0]); else globals.add(id.name); };
+  // Pass 2a: binding-level effects (so `decls` is complete before any key is resolved).
+  for (const t of targets) {
+    if (t.type === 'Identifier') markDecl(t);
+    else if (t.type === 'MemberExpression') { const o = rootOf(t); if (o.type === 'Identifier') { const r = resolveName(o.name, o); if (r) decls.add(r.decl.node.range[0]); } }
+    else if (t.type === 'ObjectPattern' || t.type === 'ArrayPattern' || t.type === 'AssignmentPattern' || t.type === 'RestElement') eachNode(t, (n) => { if (n.type === 'Identifier' && n.parent && n.parent.type !== 'MemberExpression' && (n.parent.type !== 'Property' || n.parent.value === n) && !(n.parent.type === 'AssignmentPattern' && n.parent.right === n)) markDecl(n); });
+  }
+  // Static string value of a key expression: literal, no-expression template, a never-reassigned binding
+  // initialised with such a literal, or a parameter of an immediately-invoked function whose matching
+  // argument is such a value. null when it cannot be determined.
+  const staticString = (e, depth = 0) => {
+    if (!e || depth > 6) return null;
+    if (e.type === 'Literal') return typeof e.value === 'string' ? e.value : String(e.value);
+    if (e.type === 'TemplateLiteral' && e.expressions.length === 0) return e.quasis.map((q) => q.value.cooked).join('');
+    if (e.type !== 'Identifier') return null;
+    const r = resolveName(e.name, e); if (!r) return null;
+    if (r.decl.kind === 'var') { const d = r.decl.node; if (decls.has(d.range[0])) return null; return staticString(d.init, depth + 1); }
+    if (r.decl.kind === 'param') { const fn = r.decl.node; const i = fn.params.findIndex((p) => p.type === 'Identifier' && p.name === e.name); const call = fn.parent; if (i < 0 || !call || call.type !== 'CallExpression' || call.callee !== fn) return null; return staticString(call.arguments[i], depth + 1); }
+    return null;
+  };
+  const propName = (m) => { if (!m.computed && m.property.type === 'Identifier') return m.property.name; const v = staticString(m.property); return v === null ? '*' : v; };
+  // Pass 2b: global-object writes and redefinition calls.
+  // In a strict-mode chunk `this` is never the global object in plain calls, so `this.x = ...` is an
+  // ordinary object write. Non-strict chunks (or other non-identifier roots such as f().x = ...) are '*'.
+  const strict = (() => { const st = ast.body[0]; const e = st && st.type === 'ExpressionStatement' ? st.expression : null; const fn = e && e.type === 'CallExpression' && isFn(e.callee) ? e.callee : null; const first = fn && fn.body && fn.body.type === 'BlockStatement' ? fn.body.body[0] : null; return !!(first && first.type === 'ExpressionStatement' && first.directive === 'use strict') || !!(st && st.directive === 'use strict'); })();
+  const RELEVANT = new Set(['Error', 'localStorage']);
+  // `new X(...)` can only run user code when X is constructible. Arrow functions, literals, object and
+  // array literals, template strings and arithmetic results are not, so writing them to a global —
+  // even under an unknown key — cannot hijack `throw new Error(...)`. Anything else might.
+  const mayBeConstructible = (v) => { if (!v) return true; switch (v.type) { case 'ArrowFunctionExpression': case 'Literal': case 'TemplateLiteral': case 'ObjectExpression': case 'ArrayExpression': case 'UnaryExpression': case 'BinaryExpression': case 'UpdateExpression': return false; case 'ConditionalExpression': return mayBeConstructible(v.consequent) || mayBeConstructible(v.alternate); case 'LogicalExpression': return mayBeConstructible(v.left) || mayBeConstructible(v.right); case 'SequenceExpression': return mayBeConstructible(v.expressions[v.expressions.length - 1]); case 'AssignmentExpression': return mayBeConstructible(v.right); default: return true; } };
+  for (const t0 of targets) {
+    if (t0.type !== 'MemberExpression') continue;
+    let t = t0; let o = rootOf(t);
+    while (o.type === 'AssignmentExpression') { o = o.left.type === 'MemberExpression' ? rootOf(o.left) : o.left; } // (d = expr).prop = v -> binding d
+    const key = propName(t);
+    const constructible = mayBeConstructible(valueOf.get(t0));
+    if (o.type === 'ThisExpression' && strict) continue;                 // ordinary object write in a strict chunk
+    // this.method(...)[k] = v in a strict chunk: a write through the current object's own method result
+    // (Firestore's internal field maps); treated as a non-global receiver.
+    if (strict && (o.type === 'CallExpression') && o.callee.type === 'MemberExpression' && rootOf(o.callee) && rootOf(o.callee).type === 'ThisExpression') continue;
+    if (o.type === 'Identifier') {
+      if (resolveName(o.name, o)) continue;                             // a local binding's object: already in decls
+      if (GLOBAL_OBJECTS.has(o.name)) {
+        // globalThis.X = ..., or window.self.X = ... (chain of global aliases only)
+        let chainIsGlobal = true; for (let m = t.object; m !== o; m = m.object) { if (!(m.type === 'MemberExpression' && !m.computed && m.property.type === 'Identifier' && GLOBAL_OBJECTS.has(m.property.name))) { chainIsGlobal = false; break; } }
+        if (chainIsGlobal) { if (key !== '*') globals.add(key); else if (constructible) globals.add('*'); else globals.add('*:non-constructible'); }
+        else if (key === '*' && constructible) globals.add('*');
+      } else globals.add(`${o.name}.${key}`);                            // e.g. Error.prepareStackTrace = v (property write, not a replacement)
+      continue;
+    }
+    // Property write on a value produced by a call/new/other expression: could only matter if the key
+    // is a trusted name (or unknown) AND the value were the global object — recorded conservatively.
+    if (key === '*' || RELEVANT.has(key)) { if (constructible) globals.add(key === '*' ? '*' : key); else globals.add(`${key === '*' ? '*' : key}:non-constructible`); }
+  }
+  for (const n of calls) {
+    const obj = n.callee.object.name, fn = n.callee.property.name, a0 = n.arguments[0];
+    if (!(((obj === 'Object' && (fn === 'defineProperty' || fn === 'defineProperties' || fn === 'assign' || fn === 'setPrototypeOf')) || (obj === 'Reflect' && (fn === 'set' || fn === 'defineProperty' || fn === 'setPrototypeOf'))) && a0)) continue;
+    if (a0.type === 'Identifier' && GLOBAL_OBJECTS.has(a0.name) && !resolveName(a0.name, a0)) {
+      const a1 = n.arguments[1];
+      if (a1 && (a1.type === 'Literal' || a1.type === 'TemplateLiteral' || a1.type === 'Identifier')) { const v = staticString(a1); globals.add(v === null ? '*' : v); }
+      else if (a1 && a1.type === 'ObjectExpression') for (const pr of a1.properties) { if (pr.type === 'Property' && !pr.computed) globals.add(pr.key.type === 'Identifier' ? pr.key.name : String(pr.key.value)); else globals.add('*'); }
+      else globals.add('*');
+    } else if (a0.type === 'Identifier' && !resolveName(a0.name, a0)) globals.add(`${a0.name}.*`);
+  }
+  return into;
+}
+const globalReplaced = (idx, name) => idx.globals.has(name) || idx.globals.has('*');
+
+// ---- Module map / trusted React binding -----------------------------------------------------
+// CRA main chunk: (()=>{ var e={ <id>:(e,t,n)=>{...}, ... }, t={}; function n(r){...} ... (()=>{ app })() })()
+function moduleMap(ast) {
+  let best = null;
+  walk.full(ast, (n) => {
+    if (n.type !== 'ObjectExpression' || n.properties.length < 1) return;
+    const ok = n.properties.every((p) => p.type === 'Property' && !p.computed && p.key.type === 'Literal' && typeof p.key.value === 'number' && isFn(p.value));
+    if (ok && (!best || n.properties.length > best.properties.length)) best = n;
+  });
+  if (!best) return null;
+  const m = new Map(); for (const p of best.properties) m.set(p.key.value, p.value); return m;
+}
+function moduleFactory(map, id, depth = 0) {
+  const f = map && map.get(id); if (!f || depth > 4) return null;
+  // Pure re-export: (e,t,n)=>{e.exports=n(983)}
+  const body = f.body && f.body.type === 'BlockStatement' ? f.body.body : null;
+  if (body && body.length === 1 && body[0].type === 'ExpressionStatement' && body[0].expression.type === 'AssignmentExpression') {
+    const a = body[0].expression;
+    if (a.left.type === 'MemberExpression' && a.right.type === 'CallExpression' && a.right.callee.type === 'Identifier' && a.right.arguments.length === 1 && a.right.arguments[0].type === 'Literal' && typeof a.right.arguments[0].value === 'number') return moduleFactory(map, a.right.arguments[0].value, depth + 1) || f;
+  }
+  return f;
+}
+// `ident` must be a module-level binding `var/const r = n(<id>)` where n is webpack's require (a
+// one-parameter FunctionDeclaration or a factory parameter) and module <id> is React itself.
+function verifyReactBinding(ident, ctx) {
+  const r = resolveName(ident.name, ident);
+  if (!r || r.decl.kind !== 'var' || !r.decl.node.init) return `"${ident.name}" is not a variable bound to a required module`;
+  if (ctx.idx.decls.has(r.decl.node.range[0])) return `"${ident.name}" is reassigned`;
+  const init = r.decl.node.init;
+  if (init.type !== 'CallExpression' || init.callee.type !== 'Identifier' || init.arguments.length !== 1 || init.arguments[0].type !== 'Literal' || typeof init.arguments[0].value !== 'number') return `"${ident.name}" is not initialised as require(<module id>)`;
+  const req = resolveName(init.callee.name, init.callee);
+  if (!req || !((req.decl.kind === 'function' && req.decl.node.params.length === 1) || req.decl.kind === 'param')) return `"${init.callee.name}" is not webpack's require`;
+  const fac = moduleFactory(ctx.map, init.arguments[0].value);
+  if (!fac) return `module ${init.arguments[0].value} not found in the chunk's module map`;
+  const src = ctx.code.slice(fac.range[0], fac.range[1]);
+  if (!(src.includes('Symbol.for("react.fragment")') && /\.useState\s*=/.test(src) && /\.useRef\s*=/.test(src))) return `module ${init.arguments[0].value} does not look like React (no react.fragment symbol / useState / useRef definitions)`;
+  return null;
+}
+// (0, r.useState)(x) | r.useState(x)  ->  { binding: r-identifier, hook: 'useState' }
+function hookCall(expr) {
+  if (!expr || expr.type !== 'CallExpression') return null;
+  let c = expr.callee;
+  if (c.type === 'SequenceExpression' && c.expressions.length === 2 && c.expressions[0].type === 'Literal' && c.expressions[0].value === 0) c = c.expressions[1];
+  if (c.type !== 'MemberExpression' || c.computed || c.object.type !== 'Identifier' || c.property.type !== 'Identifier') return null;
+  return { binding: c.object, hook: c.property.name, call: expr };
+}
+// A verified React useState setter: `const [state, c] = (0, r.useState)(init)` with r = React.
+function verifiedSetter(id, ctx) {
+  const r = resolveName(id.name, id);
+  if (!r || r.decl.kind !== 'pattern') return null;
+  const d = r.decl.node;
+  if (d.id.type !== 'ArrayPattern' || d.id.elements.length !== 2 || !d.id.elements[1] || d.id.elements[1].type !== 'Identifier' || d.id.elements[1].name !== id.name) return null;
+  const h = hookCall(d.init); if (!h || h.hook !== 'useState') return null;
+  if (verifyReactBinding(h.binding, ctx)) return null;
+  if (ctx.idx.decls.has(d.range[0])) return null;
+  return d;
+}
+// A verified React ref: `const o = (0, r.useRef)(x)`; reading o.current has no accessor.
+function verifiedRef(id, ctx) {
+  const r = resolveName(id.name, id);
+  if (!r || r.decl.kind !== 'var' || !r.decl.node.init) return null;
+  const h = hookCall(r.decl.node.init); if (!h || h.hook !== 'useRef') return null;
+  if (verifyReactBinding(h.binding, ctx)) return null;
+  return r.decl.node;
 }
 
-// ---- OFF contract (static, environment-independent) ---------------------------------------
-// A function is provably OFF iff its body's FIRST statement is an unconditional
-//     throw new <Ctor>(<msg>)
-// where <msg> is the disabled string literal itself or an identifier bound by a `const` whose
-// initializer is that string literal (primitive const bindings cannot change), and <Ctor> is an
-// identifier that is neither declared nor assigned anywhere in the chunk (so it is the engine's
-// own constructor; even if it were not, `throw` still ends the function before any backend use).
-// No closure is reconstructed and no argument is synthesized: an unconditional first-statement
-// throw cannot reach a backend regardless of arguments, closures or global state.
-function provablyOff(fnNode, idx) {
-  if (!fnNode.body || fnNode.body.type !== 'BlockStatement') return { off: false, why: 'function has an expression body (no statements to inspect)' };
+// ---- Effect-free expression grammar ---------------------------------------------------------
+// Returns null when evaluating `n` can have no side effect beyond reading bindings, else a reason.
+const HOST_READS = new Set(['localStorage']);
+function unsafeExpr(n, ctx) {
+  switch (n.type) {
+    case 'Literal': return null;
+    case 'TemplateLiteral': for (const e of n.expressions) { const u = unsafeExpr(e, ctx); if (u) return u; } return null;
+    case 'Identifier': {
+      if (!isReference(n)) return null;
+      const r = resolveName(n.name, n);
+      if (r) return null;
+      if (PURE_GLOBALS.has(n.name) && !globalReplaced(ctx.idx, n.name)) return null;
+      if (HOST_READS.has(n.name) && !globalReplaced(ctx.idx, n.name)) return null;
+      return `read of unresolved/redefined global "${n.name}"`;
+    }
+    case 'UnaryExpression': return ['!', '-', '+', 'typeof', 'void'].includes(n.operator) ? unsafeExpr(n.argument, ctx) : `unary ${n.operator}`;
+    case 'BinaryExpression': if (n.operator === 'in' || n.operator === 'instanceof') return `operator ${n.operator} can invoke user code`; return unsafeExpr(n.left, ctx) || unsafeExpr(n.right, ctx);
+    case 'LogicalExpression': return unsafeExpr(n.left, ctx) || unsafeExpr(n.right, ctx);
+    case 'ConditionalExpression': return unsafeExpr(n.test, ctx) || unsafeExpr(n.consequent, ctx) || unsafeExpr(n.alternate, ctx);
+    case 'SequenceExpression': for (const e of n.expressions) { const u = unsafeExpr(e, ctx); if (u) return u; } return null;
+    case 'ArrowFunctionExpression': case 'FunctionExpression': return null; // created, not evaluated
+    case 'ObjectExpression': for (const p of n.properties) { if (p.type !== 'Property' || p.computed || p.kind !== 'init' || p.method) return 'object literal with spread/computed/accessor/method'; const u = unsafeExpr(p.value, ctx); if (u) return u; } return null;
+    case 'ArrayExpression': for (const e of n.elements) { if (!e) continue; if (e.type === 'SpreadElement') return 'array spread'; const u = unsafeExpr(e, ctx); if (u) return u; } return null;
+    case 'MemberExpression': {
+      if (!n.computed && n.property.type === 'Identifier' && n.property.name === 'current' && n.object.type === 'Identifier' && verifiedRef(n.object, ctx)) return null;
+      return `member access ${n.object.type === 'Identifier' ? n.object.name : n.object.type}.${n.property.type === 'Identifier' ? n.property.name : '[computed]'} (possible accessor)`;
+    }
+    case 'CallExpression': {
+      if (n.callee.type === 'Identifier' && verifiedSetter(n.callee, ctx)) { for (const a of n.arguments) { const u = unsafeExpr(a, ctx); if (u) return u; } return null; }
+      return `call ${n.callee.type === 'Identifier' ? n.callee.name + '()' : n.callee.type} is not a verified React state setter`;
+    }
+    default: return `${n.type} is outside the recognised effect-free grammar`;
+  }
+}
+
+// ---- OFF contract (static) -----------------------------------------------------------------
+// provably OFF iff: zero parameters (nothing is evaluated on entry) and the FIRST statement is
+//     throw new Error(<msg>)
+// with <msg> the disabled literal or a const bound to it, and `Error` exactly the engine binding:
+// not declared in any enclosing scope and not assigned/redefined as a global in any entry chunk.
+function provablyOff(fnNode, ctx) {
+  if (fnNode.params.length !== 0) return { off: false, why: `function has ${fnNode.params.length} parameter(s); parameter/default initialisation runs before the body` };
+  if (!fnNode.body || fnNode.body.type !== 'BlockStatement') return { off: false, why: 'function has an expression body' };
   const first = fnNode.body.body[0];
   if (!first || first.type !== 'ThrowStatement') return { off: false, why: `first statement is ${first ? first.type : 'absent'}, not an unconditional throw` };
   const arg = first.argument;
   if (!arg || arg.type !== 'NewExpression' || arg.callee.type !== 'Identifier' || arg.arguments.length !== 1) return { off: false, why: 'throw argument is not `new <Ctor>(<msg>)`' };
-  const ctor = arg.callee.name;
-  if (resolveName(ctor, arg.callee)) return { off: false, why: `thrown constructor "${ctor}" is declared in scope (not the engine builtin)` };
-  if (idx.globals.has(ctor) || idx.globals.has('*')) return { off: false, why: `global "${ctor}" is assigned or redefined somewhere in the chunk (not trusted as the engine builtin)` };
+  if (arg.callee.name !== 'Error') return { off: false, why: `thrown constructor "${arg.callee.name}" is not the engine's Error (only the native Error binding is trusted)` };
+  if (resolveName('Error', arg.callee)) return { off: false, why: '"Error" is declared in an enclosing scope (shadowed)' };
+  if (globalReplaced(ctx.idx, 'Error')) return { off: false, why: 'global "Error" is assigned or redefined somewhere in the shipped chunks (not trusted as the engine builtin)' };
   const m = arg.arguments[0];
-  if (m.type === 'Literal' && m.value === DISABLED_MSG) return { off: true, why: 'first statement throws the disabled message literal' };
+  if (m.type === 'Literal' && m.value === DISABLED_MSG) return { off: true, why: 'zero-parameter function whose first statement throws the disabled message literal' };
   if (m.type !== 'Identifier') return { off: false, why: 'thrown message is neither the disabled literal nor an identifier' };
   const r = resolveName(m.name, m);
   if (!r || r.decl.kind !== 'var') return { off: false, why: `thrown message identifier "${m.name}" does not resolve to a variable declaration` };
   const d = r.decl.node;
   if (declKind(d) !== 'const') return { off: false, why: `"${m.name}" is a ${declKind(d)} binding (mutable), not const` };
   if (!(d.init && d.init.type === 'Literal' && d.init.value === DISABLED_MSG)) return { off: false, why: `const "${m.name}" is not initialised with the disabled message literal` };
-  if (idx.decls.has(d.range[0])) return { off: false, why: `"${m.name}" is assigned somewhere in the chunk` };
-  return { off: true, why: `first statement throws const ${m.name} = disabled message literal` };
+  if (ctx.idx.decls.has(d.range[0])) return { off: false, why: `"${m.name}" is assigned somewhere in the chunk` };
+  return { off: true, why: `zero-parameter function whose first statement throws const ${m.name} = disabled message literal` };
 }
 
-// ---- ON detection (execution) -------------------------------------------------------------
-// Used ONLY to prove an opted-in build is enabled (negative control) and to report "on" for an
-// enabled build. The extracted closure is accepted only when every free identifier is (a) a
-// pure builtin, (b) a module-scope FunctionDeclaration / const-bound function (recursively
-// checked), or (c) a module-scope const bound to an immutable literal, and none of them is
-// assigned anywhere in the chunk. Any let/var binding, object/array/call initialiser, global
-// (globalThis/window/self/localStorage/...), `this`, `arguments` or unknown name is REJECTED as
-// inconclusive. Backend reads, copies and storage writes are all counted.
-function closureFor(fnNode, code, idx) {
+// ---- Handler path validation ---------------------------------------------------------------
+// The supported compiled shapes (what CRA/terser emit for this component) are recognised; anything
+// else is inconclusive. `handler` is the function whose direct code is judged; `A` is the single
+// import call inside it. Reachable nodes = everything evaluated before A starts, plus catch/finally
+// blocks of the try statement that encloses A. Nodes after A inside that try (or after the try, or
+// after A when there is no try) are unreachable when A throws, so they are not judged for OFF.
+function pathCheck(handler, A, ctx, label) {
+  const problems = [];
+  if (handler.params.length !== 0) problems.push(`${label}: handler has ${handler.params.length} parameter(s) (parameter/default initialisation is not analysed)`);
+  let tryStmt = null; for (let p = A.parent; p && p !== handler; p = p.parent) if (p.type === 'TryStatement' && within(A, p.block)) { tryStmt = p; break; }
+  const reachable = (n) => {
+    if (within(n, A)) return false;                          // A itself and its arguments are judged separately
+    if (n.range[0] < A.range[0]) return true;               // evaluated before A starts (ancestors included, structurally)
+    if (tryStmt && ((tryStmt.handler && within(n, tryStmt.handler)) || (tryStmt.finalizer && within(n, tryStmt.finalizer)))) return true;
+    return false;                                            // after A: skipped by the throw
+  };
+  const isAncestorOfA = (n) => within(A, n);
+  const STRUCTURAL = new Set(['BlockStatement', 'ExpressionStatement', 'TryStatement', 'CatchClause', 'AwaitExpression', 'SequenceExpression', 'ConditionalExpression', 'LogicalExpression', 'BinaryExpression', 'IfStatement', 'ReturnStatement', 'VariableDeclaration', 'VariableDeclarator', 'EmptyStatement']);
+  walk.full(handler, (n) => {
+    if (n === handler) return;
+    const ef = enclosingFn(n); if (ef !== handler) return;   // inside a nested function: not evaluated here
+    if (!reachable(n)) return;
+    if (isAncestorOfA(n)) { if (!STRUCTURAL.has(n.type)) problems.push(`${label}: ${n.type} wraps the import call (unsupported shape)`); return; }
+    // Statements
+    if (n.type === 'ExpressionStatement' || n.type === 'BlockStatement' || n.type === 'TryStatement' || n.type === 'EmptyStatement') return;
+    if (n.type === 'CatchClause') { if (n.param && n.param.type !== 'Identifier') problems.push(`${label}: destructured catch parameter`); return; }
+    if (n.type === 'VariableDeclaration') return;
+    if (n.type === 'VariableDeclarator') { if (n.id.type !== 'Identifier') problems.push(`${label}: destructuring declaration in handler (possible accessor)`); if (n.init) { const u = unsafeExpr(n.init, ctx); if (u) problems.push(`${label}: ${u}`); } return; }
+    if (n.type === 'IfStatement') { const u = unsafeExpr(n.test, ctx); if (u) problems.push(`${label}: ${u}`); return; }
+    if (n.type === 'ReturnStatement') { if (n.argument) { const u = unsafeExpr(n.argument, ctx); if (u) problems.push(`${label}: ${u}`); } return; }
+    // Expressions: judged once at the top of each expression tree (unsafeExpr recurses).
+    const pe = n.parent; const topExpr = pe && (pe.type === 'ExpressionStatement' || pe.type === 'SequenceExpression' || pe.type === 'LogicalExpression' || pe.type === 'ConditionalExpression' || pe.type === 'BinaryExpression' || pe.type === 'UnaryExpression' || pe.type === 'AwaitExpression' || pe.type === 'VariableDeclarator' || pe.type === 'IfStatement' || pe.type === 'ReturnStatement' || pe.type === 'CallExpression' || pe.type === 'ObjectExpression' || pe.type === 'Property' || pe.type === 'ArrayExpression' || pe.type === 'TemplateLiteral' || pe.type === 'MemberExpression');
+    if (pe && pe.type === 'ExpressionStatement') { const u = unsafeExpr(n, ctx); if (u) problems.push(`${label}: ${u}`); return; }
+    if (!topExpr && !STRUCTURAL.has(n.type)) problems.push(`${label}: ${n.type} is outside the recognised grammar`);
+  });
+  return [...new Set(problems)];
+}
+// Direct calls (not inside nested functions) in `fn` whose callee is import code.
+function importCalls(fn, component) {
+  const out = [];
+  walk.full(fn, (n) => {
+    if (n.type !== 'CallExpression' || enclosingFn(n) !== fn) return;
+    const c = n.callee;
+    if (isFn(c)) { out.push({ call: n, node: c, kind: 'inline' }); return; }
+    if (c.type !== 'Identifier') return;
+    const r = resolveName(c.name, c); if (!r || within(r.decl.node, component)) return;
+    if (r.decl.kind === 'function') out.push({ call: n, node: r.decl.node, kind: 'module-function', name: c.name });
+    else if (r.decl.kind === 'var' && r.decl.node.init && isFn(r.decl.node.init)) out.push({ call: n, node: r.decl.node.init, kind: 'module-const', name: c.name });
+  });
+  return out;
+}
+// Accept button: onClick must be `()=>{y()}` / `()=>y()` calling one component-local zero-arg handler.
+function acceptHandlerOf(onClick, component, label) {
+  const errors = [];
+  if (onClick.params.length !== 0) errors.push(`${label}: onClick has parameters`);
+  const calls = []; walk.full(onClick, (n) => { if (n.type === 'CallExpression' && enclosingFn(n) === onClick) calls.push(n); });
+  if (calls.length !== 1) return { errors: [...errors, `${label}: onClick must contain exactly one call, found ${calls.length}`] };
+  const c = calls[0];
+  if (c.arguments.length !== 0 || c.callee.type !== 'Identifier') return { errors: [...errors, `${label}: onClick call is not a zero-argument call to an identifier`] };
+  const r = resolveName(c.callee.name, c.callee);
+  if (!r || !within(r.decl.node, component) || r.decl.kind !== 'var' || !r.decl.node.init || !isFn(r.decl.node.init)) return { errors: [...errors, `${label}: onClick callee "${c.callee.name}" is not a component-local const handler function`] };
+  // Nothing else may be evaluated in the onClick: its body must be exactly that call.
+  const body = onClick.body.type === 'BlockStatement' ? onClick.body.body : [{ type: 'ExpressionStatement', expression: onClick.body }];
+  if (body.length !== 1 || body[0].type !== 'ExpressionStatement' || body[0].expression !== c) errors.push(`${label}: onClick body is more than the single handler call`);
+  return { handler: r.decl.node.init, errors };
+}
+function bindComponent(ast, code, ctx) {
+  const accepts = []; walk.full(ast, (n) => { if (n.type === 'Literal' && n.value === BUTTON_ACCEPT) accepts.push(n); });
+  if (accepts.length === 0) return null;
+  if (accepts.length > 1) return { error: `${accepts.length} "${BUTTON_ACCEPT}" literals in one chunk (ambiguous)` };
+  const acceptLit = accepts[0];
+  const component = enclosingFn(acceptLit);
+  if (!component) return { error: 'import UI literal is not inside a function' };
+  const out = { component, markerAttr: null, executor: null, decline: null, errors: [], props: {} };
+  // Props mapping from the component's destructured first parameter.
+  const p0 = component.params[0];
+  if (p0 && p0.type === 'ObjectPattern') for (const pr of p0.properties) if (pr.type === 'Property' && pr.key.type === 'Identifier') { const v = pr.value.type === 'AssignmentPattern' ? pr.value.left : pr.value; if (v.type === 'Identifier') out.props[pr.key.name] = v.name; }
+  walk.full(component, (n) => { if (n.type === 'Property' && !n.computed && n.key.type === 'Literal' && n.key.value === 'data-import-config' && n.value.type === 'Literal') out.markerAttr = n.value.value; });
+  const propsObjectOf = (lit) => { for (let p = lit.parent; p; p = p.parent) { if (p.type === 'ObjectExpression') return p; if (isFn(p)) return null; } return null; };
+  const propOf = (obj, key) => (obj.properties || []).find((p) => p.type === 'Property' && !p.computed && ((p.key.type === 'Identifier' && p.key.name === key) || (p.key.type === 'Literal' && p.key.value === key)));
+  const bind = (handler, label, wantAwait) => {
+    const ics = importCalls(handler, component);
+    if (ics.length !== 1) { out.errors.push(`${label}: expected exactly one import call in the handler, found ${ics.length}`); return null; }
+    const t = ics[0];
+    const awaited = t.call.parent && t.call.parent.type === 'AwaitExpression';
+    if (wantAwait && !awaited) out.errors.push(`${label}: the import call is not awaited`);
+    if (!wantAwait && awaited) out.errors.push(`${label}: unexpected awaited import call`);
+    const awaits = []; walk.full(handler, (n) => { if (n.type === 'AwaitExpression' && enclosingFn(n) === handler) awaits.push(n); });
+    if (awaits.some((a) => a.argument !== t.call)) out.errors.push(`${label}: an await in the handler is not the single import call`);
+    for (const a of t.call.arguments) { const u = unsafeExpr(a, ctx); if (u) out.errors.push(`${label}: import call argument is not effect-free (${u})`); if (a.type === 'SpreadElement') out.errors.push(`${label}: spread argument`); }
+    out.errors.push(...pathCheck(handler, t.call, ctx, label));
+    return t;
+  };
+  const acceptProps = propsObjectOf(acceptLit); const onAccept = acceptProps && propOf(acceptProps, 'onClick');
+  if (!onAccept || !isFn(onAccept.value)) out.errors.push('accept button has no onClick function');
+  else { const h = acceptHandlerOf(onAccept.value, component, 'accept'); out.errors.push(...h.errors); if (h.handler) out.executor = bind(h.handler, 'accept', true); }
+  const declLits = []; walk.full(component, (n) => { if (n.type === 'Literal' && n.value === BUTTON_DECLINE) declLits.push(n); });
+  if (declLits.length !== 1) out.errors.push(`expected one "${BUTTON_DECLINE}" literal in the component, found ${declLits.length}`);
+  else {
+    const props = propsObjectOf(declLits[0]); const onDecline = props && propOf(props, 'onClick');
+    if (!onDecline || !isFn(onDecline.value)) out.errors.push('decline button has no onClick function');
+    else { if (onDecline.value.params.length !== 0) out.errors.push('decline: onClick has parameters'); out.decline = bind(onDecline.value, 'decline', false); }
+  }
+  return out;
+}
+
+// ---- ON detection (execution with the ACTUAL call-site arguments) ---------------------------
+// Only used to prove an opted-in build enabled. The callee must have plain identifier parameters
+// (no defaults/patterns/rest); every actual argument is mapped by role from the component's props
+// (localStorage -> in-memory storage, backend prop -> spy, uid/teamId/teamName -> session values,
+// literals -> themselves, `()=>ref.current===x` / `()=>true` -> a still-current predicate). Any
+// other argument shape is inconclusive, so no synthetic invocation can stand in for the real one.
+function closureFor(fnNode, code, ctx) {
   const decls = []; const seen = new Set(); const problems = [];
   const collect = (node, container) => {
     walk.full(node, (n) => {
-      if (n.type === 'ThisExpression') { problems.push('`this` is referenced (environment-dependent)'); return; }
+      if (n.type === 'ThisExpression') { problems.push('`this` is referenced'); return; }
       if (n.type !== 'Identifier' || !isReference(n)) return;
       const r = resolveName(n.name, n);
-      if (!r) { if (!PURE_GLOBALS.has(n.name)) problems.push(`free identifier "${n.name}" is not a module-scope declaration or a pure builtin`); else if (idx.globals.has(n.name) || idx.globals.has('*')) problems.push(`builtin "${n.name}" is assigned or redefined as a global in the chunk`); return; }
+      if (!r) { if (!PURE_GLOBALS.has(n.name)) problems.push(`free identifier "${n.name}" is not a module-scope declaration or a pure builtin`); else if (globalReplaced(ctx.idx, n.name)) problems.push(`builtin "${n.name}" is assigned or redefined as a global`); return; }
       if (within(r.decl.node, container)) return;
-      if (r.decl.kind !== 'var' && r.decl.kind !== 'function') { problems.push(`"${n.name}" resolves to a ${r.decl.kind} outside the function (not a module-scope const/function)`); return; }
-      if (idx.decls.has(r.decl.node.range[0])) { problems.push(`"${n.name}" is assigned or mutated after declaration (mutable binding)`); return; }
+      if (r.decl.kind !== 'var' && r.decl.kind !== 'function') { problems.push(`"${n.name}" resolves to a ${r.decl.kind} outside the function`); return; }
+      if (ctx.idx.decls.has(r.decl.node.range[0])) { problems.push(`"${n.name}" is assigned or mutated after declaration`); return; }
       const key = `${r.decl.node.range[0]}:${n.name}`; if (seen.has(key)) return; seen.add(key);
       if (r.decl.kind === 'function') { const d = r.decl.node; decls.push({ pos: d.range[0], text: code.slice(d.range[0], d.range[1]) + '\n' }); collect(d, d); return; }
       const d = r.decl.node;
       if (declKind(d) !== 'const' || !d.init) { problems.push(`"${n.name}" is not a const with an initialiser`); return; }
       if (isFn(d.init)) { decls.push({ pos: d.range[0], text: `const ${n.name} = ${code.slice(d.init.range[0], d.init.range[1])};` }); collect(d.init, d.init); return; }
       if (isImmutableLiteral(d.init)) { decls.push({ pos: d.range[0], text: `const ${n.name} = ${code.slice(d.init.range[0], d.init.range[1])};` }); return; }
-      problems.push(`"${n.name}" is a const bound to a ${d.init.type} (mutable or environment-dependent value); refusing to reconstruct`);
+      problems.push(`"${n.name}" is a const bound to a ${d.init.type} (mutable or environment-dependent value)`);
     });
   };
   collect(fnNode, fnNode);
   decls.sort((a, b) => a.pos - b.pos);
-  return { preamble: decls.map((d) => d.text).join('\n'), problems, declCount: decls.length };
+  return { preamble: decls.map((d) => d.text).join('\n'), problems: [...new Set(problems)], declCount: decls.length };
 }
-function evaluateFunction(fnNode, code, idx) {
-  const { preamble, problems, declCount } = closureFor(fnNode, code, idx);
-  if (problems.length) return { error: [...new Set(problems)].join('; '), declCount };
-  const src = `${preamble}\n(${code.slice(fnNode.range[0], fnNode.range[1])})`;
-  try { const fn = vm.runInNewContext(src, {}, { timeout: 5000 }); if (typeof fn !== 'function') return { error: 'extracted node did not evaluate to a function', declCount }; return { fn, declCount }; }
-  catch (e) { return { error: `extraction failed to evaluate: ${String(e && e.message).slice(0, 160)}`, declCount }; }
-}
-
-// ---- Component / handler binding --------------------------------------------------------
-function literalNodes(ast, value) { const out = []; walk.full(ast, (n) => { if ((n.type === 'Literal' && n.value === value)) out.push(n); }); return out; }
-const enclosingFn = (n) => { for (let p = n.parent; p; p = p.parent) if (isFn(p)) return p; return null; };
-const propsObjectOf = (lit) => { for (let p = lit.parent; p; p = p.parent) { if (p.type === 'ObjectExpression') return p; if (isFn(p)) return null; } return null; };
-const propOf = (obj, key) => (obj.properties || []).find((p) => p.type === 'Property' && !p.computed && ((p.key.type === 'Identifier' && p.key.name === key) || (p.key.type === 'Literal' && p.key.value === key)));
-const directCalls = (fn) => { const out = []; walk.full(fn, (n) => { if ((n.type === 'CallExpression' || n.type === 'NewExpression') && enclosingFn(n) === fn) out.push(n); }); return out; };
-// Classify one direct call inside a handler. Returns { role, node, kind, why }.
-//   'import'  : callee is an inline function or a module-scope function/const-function (the import code)
-//   'local'   : callee is a component-local setter/prop (ArrayPattern/ObjectPattern/param binding) — harmless
-//   'handler' : callee is a component-local const function (a second handler) — ambiguous
-//   'unknown' : member expression, unresolved, computed, new-expression on non-builtin, ... — unresolved relevant call
-function classifyCall(call, component) {
-  const c = call.callee;
-  if (call.type === 'NewExpression') return (c.type === 'Identifier' && !resolveName(c.name, c) && PURE_GLOBALS.has(c.name)) ? { role: 'local', node: call } : { role: 'unknown', node: call, why: 'constructor call to a non-builtin' };
-  if (isFn(c)) return { role: 'import', node: c, kind: 'inline' };
-  if (c.type !== 'Identifier') return { role: 'unknown', node: call, why: `callee is a ${c.type}` };
-  const r = resolveName(c.name, c);
-  if (!r) return { role: 'unknown', node: call, why: `callee "${c.name}" is unresolved (global?)` };
-  if (within(r.decl.node, component)) {
-    if (r.decl.kind === 'pattern' || r.decl.kind === 'param') return { role: 'local', node: call, name: c.name };
-    if (r.decl.kind === 'var' && r.decl.node.init && isFn(r.decl.node.init)) return { role: 'handler', node: r.decl.node.init, name: c.name };
-    return { role: 'unknown', node: call, why: `callee "${c.name}" is a component-local ${r.decl.kind} that is not a setter/prop/handler` };
-  }
-  if (r.decl.kind === 'function') return { role: 'import', node: r.decl.node, kind: 'module-function', name: c.name };
-  if (r.decl.kind === 'var' && r.decl.node.init && isFn(r.decl.node.init)) return { role: 'import', node: r.decl.node.init, kind: 'module-const', name: c.name };
-  return { role: 'unknown', node: call, why: `callee "${c.name}" resolves to a ${r.decl.kind} outside the component` };
-}
-// From a button's onClick, find THE handler body that performs the import call, rejecting ambiguity.
-function followButton(onClickFn, component, label) {
-  const errors = [];
-  const calls = directCalls(onClickFn);
-  const imports = calls.filter((c) => classifyCall(c, component).role === 'import');
-  const handlers = calls.map((c) => classifyCall(c, component)).filter((x) => x.role === 'handler');
-  const unknown = calls.map((c) => classifyCall(c, component)).filter((x) => x.role === 'unknown');
-  if (unknown.length) errors.push(`${label}: ${unknown.length} unresolved call(s) directly in onClick (${unknown.map((u) => u.why).join('; ')})`);
-  // Either the onClick itself holds the import call (decline shape), or it calls exactly one component-local handler (accept shape).
-  if (imports.length && handlers.length) errors.push(`${label}: onClick both calls a handler and performs an import call (ambiguous)`);
-  if (handlers.length > 1) errors.push(`${label}: onClick calls ${handlers.length} component-local handlers (ambiguous: ${handlers.map((h) => h.name).join(', ')})`);
-  let body = onClickFn;
-  if (handlers.length === 1 && !imports.length) body = handlers[0].node;
-  else if (!imports.length && !handlers.length) errors.push(`${label}: onClick neither performs an import call nor calls a handler`);
-  return { body, errors };
-}
-// Within the chosen body, every direct call is accounted for; exactly one import call; awaited iff `wantAwait`.
-function importCallIn(body, component, label, wantAwait) {
-  const errors = [];
-  const cls = directCalls(body).map((c) => ({ ...classifyCall(c, component), call: c }));
-  const unknown = cls.filter((x) => x.role === 'unknown');
-  if (unknown.length) errors.push(`${label}: ${unknown.length} unresolved call(s) in the handler (${[...new Set(unknown.map((u) => u.why))].join('; ')}) — every call must be accounted for`);
-  const handlers = cls.filter((x) => x.role === 'handler');
-  if (handlers.length) errors.push(`${label}: handler calls other component-local handler(s) (${handlers.map((h) => h.name).join(', ')}) — ambiguous`);
-  const imports = cls.filter((x) => x.role === 'import');
-  if (imports.length !== 1) errors.push(`${label}: expected exactly one import call in the handler, found ${imports.length}`);
-  const awaited = imports.filter((x) => x.call.parent && x.call.parent.type === 'AwaitExpression');
-  if (wantAwait && imports.length === 1 && awaited.length !== 1) errors.push(`${label}: the import call is not awaited`);
-  if (!wantAwait && awaited.length) errors.push(`${label}: unexpected awaited call`);
-  // Any await of something that is not the import call is an unaccounted asynchronous step.
-  const awaits = []; walk.full(body, (n) => { if (n.type === 'AwaitExpression' && enclosingFn(n) === body) awaits.push(n); });
-  if (awaits.some((a) => !(a.argument.type === 'CallExpression' && imports.length === 1 && a.argument === imports[0].call))) errors.push(`${label}: an await in the handler is not the single import call`);
-  return { target: imports.length === 1 ? imports[0] : null, errors };
-}
-function bindComponent(ast, code) {
-  const accepts = literalNodes(ast, BUTTON_ACCEPT);
-  if (accepts.length === 0) return null;
-  if (accepts.length > 1) return { error: `${accepts.length} "${BUTTON_ACCEPT}" literals in one chunk (ambiguous)` };
-  const acceptLit = accepts[0];
-  const component = enclosingFn(acceptLit);
-  if (!component) return { error: 'import UI literal is not inside a function' };
-  const out = { component, markerAttr: null, executor: null, decline: null, errors: [] };
-  walk.full(component, (n) => { if (n.type === 'Property' && !n.computed && n.key.type === 'Literal' && n.key.value === 'data-import-config' && n.value.type === 'Literal') out.markerAttr = n.value.value; });
-  const acceptProps = propsObjectOf(acceptLit); const onAccept = acceptProps && propOf(acceptProps, 'onClick');
-  if (!onAccept || !isFn(onAccept.value)) out.errors.push('accept button has no onClick function');
-  else { const f = followButton(onAccept.value, component, 'accept'); out.errors.push(...f.errors); if (!f.errors.length) { const t = importCallIn(f.body, component, 'accept', true); out.errors.push(...t.errors); out.executor = t.target; } }
-  const declLits = literalNodes(component, BUTTON_DECLINE);
-  if (declLits.length !== 1) out.errors.push(`expected one "${BUTTON_DECLINE}" literal in the component, found ${declLits.length}`);
-  else {
-    const props = propsObjectOf(declLits[0]); const onDecline = props && propOf(props, 'onClick');
-    if (!onDecline || !isFn(onDecline.value)) out.errors.push('decline button has no onClick function');
-    else { const f = followButton(onDecline.value, component, 'decline'); out.errors.push(...f.errors); if (!f.errors.length) { const t = importCallIn(f.body, component, 'decline', false); out.errors.push(...t.errors); out.decline = t.target; } }
-  }
-  return out;
-}
-
-// ---- Verdict per bound function -------------------------------------------------------------
 function memStorage(seed) {
   const m = new Map(Object.entries(seed)); const writes = [];
   return { writes, getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => { writes.push(['set', k]); m.set(k, String(v)); }, removeItem: (k) => { writes.push(['remove', k]); m.delete(k); }, key: (i) => [...m.keys()][i] ?? null, get length() { return m.size; }, clear: () => { writes.push(['clear']); m.clear(); } };
 }
 const PLAY = { id: 'proof-p1', name: 'Proof Mesh', phase: 'offense', type: 'pass', players: [], routes: [] };
-async function judge(target, code, idx, which) {
-  // 1. Static OFF contract (sound, no execution).
-  const st = provablyOff(target.node, idx);
-  if (st.off) return { outcome: 'disabled', basis: 'static', detail: st.why, kind: target.kind };
-  // 2. Not provably OFF: try to PROVE it is ON by execution with a verified immutable closure.
-  const ev = evaluateFunction(target.node, code, idx);
-  if (ev.error) return { outcome: 'inconclusive', basis: 'none', detail: `not provably OFF (${st.why}); cannot reconstruct a faithful closure for execution (${ev.error})`, kind: target.kind };
+function mapArgument(a, env, ctx) {
+  const { props, session, storage, backend } = env;
+  if (a.type === 'Literal') return { value: a.value };
+  if (a.type === 'Identifier') {
+    const r = resolveName(a.name, a);
+    if (!r && a.name === 'localStorage' && !globalReplaced(ctx.idx, 'localStorage')) return { value: storage };
+    if (r && r.decl.kind === 'param' && r.decl.node === ctx.component) {
+      if (a.name === props.backend) return { value: backend };
+      if (a.name === props.uid) return { value: session.uid };
+      if (a.name === props.teamId) return { value: session.teamId };
+      if (a.name === props.teamName) return { value: session.teamName };
+    }
+    if (r && r.decl.kind === 'var' && isImmutableLiteral(r.decl.node.init) && !ctx.idx.decls.has(r.decl.node.range[0])) return { value: r.decl.node.init.type === 'Literal' ? r.decl.node.init.value : r.decl.node.init.quasis.map((q) => q.value.cooked).join('') };
+    return { error: `argument identifier "${a.name}" has no faithful mapping` };
+  }
+  if (a.type === 'ObjectExpression') { const o = {}; for (const p of a.properties) { if (p.type !== 'Property' || p.computed || p.kind !== 'init') return { error: 'object argument with spread/computed/accessor' }; const k = p.key.type === 'Identifier' ? p.key.name : String(p.key.value); const v = mapArgument(p.value, env, ctx); if (v.error) return v; o[k] = v.value; } return { value: o }; }
+  if (a.type === 'ArrowFunctionExpression' && a.params.length === 0 && a.body.type !== 'BlockStatement') {
+    const b = a.body;
+    if (b.type === 'Literal' && b.value === true) return { value: () => true };
+    if (b.type === 'BinaryExpression' && b.operator === '===' && b.left.type === 'MemberExpression' && !b.left.computed && b.left.property.name === 'current' && b.left.object.type === 'Identifier' && verifiedRef(b.left.object, ctx) && b.right.type === 'Identifier') return { value: () => true };
+    return { error: 'arrow argument is not a recognised still-current predicate' };
+  }
+  return { error: `argument of type ${a.type} has no faithful mapping` };
+}
+async function proveOn(target, code, ctx, which) {
+  const fn = target.node;
+  if (fn.params.some((p) => p.type !== 'Identifier')) return { outcome: 'inconclusive', detail: 'callee has default/destructured/rest parameters (their initialisation is not analysed)' };
+  const ev = (() => { const c = closureFor(fn, code, ctx); if (c.problems.length) return { error: c.problems.join('; ') }; try { const f = vm.runInNewContext(`${c.preamble}\n(${code.slice(fn.range[0], fn.range[1])})`, {}, { timeout: 5000 }); return typeof f === 'function' ? { fn: f, declCount: c.declCount } : { error: 'not a function' }; } catch (e) { return { error: `extraction failed: ${String(e && e.message).slice(0, 120)}` }; } })();
+  if (ev.error) return { outcome: 'inconclusive', detail: `cannot reconstruct a faithful closure (${ev.error})` };
   const session = { uid: 'release-proof-uid', teamId: 'release-proof-team', teamName: 'Release Proof' };
-  const stor = memStorage({ smartPlaybook_plays: JSON.stringify([PLAY]) });
+  const storage = memStorage({ smartPlaybook_plays: JSON.stringify([PLAY]) });
   const backend = { copies: 0, reads: 0, copy: async (_s, p) => { backend.copies += 1; return `srv-${p.id}`; }, read: async () => { backend.reads += 1; return PLAY; } };
-  const side = () => `backend.copy x${backend.copies}, backend.read x${backend.reads}, storage writes ${stor.writes.length}`;
+  const args = []; for (const a of target.call.arguments) { const m = mapArgument(a, { props: ctx.props, session, storage, backend }, ctx); if (m.error) return { outcome: 'inconclusive', detail: `actual argument not faithfully mappable: ${m.error}` }; args.push(m.value); }
+  const side = () => `backend.copy x${backend.copies}, backend.read x${backend.reads}, storage writes ${storage.writes.length}`;
   try {
-    const r = which === 'executor' ? await Promise.race([ev.fn(stor, session, () => true, backend), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))]) : ev.fn(stor, session);
-    const reached = which === 'executor' ? backend.copies > 0 : (r === 'declined' || r === 'postponed') && stor.writes.length > 0;
-    return { outcome: reached ? 'enabled' : 'inconclusive', basis: 'execution', detail: `not provably OFF (${st.why}); executed: resolved ${JSON.stringify(r)}; ${side()}`, kind: target.kind, declCount: ev.declCount };
+    const r = which === 'executor' ? await Promise.race([ev.fn(...args), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))]) : ev.fn(...args);
+    const reached = which === 'executor' ? backend.copies > 0 : (r === 'declined' || r === 'postponed') && storage.writes.length > 0;
+    return { outcome: reached ? 'enabled' : 'inconclusive', detail: `executed with ${args.length} actual-mapped argument(s): resolved ${JSON.stringify(r)}; ${side()}`, declCount: ev.declCount };
   } catch (e) {
-    const msg = String(e && e.message);
-    return { outcome: backend.copies > 0 ? 'enabled' : 'inconclusive', basis: 'execution', detail: `not provably OFF (${st.why}); executed: threw "${msg.slice(0, 100)}"; ${side()}`, kind: target.kind, declCount: ev.declCount };
+    return { outcome: backend.copies > 0 ? 'enabled' : 'inconclusive', detail: `executed with ${args.length} actual-mapped argument(s): threw "${String(e && e.message).slice(0, 100)}"; ${side()}`, declCount: ev.declCount };
   }
 }
-async function executeBindings(binding, code, idx) {
-  return { executor: binding.executor ? await judge(binding.executor, code, idx, 'executor') : null, decline: binding.decline ? await judge(binding.decline, code, idx, 'decline') : null };
+async function judge(target, code, ctx, which) {
+  const st = provablyOff(target.node, ctx);
+  if (st.off) return { outcome: 'disabled', basis: 'static', detail: st.why, kind: target.kind };
+  const on = await proveOn(target, code, ctx, which);
+  return { ...on, basis: on.outcome === 'enabled' ? 'execution' : 'none', detail: `not provably OFF (${st.why}); ${on.detail}`, kind: target.kind };
 }
 
 function entryChunks(dir) {
@@ -410,16 +615,23 @@ async function analyze(dir) {
   const entries = entryChunks(dir);
   if (entries.error) return { ok: false, verdict: 'inconclusive', reasons: [entries.error], dir };
   const report = { dir, entryChunks: entries.files.map((f) => path.relative(dir, f)), components: [], verdict: 'inconclusive', reasons: [] };
-  let found = null;
+  const parsed = [];
+  const idx = { decls: new Set(), globals: new Set() };
   for (const f of entries.files) {
     const code = fs.readFileSync(f, 'utf8');
-    let ast; try { ast = parseChunk(code); } catch (e) { report.reasons.push(`inconclusive: ${path.relative(dir, f)} failed to parse: ${String(e.message).slice(0, 120)}`); continue; }
-    const b = bindComponent(ast, code);
+    try { const ast = parseChunk(code); assignmentIndex(ast, idx); parsed.push({ f, code, ast }); }
+    catch (e) { report.reasons.push(`inconclusive: ${path.relative(dir, f)} failed to parse: ${String(e.message).slice(0, 120)}`); }
+  }
+  let found = null;
+  for (const { f, code, ast } of parsed) {
+    const ctx = { idx, code, map: moduleMap(ast), component: null, props: {} };
+    const b = bindComponent(ast, code, ctx);
     if (!b) continue;
     if (b.error) { report.reasons.push(`inconclusive: ${b.error}`); continue; }
     if (found) { report.reasons.push('inconclusive: import UI component found in more than one entry chunk'); continue; }
-    const idx = assignmentIndex(ast);
-    found = { chunk: path.relative(dir, f), componentRange: b.component.range, markerAttr: b.markerAttr, errors: b.errors, exec: await executeBindings(b, code, idx) };
+    ctx.component = b.component; ctx.props = b.props;
+    const exec = { executor: b.executor ? await judge(b.executor, code, ctx, 'executor') : null, decline: b.decline ? await judge(b.decline, code, ctx, 'decline') : null };
+    found = { chunk: path.relative(dir, f), componentRange: b.component.range, markerAttr: b.markerAttr, props: b.props, errors: b.errors, exec };
     report.components.push(found);
   }
   if (!found) { report.reasons.push('inconclusive: the import UI component ("Import plays") was not found in any entry chunk'); return { ...report, ok: false }; }

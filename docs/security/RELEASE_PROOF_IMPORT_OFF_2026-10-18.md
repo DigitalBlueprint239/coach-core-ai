@@ -1,6 +1,6 @@
 # Release-proof repair: import default-OFF proven from build inputs AND shipped output
 
-Date: 2026-10-18 (revised after the independent FAIL reviews of `c9d49dd` c-6243708455 and `905b1d4` c-6246331436). Author: Claude.
+Date: 2026-10-18 (revised after the independent FAIL reviews of `c9d49dd` c-6243708455, `905b1d4` c-6246331436 and `d14aa7b` c-6248146409). Author: Claude.
 **Delivery, not independent acceptance. No merge/deploy; MVP NO-GO.**
 
 ## Finding (evidence 73, PR #76 review)
@@ -26,6 +26,39 @@ two support drafts under `docs/support/`. **Unchanged:** the enable check
 (`=== 'true'`), every import/recovery behaviour and test, `.env.production`/`.env.test`/`build-app.sh`
 opt-ins, identity UI, e2e tests/config/reporter/evidence scripts, membership (76/15), execution settings.
 PR #77 (aggregate gate) is separate and untouched.
+
+## Design rationale (third revision — effects around the throw, constructor binding, actual arguments)
+
+The third review showed that "first statement throws" is not enough when code *around* the throw can run:
+argument getters, default parameters, handler parameters, extra reads in the onClick wrapper, and
+destructured locals that are not React setters — plus a computed `globalThis["Error"]` replacement, an
+unresolved `CustomError` trusted as native, and an ON control that invoked the callee with synthetic
+arguments where the real UI passed `false`.
+
+The repair recognises the **complete supported compiled path** and rejects everything else:
+- accept onClick must be exactly `()=>{y()}` to a component-local **zero-parameter** handler; the decline
+  onClick is itself the handler and must have no parameters; the OFF callee must have **zero parameters**
+  (so no default/destructuring initialisation can run) — the real compiled handlers are
+  `async function(){throw new Error(zv)}(localStorage)`;
+- every node evaluated before the import call, and the enclosing try's catch/finally, must fit an
+  effect-free grammar: literals, local reads, `ref.current` of a **verified React `useRef`**, calls to
+  **verified React `useState` setters** (the destructuring's initialiser is `(0, r.useState)(…)` where `r`
+  is `n(<id>)` and module `<id>` is checked to be React by its own source) with effect-free arguments;
+  import-call arguments must be effect-free (so `argBox.value` getters and `i.copy(...)` arguments fail);
+- `Error` must be the engine binding: exactly that name, not shadowed, and not assigned/redefined as a
+  global anywhere in any entry chunk — identifier, member, computed-literal (`globalThis["Error"]`),
+  static-key (`window[k]` where `k` resolves to a literal through consts or IIFE arguments),
+  `Object.defineProperty/assign` and `Reflect.*` on global objects; any `eval`/`Function` other than
+  webpack's `new Function("return this")` distrusts all globals. Writes of non-constructible values
+  (arrows, literals, object/array literals) cannot hijack `new Error` and are not counted;
+- ON detection executes the callee with the **actual call-site arguments mapped by role** (literals as
+  themselves — so an explicit `false` is passed as `false`), only plain identifier parameters, and counts
+  reads/copies/writes; unmappable shapes are inconclusive.
+
+Host assumptions stated narrowly: the chunk is strict mode (`this` is never the global object in plain
+calls; `this.method()[k]=v` is an ordinary object write), the runtime is native and not rewritten by code
+outside the shipped entry chunks, and no dynamic code other than webpack's global fallback exists (any
+other is rejected). The retained shipped JS exists so a reviewer can inspect exactly what was judged.
 
 ## Design rationale (second revision)
 
@@ -74,8 +107,12 @@ what was judged. The proof is a release-*shaped* build, not a deployment.
    LICENSE (manifest-only).
 
 ## Validation
-- `node scripts/security/release-import-config.test.mjs`: 26 checks — 24 fast + 2 real-build
-  (`RELEASE_PROOF_BUILD=1`) → **26/26, 0 skipped** locally. Includes: resolve cases; synthetic CRA/terser-shaped
+- `node scripts/security/release-import-config.test.mjs`: 37 checks — 35 fast + 2 real-build
+  (`RELEASE_PROOF_BUILD=1`) → **37/37, 0 skipped** locally. Adds the third review's seven false-OFF probes
+  (each asserting the real button reaches the backend, the repaired scanner refuses OFF, and the `d14aa7b`
+  scanner gave the false OFF), the false-ON probe (explicit `false` arguments: real UI makes no call, the
+  control must not report ON — `d14aa7b` did), actual-argument execution (5 mapped args; unmappable →
+  inconclusive), surrounding-path grammar cases and the eval/Function rule. Includes: resolve cases; synthetic CRA/terser-shaped
   bundles (OFF decided on a *static* basis, ON by execution); first-review decoys 1–4 + unwired decoy;
   **second-review probes R1–R3 (all six)**, each asserting (a) the whole-module "actual behaviour" harness
   really copies/reads/writes, (b) the repaired scanner refuses OFF, (c) the `905b1d4` scanner (from git) gave a

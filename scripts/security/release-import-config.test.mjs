@@ -65,18 +65,23 @@ test('resolve: precedence audit matches CRA (shell > .env.production.local > .en
 });
 
 // ------------------------------------------------------------------ synthetic shipped bundles -------------
-// Shaped like CRA/terser output: a webpack chunk whose module factory holds the concatenated import module
-// (module-scope consts + the component) and the handlers exactly as terser folds them.
+// Shaped like CRA's single main chunk: an IIFE with a numeric module map (950 -> 983 = a React-shaped
+// module defining Symbol.for("react.fragment"), useState and useRef), webpack's require `n`, and the
+// app entry IIFE holding the concatenated import module (module-scope consts + the component) with
+// handlers exactly as terser folds them. `self.__fixtureComponent` exists only so the actual-behaviour
+// harness can call the component; the real bundle exports nothing.
 const DIS = 'Device-play import is disabled in this build. Originals preserved.';
-const COMPONENT = ({ accept, decline, attr }) => `(self.webpackChunkfixture=self.webpackChunkfixture||[]).push([[179],{4:(e,t,n)=>{"use strict";
-const jsx=(a,b)=>({a,b}),zv=${JSON.stringify(DIS)},$v="smartPlaybook_plays",Bv=e=>\`coachcore:v1:\${e}:legacyImportDecision\`,qv="coachcore:v1:legacyImportClaim";
+const REACT_LIKE = `983:(e,t)=>{var n=Symbol.for("react.transitional.element"),i=Symbol.for("react.fragment");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}`;
+const COMPONENT = ({ accept, decline, attr, prelude = '', wrap = (x) => x }) => `(()=>{"use strict";var e={${REACT_LIKE}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}
+(()=>{"use strict";var r=n(950);const jsx=(a,b)=>({a,b}),zv=${JSON.stringify(DIS)},$v="smartPlaybook_plays",Bv=e=>\`coachcore:v1:\${e}:legacyImportDecision\`,qv="coachcore:v1:legacyImportClaim";
+${prelude}
 function Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error("Invalid legacy library.");return n}
 async function Kv(e,t,n,r){if(!n())throw new Error("Account or team changed.");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:"pending",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:"imported",ids:a})),a}
 function Jv(e,t){if(e.getItem(Bv(t.uid)))return"declined";return e.setItem(Bv(t.uid),JSON.stringify({decision:"declined"})),"declined"}
-function Uv({uid:e,teamId:t,teamName:n}){const o={current:"s"},a="s",[l,c]=[1,()=>{}],[u,d]=["",()=>{}],[h,f]=[!1,()=>{}],[p,m]=[!1,()=>{}];
-const y=async()=>{f(!0),d("");try{await ${accept},o.current===a&&c(0)}catch{o.current===a&&d("Import not completed.")}finally{o.current===a&&f(!1)}};
+function Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=\`\${e}:\${t}\`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(""),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);
+const y=${wrap(`async()=>{f(!0),d("");try{await ${accept},o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d("Import not completed.")}finally{o.current===a&&f(!1)}}`)};
 return jsx("section",{"aria-label":"Import device plays","data-import-config":${JSON.stringify(attr)},children:[jsx("button",{disabled:h,onClick:()=>{y()},children:h?"Verifying copies\\u2026":"Import plays"}),jsx("button",{disabled:h,onClick:()=>{try{"postponed"===${decline}?m(!0):c(0)}catch{d("Decision could not be saved.")}},children:"Not now"})]})}
-t.default=Uv}}]);`;
+if(typeof self!=="undefined")self.__fixtureComponent=Uv})()})();`;
 const OFF_ACCEPT = 'async function(){throw new Error(zv)}(localStorage)';
 const OFF_DECLINE = 'function(){throw new Error(zv)}(localStorage)';
 const ON_ACCEPT = 'Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>o.current===a,i)';
@@ -126,7 +131,7 @@ test('F1 regression (reviewer decoy 4): negative-control rejects a comment-only 
   assert.equal(r.status, 1); assert.match(r.json.reasons.join('|'), /opted-in build executes as OFF/);
 });
 test('F1 regression: a decoy executor that throws the disabled message while the real wired executor is enabled -> FAIL (binding follows the button handler)', () => {
-  const decoy = COMPONENT({ accept: ON_ACCEPT, decline: ON_DECLINE, attr: 'coachcore:import-config=true' }).replace('function Jv(', `async function Decoy(){throw new Error(zv)}\nfunction Jv(`);
+  const decoy = COMPONENT({ accept: ON_ACCEPT, decline: ON_DECLINE, attr: 'coachcore:import-config=true', prelude: 'async function Decoy(){throw new Error(zv)}' });
   const r = run(['scan', build({ 'main.abc.js': decoy })]);
   assert.equal(r.status, 1); assert.equal(r.json.verdict, 'on');
 });
@@ -139,8 +144,7 @@ const actualBehaviour = async (code, buttonIndex = 0) => {
   const storage = { getItem: (k) => m.get(k) ?? null, setItem: (k, v) => { writes.push(k); m.set(k, v); }, removeItem: (k) => m.delete(k), key: (i) => [...m.keys()][i], get length() { return m.size; } };
   const context = { self: {}, localStorage: storage, i: { copy: async () => { copies += 1; return 'copy-id'; }, read: async () => { reads += 1; return {}; } } };
   vm.runInNewContext(code, context);
-  const exp = {}; context.self.webpackChunkfixture[0][1][4]({}, exp, {});
-  const ui = exp.default({ uid: 'u', teamId: 't', teamName: 'T' });
+  const ui = context.self.__fixtureComponent({ uid: 'u', teamId: 't', teamName: 'T', backend: context.i });
   ui.b.children[buttonIndex].b.onClick();
   await new Promise((r) => setImmediate(r)); await new Promise((r) => setTimeout(r, 20));
   return { copies, reads, writes: writes.length };
@@ -174,25 +178,95 @@ test('second-review baselines: ON baseline really copies/reads and is reported o
   const off = run(['scan', build({ 'main.abc.js': OFF_BUNDLE })]); assert.equal(off.status, 0); assert.equal(off.json.components[0].exec.decline.basis, 'static');
 });
 test('static OFF contract rejects a replaced or redefined Error constructor and non-const / mutable message bindings', () => {
-  const replaced = OFF_BUNDLE.replace('function Hv(', 'globalThis.Error=function(){i.copy({}, {id:"x"})};function Hv(');
+  const replaced = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'globalThis.Error=function(){i.copy({}, {id:"x"})};' });
   const r1 = run(['scan', build({ 'main.abc.js': replaced })]); assert.equal(r1.status, 1); assert.match(r1.json.reasons.join('|'), /global "Error" is assigned or redefined/);
-  const defined = OFF_BUNDLE.replace('function Hv(', 'Object.defineProperty(globalThis,"Error",{value:function(){}});function Hv(');
+  const defined = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'Object.defineProperty(globalThis,"Error",{value:function(){}});' });
   const r2 = run(['scan', build({ 'main.abc.js': defined })]); assert.equal(r2.status, 1); assert.match(r2.json.reasons.join('|'), /assigned or redefined/);
-  const letMsg = OFF_BUNDLE.replace('zv=' + JSON.stringify(DIS), 'zvx=1').replace('const jsx=(a,b)=>({a,b}),zvx=1', `let zv=${JSON.stringify(DIS)};const jsx=(a,b)=>({a,b}),zvx=1`);
+  const letMsg = OFF_BUNDLE.replace(',zv=' + JSON.stringify(DIS), ',zvx=1').replace('const jsx=(a,b)=>({a,b}),zvx=1', `let zv=${JSON.stringify(DIS)};const jsx=(a,b)=>({a,b}),zvx=1`);
   const r3 = run(['scan', build({ 'main.abc.js': letMsg })]); assert.equal(r3.status, 1); assert.match(r3.json.reasons.join('|'), /is a let binding \(mutable\)/);
-  const shadowErr = OFF_BUNDLE.replace('function Uv(', 'function Error(){}\nfunction Uv(');
-  const r4 = run(['scan', build({ 'main.abc.js': shadowErr })]); assert.equal(r4.status, 1); assert.match(r4.json.reasons.join('|'), /declared in scope/);
+  const shadowErr = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'function Error(){}' });
+  const r4 = run(['scan', build({ 'main.abc.js': shadowErr })]); assert.equal(r4.status, 1); assert.match(r4.json.reasons.join('|'), /declared in an enclosing scope/);
 });
 test('ON detection refuses to reconstruct mutable/global-dependent closures (negative control then fails closed, never fakes ON or OFF)', () => {
-  const mut = guard(ON_BUNDLE).replace('function Hv(', 'const cfg={enabled:true};function Hv(');
-  const r = run(['negative-control', build({ 'main.abc.js': mut })]); assert.equal(r.status, 1); assert.match(r.json.reasons.join('|'), /const bound to a ObjectExpression/);
+  const mut = guard(COMPONENT({ accept: ON_ACCEPT, decline: ON_DECLINE, attr: 'coachcore:import-config=true', prelude: 'const cfg={enabled:true};' }));
+  const r = run(['negative-control', build({ 'main.abc.js': mut })]); assert.equal(r.status, 1); assert.match(r.json.reasons.join('|'), /const bound to a ObjectExpression|is assigned or mutated/);
+});
+
+// ------------------------------------------------------------------ third-review probes (D1–D3) -------
+const GETTER = 'const argBox={get value(){i.copy({}, {id:"argument-getter"});return localStorage}};';
+const THIRD_REVIEW_FALSE_OFF = [
+  ['D1 argument getter evaluated before the throw', COMPONENT({ accept: 'async function(){throw new Error(zv)}(argBox.value)', decline: 'function(){throw new Error(zv)}(argBox.value)', attr: 'coachcore:import-config=false', prelude: GETTER })],
+  ['D1 default parameter runs before the body', COMPONENT({ accept: 'async function(x=i.copy({}, {id:"default"})){throw new Error(zv)}()', decline: 'function(x=i.copy({}, {id:"default"})){throw new Error(zv)}()', attr: 'coachcore:import-config=false' })],
+  ['D1 handler default-getter parameter', COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: GETTER, wrap: (h) => h.replace('async()=>', 'async(x=argBox.value)=>') })],
+  ['D1 onClick wrapper reads an effectful getter', COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: GETTER }).replace('onClick:()=>{y()}', 'onClick:()=>{y();argBox.value}')],
+  ['D1 destructured local that is backend code, not a verified setter', COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false' }).replace('[h,f]=(0,r.useState)(!1)', '[h,f]=[!1,()=>i.copy({}, {id:"local"})]')],
+  ['D2 computed literal global replacement globalThis["Error"]', COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'globalThis["Error"]=function(msg){i.copy({}, {id:"constructor"});this.message=msg};' })],
+  ['D2 unresolved constructor is not trusted as native', COMPONENT({ accept: 'async function(){throw new CustomError(zv)}(localStorage)', decline: 'function(){throw new CustomError(zv)}(localStorage)', attr: 'coachcore:import-config=false' })],
+];
+const FALSE_ON_PROBE = ['D3 ON control must not drop explicit false arguments', COMPONENT({ accept: 'Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>true,i,false)', decline: 'Jv(localStorage,{uid:e,teamId:t},false)', attr: 'coachcore:import-config=true' }).replace('async function Kv(e,t,n,r){', 'async function Kv(e,t,n,r,on=true){if(!on)throw new Error(zv);').replace('function Jv(e,t){', 'function Jv(e,t,on=true){if(!on)throw new Error(zv);')];
+const OLD_D14 = (() => { const r = spawnSync('git', ['-C', repo, 'cat-file', '-e', 'd14aa7bb9ec4442c3acca26b127b17f4194cbd64:scripts/security/release-import-config.js']); if (r.status !== 0) return null; const f = join(mkdtempSync(join(tmpdir(), 'old-d14-')), 'release-import-config.js'); writeFileSync(f, spawnSync('git', ['-C', repo, 'show', 'd14aa7bb9ec4442c3acca26b127b17f4194cbd64:scripts/security/release-import-config.js'], { encoding: 'utf8' }).stdout); return f; })();
+// The reviewer's harness supplied CustomError as a backend-calling global constructor.
+const actualWithCustomError = async (code, idx = 0) => {
+  let copies = 0; const m = new Map([['smartPlaybook_plays', JSON.stringify([{ id: 'p', name: 'Proof', phase: 'offense', type: 'pass', players: [], routes: [] }])]]); const writes = [];
+  const storage = { getItem: (k) => m.get(k) ?? null, setItem: (k, v) => { writes.push(k); m.set(k, v); }, removeItem: (k) => m.delete(k), key: (i) => [...m.keys()][i], get length() { return m.size; } };
+  const context = { self: {}, localStorage: storage, i: { copy: async () => { copies += 1; return 'copy-id'; }, read: async () => ({}) } };
+  context.CustomError = function (msg) { context.i.copy({}, { id: 'external-constructor' }); this.message = msg; };
+  vm.runInNewContext(code, context);
+  const ui = context.self.__fixtureComponent({ uid: 'u', teamId: 't', teamName: 'T', backend: context.i });
+  ui.b.children[idx].b.onClick(); await new Promise((r) => setTimeout(r, 20));
+  return { copies, writes: writes.length };
+};
+for (const [name, code] of THIRD_REVIEW_FALSE_OFF) {
+  test(`third-review probe — ${name}: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF`, async () => {
+    const real = name.includes('CustomError') || name.includes('unresolved constructor') ? await actualWithCustomError(code) : await actualBehaviour(code);
+    assert.ok(real.copies > 0, `probe must really reach the backend: ${JSON.stringify(real)}`);
+    const dir = build({ 'main.abc.js': code });
+    const r = run(['scan', dir]);
+    assert.equal(r.status, 1, `repaired scanner must not pass: ${r.stdout}`);
+    assert.notEqual(r.json.verdict, 'off');
+    if (OLD_D14) { const old = run(['scan', dir], {}, repo, OLD_D14); assert.equal(old.status, 0, `${name}: the d14aa7b implementation must show the false OFF: ${old.stdout.slice(0, 200)}`); assert.equal(old.json.verdict, 'off'); }
+  });
+}
+test(`third-review probe — ${FALSE_ON_PROBE[0]}: real UI passes false (no backend call); negative-control must NOT report ON; d14aa7b did`, async () => {
+  const code = FALSE_ON_PROBE[1];
+  const real = await actualBehaviour(code); assert.deepEqual(real, { copies: 0, reads: 0, writes: 0 });
+  const dir = build({ 'main.abc.js': code });
+  const nc = run(['negative-control', dir]);
+  assert.equal(nc.status, 1); assert.notEqual(nc.json.verdict, 'on');
+  assert.match(nc.json.reasons.join('|'), /default\/destructured\/rest parameters|inconclusive/);
+  if (OLD_D14) { const old = run(['negative-control', dir], {}, repo, OLD_D14); assert.equal(old.status, 0, 'd14aa7b falsely satisfied the ON control'); }
+});
+test('ON detection executes the real call-site arguments: explicit literal args are passed, not synthesised; mappable shapes only', () => {
+  // Same executor signature as the false-ON probe but the UI passes `true`: ON by execution with 5 actual-mapped arguments.
+  const on = COMPONENT({ accept: 'Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>o.current===a,i,true)', decline: 'Jv(localStorage,{uid:e,teamId:t},true)', attr: 'coachcore:import-config=true' }).replace('async function Kv(e,t,n,r){', 'async function Kv(e,t,n,r,on){if(!on)throw new Error(zv);').replace('function Jv(e,t){', 'function Jv(e,t,on){if(!on)throw new Error(zv);');
+  const r = run(['negative-control', build({ 'main.abc.js': on })]);
+  assert.equal(r.status, 0, r.stdout); assert.match(r.json.components[0].exec.executor.detail, /executed with 5 actual-mapped argument\(s\)/);
+  // An argument shape with no faithful mapping (member read) makes ON detection inconclusive rather than synthetic.
+  const odd = COMPONENT({ accept: 'Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>o.current===a,i.backend)', decline: ON_DECLINE, attr: 'coachcore:import-config=true' });
+  const r2 = run(['negative-control', build({ 'main.abc.js': odd })]);
+  assert.equal(r2.status, 1); assert.match(r2.json.reasons.join('|'), /not effect-free|no faithful mapping/);
+});
+test('dynamic code: an eval/Function call anywhere in a shipped chunk distrusts all globals (fails closed); webpack\'s `new Function("return this")` fallback alone is tolerated', () => {
+  const ev = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'eval("globalThis.Error=function(msg){i.copy({}, {id:123});this.message=msg}");' });
+  const r = run(['scan', build({ 'main.abc.js': ev })]); assert.equal(r.status, 1); assert.match(r.json.reasons.join('|'), /assigned or redefined/);
+  const wp = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'const g=(function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(e){return{}}})();' });
+  assert.equal(run(['scan', build({ 'main.abc.js': wp })]).status, 0, 'the known webpack global fallback must not fail the real bundle');
+  const fn = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: 'new Function("globalThis.Error=function(){}")();' });
+  assert.equal(run(['scan', build({ 'main.abc.js': fn })]).status, 1);
+});
+test('surrounding-path grammar: a direct backend call inside an argument, a member read before the throw, and a non-React setter all fail closed; the real compiled OFF shape passes', () => {
+  const direct = COMPONENT({ accept: 'async function(){throw new Error(zv)}(i.copy({}, {id:"direct"}))', decline: OFF_DECLINE, attr: 'coachcore:import-config=false' });
+  assert.equal(run(['scan', build({ 'main.abc.js': direct })]).status, 1);
+  const pre = COMPONENT({ accept: OFF_ACCEPT, decline: OFF_DECLINE, attr: 'coachcore:import-config=false', prelude: GETTER, wrap: (h) => h.replace('f(!0),d("")', 'argBox.value,f(!0),d("")') });
+  const r = run(['scan', build({ 'main.abc.js': pre })]); assert.equal(r.status, 1); assert.match(r.json.reasons.join('|'), /member access argBox\.value/);
+  assert.equal(run(['scan', build({ 'main.abc.js': OFF_BUNDLE })]).status, 0, 'the realistic OFF shape (hooks via the React-shaped module) is still accepted');
 });
 
 test('scan fails closed when it cannot bind: no index.html, index.html referencing a missing chunk, no component, two components, unparseable chunk, executor rejecting with a different message', () => {
   assert.match(run(['scan', build({ 'main.abc.js': OFF_BUNDLE }, { html: false })]).json.reasons.join('|'), /index\.html missing/);
   assert.match(run(['scan', build({ 'other.js': OFF_BUNDLE })]).json.reasons.join('|'), /referenced script\(s\) missing/);
   assert.match(run(['scan', build({ 'main.abc.js': 'var x=1;' })]).json.reasons.join('|'), /component \("Import plays"\) was not found/);
-  assert.match(run(['scan', build({ 'main.abc.js': OFF_BUNDLE + '\n' + OFF_BUNDLE.replace('Uv', 'Uw') })]).json.reasons.join('|'), /2 "Import plays" literals/);
+  assert.match(run(['scan', build({ 'main.abc.js': OFF_BUNDLE + '\n' + OFF_BUNDLE.replaceAll('Uv', 'Uw') })]).json.reasons.join('|'), /2 "Import plays" literals/);
   assert.match(run(['scan', build({ 'main.abc.js': 'this is not javascript {' })]).json.reasons.join('|'), /failed to parse/);
   const other = run(['scan', build({ 'main.abc.js': COMPONENT({ accept: 'async function(){throw new Error("Something else")}(localStorage)', decline: OFF_DECLINE, attr: 'coachcore:import-config=false' }) })]);
   assert.equal(other.status, 1); assert.match(other.json.reasons.join('|'), /inconclusive: executor not provably OFF .*threw "Something else"/);
