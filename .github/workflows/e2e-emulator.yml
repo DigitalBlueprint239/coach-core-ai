@@ -95,6 +95,8 @@ jobs:
           # Playwright's "clear output" task deletes outputDir (e2e/test-results) at run
           # start, which previously destroyed run.log and the release manifest before upload.
           mkdir -p e2e/test-results e2e/ci-evidence
+      - name: Release-proof self-checks (import default-OFF resolution, canary scan, fail-closed cases)
+        run: node scripts/security/release-import-config.test.mjs
       - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build)
         run: |
           RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/ci-evidence/release-build-manifest.sha256 \

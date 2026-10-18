@@ -1,6 +1,11 @@
 // Public build configuration, not consent or authorization. Only an exact opt-in
 // enables the reviewed import flow; ordinary/release builds default OFF.
 export const isLegacyImportEnabled = () => process.env.REACT_APP_ENABLE_LEGACY_IMPORT === 'true';
+// Output-level canary for the release-build proof (scripts/security/release-import-config.js):
+// CRA inlines the build-time value, so the shipped bundle carries the literal
+// "coachcore:import-config=false" (or "=true" for the explicit emulator/test opt-in).
+// An unpinned build leaves no literal, which the proof treats as inconclusive and FAILS.
+export const IMPORT_CONFIG_MARKER = `coachcore:import-config=${process.env.REACT_APP_ENABLE_LEGACY_IMPORT}`;
 const DISABLED = 'Device-play import is disabled in this build. Originals preserved.';
 export const LEGACY_KEY = 'smartPlaybook_plays';
 export const decisionKey = (uid: string) => `coachcore:v1:${uid}:legacyImportDecision`;

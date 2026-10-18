@@ -28,7 +28,24 @@ else pass "guard refuses an emulator build for $PROJECT"; fi
 if grep -qx 'REACT_APP_USE_FIREBASE_EMULATORS=false' .env.production; then pass ".env.production pins the emulator flag to false"
 else fail ".env.production" "flag not pinned to false"; fi
 
-# 3. Release-shaped build. The shell must not override the flag.
+# 2b. Import default OFF (founder decision R4; release-proof repair 2026-10-18). The
+# committed .env.production pin is necessary but NOT sufficient: a git-ignored
+# .env.local / .env.production.local or a shell variable overrides it in a CRA
+# production build. Resolve the EFFECTIVE build-time value (independently and with
+# CRA's own loader), require exactly "false" from a committed file, and refuse to
+# build at all if import would be enabled or the resolution is inconclusive.
+if grep -qx 'REACT_APP_ENABLE_LEGACY_IMPORT=false' .env.production; then pass ".env.production pins the import flag to false"
+else fail ".env.production" "REACT_APP_ENABLE_LEGACY_IMPORT not pinned to false"; fi
+if imp="$(node scripts/security/release-import-config.js resolve --node-env production)"; then
+  pass "effective build-time import config is OFF ($(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.effective.source+"="+JSON.stringify(r.effective.value)+"; CRA loader agrees: "+JSON.stringify(r.cra))' "$imp"))"
+else
+  fail "import config" "$(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.reasons.join(" | "))' "$imp" 2>/dev/null || echo 'resolution failed')"
+  echo "RESULT: $n passed, >=1 failed (refusing to build: import would not be provably OFF)"
+  [[ -n "${GITHUB_ACTIONS:-}" ]] && echo "::error title=Release-build proof (${PROJECT}): import config::effective REACT_APP_ENABLE_LEGACY_IMPORT is not provably OFF for a release build; see job log"
+  exit 1
+fi
+
+# 3. Release-shaped build. The shell must not override the flags.
 if [[ "${REACT_APP_USE_FIREBASE_EMULATORS:-}" == "true" ]]; then fail "env" "REACT_APP_USE_FIREBASE_EMULATORS=true in shell"; exit 1; fi
 rm -rf "$OUT"
 BUILD_PATH="$OUT" CI=false GENERATE_SOURCEMAP=false \
@@ -52,6 +69,12 @@ absent "no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 91
 absent "no demo-* project values" "demo-coach-core|demo-e2e"
 absent "no emulator test password or placeholder secret" "e2e-not-a-secret|e2e-placeholder-not-a-key"
 if grep -rqF "$PROJECT" "$OUT"; then pass "bundle targets $PROJECT"; else fail "project" "$PROJECT not found in bundle"; fi
+# Output-level proof: the SHIPPED JS must carry the build-time canary
+# coachcore:import-config=false, no "=true", no inlined REACT_APP_ENABLE_LEGACY_IMPORT:"true",
+# and the disabled-state copy. A missing canary is inconclusive and FAILS (fail closed).
+if sc="$(node scripts/security/release-import-config.js scan "$OUT")"; then
+  pass "shipped JS proves import OFF ($(node -e 'const r=JSON.parse(process.argv[1]);console.log("canary=false x"+r.canaryOff+", =true x"+r.canaryOn+", inlined true x"+r.inlinedTrue+", disabled copy x"+r.disabledCopy)' "$sc"))"
+else fail "import canary" "$(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.reasons.join(" | "))' "$sc" 2>/dev/null || echo 'scan failed')"; fi
 js=$(find "$OUT" -name '*.js' | wc -l | tr -d ' ')
 if [[ "$js" -ge 1 ]]; then pass "$js JS files scanned"; fi
 
@@ -64,10 +87,13 @@ if [[ -d e2e/.app-build/static/js ]]; then
     if grep -rqIE "$pat" e2e/.app-build/static/js; then pass "negative control: pattern detects emulator build ($pat)"
     else fail "negative control" "pattern $pat does not detect the emulator build"; fi
   done
+  # The import canary must DETECT the explicitly opted-in emulator build (coachcore:import-config=true).
+  if node scripts/security/release-import-config.js negative-control e2e/.app-build >/dev/null; then pass "negative control: import canary detects the opted-in emulator build (=true)"
+  else fail "negative control" "import canary does not detect the opted-in emulator build"; fi
 fi
 echo "RESULT: $n passed, $([[ $status -eq 0 ]] && echo 0 || echo '>=1') failed"
 if [[ -n "${GITHUB_ACTIONS:-}" ]]; then
   lvl=$([[ $status -eq 0 ]] && echo notice || echo error)
-  echo "::${lvl} title=Release-build proof (${PROJECT}): ${n} passed::No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects."
+  echo "::${lvl} title=Release-build proof (${PROJECT}): ${n} passed::No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF in the shipped JS (effective build config + canary); guard refuses emulator mode for real projects."
 fi
 exit $status
