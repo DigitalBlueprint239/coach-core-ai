@@ -1,0 +1,49 @@
+{
+  "base": "61448f0feee198a8796f4077f32a52f7b863f90d",
+  "accepted_ci_base": "61448f0feee198a8796f4077f32a52f7b863f90d",
+  "head": "cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+  "base_equals_head_membership": true,
+  "complete_nonoverlapping_buckets": true,
+  "project_counts": {
+    "chromium": 76,
+    "firefox": 76,
+    "phone-chromium": 15,
+    "phone-firefox": 15
+  },
+  "bucket_counts": {
+    "acceptance": {
+      "chromium": 65,
+      "firefox": 65,
+      "phone-chromium": 15,
+      "phone-firefox": 15
+    },
+    "diagnostic": {
+      "chromium": 10,
+      "firefox": 10
+    },
+    "obsolete-fault-model": {
+      "chromium": 1,
+      "firefox": 1
+    }
+  },
+  "dispatch_counts": {
+    "D10-08[a-d]": {
+      "acceptance": {
+        "chromium": 4,
+        "firefox": 4
+      },
+      "diagnostic": {},
+      "obsolete-fault-model": {}
+    },
+    "D10-": {
+      "acceptance": {
+        "chromium": 22,
+        "firefox": 22,
+        "phone-chromium": 2,
+        "phone-firefox": 2
+      },
+      "diagnostic": {},
+      "obsolete-fault-model": {}
+    }
+  }
+}

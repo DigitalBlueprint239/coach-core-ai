@@ -1,0 +1,102 @@
+[
+  {
+    "id": 12147985260,
+    "name": "e2e-results-diagnostic-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12147880629,
+    "name": "e2e-results-acceptance-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "chromium",
+        "status": "passed",
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "id": 12147631460,
+    "name": "e2e-results-acceptance-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "firefox",
+        "status": "passed",
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "id": 12147501096,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12147256881,
+    "name": "e2e-results-acceptance-phone-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-chromium",
+        "status": "passed",
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "id": 12147243371,
+    "name": "e2e-results-obsolete-fault-model-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12147124480,
+    "name": "e2e-results-diagnostic-phone-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12147094572,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12147084572,
+    "name": "e2e-results-obsolete-fault-model-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12147068053,
+    "name": "e2e-results-diagnostic-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12146773961,
+    "name": "e2e-results-diagnostic-phone-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": []
+  },
+  {
+    "id": 12146444902,
+    "name": "e2e-results-acceptance-phone-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "test_exit": "exit=0",
+    "executions": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-firefox",
+        "status": "passed",
+        "retry": 0
+      }
+    ]
+  }
+]

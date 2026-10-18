@@ -1,0 +1,254 @@
+[
+  {
+    "artifact": "extracted-12146444902",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12146773961",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147068053",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147084572",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147094572",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147124480",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147243371",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147256881",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147501096",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147631460",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147880629",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12147985260",
+    "file": "main.630c8567.js",
+    "calls": [
+      {
+        "name": "Function",
+        "type": "NewExpression",
+        "range": [
+          184304,
+          184331
+        ],
+        "args": [
+          {
+            "type": "Literal",
+            "value": "return this"
+          }
+        ],
+        "source": "new Function(\"return this\")"
+      }
+    ]
+  }
+]

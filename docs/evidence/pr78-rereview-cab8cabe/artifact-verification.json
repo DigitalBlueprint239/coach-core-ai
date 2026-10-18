@@ -1,0 +1,890 @@
+[
+  {
+    "id": 12147985260,
+    "name": "e2e-results-diagnostic-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:9e59ceeba3492dbe63c30cbebbfeaa05c02441c2d5082468b644933202892df9",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147985260/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:30.117Z",
+      "duration": 727.741,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147880629,
+    "name": "e2e-results-acceptance-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:35e496119e6d9868e442d920e83a302f04544d761d18df58b4da79115c75717e",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147880629/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:07:59.762Z",
+      "duration": 3881.83,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147631460,
+    "name": "e2e-results-acceptance-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:3ad4c17b4eb0ba3e1be6e43eba86bf3362e470e75ed023b859c5b7c0dff9b776",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147631460/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:05.941Z",
+      "duration": 5654.641,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147501096,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:f024258fd13e57cdb042578e35721297b26fe08b6122390bdf7c865c55b118ca",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147501096/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:09.691Z",
+      "duration": 663.76,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147256881,
+    "name": "e2e-results-acceptance-phone-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:c4a1c09e33d530ad20f80613155fe936112836634881c11e86ba2f2aab059976",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147256881/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:04.006Z",
+      "duration": 4363.741,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147243371,
+    "name": "e2e-results-obsolete-fault-model-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:5c8ae2097e705d04520d28295685cd49b3d651fe8392727da2997fedbc3337df",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147243371/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:14.167Z",
+      "duration": 664.0440000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147124480,
+    "name": "e2e-results-diagnostic-phone-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:f110a1f0a70eff222e78762748419051d83a1c75b8edfe6ebc9580be6ca443f5",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147124480/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:09.774Z",
+      "duration": 698.134,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147094572,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:56968d605d6ef1fe60dd549b4c013aad8ed40d2dfb6023a647a14195a6e04691",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147094572/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:08.478Z",
+      "duration": 667.4459999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147084572,
+    "name": "e2e-results-obsolete-fault-model-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:00362dc7644a7c306c6358fbb13afa6253dc2c5dd49878e7c60e0948097630a6",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147084572/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:07:42.422Z",
+      "duration": 432.683,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12147068053,
+    "name": "e2e-results-diagnostic-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:bf690d9907087173de5efb1c18f591cc52df0962b4daac94cf49058ec900021f",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12147068053/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:07:49.257Z",
+      "duration": 525.5799999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12146773961,
+    "name": "e2e-results-diagnostic-phone-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:1d3fe4aab222f5fe4a8b3a2065549b7d9b2d63c0452ebc19f20cddbf4dd3df84",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12146773961/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:17.938Z",
+      "duration": 687.0090000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12146444902,
+    "name": "e2e-results-acceptance-phone-firefox-cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+    "digest": "sha256:7bc8b1f4c43664029b7d35a00ebaa1af21da5661bd5603cda8e6abf9641d031d",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r4/extracted-12146444902/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "props": {
+            "uid": "e",
+            "teamId": "t",
+            "teamName": "n",
+            "backend": "i",
+            "onImported": "s"
+          },
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T19:08:18.339Z",
+      "duration": 6189.054,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  }
+]

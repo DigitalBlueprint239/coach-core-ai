@@ -1,0 +1,45 @@
+✔ resolve: committed .env.production pin -> OK; independent and CRA resolution agree on "false" (89.272196ms)
+✔ resolve: enabling .env.local / .env.production.local / shell variable -> FAIL (precedence over .env.production) (270.676773ms)
+✔ resolve: shell/local "false" is not release configuration; malformed, unset and .env-only pins never PASS; ${VAR} expansion is reported inconclusive (1214.429613ms)
+✔ resolve: precedence audit matches CRA (shell > .env.production.local > .env.local > .env.production > .env) (462.996062ms)
+✔ scan: a shipped OFF component (inlined throw, data-import-config=false) is proven OFF by EXECUTION; the same analysis finds the ON build enabled (282.485437ms)
+✔ F1 regression (reviewer decoy 1): OFF strings in a COMMENT next to enabled executable code -> FAIL (75.824932ms)
+✔ F1 regression (reviewer decoy 2): enabled main.js + orphan.js carrying both OFF strings -> FAIL (orphan not in the entry graph) (74.315044ms)
+✔ F1 regression (reviewer decoy 3): enabled executable behaviour behind an OFF marker attribute and OFF prose -> FAIL (contradictory output) (60.856924ms)
+✔ F1 regression (reviewer decoy 4): negative-control rejects a comment-only ON marker over disabled executable behaviour (63.567687ms)
+✔ F1 regression: a decoy executor that throws the disabled message while the real wired executor is enabled -> FAIL (binding follows the button handler) (70.458051ms)
+✔ second-review probe — R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (152.058243ms)
+✔ second-review probe — R1 global state: globalThis.proofEnabled=true read by the executor: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (138.376425ms)
+✔ second-review probe — R2 actual call arguments dropped: fifth/third argument enables: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (165.730286ms)
+✔ second-review probe — R2 unresolved member await before the inlined throw: await i.copy(...): the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (130.862406ms)
+✔ second-review probe — R2 ambiguous onClick: enabled handler then disabled handler: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (137.378278ms)
+✔ second-review probe — R3 backend read before the disabled throw: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (148.282672ms)
+✔ second-review baselines: ON baseline really copies/reads and is reported on; OFF baseline really does nothing and is reported off (static basis) (120.735511ms)
+✔ static OFF contract rejects a replaced or redefined Error constructor and non-const / mutable message bindings (244.544086ms)
+✔ ON detection refuses to reconstruct mutable/global-dependent closures (negative control then fails closed, never fakes ON or OFF) (55.896745ms)
+✔ third-review probe — D1 argument getter evaluated before the throw: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (127.441345ms)
+✔ third-review probe — D1 default parameter runs before the body: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (138.367357ms)
+✔ third-review probe — D1 handler default-getter parameter: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (135.60447ms)
+✔ third-review probe — D1 onClick wrapper reads an effectful getter: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (127.872506ms)
+✔ third-review probe — D1 destructured local that is backend code, not a verified setter: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (137.935976ms)
+✔ third-review probe — D2 computed literal global replacement globalThis["Error"]: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (142.026176ms)
+✔ third-review probe — D2 unresolved constructor is not trusted as native: real button reaches the backend; repaired scanner refuses OFF; d14aa7b gave false OFF (164.115783ms)
+✔ third-review probe — D3 ON control must not drop explicit false arguments: real UI passes false (no backend call); negative-control must NOT report ON; d14aa7b did (140.882544ms)
+✔ ON detection executes the real call-site arguments: explicit literal args are passed, not synthesised; mappable shapes only (113.008024ms)
+✔ dynamic code: an eval/Function call anywhere in a shipped chunk distrusts all globals (fails closed); webpack's `new Function("return this")` fallback alone is tolerated (185.878371ms)
+✔ surrounding-path grammar: a direct backend call inside an argument, a member read before the throw, and a non-React setter all fail closed; the real compiled OFF shape passes (162.689789ms)
+✔ scan fails closed when it cannot bind: no index.html, index.html referencing a missing chunk, no component, two components, unparseable chunk, executor rejecting with a different message (272.548208ms)
+✔ F1 demonstration: the OLD scanner (c9d49dd) accepted the reviewer decoys; the repaired scanner rejects them (175.403605ms)
+✔ source contract: enable check unchanged, build-time marker rendered, committed pin and explicit opt-ins preserved (0.718655ms)
+✔ END-TO-END (real script, fails closed BEFORE building): shell override -> exit 1, no build directory (151.951212ms)
+✔ END-TO-END (real script, fails closed BEFORE building): a temporary enabling .env.local in the repo root -> exit 1, no build (159.42757ms)
+✔ REAL release-shaped build: the proof EXITS 0, proves OFF by execution, retains the inspected output with provenance (F2: real status asserted) (15739.857874ms)
+✔ F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present (11113.874857ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33178.486364

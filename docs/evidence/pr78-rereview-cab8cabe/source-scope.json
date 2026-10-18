@@ -1,0 +1,38 @@
+{
+  "base": "61448f0feee198a8796f4077f32a52f7b863f90d",
+  "head": "cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+  "previous": "d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+  "changed_vs_base": [
+    ".github/workflows/e2e-emulator.yml",
+    "docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md",
+    "docs/support/LEGACY_IMPORT_RECOVERY_RUNBOOK_DRAFT_2026-10-18.md",
+    "docs/support/PRIVATE_BETA_DISCLOSURE_NOT_NOW_DRAFT_2026-10-18.md",
+    "scripts/security/release-import-config.js",
+    "scripts/security/release-import-config.test.mjs",
+    "scripts/security/verify-release-build.sh",
+    "src/features/legacy-import/LegacyImport.tsx",
+    "src/features/legacy-import/__tests__/import-config-marker.test.tsx",
+    "src/features/legacy-import/import-legacy.ts"
+  ],
+  "changed_vs_previous": [
+    "docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md",
+    "scripts/security/release-import-config.js",
+    "scripts/security/release-import-config.test.mjs"
+  ],
+  "pr77_changed_path_overlap": [
+    ".github/workflows/e2e-emulator.yml"
+  ],
+  "preserved_paths": {
+    "d14aa7bb9ec4442c3acca26b127b17f4194cbd64:src": true,
+    "d14aa7bb9ec4442c3acca26b127b17f4194cbd64:docs/support": true,
+    "d14aa7bb9ec4442c3acca26b127b17f4194cbd64:.github/workflows/e2e-emulator.yml": true,
+    "d14aa7bb9ec4442c3acca26b127b17f4194cbd64:scripts/security/verify-release-build.sh": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:e2e": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:.env.production": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:.env.test": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:src/App.tsx": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:src/ui": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:package.json": true,
+    "61448f0feee198a8796f4077f32a52f7b863f90d:package-lock.json": true
+  }
+}

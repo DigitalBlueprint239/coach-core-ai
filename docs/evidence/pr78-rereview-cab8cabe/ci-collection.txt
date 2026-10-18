@@ -1,0 +1,13 @@
+39157201371 success 12 jobs; 76 retained relevant annotations
+E2E obsolete-fault-model (chromium) [('E2E chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E acceptance (phone-firefox) [('E2E phone-firefox [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)', 'notice')]
+E2E obsolete-fault-model (phone-firefox) [('E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E diagnostic (firefox) [('E2E firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E acceptance (phone-chromium) [('E2E phone-chromium [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)', 'notice')]
+E2E obsolete-fault-model (firefox) [('E2E firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E diagnostic (phone-firefox) [('E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E obsolete-fault-model (phone-chromium) [('E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E acceptance (chromium) [('E2E chromium [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)', 'notice')]
+E2E acceptance (firefox) [('E2E firefox [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 1/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)', 'notice')]
+E2E diagnostic (chromium) [('E2E chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)', 'notice')]
+E2E diagnostic (phone-chromium) [('E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)', 'notice')]

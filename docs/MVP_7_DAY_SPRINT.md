@@ -165,3 +165,8 @@ TypeScript0, reporter10/evidence19. PR75's24 new ZIPs independently verified.
 Exact-head bounded Actions results/ZIP verification belong in the issue39 final
 handoff. New configuration and combined runtime require independent acceptance.
 No aggregate enforcement implementation, merge/deployment or activation; MVP NO-GO.
+
+
+## Independent PR #78 re-review — 2026-10-18 / Codex / cab8cabe
+
+Head cab8cabe2baf00b8f3a37a36a88466f5c749613e against61448f0; verdict FAIL. Previous seven false-OFF and false-ON fixtures corrected; all37 focused checks/full history/real builds pass, import49/49, TS0. Independent21-fixture comparison finds eight additional false-OFF examples and another false-ON calibration defect (effect grammar, exceptional control flow, React/UI binding, native Error tracking, callback mapping). All12 NEW CI39157201371 ZIP digests/inventories/provenance verified; four D10-01 passes/eight empty jobs, exits0. Full deployment tree not retained. PR77 independent acceptance not found in inspected records; no combination/enforcement inferred. Detailed source-pinned review: [PR78_REREVIEW_CAB8CABE.md](PR78_REREVIEW_CAB8CABE.md). Evidence-only review branch; application/PR branches unchanged. No full matrix/integration/merge/deployment/protection/recovery/AI actions. MVP NO-GO.

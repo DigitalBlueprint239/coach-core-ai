@@ -1,0 +1,46 @@
+{
+  "real_react_version": "19.1.0",
+  "backend_copies": 1,
+  "scanner_exit": 0,
+  "report": {
+    "dir": "/workspace/scratch/review78-r4/bundle-Kdk954",
+    "entryChunks": [
+      "static/js/main.abc.js"
+    ],
+    "components": [
+      {
+        "chunk": "static/js/main.abc.js",
+        "componentRange": [
+          1306,
+          2182
+        ],
+        "markerAttr": "coachcore:import-config=false",
+        "props": {
+          "uid": "e",
+          "teamId": "t",
+          "teamName": "n",
+          "backend": "i",
+          "onImported": "s"
+        },
+        "errors": [],
+        "exec": {
+          "executor": {
+            "outcome": "disabled",
+            "basis": "static",
+            "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+            "kind": "inline"
+          },
+          "decline": {
+            "outcome": "disabled",
+            "basis": "static",
+            "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+            "kind": "inline"
+          }
+        }
+      }
+    ],
+    "verdict": "off",
+    "reasons": [],
+    "ok": true
+  }
+}

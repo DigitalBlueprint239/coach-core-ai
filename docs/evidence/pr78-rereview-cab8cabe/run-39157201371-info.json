@@ -1,0 +1,14 @@
+{
+  "id": 39157201371,
+  "name": "E2E (emulator, real browsers)",
+  "head_sha": "cab8cabe2baf00b8f3a37a36a88466f5c749613e",
+  "head_branch": "ci/release-proof-import-off",
+  "event": "workflow_dispatch",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39157201371",
+  "created_at": "2026-10-18T19:06:03Z",
+  "updated_at": "2026-10-18T19:08:40Z",
+  "run_started_at": "2026-10-18T19:06:03Z",
+  "run_attempt": 1
+}
