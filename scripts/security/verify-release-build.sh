@@ -69,31 +69,57 @@ absent "no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 91
 absent "no demo-* project values" "demo-coach-core|demo-e2e"
 absent "no emulator test password or placeholder secret" "e2e-not-a-secret|e2e-placeholder-not-a-key"
 if grep -rqF "$PROJECT" "$OUT"; then pass "bundle targets $PROJECT"; else fail "project" "$PROJECT not found in bundle"; fi
-# Output-level proof: the SHIPPED JS must carry the build-time canary
-# coachcore:import-config=false, no "=true", no inlined REACT_APP_ENABLE_LEGACY_IMPORT:"true",
-# and the disabled-state copy. A missing canary is inconclusive and FAILS (fail closed).
+# Output-level proof (executable, F1 repair 2026-10-18): the import UI component is located in
+# the chunks index.html actually ships, its accept/decline handlers are followed to the compiled
+# executor/decline functions, and those are EXECUTED in a VM against a spy backend. OFF means the
+# executor rejects with the disabled message before any write or backend call and decline throws
+# it too; the component's data-import-config literal must agree. Comments, orphan files and OFF
+# prose next to enabled code cannot satisfy this; anything unbindable is inconclusive and FAILS.
 if sc="$(node scripts/security/release-import-config.js scan "$OUT")"; then
-  pass "shipped JS proves import OFF ($(node -e 'const r=JSON.parse(process.argv[1]);console.log("canary=false x"+r.canaryOff+", =true x"+r.canaryOn+", inlined true x"+r.inlinedTrue+", disabled copy x"+r.disabledCopy)' "$sc"))"
-else fail "import canary" "$(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.reasons.join(" | "))' "$sc" 2>/dev/null || echo 'scan failed')"; fi
+  pass "shipped executable import code is OFF ($(node -e 'const r=JSON.parse(process.argv[1]);const c=r.components[0];console.log(c.chunk+": executor "+c.exec.executor.kind+" -> "+c.exec.executor.outcome+", decline "+c.exec.decline.kind+" -> "+c.exec.decline.outcome+", data-import-config="+c.markerAttr)' "$sc"))"
+else fail "import executable" "$(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.reasons.join(" | "))' "$sc" 2>/dev/null || echo 'scan failed')"; fi
 js=$(find "$OUT" -name '*.js' | wc -l | tr -d ' ')
 if [[ "$js" -ge 1 ]]; then pass "$js JS files scanned"; fi
 
 MANIFEST="${RELEASE_MANIFEST:-/tmp/release-build-manifest.sha256}"
 (cd "$OUT" && find . -type f | sort | xargs sha256sum) > "$MANIFEST"
 echo "manifest: $MANIFEST ($(wc -l < "$MANIFEST") files)"
+# Retain the EXACT inspected output for independent inspection (F3 repair 2026-10-18): only
+# index.html, the shipped JS and asset-manifest.json (no source maps are generated, no .env*
+# files, nothing outside the build), plus a provenance record. In CI this lands under
+# e2e/ci-evidence so B15 inventories/hashes/uploads it with the rest of the evidence.
+if [[ -n "${RELEASE_RETAIN_DIR:-}" ]]; then
+  rm -rf "$RELEASE_RETAIN_DIR"; mkdir -p "$RELEASE_RETAIN_DIR/static/js"
+  cp "$OUT/index.html" "$RELEASE_RETAIN_DIR/index.html"
+  [[ -f "$OUT/asset-manifest.json" ]] && cp "$OUT/asset-manifest.json" "$RELEASE_RETAIN_DIR/asset-manifest.json"
+  find "$OUT/static/js" -maxdepth 1 -type f -name '*.js' -exec cp {} "$RELEASE_RETAIN_DIR/static/js/" \;
+  { echo "release-build provenance"; echo "candidate_sha=${GITHUB_SHA:-$(git rev-parse HEAD 2>/dev/null || echo unknown)}";
+    echo "head_sha=${CANDIDATE_HEAD_SHA:-}"; echo "run_id=${GITHUB_RUN_ID:-local}"; echo "run_attempt=${GITHUB_RUN_ATTEMPT:-}";
+    echo "job=${GITHUB_JOB:-local} matrix_project=${MATRIX_PROJECT:-} matrix_bucket=${MATRIX_BUCKET:-}"; echo "built_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)";
+    echo "node=$(node --version) react_scripts=$(node -p "require('react-scripts/package.json').version")";
+    echo "target_project=$PROJECT"; echo "effective_import_config=$(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.effective.source+"="+JSON.stringify(r.effective.value))' "$imp")";
+    echo "executable_verdict=$(node -e 'let r={};try{r=JSON.parse(process.argv[1])}catch{}const c=(r.components||[])[0]||{};console.log((r.verdict||"n/a")+" executor="+(((c.exec||{}).executor||{}).outcome||"n/a")+" decline="+(((c.exec||{}).decline||{}).outcome||"n/a"))' "${sc:-}")";
+    echo "build_manifest_sha256=$(sha256sum "$MANIFEST" | cut -c1-64)"; echo "--- full build manifest (all $(wc -l < "$MANIFEST") files) ---"; cat "$MANIFEST"; } > "$RELEASE_RETAIN_DIR/release-build.context"
+  echo "retained: $RELEASE_RETAIN_DIR ($(find "$RELEASE_RETAIN_DIR" -type f | wc -l) files; JS + index.html + asset-manifest + provenance; no env files)"
+fi
 # Negative control: the same patterns MUST match an emulator build if present.
-if [[ -d e2e/.app-build/static/js ]]; then
+# EMULATOR_BUILD_DIR exists so the focused checks can point this at a fixture; CI uses the
+# same-commit e2e/.app-build produced earlier in the job.
+EMU="${EMULATOR_BUILD_DIR:-e2e/.app-build}"
+if [[ -d "$EMU/static/js" ]]; then
   for pat in "__coachCoreE2E" "[:,](9099|9199|5001|8080)[^0-9]" "demo-coach-core"; do
-    if grep -rqIE "$pat" e2e/.app-build/static/js; then pass "negative control: pattern detects emulator build ($pat)"
+    if grep -rqIE "$pat" "$EMU/static/js"; then pass "negative control: pattern detects emulator build ($pat)"
     else fail "negative control" "pattern $pat does not detect the emulator build"; fi
   done
-  # The import canary must DETECT the explicitly opted-in emulator build (coachcore:import-config=true).
-  if node scripts/security/release-import-config.js negative-control e2e/.app-build >/dev/null; then pass "negative control: import canary detects the opted-in emulator build (=true)"
-  else fail "negative control" "import canary does not detect the opted-in emulator build"; fi
+  # The executable analysis must DETECT the explicitly opted-in emulator build as ON (executor reaches the backend).
+  if nc="$(node scripts/security/release-import-config.js negative-control "$EMU")"; then pass "negative control: executable analysis detects the opted-in emulator build as ON"
+  else fail "negative control" "executable analysis does not detect the opted-in emulator build as ON: $(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.reasons.join(" | "))' "$nc" 2>/dev/null)"; fi
+else
+  fail "negative control" "no emulator build at $EMU (build it with npm --prefix e2e run build:app first); the ON-detection control is required"
 fi
 echo "RESULT: $n passed, $([[ $status -eq 0 ]] && echo 0 || echo '>=1') failed"
 if [[ -n "${GITHUB_ACTIONS:-}" ]]; then
   lvl=$([[ $status -eq 0 ]] && echo notice || echo error)
-  echo "::${lvl} title=Release-build proof (${PROJECT}): ${n} passed::No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF in the shipped JS (effective build config + canary); guard refuses emulator mode for real projects."
+  echo "::${lvl} title=Release-build proof (${PROJECT}): ${n} passed::No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
 fi
 exit $status

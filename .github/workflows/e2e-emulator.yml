@@ -97,9 +97,17 @@ jobs:
           mkdir -p e2e/test-results e2e/ci-evidence
       - name: Release-proof self-checks (import default-OFF resolution, canary scan, fail-closed cases)
         run: node scripts/security/release-import-config.test.mjs
-      - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build)
+      - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build; import proven OFF by executing shipped code)
+        env:
+          MATRIX_PROJECT: ${{ matrix.project }}
+          MATRIX_BUCKET: ${{ matrix.bucket }}
+          CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
         run: |
+          # RELEASE_RETAIN_DIR (F3, 2026-10-18): the exact inspected release output (index.html, shipped
+          # JS, asset-manifest.json, provenance) is kept under e2e/ci-evidence so B15 inventories,
+          # hashes and uploads it. No source maps are generated; no .env* file is ever copied.
           RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/ci-evidence/release-build-manifest.sha256 \
+          RELEASE_RETAIN_DIR=e2e/ci-evidence/release-build \
             bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239
       - name: Run browser tests in the emulator suite
         env:

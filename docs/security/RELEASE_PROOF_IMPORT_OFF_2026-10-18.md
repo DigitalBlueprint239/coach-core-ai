@@ -1,6 +1,7 @@
 # Release-proof repair: import default-OFF proven from build inputs AND shipped output
 
-Date: 2026-10-18. Author: Claude. **Delivery, not independent acceptance. No merge/deploy; MVP NO-GO.**
+Date: 2026-10-18 (revised after the independent FAIL review of `c9d49dd`, comment 6243708455). Author: Claude.
+**Delivery, not independent acceptance. No merge/deploy; MVP NO-GO.**
 
 ## Finding (evidence 73, PR #76 review)
 `scripts/security/verify-release-build.sh` pinned the emulator flag but never looked at
@@ -28,49 +29,62 @@ PR #77 (aggregate gate) is separate and untouched.
 
 ## What the proof now requires (fail closed)
 1. `.env.production` contains the exact line `REACT_APP_ENABLE_LEGACY_IMPORT=false` (necessary, not sufficient).
-2. **Effective build-time value** resolved twice — independently (dotenv, CRA precedence) and by CRA's own
-   loader in a child process — must agree, be exactly `"false"`, and come from a committed file
-   (`.env.production` or `.env`). An enabling shell variable / `.env.local` / `.env.production.local`, a
-   local pin to `false`, a malformed value (`TRUE`, `1`, `yes`, `False`, empty, padded), an unset flag, or
-   a loader disagreement all FAIL — **before any build is produced** (no enabled bundle is ever written).
-3. **Output-level canary.** The import module defines
-   `IMPORT_CONFIG_MARKER = \`coachcore:import-config=${process.env.REACT_APP_ENABLE_LEGACY_IMPORT}\``,
-   rendered as `data-import-config` on the import section. CRA/terser fold it into a literal, so the
-   shipped JS of a release build contains `coachcore:import-config=false`. The scan requires: that
-   literal present, `coachcore:import-config=true` absent, the inlined `REACT_APP_ENABLE_LEGACY_IMPORT:"true"`
-   absent, and the disabled-state copy present (an enabled build DCEs it). A missing canary is
-   **inconclusive → FAIL**.
-4. **Negative control.** The same scan must DETECT the explicitly opted-in emulator build
-   (`e2e/.app-build`, built by `build-app.sh` with the flag ON): `coachcore:import-config=true` must be
-   found, proving the pattern is live. (Locally this requires a fresh emulator build from the same
-   commit; CI always builds it in the same job first.)
+2. **Effective build-time value** resolved twice — independently (dotenv, CRA precedence; no dotenv-expand) and
+   by CRA's own loader in a child process — must agree, be exactly `"false"`, and come from a committed-basename
+   file (`.env.production` or `.env`; this is a basename allowlist, not a git-tracking check). An enabling
+   shell variable / `.env.local` / `.env.production.local`, a local pin to `false`, a malformed value, an unset
+   flag, or a loader disagreement (e.g. `${VAR}` expansion) all FAIL **before any build is produced**.
+3. **Executable output verification (F1 repair).** Only the chunks `index.html` actually ships are considered.
+   Each is parsed (acorn; comments never reach the AST). The import UI component is located as the single
+   function containing the literal `"Import plays"`; its accept button's `onClick` is followed to the accept
+   handler and to the awaited call, whose callee is the compiled import EXECUTOR (inline after terser folding,
+   or a module-scope function resolved by identifier); the `"Not now"` button yields the compiled DECLINE
+   function the same way. Both are extracted with the transitive closure of the module-scope declarations they
+   reference and **executed in a fresh VM** against in-memory storage, a session and a spy backend. OFF ⇔ the
+   executor rejects with the disabled message before any storage write or backend call AND decline throws it
+   too; ON ⇔ the executor reaches `backend.copy`. The component's own `data-import-config` literal must agree
+   with the executed verdict. Comments, orphan files, OFF prose beside enabled code, an enabled executor behind
+   an OFF marker, a decoy rejecting function that is not wired to the button, two components, an unparseable
+   chunk or an unbindable handler all FAIL (inconclusive = FAIL).
+4. **Negative control (now required, not optional).** The same executable analysis must find the explicitly
+   opted-in emulator build (`EMULATOR_BUILD_DIR`, default `e2e/.app-build`) **ON**; a missing emulator build
+   fails the proof. The legacy hook/port/demo string controls remain.
+5. **Retention (F3 repair).** With `RELEASE_RETAIN_DIR` set (CI: `e2e/ci-evidence/release-build`), the exact
+   inspected output is kept: `index.html`, `static/js/*.js`, `asset-manifest.json` and `release-build.context`
+   (candidate/head sha, run id/attempt, matrix project/bucket, node/react-scripts versions, effective import
+   config, executable verdict, sha256 of the build manifest and the full manifest). No source maps are generated
+   and no `.env*` file is ever copied. B15 inventories, hashes and uploads the directory with the job's evidence.
 
-## Validation
-- `node scripts/security/release-import-config.test.mjs`: 12 fast checks + 1 slow (`RELEASE_PROOF_BUILD=1`):
-  committed pin OK; `.env.local=true` FAIL; `.env.production.local=true` FAIL; shell `true` FAIL;
-  shell/local `false` FAIL (not committed); eight malformed values FAIL; unset FAIL; `.env`-only FAIL;
-  precedence audit = CRA; scan: OFF ok / ON fail / missing canary inconclusive / stray inlined true fail /
-  =true alongside =false fail / no disabled copy fail / empty fail; negative-control both ways; source
-  contract (marker, enable check unchanged, opt-ins preserved); **end-to-end real script with shell
-  override → exit 1, refuses to build, no build dir; end-to-end real script with a temporary enabling
-  `.env.local` in the repo root → the old check still PASSes, the new effective check FAILs, no build**;
-  real release-shaped build → canary PASS. Result: 13/13 with the slow case, 12 pass + 1 skip without.
-- `bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239` on this head with a fresh
-  emulator build: **17 passed, 0 failed** (was 13), incl. `effective build-time import config is OFF
-  (.env.production="false"; CRA loader agrees: "false")`, `shipped JS proves import OFF (canary=false x1,
-  =true x0, inlined true x0, disabled copy x2)` and `negative control: import canary detects the opted-in
-  emulator build (=true)`.
-- Import unit suites: 7 suites / 49 tests (47 accepted + 2 new marker checks); `tsc --noEmit` clean;
-  reporter 10/10; evidence 19 (18 + root skip).
-- Actual CI: see the handoff (bounded dispatch on this head; the release-proof step runs in every job).
+## Validation (head after repair)
+- `node scripts/security/release-import-config.test.mjs` — 15 fast + 2 slow (`RELEASE_PROOF_BUILD=1`), **17/17**:
+  resolve (pin OK; `.env.local`/`.env.production.local`/shell enabling FAIL; shell/local false FAIL; 8 malformed,
+  unset, `.env`-only FAIL; `${VAR}` expansion inconclusive FAIL; precedence = CRA); synthetic CRA/terser-shaped
+  bundles: OFF proven by execution, ON detected, module-scope executor resolved and executed with its closure;
+  **reviewer decoys 1–4** (comment-only OFF strings beside enabled code; enabled `main.js` + orphan with OFF
+  strings; enabled behaviour behind OFF marker + prose; comment-only ON marker in negative-control) all FAIL;
+  decoy rejecting function not wired to the button FAILS; fail-closed cases (no `index.html`, missing referenced
+  chunk, no component, two components, unparseable chunk, other rejection message); **old scanner (`c9d49dd`)
+  demonstrably passes decoys 1–2 while the repaired scanner fails them**; source contract; two end-to-end real
+  script refusals (shell override; temporary enabling `.env.local`); **real build asserting process exit 0**,
+  the 17-PASS RESULT line, executed-OFF line, ON negative control and the retained output (files, provenance,
+  retained JS byte-identical to the manifest); **F2 regression: a broken negative control (comment-only ON
+  marker fixture) makes the real proof exit non-zero and the check asserts that status** even though every OFF
+  PASS line is still printed.
+- `bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239` with a fresh same-commit emulator
+  build: **17 passed, 0 failed**, incl. `shipped executable import code is OFF (static/js/main.<hash>.js:
+  executor inline -> disabled, decline inline -> disabled, data-import-config=coachcore:import-config=false)` and
+  `negative control: executable analysis detects the opted-in emulator build as ON`. The same analysis on the
+  enabled emulator build: verdict ON (executor `backend.copy x1`, decline returned "declined").
+- Import unit suites 49/49; `tsc --noEmit` clean; reporter 10/10; evidence 19.
 
-## Independent Codex review checklist
-1. Diff vs `61448f0` is the files above; the enable check and all accepted import/recovery behaviour are
-   byte-for-byte unchanged apart from the marker constant and attribute.
-2. Reproduce: shell override and `.env.local` end-to-end cases must refuse before building.
-3. Build once; confirm the canary is a single literal in the shipped JS and that the enabled emulator
-   build is detected by the negative control.
-4. Probe `resolve` with your own fixtures (e.g. `.env` vs `.env.production` disagreement, CRLF files,
-   quoted values `"false"` — dotenv strips quotes, so `"false"` passes; decide if that is acceptable).
-5. Confirm the workflow step order (self-checks → release proof) and that nothing else in the workflow moved.
-6. Review the two drafts in `docs/support/` as proposals only; confirm no channel/capability is implied.
+## Independent Codex re-review checklist
+1. Diff vs `61448f0`; the application change is still only the marker constant + `data-import-config`.
+2. Re-run the reviewer decoys from the FAIL review against `scan`/`negative-control`; try new ones (e.g. a
+   component whose handler calls through a MemberExpression, a chunk-split executor) — these must be
+   inconclusive-FAIL, never PASS.
+3. Run `RELEASE_PROOF_BUILD=1 node scripts/security/release-import-config.test.mjs` (two real builds).
+4. Confirm the F2 regression: a broken `EMULATOR_BUILD_DIR` makes the proof exit 1 and the suite fails.
+5. Inspect the CI-retained `ci-evidence/release-build/` in the ZIPs: run `scan` on it yourself; recompute the JS
+   hash against `release-build.context`'s manifest; confirm no `.env*`, no source maps.
+6. Read the two drafts against the authoritative boundary (issue #39 c-6224877757; RUNTIME_IMPORT_CANDIDATE
+   §support boundary): no bypass, no invented verification, existing/proposed/decisions clearly separated.
