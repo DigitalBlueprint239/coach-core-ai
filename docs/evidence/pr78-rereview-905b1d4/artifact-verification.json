@@ -1,0 +1,806 @@
+[
+  {
+    "id": 12127265287,
+    "name": "e2e-results-acceptance-phone-firefox-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:74e80055bbb9582865a6b91486b2f6bc91b62a585d1ee5db7222f9b4f5ebb259",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12127265287/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:52.494Z",
+      "duration": 5933.055,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12127115561,
+    "name": "e2e-results-diagnostic-phone-firefox-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:bf96c235e33f4e032df4fff30314ca6500449900e8998bb8a0b67cd3724f181c",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12127115561/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:22.626Z",
+      "duration": 457.773,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12127040857,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:c34d36f3ef5ebcd4e87b9c2e1db20624f86c37b93d43c16ea40d53c8e61e9f44",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12127040857/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:57.494Z",
+      "duration": 671.192,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126921328,
+    "name": "e2e-results-diagnostic-chromium-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:9c950cd10b2634f927d6c1f593f224ce8ad081035de2cb8701d5ae9c41fb0a64",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126921328/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:44:01.106Z",
+      "duration": 722.896,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126781849,
+    "name": "e2e-results-diagnostic-firefox-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:8f53ed435c689578dde960092118af25a0e07140db67fee9548dd34df21a028c",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126781849/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:58.946Z",
+      "duration": 649.0490000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126762930,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:77e560567919c3cc55c1659e45c81fa320ee5537db85f4b0a55be028504d192c",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126762930/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:32.619Z",
+      "duration": 525.862,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126497386,
+    "name": "e2e-results-diagnostic-phone-chromium-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:91be20947108ba3bb1ca61c137202d0165ca21a071b827710e60ed5da06d6f9c",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126497386/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:55.020Z",
+      "duration": 659.7750000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126468675,
+    "name": "e2e-results-acceptance-phone-chromium-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:060cbd25be9137cb559d1b056a17a268667df234ec54323e6999eb6fee972a65",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126468675/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:55.329Z",
+      "duration": 4454.349,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126463786,
+    "name": "e2e-results-acceptance-firefox-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:9363e7fa89ef3d0fd2a122dcce57fe5a1c88f906babf9ca2951578a3d985ed41",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126463786/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:40.276Z",
+      "duration": 5577.715,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126442422,
+    "name": "e2e-results-obsolete-fault-model-chromium-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:aece2df0536571473dd4f98a3c8ef85fc92cb67a2fa7bf396b5b3a3d7a87d30f",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126442422/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:44:07.915Z",
+      "duration": 597.0920000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12126274513,
+    "name": "e2e-results-obsolete-fault-model-firefox-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:ad947e0948d36f572e95952e0314aa4bfc8a93ee7e6b1c7a78ab701bf0346fed",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12126274513/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:44:00.318Z",
+      "duration": 654.062,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12125929111,
+    "name": "e2e-results-acceptance-chromium-905b1d4b0e93d720cb4cf05b5746cb7a138e7884",
+    "digest": "sha256:19ebf4f5c6b4f108858e49a1a83c1cab855c38688b5c54c27c32da47cadaaa70",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r2/extracted-12125929111/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T05:43:25.165Z",
+      "duration": 3302.5890000000004,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  }
+]

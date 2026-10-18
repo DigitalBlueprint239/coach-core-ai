@@ -1,0 +1,218 @@
+[
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126463786",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12127115561",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12127265287",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126497386",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126762930",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126274513",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126921328",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126781849",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12125929111",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126442422",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12127040857",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact_directory": "/workspace/scratch/review78-r2/extracted-12126468675",
+    "js_sha256": "c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3",
+    "unconditional_button_call_functions": [
+      {
+        "compiled_body": "async function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "compiled_body": "function(){throw new Error(zv)}",
+        "constant_name": "zv",
+        "constant_value": "Device-play import is disabled in this build. Originals preserved.",
+        "executed_rejection": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  }
+]

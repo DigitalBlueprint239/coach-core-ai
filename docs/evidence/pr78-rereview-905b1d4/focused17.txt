@@ -1,0 +1,25 @@
+✔ resolve: committed .env.production pin -> OK; independent and CRA resolution agree on "false" (87.816213ms)
+✔ resolve: enabling .env.local / .env.production.local / shell variable -> FAIL (precedence over .env.production) (258.46626ms)
+✔ resolve: shell/local "false" is not release configuration; malformed, unset and .env-only pins never PASS; ${VAR} expansion is reported inconclusive (1373.598841ms)
+✔ resolve: precedence audit matches CRA (shell > .env.production.local > .env.local > .env.production > .env) (432.020696ms)
+✔ scan: a shipped OFF component (inlined throw, data-import-config=false) is proven OFF by EXECUTION; the same analysis finds the ON build enabled (230.268154ms)
+✔ F1 regression (reviewer decoy 1): OFF strings in a COMMENT next to enabled executable code -> FAIL (51.727049ms)
+✔ F1 regression (reviewer decoy 2): enabled main.js + orphan.js carrying both OFF strings -> FAIL (orphan not in the entry graph) (58.030423ms)
+✔ F1 regression (reviewer decoy 3): enabled executable behaviour behind an OFF marker attribute and OFF prose -> FAIL (contradictory output) (55.870866ms)
+✔ F1 regression (reviewer decoy 4): negative-control rejects a comment-only ON marker over disabled executable behaviour (54.231072ms)
+✔ F1 regression: a decoy executor that throws the disabled message while the real wired executor is enabled -> FAIL (binding follows the button handler) (56.370676ms)
+✔ scan fails closed when it cannot bind: no index.html, index.html referencing a missing chunk, no component, two components, unparseable chunk, executor rejecting with a different message (274.239743ms)
+✔ F1 demonstration: the OLD scanner (c9d49dd) accepted the reviewer decoys; the repaired scanner rejects them (155.518672ms)
+✔ source contract: enable check unchanged, build-time marker rendered, committed pin and explicit opt-ins preserved (0.875581ms)
+✔ END-TO-END (real script, fails closed BEFORE building): shell override -> exit 1, no build directory (153.451263ms)
+✔ END-TO-END (real script, fails closed BEFORE building): a temporary enabling .env.local in the repo root -> exit 1, no build (146.371292ms)
+✔ REAL release-shaped build: the proof EXITS 0, proves OFF by execution, retains the inspected output with provenance (F2: real status asserted) (10989.987061ms)
+✔ F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present (10035.303472ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24425.757821

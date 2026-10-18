@@ -1,0 +1,135 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --testPathPattern=src/features/legacy-import
+
+PASS src/features/legacy-import/__tests__/risk-characterization.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      14 | test('R3 fresh Not now remains declined after remount and team switch, with no writes', async () => {
+      15 |   const backend = {copy: jest.fn(), read: jest.fn()};
+    > 16 |   const view = render(<LegacyImport {...owner} backend={backend}/>);
+         |                      ^
+      17 |   fireEvent.click(screen.getByRole('button', {name: 'Not now'}));
+      18 |   const decision = localStorage.getItem(decisionKey('A'));
+      19 |   expect(JSON.parse(decision!)).toEqual({decision: 'declined'});
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/risk-characterization.test.tsx:16:22)
+
+PASS src/features/legacy-import/__tests__/import-legacy.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      33 |   expect(localStorage.getItem(decisionKey('coachB'))).toBeNull();
+      34 |   await expect(importLegacy(localStorage,{uid:'coachB',teamId:'teamB'},()=>true,backend)).rejects.toThrow('already imported by another account');
+    > 35 |   render(<LegacyImport uid="coachB" teamId="teamB" teamName="Bears" backend={backend}/>);
+         |         ^
+      36 |   expect(screen.getByText(/already imported by another account/)).toBeInTheDocument();
+      37 |   expect(screen.queryByRole('button',{name:'Import plays'})).not.toBeInTheDocument();
+      38 |   expect(stored.size).toBe(1);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-legacy.test.tsx:35:9)
+
+PASS src/features/legacy-import/__tests__/owner-resume.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      18 | test('Not now postpones unfinished import, preserves ownership and offers immediate and remounted recovery', () => {
+      19 |   const backend = { copy: jest.fn(), read: jest.fn() };
+    > 20 |   const view = render(<LegacyImport {...owner} backend={backend} />);
+         |                      ^
+      21 |   fireEvent.click(screen.getByRole('button', { name: 'Not now' }));
+      22 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+      23 |   expect(localStorage.getItem(CLAIM_KEY)).toBe(claim);
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/owner-resume.test.tsx:20:22)
+
+PASS src/features/legacy-import/__tests__/unfinished-claim.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      23 |   expect(localStorage.getItem(decisionKey('A'))).toBeNull();
+      24 |   expect(importNotice(localStorage, other)).toMatch(/another account/);
+    > 25 |   render(<LegacyImport {...other} backend={backend} />);
+         |         ^
+      26 |   expect(screen.getByRole('region', { name: 'Import device plays' })).toBeInTheDocument();
+      27 |   expect(screen.queryByRole('button', { name: 'Import plays' })).not.toBeInTheDocument();
+      28 |   await expect(importLegacy(localStorage, other, () => true, backend)).rejects.toThrow('another account');
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/unfinished-claim.test.tsx:25:9)
+
+PASS src/features/legacy-import/__tests__/firebase-import.test.ts
+PASS src/features/legacy-import/__tests__/import-configuration.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      26 |   const backend = { copy: jest.fn(), read: jest.fn() };
+      27 |   expect(isLegacyImportEnabled()).toBe(false);
+    > 28 |   render(<LegacyImport {...owner} backend={backend} />);
+         |         ^
+      29 |   expect(screen.getByRole('alert')).toHaveTextContent('disabled in this build');
+      30 |   expect(screen.queryByRole('button', { name: 'Import plays' })).not.toBeInTheDocument();
+      31 |   expect(screen.queryByRole('button', { name: 'Not now' })).not.toBeInTheDocument();
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at src/features/legacy-import/__tests__/import-configuration.test.tsx:28:9
+
+PASS src/features/legacy-import/__tests__/import-config-marker.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      16 |   localStorage.setItem(LEGACY_KEY, JSON.stringify([{ id: 'p1', name: 'Mesh', phase: 'offense', type: 'pass', players: [], routes: [] }]));
+      17 |   const owner = { uid: 'marker-owner', teamId: 't1', teamName: 'Team' };
+    > 18 |   const view = render(<LegacyImport {...owner} backend={{ copy: jest.fn(), read: jest.fn() }} />);
+         |                      ^
+      19 |   expect(screen.getByRole('region', { name: 'Import device plays' })).toHaveAttribute('data-import-config', 'coachcore:import-config=true');
+      20 |   view.unmount();
+      21 |   const flag = process.env.REACT_APP_ENABLE_LEGACY_IMPORT;
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-config-marker.test.tsx:18:22)
+      at TestScheduler.scheduleTests (../coach-core-integration/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../coach-core-integration/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../coach-core-integration/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../coach-core-integration/node_modules/@jest/core/build/cli/index.js:173:3)
+
+
+Test Suites: 7 passed, 7 total
+Tests:       49 passed, 49 total
+Snapshots:   0 total
+Time:        1.967 s
+Ran all test suites matching /src\/features\/legacy-import/i.

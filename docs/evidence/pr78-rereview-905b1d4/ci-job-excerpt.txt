@@ -1,0 +1,18 @@
+2026-10-18T05:42:53.1096925Z # tests 10
+2026-10-18T05:42:53.1098438Z # pass 10
+2026-10-18T05:42:53.1099063Z # fail 0
+2026-10-18T05:42:53.1100271Z # skipped 0
+2026-10-18T05:42:55.1785013Z # tests 19
+2026-10-18T05:42:55.1785738Z # pass 19
+2026-10-18T05:42:55.1786084Z # fail 0
+2026-10-18T05:42:55.1786855Z # skipped 0
+2026-10-18T05:43:21.8931162Z ok 12 - F1 demonstration: the OLD scanner (c9d49dd) accepted the reviewer decoys; the repaired scanner rejects them # SKIP old implementation not available in this clone
+2026-10-18T05:43:21.8946149Z ok 16 - REAL release-shaped build: the proof EXITS 0, proves OFF by execution, retains the inspected output with provenance (F2: real status asserted) # SKIP set RELEASE_PROOF_BUILD=1 to run the real builds
+2026-10-18T05:43:21.8951819Z ok 17 - F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present # SKIP set RELEASE_PROOF_BUILD=1 to run the real builds
+2026-10-18T05:43:21.8953805Z # tests 17
+2026-10-18T05:43:21.8954192Z # pass 14
+2026-10-18T05:43:21.8954388Z # fail 0
+2026-10-18T05:43:21.8954788Z # skipped 3
+2026-10-18T05:43:37.0523932Z PASS shipped executable import code is OFF (static/js/main.630c8567.js: executor inline -> disabled, decline inline -> disabled, data-import-config=coachcore:import-config=false)
+2026-10-18T05:43:37.6908391Z PASS negative control: executable analysis detects the opted-in emulator build as ON
+2026-10-18T05:43:37.6913797Z RESULT: 17 passed, 0 failed

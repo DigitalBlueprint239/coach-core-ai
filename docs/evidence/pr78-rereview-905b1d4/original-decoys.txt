@@ -1,0 +1,13 @@
+{"name":"local expansion enables","exit":1,"independent":{"source":".env.local","value":"${CHOICE}"},"cra":{"has":true,"value":"true"},"ok":false}
+{"name":"shell expansion in nominal committed value","exit":1,"independent":{"source":".env.production","value":"${CHOICE}"},"cra":{"has":true,"value":"true"},"ok":false}
+{"name":"safe expansion refuses closed","exit":1,"independent":{"source":".env.production","value":"${CHOICE}"},"cra":{"has":true,"value":"false"},"ok":false}
+{"name":"quoted CRLF exact pin","exit":0,"independent":{"source":".env.production","value":"false"},"cra":{"has":true,"value":"false"},"ok":true}
+{"name":"escaped dollar local","exit":1,"independent":{"source":".env.local","value":"\\$CHOICE"},"cra":{"has":true,"value":"true"},"ok":false}
+{"name":"local false overrides committed","exit":1,"independent":{"source":".env.local","value":"false"},"cra":{"has":true,"value":"false"},"ok":false}
+{"name":"untracked allowed basename","exit":0,"independent":{"source":".env.production","value":"false"},"cra":{"has":true,"value":"false"},"ok":true}
+{"name":"shell true dominates local false","exit":1,"independent":{"source":"shell","value":"true"},"cra":{"has":true,"value":"true"},"ok":false}
+{"name":"only comments; enabled executable","exit":1,"executableImportEnabled":true,"ok":false}
+{"name":"unreferenced stale file; enabled executable","exit":1,"executableImportEnabled":true,"ok":false}
+{"name":"contradictory executable; off strings retained","exit":1,"executableImportEnabled":true,"ok":false}
+{"name":"missing marker","exit":1,"executableImportEnabled":false,"ok":false}
+{"name":"on and off marker","exit":1,"ok":false}

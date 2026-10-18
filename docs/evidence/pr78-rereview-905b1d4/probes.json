@@ -1,0 +1,446 @@
+[
+  {
+    "name": "baseline on",
+    "dir": "/workspace/scratch/review78-r2/bundle-O0TaoD",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-O0TaoD",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1661
+          ],
+          "markerAttr": "coachcore:import-config=true",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "enabled",
+              "detail": "resolved [\"srv-proof-p1\"]; backend.copy x1, writes 2",
+              "kind": "module-function",
+              "declCount": 4
+            },
+            "decline": {
+              "outcome": "enabled",
+              "detail": "returned \"declined\"; writes 1",
+              "kind": "module-function",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "on",
+      "reasons": [
+        "import is ENABLED in the shipped executable code (resolved [\"srv-proof-p1\"]; backend.copy x1, writes 2)"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "baseline off",
+    "dir": "/workspace/scratch/review78-r2/bundle-63KsrM",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-63KsrM",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1661
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "closure mutation ignored",
+    "dir": "/workspace/scratch/review78-r2/bundle-gSg91P",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-gSg91P",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1048,
+            1777
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "module-function",
+              "declCount": 6
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "module-function",
+              "declCount": 3
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "VM global state substituted",
+    "dir": "/workspace/scratch/review78-r2/bundle-D0DoG9",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-D0DoG9",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1058,
+            1787
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "module-function",
+              "declCount": 5
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "module-function",
+              "declCount": 2
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "actual call arguments dropped",
+    "dir": "/workspace/scratch/review78-r2/bundle-ni2XKl",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-ni2XKl",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            993,
+            1723
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "module-function",
+              "declCount": 5
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "module-function",
+              "declCount": 2
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "unresolved member await ignored",
+    "dir": "/workspace/scratch/review78-r2/bundle-tcDelW",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-tcDelW",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1698
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "ambiguous onClick chooses last handler",
+    "dir": "/workspace/scratch/review78-r2/bundle-Qw3mjf",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-Qw3mjf",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1779
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "inline",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "backend read ignored",
+    "dir": "/workspace/scratch/review78-r2/bundle-sv1AVc",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-sv1AVc",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1015,
+            1750
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "detail": "rejected with the disabled message before any storage write or backend call",
+              "kind": "module-function",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 1,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "unknown closure fails closed",
+    "dir": "/workspace/scratch/review78-r2/bundle-Qppzle",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r2/bundle-Qppzle",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1673
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "inconclusive",
+              "detail": "free identifier \"unknownBinding\" is not a module-scope declaration or a known global",
+              "declCount": 0
+            },
+            "decline": {
+              "outcome": "disabled",
+              "detail": "threw the disabled message; no storage write",
+              "kind": "inline",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: executor free identifier \"unknownBinding\" is not a module-scope declaration or a known global"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  }
+]

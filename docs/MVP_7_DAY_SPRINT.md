@@ -165,3 +165,18 @@ TypeScript0, reporter10/evidence19. PR75's24 new ZIPs independently verified.
 Exact-head bounded Actions results/ZIP verification belong in the issue39 final
 handoff. New configuration and combined runtime require independent acceptance.
 No aggregate enforcement implementation, merge/deployment or activation; MVP NO-GO.
+
+
+## 2026-10-18 — independent PR78 re-review905b1d4: FAIL
+
+Against61448f0; priorc9d49dd findings individually checked. Status assertions and
+broken-ON suite failure now work;17/17 focused real-build checks,49 import tests,
+TypeScript0; all12 new CI archives and retained main-output/provenance verified.
+Draft support bypass/verification issues corrected as drafts, not operational approval.
+Executable verification still has six false-OFF probes: closure state/VM globals,
+actual arguments, ignored/ambiguous handler calls and backend reads. CI actually
+reports14 focused passes/3 skips; local full17 ran.
+[Source-pinned re-review and evidence](PR78_REREVIEW_905B1D4.md). PR77 remains
+independently unaccepted in inspected records. No branches combined, unchanged full
+matrix, merge/deploy, protection/production change, recovery action or AI activation.
+MVP NO-GO.
