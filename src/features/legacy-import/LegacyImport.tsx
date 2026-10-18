@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { isLegacyImportEnabled, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, hasUnfinishedImport, ImportBackend } from './import-legacy';
+import { isLegacyImportEnabled, IMPORT_CONFIG_MARKER, CLAIM_KEY, LEGACY_KEY, decisionKey, readLegacy, importLegacy, declineImport, importNotice, hasUnfinishedImport, ImportBackend } from './import-legacy';
 import { firebaseImport } from './firebase-import';
 export default function LegacyImport({ uid, teamId, teamName, backend = firebaseImport, onImported }: {
   uid: string; teamId: string; teamName: string; backend?: ImportBackend; onImported?: () => void;
@@ -41,7 +41,7 @@ export default function LegacyImport({ uid, teamId, teamName, backend = firebase
     } catch { if (current.current === session) setError('Import not completed. Original plays preserved. Retry or review your team access.'); }
     finally { if (current.current === session) setBusy(false); }
   };
-  return <section aria-label="Import device plays" className="p-4 border rounded bg-white">
+  return <section aria-label="Import device plays" className="p-4 border rounded bg-white" data-import-config={IMPORT_CONFIG_MARKER}>
     {count > 0 && postponed && <><p>Unfinished import postponed. Return on this account and {teamName} to finish. Original plays remain on this device.</p>
       <button onClick={() => setPostponed(false)}>Resume import</button></>}
     {count > 0 && !postponed && <><p>Import {count} plays saved on this device into {teamName} for this account?</p>

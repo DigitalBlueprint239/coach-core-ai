@@ -11,6 +11,9 @@
     "test": "cd .. && firebase emulators:exec --project demo-coach-core-e2e --only auth,firestore,functions \"npm --prefix e2e run test:browser\"",
     "test:auth-only": "cd .. && firebase emulators:exec --project demo-coach-core-e2e --only auth \"E2E_AUTH_ONLY=1 npm --prefix e2e run test:browser\"",
     "test:browser": "playwright test -c playwright.config.ts",
+    "build:app:import-off": "E2E_IMPORT_OFF=1 bash scripts/build-app.sh",
+    "test:release-proof": "cd .. && firebase emulators:exec --project demo-coach-core-e2e --only auth,firestore,functions \"npm --prefix e2e run test:release-proof:browser\"",
+    "test:release-proof:browser": "playwright test -c playwright.release-proof.config.ts",
     "test:reporter": "node reporters/annotate.test.mjs",
     "test:evidence": "node scripts/evidence.test.mjs"
   },
