@@ -1,0 +1,85 @@
+Evidence 76 — PR #78 second re-review repair (R1–R3 of Codex review 6246331436): delivery record
+================================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+Failed head: 905b1d4b0e93d720cb4cf05b5746cb7a138e7884.  New head: d14aa7bb9ec4442c3acca26b127b17f4194cbd64.  Base unchanged: 61448f0 (PR #76).
+Changed vs 905b1d4 (5 files, +349/-160): scripts/security/release-import-config.js, scripts/security/release-import-config.test.mjs,
+  scripts/security/verify-release-build.sh (basis shown in the PASS line), .github/workflows/e2e-emulator.yml (self-check pass/skip annotation),
+  docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md. src/ and docs/support/ byte-identical to 905b1d4 (drafts preserved; app change still only the marker).
+
+CORRECTION of earlier reporting: CI run 39101432532 (head 905b1d4) self-check step executed 17 tests = 14 passed / 0 failed / 3 skipped
+  (old-c9d49dd comparison + two real-build cases skipped in the shallow CI checkout). My previous handoff's "15 fast" was the local figure, not CI's.
+
+1. Reproduction of all six reviewer probes on 905b1d4 (Codex's probes.cjs, paths adjusted; "actual" = whole-module execution + real button click):
+   closure mutation (cfg.enabled=true)        905b1d4 scan exit 0 verdict off   | actual accept: copies 1, reads 1, writes 2   -> FALSE OFF
+   globalThis.proofEnabled=true               905b1d4 scan exit 0 verdict off   | actual accept: copies 1, reads 1, writes 2   -> FALSE OFF
+   actual call arguments dropped (5th/3rd)    905b1d4 scan exit 0 verdict off   | actual accept: copies 1, reads 1, writes 2   -> FALSE OFF
+   unresolved member await (await i.copy)     905b1d4 scan exit 0 verdict off   | actual accept: copies 1, reads 0, writes 0   -> FALSE OFF
+   ambiguous onClick (y(); deadOff())         905b1d4 scan exit 0 verdict off   | actual accept: copies 1, reads 1, writes 2   -> FALSE OFF
+   backend read then disabled throw           905b1d4 scan exit 0 verdict off   | actual accept: copies 0, reads 1, writes 0   -> FALSE OFF
+   (baseline on -> on; baseline off -> off; unknown closure -> inconclusive, as Codex reported)
+
+2. Design decision (details: docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md §Design rationale)
+   Rejected: real-browser UI drive of the release bundle (needs faked Firebase Auth/Firestore; component renders only when signed in with a team);
+   whole-module execution with webpack's runtime (app module mounts on evaluation; component not exported). Chosen: a STATIC, environment-independent
+   OFF contract — the bound function's first statement must be an unconditional `throw new <Ctor>(<msg>)` with <msg> the disabled literal or a const
+   bound to it, and <Ctor> neither declared in scope nor assigned/redefined (globalThis/self/window/Object.defineProperty/Reflect.set) anywhere in the
+   chunk. Such a function cannot reach a backend whatever its arguments, closures or global state; nothing is reconstructed or synthesised for OFF.
+   Handler binding now accounts for EVERY direct call (setters/props allowed; member-expression callees, unresolved callees, second handlers, extra
+   awaits => inconclusive). ON is proved only by execution with an immutable closure (pure builtins, module-scope functions, immutable-literal consts,
+   none reassigned/mutated — scope-aware, so minified name reuse no longer confuses it) and counts backend reads, copies and storage writes.
+
+3. New verifier vs the six probes (all now rejected; actual behaviour unchanged):
+   closure mutation -> exit 1 inconclusive | globalThis -> exit 1 inconclusive | args dropped -> exit 1 inconclusive | member await -> exit 1 inconclusive
+   ambiguous onClick -> exit 1 inconclusive | backend read -> exit 1 inconclusive | baseline on -> on | baseline off -> off (basis static) | unknown -> inconclusive
+   Real OFF release build: verdict off — executor inline -> disabled [static] ("first statement throws const zv = disabled message literal"), decline same.
+   Real opted-in emulator build: verdict on — executor executed: resolved ["srv-proof-p1"]; backend.copy x1, backend.read x1, storage writes 5; decline "declined".
+   Property mutations of builtins (Error.prepareStackTrace=… in libraries) are NOT treated as constructor replacement; `Error = …`, `globalThis.Error = …`,
+   Object.defineProperty(globalThis,'Error',…) and a declared `function Error` ARE rejected (checks).
+
+4. Focused checks: node scripts/security/release-import-config.test.mjs -> 26 tests: local fast 24 pass / 2 skipped; RELEASE_PROOF_BUILD=1 -> 26/26, 0 skipped.
+   New: six second-review probe tests, each asserting (a) actual-behaviour harness shows copies/reads/writes, (b) repaired scanner exit 1 and verdict != off,
+   (c) the 905b1d4 scanner (from git) returns exit 0 / off (false OFF demonstrated); baselines; replaced/defineProperty'd/shadowed Error and `let` message
+   rejected; mutable closure -> negative-control fails closed. Preserved: F2 real-status assertions (exit 0 and the broken-control non-zero regression),
+   first-review decoys, old c9d49dd demonstration, end-to-end refusals, source contract.
+   verify-release-build.sh on d14aa7b (fresh same-commit emulator build): RESULT: 17 passed, 0 failed:
+     PASS guard refuses an emulator build for coach-core-mvp-staging-239
+     PASS .env.production pins the emulator flag to false
+     PASS .env.production pins the import flag to false
+     PASS effective build-time import config is OFF (.env.production="false"; CRA loader agrees: "false")
+     PASS release-shaped build for coach-core-mvp-staging-239
+     PASS no test-hook marker (__coachCoreE2E)
+     PASS no test-hook module (e2e-support / emulator-hooks)
+     PASS no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 9199)
+     PASS no demo-* project values
+     PASS no emulator test password or placeholder secret
+     PASS bundle targets coach-core-mvp-staging-239
+     PASS shipped executable import code is OFF (static/js/main.630c8567.js: executor inline -> disabled [static], decline inline -> disabled [static], data-import-config=coachcore:import-config=false)
+     PASS 2 JS files scanned
+     PASS negative control: pattern detects emulator build (__coachCoreE2E)
+     PASS negative control: pattern detects emulator build ([:,](9099|9199|5001|8080)[^0-9])
+     PASS negative control: pattern detects emulator build (demo-coach-core)
+     PASS negative control: executable analysis detects the opted-in emulator build as ON
+     RESULT: 17 passed, 0 failed
+   Import suites 7/49; tsc clean; reporter 10/10; evidence 19 (18 + root skip).
+
+5. Actual CI: workflow_dispatch run 39112158651 on d14aa7b (grep D10-01, repeat 1): 12/12 jobs success.
+   Self-check step annotation (every job): "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in
+   this clone; 25/26: set RELEASE_PROOF_BUILD=1 to run the real builds". Release-build proof annotation: "17 passed" (the proof step builds and verifies
+   on the runner; its 17 are executed assertions). B15 inventories: 10 files per job (incl. retained release-build/{index.html, asset-manifest.json,
+   static/js/main.<hash>.js, release-build.context}); finalize ✅ / withheld skipped / upload ✅. Artifact metadata (names suffixed -d14aa7b…):
+     12130703804 e2e-results-acceptance-chromium 238305B sha256:28bf7f6b324234613e2117ae72ea375ab968bf2e5b49e89e1bc45da97cf13168
+     12131245583 e2e-results-acceptance-firefox 238279B sha256:67218957c56f9274792138e491290071f63f1cc21ca8531473cbcabdb2aa1da5
+     12131255194 e2e-results-acceptance-phone-chromium 238332B sha256:5f89d884b5d10e5476ab4f1fada36d585d3fc82fe4dc23c4691bac77c0d2c2cf
+     12130193857 e2e-results-acceptance-phone-firefox 238284B sha256:590e27a4d047c932aa5f5157caed94b8aa03620f209526ecfd620401a491ccb3
+     12130882630 e2e-results-diagnostic-chromium 236311B sha256:466a337049c06a057ed99b796a80a0fd2e2d59d7761a20955f031816bbda5865
+     12131150984 e2e-results-diagnostic-firefox 236289B sha256:f29153851eacbde539efb47e8419404dc4a7986db56a345411e1531ea1c1ba89
+     12131325330 e2e-results-diagnostic-phone-chromium 236329B sha256:11679ea90cdd22a88dfb9821f43e7de613437cba4f452a92205ed5209890a146
+     12131400100 e2e-results-diagnostic-phone-firefox 236296B sha256:01b571671882d9460cec4f7bc97e3ed29b36a05710ef43e6f04e1378a417a712
+     12130941457 e2e-results-obsolete-fault-model-chromium 236329B sha256:ccebebe1c539e162df8638a79ca7bc67ea9eed86fd654396e4b522772dc4b1b0
+     12130908510 e2e-results-obsolete-fault-model-firefox 236294B sha256:279ec689f056c038b6eb296e02cce39e8220d337cde6ef51e0c1f388f4d6aab7
+     12130901709 e2e-results-obsolete-fault-model-phone-chromium 236342B sha256:2c8b9a516ab5485fbeda30a5943218352889078a1a341e26193c2c5a92665acb
+     12131001058 e2e-results-obsolete-fault-model-phone-firefox 236310B sha256:94d5695878aa87c3bc9b201f799e8a8e8c04ab0e52fdf9688953312c01283066
+   Limitations: ZIPs not opened from this workspace; release-SHAPED build (placeholder web config), not a deployment; static analysis cannot exclude
+   dynamic code (eval/new Function) rewriting behaviour at run time — the retained JS is there for inspection; not retained: CSS, sw.js, headers/
+   redirects, robots/sitemap, LICENSE (manifest-only); no full matrix (runtime unchanged); the independent resolver has no dotenv-expand (disagreement
+   fails closed); "committed file" is a basename allowlist.
