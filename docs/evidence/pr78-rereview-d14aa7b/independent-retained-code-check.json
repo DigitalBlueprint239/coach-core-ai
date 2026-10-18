@@ -1,0 +1,242 @@
+[
+  {
+    "artifact": "extracted-12130193857",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12130703804",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12130882630",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12130901709",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12130908510",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12130941457",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12131001058",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12131150984",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12131245583",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12131255194",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12131325330",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  },
+  {
+    "artifact": "extracted-12131400100",
+    "file": "main.630c8567.js",
+    "checks": [
+      {
+        "body": "async function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      },
+      {
+        "body": "function(){throw new Error(zv)}",
+        "params": 0,
+        "call_argument": "localStorage",
+        "message_binding": "zv",
+        "rejected_message": "Device-play import is disabled in this build. Originals preserved."
+      }
+    ]
+  }
+]

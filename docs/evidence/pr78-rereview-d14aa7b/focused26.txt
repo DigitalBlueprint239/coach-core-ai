@@ -1,0 +1,34 @@
+✔ resolve: committed .env.production pin -> OK; independent and CRA resolution agree on "false" (82.15095ms)
+✔ resolve: enabling .env.local / .env.production.local / shell variable -> FAIL (precedence over .env.production) (243.906128ms)
+✔ resolve: shell/local "false" is not release configuration; malformed, unset and .env-only pins never PASS; ${VAR} expansion is reported inconclusive (1289.311138ms)
+✔ resolve: precedence audit matches CRA (shell > .env.production.local > .env.local > .env.production > .env) (430.411245ms)
+✔ scan: a shipped OFF component (inlined throw, data-import-config=false) is proven OFF by EXECUTION; the same analysis finds the ON build enabled (256.702137ms)
+✔ F1 regression (reviewer decoy 1): OFF strings in a COMMENT next to enabled executable code -> FAIL (55.365467ms)
+✔ F1 regression (reviewer decoy 2): enabled main.js + orphan.js carrying both OFF strings -> FAIL (orphan not in the entry graph) (61.555146ms)
+✔ F1 regression (reviewer decoy 3): enabled executable behaviour behind an OFF marker attribute and OFF prose -> FAIL (contradictory output) (58.083748ms)
+✔ F1 regression (reviewer decoy 4): negative-control rejects a comment-only ON marker over disabled executable behaviour (54.441384ms)
+✔ F1 regression: a decoy executor that throws the disabled message while the real wired executor is enabled -> FAIL (binding follows the button handler) (55.791165ms)
+✔ second-review probe — R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (125.45952ms)
+✔ second-review probe — R1 global state: globalThis.proofEnabled=true read by the executor: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (127.882732ms)
+✔ second-review probe — R2 actual call arguments dropped: fifth/third argument enables: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (140.237265ms)
+✔ second-review probe — R2 unresolved member await before the inlined throw: await i.copy(...): the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (146.197707ms)
+✔ second-review probe — R2 ambiguous onClick: enabled handler then disabled handler: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (155.239969ms)
+✔ second-review probe — R3 backend read before the disabled throw: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on) (153.541527ms)
+✔ second-review baselines: ON baseline really copies/reads and is reported on; OFF baseline really does nothing and is reported off (static basis) (134.003781ms)
+✔ static OFF contract rejects a replaced or redefined Error constructor and non-const / mutable message bindings (229.483088ms)
+✔ ON detection refuses to reconstruct mutable/global-dependent closures (negative control then fails closed, never fakes ON or OFF) (65.325093ms)
+✔ scan fails closed when it cannot bind: no index.html, index.html referencing a missing chunk, no component, two components, unparseable chunk, executor rejecting with a different message (300.633599ms)
+✔ F1 demonstration: the OLD scanner (c9d49dd) accepted the reviewer decoys; the repaired scanner rejects them (187.648318ms)
+✔ source contract: enable check unchanged, build-time marker rendered, committed pin and explicit opt-ins preserved (0.701418ms)
+✔ END-TO-END (real script, fails closed BEFORE building): shell override -> exit 1, no build directory (171.551969ms)
+✔ END-TO-END (real script, fails closed BEFORE building): a temporary enabling .env.local in the repo root -> exit 1, no build (157.804048ms)
+✔ REAL release-shaped build: the proof EXITS 0, proves OFF by execution, retains the inspected output with provenance (F2: real status asserted) (12265.639499ms)
+✔ F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present (10707.926979ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27679.566164

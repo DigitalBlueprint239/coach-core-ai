@@ -1,0 +1,806 @@
+[
+  {
+    "id": 12131400100,
+    "name": "e2e-results-diagnostic-phone-firefox-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:01b571671882d9460cec4f7bc97e3ed29b36a05710ef43e6f04e1378a417a712",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12131400100/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:34.399Z",
+      "duration": 698.6329999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12131325330,
+    "name": "e2e-results-diagnostic-phone-chromium-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:11679ea90cdd22a88dfb9821f43e7de613437cba4f452a92205ed5209890a146",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12131325330/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:32.723Z",
+      "duration": 673.143,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12131255194,
+    "name": "e2e-results-acceptance-phone-chromium-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:5f89d884b5d10e5476ab4f1fada36d585d3fc82fe4dc23c4691bac77c0d2c2cf",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12131255194/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:27.444Z",
+      "duration": 4143.186000000001,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12131245583,
+    "name": "e2e-results-acceptance-firefox-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:67218957c56f9274792138e491290071f63f1cc21ca8531473cbcabdb2aa1da5",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12131245583/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:14.853Z",
+      "duration": 5063.935,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12131150984,
+    "name": "e2e-results-diagnostic-firefox-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:f29153851eacbde539efb47e8419404dc4a7986db56a345411e1531ea1c1ba89",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12131150984/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:33.771Z",
+      "duration": 686.9390000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12131001058,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:94d5695878aa87c3bc9b201f799e8a8e8c04ab0e52fdf9688953312c01283066",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12131001058/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:21.014Z",
+      "duration": 633.1149999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12130941457,
+    "name": "e2e-results-obsolete-fault-model-chromium-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:ccebebe1c539e162df8638a79ca7bc67ea9eed86fd654396e4b522772dc4b1b0",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12130941457/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:41.683Z",
+      "duration": 653.4090000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12130908510,
+    "name": "e2e-results-obsolete-fault-model-firefox-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:279ec689f056c038b6eb296e02cce39e8220d337cde6ef51e0c1f388f4d6aab7",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12130908510/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:30.196Z",
+      "duration": 670.0949999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12130901709,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:2c8b9a516ab5485fbeda30a5943218352889078a1a341e26193c2c5a92665acb",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12130901709/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:32.297Z",
+      "duration": 714.6669999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12130882630,
+    "name": "e2e-results-diagnostic-chromium-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:466a337049c06a057ed99b796a80a0fd2e2d59d7761a20955f031816bbda5865",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12130882630/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:06.677Z",
+      "duration": 431.864,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12130703804,
+    "name": "e2e-results-acceptance-chromium-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:28bf7f6b324234613e2117ae72ea375ab968bf2e5b49e89e1bc45da97cf13168",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12130703804/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:34.085Z",
+      "duration": 4382.281,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12130193857,
+    "name": "e2e-results-acceptance-phone-firefox-d14aa7bb9ec4442c3acca26b127b17f4194cbd64",
+    "digest": "sha256:590e27a4d047c932aa5f5157caed94b8aa03620f209526ecfd620401a491ccb3",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "all_entry_and_asset_manifest_js_present": true,
+    "configured_token_scans_clear": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_build_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "scan": {
+      "dir": "/workspace/scratch/review78-r3/extracted-12130193857/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "componentRange": [
+            653278,
+            655613
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "stats": {
+      "startTime": "2026-10-18T08:39:11.878Z",
+      "duration": 4888.914,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  }
+]

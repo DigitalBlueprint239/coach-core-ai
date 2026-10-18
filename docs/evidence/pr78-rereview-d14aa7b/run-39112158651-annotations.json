@@ -1,0 +1,454 @@
+[
+  {
+    "job": "E2E diagnostic (firefox)",
+    "job_id": 117630404250,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "10 files; run.log redaction: bytes_before=3746 bytes_after=3746; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic firefox)",
+        "message": "files=2 bytes=16029 results.json=128906bbed77ae0d executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"firefox\", bucket \"diagnostic\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic firefox)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (phone-firefox)",
+    "job_id": 117630404325,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "10 files; run.log redaction: bytes_before=18849 bytes_after=18803; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance phone-firefox)",
+        "message": "files=2 bytes=17733 results.json=a2d1718330fd3cbc executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 1/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 D10-01 [3.3/3.3/3.3s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance phone-firefox)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (phone-chromium)",
+    "job_id": 117630404332,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "10 files; run.log redaction: bytes_before=18855 bytes_after=18809; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance phone-chromium)",
+        "message": "files=2 bytes=17782 results.json=aa31280932be9092 executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 1/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 D10-01 [2.7/2.7/2.7s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance phone-chromium)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (firefox)",
+    "job_id": 117630404336,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "10 files; run.log redaction: bytes_before=3776 bytes_after=3776; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model firefox)",
+        "message": "files=2 bytes=16029 results.json=833ba90bd8ae537e executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"firefox\", bucket \"obsolete-fault-model\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model firefox)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (phone-chromium)",
+    "job_id": 117630404349,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "10 files; run.log redaction: bytes_before=3781 bytes_after=3781; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic phone-chromium)",
+        "message": "files=2 bytes=16074 results.json=45ac56202999a561 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"diagnostic\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic phone-chromium)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (firefox)",
+    "job_id": 117630404363,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "10 files; run.log redaction: bytes_before=18820 bytes_after=18774; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance firefox)",
+        "message": "files=2 bytes=17704 results.json=a2c17aa45d6177d8 executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 1/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 D10-01 [3.3/3.3/3.3s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance firefox)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (chromium)",
+    "job_id": 117630404368,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "10 files; run.log redaction: bytes_before=3781 bytes_after=3781; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model chromium)",
+        "message": "files=2 bytes=16067 results.json=f0e0477ed899f7a3 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"chromium\", bucket \"obsolete-fault-model\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model chromium)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (phone-chromium)",
+    "job_id": 117630404371,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "10 files; run.log redaction: bytes_before=3811 bytes_after=3811; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model phone-chromium)",
+        "message": "files=2 bytes=16084 results.json=73d583ec4d53a1c9 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-chromium\", bucket \"obsolete-fault-model\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model phone-chromium)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (phone-firefox)",
+    "job_id": 117630404390,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "10 files; run.log redaction: bytes_before=3776 bytes_after=3776; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic phone-firefox)",
+        "message": "files=2 bytes=16046 results.json=04bc488cf043c6c7 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"diagnostic\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic phone-firefox)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (phone-firefox)",
+    "job_id": 117630404392,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "10 files; run.log redaction: bytes_before=3806 bytes_after=3806; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model phone-firefox)",
+        "message": "files=2 bytes=16046 results.json=2d8eb66cf6205065 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"phone-firefox\", bucket \"obsolete-fault-model\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model phone-firefox)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (chromium)",
+    "job_id": 117630404401,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "10 files; run.log redaction: bytes_before=3751 bytes_after=3751; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic chromium)",
+        "message": "files=2 bytes=16057 results.json=a77778baf4d40a6e executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; the current filters (project \"chromium\", bucket \"diagnostic\" and grep \"D10-01\") selected no tests. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic chromium)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (chromium)",
+    "job_id": 117630404412,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "10 files; run.log redaction: bytes_before=18826 bytes_after=18780; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance chromium)",
+        "message": "files=2 bytes=17743 results.json=ac9d051ad03264bf executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium [acceptance]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 1/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 D10-01 [3.0/3.0/3.0s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof (coach-core-mvp-staging-239): 17 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import proven OFF by executing the shipped import code (effective build config + executable analysis + ON negative control); guard refuses emulator mode for real projects."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance chromium)",
+        "message": "tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  }
+]

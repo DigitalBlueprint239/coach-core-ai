@@ -165,3 +165,19 @@ TypeScript0, reporter10/evidence19. PR75's24 new ZIPs independently verified.
 Exact-head bounded Actions results/ZIP verification belong in the issue39 final
 handoff. New configuration and combined runtime require independent acceptance.
 No aggregate enforcement implementation, merge/deployment or activation; MVP NO-GO.
+
+
+## 2026-10-18 — independent PR78 re-reviewd14aa7b: FAIL
+
+Six prior probes now fail closed;26/26 full-history real-build checks and49 import
+tests pass, TypeScript0. All12 new CI archives, retained main code/provenance/hashes
+verified. CI self-checks23pass/3skip explicitly confirmed. Replacement static OFF
+contract still accepts parameter/argument/wrapper effects and untrusted constructors;
+ON control can drop explicit disabling arguments. Seven false-OFF probes and one
+false-ON control reproduced with whole-module/button spies. The actual retained
+CI handler bodies remain disabled. Dynamic eval limitation separately documented;
+actual main has fixed Function return-this fallback.
+[Source-pinned findings, minimum corrections and executable evidence](PR78_REREVIEW_D14AA7B.md).
+Corrected support drafts/app behavior preserved; PR77 still independently unaccepted
+in inspected records. No branches combined, unchanged full matrix, merge/deploy,
+production/protection change, recovery action or AI activation. MVP NO-GO.

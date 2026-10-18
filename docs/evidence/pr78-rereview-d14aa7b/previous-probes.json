@@ -1,0 +1,469 @@
+[
+  {
+    "name": "baseline on",
+    "dir": "/workspace/scratch/review78-r3/bundle-r5vAe8",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-r5vAe8",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1661
+          ],
+          "markerAttr": "coachcore:import-config=true",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "enabled",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+              "kind": "module-function",
+              "declCount": 4
+            },
+            "decline": {
+              "outcome": "enabled",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+              "kind": "module-function",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "on",
+      "reasons": [
+        "import is ENABLED in the shipped executable code (not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2)"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "baseline off",
+    "dir": "/workspace/scratch/review78-r3/bundle-rSIHzT",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-rSIHzT",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1661
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "closure mutation ignored",
+    "dir": "/workspace/scratch/review78-r3/bundle-t1no4w",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-t1no4w",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1048,
+            1777
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "inconclusive",
+              "basis": "none",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (\"cfg\" is assigned or mutated after declaration (mutable binding))",
+              "kind": "module-function"
+            },
+            "decline": {
+              "outcome": "inconclusive",
+              "basis": "none",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (\"cfg\" is assigned or mutated after declaration (mutable binding))",
+              "kind": "module-function"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: executor not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (\"cfg\" is assigned or mutated after declaration (mutable binding))",
+        "inconclusive: decline not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (\"cfg\" is assigned or mutated after declaration (mutable binding))"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "VM global state substituted",
+    "dir": "/workspace/scratch/review78-r3/bundle-T8RvOh",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-T8RvOh",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1058,
+            1787
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "inconclusive",
+              "basis": "none",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (free identifier \"globalThis\" is not a module-scope declaration or a pure builtin)",
+              "kind": "module-function"
+            },
+            "decline": {
+              "outcome": "inconclusive",
+              "basis": "none",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (free identifier \"globalThis\" is not a module-scope declaration or a pure builtin)",
+              "kind": "module-function"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: executor not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (free identifier \"globalThis\" is not a module-scope declaration or a pure builtin)",
+        "inconclusive: decline not provably OFF (first statement is IfStatement, not an unconditional throw); cannot reconstruct a faithful closure for execution (free identifier \"globalThis\" is not a module-scope declaration or a pure builtin)"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "actual call arguments dropped",
+    "dir": "/workspace/scratch/review78-r3/bundle-vaRoaJ",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-vaRoaJ",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            993,
+            1723
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "inconclusive",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: threw \"Device-play import is disabled in this build. Originals preserved.\"; backend.copy x0, backend.read x0, storage writes 0",
+              "kind": "module-function",
+              "declCount": 5
+            },
+            "decline": {
+              "outcome": "inconclusive",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: threw \"Device-play import is disabled in this build. Originals preserved.\"; backend.copy x0, backend.read x0, storage writes 0",
+              "kind": "module-function",
+              "declCount": 2
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: executor not provably OFF (first statement is IfStatement, not an unconditional throw); executed: threw \"Device-play import is disabled in this build. Originals preserved.\"; backend.copy x0, backend.read x0, storage writes 0",
+        "inconclusive: decline not provably OFF (first statement is IfStatement, not an unconditional throw); executed: threw \"Device-play import is disabled in this build. Originals preserved.\"; backend.copy x0, backend.read x0, storage writes 0"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    }
+  },
+  {
+    "name": "unresolved member await ignored",
+    "dir": "/workspace/scratch/review78-r3/bundle-zNx6lj",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-zNx6lj",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1698
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [
+            "accept: 1 unresolved call(s) in the handler (callee is a MemberExpression) — every call must be accounted for",
+            "accept: an await in the handler is not the single import call"
+          ],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: accept: 1 unresolved call(s) in the handler (callee is a MemberExpression) — every call must be accounted for",
+        "inconclusive: accept: an await in the handler is not the single import call"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "ambiguous onClick chooses last handler",
+    "dir": "/workspace/scratch/review78-r3/bundle-FJgBVz",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-FJgBVz",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1779
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [
+            "accept: onClick calls 2 component-local handlers (ambiguous: y, deadOff)"
+          ],
+          "exec": {
+            "executor": null,
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: accept: onClick calls 2 component-local handlers (ambiguous: y, deadOff)",
+        "inconclusive: executor not bound"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "backend read ignored",
+    "dir": "/workspace/scratch/review78-r3/bundle-WffaNZ",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-WffaNZ",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1015,
+            1750
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "inconclusive",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is ExpressionStatement, not an unconditional throw); executed: threw \"Device-play import is disabled in this build. Originals preserved.\"; backend.copy x0, backend.read x1, storage writes 0",
+              "kind": "module-function",
+              "declCount": 1
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: executor not provably OFF (first statement is ExpressionStatement, not an unconditional throw); executed: threw \"Device-play import is disabled in this build. Originals preserved.\"; backend.copy x0, backend.read x1, storage writes 0"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 1,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  {
+    "name": "unknown closure fails closed",
+    "dir": "/workspace/scratch/review78-r3/bundle-irRo6o",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-irRo6o",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1673
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "inconclusive",
+              "basis": "none",
+              "detail": "not provably OFF (thrown message identifier \"unknownBinding\" does not resolve to a variable declaration); cannot reconstruct a faithful closure for execution (free identifier \"unknownBinding\" is not a module-scope declaration or a pure builtin)",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: executor not provably OFF (thrown message identifier \"unknownBinding\" does not resolve to a variable declaration); cannot reconstruct a faithful closure for execution (free identifier \"unknownBinding\" is not a module-scope declaration or a pure builtin)"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    }
+  }
+]

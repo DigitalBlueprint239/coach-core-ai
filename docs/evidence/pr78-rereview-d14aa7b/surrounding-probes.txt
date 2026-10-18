@@ -1,0 +1,12 @@
+{"name":"baseline on","exit":1,"verdict":"on","actual":{"copies":1,"reads":1,"writes":2},"decline":{"copies":0,"reads":0,"writes":1}}
+{"name":"baseline off","exit":0,"verdict":"off","actual":{"copies":0,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"argument getter before throw","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":1,"reads":0,"writes":0}}
+{"name":"default parameters before body","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":1,"reads":0,"writes":0}}
+{"name":"handler wrapper default getter","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"onClick wrapper getter","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"destructured local called as harmless setter","exit":0,"verdict":"off","actual":{"copies":2,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"computed Error replacement","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":1,"reads":0,"writes":0}}
+{"name":"unresolved constructor trusted","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":1,"reads":0,"writes":0}}
+{"name":"ON control drops explicit false arguments","exit":1,"verdict":"on","actual":{"copies":0,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0},"negative_control_exit":0}
+{"name":"direct argument backend call rejects","exit":1,"verdict":"inconclusive","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"dynamic eval documented limit","exit":0,"verdict":"off","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":1,"reads":0,"writes":0}}

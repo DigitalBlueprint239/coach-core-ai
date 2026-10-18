@@ -1,0 +1,22 @@
+2026-10-18T08:38:34.1081515Z # tests 10
+2026-10-18T08:38:34.1082806Z # pass 10
+2026-10-18T08:38:34.1083365Z # fail 0
+2026-10-18T08:38:34.1084602Z # skipped 0
+2026-10-18T08:38:36.1079373Z # tests 19
+2026-10-18T08:38:36.1080052Z # pass 19
+2026-10-18T08:38:36.1080593Z # fail 0
+2026-10-18T08:38:36.1081370Z # skipped 0
+2026-10-18T08:38:58.4986717Z [36;1mt=$(grep -E '^# tests ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); p=$(grep -E '^# pass ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')[0m
+2026-10-18T08:38:58.4987848Z [36;1mf=$(grep -E '^# fail ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); k=$(grep -E '^# skipped ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')[0m
+2026-10-18T08:38:58.4988892Z [36;1msk=$(grep -E '^(ok|not ok) .* # SKIP' /tmp/release-proof-selfchecks.txt | sed -E 's/^(ok|not ok) ([0-9]+) - .*# SKIP ?/\2: /' | cut -c1-80 | tr '\n' ';')[0m
+2026-10-18T08:39:02.3973665Z ok 21 - F1 demonstration: the OLD scanner (c9d49dd) accepted the reviewer decoys; the repaired scanner rejects them # SKIP old implementation not available in this clone
+2026-10-18T08:39:02.3989187Z ok 25 - REAL release-shaped build: the proof EXITS 0, proves OFF by execution, retains the inspected output with provenance (F2: real status asserted) # SKIP set RELEASE_PROOF_BUILD=1 to run the real builds
+2026-10-18T08:39:02.3994354Z ok 26 - F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present # SKIP set RELEASE_PROOF_BUILD=1 to run the real builds
+2026-10-18T08:39:02.3996411Z # tests 26
+2026-10-18T08:39:02.3996792Z # pass 23
+2026-10-18T08:39:02.3997178Z # fail 0
+2026-10-18T08:39:02.3997590Z # skipped 3
+2026-10-18T08:39:02.4213507Z ##[notice]tests=26 pass=23 fail=0 skipped=3 (skipped tests are NOT passes): 21: old implementation not available in this clone;25: set RELEASE_PROOF_BUILD=1 to run the real builds;26: set RELEASE_PROOF_BUILD=1 to run the real builds;
+2026-10-18T08:39:17.0078091Z PASS shipped executable import code is OFF (static/js/main.630c8567.js: executor inline -> disabled [static], decline inline -> disabled [static], data-import-config=coachcore:import-config=false)
+2026-10-18T08:39:17.6934615Z PASS negative control: executable analysis detects the opted-in emulator build as ON
+2026-10-18T08:39:17.6939610Z RESULT: 17 passed, 0 failed

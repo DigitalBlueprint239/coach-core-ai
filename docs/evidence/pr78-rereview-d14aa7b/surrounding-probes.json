@@ -1,0 +1,652 @@
+[
+  {
+    "name": "baseline on",
+    "dir": "/workspace/scratch/review78-r3/bundle-zeNcqf",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-zeNcqf",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1661
+          ],
+          "markerAttr": "coachcore:import-config=true",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "enabled",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+              "kind": "module-function",
+              "declCount": 4
+            },
+            "decline": {
+              "outcome": "enabled",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+              "kind": "module-function",
+              "declCount": 1
+            }
+          }
+        }
+      ],
+      "verdict": "on",
+      "reasons": [
+        "import is ENABLED in the shipped executable code (not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2)"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    },
+    "negative_control": null
+  },
+  {
+    "name": "baseline off",
+    "dir": "/workspace/scratch/review78-r3/bundle-uR7boI",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-uR7boI",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1661
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "argument getter before throw",
+    "dir": "/workspace/scratch/review78-r3/bundle-fm2vBX",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-fm2vBX",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1016,
+            1744
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "default parameters before body",
+    "dir": "/workspace/scratch/review78-r3/bundle-VDBdor",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-VDBdor",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1693
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "handler wrapper default getter",
+    "dir": "/workspace/scratch/review78-r3/bundle-Rmf9Sd",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-Rmf9Sd",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1016,
+            1758
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "onClick wrapper getter",
+    "dir": "/workspace/scratch/review78-r3/bundle-RDLiq6",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-RDLiq6",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1016,
+            1757
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "destructured local called as harmless setter",
+    "dir": "/workspace/scratch/review78-r3/bundle-V5woqU",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-V5woqU",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1683
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 2,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "computed Error replacement",
+    "dir": "/workspace/scratch/review78-r3/bundle-b4jjg0",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-b4jjg0",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1016,
+            1744
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "unresolved constructor trusted",
+    "dir": "/workspace/scratch/review78-r3/bundle-YqV9JR",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-YqV9JR",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1673
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "ON control drops explicit false arguments",
+    "dir": "/workspace/scratch/review78-r3/bundle-IXoKOt",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-IXoKOt",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1003,
+            1734
+          ],
+          "markerAttr": "coachcore:import-config=true",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "enabled",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+              "kind": "module-function",
+              "declCount": 5
+            },
+            "decline": {
+              "outcome": "enabled",
+              "basis": "execution",
+              "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+              "kind": "module-function",
+              "declCount": 2
+            }
+          }
+        }
+      ],
+      "verdict": "on",
+      "reasons": [
+        "import is ENABLED in the shipped executable code (not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2)"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": {
+      "exit": 0,
+      "report": {
+        "dir": "/workspace/scratch/review78-r3/bundle-IXoKOt",
+        "entryChunks": [
+          "static/js/main.abc.js"
+        ],
+        "components": [
+          {
+            "chunk": "static/js/main.abc.js",
+            "componentRange": [
+              1003,
+              1734
+            ],
+            "markerAttr": "coachcore:import-config=true",
+            "errors": [],
+            "exec": {
+              "executor": {
+                "outcome": "enabled",
+                "basis": "execution",
+                "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+                "kind": "module-function",
+                "declCount": 5
+              },
+              "decline": {
+                "outcome": "enabled",
+                "basis": "execution",
+                "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+                "kind": "module-function",
+                "declCount": 2
+              }
+            }
+          }
+        ],
+        "verdict": "on",
+        "reasons": [],
+        "ok": true
+      }
+    }
+  },
+  {
+    "name": "direct argument backend call rejects",
+    "dir": "/workspace/scratch/review78-r3/bundle-vv2ama",
+    "scanner_exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-vv2ama",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            933,
+            1674
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [
+            "accept: 1 unresolved call(s) in the handler (callee is a MemberExpression) — every call must be accounted for"
+          ],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "inconclusive",
+      "reasons": [
+        "inconclusive: accept: 1 unresolved call(s) in the handler (callee is a MemberExpression) — every call must be accounted for"
+      ],
+      "ok": false
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  },
+  {
+    "name": "dynamic eval documented limit",
+    "dir": "/workspace/scratch/review78-r3/bundle-9uhEev",
+    "scanner_exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78-r3/bundle-9uhEev",
+      "entryChunks": [
+        "static/js/main.abc.js"
+      ],
+      "components": [
+        {
+          "chunk": "static/js/main.abc.js",
+          "componentRange": [
+            1011,
+            1739
+          ],
+          "markerAttr": "coachcore:import-config=false",
+          "errors": [],
+          "exec": {
+            "executor": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            },
+            "decline": {
+              "outcome": "disabled",
+              "basis": "static",
+              "detail": "first statement throws const zv = disabled message literal",
+              "kind": "inline"
+            }
+          }
+        }
+      ],
+      "verdict": "off",
+      "reasons": [],
+      "ok": true
+    },
+    "actual_button": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "negative_control": null
+  }
+]

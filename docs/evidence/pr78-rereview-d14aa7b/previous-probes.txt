@@ -1,0 +1,9 @@
+{"name":"baseline on","exit":1,"verdict":"on","actual":{"copies":1,"reads":1,"writes":2},"decline":{"copies":0,"reads":0,"writes":1}}
+{"name":"baseline off","exit":0,"verdict":"off","actual":{"copies":0,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"closure mutation ignored","exit":1,"verdict":"inconclusive","actual":{"copies":1,"reads":1,"writes":2},"decline":{"copies":0,"reads":0,"writes":1}}
+{"name":"VM global state substituted","exit":1,"verdict":"inconclusive","actual":{"copies":1,"reads":1,"writes":2},"decline":{"copies":0,"reads":0,"writes":1}}
+{"name":"actual call arguments dropped","exit":1,"verdict":"inconclusive","actual":{"copies":1,"reads":1,"writes":2},"decline":{"copies":0,"reads":0,"writes":1}}
+{"name":"unresolved member await ignored","exit":1,"verdict":"inconclusive","actual":{"copies":1,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"ambiguous onClick chooses last handler","exit":1,"verdict":"inconclusive","actual":{"copies":1,"reads":1,"writes":2},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"backend read ignored","exit":1,"verdict":"inconclusive","actual":{"copies":0,"reads":1,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
+{"name":"unknown closure fails closed","exit":1,"verdict":"inconclusive","actual":{"copies":0,"reads":0,"writes":0},"decline":{"copies":0,"reads":0,"writes":0}}
