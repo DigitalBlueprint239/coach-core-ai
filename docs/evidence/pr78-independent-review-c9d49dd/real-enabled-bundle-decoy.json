@@ -1,0 +1,28 @@
+{
+  "scan_exit": 0,
+  "report": {
+    "dir": "/workspace/scratch/review78/mutated-real-enabled-build",
+    "jsFiles": 3,
+    "canaryOff": 1,
+    "canaryOn": 0,
+    "inlinedTrue": 0,
+    "disabledCopy": 3,
+    "ok": true,
+    "reasons": []
+  },
+  "changes_only": {
+    "sw.js": {
+      "on_markers_changed": 0,
+      "inlined_metadata_changed": 0
+    },
+    "main.7385e2c0.js": {
+      "on_markers_changed": 1,
+      "inlined_metadata_changed": 6
+    },
+    "670.5642af5b.chunk.js": {
+      "on_markers_changed": 0,
+      "inlined_metadata_changed": 0
+    }
+  },
+  "source": "fresh same-head explicitly opted-in emulator bundle; only marker/env metadata literals changed and prose comments appended; enabled renderer/executor bodies unchanged"
+}

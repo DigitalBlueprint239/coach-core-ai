@@ -1,0 +1,19 @@
+PASS guard refuses an emulator build for coach-core-mvp-staging-239
+PASS .env.production pins the emulator flag to false
+PASS .env.production pins the import flag to false
+PASS effective build-time import config is OFF (.env.production="false"; CRA loader agrees: "false")
+PASS release-shaped build for coach-core-mvp-staging-239
+PASS no test-hook marker (__coachCoreE2E)
+PASS no test-hook module (e2e-support / emulator-hooks)
+PASS no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 9199)
+PASS no demo-* project values
+PASS no emulator test password or placeholder secret
+PASS bundle targets coach-core-mvp-staging-239
+PASS shipped JS proves import OFF (canary=false x1, =true x0, inlined true x0, disabled copy x2)
+PASS 2 JS files scanned
+manifest: /workspace/scratch/review78/fresh-release-manifest.sha256 (11 files)
+PASS negative control: pattern detects emulator build (__coachCoreE2E)
+PASS negative control: pattern detects emulator build ([:,](9099|9199|5001|8080)[^0-9])
+PASS negative control: pattern detects emulator build (demo-coach-core)
+PASS negative control: import canary detects the opted-in emulator build (=true)
+RESULT: 17 passed, 0 failed

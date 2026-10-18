@@ -1,0 +1,21 @@
+✔ resolve: committed .env.production pin -> OK; independent and CRA resolution agree on "false" (80.447839ms)
+✔ resolve: an enabling git-ignored .env.local overrides .env.production -> FAIL (the evidence-73 finding) (86.424006ms)
+✔ resolve: an enabling .env.production.local wins over .env.local and .env.production -> FAIL (90.227453ms)
+✔ resolve: an enabling shell variable wins over every file -> FAIL (76.704797ms)
+✔ resolve: a shell/local pin to "false" is not release configuration -> FAIL (must come from a committed file) (144.999006ms)
+✔ resolve: malformed or unexpected values never PASS (TRUE, 1, yes, False, "", " false", "false ") and a missing pin fails (856.314806ms)
+✔ resolve: precedence audit matches CRA (shell > .env.production.local > .env.local > .env.production > .env) (386.108358ms)
+✔ scan: shipped JS with canary=false + disabled copy -> OK; canary=true -> FAIL enabled; missing canary -> FAIL inconclusive; stray inlined true -> FAIL; empty -> FAIL (212.007443ms)
+✔ negative-control: an enabled build is detected (OK) and an OFF build is not mistaken for one (FAIL) (60.902965ms)
+✔ source contract: the import module defines the build-time canary from the flag and the section renders it (0.664392ms)
+✔ END-TO-END (real script, fails closed BEFORE building): shell override -> exit 1, no build directory, no import-OFF PASS line (147.380582ms)
+✔ END-TO-END (real script, fails closed BEFORE building): a temporary enabling .env.local in the repo root -> exit 1, no build (150.939044ms)
+✔ REAL release-shaped build (slow; RELEASE_PROOF_BUILD=1): proof passes and the shipped JS carries exactly the OFF canary (15283.879626ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17589.467765

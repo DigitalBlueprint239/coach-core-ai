@@ -1,0 +1,11 @@
+{
+  "exit": 0,
+  "actual_executable_import_enabled": false,
+  "result": {
+    "dir": "/workspace/scratch/review78/negative-comment",
+    "jsFiles": 1,
+    "canaryOn": 1,
+    "ok": true,
+    "reasons": []
+  }
+}

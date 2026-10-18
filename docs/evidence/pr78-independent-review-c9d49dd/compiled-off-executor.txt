@@ -1,0 +1,2 @@
+Exact function extracted from fresh main bundle: async function(){throw new Error(zv)}
+Executed result: Device-play import is disabled in this build. Originals preserved.

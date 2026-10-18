@@ -1,0 +1,38 @@
+{
+  "resolver_exit": 1,
+  "actual_build_exit": 0,
+  "output_scan_exit": 1,
+  "output_scan": {
+    "dir": "/workspace/scratch/review78/expansion-build",
+    "jsFiles": 2,
+    "canaryOff": 0,
+    "canaryOn": 1,
+    "inlinedTrue": 5,
+    "disabledCopy": 0,
+    "ok": false,
+    "reasons": [
+      "inconclusive: canary coachcore:import-config=false not found in the shipped JS (unpinned build, toolchain change or marker removed) \u2014 cannot prove import is OFF",
+      "import is ENABLED in the shipped JS: coachcore:import-config=true found 1x",
+      "inlined build env shows REACT_APP_ENABLE_LEGACY_IMPORT:\"true\" (5x)",
+      "inconclusive: disabled-state copy not present in the shipped JS (import module missing or changed)"
+    ]
+  },
+  "resolver": {
+    "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+    "nodeEnv": "production",
+    "effective": {
+      "source": ".env.local",
+      "value": "${REVIEW_CHOICE}"
+    },
+    "sources": [
+      ".env.local=\"${REVIEW_CHOICE}\"",
+      ".env.production=\"false\""
+    ],
+    "cra": "true",
+    "ok": false,
+    "reasons": [
+      "inconclusive: CRA loader resolves REACT_APP_ENABLE_LEGACY_IMPORT=\"true\" but independent resolution gives \"${REVIEW_CHOICE}\" (.env.local)",
+      "REACT_APP_ENABLE_LEGACY_IMPORT is not pinned to exactly \"false\" for this build (effective: \"${REVIEW_CHOICE}\" from .env.local); release builds must be unambiguous"
+    ]
+  }
+}

@@ -165,3 +165,17 @@ TypeScript0, reporter10/evidence19. PR75's24 new ZIPs independently verified.
 Exact-head bounded Actions results/ZIP verification belong in the issue39 final
 handoff. New configuration and combined runtime require independent acceptance.
 No aggregate enforcement implementation, merge/deployment or activation; MVP NO-GO.
+
+
+## 2026-10-18 — independent PR78 release-proof review: FAIL
+
+Reviewed c9d49dd against61448f0, handoff/evidence74 and CI39081774809.
+Original .env.local gap reproduced; new literal override refusal, 13 focused checks,
+17 proof assertions,49 import unit tests, TypeScript and12 retained ZIPs verified.
+Independent executable/text-decoy probes expose false OFF/ON output proof; slow
+focused case can pass on a nonzero real proof. Draft recovery clearing and ownership
+verification procedures need correction. Membership/limits/identity unchanged.
+[Source-pinned findings and evidence](PR78_INDEPENDENT_REVIEW_C9D49DD.md).
+PR77 remains draft, independently unaccepted in inspected records; workflow overlap
+identified only, no branches combined. No full matrix, merge/deploy, production/
+protection change, recovery action or AI activation. MVP NO-GO.

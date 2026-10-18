@@ -1,0 +1,323 @@
+[
+  {
+    "name": "local expansion enables",
+    "root": "/workspace/scratch/review78/fixture-Qiwx5V",
+    "independent": {
+      "source": ".env.local",
+      "value": "${CHOICE}"
+    },
+    "cra": {
+      "has": true,
+      "value": "true"
+    },
+    "exit": 1,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.local",
+        "value": "${CHOICE}"
+      },
+      "sources": [
+        ".env.local=\"${CHOICE}\"",
+        ".env.production=\"false\""
+      ],
+      "cra": "true",
+      "ok": false,
+      "reasons": [
+        "inconclusive: CRA loader resolves REACT_APP_ENABLE_LEGACY_IMPORT=\"true\" but independent resolution gives \"${CHOICE}\" (.env.local)",
+        "REACT_APP_ENABLE_LEGACY_IMPORT is not pinned to exactly \"false\" for this build (effective: \"${CHOICE}\" from .env.local); release builds must be unambiguous"
+      ]
+    }
+  },
+  {
+    "name": "shell expansion in nominal committed value",
+    "root": "/workspace/scratch/review78/fixture-MLbovZ",
+    "independent": {
+      "source": ".env.production",
+      "value": "${CHOICE}"
+    },
+    "cra": {
+      "has": true,
+      "value": "true"
+    },
+    "exit": 1,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.production",
+        "value": "${CHOICE}"
+      },
+      "sources": [
+        ".env.production=\"${CHOICE}\""
+      ],
+      "cra": "true",
+      "ok": false,
+      "reasons": [
+        "inconclusive: CRA loader resolves REACT_APP_ENABLE_LEGACY_IMPORT=\"true\" but independent resolution gives \"${CHOICE}\" (.env.production)",
+        "REACT_APP_ENABLE_LEGACY_IMPORT is not pinned to exactly \"false\" for this build (effective: \"${CHOICE}\" from .env.production); release builds must be unambiguous"
+      ]
+    }
+  },
+  {
+    "name": "safe expansion refuses closed",
+    "root": "/workspace/scratch/review78/fixture-qt2gtR",
+    "independent": {
+      "source": ".env.production",
+      "value": "${CHOICE}"
+    },
+    "cra": {
+      "has": true,
+      "value": "false"
+    },
+    "exit": 1,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.production",
+        "value": "${CHOICE}"
+      },
+      "sources": [
+        ".env.production=\"${CHOICE}\""
+      ],
+      "cra": "false",
+      "ok": false,
+      "reasons": [
+        "inconclusive: CRA loader resolves REACT_APP_ENABLE_LEGACY_IMPORT=\"false\" but independent resolution gives \"${CHOICE}\" (.env.production)",
+        "REACT_APP_ENABLE_LEGACY_IMPORT is not pinned to exactly \"false\" for this build (effective: \"${CHOICE}\" from .env.production); release builds must be unambiguous"
+      ]
+    }
+  },
+  {
+    "name": "quoted CRLF exact pin",
+    "root": "/workspace/scratch/review78/fixture-xuIKpy",
+    "independent": {
+      "source": ".env.production",
+      "value": "false"
+    },
+    "cra": {
+      "has": true,
+      "value": "false"
+    },
+    "exit": 0,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.production",
+        "value": "false"
+      },
+      "sources": [
+        ".env.production=\"false\""
+      ],
+      "cra": "false",
+      "ok": true,
+      "reasons": []
+    }
+  },
+  {
+    "name": "escaped dollar local",
+    "root": "/workspace/scratch/review78/fixture-quG3SO",
+    "independent": {
+      "source": ".env.local",
+      "value": "\\$CHOICE"
+    },
+    "cra": {
+      "has": true,
+      "value": "true"
+    },
+    "exit": 1,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.local",
+        "value": "\\$CHOICE"
+      },
+      "sources": [
+        ".env.local=\"\\\\$CHOICE\"",
+        ".env.production=\"false\""
+      ],
+      "cra": "true",
+      "ok": false,
+      "reasons": [
+        "inconclusive: CRA loader resolves REACT_APP_ENABLE_LEGACY_IMPORT=\"true\" but independent resolution gives \"\\\\$CHOICE\" (.env.local)",
+        "REACT_APP_ENABLE_LEGACY_IMPORT is not pinned to exactly \"false\" for this build (effective: \"\\\\$CHOICE\" from .env.local); release builds must be unambiguous"
+      ]
+    }
+  },
+  {
+    "name": "local false overrides committed",
+    "root": "/workspace/scratch/review78/fixture-vZgzq1",
+    "independent": {
+      "source": ".env.local",
+      "value": "false"
+    },
+    "cra": {
+      "has": true,
+      "value": "false"
+    },
+    "exit": 1,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.local",
+        "value": "false"
+      },
+      "sources": [
+        ".env.local=\"false\"",
+        ".env.production=\"false\""
+      ],
+      "cra": "false",
+      "ok": false,
+      "reasons": [
+        "REACT_APP_ENABLE_LEGACY_IMPORT is pinned by .env.local, not by a committed file (.env.production or .env); local/shell pins are not release configuration"
+      ]
+    }
+  },
+  {
+    "name": "untracked allowed basename",
+    "root": "/workspace/scratch/review78/fixture-rIqEwP",
+    "independent": {
+      "source": ".env.production",
+      "value": "false"
+    },
+    "cra": {
+      "has": true,
+      "value": "false"
+    },
+    "exit": 0,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": ".env.production",
+        "value": "false"
+      },
+      "sources": [
+        ".env.production=\"false\""
+      ],
+      "cra": "false",
+      "ok": true,
+      "reasons": []
+    }
+  },
+  {
+    "name": "shell true dominates local false",
+    "root": "/workspace/scratch/review78/fixture-4mZb9x",
+    "independent": {
+      "source": "shell",
+      "value": "true"
+    },
+    "cra": {
+      "has": true,
+      "value": "true"
+    },
+    "exit": 1,
+    "report": {
+      "flag": "REACT_APP_ENABLE_LEGACY_IMPORT",
+      "nodeEnv": "production",
+      "effective": {
+        "source": "shell",
+        "value": "true"
+      },
+      "sources": [
+        "shell=\"true\"",
+        ".env.local=\"false\"",
+        ".env.production=\"false\""
+      ],
+      "cra": "true",
+      "ok": false,
+      "reasons": [
+        "REACT_APP_ENABLE_LEGACY_IMPORT is ENABLED for this build by shell"
+      ]
+    }
+  },
+  {
+    "name": "only comments; enabled executable",
+    "root": "/workspace/scratch/review78/fixture-paOmqN",
+    "exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78/fixture-paOmqN",
+      "jsFiles": 1,
+      "canaryOff": 1,
+      "canaryOn": 0,
+      "inlinedTrue": 0,
+      "disabledCopy": 1,
+      "ok": true,
+      "reasons": []
+    },
+    "executableImportEnabled": true
+  },
+  {
+    "name": "unreferenced stale file; enabled executable",
+    "root": "/workspace/scratch/review78/fixture-fXmsdy",
+    "exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78/fixture-fXmsdy",
+      "jsFiles": 2,
+      "canaryOff": 1,
+      "canaryOn": 0,
+      "inlinedTrue": 0,
+      "disabledCopy": 1,
+      "ok": true,
+      "reasons": []
+    },
+    "executableImportEnabled": true
+  },
+  {
+    "name": "contradictory executable; off strings retained",
+    "root": "/workspace/scratch/review78/fixture-XAeDPL",
+    "exit": 0,
+    "report": {
+      "dir": "/workspace/scratch/review78/fixture-XAeDPL",
+      "jsFiles": 1,
+      "canaryOff": 1,
+      "canaryOn": 0,
+      "inlinedTrue": 0,
+      "disabledCopy": 1,
+      "ok": true,
+      "reasons": []
+    },
+    "executableImportEnabled": true
+  },
+  {
+    "name": "missing marker",
+    "root": "/workspace/scratch/review78/fixture-bs2Mnq",
+    "exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78/fixture-bs2Mnq",
+      "jsFiles": 1,
+      "canaryOff": 0,
+      "canaryOn": 0,
+      "inlinedTrue": 0,
+      "disabledCopy": 0,
+      "ok": false,
+      "reasons": [
+        "inconclusive: canary coachcore:import-config=false not found in the shipped JS (unpinned build, toolchain change or marker removed) — cannot prove import is OFF",
+        "inconclusive: disabled-state copy not present in the shipped JS (import module missing or changed)"
+      ]
+    },
+    "executableImportEnabled": false
+  },
+  {
+    "name": "on and off marker",
+    "root": "/workspace/scratch/review78/fixture-LmYrpi",
+    "exit": 1,
+    "report": {
+      "dir": "/workspace/scratch/review78/fixture-LmYrpi",
+      "jsFiles": 1,
+      "canaryOff": 1,
+      "canaryOn": 1,
+      "inlinedTrue": 0,
+      "disabledCopy": 1,
+      "ok": false,
+      "reasons": [
+        "import is ENABLED in the shipped JS: coachcore:import-config=true found 1x"
+      ]
+    }
+  }
+]

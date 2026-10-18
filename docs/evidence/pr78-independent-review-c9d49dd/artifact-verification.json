@@ -1,0 +1,278 @@
+[
+  {
+    "id": 12119775267,
+    "name": "e2e-results-acceptance-phone-chromium-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:e2f4ff821c222251610d23c632eb72b034643d2ddba062bdb9eaa8aa8707c25c",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:37.486Z",
+      "duration": 5856.88,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12119605169,
+    "name": "e2e-results-acceptance-chromium-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:3cc65af9b7daea3bcb29da3711845764bbf0c96b76aff5ac601c202abdcb7fc3",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:22.186Z",
+      "duration": 4018.9180000000006,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12119510785,
+    "name": "e2e-results-diagnostic-phone-chromium-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:c65b614303c7678c2f4eb8fc23d96352581c73f63cf28a3056b9fe2324191a42",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:11:55.358Z",
+      "duration": 446.288,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12119386757,
+    "name": "e2e-results-diagnostic-phone-firefox-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:06e2c3729c7a729400026d9c67a06b237a1cf48c1a12c78fbf2b0058c6be96b7",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:45.304Z",
+      "duration": 661.6500000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12119376462,
+    "name": "e2e-results-acceptance-firefox-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:6f9133abe82d1c814ca5e8e06f95de01cacfe97c21c4c4e1c92454b2e3aa6678",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:11:48.313Z",
+      "duration": 4180.554999999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12119311783,
+    "name": "e2e-results-acceptance-phone-firefox-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:31ac0656f525390cadd5767facab4cba52072bd326b210d74cdf4f2cb48a0c5b",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:15.503Z",
+      "duration": 5359.599,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-firefox",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12119212166,
+    "name": "e2e-results-obsolete-fault-model-firefox-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:c501a70c73e77bd9f73ad4346fb834029c20ada15a1f97157dd2f5633829cd5d",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:33.320Z",
+      "duration": 679.386,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12118943765,
+    "name": "e2e-results-obsolete-fault-model-chromium-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:dde181ce7c28fef8ebb448e968e987e9b877018d7d81d02a55ed1d8f2dbd0d96",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:26.421Z",
+      "duration": 618.5769999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12118937290,
+    "name": "e2e-results-diagnostic-firefox-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:467d38ab99369119dfbc9e3cc478c868a52ab095ea8a5269b1d33819e7531693",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:21.310Z",
+      "duration": 618.542,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12118769202,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:616f6aff628ef74c94313827478a1340402fe68f58d0f8136820ade9e098e1f8",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:15.751Z",
+      "duration": 510.1719999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12118284609,
+    "name": "e2e-results-diagnostic-chromium-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:1b4ce1d08b5e5342412ea5945388d2686af1b84330092840da0dc80e3de6451f",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:39.013Z",
+      "duration": 708.611,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  },
+  {
+    "id": 12118179811,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-c9d49dd367933a92039ba40478d80ffe3a6af987",
+    "digest": "sha256:9697afc239cd54072436c4bd69fe6518ec0156a3098458183b91809adb71d16a",
+    "archive_and_inventory_verified": true,
+    "sanitized_log_scan_clear": true,
+    "test_exit": 0,
+    "stats": {
+      "startTime": "2026-10-18T00:12:13.753Z",
+      "duration": 528.926,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [],
+    "inventory_files": 6,
+    "release_manifest_entries": 11
+  }
+]

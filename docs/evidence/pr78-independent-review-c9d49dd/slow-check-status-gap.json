@@ -1,0 +1,5 @@
+{
+  "proof_exit": 1,
+  "all_13_focused_checks_exit": 0,
+  "invalid_negative_control": "only a comment with ON canary; no hooks/emulator ports/demo values"
+}

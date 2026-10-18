@@ -1,0 +1,16 @@
+2026-10-18T00:11:24.3100806Z # tests 10
+2026-10-18T00:11:24.3101216Z # pass 10
+2026-10-18T00:11:24.3101421Z # fail 0
+2026-10-18T00:11:24.3101830Z # skipped 0
+2026-10-18T00:11:26.0843173Z # tests 19
+2026-10-18T00:11:26.0843562Z # pass 19
+2026-10-18T00:11:26.0843749Z # fail 0
+2026-10-18T00:11:26.0844157Z # skipped 0
+2026-10-18T00:11:48.0008810Z # tests 13
+2026-10-18T00:11:48.0009198Z # pass 12
+2026-10-18T00:11:48.0009387Z # fail 0
+2026-10-18T00:11:48.0009796Z # skipped 1
+2026-10-18T00:11:48.1573928Z PASS effective build-time import config is OFF (.env.production="false"; CRA loader agrees: "false")
+2026-10-18T00:12:00.1383561Z PASS shipped JS proves import OFF (canary=false x1, =true x0, inlined true x0, disabled copy x2)
+2026-10-18T00:12:00.1869117Z PASS negative control: import canary detects the opted-in emulator build (=true)
+2026-10-18T00:12:00.1872855Z RESULT: 17 passed, 0 failed
