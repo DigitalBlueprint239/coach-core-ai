@@ -1,0 +1,2120 @@
+[
+  {
+    "name": "baseline OFF",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-I3Jl9y",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-I3Jl9y",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2119
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-I3Jl9y",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2119
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "baseline ON",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-1n4kYe",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>o.current===a,i),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=true\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===Jv(localStorage,{uid:e,teamId:t})?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 1,
+      "writes": 2
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-1n4kYe",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2119
+              ],
+              "markerAttr": "coachcore:import-config=true",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "enabled",
+                  "detail": "not provably OFF (function has 4 parameter(s); parameter/default initialisation runs before the body); executed with 4 actual-mapped argument(s): resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+                  "declCount": 4,
+                  "basis": "execution",
+                  "kind": "module-function"
+                },
+                "decline": {
+                  "outcome": "enabled",
+                  "detail": "not provably OFF (function has 2 parameter(s); parameter/default initialisation runs before the body); executed with 2 actual-mapped argument(s): resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+                  "declCount": 1,
+                  "basis": "execution",
+                  "kind": "module-function"
+                }
+              }
+            }
+          ],
+          "verdict": "on",
+          "reasons": [
+            "import is ENABLED in the shipped executable code (not provably OFF (function has 4 parameter(s); parameter/default initialisation runs before the body); executed with 4 actual-mapped argument(s): resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2)"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-1n4kYe",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2119
+              ],
+              "markerAttr": "coachcore:import-config=true",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "enabled",
+                  "basis": "execution",
+                  "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+                  "kind": "module-function",
+                  "declCount": 4
+                },
+                "decline": {
+                  "outcome": "enabled",
+                  "basis": "execution",
+                  "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+                  "kind": "module-function",
+                  "declCount": 1
+                }
+              }
+            }
+          ],
+          "verdict": "on",
+          "reasons": [
+            "import is ENABLED in the shipped executable code (not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2)"
+          ],
+          "ok": false
+        }
+      }
+    }
+  },
+  {
+    "name": "D1 argument getter evaluated before the throw",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-QCDwt2",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\nconst argBox={get value(){i.copy({}, {id:\"argument-getter\"});return localStorage}};\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(argBox.value),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(argBox.value)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-QCDwt2",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2202
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [
+                "accept: import call argument is not effect-free (member access argBox.value (possible accessor))",
+                "decline: import call argument is not effect-free (member access argBox.value (possible accessor))"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: import call argument is not effect-free (member access argBox.value (possible accessor))",
+            "inconclusive: decline: import call argument is not effect-free (member access argBox.value (possible accessor))"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-QCDwt2",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2202
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D1 default parameter runs before the body",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-xSZDru",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(x=i.copy({}, {id:\"default\"})){throw new Error(zv)}(),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(x=i.copy({}, {id:\"default\"})){throw new Error(zv)}()?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-xSZDru",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2151
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (function has 1 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)",
+                  "basis": "none",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (function has 1 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)",
+                  "basis": "none",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: executor not provably OFF (function has 1 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)",
+            "inconclusive: decline not provably OFF (function has 1 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-xSZDru",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2151
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D1 handler default-getter parameter",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-PRYQEq",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\nconst argBox={get value(){i.copy({}, {id:\"argument-getter\"});return localStorage}};\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async(x=argBox.value)=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-PRYQEq",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2216
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [
+                "accept: handler has 1 parameter(s) (parameter/default initialisation is not analysed)",
+                "accept: MemberExpression is outside the recognised grammar",
+                "accept: AssignmentPattern is outside the recognised grammar"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: handler has 1 parameter(s) (parameter/default initialisation is not analysed)",
+            "inconclusive: accept: MemberExpression is outside the recognised grammar",
+            "inconclusive: accept: AssignmentPattern is outside the recognised grammar"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-PRYQEq",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2216
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D1 onClick wrapper reads an effectful getter",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-46N4Y7",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\nconst argBox={get value(){i.copy({}, {id:\"argument-getter\"});return localStorage}};\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y();argBox.value},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-46N4Y7",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2215
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [
+                "accept: onClick body is more than the single handler call"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: onClick body is more than the single handler call"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-46N4Y7",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2215
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D1 destructured local that is backend code, not a verified setter",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-VVolwG",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=[!1,()=>i.copy({}, {id:\"local\"})],[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 2,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-VVolwG",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2134
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [
+                "accept: call f() is not a verified React state setter"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: call f() is not a verified React state setter"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-VVolwG",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2134
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D2 computed literal global replacement globalThis[\"Error\"]",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-Guy6rB",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\nglobalThis[\"Error\"]=function(msg){i.copy({}, {id:\"constructor\"});this.message=msg};\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-Guy6rB",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2202
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (global \"Error\" is assigned or redefined somewhere in the shipped chunks (not trusted as the engine builtin)); cannot reconstruct a faithful closure (builtin \"Error\" is assigned or redefined as a global)",
+                  "basis": "none",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (global \"Error\" is assigned or redefined somewhere in the shipped chunks (not trusted as the engine builtin)); cannot reconstruct a faithful closure (builtin \"Error\" is assigned or redefined as a global)",
+                  "basis": "none",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: executor not provably OFF (global \"Error\" is assigned or redefined somewhere in the shipped chunks (not trusted as the engine builtin)); cannot reconstruct a faithful closure (builtin \"Error\" is assigned or redefined as a global)",
+            "inconclusive: decline not provably OFF (global \"Error\" is assigned or redefined somewhere in the shipped chunks (not trusted as the engine builtin)); cannot reconstruct a faithful closure (builtin \"Error\" is assigned or redefined as a global)"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-Guy6rB",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1368,
+                2202
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D2 unresolved constructor is not trusted as native",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-YHJZMw",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new CustomError(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new CustomError(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-YHJZMw",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2131
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (thrown constructor \"CustomError\" is not the engine's Error (only the native Error binding is trusted)); cannot reconstruct a faithful closure (free identifier \"CustomError\" is not a module-scope declaration or a pure builtin)",
+                  "basis": "none",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (thrown constructor \"CustomError\" is not the engine's Error (only the native Error binding is trusted)); cannot reconstruct a faithful closure (free identifier \"CustomError\" is not a module-scope declaration or a pure builtin)",
+                  "basis": "none",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: executor not provably OFF (thrown constructor \"CustomError\" is not the engine's Error (only the native Error binding is trusted)); cannot reconstruct a faithful closure (free identifier \"CustomError\" is not a module-scope declaration or a pure builtin)",
+            "inconclusive: decline not provably OFF (thrown constructor \"CustomError\" is not the engine's Error (only the native Error binding is trusted)); cannot reconstruct a faithful closure (free identifier \"CustomError\" is not a module-scope declaration or a pure builtin)"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-YHJZMw",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2131
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "D3 ON control must not drop explicit false arguments",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-BC23Rc",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r,on=true){if(!on)throw new Error(zv);if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t,on=true){if(!on)throw new Error(zv);if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>true,i,false),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=true\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===Jv(localStorage,{uid:e,teamId:t},false)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-BC23Rc",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1355,
+                2192
+              ],
+              "markerAttr": "coachcore:import-config=true",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (function has 5 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)",
+                  "basis": "none",
+                  "kind": "module-function"
+                },
+                "decline": {
+                  "outcome": "inconclusive",
+                  "detail": "not provably OFF (function has 3 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)",
+                  "basis": "none",
+                  "kind": "module-function"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: executor not provably OFF (function has 5 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)",
+            "inconclusive: decline not provably OFF (function has 3 parameter(s); parameter/default initialisation runs before the body); callee has default/destructured/rest parameters (their initialisation is not analysed)"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-BC23Rc",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1355,
+                2192
+              ],
+              "markerAttr": "coachcore:import-config=true",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "enabled",
+                  "basis": "execution",
+                  "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+                  "kind": "module-function",
+                  "declCount": 5
+                },
+                "decline": {
+                  "outcome": "enabled",
+                  "basis": "execution",
+                  "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+                  "kind": "module-function",
+                  "declCount": 2
+                }
+              }
+            }
+          ],
+          "verdict": "on",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "React state functional updater",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-TMZFk2",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=typeof v===\"function\"?v(s[0]):v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(()=>{i.copy({}, {id:\"updater\"});return true}),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-TMZFk2",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1315,
+                2191
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-TMZFk2",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1315,
+                2191
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "coercion of local value",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-QZxvy5",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nconst evil={valueOf(){i.copy({}, {id:\"coercion\"});return 1}};function Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(+evil),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-QZxvy5",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1346,
+                2183
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-QZxvy5",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1346,
+                2183
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "explicit global receiver defeats strict this assumption",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-FisHoB",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction poison(){this.Error=function(msg){i.copy({}, {id:\"this-global\"});this.message=msg}}poison.call(globalThis);function Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-FisHoB",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1401,
+                2235
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-FisHoB",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1401,
+                2235
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "Reflect alias rewrites Error",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-a8DUaE",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nconst R=Reflect;R.set(globalThis,\"Error\",function(msg){i.copy({}, {id:\"reflect-alias\"});this.message=msg});function Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-a8DUaE",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1392,
+                2226
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-a8DUaE",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1392,
+                2226
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "unverified require function returns malicious hooks",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-jRqHcb",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),r===950?{...s.exports,useState:x=>[x,()=>globalThis.i.copy({}, {id:\"require\"})]}:s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 4,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-jRqHcb",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1366,
+                2200
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-jRqHcb",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1366,
+                2200
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "ref current accessor installed in component",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-pFBCbq",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);Object.defineProperty(o,\"current\",{get(){i.copy({}, {id:\"ref-getter\"});return a}});const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 2,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-pFBCbq",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2190
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-pFBCbq",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2190
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "outer finally executes after inner rejection",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-uuX6o1",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}}finally{i.copy({}, {id:\"outer-finally\"})}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-uuX6o1",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2165
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-uuX6o1",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2165
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [
+                "accept: 1 unresolved call(s) in the handler (callee is a MemberExpression) — every call must be accounted for"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: 1 unresolved call(s) in the handler (callee is a MemberExpression) — every call must be accounted for"
+          ],
+          "ok": false
+        }
+      }
+    }
+  },
+  {
+    "name": "duplicate onClick selects uninspected handler",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-aRBQN4",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},onClick:()=>{i.copy({}, {id:\"duplicate\"})},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-aRBQN4",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2162
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-aRBQN4",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2162
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "ON predicate mapping is not faithful",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-bnOlpa",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=\"stale\";const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>o.current===a,i),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=true\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===Jv(localStorage,{uid:e,teamId:t})?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 1
+    },
+    "scans": {
+      "cab8": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-bnOlpa",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2125
+              ],
+              "markerAttr": "coachcore:import-config=true",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "enabled",
+                  "detail": "not provably OFF (function has 4 parameter(s); parameter/default initialisation runs before the body); executed with 4 actual-mapped argument(s): resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+                  "declCount": 4,
+                  "basis": "execution",
+                  "kind": "module-function"
+                },
+                "decline": {
+                  "outcome": "enabled",
+                  "detail": "not provably OFF (function has 2 parameter(s); parameter/default initialisation runs before the body); executed with 2 actual-mapped argument(s): resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+                  "declCount": 1,
+                  "basis": "execution",
+                  "kind": "module-function"
+                }
+              }
+            }
+          ],
+          "verdict": "on",
+          "reasons": [],
+          "ok": true
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-bnOlpa",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2125
+              ],
+              "markerAttr": "coachcore:import-config=true",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "enabled",
+                  "basis": "execution",
+                  "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved [\"srv-proof-p1\"]; backend.copy x1, backend.read x1, storage writes 2",
+                  "kind": "module-function",
+                  "declCount": 4
+                },
+                "decline": {
+                  "outcome": "enabled",
+                  "basis": "execution",
+                  "detail": "not provably OFF (first statement is IfStatement, not an unconditional throw); executed: resolved \"declined\"; backend.copy x0, backend.read x0, storage writes 1",
+                  "kind": "module-function",
+                  "declCount": 1
+                }
+              }
+            }
+          ],
+          "verdict": "on",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "getter argument direct (must reject)",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-qjjN91",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nconst argBox={get value(){i.copy({}, {id:\"getter\"});return localStorage}};function Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(argBox.value),o.current===a&&(c(0),null===s||void 0===s||s())}catch{o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 1,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-qjjN91",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1359,
+                2193
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [
+                "accept: import call argument is not effect-free (member access argBox.value (possible accessor))"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: import call argument is not effect-free (member access argBox.value (possible accessor))"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-qjjN91",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1359,
+                2193
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  },
+  {
+    "name": "catch member read (must reject)",
+    "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-XgskBo",
+    "code": "(()=>{\"use strict\";var e={983:(e,t)=>{var n=Symbol.for(\"react.transitional.element\"),i=Symbol.for(\"react.fragment\");t.Fragment=i;t.useState=function(e){var s=[e,function(v){s[0]=v}];return s};t.useRef=function(e){return{current:e}};t.useEffect=function(){}},950:(e,t,n)=>{e.exports=n(983)}},t={};function n(r){var i=t[r];if(void 0!==i)return i.exports;var s=t[r]={exports:{}};return e[r](s,s.exports,n),s.exports}\n(()=>{\"use strict\";var r=n(950);const jsx=(a,b)=>({a,b}),zv=\"Device-play import is disabled in this build. Originals preserved.\",$v=\"smartPlaybook_plays\",Bv=e=>`coachcore:v1:${e}:legacyImportDecision`,qv=\"coachcore:v1:legacyImportClaim\";\n\nfunction Hv(e){const t=e.getItem($v);if(!t)return[];const n=JSON.parse(t);if(!Array.isArray(n))throw new Error(\"Invalid legacy library.\");return n}\nasync function Kv(e,t,n,r){if(!n())throw new Error(\"Account or team changed.\");const s=Hv(e);if(!s.length)return[];e.setItem(qv,JSON.stringify({uid:t.uid,status:\"pending\",teamId:t.teamId}));const a=[];for(const o of s){const i=await r.copy(t,o);await r.read(t,i);a.push(i)}return e.setItem(Bv(t.uid),JSON.stringify({decision:\"imported\",ids:a})),a}\nfunction Jv(e,t){if(e.getItem(Bv(t.uid)))return\"declined\";return e.setItem(Bv(t.uid),JSON.stringify({decision:\"declined\"})),\"declined\"}\nfunction Uv({uid:e,teamId:t,teamName:n,backend:i,onImported:s}){const a=`${e}:${t}`,o=(0,r.useRef)(a);o.current=a;const[l,c]=(0,r.useState)(1),[u,d]=(0,r.useState)(\"\"),[h,f]=(0,r.useState)(!1),[p,m]=(0,r.useState)(!1);\nconst y=async()=>{f(!0),d(\"\");try{await async function(){throw new Error(zv)}(localStorage),o.current===a&&(c(0),null===s||void 0===s||s())}catch(err){err.message;o.current===a&&d(\"Import not completed.\")}finally{o.current===a&&f(!1)}};\nreturn jsx(\"section\",{\"aria-label\":\"Import device plays\",\"data-import-config\":\"coachcore:import-config=false\",children:[jsx(\"button\",{disabled:h,onClick:()=>{y()},children:h?\"Verifying copies\\u2026\":\"Import plays\"}),jsx(\"button\",{disabled:h,onClick:()=>{try{\"postponed\"===function(){throw new Error(zv)}(localStorage)?m(!0):c(0)}catch{d(\"Decision could not be saved.\")}},children:\"Not now\"})]})}\nif(typeof self!==\"undefined\")self.__fixtureComponent=Uv})()})();",
+    "actual_accept": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "actual_decline": {
+      "copies": 0,
+      "reads": 0,
+      "writes": 0
+    },
+    "scans": {
+      "cab8": {
+        "exit": 1,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-XgskBo",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2136
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "props": {
+                "uid": "e",
+                "teamId": "t",
+                "teamName": "n",
+                "backend": "i",
+                "onImported": "s"
+              },
+              "errors": [
+                "accept: member access err.message (possible accessor)"
+              ],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "zero-parameter function whose first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "inconclusive",
+          "reasons": [
+            "inconclusive: accept: member access err.message (possible accessor)"
+          ],
+          "ok": false
+        }
+      },
+      "d14": {
+        "exit": 0,
+        "report": {
+          "dir": "/tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/codex4/repro/out/bundle-XgskBo",
+          "entryChunks": [
+            "static/js/main.abc.js"
+          ],
+          "components": [
+            {
+              "chunk": "static/js/main.abc.js",
+              "componentRange": [
+                1285,
+                2136
+              ],
+              "markerAttr": "coachcore:import-config=false",
+              "errors": [],
+              "exec": {
+                "executor": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                },
+                "decline": {
+                  "outcome": "disabled",
+                  "basis": "static",
+                  "detail": "first statement throws const zv = disabled message literal",
+                  "kind": "inline"
+                }
+              }
+            }
+          ],
+          "verdict": "off",
+          "reasons": [],
+          "ok": true
+        }
+      }
+    }
+  }
+]
