@@ -1,6 +1,6 @@
 # Release-proof repair: import default-OFF proven from build inputs AND shipped output
 
-Date: 2026-10-18 (revised after the independent FAIL review of `c9d49dd`, comment 6243708455). Author: Claude.
+Date: 2026-10-18 (revised after the independent FAIL reviews of `c9d49dd` c-6243708455 and `905b1d4` c-6246331436). Author: Claude.
 **Delivery, not independent acceptance. No merge/deploy; MVP NO-GO.**
 
 ## Finding (evidence 73, PR #76 review)
@@ -27,64 +27,73 @@ two support drafts under `docs/support/`. **Unchanged:** the enable check
 opt-ins, identity UI, e2e tests/config/reporter/evidence scripts, membership (76/15), execution settings.
 PR #77 (aggregate gate) is separate and untouched.
 
+## Design rationale (second revision)
+
+The second review showed that *executing a reconstructed closure* can never be trusted to say OFF: a
+reconstruction can omit later initialisation (`cfg.enabled = true`), substitute an empty VM for shipped
+global state (`globalThis.proofEnabled`), drop actual call arguments, ignore an unresolved call that runs
+first, or pick one of two handlers. Every one of those produced a false OFF while the real button copied.
+
+Options considered:
+- **Real browser, real UI wiring.** The import section renders only for an authenticated coach with a
+  selected team; the release-shaped bundle targets the staging project with a placeholder key and has no
+  emulator wiring, so driving it requires faking Firebase Auth and Firestore protocols under Playwright.
+  Not feasible as a bounded repair, and still would not isolate the component from the parent's state.
+- **Whole-module execution with webpack's own runtime.** The main chunk is a self-contained IIFE whose app
+  module runs `createRoot(...).render(<App/>)` on evaluation; the component is not exported. Executing it
+  needs a DOM and the same auth state. Same problem.
+- **Static, environment-independent OFF contract + execution only for ON.** Chosen. The release build's
+  compiled handlers are `async function(){throw new Error(zv)}(localStorage)` — an *unconditional first
+  statement throw*. Such a function cannot reach a backend regardless of its arguments, closures, globals
+  or later initialisation; the only things that must hold are that the thrown message really is the
+  disabled constant (a `const` bound to the string literal — primitives bound by `const` cannot change) and
+  that `Error` has not been replaced (not declared in scope; not assigned/`defineProperty`'d as a global
+  anywhere in the chunk). No argument is synthesised and no environment is reconstructed for OFF.
+  Handler binding accounts for **every** direct call (setters/props allowed; any member-expression call,
+  unresolved callee, second handler, extra await or ambiguity is inconclusive). ON is proved by execution
+  only when every free identifier is a pure builtin, a module-scope function or an immutable-literal
+  const, none reassigned/mutated (scope-aware), and backend reads, copies and storage writes are all
+  counted; otherwise inconclusive. The data attribute must agree with the verdict.
+
+Residual limits stated plainly: static analysis cannot exclude dynamic code (`eval`/`new Function`) that
+rewrites behaviour at run time; the retained shipped JS (below) exists so a reviewer can inspect exactly
+what was judged. The proof is a release-*shaped* build, not a deployment.
+
 ## What the proof now requires (fail closed)
 1. `.env.production` contains the exact line `REACT_APP_ENABLE_LEGACY_IMPORT=false` (necessary, not sufficient).
-2. **Effective build-time value** resolved twice — independently (dotenv, CRA precedence; no dotenv-expand) and
-   by CRA's own loader in a child process — must agree, be exactly `"false"`, and come from a committed-basename
-   file (`.env.production` or `.env`; this is a basename allowlist, not a git-tracking check). An enabling
-   shell variable / `.env.local` / `.env.production.local`, a local pin to `false`, a malformed value, an unset
-   flag, or a loader disagreement (e.g. `${VAR}` expansion) all FAIL **before any build is produced**.
-3. **Executable output verification (F1 repair).** Only the chunks `index.html` actually ships are considered.
-   Each is parsed (acorn; comments never reach the AST). The import UI component is located as the single
-   function containing the literal `"Import plays"`; its accept button's `onClick` is followed to the accept
-   handler and to the awaited call, whose callee is the compiled import EXECUTOR (inline after terser folding,
-   or a module-scope function resolved by identifier); the `"Not now"` button yields the compiled DECLINE
-   function the same way. Both are extracted with the transitive closure of the module-scope declarations they
-   reference and **executed in a fresh VM** against in-memory storage, a session and a spy backend. OFF ⇔ the
-   executor rejects with the disabled message before any storage write or backend call AND decline throws it
-   too; ON ⇔ the executor reaches `backend.copy`. The component's own `data-import-config` literal must agree
-   with the executed verdict. Comments, orphan files, OFF prose beside enabled code, an enabled executor behind
-   an OFF marker, a decoy rejecting function that is not wired to the button, two components, an unparseable
-   chunk or an unbindable handler all FAIL (inconclusive = FAIL).
-4. **Negative control (now required, not optional).** The same executable analysis must find the explicitly
-   opted-in emulator build (`EMULATOR_BUILD_DIR`, default `e2e/.app-build`) **ON**; a missing emulator build
-   fails the proof. The legacy hook/port/demo string controls remain.
-5. **Retention (F3 repair).** With `RELEASE_RETAIN_DIR` set (CI: `e2e/ci-evidence/release-build`), the exact
-   inspected output is kept: `index.html`, `static/js/*.js`, `asset-manifest.json` and `release-build.context`
-   (candidate/head sha, run id/attempt, matrix project/bucket, node/react-scripts versions, effective import
-   config, executable verdict, sha256 of the build manifest and the full manifest). No source maps are generated
-   and no `.env*` file is ever copied. B15 inventories, hashes and uploads the directory with the job's evidence.
+2. **Effective build-time value** resolved independently and by CRA's loader (child process): must agree, be
+   exactly `"false"`, from a committed-basename file. Enabling shell/local files, local pins, malformed/unset
+   values or loader disagreement (e.g. `${VAR}` expansion) FAIL **before any build**.
+3. **Shipped import implementation OFF** by the static contract above, bound through the real button
+   handlers of the single `"Import plays"` component in the chunks `index.html` ships.
+4. **Negative control (required):** the same analysis must find the opted-in emulator build ON by execution.
+5. **Retention:** `RELEASE_RETAIN_DIR` keeps `index.html`, `static/js/*.js`, `asset-manifest.json` and
+   `release-build.context` (SHAs, run/attempt, matrix job, versions, effective config, verdict, manifest
+   hash + full manifest); no source maps, no `.env*`. CI retains under `e2e/ci-evidence/release-build`,
+   inventoried/hashed/uploaded by B15. Not retained: CSS, `sw.js`, headers/redirects, robots/sitemap,
+   LICENSE (manifest-only).
 
-## Validation (head after repair)
-- `node scripts/security/release-import-config.test.mjs` — 15 fast + 2 slow (`RELEASE_PROOF_BUILD=1`), **17/17**:
-  resolve (pin OK; `.env.local`/`.env.production.local`/shell enabling FAIL; shell/local false FAIL; 8 malformed,
-  unset, `.env`-only FAIL; `${VAR}` expansion inconclusive FAIL; precedence = CRA); synthetic CRA/terser-shaped
-  bundles: OFF proven by execution, ON detected, module-scope executor resolved and executed with its closure;
-  **reviewer decoys 1–4** (comment-only OFF strings beside enabled code; enabled `main.js` + orphan with OFF
-  strings; enabled behaviour behind OFF marker + prose; comment-only ON marker in negative-control) all FAIL;
-  decoy rejecting function not wired to the button FAILS; fail-closed cases (no `index.html`, missing referenced
-  chunk, no component, two components, unparseable chunk, other rejection message); **old scanner (`c9d49dd`)
-  demonstrably passes decoys 1–2 while the repaired scanner fails them**; source contract; two end-to-end real
-  script refusals (shell override; temporary enabling `.env.local`); **real build asserting process exit 0**,
-  the 17-PASS RESULT line, executed-OFF line, ON negative control and the retained output (files, provenance,
-  retained JS byte-identical to the manifest); **F2 regression: a broken negative control (comment-only ON
-  marker fixture) makes the real proof exit non-zero and the check asserts that status** even though every OFF
-  PASS line is still printed.
-- `bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239` with a fresh same-commit emulator
-  build: **17 passed, 0 failed**, incl. `shipped executable import code is OFF (static/js/main.<hash>.js:
-  executor inline -> disabled, decline inline -> disabled, data-import-config=coachcore:import-config=false)` and
-  `negative control: executable analysis detects the opted-in emulator build as ON`. The same analysis on the
-  enabled emulator build: verdict ON (executor `backend.copy x1`, decline returned "declined").
-- Import unit suites 49/49; `tsc --noEmit` clean; reporter 10/10; evidence 19.
+## Validation
+- `node scripts/security/release-import-config.test.mjs`: 26 checks — 24 fast + 2 real-build
+  (`RELEASE_PROOF_BUILD=1`) → **26/26, 0 skipped** locally. Includes: resolve cases; synthetic CRA/terser-shaped
+  bundles (OFF decided on a *static* basis, ON by execution); first-review decoys 1–4 + unwired decoy;
+  **second-review probes R1–R3 (all six)**, each asserting (a) the whole-module "actual behaviour" harness
+  really copies/reads/writes, (b) the repaired scanner refuses OFF, (c) the `905b1d4` scanner (from git) gave a
+  false OFF; baselines; replaced/redefined/shadowed `Error` and `let` message rejected; mutable closure makes
+  ON detection fail closed; fail-closed binding cases; old `c9d49dd` scanner vs new; source contract; two
+  end-to-end real-script refusals; real build asserting **process exit 0**, the 17-PASS line, static-OFF line,
+  ON control and retained output; F2 regression (broken ON control → non-zero exit asserted).
+- `verify-release-build.sh` on this head with a fresh same-commit emulator build: **17 passed, 0 failed**.
+- Import suites 49/49; `tsc` clean; reporter 10/10; evidence 19.
+- In CI the self-check step annotates `tests/pass/fail/skipped` explicitly; its real-build cases and the
+  old-commit comparisons are **skipped there** (shallow checkout; the proof step builds anyway) — skips are
+  reported as skips, never as passes.
 
 ## Independent Codex re-review checklist
-1. Diff vs `61448f0`; the application change is still only the marker constant + `data-import-config`.
-2. Re-run the reviewer decoys from the FAIL review against `scan`/`negative-control`; try new ones (e.g. a
-   component whose handler calls through a MemberExpression, a chunk-split executor) — these must be
-   inconclusive-FAIL, never PASS.
-3. Run `RELEASE_PROOF_BUILD=1 node scripts/security/release-import-config.test.mjs` (two real builds).
-4. Confirm the F2 regression: a broken `EMULATOR_BUILD_DIR` makes the proof exit 1 and the suite fails.
-5. Inspect the CI-retained `ci-evidence/release-build/` in the ZIPs: run `scan` on it yourself; recompute the JS
-   hash against `release-build.context`'s manifest; confirm no `.env*`, no source maps.
-6. Read the two drafts against the authoritative boundary (issue #39 c-6224877757; RUNTIME_IMPORT_CANDIDATE
-   §support boundary): no bypass, no invented verification, existing/proposed/decisions clearly separated.
+1. Re-run your six probes and the whole-module harness against `scan`; add new shapes (member-expression
+   callee, second awaited call, `Object.defineProperty(globalThis,'Error',…)`, `let` message) — none may PASS.
+2. Confirm the real OFF build is decided `[static]` and the real emulator build is `on` by execution with
+   reads counted.
+3. `RELEASE_PROOF_BUILD=1 node scripts/security/release-import-config.test.mjs` (26/26 with full history).
+4. Inspect the CI-retained `ci-evidence/release-build/` and the self-check annotation counts.
+5. Drafts unchanged from the corrected `905b1d4` versions.

@@ -95,8 +95,15 @@ jobs:
           # Playwright's "clear output" task deletes outputDir (e2e/test-results) at run
           # start, which previously destroyed run.log and the release manifest before upload.
           mkdir -p e2e/test-results e2e/ci-evidence
-      - name: Release-proof self-checks (import default-OFF resolution, canary scan, fail-closed cases)
-        run: node scripts/security/release-import-config.test.mjs
+      - name: Release-proof self-checks (import default-OFF resolution, executable OFF/ON analysis, fail-closed cases)
+        run: |
+          set -o pipefail
+          node scripts/security/release-import-config.test.mjs 2>&1 | tee /tmp/release-proof-selfchecks.txt
+          # Accurate pass/fail/skip accounting as an annotation (job logs are not always reachable by reviewers).
+          t=$(grep -E '^# tests ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); p=$(grep -E '^# pass ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')
+          f=$(grep -E '^# fail ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); k=$(grep -E '^# skipped ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')
+          sk=$(grep -E '^(ok|not ok) .* # SKIP' /tmp/release-proof-selfchecks.txt | sed -E 's/^(ok|not ok) ([0-9]+) - .*# SKIP ?/\2: /' | cut -c1-80 | tr '\n' ';')
+          echo "::notice title=Release-proof self-checks (${{ matrix.bucket }} ${{ matrix.project }})::tests=${t} pass=${p} fail=${f} skipped=${k} (skipped tests are NOT passes): ${sk}"
       - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build; import proven OFF by executing shipped code)
         env:
           MATRIX_PROJECT: ${{ matrix.project }}

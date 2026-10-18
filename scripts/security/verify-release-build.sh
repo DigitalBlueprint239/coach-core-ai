@@ -76,7 +76,7 @@ if grep -rqF "$PROJECT" "$OUT"; then pass "bundle targets $PROJECT"; else fail "
 # it too; the component's data-import-config literal must agree. Comments, orphan files and OFF
 # prose next to enabled code cannot satisfy this; anything unbindable is inconclusive and FAILS.
 if sc="$(node scripts/security/release-import-config.js scan "$OUT")"; then
-  pass "shipped executable import code is OFF ($(node -e 'const r=JSON.parse(process.argv[1]);const c=r.components[0];console.log(c.chunk+": executor "+c.exec.executor.kind+" -> "+c.exec.executor.outcome+", decline "+c.exec.decline.kind+" -> "+c.exec.decline.outcome+", data-import-config="+c.markerAttr)' "$sc"))"
+  pass "shipped executable import code is OFF ($(node -e 'const r=JSON.parse(process.argv[1]);const c=r.components[0];console.log(c.chunk+": executor "+c.exec.executor.kind+" -> "+c.exec.executor.outcome+" ["+c.exec.executor.basis+"], decline "+c.exec.decline.kind+" -> "+c.exec.decline.outcome+" ["+c.exec.decline.basis+"], data-import-config="+c.markerAttr)' "$sc"))"
 else fail "import executable" "$(node -e 'const r=JSON.parse(process.argv[1]);console.log(r.reasons.join(" | "))' "$sc" 2>/dev/null || echo 'scan failed')"; fi
 js=$(find "$OUT" -name '*.js' | wc -l | tr -d ' ')
 if [[ "$js" -ge 1 ]]; then pass "$js JS files scanned"; fi

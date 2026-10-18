@@ -20,23 +20,29 @@
 //   scan <build-dir>            -> PASS only if the SHIPPED import implementation is OFF
 //   negative-control <build-dir> -> PASS only if the SHIPPED import implementation is ON
 //
-// How `scan` binds to executable behaviour (F1 of the independent review):
-//   1. Only chunks referenced by <script src> in <build-dir>/index.html are considered
-//      (orphan/decoy files are ignored; no index.html => inconclusive).
-//   2. Each chunk is PARSED (acorn). Comments never reach the AST. The import UI component is
-//      located as the single function containing the string literal "Import plays".
-//   3. From that component's "Import plays" button the onClick handler is followed to the
-//      accept function, and inside it to the awaited call: the callee is the shipped import
-//      EXECUTOR (an inline function after terser folding, or a module-scope function). The
-//      "Not now" button yields the shipped DECLINE function the same way.
-//   4. Both functions are extracted with the transitive closure of the module-scope
-//      declarations they reference and EXECUTED in a fresh VM context against an in-memory
-//      storage, a session and a spy backend. OFF means: the executor rejects with the
-//      disabled message before any storage write or backend call AND decline throws the same;
-//      ON means: the executor reaches backend.copy. Anything else is inconclusive.
-//   5. The component's own "data-import-config" literal must agree with the executed verdict.
-//   Decoy comments, orphan files, OFF prose next to enabled code, or an enabled executor
-//   behind an OFF marker all FAIL; a scan that cannot bind to the component FAILS (closed).
+// How `scan` decides (redesigned after the second independent review, R1–R3):
+//   1. Only chunks referenced by <script src> in <build-dir>/index.html are considered.
+//   2. Each chunk is PARSED (acorn; comments never reach the AST). The import UI component is
+//      the single function containing the literal "Import plays".
+//   3. The "Import plays" and "Not now" buttons' onClick handlers are followed with EVERY direct
+//      call accounted for: an onClick may either perform the import call itself or call exactly
+//      one component-local handler; inside that body exactly one call may be import code (an
+//      inline function or a module-scope function); every other call must be a component-local
+//      setter/prop; any member-expression call, unresolved callee, second handler, extra await
+//      or ambiguity is INCONCLUSIVE (fails). Actual arguments are never substituted.
+//   4. OFF is decided STATICALLY and soundly: the bound function's first statement must be an
+//      unconditional `throw new <Ctor>(<msg>)` whose message is the disabled literal or a const
+//      bound to that literal, with <Ctor> neither declared in scope nor assigned/redefined as a
+//      global anywhere in the chunk. No closure is reconstructed, no environment is synthesised:
+//      an unconditional first-statement throw cannot reach a backend whatever the arguments,
+//      closures or global state are.
+//   5. ON is proved by EXECUTION only when every free identifier of the bound function is a pure
+//      builtin, a module-scope function, or a module-scope const bound to an immutable literal,
+//      none reassigned or mutated anywhere (scope-aware). Backend reads, copies and storage
+//      writes are all counted. Anything else is inconclusive.
+//   6. The component's own "data-import-config" literal must agree with the verdict.
+//   Decoy comments/orphans/prose, mutable or global-dependent closures, dropped arguments,
+//   extra backend calls before an inlined throw, ambiguous handlers and backend reads all FAIL.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -156,55 +162,186 @@ function isReference(id) {
   if (p.type === 'CatchClause' && p.param === id) return false;
   return true;
 }
-const GLOBALS = new Set(['Object', 'Array', 'JSON', 'Error', 'TypeError', 'RangeError', 'Number', 'Date', 'Set', 'Map', 'WeakMap', 'WeakSet', 'Promise', 'Math', 'String', 'Boolean', 'Symbol', 'undefined', 'NaN', 'Infinity', 'isFinite', 'isNaN', 'parseInt', 'parseFloat', 'encodeURIComponent', 'decodeURIComponent', 'Reflect', 'Proxy', 'arguments', 'globalThis']);
+// Pure builtins the ON-detection execution may reference. Nothing that reads environment or
+// mutable global state (no globalThis/window/self/document/localStorage/fetch/console).
+const PURE_GLOBALS = new Set(['Object', 'Array', 'JSON', 'Error', 'TypeError', 'RangeError', 'Number', 'Date', 'Set', 'Map', 'Promise', 'Math', 'String', 'Boolean', 'Symbol', 'undefined', 'NaN', 'Infinity', 'isFinite', 'isNaN', 'parseInt', 'parseFloat', 'encodeURIComponent', 'decodeURIComponent']);
+const isImmutableLiteral = (n) => n && ((n.type === 'Literal' && (typeof n.value === 'string' || typeof n.value === 'number' || typeof n.value === 'boolean' || n.value === null)) || (n.type === 'TemplateLiteral' && n.expressions.length === 0));
+const declKind = (d) => { for (let p = d.parent; p; p = p.parent) if (p.type === 'VariableDeclaration') return p.kind; return null; };
 
-// Source closure: the function text plus every outer (module-scope) declaration it needs, transitively.
-function closureFor(fnNode, code) {
-  const decls = [];
-  const seen = new Set();
-  const problems = [];
+// Scope-aware assignment tracking. Minified names are reused across scopes, so an assignment
+// counts against a binding only when the assignment target RESOLVES to that same declaration.
+//   decls   : Set of declaration ranges that are reassigned/updated (or whose object is mutated)
+//   globals : names assigned as globals — bare `Error = ...`, or `globalThis.Error = ...`,
+//             `self.x = ...`, `window.x = ...`, `global.x = ...` anywhere in the chunk
+const GLOBAL_OBJECTS = new Set(['globalThis', 'self', 'window', 'global']);
+function assignmentIndex(ast) {
+  const decls = new Set(); const globals = new Set();
+  const mark = (t) => {
+    if (!t) return;
+    if (t.type === 'Identifier') { const r = resolveName(t.name, t); if (r) decls.add(r.decl.node.range[0]); else globals.add(t.name); return; }
+    if (t.type === 'MemberExpression') {
+      let o = t; while (o.type === 'MemberExpression') o = o.object;
+      if (o.type === 'Identifier') {
+        const r = resolveName(o.name, o);
+        if (r) decls.add(r.decl.node.range[0]);                       // object held by a binding is mutated
+        else if (GLOBAL_OBJECTS.has(o.name) && t.object === o && !t.computed && t.property.type === 'Identifier') globals.add(t.property.name); // globalThis.X = ... REPLACES a global
+        // A property assignment on an unresolved global (e.g. Error.stackTraceLimit = 10) mutates the
+        // object but does not replace the binding; `throw new Error(...)` still throws. Not recorded.
+      }
+      return;
+    }
+    if (t.type === 'ObjectPattern' || t.type === 'ArrayPattern' || t.type === 'AssignmentPattern' || t.type === 'RestElement') {
+      walk.full(t, (n) => { if (n.type === 'Identifier' && isReference(n) === false && n.parent && (n.parent.type !== 'Property' || n.parent.value === n)) { const r = resolveName(n.name, n); if (r) decls.add(r.decl.node.range[0]); else globals.add(n.name); } });
+    }
+  };
+  walk.full(ast, (n) => {
+    if (n.type === 'AssignmentExpression') mark(n.left);
+    else if (n.type === 'UpdateExpression') mark(n.argument);
+    else if ((n.type === 'ForInStatement' || n.type === 'ForOfStatement') && n.left.type !== 'VariableDeclaration') mark(n.left);
+    else if (n.type === 'CallExpression' && n.callee.type === 'MemberExpression' && !n.callee.computed && n.callee.object.type === 'Identifier' && n.callee.property.type === 'Identifier') {
+      // Object.defineProperty(globalThis, 'Error', ...) / Reflect.set(self, 'Error', ...) / Object.assign(window, {...})
+      const obj = n.callee.object.name, fn = n.callee.property.name, a0 = n.arguments[0];
+      if (((obj === 'Object' && (fn === 'defineProperty' || fn === 'defineProperties' || fn === 'assign')) || (obj === 'Reflect' && (fn === 'set' || fn === 'defineProperty'))) && a0 && a0.type === 'Identifier' && GLOBAL_OBJECTS.has(a0.name) && !resolveName(a0.name, a0)) {
+        const a1 = n.arguments[1];
+        if (a1 && a1.type === 'Literal' && typeof a1.value === 'string') globals.add(a1.value);
+        else if (a1 && a1.type === 'ObjectExpression') for (const pr of a1.properties) { if (pr.type === 'Property' && !pr.computed) globals.add(pr.key.type === 'Identifier' ? pr.key.name : String(pr.key.value)); }
+        else globals.add('*'); // dynamic redefinition of globals: trust nothing builtin
+      }
+    }
+  });
+  return { decls, globals };
+}
+
+// ---- OFF contract (static, environment-independent) ---------------------------------------
+// A function is provably OFF iff its body's FIRST statement is an unconditional
+//     throw new <Ctor>(<msg>)
+// where <msg> is the disabled string literal itself or an identifier bound by a `const` whose
+// initializer is that string literal (primitive const bindings cannot change), and <Ctor> is an
+// identifier that is neither declared nor assigned anywhere in the chunk (so it is the engine's
+// own constructor; even if it were not, `throw` still ends the function before any backend use).
+// No closure is reconstructed and no argument is synthesized: an unconditional first-statement
+// throw cannot reach a backend regardless of arguments, closures or global state.
+function provablyOff(fnNode, idx) {
+  if (!fnNode.body || fnNode.body.type !== 'BlockStatement') return { off: false, why: 'function has an expression body (no statements to inspect)' };
+  const first = fnNode.body.body[0];
+  if (!first || first.type !== 'ThrowStatement') return { off: false, why: `first statement is ${first ? first.type : 'absent'}, not an unconditional throw` };
+  const arg = first.argument;
+  if (!arg || arg.type !== 'NewExpression' || arg.callee.type !== 'Identifier' || arg.arguments.length !== 1) return { off: false, why: 'throw argument is not `new <Ctor>(<msg>)`' };
+  const ctor = arg.callee.name;
+  if (resolveName(ctor, arg.callee)) return { off: false, why: `thrown constructor "${ctor}" is declared in scope (not the engine builtin)` };
+  if (idx.globals.has(ctor) || idx.globals.has('*')) return { off: false, why: `global "${ctor}" is assigned or redefined somewhere in the chunk (not trusted as the engine builtin)` };
+  const m = arg.arguments[0];
+  if (m.type === 'Literal' && m.value === DISABLED_MSG) return { off: true, why: 'first statement throws the disabled message literal' };
+  if (m.type !== 'Identifier') return { off: false, why: 'thrown message is neither the disabled literal nor an identifier' };
+  const r = resolveName(m.name, m);
+  if (!r || r.decl.kind !== 'var') return { off: false, why: `thrown message identifier "${m.name}" does not resolve to a variable declaration` };
+  const d = r.decl.node;
+  if (declKind(d) !== 'const') return { off: false, why: `"${m.name}" is a ${declKind(d)} binding (mutable), not const` };
+  if (!(d.init && d.init.type === 'Literal' && d.init.value === DISABLED_MSG)) return { off: false, why: `const "${m.name}" is not initialised with the disabled message literal` };
+  if (idx.decls.has(d.range[0])) return { off: false, why: `"${m.name}" is assigned somewhere in the chunk` };
+  return { off: true, why: `first statement throws const ${m.name} = disabled message literal` };
+}
+
+// ---- ON detection (execution) -------------------------------------------------------------
+// Used ONLY to prove an opted-in build is enabled (negative control) and to report "on" for an
+// enabled build. The extracted closure is accepted only when every free identifier is (a) a
+// pure builtin, (b) a module-scope FunctionDeclaration / const-bound function (recursively
+// checked), or (c) a module-scope const bound to an immutable literal, and none of them is
+// assigned anywhere in the chunk. Any let/var binding, object/array/call initialiser, global
+// (globalThis/window/self/localStorage/...), `this`, `arguments` or unknown name is REJECTED as
+// inconclusive. Backend reads, copies and storage writes are all counted.
+function closureFor(fnNode, code, idx) {
+  const decls = []; const seen = new Set(); const problems = [];
   const collect = (node, container) => {
     walk.full(node, (n) => {
+      if (n.type === 'ThisExpression') { problems.push('`this` is referenced (environment-dependent)'); return; }
       if (n.type !== 'Identifier' || !isReference(n)) return;
       const r = resolveName(n.name, n);
-      if (!r) { if (!GLOBALS.has(n.name)) problems.push(`free identifier "${n.name}" is not a module-scope declaration or a known global`); return; }
-      if (within(r.decl.node, container) || r.decl.kind === 'param' && within(r.decl.node, container)) return; // local to the function being extracted
-      if (r.decl.kind === 'param' || r.decl.kind === 'pattern') { problems.push(`"${n.name}" resolves to a ${r.decl.kind} outside the import code (component-local state?) — cannot extract`); return; }
-      const key = `${r.decl.node.range[0]}:${n.name}`;
-      if (seen.has(key)) return;
-      seen.add(key);
-      if (r.decl.kind === 'var') { const d = r.decl.node; decls.push({ pos: d.range[0], text: d.init ? `const ${n.name} = ${code.slice(d.init.range[0], d.init.range[1])};` : `let ${n.name};` }); if (d.init) collect(d.init, d.init); }
-      else if (r.decl.kind === 'function' || r.decl.kind === 'class') { const d = r.decl.node; decls.push({ pos: d.range[0], text: code.slice(d.range[0], d.range[1]) + '\n' }); collect(d, d); }
+      if (!r) { if (!PURE_GLOBALS.has(n.name)) problems.push(`free identifier "${n.name}" is not a module-scope declaration or a pure builtin`); else if (idx.globals.has(n.name) || idx.globals.has('*')) problems.push(`builtin "${n.name}" is assigned or redefined as a global in the chunk`); return; }
+      if (within(r.decl.node, container)) return;
+      if (r.decl.kind !== 'var' && r.decl.kind !== 'function') { problems.push(`"${n.name}" resolves to a ${r.decl.kind} outside the function (not a module-scope const/function)`); return; }
+      if (idx.decls.has(r.decl.node.range[0])) { problems.push(`"${n.name}" is assigned or mutated after declaration (mutable binding)`); return; }
+      const key = `${r.decl.node.range[0]}:${n.name}`; if (seen.has(key)) return; seen.add(key);
+      if (r.decl.kind === 'function') { const d = r.decl.node; decls.push({ pos: d.range[0], text: code.slice(d.range[0], d.range[1]) + '\n' }); collect(d, d); return; }
+      const d = r.decl.node;
+      if (declKind(d) !== 'const' || !d.init) { problems.push(`"${n.name}" is not a const with an initialiser`); return; }
+      if (isFn(d.init)) { decls.push({ pos: d.range[0], text: `const ${n.name} = ${code.slice(d.init.range[0], d.init.range[1])};` }); collect(d.init, d.init); return; }
+      if (isImmutableLiteral(d.init)) { decls.push({ pos: d.range[0], text: `const ${n.name} = ${code.slice(d.init.range[0], d.init.range[1])};` }); return; }
+      problems.push(`"${n.name}" is a const bound to a ${d.init.type} (mutable or environment-dependent value); refusing to reconstruct`);
     });
   };
   collect(fnNode, fnNode);
   decls.sort((a, b) => a.pos - b.pos);
   return { preamble: decls.map((d) => d.text).join('\n'), problems, declCount: decls.length };
 }
-function evaluateFunction(fnNode, code) {
-  const { preamble, problems, declCount } = closureFor(fnNode, code);
-  if (problems.length) return { error: problems.join('; '), declCount };
+function evaluateFunction(fnNode, code, idx) {
+  const { preamble, problems, declCount } = closureFor(fnNode, code, idx);
+  if (problems.length) return { error: [...new Set(problems)].join('; '), declCount };
   const src = `${preamble}\n(${code.slice(fnNode.range[0], fnNode.range[1])})`;
   try { const fn = vm.runInNewContext(src, {}, { timeout: 5000 }); if (typeof fn !== 'function') return { error: 'extracted node did not evaluate to a function', declCount }; return { fn, declCount }; }
   catch (e) { return { error: `extraction failed to evaluate: ${String(e && e.message).slice(0, 160)}`, declCount }; }
 }
 
-// Locate component + bound executor/decline function nodes inside one parsed chunk.
+// ---- Component / handler binding --------------------------------------------------------
 function literalNodes(ast, value) { const out = []; walk.full(ast, (n) => { if ((n.type === 'Literal' && n.value === value)) out.push(n); }); return out; }
 const enclosingFn = (n) => { for (let p = n.parent; p; p = p.parent) if (isFn(p)) return p; return null; };
 const propsObjectOf = (lit) => { for (let p = lit.parent; p; p = p.parent) { if (p.type === 'ObjectExpression') return p; if (isFn(p)) return null; } return null; };
 const propOf = (obj, key) => (obj.properties || []).find((p) => p.type === 'Property' && !p.computed && ((p.key.type === 'Identifier' && p.key.name === key) || (p.key.type === 'Literal' && p.key.value === key)));
-function calleeFunction(call, component) {
+const directCalls = (fn) => { const out = []; walk.full(fn, (n) => { if ((n.type === 'CallExpression' || n.type === 'NewExpression') && enclosingFn(n) === fn) out.push(n); }); return out; };
+// Classify one direct call inside a handler. Returns { role, node, kind, why }.
+//   'import'  : callee is an inline function or a module-scope function/const-function (the import code)
+//   'local'   : callee is a component-local setter/prop (ArrayPattern/ObjectPattern/param binding) — harmless
+//   'handler' : callee is a component-local const function (a second handler) — ambiguous
+//   'unknown' : member expression, unresolved, computed, new-expression on non-builtin, ... — unresolved relevant call
+function classifyCall(call, component) {
   const c = call.callee;
-  if (isFn(c)) return { node: c, kind: 'inline' };
-  if (c.type === 'Identifier') {
-    const r = resolveName(c.name, c);
-    if (!r) return null;
-    if (within(r.decl.node, component)) return null; // component-local (state setter etc.)
-    if (r.decl.kind === 'function') return { node: r.decl.node, kind: 'module-function' };
-    if (r.decl.kind === 'var' && r.decl.node.init && isFn(r.decl.node.init)) return { node: r.decl.node.init, kind: 'module-const' };
+  if (call.type === 'NewExpression') return (c.type === 'Identifier' && !resolveName(c.name, c) && PURE_GLOBALS.has(c.name)) ? { role: 'local', node: call } : { role: 'unknown', node: call, why: 'constructor call to a non-builtin' };
+  if (isFn(c)) return { role: 'import', node: c, kind: 'inline' };
+  if (c.type !== 'Identifier') return { role: 'unknown', node: call, why: `callee is a ${c.type}` };
+  const r = resolveName(c.name, c);
+  if (!r) return { role: 'unknown', node: call, why: `callee "${c.name}" is unresolved (global?)` };
+  if (within(r.decl.node, component)) {
+    if (r.decl.kind === 'pattern' || r.decl.kind === 'param') return { role: 'local', node: call, name: c.name };
+    if (r.decl.kind === 'var' && r.decl.node.init && isFn(r.decl.node.init)) return { role: 'handler', node: r.decl.node.init, name: c.name };
+    return { role: 'unknown', node: call, why: `callee "${c.name}" is a component-local ${r.decl.kind} that is not a setter/prop/handler` };
   }
-  return null;
+  if (r.decl.kind === 'function') return { role: 'import', node: r.decl.node, kind: 'module-function', name: c.name };
+  if (r.decl.kind === 'var' && r.decl.node.init && isFn(r.decl.node.init)) return { role: 'import', node: r.decl.node.init, kind: 'module-const', name: c.name };
+  return { role: 'unknown', node: call, why: `callee "${c.name}" resolves to a ${r.decl.kind} outside the component` };
+}
+// From a button's onClick, find THE handler body that performs the import call, rejecting ambiguity.
+function followButton(onClickFn, component, label) {
+  const errors = [];
+  const calls = directCalls(onClickFn);
+  const imports = calls.filter((c) => classifyCall(c, component).role === 'import');
+  const handlers = calls.map((c) => classifyCall(c, component)).filter((x) => x.role === 'handler');
+  const unknown = calls.map((c) => classifyCall(c, component)).filter((x) => x.role === 'unknown');
+  if (unknown.length) errors.push(`${label}: ${unknown.length} unresolved call(s) directly in onClick (${unknown.map((u) => u.why).join('; ')})`);
+  // Either the onClick itself holds the import call (decline shape), or it calls exactly one component-local handler (accept shape).
+  if (imports.length && handlers.length) errors.push(`${label}: onClick both calls a handler and performs an import call (ambiguous)`);
+  if (handlers.length > 1) errors.push(`${label}: onClick calls ${handlers.length} component-local handlers (ambiguous: ${handlers.map((h) => h.name).join(', ')})`);
+  let body = onClickFn;
+  if (handlers.length === 1 && !imports.length) body = handlers[0].node;
+  else if (!imports.length && !handlers.length) errors.push(`${label}: onClick neither performs an import call nor calls a handler`);
+  return { body, errors };
+}
+// Within the chosen body, every direct call is accounted for; exactly one import call; awaited iff `wantAwait`.
+function importCallIn(body, component, label, wantAwait) {
+  const errors = [];
+  const cls = directCalls(body).map((c) => ({ ...classifyCall(c, component), call: c }));
+  const unknown = cls.filter((x) => x.role === 'unknown');
+  if (unknown.length) errors.push(`${label}: ${unknown.length} unresolved call(s) in the handler (${[...new Set(unknown.map((u) => u.why))].join('; ')}) — every call must be accounted for`);
+  const handlers = cls.filter((x) => x.role === 'handler');
+  if (handlers.length) errors.push(`${label}: handler calls other component-local handler(s) (${handlers.map((h) => h.name).join(', ')}) — ambiguous`);
+  const imports = cls.filter((x) => x.role === 'import');
+  if (imports.length !== 1) errors.push(`${label}: expected exactly one import call in the handler, found ${imports.length}`);
+  const awaited = imports.filter((x) => x.call.parent && x.call.parent.type === 'AwaitExpression');
+  if (wantAwait && imports.length === 1 && awaited.length !== 1) errors.push(`${label}: the import call is not awaited`);
+  if (!wantAwait && awaited.length) errors.push(`${label}: unexpected awaited call`);
+  // Any await of something that is not the import call is an unaccounted asynchronous step.
+  const awaits = []; walk.full(body, (n) => { if (n.type === 'AwaitExpression' && enclosingFn(n) === body) awaits.push(n); });
+  if (awaits.some((a) => !(a.argument.type === 'CallExpression' && imports.length === 1 && a.argument === imports[0].call))) errors.push(`${label}: an await in the handler is not the single import call`);
+  return { target: imports.length === 1 ? imports[0] : null, errors };
 }
 function bindComponent(ast, code) {
   const accepts = literalNodes(ast, BUTTON_ACCEPT);
@@ -214,74 +351,48 @@ function bindComponent(ast, code) {
   const component = enclosingFn(acceptLit);
   if (!component) return { error: 'import UI literal is not inside a function' };
   const out = { component, markerAttr: null, executor: null, decline: null, errors: [] };
-  // data-import-config literal on the component's section (an AST Property, never a comment).
   walk.full(component, (n) => { if (n.type === 'Property' && !n.computed && n.key.type === 'Literal' && n.key.value === 'data-import-config' && n.value.type === 'Literal') out.markerAttr = n.value.value; });
-  // Accept button -> onClick -> y() -> resolve y -> awaited call -> callee.
   const acceptProps = propsObjectOf(acceptLit); const onAccept = acceptProps && propOf(acceptProps, 'onClick');
   if (!onAccept || !isFn(onAccept.value)) out.errors.push('accept button has no onClick function');
-  else {
-    const calls = []; walk.full(onAccept.value, (n) => { if (n.type === 'CallExpression') calls.push(n); });
-    let acceptFn = null;
-    for (const c of calls) { const f = c.callee.type === 'Identifier' ? resolveName(c.callee.name, c.callee) : null; if (f && f.decl.kind === 'var' && f.decl.node.init && isFn(f.decl.node.init)) acceptFn = f.decl.node.init; else if (isFn(c.callee)) acceptFn = c.callee; }
-    if (!acceptFn) out.errors.push('could not follow the accept onClick to its handler function');
-    else {
-      // Only awaits DIRECTLY in the accept handler (not inside the inlined executor's own body).
-      const awaited = []; walk.full(acceptFn, (n) => { if (n.type === 'AwaitExpression' && n.argument.type === 'CallExpression' && enclosingFn(n) === acceptFn) awaited.push(n.argument); });
-      const bound = awaited.map((c) => calleeFunction(c, component)).filter(Boolean);
-      if (bound.length !== 1) out.errors.push(`expected exactly one awaited executor call in the accept handler, found ${bound.length} (of ${awaited.length} awaited calls)`);
-      else out.executor = bound[0];
-    }
-  }
-  // Decline button -> onClick -> the one call whose callee is import code (inline or module-scope), not component state.
+  else { const f = followButton(onAccept.value, component, 'accept'); out.errors.push(...f.errors); if (!f.errors.length) { const t = importCallIn(f.body, component, 'accept', true); out.errors.push(...t.errors); out.executor = t.target; } }
   const declLits = literalNodes(component, BUTTON_DECLINE);
   if (declLits.length !== 1) out.errors.push(`expected one "${BUTTON_DECLINE}" literal in the component, found ${declLits.length}`);
   else {
     const props = propsObjectOf(declLits[0]); const onDecline = props && propOf(props, 'onClick');
     if (!onDecline || !isFn(onDecline.value)) out.errors.push('decline button has no onClick function');
-    else {
-      // Only calls DIRECTLY in the onClick (not inside the inlined decline function's own body).
-      const calls = []; walk.full(onDecline.value, (n) => { if (n.type === 'CallExpression' && enclosingFn(n) === onDecline.value) calls.push(n); });
-      const bound = calls.map((c) => calleeFunction(c, component)).filter(Boolean);
-      if (bound.length !== 1) out.errors.push(`expected exactly one import call in the decline handler, found ${bound.length}`);
-      else out.decline = bound[0];
-    }
+    else { const f = followButton(onDecline.value, component, 'decline'); out.errors.push(...f.errors); if (!f.errors.length) { const t = importCallIn(f.body, component, 'decline', false); out.errors.push(...t.errors); out.decline = t.target; } }
   }
   return out;
 }
 
-// Execute the bound functions against in-memory state and a spy backend.
+// ---- Verdict per bound function -------------------------------------------------------------
 function memStorage(seed) {
   const m = new Map(Object.entries(seed)); const writes = [];
-  return { store: m, writes, getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => { writes.push(['set', k]); m.set(k, String(v)); }, removeItem: (k) => { writes.push(['remove', k]); m.delete(k); }, key: (i) => [...m.keys()][i] ?? null, get length() { return m.size; }, clear: () => { writes.push(['clear']); m.clear(); } };
+  return { writes, getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => { writes.push(['set', k]); m.set(k, String(v)); }, removeItem: (k) => { writes.push(['remove', k]); m.delete(k); }, key: (i) => [...m.keys()][i] ?? null, get length() { return m.size; }, clear: () => { writes.push(['clear']); m.clear(); } };
 }
 const PLAY = { id: 'proof-p1', name: 'Proof Mesh', phase: 'offense', type: 'pass', players: [], routes: [] };
-async function executeBindings(binding, code) {
+async function judge(target, code, idx, which) {
+  // 1. Static OFF contract (sound, no execution).
+  const st = provablyOff(target.node, idx);
+  if (st.off) return { outcome: 'disabled', basis: 'static', detail: st.why, kind: target.kind };
+  // 2. Not provably OFF: try to PROVE it is ON by execution with a verified immutable closure.
+  const ev = evaluateFunction(target.node, code, idx);
+  if (ev.error) return { outcome: 'inconclusive', basis: 'none', detail: `not provably OFF (${st.why}); cannot reconstruct a faithful closure for execution (${ev.error})`, kind: target.kind };
   const session = { uid: 'release-proof-uid', teamId: 'release-proof-team', teamName: 'Release Proof' };
-  const result = { executor: null, decline: null };
-  if (binding.executor) {
-    const ev = evaluateFunction(binding.executor.node, code);
-    if (ev.error) result.executor = { outcome: 'inconclusive', detail: ev.error, declCount: ev.declCount };
-    else {
-      const st = memStorage({ smartPlaybook_plays: JSON.stringify([PLAY]) });
-      const backend = { copies: 0, reads: 0, copy: async (_s, p) => { backend.copies += 1; return `srv-${p.id}`; }, read: async () => { backend.reads += 1; return PLAY; } };
-      let outcome, detail;
-      try { const r = await Promise.race([ev.fn(st, session, () => true, backend), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))]); outcome = backend.copies > 0 ? 'enabled' : 'inconclusive'; detail = `resolved ${JSON.stringify(r)}; backend.copy x${backend.copies}, writes ${st.writes.length}`; }
-      catch (e) { const msg = String(e && e.message); if (msg === DISABLED_MSG && backend.copies === 0 && st.writes.length === 0) { outcome = 'disabled'; detail = 'rejected with the disabled message before any storage write or backend call'; } else { outcome = backend.copies > 0 ? 'enabled' : 'inconclusive'; detail = `rejected "${msg.slice(0, 120)}"; backend.copy x${backend.copies}, writes ${st.writes.length}`; } }
-      result.executor = { outcome, detail, kind: binding.executor.kind, declCount: ev.declCount };
-    }
+  const stor = memStorage({ smartPlaybook_plays: JSON.stringify([PLAY]) });
+  const backend = { copies: 0, reads: 0, copy: async (_s, p) => { backend.copies += 1; return `srv-${p.id}`; }, read: async () => { backend.reads += 1; return PLAY; } };
+  const side = () => `backend.copy x${backend.copies}, backend.read x${backend.reads}, storage writes ${stor.writes.length}`;
+  try {
+    const r = which === 'executor' ? await Promise.race([ev.fn(stor, session, () => true, backend), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))]) : ev.fn(stor, session);
+    const reached = which === 'executor' ? backend.copies > 0 : (r === 'declined' || r === 'postponed') && stor.writes.length > 0;
+    return { outcome: reached ? 'enabled' : 'inconclusive', basis: 'execution', detail: `not provably OFF (${st.why}); executed: resolved ${JSON.stringify(r)}; ${side()}`, kind: target.kind, declCount: ev.declCount };
+  } catch (e) {
+    const msg = String(e && e.message);
+    return { outcome: backend.copies > 0 ? 'enabled' : 'inconclusive', basis: 'execution', detail: `not provably OFF (${st.why}); executed: threw "${msg.slice(0, 100)}"; ${side()}`, kind: target.kind, declCount: ev.declCount };
   }
-  if (binding.decline) {
-    const ev = evaluateFunction(binding.decline.node, code);
-    if (ev.error) result.decline = { outcome: 'inconclusive', detail: ev.error, declCount: ev.declCount };
-    else {
-      const st = memStorage({ smartPlaybook_plays: JSON.stringify([PLAY]) });
-      let outcome, detail;
-      try { const r = ev.fn(st, session); outcome = (r === 'declined' || r === 'postponed') ? 'enabled' : 'inconclusive'; detail = `returned ${JSON.stringify(r)}; writes ${st.writes.length}`; }
-      catch (e) { const msg = String(e && e.message); if (msg === DISABLED_MSG && st.writes.length === 0) { outcome = 'disabled'; detail = 'threw the disabled message; no storage write'; } else { outcome = 'inconclusive'; detail = `threw "${msg.slice(0, 120)}"`; } }
-      result.decline = { outcome, detail, kind: binding.decline.kind, declCount: ev.declCount };
-    }
-  }
-  return result;
+}
+async function executeBindings(binding, code, idx) {
+  return { executor: binding.executor ? await judge(binding.executor, code, idx, 'executor') : null, decline: binding.decline ? await judge(binding.decline, code, idx, 'decline') : null };
 }
 
 function entryChunks(dir) {
@@ -307,7 +418,8 @@ async function analyze(dir) {
     if (!b) continue;
     if (b.error) { report.reasons.push(`inconclusive: ${b.error}`); continue; }
     if (found) { report.reasons.push('inconclusive: import UI component found in more than one entry chunk'); continue; }
-    found = { chunk: path.relative(dir, f), componentRange: b.component.range, markerAttr: b.markerAttr, errors: b.errors, exec: await executeBindings(b, code) };
+    const idx = assignmentIndex(ast);
+    found = { chunk: path.relative(dir, f), componentRange: b.component.range, markerAttr: b.markerAttr, errors: b.errors, exec: await executeBindings(b, code, idx) };
     report.components.push(found);
   }
   if (!found) { report.reasons.push('inconclusive: the import UI component ("Import plays") was not found in any entry chunk'); return { ...report, ok: false }; }

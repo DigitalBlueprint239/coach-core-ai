@@ -13,6 +13,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import vm from 'node:vm';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repo = resolve(here, '..', '..');
@@ -20,7 +21,7 @@ const script = join(here, 'release-import-config.js');
 const proof = join(here, 'verify-release-build.sh');
 const FLAG = 'REACT_APP_ENABLE_LEGACY_IMPORT';
 const cleanEnv = () => { const e = { ...process.env }; delete e[FLAG]; return e; };
-const run = (args, env = {}, cwd = repo, scriptPath = script) => { const r = spawnSync(process.execPath, [scriptPath, ...args], { encoding: 'utf8', env: { ...cleanEnv(), ...env }, cwd }); let json = null; try { json = JSON.parse(r.stdout.trim().split('\n').pop()); } catch { /* keep null */ } return { ...r, json }; };
+const run = (args, env = {}, cwd = repo, scriptPath = script) => { const r = spawnSync(process.execPath, [scriptPath, ...args], { encoding: 'utf8', env: { ...cleanEnv(), NODE_PATH: join(repo, 'node_modules'), ...env }, cwd }); let json = null; try { json = JSON.parse(r.stdout.trim().split('\n').pop()); } catch { /* keep null */ } return { ...r, json }; };
 const fixtureRoot = (files) => { const d = mkdtempSync(join(tmpdir(), 'rel-')); writeFileSync(join(d, 'package.json'), '{"name":"fixture","version":"0.0.0"}'); for (const [f, c] of Object.entries(files)) writeFileSync(join(d, f), c); return d; };
 const PROD_OFF = `REACT_APP_USE_FIREBASE_EMULATORS=false\n${FLAG}=false\n`;
 
@@ -96,8 +97,10 @@ test('scan: a shipped OFF component (inlined throw, data-import-config=false) is
   assert.equal(off.json.components[0].exec.executor.outcome, 'disabled'); assert.equal(off.json.components[0].exec.decline.outcome, 'disabled');
   const on = run(['scan', build({ 'main.abc.js': ON_BUNDLE })]);
   assert.equal(on.status, 1); assert.equal(on.json.verdict, 'on');
-  assert.match(on.json.reasons.join('|'), /import is ENABLED in the shipped executable code .*backend\.copy x1/);
-  assert.equal(on.json.components[0].exec.executor.kind, 'module-function', 'module-scope executor resolved through the identifier and executed with its closure');
+  assert.match(on.json.reasons.join('|'), /import is ENABLED in the shipped executable code .*backend\.copy x1, backend\.read x1/);
+  assert.equal(on.json.components[0].exec.executor.kind, 'module-function', 'module-scope executor resolved through the identifier and executed with its immutable closure');
+  assert.equal(on.json.components[0].exec.executor.basis, 'execution');
+  assert.equal(off.json.components[0].exec.executor.basis, 'static', 'OFF is decided statically (unconditional first-statement throw), never by reconstructing an environment');
   assert.equal(run(['negative-control', build({ 'main.abc.js': ON_BUNDLE })]).status, 0);
   assert.equal(run(['negative-control', build({ 'main.abc.js': OFF_BUNDLE })]).status, 1);
 });
@@ -127,6 +130,64 @@ test('F1 regression: a decoy executor that throws the disabled message while the
   const r = run(['scan', build({ 'main.abc.js': decoy })]);
   assert.equal(r.status, 1); assert.equal(r.json.verdict, 'on');
 });
+// ------------------------------------------------------------------ second-review probes (R1–R3) -------
+// "Actual" behaviour harness (the reviewer's method): execute the WHOLE module factory with a stubbed
+// require/self/localStorage and the backend prop `i`, call the component, click the real returned button and
+// observe the spies. This is what the shipped code really does; the scanner must never say OFF when it copies.
+const actualBehaviour = async (code, buttonIndex = 0) => {
+  let copies = 0, reads = 0; const m = new Map([['smartPlaybook_plays', JSON.stringify([{ id: 'p', name: 'Proof', phase: 'offense', type: 'pass', players: [], routes: [] }])]]); const writes = [];
+  const storage = { getItem: (k) => m.get(k) ?? null, setItem: (k, v) => { writes.push(k); m.set(k, v); }, removeItem: (k) => m.delete(k), key: (i) => [...m.keys()][i], get length() { return m.size; } };
+  const context = { self: {}, localStorage: storage, i: { copy: async () => { copies += 1; return 'copy-id'; }, read: async () => { reads += 1; return {}; } } };
+  vm.runInNewContext(code, context);
+  const exp = {}; context.self.webpackChunkfixture[0][1][4]({}, exp, {});
+  const ui = exp.default({ uid: 'u', teamId: 't', teamName: 'T' });
+  ui.b.children[buttonIndex].b.onClick();
+  await new Promise((r) => setImmediate(r)); await new Promise((r) => setTimeout(r, 20));
+  return { copies, reads, writes: writes.length };
+};
+const guard = (code) => code.replace('async function Kv(e,t,n,r){', 'async function Kv(e,t,n,r){if(!cfg.enabled)throw new Error(zv);').replace('function Jv(e,t){', 'function Jv(e,t){if(!cfg.enabled)throw new Error(zv);');
+const SECOND_REVIEW_PROBES = [
+  ['R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true', guard(COMPONENT({ accept: ON_ACCEPT, decline: ON_DECLINE, attr: 'coachcore:import-config=false' })).replace('function Hv(', 'const cfg={enabled:false};cfg.enabled=true;function Hv(')],
+  ['R1 global state: globalThis.proofEnabled=true read by the executor', guard(COMPONENT({ accept: ON_ACCEPT, decline: ON_DECLINE, attr: 'coachcore:import-config=false' })).replaceAll('cfg.enabled', 'globalThis.proofEnabled').replace('function Hv(', 'globalThis.proofEnabled=true;function Hv(')],
+  ['R2 actual call arguments dropped: fifth/third argument enables', COMPONENT({ accept: 'Kv(localStorage,{uid:e,teamId:t,teamName:n},()=>true,i,true)', decline: 'Jv(localStorage,{uid:e,teamId:t},true)', attr: 'coachcore:import-config=false' }).replace('async function Kv(e,t,n,r){', 'async function Kv(e,t,n,r,on){if(!on)throw new Error(zv);').replace('function Jv(e,t){', 'function Jv(e,t,on){if(!on)throw new Error(zv);')],
+  ['R2 unresolved member await before the inlined throw: await i.copy(...)', OFF_BUNDLE.replace('try{await async function', 'try{await i.copy({}, {id:"side-effect"});await async function')],
+  ['R2 ambiguous onClick: enabled handler then disabled handler', ON_BUNDLE.replace('const y=async()=>', 'const deadOff=async()=>{try{await async function(){throw new Error(zv)}(localStorage)}catch{}};const y=async()=>').replace('onClick:()=>{y()}', 'onClick:()=>{y();deadOff()}').replace('"data-import-config":"coachcore:import-config=true"', '"data-import-config":"coachcore:import-config=false"').replace(ON_DECLINE, OFF_DECLINE)],
+  ['R3 backend read before the disabled throw', COMPONENT({ accept: 'ReadThenDisabled(localStorage,{uid:e,teamId:t},()=>true,i)', decline: OFF_DECLINE, attr: 'coachcore:import-config=false' }).replace('function Hv(', 'async function ReadThenDisabled(e,t,n,r){await r.read(t,"id");throw new Error(zv)}function Hv(')],
+];
+const OLD_905 = (() => { const r = spawnSync('git', ['-C', repo, 'cat-file', '-e', '905b1d4b0e93d720cb4cf05b5746cb7a138e7884:scripts/security/release-import-config.js']); if (r.status !== 0) return null; const f = join(mkdtempSync(join(tmpdir(), 'old905-')), 'release-import-config.js'); writeFileSync(f, spawnSync('git', ['-C', repo, 'show', '905b1d4b0e93d720cb4cf05b5746cb7a138e7884:scripts/security/release-import-config.js'], { encoding: 'utf8' }).stdout); return f; })();
+
+for (const [name, code] of SECOND_REVIEW_PROBES) {
+  test(`second-review probe — ${name}: the shipped code performs side effects, the repaired scanner refuses OFF (inconclusive or on)`, async () => {
+    const real = await actualBehaviour(code);
+    assert.ok(real.copies + real.reads + real.writes > 0, `probe must really be enabled/side-effecting: ${JSON.stringify(real)}`);
+    const dir = build({ 'main.abc.js': code });
+    const r = run(['scan', dir]);
+    assert.equal(r.status, 1, `repaired scanner must not pass: ${r.stdout}`);
+    assert.notEqual(r.json.verdict, 'off');
+    if (OLD_905) { const old = run(['scan', dir], {}, repo, OLD_905); assert.equal(old.status, 0, 'the 905b1d4 implementation gave a false OFF (demonstrates the finding)'); assert.equal(old.json.verdict, 'off'); }
+  });
+}
+test('second-review baselines: ON baseline really copies/reads and is reported on; OFF baseline really does nothing and is reported off (static basis)', async () => {
+  assert.deepEqual(await actualBehaviour(ON_BUNDLE), { copies: 1, reads: 1, writes: 2 });
+  assert.deepEqual(await actualBehaviour(OFF_BUNDLE), { copies: 0, reads: 0, writes: 0 });
+  assert.deepEqual(await actualBehaviour(OFF_BUNDLE, 1), { copies: 0, reads: 0, writes: 0 });
+  const off = run(['scan', build({ 'main.abc.js': OFF_BUNDLE })]); assert.equal(off.status, 0); assert.equal(off.json.components[0].exec.decline.basis, 'static');
+});
+test('static OFF contract rejects a replaced or redefined Error constructor and non-const / mutable message bindings', () => {
+  const replaced = OFF_BUNDLE.replace('function Hv(', 'globalThis.Error=function(){i.copy({}, {id:"x"})};function Hv(');
+  const r1 = run(['scan', build({ 'main.abc.js': replaced })]); assert.equal(r1.status, 1); assert.match(r1.json.reasons.join('|'), /global "Error" is assigned or redefined/);
+  const defined = OFF_BUNDLE.replace('function Hv(', 'Object.defineProperty(globalThis,"Error",{value:function(){}});function Hv(');
+  const r2 = run(['scan', build({ 'main.abc.js': defined })]); assert.equal(r2.status, 1); assert.match(r2.json.reasons.join('|'), /assigned or redefined/);
+  const letMsg = OFF_BUNDLE.replace('zv=' + JSON.stringify(DIS), 'zvx=1').replace('const jsx=(a,b)=>({a,b}),zvx=1', `let zv=${JSON.stringify(DIS)};const jsx=(a,b)=>({a,b}),zvx=1`);
+  const r3 = run(['scan', build({ 'main.abc.js': letMsg })]); assert.equal(r3.status, 1); assert.match(r3.json.reasons.join('|'), /is a let binding \(mutable\)/);
+  const shadowErr = OFF_BUNDLE.replace('function Uv(', 'function Error(){}\nfunction Uv(');
+  const r4 = run(['scan', build({ 'main.abc.js': shadowErr })]); assert.equal(r4.status, 1); assert.match(r4.json.reasons.join('|'), /declared in scope/);
+});
+test('ON detection refuses to reconstruct mutable/global-dependent closures (negative control then fails closed, never fakes ON or OFF)', () => {
+  const mut = guard(ON_BUNDLE).replace('function Hv(', 'const cfg={enabled:true};function Hv(');
+  const r = run(['negative-control', build({ 'main.abc.js': mut })]); assert.equal(r.status, 1); assert.match(r.json.reasons.join('|'), /const bound to a ObjectExpression/);
+});
+
 test('scan fails closed when it cannot bind: no index.html, index.html referencing a missing chunk, no component, two components, unparseable chunk, executor rejecting with a different message', () => {
   assert.match(run(['scan', build({ 'main.abc.js': OFF_BUNDLE }, { html: false })]).json.reasons.join('|'), /index\.html missing/);
   assert.match(run(['scan', build({ 'other.js': OFF_BUNDLE })]).json.reasons.join('|'), /referenced script\(s\) missing/);
@@ -134,7 +195,7 @@ test('scan fails closed when it cannot bind: no index.html, index.html referenci
   assert.match(run(['scan', build({ 'main.abc.js': OFF_BUNDLE + '\n' + OFF_BUNDLE.replace('Uv', 'Uw') })]).json.reasons.join('|'), /2 "Import plays" literals/);
   assert.match(run(['scan', build({ 'main.abc.js': 'this is not javascript {' })]).json.reasons.join('|'), /failed to parse/);
   const other = run(['scan', build({ 'main.abc.js': COMPONENT({ accept: 'async function(){throw new Error("Something else")}(localStorage)', decline: OFF_DECLINE, attr: 'coachcore:import-config=false' }) })]);
-  assert.equal(other.status, 1); assert.match(other.json.reasons.join('|'), /inconclusive: executor rejected "Something else"/);
+  assert.equal(other.status, 1); assert.match(other.json.reasons.join('|'), /inconclusive: executor not provably OFF .*threw "Something else"/);
 });
 
 test('F1 demonstration: the OLD scanner (c9d49dd) accepted the reviewer decoys; the repaired scanner rejects them', { skip: spawnSync('git', ['-C', repo, 'cat-file', '-e', 'c9d49dd367933a92039ba40478d80ffe3a6af987:scripts/security/release-import-config.js']).status !== 0 ? 'old implementation not available in this clone' : false }, () => {
@@ -194,7 +255,7 @@ test('REAL release-shaped build: the proof EXITS 0, proves OFF by execution, ret
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /RESULT: 17 passed, 0 failed/);
   assert.match(r.stdout, /PASS effective build-time import config is OFF \(\.env\.production="false"; CRA loader agrees: "false"\)/);
-  assert.match(r.stdout, /PASS shipped executable import code is OFF \(static\/js\/main\.[0-9a-f]+\.js: executor inline -> disabled, decline inline -> disabled, data-import-config=coachcore:import-config=false\)/);
+  assert.match(r.stdout, /PASS shipped executable import code is OFF \(static\/js\/main\.[0-9a-f]+\.js: executor inline -> disabled \[static\], decline inline -> disabled \[static\], data-import-config=coachcore:import-config=false\)/);
   assert.match(r.stdout, /PASS negative control: executable analysis detects the opted-in emulator build as ON/);
   const s = run(['scan', r.out]); assert.equal(s.status, 0, s.stdout);
   // Retained output: index.html + shipped JS + asset-manifest + provenance; no env files; hashes match the build manifest.
