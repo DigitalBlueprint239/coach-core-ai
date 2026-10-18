@@ -1,0 +1,83 @@
+Evidence 75 — PR #78 re-review repair (F1–F4 of Codex review 6243708455): delivery record
+=======================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+Reviewed head: c9d49dd367933a92039ba40478d80ffe3a6af987.  New head: 905b1d4b0e93d720cb4cf05b5746cb7a138e7884.  Base unchanged: 61448f0feee198a8796f4077f32a52f7b863f90d (PR #76).
+Changed vs c9d49dd (7 files, +630/-302): .github/workflows/e2e-emulator.yml (proof step env + RELEASE_RETAIN_DIR), scripts/security/release-import-config.js (rewritten
+  verifier), scripts/security/release-import-config.test.mjs (rewritten checks), scripts/security/verify-release-build.sh (executable pass line, required ON control,
+  EMULATOR_BUILD_DIR, retention + provenance), docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md, docs/support/*DRAFT* (both corrected).
+Changed vs base 61448f0 (10 files, +889/-7). Application change still only IMPORT_CONFIG_MARKER + data-import-config (unchanged from c9d49dd); enable check,
+  import/recovery behaviour, opt-ins, identity UI, e2e tests/config/reporter/evidence script, membership 76/15 and execution settings untouched. PR #77 untouched.
+
+F1 — executable-output verification (was: substring counting)
+  New `scan`: entry graph from index.html <script src> only; acorn parse (comments never in the AST); component = the single function holding the literal
+  "Import plays"; accept onClick -> handler -> awaited call -> callee (inline after terser folding, or module-scope function via identifier resolution);
+  "Not now" onClick -> decline callee; both extracted with the transitive closure of module-scope declarations and EXECUTED in a fresh VM with in-memory
+  storage + spy backend. OFF <=> executor rejects with the exact disabled message before any write/backend call AND decline throws it; ON <=> backend.copy
+  reached. data-import-config literal must agree. Everything else inconclusive -> FAIL. negative-control requires the same analysis to yield ON.
+  Real OFF build:  verdict off  (executor inline -> disabled, decline inline -> disabled, 1 closure decl each).
+  Real ON (emulator) build: verdict on (executor inline -> enabled: backend.copy x1, writes 5, 8 closure decls; decline -> "declined"); scan FAILS, negative-control PASSES.
+  Reviewer decoys (synthetic CRA/terser-shaped fixtures, index.html-referenced): 1 comment-only OFF strings beside enabled code -> FAIL (verdict on);
+  2 enabled main.js + orphan.js with OFF strings -> FAIL (orphan not in entry graph); 3 enabled behaviour behind OFF marker + prose -> FAIL (contradictory);
+  4 comment-only ON marker over disabled behaviour in negative-control -> FAIL; plus: decoy rejecting function not wired to the button -> FAIL (verdict on).
+  OLD scanner (c9d49dd, run from git) on decoys 1 and 2: exit 0 (false pass) — DEMONSTRATED in check 12; repaired scanner: exit 1 on both.
+F2 — focused checks assert real outcomes
+  Slow check 16 asserts the real proof's process status === 0, "RESULT: 17 passed, 0 failed", the executed-OFF line, the ON negative-control line, and the
+  retained output. Slow check 17 (regression for the reviewer's probe): EMULATOR_BUILD_DIR pointed at a comment-only ON-marker fixture -> real proof exits
+  non-zero with "FAIL negative control -- pattern __coachCoreE2E…" and "FAIL negative control -- executable analysis does not detect…", while the OFF PASS
+  line is still printed; the check asserts the non-zero status (the old suite would have passed here).
+  Results: fast 15/15 (+2 skipped) ; RELEASE_PROOF_BUILD=1 -> 17/17, 0 skipped (two real builds).
+F3 — inspectable build evidence
+  verify-release-build.sh: with RELEASE_RETAIN_DIR set, keeps index.html, static/js/*.js, asset-manifest.json and release-build.context (candidate_sha, head_sha,
+  run_id, run_attempt, matrix project/bucket, built_at, node/react-scripts, target project, effective import config, executable verdict, sha256 of the build
+  manifest + the full manifest). No source maps (GENERATE_SOURCEMAP=false), no .env* ever copied, nothing outside the build. CI sets RELEASE_RETAIN_DIR=
+  e2e/ci-evidence/release-build so B15 inventories (hashes) and uploads it; evidence inventory went from 6 to 10 files per job.
+  Local provenance sample: executable_verdict=off executor=disabled decline=disabled; build_manifest_sha256=8f88a3cc…0753b7; retained main.js byte-identical
+  to the manifest entry (asserted by check 16).
+F4 — drafts corrected to the approved boundary (issue #39 c-6224877757 policy 3; RUNTIME_IMPORT_CANDIDATE §support boundary, both quoted verbatim in the doc)
+  Removed: the "create another team / coach clears device state" path; the challenge-word verification; the ownerUid query; device decision JSON as evidence.
+  Now separated: EXISTS today (device keys; teams.ownerId; plays.teamId/createdBy/legacy_v1_; blocking copy shows team NAME; NO channel/endpoint/operator
+  role/audit config/verification screen; NO support powers) / support may do TODAY (record, help select an existing team, explain the boundary without any
+  bypass, escalate) / PROPOSED requirements (identity-system authentication, backend-only ownership records, logged read-only operator access, audit, escalation,
+  completion evidence) / UNRESOLVED decisions D1–D7 (incl. D5 non-forgeable teamId, D6 discard control = product decision not a workaround).
+  Disclosure draft: no longer says "contact us"; states no re-open/move/import-on-behalf capability exists; P3 reframed.
+
+Local validation on 905b1d4: node scripts/security/release-import-config.test.mjs -> 15 pass / 2 skipped; RELEASE_PROOF_BUILD=1 -> 17/17.
+  bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239 -> RESULT: 17 passed, 0 failed (fresh same-commit emulator build):
+    PASS guard refuses an emulator build for coach-core-mvp-staging-239
+    PASS .env.production pins the emulator flag to false
+    PASS .env.production pins the import flag to false
+    PASS effective build-time import config is OFF (.env.production="false"; CRA loader agrees: "false")
+    PASS release-shaped build for coach-core-mvp-staging-239
+    PASS no test-hook marker (__coachCoreE2E)
+    PASS no test-hook module (e2e-support / emulator-hooks)
+    PASS no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 9199)
+    PASS no demo-* project values
+    PASS no emulator test password or placeholder secret
+    PASS bundle targets coach-core-mvp-staging-239
+    PASS shipped executable import code is OFF (static/js/main.630c8567.js: executor inline -> disabled, decline inline -> disabled, data-import-config=coachcore:import-config=false)
+    PASS 2 JS files scanned
+    PASS negative control: pattern detects emulator build (__coachCoreE2E)
+    PASS negative control: pattern detects emulator build ([:,](9099|9199|5001|8080)[^0-9])
+    PASS negative control: pattern detects emulator build (demo-coach-core)
+    PASS negative control: executable analysis detects the opted-in emulator build as ON
+    RESULT: 17 passed, 0 failed
+  Import unit suites 7/49; tsc clean; reporter 10/10; evidence 19 (18 + root skip).
+Actual CI: workflow_dispatch run 39101432532 on 905b1d4 (grep D10-01, repeat 1): 12/12 jobs success; every job: Release-proof self-checks ✅ (15 fast; slow
+  skipped — the proof step itself builds), Release-build proof ✅ "17 passed … import proven OFF by executing the shipped import code (effective build config +
+  executable analysis + ON negative control)", finalize ✅ with "10 files" inventories (6 + retained release-build/{index.html, asset-manifest.json,
+  static/js/main.<hash>.js, release-build.context}), upload ✅ (~238 KB per job). Artifact metadata:
+    12125929111 e2e-results-acceptance-chromium 238245B sha256:19ebf4f5c6b4f108858e49a1a83c1cab855c38688b5c54c27c32da47cadaaa70
+    12126463786 e2e-results-acceptance-firefox 238204B sha256:9363e7fa89ef3d0fd2a122dcce57fe5a1c88f906babf9ca2951578a3d985ed41
+    12126468675 e2e-results-acceptance-phone-chromium 238254B sha256:060cbd25be9137cb559d1b056a17a268667df234ec54323e6999eb6fee972a65
+    12127265287 e2e-results-acceptance-phone-firefox 238213B sha256:74e80055bbb9582865a6b91486b2f6bc91b62a585d1ee5db7222f9b4f5ebb259
+    12126921328 e2e-results-diagnostic-chromium 236249B sha256:9c950cd10b2634f927d6c1f593f224ce8ad081035de2cb8701d5ae9c41fb0a64
+    12126781849 e2e-results-diagnostic-firefox 236226B sha256:8f53ed435c689578dde960092118af25a0e07140db67fee9548dd34df21a028c
+    12126497386 e2e-results-diagnostic-phone-chromium 236269B sha256:91be20947108ba3bb1ca61c137202d0165ca21a071b827710e60ed5da06d6f9c
+    12127115561 e2e-results-diagnostic-phone-firefox 236231B sha256:bf96c235e33f4e032df4fff30314ca6500449900e8998bb8a0b67cd3724f181c
+    12126442422 e2e-results-obsolete-fault-model-chromium 236266B sha256:aece2df0536571473dd4f98a3c8ef85fc92cb67a2fa7bf396b5b3a3d7a87d30f
+    12126274513 e2e-results-obsolete-fault-model-firefox 236229B sha256:ad947e0948d36f572e95952e0314aa4bfc8a93ee7e6b1c7a78ab701bf0346fed
+    12127040857 e2e-results-obsolete-fault-model-phone-chromium 236278B sha256:c34d36f3ef5ebcd4e87b9c2e1db20624f86c37b93d43c16ea40d53c8e61e9f44
+    12126762930 e2e-results-obsolete-fault-model-phone-firefox 236245B sha256:77e560567919c3cc55c1659e45c81fa320ee5537db85f4b0a55be028504d192c
+Limitations: ZIPs not opened from this workspace (proxy) — the retained release JS is now inside them for the reviewer; release-SHAPED build with placeholder
+  web config, not a staging deployment; no full matrix (runtime unchanged); the "committed file" test is a basename allowlist (documented); the independent
+  resolver does not implement dotenv-expand (disagreement with CRA's loader is reported inconclusive and fails, as designed).
