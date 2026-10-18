@@ -95,7 +95,10 @@ jobs:
           # Playwright's "clear output" task deletes outputDir (e2e/test-results) at run
           # start, which previously destroyed run.log and the release manifest before upload.
           mkdir -p e2e/test-results e2e/ci-evidence
-      - name: Release-proof self-checks (import default-OFF resolution, executable OFF/ON analysis, fail-closed cases)
+      - name: Build same-commit import-OFF emulator build (release proof L3 input; desktop acceptance jobs only)
+        if: matrix.bucket == 'acceptance' && (matrix.project == 'chromium' || matrix.project == 'firefox')
+        run: npm --prefix e2e run build:app:import-off
+      - name: Release-proof self-checks (import default-OFF resolution, canary/source-scope, gate fail-closed cases, retired-model regressions)
         run: |
           set -o pipefail
           node scripts/security/release-import-config.test.mjs 2>&1 | tee /tmp/release-proof-selfchecks.txt
@@ -104,7 +107,7 @@ jobs:
           f=$(grep -E '^# fail ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); k=$(grep -E '^# skipped ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')
           sk=$(grep -E '^(ok|not ok) .* # SKIP' /tmp/release-proof-selfchecks.txt | sed -E 's/^(ok|not ok) ([0-9]+) - .*# SKIP ?/\2: /' | cut -c1-80 | tr '\n' ';')
           echo "::notice title=Release-proof self-checks (${{ matrix.bucket }} ${{ matrix.project }})::tests=${t} pass=${p} fail=${f} skipped=${k} (skipped tests are NOT passes): ${sk}"
-      - name: Release-build proof (no hooks / emulator wiring in a staging-shaped build; import proven OFF by executing shipped code)
+      - name: Release-build proof L1+L2 (no hooks / emulator wiring in a staging-shaped build; import flag resolved OFF and inlined as import-config=false - no behavioural claim)
         env:
           MATRIX_PROJECT: ${{ matrix.project }}
           MATRIX_BUCKET: ${{ matrix.bucket }}
@@ -114,7 +117,7 @@ jobs:
           # JS, asset-manifest.json, provenance) is kept under e2e/ci-evidence so B15 inventories,
           # hashes and uploads it. No source maps are generated; no .env* file is ever copied.
           RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/ci-evidence/release-build-manifest.sha256 \
-          RELEASE_RETAIN_DIR=e2e/ci-evidence/release-build \
+          RELEASE_RETAIN_DIR=e2e/ci-evidence/release-build RELEASE_CANARY_JSON=e2e/ci-evidence/release-canary.json \
             bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239
       - name: Run browser tests in the emulator suite
         env:
@@ -130,6 +133,33 @@ jobs:
             npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
             --only auth,firestore,functions \
             "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT} --project=${PROJECT} --pass-with-no-tests"
+      - name: Release proof L3 (real browser; import-OFF emulator build shows disabled behaviour; accepted D10-01/D10-02 on the opted-in build as ON control)
+        if: matrix.bucket == 'acceptance' && (matrix.project == 'chromium' || matrix.project == 'firefox')
+        env:
+          RP_BROWSER: ${{ matrix.project }}
+        run: |
+          # Separate Playwright config and output dir: the B11 suite above is untouched. Both same-commit
+          # builds are served side by side (:3100 import-OFF, :3000 opted-in). No tee of this run's
+          # console (only the redacted main run.log is retained); results.json + gate JSON are the evidence.
+          npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
+            --only auth,firestore,functions \
+            "npm --prefix e2e run test:release-proof:browser"
+      - name: Release gate - L1 configuration + L2 inlining + L3 behaviour (refuses to PASS without executed browser evidence)
+        if: always() && matrix.bucket == 'acceptance' && (matrix.project == 'chromium' || matrix.project == 'firefox')
+        run: |
+          set +e
+          mkdir -p e2e/test-results/release-proof
+          [ -f e2e/test-results-release-proof/results.json ] && cp e2e/test-results-release-proof/results.json e2e/test-results/release-proof/results.json
+          node scripts/security/release-import-config.js gate --canary e2e/ci-evidence/release-canary.json \
+            --off e2e/test-results-release-proof/results.json --on e2e/test-results-release-proof/results.json \
+            --out e2e/ci-evidence/release-gate.json > /tmp/release-gate.out; st=$?
+          v=$(node -e "const r=require('./e2e/ci-evidence/release-gate.json');console.log('verdict='+r.verdict+' off='+JSON.stringify((r.legs.behaviourOff||{}).executed||r.legs.behaviourOff)+' on='+JSON.stringify((r.legs.behaviourOnControl||{}).executed||r.legs.behaviourOnControl)+(r.reasons.length?' reasons='+r.reasons.join(' | '):''))" 2>/dev/null | cut -c1-1500)
+          lvl=$([ "$st" -eq 0 ] && echo notice || echo error)
+          echo "::${lvl} title=Release gate (${{ matrix.project }} ${{ matrix.bucket }})::${v}"
+          exit $st
+      - name: Release gate not run in this job (behavioural leg runs in desktop acceptance jobs only)
+        if: always() && !(matrix.bucket == 'acceptance' && (matrix.project == 'chromium' || matrix.project == 'firefox'))
+        run: echo "::notice title=Release gate (${{ matrix.project }} ${{ matrix.bucket }})::L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
       - name: Emulator diagnostics (functions load/requests, no secrets)
         if: always()
         run: |

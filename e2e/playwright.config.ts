@@ -36,6 +36,9 @@ const TOP_GREP = ANDS.length ? both(/[\s\S]*/) : undefined;
 
 export default defineConfig({
   testDir: './tests',
+  // The release-proof OFF spec runs ONLY through playwright.release-proof.config.ts against the
+  // import-OFF build; excluding it here keeps the B11 suite membership unchanged.
+  testIgnore: ['**/release-import-off.spec.ts'],
   outputDir: './test-results',
   fullyParallel: false,
   workers: 1, // one shared emulator; tests reset it in beforeEach

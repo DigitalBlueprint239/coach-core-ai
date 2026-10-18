@@ -1,6 +1,7 @@
-# Release-proof repair: import default-OFF proven from build inputs AND shipped output
+# Release proof: legacy-import default-OFF — fourth revision (verification contract reassessed)
 
-Date: 2026-10-18 (revised after the independent FAIL reviews of `c9d49dd` c-6243708455, `905b1d4` c-6246331436 and `d14aa7b` c-6248146409). Author: Claude.
+Date: 2026-10-18 (revised after the independent FAIL reviews of `c9d49dd` c-6243708455, `905b1d4`
+c-6246331436, `d14aa7b` c-6248146409 and `cab8cab` c-6254186547). Author: Claude.
 **Delivery, not independent acceptance. No merge/deploy; MVP NO-GO.**
 
 ## Finding (evidence 73, PR #76 review)
@@ -16,121 +17,155 @@ proof still reported 13/13 PASS.
 
 ## Base and scope
 Base **`61448f0feee198a8796f4077f32a52f7b863f90d`** (PR #76, reviewed PASS). Branch
-`ci/release-proof-import-off` (deliberately outside `claude/**` so no full matrix auto-starts).
-Changed files: `scripts/security/verify-release-build.sh`, new `scripts/security/release-import-config.js`,
-new `scripts/security/release-import-config.test.mjs`, `src/features/legacy-import/import-legacy.ts`
-(+5 lines: `IMPORT_CONFIG_MARKER`), `src/features/legacy-import/LegacyImport.tsx` (`data-import-config`
-attribute), new `src/features/legacy-import/__tests__/import-config-marker.test.tsx`,
-`.github/workflows/e2e-emulator.yml` (+1 step running the self-checks before the proof), this doc and the
-two support drafts under `docs/support/`. **Unchanged:** the enable check
-(`=== 'true'`), every import/recovery behaviour and test, `.env.production`/`.env.test`/`build-app.sh`
-opt-ins, identity UI, e2e tests/config/reporter/evidence scripts, membership (76/15), execution settings.
-PR #77 (aggregate gate) is separate and untouched.
+`ci/release-proof-import-off`. Files in this revision: `scripts/security/release-import-config.js`
+(rewritten: `resolve`, `canary`, `gate`; `scan`/`negative-control` removed),
+`scripts/security/release-import-config.test.mjs` (65 checks), `scripts/security/verify-release-build.sh`,
+`e2e/scripts/build-app.sh` (+ `E2E_IMPORT_OFF=1` mode), new `e2e/playwright.release-proof.config.ts`,
+new `e2e/tests/release-import-off.spec.ts`, `e2e/playwright.config.ts` (+ `testIgnore` for that one
+spec), `e2e/package.json` (+3 scripts), `.github/workflows/e2e-emulator.yml` (+ import-OFF build, L3 run,
+gate steps in the desktop acceptance jobs; notice elsewhere), this doc. **Unchanged since `c9d49dd`:**
+`src/features/legacy-import/import-legacy.ts` (`IMPORT_CONFIG_MARKER`), `LegacyImport.tsx`
+(`data-import-config`), the marker unit test, `.env.production`/`.env.test`, every import/recovery
+behaviour and test, identity UI, the B11 suite (182 tests listed before and after), reporter/evidence
+scripts, execution settings, the two corrected support drafts. PR #77 is separate and untouched.
 
-## Design rationale (third revision — effects around the throw, constructor binding, actual arguments)
+## Why the verifier repeatedly accepted behaviour its model did not represent (root cause)
 
-The third review showed that "first statement throws" is not enough when code *around* the throw can run:
-argument getters, default parameters, handler parameters, extra reads in the onClick wrapper, and
-destructured locals that are not React setters — plus a computed `globalThis["Error"]` replacement, an
-unresolved `CustomError` trusted as native, and an ON control that invoked the callee with synthetic
-arguments where the real UI passed `false`.
+Every revision from `c9d49dd` to `cab8cab` tried to answer one question from the minified shipped chunk
+alone: *is the import handler inert?* Each repair added a recogniser for the construct the previous
+review used — string counting → reconstructed closures → "first statement throws" with an effect-free
+grammar around it → verified React bindings, constructor-binding index, strict-`this` exemptions,
+predicate mapping. Each time the next review found a construct **the engine evaluates and the model does
+not**: setter arguments that are functions (React invokes them), `+evil` (valueOf), accessor properties,
+`poison.call(globalThis)`, `const R = Reflect`, a tampered `require`, an outer `finally`, a duplicate JSX
+key, a stale `ref.current` that the ON control replaced with `()=>true`.
 
-The repair recognises the **complete supported compiled path** and rejects everything else:
-- accept onClick must be exactly `()=>{y()}` to a component-local **zero-parameter** handler; the decline
-  onClick is itself the handler and must have no parameters; the OFF callee must have **zero parameters**
-  (so no default/destructuring initialisation can run) — the real compiled handlers are
-  `async function(){throw new Error(zv)}(localStorage)`;
-- every node evaluated before the import call, and the enclosing try's catch/finally, must fit an
-  effect-free grammar: literals, local reads, `ref.current` of a **verified React `useRef`**, calls to
-  **verified React `useState` setters** (the destructuring's initialiser is `(0, r.useState)(…)` where `r`
-  is `n(<id>)` and module `<id>` is checked to be React by its own source) with effect-free arguments;
-  import-call arguments must be effect-free (so `argBox.value` getters and `i.copy(...)` arguments fail);
-- `Error` must be the engine binding: exactly that name, not shadowed, and not assigned/redefined as a
-  global anywhere in any entry chunk — identifier, member, computed-literal (`globalThis["Error"]`),
-  static-key (`window[k]` where `k` resolves to a literal through consts or IIFE arguments),
-  `Object.defineProperty/assign` and `Reflect.*` on global objects; any `eval`/`Function` other than
-  webpack's `new Function("return this")` distrusts all globals. Writes of non-constructible values
-  (arrows, literals, object/array literals) cannot hijack `new Error` and are not counted;
-- ON detection executes the callee with the **actual call-site arguments mapped by role** (literals as
-  themselves — so an explicit `false` is passed as `false`), only plain identifier parameters, and counts
-  reads/copies/writes; unmappable shapes are inconclusive.
+That is not a sequence of bugs; it is the shape of the problem. "No backend effect is reachable from this
+handler" is a semantic property of arbitrary JavaScript. A syntactic whitelist over compiled output can
+only be sound if it enumerates every evaluation point of the language (every coercion, accessor, call,
+binding resolution and control-flow edge) — and each exemption added to make the *real* bundle pass
+(`Error.prepareStackTrace=`, gtag `window[e]=t`, Firebase `Gf()[t]=…`, React `this.x=`) widened the
+accepted language again without re-establishing soundness. The ON control had the mirror defect: to make
+execution possible outside the browser it synthesised environment (arguments, predicates, storage), so
+it could "prove" ON for code the real UI never enables. Both legs were modelling the engine instead of
+using it.
 
-Host assumptions stated narrowly: the chunk is strict mode (`this` is never the global object in plain
-calls; `this.method()[k]=v` is an ordinary object write), the runtime is native and not rewritten by code
-outside the shipped entry chunks, and no dynamic code other than webpack's global fallback exists (any
-other is rejected). The retained shipped JS exists so a reviewer can inspect exactly what was judged.
+## The smallest defensible contract (chosen)
 
-## Design rationale (second revision)
+Stop asserting handler inertness from output. Prove three things that are each decidable, and only
+their conjunction is called the proof:
 
-The second review showed that *executing a reconstructed closure* can never be trusted to say OFF: a
-reconstruction can omit later initialisation (`cfg.enabled = true`), substitute an empty VM for shipped
-global state (`globalThis.proofEnabled`), drop actual call arguments, ignore an unresolved call that runs
-first, or pick one of two handlers. Every one of those produced a false OFF while the real button copied.
+| Leg | Claim | How it is decided | Decidable because |
+|---|---|---|---|
+| **L1 configuration** (`resolve`) | The release build's effective `REACT_APP_ENABLE_LEGACY_IMPORT` is exactly `"false"` from a committed-basename file. | Independent dotenv resolution + CRA's own `config/env.js` in a child process, in the same shell the build then runs in; the script refuses to build otherwise. | Finite file precedence + loader agreement; no code semantics. |
+| **L2 inlining** (`canary`) | The chunks `index.html` ships contain the build-time marker `coachcore:import-config=<v>` as a **string-literal token in parsed code** (comments are not tokens), with exactly one distinct `<v>` equal to the resolved value; and `src/` reads the flag at exactly one boundary (`isLegacyImportEnabled`, `IMPORT_CONFIG_MARKER`, verbatim) with the accepted guards present verbatim (`importLegacy`/`declineImport` first-statement check, component `enabled` switch, `data-import-config`). | Token scan of the entry chunks (acorn tokenizer) + exact-line source scope check. | Literal presence/absence and exact text; webpack DefinePlugin substitutes one value per compilation, so one inlined value governs every read. |
+| **L3 behaviour** (`e2e/tests/release-import-off.spec.ts` + `gate`) | The application compiled from this commit with the flag OFF behaves disabled under real execution: owner signed in, device plays seeded → notice only, `data-import-config=…=false`, **zero** buttons in the import region, no `plays` document for the team or coach, no claim/pending/decision key, originals byte-identical (RP-OFF-01); an **unfinished claim of this very coach and team** is neither resumed, postponed nor cleared and stays byte-identical (RP-OFF-02); no device data → no region, nothing written (RP-OFF-03). ON control = the **accepted** D10-01/D10-02 on the same-commit opted-in build (real UI, real arguments, real predicates, real emulator writes). | Playwright (Chromium and Firefox) against the Firebase emulators, both builds served side by side; `gate` reads `results.json` and requires every RP-OFF-* and D10-01/D10-02 execution to be `expected`/passed — a skip, a flaky pass, a missing title or a missing file is inconclusive. | Observation of the real bundle in a real browser; nothing modelled, nothing synthesised. |
 
-Options considered:
-- **Real browser, real UI wiring.** The import section renders only for an authenticated coach with a
-  selected team; the release-shaped bundle targets the staging project with a placeholder key and has no
-  emulator wiring, so driving it requires faking Firebase Auth and Firestore protocols under Playwright.
-  Not feasible as a bounded repair, and still would not isolate the component from the parent's state.
-- **Whole-module execution with webpack's own runtime.** The main chunk is a self-contained IIFE whose app
-  module runs `createRoot(...).render(<App/>)` on evaluation; the component is not exported. Executing it
-  needs a DOM and the same auth state. Same problem.
-- **Static, environment-independent OFF contract + execution only for ON.** Chosen. The release build's
-  compiled handlers are `async function(){throw new Error(zv)}(localStorage)` — an *unconditional first
-  statement throw*. Such a function cannot reach a backend regardless of its arguments, closures, globals
-  or later initialisation; the only things that must hold are that the thrown message really is the
-  disabled constant (a `const` bound to the string literal — primitives bound by `const` cannot change) and
-  that `Error` has not been replaced (not declared in scope; not assigned/`defineProperty`'d as a global
-  anywhere in the chunk). No argument is synthesised and no environment is reconstructed for OFF.
-  Handler binding accounts for **every** direct call (setters/props allowed; any member-expression call,
-  unresolved callee, second handler, extra await or ambiguity is inconclusive). ON is proved by execution
-  only when every free identifier is a pure builtin, a module-scope function or an immutable-literal
-  const, none reassigned/mutated (scope-aware), and backend reads, copies and storage writes are all
-  counted; otherwise inconclusive. The data attribute must agree with the verdict.
+Each reviewer finding maps to a leg that no longer needs to model it:
 
-Residual limits stated plainly: static analysis cannot exclude dynamic code (`eval`/`new Function`) that
-rewrites behaviour at run time; the retained shipped JS (below) exists so a reviewer can inspect exactly
-what was judged. The proof is a release-*shaped* build, not a deployment.
+| Finding (review 4) | Was modelled by | Now |
+|---|---|---|
+| F1 functional updater via verified setter (incl. real React 19) | "verified setter + effect-free argument" grammar | no setter grammar exists; real React runs in the browser (L3) |
+| F1 `+evil` valueOf coercion | "effect-free unary" rule | no expression grammar exists (L3) |
+| F2 `poison.call(globalThis)` / aliased `Reflect` / tampered `require` | constructor-binding index, strict-`this` exemption, module-source check | no Error/binding trust is required: nothing is executed in a VM |
+| F2 `Object.defineProperty(ref,'current',{get})` | verified `useRef` | none |
+| F3 outer `finally` after handled rejection | nearest-try path check | none |
+| F4 duplicate `onClick` key | first-match prop lookup | the real DOM button is what Playwright clicks — and in the OFF build there is none to click |
+| F5 ON predicate mapped to `()=>true` | synthetic ON execution | ON control is the accepted browser suite with the real predicate |
+| F6 reporting | — | the shell script's RESULT line states "L1+L2 only; L3 decided by gate"; the gate reports executed titles per project and refuses on skips |
+
+### What the proof establishes, precisely
+For the inspected commit and toolchain (versions recorded in `release-build.context`): (1) the
+release-shaped build was produced with the import flag OFF; (2) the compiler inlined that value into the
+shipped entry chunks and the source reads the flag nowhere else; (3) the application compiled from that
+source with that value exhibits the disabled behaviour in Chromium and Firefox, and the same commit
+compiled with the opt-in exhibits the accepted enabled behaviour.
+
+### Host assumptions (stated, not verified by the proof)
+- **DefinePlugin single substitution:** webpack 5 / react-scripts 5.0.1 (lockfile-pinned) replaces every
+  `process.env.REACT_APP_ENABLE_LEGACY_IMPORT` read with the same value in one compilation. This is the
+  toolchain-integrity assumption any build proof makes; L2 corroborates it (one literal, one value).
+- **Build equivalence:** the import-OFF emulator build and the release build are the same source, same
+  toolchain and same flag value, differing only by the emulator/project environment values. The proof
+  does **not** execute the release bundle itself (it has no emulator wiring and cannot be signed into
+  without a real identity provider); it executes the same-commit OFF build with emulator wiring.
+- **Artifact identity:** the shipped bundle is the one the proof built (all hashes retained; comparison
+  with a deployment is out of scope — nothing is deployed).
+
+### Not established
+Any property of a bundle not built by this proof from this commit; any claim about handler inertness
+derived from minified output (retired as unsound — the synthetic adversarial bundles from all four
+reviews remain in the regression suite precisely to show the fourth revision makes no such claim and the
+gate stays inconclusive for all of them).
+
+## Alternative considered: a structural release boundary in the application (proposed, not implemented)
+
+A refactor could make the OFF bundle contain **no import executor at all**, turning the output check into
+a structural absence check instead of a behaviour claim:
+
+```ts
+// src/features/legacy-import/index.ts (proposal)
+export default process.env.REACT_APP_ENABLE_LEGACY_IMPORT === 'true'
+  ? require('./LegacyImport').default          // dead branch in release builds: webpack drops the module
+  : require('./LegacyImportDisabled').default; // notice-only component, imports nothing from import-legacy/firebase-import
+```
+with `SmartPlaybook.tsx` importing the index. webpack evaluates the DefinePlugin constant before
+dependency collection, so `LegacyImport.tsx` (and `import-legacy.ts`' executor) would leave the OFF graph
+unless imported elsewhere — and `EarlierDrafts.tsx` already imports `firebaseImport` for accepted
+recovery, so the **backend capability** stays in the bundle regardless; only the import UI wiring would be
+absent. That makes the gain smaller than it looks, and the change touches accepted application code
+(PR #76 runtime, reviewed PASS) and the accepted marker test. It is therefore **documented, not done**:
+if Coach Drew wants it, it is a separate PR against `61448f0` with its own review; the L3 harness above
+would still be the behavioural evidence for it.
+
+Also considered and rejected: executing the real release bundle under Playwright with faked Firebase Auth
+and Firestore protocols (large, brittle, and the fake is itself a model); evaluating the main chunk with
+webpack's runtime in jsdom (the app mounts on evaluation; the component is not exported).
 
 ## What the proof now requires (fail closed)
 1. `.env.production` contains the exact line `REACT_APP_ENABLE_LEGACY_IMPORT=false` (necessary, not sufficient).
-2. **Effective build-time value** resolved independently and by CRA's loader (child process): must agree, be
-   exactly `"false"`, from a committed-basename file. Enabling shell/local files, local pins, malformed/unset
-   values or loader disagreement (e.g. `${VAR}` expansion) FAIL **before any build**.
-3. **Shipped import implementation OFF** by the static contract above, bound through the real button
-   handlers of the single `"Import plays"` component in the chunks `index.html` ships.
-4. **Negative control (required):** the same analysis must find the opted-in emulator build ON by execution.
-5. **Retention:** `RELEASE_RETAIN_DIR` keeps `index.html`, `static/js/*.js`, `asset-manifest.json` and
-   `release-build.context` (SHAs, run/attempt, matrix job, versions, effective config, verdict, manifest
-   hash + full manifest); no source maps, no `.env*`. CI retains under `e2e/ci-evidence/release-build`,
-   inventoried/hashed/uploaded by B15. Not retained: CSS, `sw.js`, headers/redirects, robots/sitemap,
-   LICENSE (manifest-only).
+2. **Effective build-time value** (L1) resolved independently and by CRA's loader: must agree, be exactly
+   `"false"`, from a committed-basename file; otherwise FAIL **before any build**.
+3. **Canary** (L2): one string-literal `coachcore:import-config=false` in the shipped entry chunks, no
+   other value; source scope exact; the opted-in emulator build must read `config-true` (negative control
+   of the check itself); the import-OFF emulator build, when present, must read `config-false` and is hashed.
+4. **Behaviour** (L3): RP-OFF-01/02/03 and D10-01/D10-02 executed and passed in the release-proof config;
+   `gate` writes `release-gate.json` with the executed titles per project, the verdict, the
+   "establishes" statement and the reasons.
+5. **Retention:** `RELEASE_RETAIN_DIR` keeps `index.html`, `static/js/*.js`, `asset-manifest.json`,
+   `release-canary.json`, `import-off-build-manifest.sha256` and `release-build.context` (SHAs,
+   run/attempt, matrix job, node/react-scripts/webpack/terser/react versions, effective config, canary
+   verdict, both manifest hashes + full release manifest); no source maps, no `.env*`. CI retains under
+   `e2e/ci-evidence/` (inventoried/hashed/uploaded by B15) and copies the release-proof `results.json`
+   under `e2e/test-results/release-proof/`.
+6. **Reporting:** the shell script's RESULT line names the legs it covers; the self-check step annotates
+   tests/pass/fail/skipped; the gate step annotates the verdict with executed titles; jobs that do not run
+   L3 say so and make no OFF-behaviour claim.
 
-## Validation
-- `node scripts/security/release-import-config.test.mjs`: 37 checks — 35 fast + 2 real-build
-  (`RELEASE_PROOF_BUILD=1`) → **37/37, 0 skipped** locally. Adds the third review's seven false-OFF probes
-  (each asserting the real button reaches the backend, the repaired scanner refuses OFF, and the `d14aa7b`
-  scanner gave the false OFF), the false-ON probe (explicit `false` arguments: real UI makes no call, the
-  control must not report ON — `d14aa7b` did), actual-argument execution (5 mapped args; unmappable →
-  inconclusive), surrounding-path grammar cases and the eval/Function rule. Includes: resolve cases; synthetic CRA/terser-shaped
-  bundles (OFF decided on a *static* basis, ON by execution); first-review decoys 1–4 + unwired decoy;
-  **second-review probes R1–R3 (all six)**, each asserting (a) the whole-module "actual behaviour" harness
-  really copies/reads/writes, (b) the repaired scanner refuses OFF, (c) the `905b1d4` scanner (from git) gave a
-  false OFF; baselines; replaced/redefined/shadowed `Error` and `let` message rejected; mutable closure makes
-  ON detection fail closed; fail-closed binding cases; old `c9d49dd` scanner vs new; source contract; two
-  end-to-end real-script refusals; real build asserting **process exit 0**, the 17-PASS line, static-OFF line,
-  ON control and retained output; F2 regression (broken ON control → non-zero exit asserted).
-- `verify-release-build.sh` on this head with a fresh same-commit emulator build: **17 passed, 0 failed**.
-- Import suites 49/49; `tsc` clean; reporter 10/10; evidence 19.
-- In CI the self-check step annotates `tests/pass/fail/skipped` explicitly; its real-build cases and the
-  old-commit comparisons are **skipped there** (shallow checkout; the proof step builds anyway) — skips are
-  reported as skips, never as passes.
+## Validation (this head)
+- `node scripts/security/release-import-config.test.mjs`: **65 checks — 63 pass, 2 skipped** (the two
+  real-build cases) locally with full history; with `RELEASE_PROOF_BUILD=1` the two real-build cases
+  **pass** (19-PASS script line, canary/provenance retained, gate inconclusive without browser results;
+  F2 broken-control regression non-zero). Sections: resolve (4); canary + source scope (3); retired-model
+  regressions — 23 false-OFF fixtures from all four reviews (each: reviewers' actual-behaviour harness
+  shows the effect; the fourth revision makes no behavioural claim; gate inconclusive), 2 false-ON
+  fixtures, the real-React-19/jsdom updater; **review reproductions** — 22 false-OFF + 2 false-ON + 1
+  real-React checks that the superseded `905b1d4`/`d14aa7b`/`cab8cab` scanners returned the false verdict
+  (explicitly **skipped**, not passed, where git history is shallow); gate contract (2); source/workflow
+  contract (1); real-script refusals (2); real builds (2).
+- `verify-release-build.sh` on this head with fresh same-commit emulator and import-OFF builds:
+  **19 passed, 0 failed (L1+L2 only)**.
+- Playwright membership: main config lists **182 tests in 9 files before and after**; release-proof
+  config lists RP-OFF-01/02/03 × {chromium, firefox} and D10-01/D10-02 × {chromium, firefox}.
+- **L3 was NOT executed locally**: the Firebase emulator JARs cannot be downloaded from this workspace.
+  The behavioural leg and the gate verdict come from the bounded CI run on this head (desktop acceptance
+  jobs); see the evidence file for run ids and annotation text.
 
 ## Independent Codex re-review checklist
-1. Re-run your six probes and the whole-module harness against `scan`; add new shapes (member-expression
-   callee, second awaited call, `Object.defineProperty(globalThis,'Error',…)`, `let` message) — none may PASS.
-2. Confirm the real OFF build is decided `[static]` and the real emulator build is `on` by execution with
-   reads counted.
-3. `RELEASE_PROOF_BUILD=1 node scripts/security/release-import-config.test.mjs` (26/26 with full history).
-4. Inspect the CI-retained `ci-evidence/release-build/` and the self-check annotation counts.
-5. Drafts unchanged from the corrected `905b1d4` versions.
+1. Re-run your nine probes and any new shape: confirm `canary` never reports behaviour and `gate` is
+   inconclusive for every synthetic bundle (no `scan`/`negative-control` command exists).
+2. Inspect the CI run: `release-gate.json` (executed titles per project, verdict), the release-proof
+   `results.json`, `release-build.context` (both manifest hashes), the self-check annotation counts.
+3. `RELEASE_PROOF_BUILD=1 node scripts/security/release-import-config.test.mjs` with full history (65/65).
+4. Playwright `--list` for both configs (membership unchanged; OFF spec only in the release-proof config).
+5. Drafts and application code unchanged from the accepted versions.
