@@ -1,0 +1,574 @@
+[
+  {
+    "job": "E2E diagnostic (chromium)",
+    "id": 117780196913,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "15 files; run.log redaction: bytes_before=39036 bytes_after=38254; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic chromium)",
+        "message": "files=5 bytes=669999 results.json=4c29e127d8881dfc executions_in_results_json=10 top-level: .last-run.json,n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--chromium,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (chromium diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium diag data: 9 executions",
+        "message": "PASS N2-D0 #0: D0 server=327ms dialogClosed=342ms net: [click@1] | CP 71-298 net::ERR_ABORTED | [end@343] | Listen: 1 req, 1 open\nPASS N2-D1 #0: D1 server=116ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8005ms teams=1 net: [click@0] | CP 39-78 net::ERR_ABORTED | [unblock@8001] | [end@8005] | Listen: 0 req, 0 open\nPASS N2-D3 #0: D3 leg=write-response held=0 server=108ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=114ms teams=1 net: [click@1] | CP 38-85 net::ERR_ABORTED | [release@125] | [end@125] | Listen: 0 req, 0 open\nPASS N2-D4 #0: D4 leg=backchannel held=0 server=112ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=118ms teams=1 net: [click@1] | CP 37-91 net::ERR_ABORTED | RG 91-92 net::ERR_ABORTED | [release@128] | [end@128] | Listen: 0 req, 0 open\nPASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok\nPASS CC-E1 #0: e1 fault=commit-reset faultHits=4 statusSeries=[\"51ms:saving\",\"307ms:saving\",\"562ms:saving\",\"818ms:saving\",\"1074ms:saving\",\"1330ms:saving\",\"1585ms:saving\",\"1840ms:saving\",\"2095ms:saving\",\"2350ms:saving\",\"2605ms:saving\",\"2860ms:saving\",\"3115ms:saving\",\"3370ms:saving\",\"3625ms:saving\",\"3880ms:saving\",\"4136ms:saving\",\"4391ms:saving\",\"4646ms:saving\",\"4899ms:saving\",\"5154ms:saving\",\"5409ms:saving\",\"5664ms:saving\",\"5919ms:saving\",\"6174ms:saving\",\"6429ms:saving\",\"6684ms:saving\",\"6939ms:saving\",\"7194ms:saving\",\"7449ms:saving\",\"7705ms:saving\",\"7961ms:saving\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[] recoveredAfterRestore=953ms finalStatus=saved finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E2 #0: e2 fault=commit-hold faultHits=1 statusSeries=[\"48ms:saving\",\"303ms:saving\",\"559ms:saving\",\"814ms:saving\",\"1069ms:saving\",\"1324ms:saving\",\"1578ms:saving\",\"1833ms:saving\",\"2087ms:saving\",\"2343ms:saving\",\"2597ms:saving\",\"2852ms:saving\",\"3106ms:saving\",\"3361ms:saving\",\"3616ms:saving\",\"3871ms:saving\",\"4126ms:saving\",\"4381ms:saving\",\"4636ms:saving\",\"4891ms:saving\",\"5146ms:saving\",\"5400ms:saving\",\"5656ms:saving\",\"5910ms:saving\",\"6166ms:saving\",\"6421ms:saving\",\"6676ms:saving\",\"6930ms:saving\",\"7184ms:saving\",\"7439ms:saving\",\"7694ms:saving\",\"7949ms:saving\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[] recoveredAfterRestore=114ms finalStatus=saved finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E3 #0: E3 afterFailure fields={\"Plan.name\":\"Edit path plan v2\",\"Plan.notes\":\"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx\"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=8903ms E3 alertAfterFailure=\"Connection failed.\" autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E4 #0: E4 afterFailure nameFields=[\"Mesh after failure\",\"Mesh after failure\"] draftsWithEdit=[\"imFqqCf1PPpbwC51cQmt:drafts\"] status=failed alerts=[\"Connection failed.\"] E4 commitResets=5 faultWindow=9501ms E4 autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Mesh after failure\"}]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 1 of 10 executions",
+        "message": "FAIL N2-D2 #0: Click@n2.spec.ts:138 59.4s"
+      },
+      {
+        "annotation_level": "warning",
+        "title": "E2E chromium diag: 1 failed executions",
+        "message": "N2-D2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.4s) | slowest: Click@n2.spec.ts:138 59.4s; Navigate@app.ts:68 0.1s; Expect \"toBeVisible\"@app.ts:99 0.1s"
+      },
+      {
+        "annotation_level": "failure",
+        "title": "E2E chromium [diagnostic]: 9 passed / 1 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 9/1 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "FAIL 1/1 N2-D2 [60.1/60.1/60.1s] -- Test timeout of 60000ms exceeded.\nPASS 1/1 N2-D0 [1.1/1.1/1.1s]\nPASS 1/1 N2-D1 [8.6/8.6/8.6s]\nPASS 1/1 N2-D3 [0.7/0.7/0.7s]\nPASS 1/1 N2-D4 [0.7/0.7/0.7s]\nPASS 1/1 N3-D5 [5.9/5.9/5.9s]\nPASS 1/1 CC-E1 [10.3/10.3/10.3s]\nPASS 1/1 CC-E2 [9.4/9.4/9.4s]\nPASS 1/1 CC-E3 [15.2/15.2/15.2s]\nPASS 1/1 CC-E4 [16.0/16.0/16.0s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (phone-chromium)",
+    "id": 117780197059,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "12 files; run.log redaction: bytes_before=3785 bytes_after=3785; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model phone-chromium)",
+        "message": "files=2 bytes=27273 results.json=ea1c2c1784ed0b9a executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (phone-chromium obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"obsolete-fault-model\" tests exist for project \"phone-chromium\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model phone-chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (phone-firefox)",
+    "id": 117780197096,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "12 files; run.log redaction: bytes_before=84523 bytes_after=83419; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance phone-firefox)",
+        "message": "files=2 bytes=53647 results.json=a4e7d9b610051530 executions_in_results_json=15 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (phone-firefox acceptance)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox slow steps >= 10s: 0 of 15 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox [acceptance]: 15 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 15/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-A07 [2.9/2.9/2.9s]\nPASS 1/1 E2E-A10 [1.5/1.5/1.5s]\nPASS 1/1 CC-P10 [3.4/3.4/3.4s]\nPASS 1/1 CC-P11 [2.7/2.7/2.7s]\nPASS 1/1 CC-P12 [2.9/2.9/2.9s]\nPASS 1/1 CC-P14 [4.9/4.9/4.9s]\nPASS 1/1 CC-P15 [4.1/4.1/4.1s]\nPASS 1/1 CC-P16 [3.9/3.9/3.9s]\nPASS 1/1 CC-P17 [3.5/3.5/3.5s]\nPASS 1/1 CC-L0 [2.3/2.3/2.3s]\nPASS 1/1 CC-L1 [1.8/1.8/1.8s]\nPASS 1/1 D10-01 [2.3/2.3/2.3s]\nPASS 1/1 D10-06e [5.7/5.7/5.7s]\nPASS 1/1 E2E-T01 [2.4/2.4/2.4s]\nPASS 1/1 E2E-T02 [3.5/3.5/3.5s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance phone-firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (firefox)",
+    "id": 117780197099,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "12 files; run.log redaction: bytes_before=4403 bytes_after=4357; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model firefox)",
+        "message": "files=2 bytes=29251 results.json=63cfa87ee513bd0d executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (firefox obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox diag data: 1 executions",
+        "message": "PASS N2-A2 #0: A2 cancelEnabled=true retrySubmitted=true savedAfterRelease=24ms teams=1"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox [obsolete-fault-model]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 1/0 (pass/fail)",
+        "message": "PASS 1/1 N2-A2 [7.5/7.5/7.5s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (phone-firefox)",
+    "id": 117780197100,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "12 files; run.log redaction: bytes_before=3750 bytes_after=3750; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic phone-firefox)",
+        "message": "files=2 bytes=27245 results.json=6bcb2eb7455d3790 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (phone-firefox diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"diagnostic\" tests exist for project \"phone-firefox\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic phone-firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (phone-chromium)",
+    "id": 117780197120,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "12 files; run.log redaction: bytes_before=84547 bytes_after=83443; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance phone-chromium)",
+        "message": "files=2 bytes=53690 results.json=be1cf998ad4afbaa executions_in_results_json=15 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (phone-chromium acceptance)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium slow steps >= 10s: 0 of 15 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium [acceptance]: 15 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 15/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-A07 [1.3/1.3/1.3s]\nPASS 1/1 E2E-A10 [1.0/1.0/1.0s]\nPASS 1/1 CC-P10 [2.3/2.3/2.3s]\nPASS 1/1 CC-P11 [1.8/1.8/1.8s]\nPASS 1/1 CC-P12 [2.0/2.0/2.0s]\nPASS 1/1 CC-P14 [3.5/3.5/3.5s]\nPASS 1/1 CC-P15 [2.7/2.7/2.7s]\nPASS 1/1 CC-P16 [2.1/2.1/2.1s]\nPASS 1/1 CC-P17 [2.4/2.4/2.4s]\nPASS 1/1 CC-L0 [1.4/1.4/1.4s]\nPASS 1/1 CC-L1 [1.1/1.1/1.1s]\nPASS 1/1 D10-01 [1.6/1.6/1.6s]\nPASS 1/1 D10-06e [3.8/3.8/3.8s]\nPASS 1/1 E2E-T01 [1.5/1.5/1.5s]\nPASS 1/1 E2E-T02 [2.3/2.3/2.3s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance phone-chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (chromium)",
+    "id": 117780197125,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "12 files; run.log redaction: bytes_before=4408 bytes_after=4362; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model chromium)",
+        "message": "files=2 bytes=29281 results.json=59ea99dadd5c38c1 executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (chromium obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium diag data: 1 executions",
+        "message": "PASS N2-A2 #0: A2 cancelEnabled=true retrySubmitted=true savedAfterRelease=36ms teams=1"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium [obsolete-fault-model]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 1/0 (pass/fail)",
+        "message": "PASS 1/1 N2-A2 [6.8/6.8/6.8s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (firefox)",
+    "id": 117780197131,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "15 files; run.log redaction: bytes_before=38933 bytes_after=38151; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic firefox)",
+        "message": "files=5 bytes=4598615 results.json=8275f719e689b6b8 executions_in_results_json=10 top-level: .last-run.json,n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--firefox,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (firefox diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox diag data: 9 executions",
+        "message": "PASS N2-D0 #0: D0 server=468ms dialogClosed=507ms net: [click@1] | CP 119-476 NS_BINDING_ABORTED | [end@508] | Listen: 1 req, 1 open\nPASS N2-D1 #0: D1 server=146ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8011ms teams=1 net: [click@1] | CP 64-127 200 | [unblock@8001] | [end@8012] | Listen: 0 req, 0 open\nPASS N2-D3 #0: D3 leg=write-response held=0 server=139ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=148ms teams=1 net: [click@1] | CP 63-119 NS_BINDING_ABORTED | [release@159] | [end@159] | Listen: 0 req, 0 open\nPASS N2-D4 #0: D4 leg=backchannel held=0 server=136ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=145ms teams=1 net: [click@1] | CP 62-118 NS_BINDING_ABORTED | [release@153] | [end@153] | Listen: 0 req, 0 open\nPASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok\nPASS CC-E1 #0: e1 fault=commit-reset faultHits=4 statusSeries=[\"82ms:saving\",\"346ms:saving\",\"607ms:saving\",\"866ms:saving\",\"1126ms:saving\",\"1384ms:saving\",\"1644ms:saving\",\"1903ms:saving\",\"2163ms:saving\",\"2422ms:saving\",\"2680ms:saving\",\"2938ms:saving\",\"3196ms:saving\",\"3454ms:saving\",\"3714ms:saving\",\"3973ms:saving\",\"4231ms:saving\",\"4489ms:saving\",\"4747ms:saving\",\"5004ms:saving\",\"5261ms:saving\",\"5519ms:saving\",\"5776ms:saving\",\"6034ms:saving\",\"6291ms:saving\",\"6550ms:saving\",\"6807ms:saving\",\"7064ms:saving\",\"7322ms:saving\",\"7583ms:saving\",\"7841ms:saving\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[] recoveredAfterRestore=1242ms finalStatus=saved finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E2 #0: e2 fault=commit-hold faultHits=1 statusSeries=[\"81ms:saving\",\"341ms:saving\",\"597ms:saving\",\"855ms:saving\",\"1112ms:saving\",\"1370ms:saving\",\"1628ms:saving\",\"1885ms:saving\",\"2143ms:saving\",\"2401ms:saving\",\"2659ms:saving\",\"2916ms:saving\",\"3176ms:saving\",\"3434ms:saving\",\"3693ms:saving\",\"3950ms:saving\",\"4207ms:saving\",\"4465ms:saving\",\"4722ms:saving\",\"4980ms:saving\",\"5238ms:saving\",\"5496ms:saving\",\"5755ms:saving\",\"6014ms:saving\",\"6301ms:saving\",\"6559ms:saving\",\"6817ms:saving\",\"7083ms:saving\",\"7342ms:saving\",\"7600ms:saving\",\"7858ms:saving\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[] recoveredAfterRestore=134ms finalStatus=saved finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E3 #0: E3 afterFailure fields={\"Plan.name\":\"Edit path plan v2\",\"Plan.notes\":\"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx\"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=8038ms E3 alertAfterFailure=\"Connection failed.\" autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E4 #0: E4 afterFailure nameFields=[\"Mesh after failure\",\"Mesh after failure\"] draftsWithEdit=[\"8b0nxUoslIWEvz3ieuVq:drafts\"] status=failed alerts=[\"Connection failed.\"] E4 commitResets=5 faultWindow=9753ms E4 autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Mesh after failure\"}]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 0 of 10 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "warning",
+        "title": "E2E firefox diag: 1 failed executions",
+        "message": "N2-D2 #0 timedOut 60.4s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Expect \"toBeVisible\"@n2.spec.ts:134 (0.0s) | slowest: Navigate@app.ts:68 0.2s; Navigate@app.ts:88 0.1s; Click@app.ts:76 0.1s"
+      },
+      {
+        "annotation_level": "failure",
+        "title": "E2E firefox [diagnostic]: 9 passed / 1 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 9/1 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "FAIL 1/1 N2-D2 [60.4/60.4/60.4s] -- Test timeout of 60000ms exceeded.\nPASS 1/1 N2-D0 [3.1/3.1/3.1s]\nPASS 1/1 N2-D1 [9.2/9.2/9.2s]\nPASS 1/1 N2-D3 [1.3/1.3/1.3s]\nPASS 1/1 N2-D4 [1.3/1.3/1.3s]\nPASS 1/1 N3-D5 [11.3/11.3/11.3s]\nPASS 1/1 CC-E1 [11.3/11.3/11.3s]\nPASS 1/1 CC-E2 [10.1/10.1/10.1s]\nPASS 1/1 CC-E3 [15.2/15.2/15.2s]\nPASS 1/1 CC-E4 [17.1/17.1/17.1s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (phone-chromium)",
+    "id": 117780197143,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "12 files; run.log redaction: bytes_before=3755 bytes_after=3755; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (diagnostic phone-chromium)",
+        "message": "files=2 bytes=27283 results.json=7f1562e82c667b96 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (phone-chromium diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"diagnostic\" tests exist for project \"phone-chromium\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (diagnostic phone-chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (chromium)",
+    "id": 117780197149,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "15 files; run.log redaction: bytes_before=342256 bytes_after=338438; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance chromium)",
+        "message": "files=3 bytes=171590 results.json=523e3399f0b20d04 executions_in_results_json=65 top-level: .last-run.json,release-proof,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (chromium acceptance)",
+        "message": "verdict=off off=[\"RP-OFF-01@import-off-chromium:expected\",\"RP-OFF-02@import-off-chromium:expected\",\"RP-OFF-03@import-off-chromium:expected\",\"D10-01@on-control-chromium:expected\",\"D10-02@on-control-chromium:expected\"] on=[\"RP-OFF-01@import-off-chromium:expected\",\"RP-OFF-02@import-off-chromium:expected\",\"RP-OFF-03@import-off-chromium:expected\",\"D10-01@on-control-chromium:expected\",\"D10-02@on-control-chromium:expected\"]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium diag data: 14 executions",
+        "message": "PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"0cde624c\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"6NgsbDu0kAKkvj9kvaYpbDBfPLk0\",\"status\":\"pending\",\"teamId\":\"r6guKZnPgGC58V0dN12C\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]\nPASS N2-A1 #0: A1 statusAt=66ms savedAfterRestore=6ms recoveredAfterRestore=16ms teams=1 net: [click@1] | CP 52-111 net::ERR_ABORTED | RG 110-111 net::ERR_ABORTED | [restore@8004] | [end@11027] | Listen: 0 req, 0 open\nPASS N2-R1 #0: R1 heldCommits=1 statusAt=58ms serverDuringOutage=0 recovery=automatic/68ms net: [click@1] | CP 50-8063 net::ERR_ABORTED | [restore@8004] | [end@11071] | Listen: 0 req, 0 open\nPASS N2-R1b #0: R1b resets=1 statusAt=65ms serverDuringOutage=0 recovery=ui-retry/12157ms net: [click@0] | CP 52-61 net::ERR_CONNECTION_RESET | [restore@8009] | CP 20097-20146 net::ERR_ABORTED | [end@23166] | Listen: 0 req, 0 open\nPASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=71ms serverAfterCommit=1 recovery=automatic/75ms net: [click@1] | CP 50-142 net::ERR_ABORTED | [end@3173] | Listen: 0 req, 0 open\nPASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/75ms\nPASS N2-R3 #0: R3 recovery=ui-retry/12161ms\nPASS N2-R4 #0: R4 recovery=ui-retry/12255ms\nPASS N2-R5 #0: R5 fakedCommits=1 statusAt=65ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12115ms net: [click@1] | CP 51-76 net::ERR_ABORTED | RG 61-76 net::ERR_ABORTED | [restore@8020] | CP 20063-20111 net::ERR_ABORTED | RG 20111-20111 net::ERR_ABORTED | [end@23135] | Listen: 0 req, 0 open\nPASS N2-R6 #0: R6 statusAt=61ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0\nPASS N2-R7 #0: R7 promptAt=55ms teamsBeforeAnswer=1 prompt=\"You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team\" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=60ms teamsWithName=2 distinctIds=2 distinctCodes=2\nPASS N2-R7b #0: R7b resets=1 statusAt=8ms serverDuring=1 recoveredAt=13 reprompts=0 teamsWithName=2\nPASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=67ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12117ms\nPASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=55ms committedAt=68ms noFalseSuccessAt8s=true recovery=automatic/2763ms"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 0 of 65 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E chromium [acceptance]: 65 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 65/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-AI01 [2.3/2.3/2.3s]\nPASS 1/1 E2E-AI01b [2.0/2.0/2.0s]\nPASS 1/1 E2E-A01 [0.3/0.3/0.3s]\nPASS 1/1 E2E-A02 [0.6/0.6/0.6s]\nPASS 1/1 E2E-A03 [0.8/0.8/0.8s]\nPASS 1/1 E2E-A04 [0.8/0.8/0.8s]\nPASS 1/1 E2E-A05 [0.3/0.3/0.3s]\nPASS 1/1 E2E-A06 [0.3/0.3/0.3s]\nPASS 1/1 E2E-A07 [1.0/1.0/1.0s]\nPASS 1/1 E2E-A08 [0.6/0.6/0.6s]\nPASS 1/1 E2E-A09 [1.2/1.2/1.2s]\nPASS 1/1 E2E-A10 [1.0/1.0/1.0s]\nPASS 1/1 CC-P10 [2.1/2.1/2.1s]\nPASS 1/1 CC-P10b [2.7/2.7/2.7s]\nPASS 1/1 CC-P11 [1.7/1.7/1.7s]\nPASS 1/1 CC-P12 [1.6/1.6/1.6s]\nPASS 1/1 CC-P14 [3.2/3.2/3.2s]\nPASS 1/1 CC-P15 [2.7/2.7/2.7s]\nPASS 1/1 CC-P16 [2.1/2.1/2.1s]\nPASS 1/1 CC-P16b [1.3/1.3/1.3s]\nPASS 1/1 CC-P17 [2.4/2.4/2.4s]\nPASS 1/1 CC-L0 [1.4/1.4/1.4s]\nPASS 1/1 CC-L1 [1.2/1.2/1.2s]\nPASS 1/1 CC-W0 [1.3/1.3/1.3s]\nPASS 1/1 D10-00 [1.0/1.0/1.0s]\nPASS 1/1 D10-01 [1.7/1.7/1.7s]\nPASS 1/1 D10-02 [1.7/1.7/1.7s]\nPASS 1/1 D10-03 [2.0/2.0/2.0s]\nPASS 1/1 D10-04 [1.7/1.7/1.7s]\nPASS 1/1 D10-05 [1.2/1.2/1.2s]\nPASS 1/1 D10-06 [2.5/2.5/2.5s]\nPASS 1/1 D10-06b [2.1/2.1/2.1s]\nPASS 1/1 D10-07 [6.6/6.6/6.6s]\nPASS 1/1 D10-07b [1.5/1.5/1.5s]\nPASS 1/1 D10-08 [1.9/1.9/1.9s]\nPASS 1/1 D10-09 [2.3/2.3/2.3s]\nPASS 1/1 D10-10 [1.4/1.4/1.4s]\nPASS 1/1 D10-11 [2.1/2.1/2.1s]\nPASS 1/1 D10-12 [0.8/0.8/0.8s]\nPASS 1/1 D10-06c [1.9/1.9/1.9s]\nPASS 1/1 D10-06d [2.4/2.4/2.4s]\nPASS 1/1 D10-06e [3.8/3.8/3.8s]\nPASS 1/1 D10-08a [1.8/1.8/1.8s]\nPASS 1/1 D10-08b [3.2/3.2/3.2s]\nPASS 1/1 D10-08c [4.0/4.0/4.0s]\nPASS 1/1 D10-08d [1.3/1.3/1.3s]\nPASS 1/1 N2-A1 [11.8/11.8/11.8s]\nPASS 1/1 N2-R1 [11.8/11.8/11.8s]\nPASS 1/1 N2-R1b [23.9/23.9/23.9s]\nPASS 1/1 N2-R1c [3.9/3.9/3.9s]\nPASS 1/1 N2-R2 [6.1/6.1/6.1s]\nPASS 1/1 N2-R3 [16.1/16.1/16.1s]\nPASS 1/1 N2-R4 [17.3/17.3/17.3s]\nPASS 1/1 N2-R5 [23.8/23.8/23.8s]\nPASS 1/1 N2-R6 [21.0/21.0/21.0s]\nPASS 1/1 N2-R7 [10.3/10.3/10.3s]\nPASS 1/1 N2-R7b [29.2/29.2/29.2s]\nPASS 1/1 N2-R8 [23.8/23.8/23.8s]\nPASS 1/1 N2-R8b [14.5/14.5/14.5s]\nPASS 1/1 E2E-C01 [1.5/1.5/1.5s]\nPASS 1/1 E2E-T01 [1.5/1.5/1.5s]\nPASS 1/1 E2E-T02 [2.3/2.3/2.3s]\nPASS 1/1 E2E-T03 [1.9/1.9/1.9s]\nPASS 1/1 UI-01 [0.8/0.8/0.8s]\nPASS 1/1 UI-02 [1.5/1.5/1.5s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 19 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (firefox)",
+    "id": 117780197166,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "15 files; run.log redaction: bytes_before=342131 bytes_after=338313; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (acceptance firefox)",
+        "message": "files=3 bytes=171365 results.json=fb32f8035f56db59 executions_in_results_json=65 top-level: .last-run.json,release-proof,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (firefox acceptance)",
+        "message": "verdict=off off=[\"RP-OFF-01@import-off-firefox:expected\",\"RP-OFF-02@import-off-firefox:expected\",\"RP-OFF-03@import-off-firefox:expected\",\"D10-01@on-control-firefox:expected\",\"D10-02@on-control-firefox:expected\"] on=[\"RP-OFF-01@import-off-firefox:expected\",\"RP-OFF-02@import-off-firefox:expected\",\"RP-OFF-03@import-off-firefox:expected\",\"D10-01@on-control-firefox:expected\",\"D10-02@on-control-firefox:expected\"]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox diag data: 14 executions",
+        "message": "PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"3c945fb8\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"re9oL2a7MCREq9HtFqeI7hR3jxob\",\"status\":\"pending\",\"teamId\":\"fbD76SX1tx9iwUPOVyoO\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]\nPASS N2-A1 #0: A1 statusAt=81ms savedAfterRestore=4ms recoveredAfterRestore=27ms teams=1 net: [click@1] | CP 62-111 200 | RG 112-114 NS_BINDING_ABORTED | [restore@8002] | [end@11032] | Listen: 0 req, 0 open\nPASS N2-R1 #0: R1 heldCommits=1 statusAt=77ms serverDuringOutage=0 recovery=automatic/83ms net: [click@1] | CP 63-8047 200 | [restore@8001] | [end@11085] | Listen: 0 req, 0 open\nPASS N2-R1b #0: R1b resets=1 statusAt=90ms serverDuringOutage=0 recovery=ui-retry/12159ms net: [click@1] | CP 73-76 NS_ERROR_NET_RESET | [restore@8006] | CP 20082-20129 200 | RG 20132-20133 NS_BINDING_ABORTED | [end@23165] | Listen: 0 req, 0 open\nPASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=88ms serverAfterCommit=1 recovery=automatic/84ms net: [click@1] | CP 62-140 NS_BINDING_ABORTED | [end@3198] | Listen: 0 req, 0 open\nPASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/76ms\nPASS N2-R3 #0: R3 recovery=ui-retry/12267ms\nPASS N2-R4 #0: R4 recovery=ui-retry/12207ms\nPASS N2-R5 #0: R5 fakedCommits=1 statusAt=87ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12172ms net: [click@2] | CP 64-67 200 | RG 71-80 403 | [restore@8033] | CP 20120-20168 200 | RG 20172-20172 NS_BINDING_ABORTED | [end@23205] | Listen: 0 req, 0 open\nPASS N2-R6 #0: R6 statusAt=90ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0\nPASS N2-R7 #0: R7 promptAt=78ms teamsBeforeAnswer=1 prompt=\"You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team\" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=5ms teamsWithName=2 distinctIds=2 distinctCodes=2\nPASS N2-R7b #0: R7b resets=1 statusAt=8ms serverDuring=1 recoveredAt=10 reprompts=0 teamsWithName=2\nPASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=84ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12162ms\nPASS N2-R8b #0: R8b listenBlocked=5 readbacksFailed=1 statusAt=88ms committedAt=104ms noFalseSuccessAt8s=true recovery=automatic/987ms"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 0 of 65 executions",
+        "message": "none"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E firefox [acceptance]: 65 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 65/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-AI01 [3.7/3.7/3.7s]\nPASS 1/1 E2E-AI01b [3.0/3.0/3.0s]\nPASS 1/1 E2E-A01 [0.5/0.5/0.5s]\nPASS 1/1 E2E-A02 [1.0/1.0/1.0s]\nPASS 1/1 E2E-A03 [1.5/1.5/1.5s]\nPASS 1/1 E2E-A04 [1.4/1.4/1.4s]\nPASS 1/1 E2E-A05 [0.5/0.5/0.5s]\nPASS 1/1 E2E-A06 [1.5/1.5/1.5s]\nPASS 1/1 E2E-A07 [1.7/1.7/1.7s]\nPASS 1/1 E2E-A08 [0.9/0.9/0.9s]\nPASS 1/1 E2E-A09 [1.6/1.6/1.6s]\nPASS 1/1 E2E-A10 [1.5/1.5/1.5s]\nPASS 1/1 CC-P10 [3.2/3.2/3.2s]\nPASS 1/1 CC-P10b [3.7/3.7/3.7s]\nPASS 1/1 CC-P11 [2.4/2.4/2.4s]\nPASS 1/1 CC-P12 [2.6/2.6/2.6s]\nPASS 1/1 CC-P14 [4.8/4.8/4.8s]\nPASS 1/1 CC-P15 [4.7/4.7/4.7s]\nPASS 1/1 CC-P16 [3.2/3.2/3.2s]\nPASS 1/1 CC-P16b [2.0/2.0/2.0s]\nPASS 1/1 CC-P17 [3.7/3.7/3.7s]\nPASS 1/1 CC-L0 [2.2/2.2/2.2s]\nPASS 1/1 CC-L1 [1.9/1.9/1.9s]\nPASS 1/1 CC-W0 [1.8/1.8/1.8s]\nPASS 1/1 D10-00 [1.5/1.5/1.5s]\nPASS 1/1 D10-01 [3.2/3.2/3.2s]\nPASS 1/1 D10-02 [2.3/2.3/2.3s]\nPASS 1/1 D10-03 [3.1/3.1/3.1s]\nPASS 1/1 D10-04 [2.3/2.3/2.3s]\nPASS 1/1 D10-05 [1.9/1.9/1.9s]\nPASS 1/1 D10-06 [3.6/3.6/3.6s]\nPASS 1/1 D10-06b [3.6/3.6/3.6s]\nPASS 1/1 D10-07 [7.3/7.3/7.3s]\nPASS 1/1 D10-07b [2.4/2.4/2.4s]\nPASS 1/1 D10-08 [3.0/3.0/3.0s]\nPASS 1/1 D10-09 [4.4/4.4/4.4s]\nPASS 1/1 D10-10 [2.0/2.0/2.0s]\nPASS 1/1 D10-11 [3.6/3.6/3.6s]\nPASS 1/1 D10-12 [1.2/1.2/1.2s]\nPASS 1/1 D10-06c [3.2/3.2/3.2s]\nPASS 1/1 D10-06d [4.1/4.1/4.1s]\nPASS 1/1 D10-06e [5.7/5.7/5.7s]\nPASS 1/1 D10-08a [3.0/3.0/3.0s]\nPASS 1/1 D10-08b [4.4/4.4/4.4s]\nPASS 1/1 D10-08c [5.2/5.2/5.2s]\nPASS 1/1 D10-08d [2.2/2.2/2.2s]\nPASS 1/1 N2-A1 [12.2/12.2/12.2s]\nPASS 1/1 N2-R1 [12.3/12.3/12.3s]\nPASS 1/1 N2-R1b [24.4/24.4/24.4s]\nPASS 1/1 N2-R1c [4.4/4.4/4.4s]\nPASS 1/1 N2-R2 [6.6/6.6/6.6s]\nPASS 1/1 N2-R3 [16.8/16.8/16.8s]\nPASS 1/1 N2-R4 [18.5/18.5/18.5s]\nPASS 1/1 N2-R5 [24.8/24.8/24.8s]\nPASS 1/1 N2-R6 [21.5/21.5/21.5s]\nPASS 1/1 N2-R7 [10.8/10.8/10.8s]\nPASS 1/1 N2-R7b [29.9/29.9/29.9s]\nPASS 1/1 N2-R8 [24.4/24.4/24.4s]\nPASS 1/1 N2-R8b [13.3/13.3/13.3s]\nPASS 1/1 E2E-C01 [2.5/2.5/2.5s]\nPASS 1/1 E2E-T01 [2.5/2.5/2.5s]\nPASS 1/1 E2E-T02 [4.5/4.5/4.5s]\nPASS 1/1 E2E-T03 [3.0/3.0/3.0s]\nPASS 1/1 UI-01 [1.3/1.3/1.3s]\nPASS 1/1 UI-02 [2.4/2.4/2.4s]"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 19 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (acceptance firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (phone-firefox)",
+    "id": 117780197176,
+    "annotations": [
+      {
+        "annotation_level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "12 files; run.log redaction: bytes_before=3780 bytes_after=3780; UPLOAD_OK present"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model phone-firefox)",
+        "message": "files=2 bytes=27245 results.json=0208168966bb6803 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release gate (phone-firefox obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"obsolete-fault-model\" tests exist for project \"phone-firefox\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "annotation_level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model phone-firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      }
+    ]
+  }
+]

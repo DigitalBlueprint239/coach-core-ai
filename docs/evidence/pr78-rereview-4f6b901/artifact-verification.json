@@ -1,0 +1,1010 @@
+[
+  {
+    "id": 12150195929,
+    "name": "e2e-results-acceptance-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:b98f543aeafef867ea2dc57def25cac7a14da1e18c543823f80b59ab2af00473",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 15,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "import-off-build-manifest.sha256",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12150195929/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": "d305504dc8fb6ad2491bf935e6cc0060ef2a6ee006637119beb6a81ec7d0afe2",
+    "off_build_bytes_retained": false,
+    "l3": {
+      "stats": {
+        "startTime": "2026-10-18T20:31:49.717Z",
+        "duration": 25882.83,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical",
+          "file": "release-import-off.spec.ts",
+          "project": "import-off-firefox",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied",
+          "file": "release-import-off.spec.ts",
+          "project": "import-off-firefox",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written",
+          "file": "release-import-off.spec.ts",
+          "project": "import-off-firefox",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+          "file": "legacy-import.spec.ts",
+          "project": "on-control-firefox",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+          "file": "legacy-import.spec.ts",
+          "project": "on-control-firefox",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-18T20:31:49.717Z",
+            "duration": 25882.83,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-18T20:31:49.717Z",
+            "duration": 25882.83,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:26.686Z",
+      "duration": 367203.74700000003,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12150190027,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:d130b80b15662e050cc1977f7e7b726714dfd048f4c52d9ae1f24eafc81f0291",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12150190027/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:24:37.294Z",
+      "duration": 468.596,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12150035775,
+    "name": "e2e-results-obsolete-fault-model-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:bd8088f0e5778f9676325c45f8e11deb3800e8e4b59ed42ab9aa27dea063f38e",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12150035775/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:24.823Z",
+      "duration": 9208.448,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12150015843,
+    "name": "e2e-results-acceptance-phone-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:95921b99bb0d961d2c1a433b70060060bf1b77a1f8837c8dfa96d2d74346c071",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12150015843/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:08.150Z",
+      "duration": 32210.893999999997,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149956092,
+    "name": "e2e-results-diagnostic-phone-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:da39d64fc0daf79508b525870c8164664e6e8d4c81ddbeb5aa8b486b49be76a4",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149956092/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:23.682Z",
+      "duration": 565.5220000000002,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149791658,
+    "name": "e2e-results-obsolete-fault-model-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:d994bf63cd17138bf9ea7fc5af4d46582a7e0cf99edeab7d8af2f7042d92177b",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149791658/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:24:35.211Z",
+      "duration": 10253.396999999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149777500,
+    "name": "e2e-results-acceptance-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:b8084a5e5dbad2e064562358cc2ebe4d64a4abdcdc556e389a68e618258b1096",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 15,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "import-off-build-manifest.sha256",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149777500/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": "d305504dc8fb6ad2491bf935e6cc0060ef2a6ee006637119beb6a81ec7d0afe2",
+    "off_build_bytes_retained": false,
+    "l3": {
+      "stats": {
+        "startTime": "2026-10-18T20:30:47.417Z",
+        "duration": 18839.18,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical",
+          "file": "release-import-off.spec.ts",
+          "project": "import-off-chromium",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied",
+          "file": "release-import-off.spec.ts",
+          "project": "import-off-chromium",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written",
+          "file": "release-import-off.spec.ts",
+          "project": "import-off-chromium",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+          "file": "legacy-import.spec.ts",
+          "project": "on-control-chromium",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        },
+        {
+          "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+          "file": "legacy-import.spec.ts",
+          "project": "on-control-chromium",
+          "status": "expected",
+          "results": [
+            [
+              "passed",
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-18T20:30:47.417Z",
+            "duration": 18839.18,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-18T20:30:47.417Z",
+            "duration": 18839.18,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:23.504Z",
+      "duration": 309188.745,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149741062,
+    "name": "e2e-results-diagnostic-phone-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:92e35406bafb48936947fac9303569b3f9ec6506705f70dfb3f1720de2d10b89",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149741062/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:08.787Z",
+      "duration": 661.5779999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149607271,
+    "name": "e2e-results-acceptance-phone-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:f73b09ad7ee3cacf02f9164c8b199a46af60f8b81c527069a4eb4c610b79a556",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149607271/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:10.206Z",
+      "duration": 50134.78599999999,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149591680,
+    "name": "e2e-results-diagnostic-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:01b30588fcd3dedfece5c6b885b2a61b110a47a7a8dbff7860aa491fde98504b",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 15,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149591680/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:06.758Z",
+      "duration": 143823.86500000002,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "test_exit": 1
+  },
+  {
+    "id": 12149576348,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:d82ace8b9d80459e7c2d345a04030ff2783608b2626f92220da1857f7df43e8c",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 12,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149576348/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:25:08.232Z",
+      "duration": 689.0999999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "test_exit": 0
+  },
+  {
+    "id": 12149413766,
+    "name": "e2e-results-diagnostic-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "digest": "sha256:b996cb35535c86582b77f98356b04e8eed66255fb84de4ee9ab7cc0510e65d16",
+    "archive_inventory_and_retained_hashes_verified": true,
+    "inventory_files": 15,
+    "provenance_candidate_run_attempt_matrix_verified": true,
+    "retained_files_sorted": [
+      "asset-manifest.json",
+      "index.html",
+      "release-build.context",
+      "release-canary.json",
+      "static/js/main.630c8567.js"
+    ],
+    "unretained_release_manifest_files": [
+      "_headers",
+      "_redirects",
+      "manifest.json",
+      "robots.txt",
+      "sitemap.xml",
+      "static/css/main.d6011d57.css",
+      "static/js/main.630c8567.js.LICENSE.txt",
+      "sw.js"
+    ],
+    "configured_text_token_scans_clear": true,
+    "release_canary": {
+      "dir": "/workspace/scratch/review78-r5/extracted-12149413766/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    },
+    "off_manifest_digest": null,
+    "off_build_bytes_retained": false,
+    "l3": null,
+    "gate": null,
+    "main_stats": {
+      "startTime": "2026-10-18T20:24:50.598Z",
+      "duration": 129777.456,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "test_exit": 1
+  }
+]

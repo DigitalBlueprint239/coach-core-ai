@@ -1,0 +1,1712 @@
+{
+  "synthetic_fixtures": [
+    {
+      "name": "baseline OFF",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-1czkyX",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1802,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-1czkyX/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-1czkyX/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-1czkyX/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-1czkyX/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "baseline ON",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-q7vyh9",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1815,
+              "value": "coachcore:import-config=true"
+            }
+          ],
+          "verdict": "config-true",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-true",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-q7vyh9/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-q7vyh9/missing.json"
+            }
+          },
+          "reasons": [
+            "configuration leg: canary verdict is config-true: ",
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-q7vyh9/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-q7vyh9/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D1 argument getter evaluated before the throw",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-ufSAX9",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1885,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-ufSAX9/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-ufSAX9/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-ufSAX9/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-ufSAX9/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D1 default parameter runs before the body",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-5bTu9U",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1818,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-5bTu9U/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-5bTu9U/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-5bTu9U/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-5bTu9U/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D1 handler default-getter parameter",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-o3Do0L",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1899,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-o3Do0L/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-o3Do0L/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-o3Do0L/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-o3Do0L/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D1 onClick wrapper reads an effectful getter",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-zUoewA",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1885,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-zUoewA/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-zUoewA/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-zUoewA/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-zUoewA/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D1 destructured local that is backend code, not a verified setter",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-19pR6Y",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1817,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-19pR6Y/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-19pR6Y/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-19pR6Y/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-19pR6Y/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D2 computed literal global replacement globalThis[\"Error\"]",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-KehyEB",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1885,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-KehyEB/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-KehyEB/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-KehyEB/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-KehyEB/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D2 unresolved constructor is not trusted as native",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-iUKrmx",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1808,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-iUKrmx/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-iUKrmx/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-iUKrmx/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-iUKrmx/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "D3 ON control must not drop explicit false arguments",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-z8DXky",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1882,
+              "value": "coachcore:import-config=true"
+            }
+          ],
+          "verdict": "config-true",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-true",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-z8DXky/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-z8DXky/missing.json"
+            }
+          },
+          "reasons": [
+            "configuration leg: canary verdict is config-true: ",
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-z8DXky/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-z8DXky/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "React state functional updater",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-CkcEQK",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1874,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-CkcEQK/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-CkcEQK/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-CkcEQK/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-CkcEQK/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "coercion of local value",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-P3NJI8",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1866,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-P3NJI8/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-P3NJI8/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-P3NJI8/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-P3NJI8/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "explicit global receiver defeats strict this assumption",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-v7ralQ",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1918,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-v7ralQ/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-v7ralQ/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-v7ralQ/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-v7ralQ/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "Reflect alias rewrites Error",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-4JIpFy",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1909,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-4JIpFy/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-4JIpFy/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-4JIpFy/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-4JIpFy/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "unverified require function returns malicious hooks",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-44DBsb",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1883,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-44DBsb/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-44DBsb/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-44DBsb/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-44DBsb/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "ref current accessor installed in component",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-wfjKne",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1873,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-wfjKne/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-wfjKne/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-wfjKne/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-wfjKne/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "outer finally executes after inner rejection",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-Y06HL6",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1848,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-Y06HL6/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-Y06HL6/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-Y06HL6/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-Y06HL6/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "duplicate onClick selects uninspected handler",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-HNRAfo",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1802,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-HNRAfo/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-HNRAfo/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-HNRAfo/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-HNRAfo/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "ON predicate mapping is not faithful",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-qVGgh2",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1821,
+              "value": "coachcore:import-config=true"
+            }
+          ],
+          "verdict": "config-true",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-true",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-qVGgh2/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-qVGgh2/missing.json"
+            }
+          },
+          "reasons": [
+            "configuration leg: canary verdict is config-true: ",
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-qVGgh2/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-qVGgh2/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "getter argument direct (must reject)",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-TvslYi",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1876,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-TvslYi/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-TvslYi/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-TvslYi/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-TvslYi/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    },
+    {
+      "name": "catch member read (must reject)",
+      "canary": {
+        "exit": 0,
+        "report": {
+          "dir": "/workspace/scratch/review78-r5/fixture-P8vDXU",
+          "entryChunks": [
+            "static/js/main.js"
+          ],
+          "literals": [
+            {
+              "chunk": "static/js/main.js",
+              "offset": 1819,
+              "value": "coachcore:import-config=false"
+            }
+          ],
+          "verdict": "config-false",
+          "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+          "reasons": [],
+          "sourceScope": {
+            "ok": true,
+            "reasons": [],
+            "reads": [
+              "src/features/legacy-import/import-legacy.ts:3",
+              "src/features/legacy-import/import-legacy.ts:8"
+            ]
+          },
+          "ok": true
+        }
+      },
+      "gate": {
+        "exit": 1,
+        "report": {
+          "verdict": "inconclusive",
+          "legs": {
+            "canary": {
+              "verdict": "config-false",
+              "literals": 1,
+              "chunks": [
+                "static/js/main.js"
+              ]
+            },
+            "behaviourOff": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-P8vDXU/missing.json"
+            },
+            "behaviourOnControl": {
+              "error": "results file missing: /workspace/scratch/review78-r5/fixture-P8vDXU/missing.json"
+            }
+          },
+          "reasons": [
+            "inconclusive: behaviour leg (import-OFF emulator build): results file missing: /workspace/scratch/review78-r5/fixture-P8vDXU/missing.json",
+            "inconclusive: ON control (opted-in emulator build, accepted D10 suite): results file missing: /workspace/scratch/review78-r5/fixture-P8vDXU/missing.json"
+          ],
+          "establishes": null,
+          "ok": false
+        }
+      },
+      "removed_scan_exit": 2,
+      "removed_negative_control_exit": 2
+    }
+  ],
+  "real_results_mutations": [
+    {
+      "name": "actual CI results (positive)",
+      "expected_exit": 0,
+      "exit": 0,
+      "report": {
+        "verdict": "off",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [],
+        "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+        "ok": true
+      }
+    },
+    {
+      "name": "OFF skipped",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "inconclusive: behaviour leg (import-OFF emulator build): RP-OFF-02 was not executed",
+          "inconclusive: behaviour leg (import-OFF emulator build): RP-OFF-02 [release proof] unfinished imp (import-off-chromium) was skipped, not executed"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    },
+    {
+      "name": "OFF no completed result",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "inconclusive: behaviour leg (import-OFF emulator build): RP-OFF-02 was not executed"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    },
+    {
+      "name": "OFF interrupted",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:unexpected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:unexpected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "behaviour leg (import-OFF emulator build): RP-OFF-02 (import-off-chromium) did not pass: unexpected [interrupted]"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    },
+    {
+      "name": "OFF timed out",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:unexpected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:unexpected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "behaviour leg (import-OFF emulator build): RP-OFF-02 (import-off-chromium) did not pass: unexpected [timedOut]"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    },
+    {
+      "name": "ON control failed",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:unexpected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:unexpected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "ON control (opted-in emulator build, accepted D10 suite): D10-01 (on-control-chromium) did not pass: unexpected [failed]"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    },
+    {
+      "name": "OFF flaky",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:flaky",
+              "RP-OFF-02@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:flaky",
+              "RP-OFF-02@import-off-chromium:expected",
+              "RP-OFF-03@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "behaviour leg (import-OFF emulator build): RP-OFF-01 (import-off-chromium) did not pass: flaky [failed,passed]"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    },
+    {
+      "name": "required OFF title absent",
+      "expected_exit": 1,
+      "exit": 1,
+      "report": {
+        "verdict": "inconclusive",
+        "legs": {
+          "canary": {
+            "verdict": "config-false",
+            "literals": 1,
+            "chunks": [
+              "static/js/main.630c8567.js"
+            ]
+          },
+          "behaviourOff": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:expected",
+              "unrelated@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          },
+          "behaviourOnControl": {
+            "executed": [
+              "RP-OFF-01@import-off-chromium:expected",
+              "RP-OFF-02@import-off-chromium:expected",
+              "unrelated@import-off-chromium:expected",
+              "D10-01@on-control-chromium:expected",
+              "D10-02@on-control-chromium:expected"
+            ],
+            "stats": {
+              "startTime": "2026-10-18T20:30:47.417Z",
+              "duration": 18839.18,
+              "expected": 5,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            }
+          }
+        },
+        "reasons": [
+          "inconclusive: behaviour leg (import-OFF emulator build): RP-OFF-03 was not executed"
+        ],
+        "establishes": null,
+        "ok": false
+      }
+    }
+  ]
+}

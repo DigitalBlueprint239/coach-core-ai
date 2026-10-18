@@ -165,3 +165,8 @@ TypeScript0, reporter10/evidence19. PR75's24 new ZIPs independently verified.
 Exact-head bounded Actions results/ZIP verification belong in the issue39 final
 handoff. New configuration and combined runtime require independent acceptance.
 No aggregate enforcement implementation, merge/deployment or activation; MVP NO-GO.
+
+
+## Independent PR #78 redesigned proof re-review — 2026-10-18 / Codex
+
+Head4f6b901b6c4141f88f5d884af0d67d62b28f40c1 against61448f0: PASS for the bounded L1/L2/L3 default-OFF configuration proof, not release/deployment acceptance. Source guards/config evidence plus same-commit real-browser OFF behavior and accepted ON control support the narrow claim under stated compiler/build assumptions; exact release executable was not run. Local65/65 focused/full history/real-build checks, import49/49, TS0; CI L3 ten passes, both gate recomputations match. All12 new39163048438 ZIP digests/inventories/provenance verified. Main CI remains failure:180passes/2N2-D2 timeouts, exits1 retained. OFF emulator bytes and eight release manifest entries unretained; no local-to-CI byte-reproducibility claimed. PR77 independent acceptance still unconfirmed; aggregate enforcement/integration/release prerequisites remain separate. Details [PR78_REREVIEW_4F6B901.md](PR78_REREVIEW_4F6B901.md). Evidence-only branch; no full matrix/integration/merge/deployment/protection/recovery/AI action. MVP NO-GO.

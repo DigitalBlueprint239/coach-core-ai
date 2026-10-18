@@ -1,0 +1,1 @@
+21 prior fixtures: canary makes no behaviour claim; gate without L3 inconclusive; retired commands exit2. Actual-CI positive gate + seven failure mutations behave as expected.

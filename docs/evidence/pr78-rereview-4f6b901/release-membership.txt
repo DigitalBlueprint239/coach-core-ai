@@ -1,0 +1,12 @@
+Listing tests:
+  [import-off-chromium] › release-import-off.spec.ts:54:1 › RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical
+  [import-off-chromium] › release-import-off.spec.ts:70:1 › RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied
+  [import-off-chromium] › release-import-off.spec.ts:85:1 › RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written
+  [on-control-chromium] › legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  [on-control-chromium] › legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+  [import-off-firefox] › release-import-off.spec.ts:54:1 › RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical
+  [import-off-firefox] › release-import-off.spec.ts:70:1 › RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied
+  [import-off-firefox] › release-import-off.spec.ts:85:1 › RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written
+  [on-control-firefox] › legacy-import.spec.ts:59:1 › D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched
+  [on-control-firefox] › legacy-import.spec.ts:76:1 › D10-02 decline: "Not now" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach
+Total: 10 tests in 2 files

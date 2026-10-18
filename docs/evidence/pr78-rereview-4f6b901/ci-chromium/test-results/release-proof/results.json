@@ -1,0 +1,519 @@
+{
+  "config": {
+    "argv": [
+      "/opt/hostedtoolcache/node/22.23.3/x64/bin/node",
+      "/home/runner/work/coach-core-ai/coach-core-ai/e2e/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "playwright.release-proof.config.ts"
+    ],
+    "configFile": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/playwright.release-proof.config.ts",
+    "rootDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+        "commitHash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+        "buildHref": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39163048438"
+      },
+      "gitCommit": {
+        "shortHash": "4f6b901",
+        "hash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+        "subject": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate",
+        "body": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate\n\nWhy: four independent reviews (c9d49dd, 905b1d4, d14aa7b, cab8cab) each defeated the static model of\nthe shipped handler with constructs the engine evaluates and the model did not (functional updaters,\nvalueOf coercion, accessor refs, poison.call(globalThis), aliased Reflect, tampered require, outer\nfinally, duplicate onClick, synthesised ON predicate). Handler inertness over arbitrary compiled JS is\nnot decidable by a whitelist; every exemption widened the accepted language. This revision makes no\nbehavioural claim from minified output.\n\nContract: resolve (effective flag exactly \"false\" from a committed file, CRA loader agrees; refuse to\nbuild otherwise) + canary (single string-literal coachcore:import-config=false token in the shipped entry\nchunks; source reads the flag only at the release boundary with the accepted guards verbatim) + gate\n(real-browser RP-OFF-01/02/03 on the same-commit import-OFF emulator build and the accepted D10-01/D10-02\non the opted-in build must all have executed and passed; skips/flaky/missing are inconclusive).\n\n- scripts/security/release-import-config.js: resolve/canary/gate; scan and negative-control removed.\n- scripts/security/release-import-config.test.mjs: 65 checks; all 23 false-OFF and 2 false-ON fixtures\n  from the four reviews kept (reviewers' actual-behaviour harness + real React 19/jsdom updater), the\n  superseded scanners' false verdicts reproduced from git (explicit SKIP when history is shallow), gate\n  fail-closed cases, real-build cases.\n- scripts/security/verify-release-build.sh: L1+L2 only (19 PASS lines), RESULT line says so; retains\n  release-canary.json, import-off build manifest, toolchain versions in release-build.context.\n- e2e: build-app.sh E2E_IMPORT_OFF=1 mode; playwright.release-proof.config.ts (two builds served side by\n  side; chromium+firefox); tests/release-import-off.spec.ts; main config testIgnore keeps 182 tests.\n- workflow: import-OFF build, L3 run and gate in desktop acceptance jobs; explicit \"no claim\" notice\n  elsewhere.\n- docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md: root cause, contract, establishes/assumptions,\n  proposed (not implemented) structural release boundary refactor.\nApplication code, support drafts, B11 suite membership and settings unchanged. No merge/deploy; MVP NO-GO.\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01YHR8pnKSDwARt3y7Ay5ru3\n",
+        "author": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "time": 1792354944000
+        },
+        "committer": {
+          "name": "Claude",
+          "email": "noreply@anthropic.com",
+          "time": 1792354944000
+        },
+        "branch": "ci/release-proof-import-off"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/test-results-release-proof",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "commitHash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "buildHref": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39163048438"
+          },
+          "gitCommit": {
+            "shortHash": "4f6b901",
+            "hash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "subject": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate",
+            "body": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate\n\nWhy: four independent reviews (c9d49dd, 905b1d4, d14aa7b, cab8cab) each defeated the static model of\nthe shipped handler with constructs the engine evaluates and the model did not (functional updaters,\nvalueOf coercion, accessor refs, poison.call(globalThis), aliased Reflect, tampered require, outer\nfinally, duplicate onClick, synthesised ON predicate). Handler inertness over arbitrary compiled JS is\nnot decidable by a whitelist; every exemption widened the accepted language. This revision makes no\nbehavioural claim from minified output.\n\nContract: resolve (effective flag exactly \"false\" from a committed file, CRA loader agrees; refuse to\nbuild otherwise) + canary (single string-literal coachcore:import-config=false token in the shipped entry\nchunks; source reads the flag only at the release boundary with the accepted guards verbatim) + gate\n(real-browser RP-OFF-01/02/03 on the same-commit import-OFF emulator build and the accepted D10-01/D10-02\non the opted-in build must all have executed and passed; skips/flaky/missing are inconclusive).\n\n- scripts/security/release-import-config.js: resolve/canary/gate; scan and negative-control removed.\n- scripts/security/release-import-config.test.mjs: 65 checks; all 23 false-OFF and 2 false-ON fixtures\n  from the four reviews kept (reviewers' actual-behaviour harness + real React 19/jsdom updater), the\n  superseded scanners' false verdicts reproduced from git (explicit SKIP when history is shallow), gate\n  fail-closed cases, real-build cases.\n- scripts/security/verify-release-build.sh: L1+L2 only (19 PASS lines), RESULT line says so; retains\n  release-canary.json, import-off build manifest, toolchain versions in release-build.context.\n- e2e: build-app.sh E2E_IMPORT_OFF=1 mode; playwright.release-proof.config.ts (two builds served side by\n  side; chromium+firefox); tests/release-import-off.spec.ts; main config testIgnore keeps 182 tests.\n- workflow: import-OFF build, L3 run and gate in desktop acceptance jobs; explicit \"no claim\" notice\n  elsewhere.\n- docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md: root cause, contract, establishes/assumptions,\n  proposed (not implemented) structural release boundary refactor.\nApplication code, support drafts, B11 suite membership and settings unchanged. No merge/deploy; MVP NO-GO.\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01YHR8pnKSDwARt3y7Ay5ru3\n",
+            "author": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "committer": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "branch": "ci/release-proof-import-off"
+          },
+          "actualWorkers": 1
+        },
+        "id": "import-off-chromium",
+        "name": "import-off-chromium",
+        "testDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/release-import-off\\.spec\\.ts/"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/test-results-release-proof",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "commitHash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "buildHref": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39163048438"
+          },
+          "gitCommit": {
+            "shortHash": "4f6b901",
+            "hash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "subject": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate",
+            "body": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate\n\nWhy: four independent reviews (c9d49dd, 905b1d4, d14aa7b, cab8cab) each defeated the static model of\nthe shipped handler with constructs the engine evaluates and the model did not (functional updaters,\nvalueOf coercion, accessor refs, poison.call(globalThis), aliased Reflect, tampered require, outer\nfinally, duplicate onClick, synthesised ON predicate). Handler inertness over arbitrary compiled JS is\nnot decidable by a whitelist; every exemption widened the accepted language. This revision makes no\nbehavioural claim from minified output.\n\nContract: resolve (effective flag exactly \"false\" from a committed file, CRA loader agrees; refuse to\nbuild otherwise) + canary (single string-literal coachcore:import-config=false token in the shipped entry\nchunks; source reads the flag only at the release boundary with the accepted guards verbatim) + gate\n(real-browser RP-OFF-01/02/03 on the same-commit import-OFF emulator build and the accepted D10-01/D10-02\non the opted-in build must all have executed and passed; skips/flaky/missing are inconclusive).\n\n- scripts/security/release-import-config.js: resolve/canary/gate; scan and negative-control removed.\n- scripts/security/release-import-config.test.mjs: 65 checks; all 23 false-OFF and 2 false-ON fixtures\n  from the four reviews kept (reviewers' actual-behaviour harness + real React 19/jsdom updater), the\n  superseded scanners' false verdicts reproduced from git (explicit SKIP when history is shallow), gate\n  fail-closed cases, real-build cases.\n- scripts/security/verify-release-build.sh: L1+L2 only (19 PASS lines), RESULT line says so; retains\n  release-canary.json, import-off build manifest, toolchain versions in release-build.context.\n- e2e: build-app.sh E2E_IMPORT_OFF=1 mode; playwright.release-proof.config.ts (two builds served side by\n  side; chromium+firefox); tests/release-import-off.spec.ts; main config testIgnore keeps 182 tests.\n- workflow: import-OFF build, L3 run and gate in desktop acceptance jobs; explicit \"no claim\" notice\n  elsewhere.\n- docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md: root cause, contract, establishes/assumptions,\n  proposed (not implemented) structural release boundary refactor.\nApplication code, support drafts, B11 suite membership and settings unchanged. No merge/deploy; MVP NO-GO.\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01YHR8pnKSDwARt3y7Ay5ru3\n",
+            "author": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "committer": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "branch": "ci/release-proof-import-off"
+          },
+          "actualWorkers": 1
+        },
+        "id": "on-control-chromium",
+        "name": "on-control-chromium",
+        "testDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/legacy-import\\.spec\\.ts/"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/test-results-release-proof",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "commitHash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "buildHref": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39163048438"
+          },
+          "gitCommit": {
+            "shortHash": "4f6b901",
+            "hash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "subject": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate",
+            "body": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate\n\nWhy: four independent reviews (c9d49dd, 905b1d4, d14aa7b, cab8cab) each defeated the static model of\nthe shipped handler with constructs the engine evaluates and the model did not (functional updaters,\nvalueOf coercion, accessor refs, poison.call(globalThis), aliased Reflect, tampered require, outer\nfinally, duplicate onClick, synthesised ON predicate). Handler inertness over arbitrary compiled JS is\nnot decidable by a whitelist; every exemption widened the accepted language. This revision makes no\nbehavioural claim from minified output.\n\nContract: resolve (effective flag exactly \"false\" from a committed file, CRA loader agrees; refuse to\nbuild otherwise) + canary (single string-literal coachcore:import-config=false token in the shipped entry\nchunks; source reads the flag only at the release boundary with the accepted guards verbatim) + gate\n(real-browser RP-OFF-01/02/03 on the same-commit import-OFF emulator build and the accepted D10-01/D10-02\non the opted-in build must all have executed and passed; skips/flaky/missing are inconclusive).\n\n- scripts/security/release-import-config.js: resolve/canary/gate; scan and negative-control removed.\n- scripts/security/release-import-config.test.mjs: 65 checks; all 23 false-OFF and 2 false-ON fixtures\n  from the four reviews kept (reviewers' actual-behaviour harness + real React 19/jsdom updater), the\n  superseded scanners' false verdicts reproduced from git (explicit SKIP when history is shallow), gate\n  fail-closed cases, real-build cases.\n- scripts/security/verify-release-build.sh: L1+L2 only (19 PASS lines), RESULT line says so; retains\n  release-canary.json, import-off build manifest, toolchain versions in release-build.context.\n- e2e: build-app.sh E2E_IMPORT_OFF=1 mode; playwright.release-proof.config.ts (two builds served side by\n  side; chromium+firefox); tests/release-import-off.spec.ts; main config testIgnore keeps 182 tests.\n- workflow: import-OFF build, L3 run and gate in desktop acceptance jobs; explicit \"no claim\" notice\n  elsewhere.\n- docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md: root cause, contract, establishes/assumptions,\n  proposed (not implemented) structural release boundary refactor.\nApplication code, support drafts, B11 suite membership and settings unchanged. No merge/deploy; MVP NO-GO.\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01YHR8pnKSDwARt3y7Ay5ru3\n",
+            "author": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "committer": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "branch": "ci/release-proof-import-off"
+          },
+          "actualWorkers": 1
+        },
+        "name": "import-off-chromium",
+        "testDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+        "snapshotDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 60000,
+        "use": {
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "baseURL": "http://localhost:3100"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "import-off-chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/test-results-release-proof",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "commitHash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "buildHref": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39163048438"
+          },
+          "gitCommit": {
+            "shortHash": "4f6b901",
+            "hash": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+            "subject": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate",
+            "body": "release proof (4th revision): retire output-level behaviour claims; L1 config + L2 inlining + L3 real-browser OFF run with accepted ON control, judged by a gate\n\nWhy: four independent reviews (c9d49dd, 905b1d4, d14aa7b, cab8cab) each defeated the static model of\nthe shipped handler with constructs the engine evaluates and the model did not (functional updaters,\nvalueOf coercion, accessor refs, poison.call(globalThis), aliased Reflect, tampered require, outer\nfinally, duplicate onClick, synthesised ON predicate). Handler inertness over arbitrary compiled JS is\nnot decidable by a whitelist; every exemption widened the accepted language. This revision makes no\nbehavioural claim from minified output.\n\nContract: resolve (effective flag exactly \"false\" from a committed file, CRA loader agrees; refuse to\nbuild otherwise) + canary (single string-literal coachcore:import-config=false token in the shipped entry\nchunks; source reads the flag only at the release boundary with the accepted guards verbatim) + gate\n(real-browser RP-OFF-01/02/03 on the same-commit import-OFF emulator build and the accepted D10-01/D10-02\non the opted-in build must all have executed and passed; skips/flaky/missing are inconclusive).\n\n- scripts/security/release-import-config.js: resolve/canary/gate; scan and negative-control removed.\n- scripts/security/release-import-config.test.mjs: 65 checks; all 23 false-OFF and 2 false-ON fixtures\n  from the four reviews kept (reviewers' actual-behaviour harness + real React 19/jsdom updater), the\n  superseded scanners' false verdicts reproduced from git (explicit SKIP when history is shallow), gate\n  fail-closed cases, real-build cases.\n- scripts/security/verify-release-build.sh: L1+L2 only (19 PASS lines), RESULT line says so; retains\n  release-canary.json, import-off build manifest, toolchain versions in release-build.context.\n- e2e: build-app.sh E2E_IMPORT_OFF=1 mode; playwright.release-proof.config.ts (two builds served side by\n  side; chromium+firefox); tests/release-import-off.spec.ts; main config testIgnore keeps 182 tests.\n- workflow: import-OFF build, L3 run and gate in desktop acceptance jobs; explicit \"no claim\" notice\n  elsewhere.\n- docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md: root cause, contract, establishes/assumptions,\n  proposed (not implemented) structural release boundary refactor.\nApplication code, support drafts, B11 suite membership and settings unchanged. No merge/deploy; MVP NO-GO.\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01YHR8pnKSDwARt3y7Ay5ru3\n",
+            "author": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "committer": {
+              "name": "Claude",
+              "email": "noreply@anthropic.com",
+              "time": 1792354944000
+            },
+            "branch": "ci/release-proof-import-off"
+          },
+          "actualWorkers": 1
+        },
+        "name": "on-control-chromium",
+        "testDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+        "snapshotDir": "/home/runner/work/coach-core-ai/coach-core-ai/e2e/tests",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 60000,
+        "use": {
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "baseURL": "http://localhost:3000"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "on-control-chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results-release-proof/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "release-import-off.spec.ts",
+      "file": "release-import-off.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "import-off-chromium",
+              "projectName": "import-off-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5140,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 112
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 108
+                    }
+                  ],
+                  "startTime": "2026-10-18T20:30:48.144Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "15e34dca9800517c2d54-de13c5451a8233269887",
+          "file": "release-import-off.spec.ts",
+          "line": 54,
+          "column": 1
+        },
+        {
+          "title": "RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "import-off-chromium",
+              "projectName": "import-off-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4300,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 89
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 69
+                    }
+                  ],
+                  "startTime": "2026-10-18T20:30:53.390Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "15e34dca9800517c2d54-ef50a0614a19ea9b967f",
+          "file": "release-import-off.spec.ts",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "import-off-chromium",
+              "projectName": "import-off-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4092,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 86
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 59
+                    }
+                  ],
+                  "startTime": "2026-10-18T20:30:57.701Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "15e34dca9800517c2d54-6dfef0a79c9c7d0fd79d",
+          "file": "release-import-off.spec.ts",
+          "line": 85,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "legacy-import.spec.ts",
+      "file": "legacy-import.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "on-control-chromium",
+              "projectName": "on-control-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1935,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 100
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 78
+                    }
+                  ],
+                  "startTime": "2026-10-18T20:31:02.263Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "05d3bb950b4a0761726b-ee568b3cf34d1c54f10d",
+          "file": "legacy-import.spec.ts",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "on-control-chromium",
+              "projectName": "on-control-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1892,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 98
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 80
+                    }
+                  ],
+                  "startTime": "2026-10-18T20:31:04.299Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "05d3bb950b4a0761726b-2f1d0a9df274172aefb5",
+          "file": "legacy-import.spec.ts",
+          "line": 76,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-18T20:30:47.417Z",
+    "duration": 18839.18,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

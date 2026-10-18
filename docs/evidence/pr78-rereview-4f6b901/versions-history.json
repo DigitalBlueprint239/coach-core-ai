@@ -1,0 +1,14 @@
+{
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "history": {
+    "905b1d4b0e93d720cb4cf05b5746cb7a138e7884": 0,
+    "d14aa7bb9ec4442c3acca26b127b17f4194cbd64": 0,
+    "cab8cabe2baf00b8f3a37a36a88466f5c749613e": 0
+  },
+  "local_l3_executed": false,
+  "ci_l3_browsers": [
+    "chromium",
+    "firefox"
+  ]
+}

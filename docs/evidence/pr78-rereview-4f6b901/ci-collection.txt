@@ -1,0 +1,13 @@
+E2E diagnostic (chromium) failure
+E2E obsolete-fault-model (phone-chromium) success
+E2E acceptance (phone-firefox) success
+E2E obsolete-fault-model (firefox) success
+E2E diagnostic (phone-firefox) success
+E2E acceptance (phone-chromium) success
+E2E obsolete-fault-model (chromium) success
+E2E diagnostic (firefox) failure
+E2E diagnostic (phone-chromium) success
+E2E acceptance (chromium) success
+E2E acceptance (firefox) success
+E2E obsolete-fault-model (phone-firefox) success
+All12 finalization/uploads succeeded; two desktop L3/gate steps succeeded, ten explicitly skipped

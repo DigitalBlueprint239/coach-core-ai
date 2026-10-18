@@ -1,0 +1,49 @@
+{
+  "verdict": "off",
+  "legs": {
+    "canary": {
+      "verdict": "config-false",
+      "literals": 1,
+      "chunks": [
+        "static/js/main.630c8567.js"
+      ]
+    },
+    "behaviourOff": {
+      "executed": [
+        "RP-OFF-01@import-off-chromium:expected",
+        "RP-OFF-02@import-off-chromium:expected",
+        "RP-OFF-03@import-off-chromium:expected",
+        "D10-01@on-control-chromium:expected",
+        "D10-02@on-control-chromium:expected"
+      ],
+      "stats": {
+        "startTime": "2026-10-18T20:30:47.417Z",
+        "duration": 18839.18,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "behaviourOnControl": {
+      "executed": [
+        "RP-OFF-01@import-off-chromium:expected",
+        "RP-OFF-02@import-off-chromium:expected",
+        "RP-OFF-03@import-off-chromium:expected",
+        "D10-01@on-control-chromium:expected",
+        "D10-02@on-control-chromium:expected"
+      ],
+      "stats": {
+        "startTime": "2026-10-18T20:30:47.417Z",
+        "duration": 18839.18,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  },
+  "reasons": [],
+  "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+  "ok": true
+}

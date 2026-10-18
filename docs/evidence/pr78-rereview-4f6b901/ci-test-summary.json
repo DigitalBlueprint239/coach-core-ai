@@ -1,0 +1,184 @@
+[
+  {
+    "artifact": 12150195929,
+    "name": "e2e-results-acceptance-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:26.686Z",
+      "duration": 367203.74700000003,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12150190027,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:24:37.294Z",
+      "duration": 468.596,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12150035775,
+    "name": "e2e-results-obsolete-fault-model-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:24.823Z",
+      "duration": 9208.448,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12150015843,
+    "name": "e2e-results-acceptance-phone-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:08.150Z",
+      "duration": 32210.893999999997,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149956092,
+    "name": "e2e-results-diagnostic-phone-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:23.682Z",
+      "duration": 565.5220000000002,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149791658,
+    "name": "e2e-results-obsolete-fault-model-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:24:35.211Z",
+      "duration": 10253.396999999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149777500,
+    "name": "e2e-results-acceptance-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:23.504Z",
+      "duration": 309188.745,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149741062,
+    "name": "e2e-results-diagnostic-phone-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:08.787Z",
+      "duration": 661.5779999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149607271,
+    "name": "e2e-results-acceptance-phone-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:10.206Z",
+      "duration": 50134.78599999999,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149591680,
+    "name": "e2e-results-diagnostic-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:06.758Z",
+      "duration": 143823.86500000002,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "nonpassing": [
+      {
+        "title": "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?",
+        "project": "firefox",
+        "status": "unexpected",
+        "results": [
+          {
+            "status": "timedOut",
+            "retry": 0,
+            "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "artifact": 12149576348,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:25:08.232Z",
+      "duration": 689.0999999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "nonpassing": []
+  },
+  {
+    "artifact": 12149413766,
+    "name": "e2e-results-diagnostic-chromium-4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+    "stats": {
+      "startTime": "2026-10-18T20:24:50.598Z",
+      "duration": 129777.456,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "nonpassing": [
+      {
+        "title": "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?",
+        "project": "chromium",
+        "status": "unexpected",
+        "results": [
+          {
+            "status": "timedOut",
+            "retry": 0,
+            "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+          }
+        ]
+      }
+    ]
+  }
+]
