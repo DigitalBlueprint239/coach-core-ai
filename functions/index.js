@@ -340,18 +340,28 @@ const {onObjectFinalized} = require("firebase-functions/v2/storage");
 const {Timestamp: FilmTimestamp} = require("firebase-admin/firestore");
 const {getStorage} = require("firebase-admin/storage");
 const {createFilmHandlers} = require("./src/film/handlers");
+const {createStorageAdapter} = require("./src/film/storage-adapter");
+
+// R1: film switch, default OFF. The candidate is also blocked from deploy by
+// the functions.predeploy guard (scripts/film-terms-guard.js) while D3/D7 are
+// placeholders. Emulator tests inject their own handlers and do not use this.
+const FILM_ENABLED = defineBoolean("COACH_CORE_FILM_ENABLED", {
+  default: false,
+  description: "Kill switch for Film upload callables. false = every film " +
+    "callable is refused. Do not enable while D3/D7 terms are PENDING.",
+});
+
+let filmStorage = null;
+const getFilmStorage = () =>
+  filmStorage || (filmStorage = createStorageAdapter(getStorage().bucket()));
 
 const filmHandlers = createFilmHandlers({
   db,
   Timestamp: FilmTimestamp,
+  isEnabled: () => FILM_ENABLED.value() === true,
   getUser: (uid) => getAuth().getUser(uid),
-  deleteObject: (name) =>
-    getStorage().bucket().file(name).delete({ignoreNotFound: true}),
-  readHead: async (name, n) => {
-    const [buf] = await getStorage().bucket().file(name)
-        .download({start: 0, end: n - 1, validation: false});
-    return buf;
-  },
+  deleteObject: (target) => getFilmStorage().deleteObject(target),
+  readHead: (target) => getFilmStorage().readHead(target),
   logger,
 });
 

@@ -20,6 +20,9 @@ const {HttpsError} = require("firebase-functions/v2/https");
 const c = require("./contract");
 const {LIMITS} = require("./limits");
 
+// R4: bounded first-box read (ftyp with up to 252 compatible brands).
+const HEAD_READ_BYTES = 1024;
+
 // gRPC / Firestore codes treated as known-transient: ABORTED (contention),
 // DEADLINE_EXCEEDED, UNAVAILABLE. Anything else is not retry-eligible.
 const TRANSIENT_CODES = new Set([10, 4, 14, "aborted", "deadline-exceeded",
@@ -128,8 +131,13 @@ function toFilmState(d) {
  * @param {object} deps.db admin Firestore
  * @param {object} deps.Timestamp admin Timestamp class
  * @param {function(string): Promise<object>} deps.getUser
- * @param {function(string): Promise<void>} deps.deleteObject quarantine path
- * @param {function(string, number): Promise<Buffer>} deps.readHead
+ * @param {function(): boolean} [deps.isEnabled] film switch (default off in
+ *   index.js: COACH_CORE_FILM_ENABLED); callables refuse while false
+ * @param {function({name: string, generation: string}): Promise<boolean>}
+ *   deps.deleteObject generation-matched delete; false = gone or replaced
+ * @param {function({name: string, generation: string, bytes: number}):
+ *   Promise<?Buffer>} deps.readHead first bytes of that generation; null =
+ *   that generation no longer exists; throws on transient errors
  * @param {object} deps.logger
  * @param {function(): Date} [deps.now]
  * @param {function(): string} [deps.newFilmId]
@@ -140,6 +148,23 @@ function createFilmHandlers(deps) {
   const now = deps.now || (() => new Date());
   const newFilmId = deps.newFilmId || (() => crypto.randomUUID());
   const ts = (d) => Timestamp.fromDate(d);
+  const isEnabled = deps.isEnabled || (() => true);
+
+  /**
+   * Delete one exact object generation; never throws.
+   * @param {string} name
+   * @param {string} generation
+   * @param {string} why log label
+   */
+  async function deleteGeneration(name, generation, why) {
+    try {
+      const deleted = await deps.deleteObject({name, generation});
+      logger.info("film.object_delete", {why, deleted});
+    } catch (err) {
+      logger.warn("film.object_delete_failed",
+          {why, code: err && err.code ? String(err.code) : null});
+    }
+  }
 
   const teamRef = (teamId) => db.collection("teams").doc(teamId);
   const filmRef = (teamId, filmId) =>
@@ -160,6 +185,13 @@ function createFilmHandlers(deps) {
    */
   function callable(name, fn) {
     return async (request) => {
+      if (!isEnabled()) {
+        // Configuration state, not a transient condition: thrown sanitized
+        // internal (client: sdk/internal, not retry-eligible). FILM-S1 is not
+        // deployable while D3/D7 are placeholders (deploy guard + this).
+        logger.warn(`film.${name}.disabled`);
+        throw new HttpsError("internal", "internal");
+      }
       try {
         return await fn(request);
       } catch (err) {
@@ -259,15 +291,23 @@ function createFilmHandlers(deps) {
       const lRef = ledgerRef(payload.teamId);
       const lSnap = await tx.get(lRef);
       const slots = {...((lSnap.exists && lSnap.data().slots) || {})};
-      // Lazy expiry: a reserved slot past its expiry is released here.
-      for (const [id, s] of Object.entries(slots)) {
-        if (s.status === "reserved" && s.expiresAt.toMillis() <= at.getTime()) {
-          delete slots[id];
-          tx.update(filmRef(payload.teamId, id), {
-            status: "expired", statusChangedAt: ts(at),
-          });
+      // Lazy expiry: a reserved slot past its expiry is released here. The
+      // film docs are read first (all reads precede writes); a slot whose
+      // document is missing or no longer reserved is dropped, never updated.
+      const lapsed = Object.entries(slots).filter(([, s]) =>
+        s.status === "reserved" && s.expiresAt.toMillis() <= at.getTime());
+      const lapsedSnaps = await Promise.all(lapsed.map(([id]) =>
+        tx.get(filmRef(payload.teamId, id))));
+      lapsed.forEach(([id], i) => {
+        delete slots[id];
+        const snap = lapsedSnaps[i];
+        if (snap.exists && snap.data().status === "reserved") {
+          tx.update(snap.ref, {status: "expired", statusChangedAt: ts(at)});
+        } else {
+          logger.warn("film.ledger.orphan_slot_dropped",
+              {exists: snap.exists});
         }
-      }
+      });
       if (Object.keys(slots).length >= LIMITS.teamFilmCap) {
         throw stop("team-cap-reached", "team-film-cap");
       }
@@ -313,10 +353,10 @@ function createFilmHandlers(deps) {
     const {operationId, payload} = parseRequest(action, request.data);
     const payloadHash = sha256(canonical(payload));
     const at = now();
-    let deletePath = null;
+    let toDelete = null;
 
     const response = await db.runTransaction(async (tx) => {
-      deletePath = null;
+      toDelete = null;
       const oRef = opRef(uid, operationId);
       const replay = await checkOperation(tx, oRef, action, payloadHash, at);
       if (replay) return replay;
@@ -339,7 +379,12 @@ function createFilmHandlers(deps) {
         const slots = {...((lSnap.exists && lSnap.data().slots) || {})};
         delete slots[payload.filmId];
         tx.set(lRef, {slots, updatedAt: ts(at)});
-        deletePath = d.uploadPath;
+        // Only a generation this film recorded is deleted here. An object
+        // whose finalize has not been processed yet is deleted by that event
+        // (exact generation) when it sees the film is abandoned.
+        if (d.objectGeneration) {
+          toDelete = {name: d.uploadPath, generation: d.objectGeneration};
+        }
       } else if (previousStatus !== "abandoned") {
         throw stop("failed-precondition", "invalid-state");
       }
@@ -352,13 +397,8 @@ function createFilmHandlers(deps) {
       return out;
     });
 
-    if (deletePath) {
-      try {
-        await deps.deleteObject(deletePath);
-      } catch (err) {
-        // A late or missing object is reconciled by the finalize handler.
-        logger.warn("film.abandon.delete_failed", {error: String(err)});
-      }
+    if (toDelete) {
+      await deleteGeneration(toDelete.name, toDelete.generation, "abandon");
     }
     return response;
   });
@@ -377,11 +417,14 @@ function createFilmHandlers(deps) {
     const size = Number(object.size);
     const at = now();
 
-    let head = null;
-    try {
-      head = await deps.readHead(object.name, 64);
-    } catch (_) {
-      head = null; // treated as an invalid signature
+    // R3: a transient read error throws (no state change, nothing deleted);
+    // a vanished generation leaves the reservation untouched. Only a head
+    // that was actually read can cause a signature rejection.
+    const head = await deps.readHead(
+        {name: object.name, generation, bytes: HEAD_READ_BYTES});
+    if (head === null) {
+      logger.info("film.finalize", {outcome: "object-gone"});
+      return "object-gone";
     }
 
     let deleteAfter = false;
@@ -432,13 +475,7 @@ function createFilmHandlers(deps) {
       return "validating";
     });
 
-    if (deleteAfter) {
-      try {
-        await deps.deleteObject(object.name);
-      } catch (err) {
-        logger.warn("film.finalize.delete_failed", {error: String(err)});
-      }
-    }
+    if (deleteAfter) await deleteGeneration(object.name, generation, outcome);
     logger.info("film.finalize", {outcome});
     return outcome;
   }
@@ -447,15 +484,20 @@ function createFilmHandlers(deps) {
 }
 
 /**
- * First ISO-BMFF box must be a plausible 'ftyp' box: size 16..64 (fits the
- * bounded read), type 'ftyp', printable 4-char major brand.
+ * First ISO-BMFF box must be a plausible, complete 'ftyp' box inside the
+ * bounded read: 16 <= size <= HEAD_READ_BYTES, size within the bytes read,
+ * (size - 16) a multiple of 4 (compatible brands), type 'ftyp', printable
+ * 4-char major brand. FILM-S1 intake check only; NOT media validation.
  * @param {?Buffer} head
  * @return {boolean}
  */
 function isFtypHead(head) {
   if (!head || head.length < 16) return false;
   const boxSize = head.readUInt32BE(0);
-  if (boxSize < 16 || boxSize > 64) return false;
+  if (boxSize < 16 || boxSize > HEAD_READ_BYTES || boxSize > head.length ||
+      (boxSize - 16) % 4 !== 0) {
+    return false;
+  }
   if (head.toString("latin1", 4, 8) !== "ftyp") return false;
   for (let i = 8; i < 12; i++) {
     if (head[i] < 0x20 || head[i] > 0x7e) return false;
@@ -464,4 +506,4 @@ function isFtypHead(head) {
 }
 
 module.exports = {createFilmHandlers, isFtypHead, assertEligible,
-  QUARANTINE_RE};
+  QUARANTINE_RE, HEAD_READ_BYTES};

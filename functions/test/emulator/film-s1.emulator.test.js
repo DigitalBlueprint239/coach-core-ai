@@ -19,6 +19,7 @@ const {getStorage} = require("firebase-admin/storage");
 const c = require("../../src/film/contract");
 const {LIMITS} = require("../../src/film/limits");
 const {createFilmHandlers} = require("../../src/film/handlers");
+const {createStorageAdapter} = require("../../src/film/storage-adapter");
 
 const BUCKET = `${PROJECT}.appspot.com`;
 initializeApp({projectId: PROJECT, storageBucket: BUCKET}, "film-s1");
@@ -44,18 +45,19 @@ const auth = (uid, extra = {}) => ({uid, token: {email_verified: true,
   firebase: {sign_in_provider: "google.com"}, auth_time: 1760900000,
   ...extra}});
 
-const h = createFilmHandlers({
+const storage = createStorageAdapter(bucket);
+const deps = {
   db, Timestamp,
   getUser: async (uid) => {
     if (!users[uid]) throw new Error("not found");
     return users[uid];
   },
-  deleteObject: (name) => bucket.file(name).delete({ignoreNotFound: true}),
-  readHead: async (name, n) => (await bucket.file(name)
-      .download({start: 0, end: n - 1, validation: false}))[0],
+  deleteObject: (t) => storage.deleteObject(t),
+  readHead: (t) => storage.readHead(t),
   logger: {info() {}, warn() {}, error() {}},
   now: () => clock,
-});
+};
+const h = createFilmHandlers(deps);
 
 const op = () => crypto.randomUUID();
 const reserveReq = (over = {}, opId = op()) => ({
@@ -400,6 +402,90 @@ describe("FS-19..22 finalize and abandon", () => {
         assert.equal(await exists(p), false);
         assert.equal(await h.onQuarantineFinalized({name: "films/x.mp4"}),
             "ignored-path");
+      });
+});
+
+describe("R1-R5 backend repairs", () => {
+  it("R1 switch off: callables throw sanitized internal, nothing written",
+      async () => {
+        const off = createFilmHandlers({...deps, isEnabled: () => false});
+        await assert.rejects(off.reserveFilmUpload({auth: auth(OWNER),
+          data: reserveReq()}), (e) => e.code === "internal");
+        await assert.rejects(off.abandonFilmUpload({auth: auth(OWNER),
+          data: abandonReq(op())}), (e) => e.code === "internal");
+        assert.equal((await filmDocs()).length, 0);
+        assert.equal((await db.collection("filmOperations").get()).size, 0);
+      });
+  it("R2 abandon from reserved never deletes an unprocessed object; " +
+      "its late event deletes that exact generation", async () => {
+    const r = (await reserve(reserveReq())).data;
+    const e = await putObject(r.uploadPath, MP4);
+    await abandon(abandonReq(r.filmId));
+    assert.equal(await exists(r.uploadPath), true);
+    assert.equal(await h.onQuarantineFinalized(e), "stale-abandoned");
+    assert.equal(await exists(r.uploadPath), false);
+  });
+  it("R2 stale cleanup leaves a newer generation at the same path alone",
+      async () => {
+        const r = (await reserve(reserveReq())).data;
+        const e1 = await putObject(r.uploadPath, MP4);
+        await abandon(abandonReq(r.filmId));
+        const e2 = await putObject(r.uploadPath, MP4); // replaces e1 (admin)
+        assert.notEqual(String(e1.generation), String(e2.generation));
+        // e1's generation is gone: the event sees object-gone, deletes nothing
+        assert.equal(await h.onQuarantineFinalized(e1), "object-gone");
+        assert.equal(await exists(r.uploadPath), true);
+        assert.equal(await storage.deleteObject({name: r.uploadPath,
+          generation: String(e1.generation)}), false);
+        assert.equal(await exists(r.uploadPath), true);
+        // the current generation's own event removes it
+        assert.equal(await h.onQuarantineFinalized(e2), "stale-abandoned");
+        assert.equal(await exists(r.uploadPath), false);
+      });
+  it("R3 transient head-read error: throws, film stays reserved, " +
+      "object kept", async () => {
+    const flaky = createFilmHandlers({...deps, readHead: async () => {
+      throw Object.assign(new Error("socket hang up"), {code: "ECONNRESET"});
+    }});
+    const r = (await reserve(reserveReq())).data;
+    const e = await putObject(r.uploadPath, MP4);
+    await assert.rejects(flaky.onQuarantineFinalized(e));
+    const d = (await db.doc(`teams/${TEAM}/films/${r.filmId}`).get()).data();
+    assert.equal(d.status, "reserved");
+    assert.equal(d.objectGeneration, null);
+    assert.equal(await exists(r.uploadPath), true);
+    assert.equal((await slots()).length, 1);
+    // the retried event then validates normally
+    assert.equal(await h.onQuarantineFinalized(e), "validating");
+  });
+  it("R3 generation gone before the event: reservation untouched",
+      async () => {
+        const r = (await reserve(reserveReq())).data;
+        const e = await putObject(r.uploadPath, MP4);
+        await bucket.file(r.uploadPath).delete();
+        assert.equal(await h.onQuarantineFinalized(e), "object-gone");
+        const d = (await db.doc(`teams/${TEAM}/films/${r.filmId}`).get())
+            .data();
+        assert.equal(d.status, "reserved");
+      });
+  it("R4 ftyp box with 16 compatible brands (80 bytes) is accepted",
+      async () => {
+        const big = Buffer.alloc(96);
+        big.writeUInt32BE(80, 0);
+        big.write("ftypisom", 4, "latin1");
+        for (let i = 16; i < 80; i += 4) big.write("iso2", i, "latin1");
+        const r = (await reserve(reserveReq({declaredBytes: 96}))).data;
+        assert.equal(await h.onQuarantineFinalized(
+            await putObject(r.uploadPath, big)), "validating");
+      });
+  it("R5 orphan lapsed ledger slot is dropped; reserve still succeeds",
+      async () => {
+        const r = (await reserve(reserveReq())).data;
+        await db.doc(`teams/${TEAM}/films/${r.filmId}`).delete();
+        clock = new Date(T0.getTime() + LIMITS.reservationLifetimeMs);
+        const next = await reserve(reserveReq());
+        assert.equal(next.ok, true, JSON.stringify(next));
+        assert.deepEqual(await slots(), [next.data.filmId]);
       });
 });
 

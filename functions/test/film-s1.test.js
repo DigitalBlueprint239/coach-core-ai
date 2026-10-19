@@ -148,3 +148,120 @@ describe("ftyp first-box check", () => {
     assert.equal(isFtypHead(null), false);
   });
 });
+
+describe("R4 ftyp bounds", () => {
+  const {HEAD_READ_BYTES} = require("../src/film/handlers");
+  const ftyp = (size, len = size) => {
+    const b = Buffer.alloc(len);
+    b.writeUInt32BE(size, 0);
+    b.write("ftypisom", 4, "latin1");
+    for (let i = 16; i + 4 <= Math.min(size, len); i += 4) {
+      b.write("iso2", i, "latin1");
+    }
+    return b;
+  };
+  it("accepts complete boxes up to the 1 KiB read", () => {
+    assert.equal(HEAD_READ_BYTES, 1024);
+    for (const n of [16, 20, 80, 1024]) assert.equal(isFtypHead(ftyp(n)), true, n);
+  });
+  it("rejects truncated, misaligned or oversized boxes", () => {
+    assert.equal(isFtypHead(ftyp(80, 64)), false); // box larger than bytes read
+    assert.equal(isFtypHead(ftyp(22, 32)), false); // (size-16) % 4 != 0
+    assert.equal(isFtypHead(ftyp(1028, 1024)), false);
+  });
+});
+
+describe("R2/R3 storage adapter (fake bucket)", () => {
+  const {createStorageAdapter} = require("../src/film/storage-adapter");
+  const fakeBucket = (behaviour) => ({file: (name, opts) => ({
+    delete: async (o) => behaviour.delete(name, o),
+    download: async (o) => behaviour.download(name, opts, o),
+  })});
+  it("deletes only the given generation; 404/412 -> false; else throws",
+      async () => {
+        const calls = [];
+        const ok = createStorageAdapter(fakeBucket({delete: async (n, o) => {
+          calls.push([n, o]);
+        }}));
+        assert.equal(await ok.deleteObject({name: "q/x", generation: "171"}),
+            true);
+        assert.deepEqual(calls, [["q/x", {ifGenerationMatch: "171"}]]);
+        await assert.rejects(ok.deleteObject({name: "q/x", generation: null}));
+        for (const code of [404, 412]) {
+          const a = createStorageAdapter(fakeBucket({delete: async () => {
+            throw Object.assign(new Error("x"), {code});
+          }}));
+          assert.equal(await a.deleteObject({name: "q", generation: "1"}),
+              false);
+        }
+        const bad = createStorageAdapter(fakeBucket({delete: async () => {
+          throw Object.assign(new Error("x"), {code: 503});
+        }}));
+        await assert.rejects(bad.deleteObject({name: "q", generation: "1"}));
+      });
+  it("reads that generation; 404 -> null; transient -> throws", async () => {
+    let seen;
+    const a = createStorageAdapter(fakeBucket({download: async (n, f, o) => {
+      seen = {n, f, o};
+      return [Buffer.from("ab")];
+    }}));
+    const buf = await a.readHead({name: "q", generation: "9", bytes: 1024});
+    assert.equal(buf.toString(), "ab");
+    assert.deepEqual(seen, {n: "q", f: {generation: "9"},
+      o: {start: 0, end: 1023, validation: false}});
+    const gone = createStorageAdapter(fakeBucket({download: async () => {
+      throw Object.assign(new Error("x"), {code: 404});
+    }}));
+    assert.equal(await gone.readHead({name: "q", generation: "9", bytes: 4}),
+        null);
+    const flaky = createStorageAdapter(fakeBucket({download: async () => {
+      throw Object.assign(new Error("x"), {code: "ECONNRESET"});
+    }}));
+    await assert.rejects(flaky.readHead({name: "q", generation: "9",
+      bytes: 4}));
+  });
+});
+
+describe("R1 visibly non-deployable", () => {
+  const {spawnSync} = require("child_process");
+  const {pendingTerms} = require("../src/film/terms");
+  it("D3 and D7 are PENDING, and the predeploy guard exits 1", () => {
+    assert.deepEqual(pendingTerms(), ["D3", "D7"]);
+    const r = spawnSync(process.execPath,
+        [path.join(__dirname, "..", "scripts", "film-terms-guard.js")],
+        {encoding: "utf8"});
+    assert.equal(r.status, 1);
+    assert.match(r.stderr, /DEPLOY BLOCKED: FILM TERMS PENDING/);
+  });
+  it("firebase.json runs the guard before any functions deploy", () => {
+    const fb = JSON.parse(fs.readFileSync(path.join(ROOT, "firebase.json")));
+    assert.deepEqual(fb.functions.predeploy,
+        ["node \"$RESOURCE_DIR/scripts/film-terms-guard.js\""]);
+  });
+  it("switch off: handler refuses before identity or data access", async () => {
+    let touched = false;
+    const off = createFilmHandlers({db: noDb, Timestamp: null,
+      isEnabled: () => false,
+      getUser: async () => {
+        touched = true;
+        return {};
+      },
+      deleteObject: async () => false, readHead: async () => null,
+      logger: {info() {}, warn() {}, error() {}}});
+    await assert.rejects(off.reserveFilmUpload({auth: AUTH,
+      data: fixture("reserve.request.valid.json")}),
+    (e) => e.code === "internal" && e.message === "internal");
+    assert.equal(touched, false);
+  });
+  it("deployed callables default to off (COACH_CORE_FILM_ENABLED unset)",
+      async () => {
+        process.env.GCLOUD_PROJECT = "demo-coach-core-beta";
+        delete process.env.COACH_CORE_FILM_ENABLED;
+        const fns = require("../index");
+        for (const name of ["reserveFilmUpload", "abandonFilmUpload"]) {
+          await assert.rejects(fns[name].run({auth: AUTH,
+            data: fixture("reserve.request.valid.json")}),
+          (e) => e.code === "internal", name);
+        }
+      });
+});

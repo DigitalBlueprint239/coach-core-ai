@@ -12,6 +12,10 @@ const FILM = '3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b';
 const FILM_EXPIRED = '4a2f3e5d-6c7b-4f8a-9bac-1d2e3f4a5b6c';
 const FILM_ABANDONED = '5b304f6e-7d8c-4a9b-8cbd-2e3f4a5b6c7d';
 const FILM_BOB = '6c41507f-8e9d-4bac-9dce-3f4a5b6c7d8e';
+const FILM_AT_MAX = '7e5c6d8f-9a0b-4c1d-8e2f-3a4b5c6d7e8f';
+const FILM_OVER_MAX = '8f6d7e90-ab1c-4d2e-9f30-4b5c6d7e8f90';
+// PENDING_D3 placeholder; equals functions/src/film/limits.js maxBytes (FS-25).
+const MAX_BYTES = 100000000;
 const SIZE = 32;
 const BYTES = new Uint8Array(SIZE);
 const mp4 = { contentType: 'video/mp4' };
@@ -44,6 +48,9 @@ beforeEach(async () => {
     await setDoc(doc(f, `teams/${TEAM_A}/films/${FILM_EXPIRED}`), film(TEAM_A, FILM_EXPIRED, ALICE, { reservationExpiresAt: past }));
     await setDoc(doc(f, `teams/${TEAM_A}/films/${FILM_ABANDONED}`), film(TEAM_A, FILM_ABANDONED, ALICE, { status: 'abandoned', abandonedAt: now }));
     await setDoc(doc(f, `teams/${TEAM_B}/films/${FILM_BOB}`), film(TEAM_B, FILM_BOB, BOB));
+    await setDoc(doc(f, `teams/${TEAM_A}/films/${FILM_AT_MAX}`), film(TEAM_A, FILM_AT_MAX, ALICE, { declaredBytes: MAX_BYTES }));
+    // Seeded directly (the server would refuse it) to isolate the rules literal.
+    await setDoc(doc(f, `teams/${TEAM_A}/films/${FILM_OVER_MAX}`), film(TEAM_A, FILM_OVER_MAX, ALICE, { declaredBytes: MAX_BYTES + 1 }));
     await setDoc(doc(f, `teams/${TEAM_A}/filmLedger/cap`), { slots: {} });
     await setDoc(doc(f, 'filmOperations/x'), { uid: ALICE });
   });
@@ -122,6 +129,25 @@ describe('FS-15..18 quarantine uploads (Storage)', () => {
   it('FS-18 quarantine: an existing object cannot be overwritten (create-only)', async () => {
     await seedObjects();
     await assertFails(uploadBytes(ref(store(ALICE), qpath(TEAM_A, FILM)), BYTES, mp4));
+  });
+});
+
+describe('FS-06 rules side / R8: byte limit at the Storage boundary', () => {
+  it('upload of exactly maxBytes is allowed', async () => {
+    await assertSucceeds(uploadBytes(ref(store(ALICE), qpath(TEAM_A, FILM_AT_MAX)), new Uint8Array(MAX_BYTES), mp4));
+  });
+  it('upload of maxBytes + 1 is denied even when the film doc declares it', async () => {
+    await assertFails(uploadBytes(ref(store(ALICE), qpath(TEAM_A, FILM_OVER_MAX)), new Uint8Array(MAX_BYTES + 1), mp4));
+  });
+});
+
+describe('R7 film document identity is checked', () => {
+  it('a film doc whose teamId/filmId fields do not match the path is not a live reservation', async () => {
+    const mismatched = '9a7e8fa1-bc2d-4e3f-8a41-5c6d7e8f90a1';
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(doc(ctx.firestore(), `teams/${TEAM_A}/films/${mismatched}`), film(TEAM_A, FILM, ALICE));
+    });
+    await assertFails(uploadBytes(ref(store(ALICE), qpath(TEAM_A, mismatched)), BYTES, mp4));
   });
 });
 

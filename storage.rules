@@ -50,12 +50,20 @@ service firebase.storage {
       return /databases/(default)/documents/teams/$(teamId)/films/$(filmId);
     }
 
+    // R7: the film document is read once and evaluated as a value
+    // (one exists + one get on the same path) instead of five gets.
+    function isLiveFilm(film, teamId, filmId) {
+      return film.teamId == teamId
+        && film.filmId == filmId
+        && film.createdBy == request.auth.uid
+        && film.status == 'reserved'
+        && request.time < film.reservationExpiresAt
+        && request.resource.size == film.declaredBytes;
+    }
+
     function isLiveFilmReservation(teamId, filmId) {
       return firestore.exists(filmDocPath(teamId, filmId))
-        && firestore.get(filmDocPath(teamId, filmId)).data.createdBy == request.auth.uid
-        && firestore.get(filmDocPath(teamId, filmId)).data.status == 'reserved'
-        && request.time < firestore.get(filmDocPath(teamId, filmId)).data.reservationExpiresAt
-        && request.resource.size == firestore.get(filmDocPath(teamId, filmId)).data.declaredBytes;
+        && isLiveFilm(firestore.get(filmDocPath(teamId, filmId)).data, teamId, filmId);
     }
 
     match /quarantine/{teamId}/{filmId}/source.mp4 {

@@ -4,7 +4,10 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "source": "functions"
+    "source": "functions",
+    "predeploy": [
+      "node \"$RESOURCE_DIR/scripts/film-terms-guard.js\""
+    ]
   },
   "storage": {
     "rules": "storage.rules"
