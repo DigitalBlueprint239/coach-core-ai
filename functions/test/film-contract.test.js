@@ -177,6 +177,39 @@ describe("coach-film.v1 tables", () => {
         .success, true);
   });
 
+  it("C4: file name limit counts UTF-16 units in request AND stored schemas",
+      () => {
+        const req = load("reserve.request.valid.json");
+        const st = load("film-state.reserved.json");
+        const accepts = (name) => ({
+          request: c.schemas.reserveRequest.safeParse({...req,
+            payload: {...req.payload, fileName: name}}).success,
+          stored: c.schemas.filmState.safeParse({...st, fileName: name})
+              .success,
+        });
+        const max = LIMITS.maxFileNameLength;
+        assert.equal(max, 120);
+        assert.deepEqual(accepts("\u{1F600}".repeat(60)),
+            {request: true, stored: true});
+        assert.deepEqual(accepts("\u{1F600}".repeat(61)),
+            {request: false, stored: false});
+        assert.deepEqual(accepts("a".repeat(max)), {request: true, stored: true});
+        assert.deepEqual(accepts("a".repeat(max + 1)),
+            {request: false, stored: false});
+        // 119 ASCII + 1 astral = 121 units (120 code points): rejected.
+        assert.deepEqual(accepts("a".repeat(119) + "\u{1F600}"),
+            {request: false, stored: false});
+      });
+
+  it("manifest utf16Units matches the fixture's canonical file name", () => {
+    for (const fx of manifest.fixtures.filter((f) => f.utf16Units)) {
+      const v = load(fx.file);
+      const name = fx.kind === "film-state" ? v.fileName :
+        c.canonicalizeFileName(v.payload.fileName);
+      assert.equal(name.length, fx.utf16Units, fx.file);
+    }
+  });
+
   it("every limit is labelled placeholder or delegated", () => {
     for (const k of Object.keys(LIMITS)) {
       assert.ok(["PENDING_D3", "PENDING_D7", "DELEGATED"].includes(PENDING[k]), k);

@@ -1,8 +1,10 @@
-# coach-film.v1 — FILM-S1 wire contract (revision r2)
+# coach-film.v1 — FILM-S1 wire contract (revision r3)
 
 > **CONTRACT HANDOFF ONLY.** This document, `functions/src/film/contract.js`, `functions/src/film/limits.js` and `tests/fixtures/coach-film.v1/` define the contract the client mirror builds against. Contract agreement is not backend delivery or acceptance. Limit and rights values are **test placeholders** (PENDING_D3 / PENDING_D7), not approved terms. Emulator-only; nothing deployed, no AI, no spend.
 
 Authority order if anything disagrees: `contract.js` (zod, executable) → fixtures (validated against it by `functions/test/film-contract.test.js`) → this document → `contract.schema.json` (generated; cannot express cross-field rules).
+
+**r3 (Codex C4 at `7553a05`):** the 120 UTF-16-unit file-name bound is now enforced by an explicit `.length` refinement in both the request and stored schemas (zod's `.max` counts code points); UTF-16 boundary fixtures added. The limit is unchanged.
 
 **r2 (Codex review C1–C3 at `f641d3d`):** client failures split from server errors (§6); state and response invariants enforced in the executable schemas, with negative mutation fixtures (§4.1, §3.1); replay window, operation tombstones, file-name canonicalization and receipt-vs-permission (§2, §7). Change log in §11.
 
@@ -35,7 +37,7 @@ A callable accepts only its own `action`. Any other action → `invalid-argument
 | `rightsAcknowledged` | boolean | `false` → `invalid-argument / rights-acknowledgement-required` |
 | `rightsWordingVersion` | string | must be in `acceptedRightsWordingVersions` else `failed-precondition / rights-wording-outdated` |
 
-**File-name canonicalization (exact):** `canonical = input.normalize("NFC").trim()` (JS `String.prototype.trim`). The canonical value must be 1–120 UTF-16 code units and contain no C0/C1 control characters (U+0000–U+001F, U+007F–U+009F); otherwise `invalid-argument / schema-invalid`. The server stores, returns and **hashes the canonical form** for idempotency, so `"  Café.mp4 "` and `"Café.mp4"` under one operationId are the same payload. Stored/returned `fileName` is always canonical (the schema rejects a non-canonical stored value). The client mirror uses `canonicalizeFileName` semantics exactly.
+**File-name canonicalization (exact):** `canonical = input.normalize("NFC").trim()` (JS `String.prototype.trim`). The canonical value must be 1–120 **UTF-16 code units** (`String.prototype.length`, measured after canonicalization; an astral character such as 😀 counts 2) and contain no C0/C1 control characters (U+0000–U+001F, U+007F–U+009F); otherwise `invalid-argument / schema-invalid`. The server stores, returns and **hashes the canonical form** for idempotency, so `"  Café.mp4 "` and `"Café.mp4"` under one operationId are the same payload. Stored/returned `fileName` is always canonical (the schema rejects a non-canonical stored value). The client mirror uses `canonicalizeFileName` semantics exactly. Boundaries: 60 × 😀 (120 units) accepted, 61 × 😀 (122 units) rejected, 120 ASCII accepted, 121 ASCII rejected, in both request and stored schemas. `contract.schema.json` cannot express a UTF-16 bound (JSON Schema `maxLength` counts code points), so it carries no `maxLength` for `fileName`; the bound is in `x-coach-film.limits.maxFileNameLength` and the zod schemas.
 
 **abandonFilmUpload payload**: `{ teamId, filmId }` (`filmId` = UUID v4 returned by reserve).
 
@@ -114,7 +116,7 @@ Slot-holding: `reserved`, `validating`, `ready`. `rejected`, `abandoned`, `expir
 | T5 | `expired` ⇒ `statusChangedAt ≥ reservationExpiresAt` |
 | T6 | `validating` or `rejected` ⇒ `statusChangedAt < reservationExpiresAt` |
 | T7 | `abandoned` ⇒ `abandonedAt == statusChangedAt` |
-| F1 | `fileName` is canonical (§2) |
+| F1 | `fileName` is canonical and 1–120 UTF-16 code units (§2) |
 
 ## 5. Encodings
 
@@ -186,9 +188,10 @@ Upload to `uploadPath` with the Firebase Storage SDK, `contentType: "video/mp4"`
 
 ## 10. Fixtures
 
-`tests/fixtures/coach-film.v1/`: `index.json` (manifest: kind ∈ request | response | film-state | client-failure, action, valid, expected code/reason, `mutation` + `rule` for negatives), 78 fixture files, `contract.schema.json` (generated), `SHA256SUMS.txt`. Negative mutation fixtures (`invalid.mutation.*`) must be rejected by the executable schema **for the named rule**; M1–M8 are the reviewer's eight probes, X1–X13 extend coverage to the remaining invariants. Authoring script: `functions/scripts/film-fixtures.js` (the JSON files are authoritative). Regenerate schema/sums with `node functions/scripts/film-contract-schema.js`; `--check` fails on drift. Fixture changes need both owners' review on #39.
+`tests/fixtures/coach-film.v1/`: `index.json` (manifest: kind ∈ request | response | film-state | client-failure, action, valid, expected code/reason, `mutation` + `rule` for negatives), 86 fixture files, `contract.schema.json` (generated), `SHA256SUMS.txt`. Negative mutation fixtures (`invalid.mutation.*`) must be rejected by the executable schema **for the named rule**; M1–M8 are the reviewer's eight probes, X1–X15 extend coverage to the remaining invariants. Authoring script: `functions/scripts/film-fixtures.js` (the JSON files are authoritative). Regenerate schema/sums with `node functions/scripts/film-contract-schema.js`; `--check` fails on drift. Fixture changes need both owners' review on #39.
 
 ## 11. Change log
 
 - **r1** `f641d3d` — initial handoff.
 - **r2** — C1: removed server reason `unavailable/transport`; added `clientFailure` type (protocol / network / sdk) with only network, sdk `unavailable` and `deadline-exceeded` retry-eligible; server emits `backend-unavailable` only for known-transient conditions and throws sanitized `internal` otherwise. C2: invariants R1–R4, A1–A4, P1, S1–S2, G1–G2, T1–T7, F1 in the executable schemas; 21 negative mutation fixtures. C3: `operation-expired` reason, 24 h replay window, retained tombstones, exact file-name canonicalization, receipt-vs-permission rule.
+- **r3** — C4: explicit UTF-16 `.length` bound in `canonicalFileName` and `storedFileName` (limit stays 120); 8 boundary fixtures (request: 60-emoji valid, 61-emoji invalid, 120-ASCII valid, 120-ASCII padded valid after trim; stored: 60-emoji valid, 120-ASCII valid, X14 61-emoji invalid, X15 121-ASCII invalid). The 78 r2 fixture files are byte-unchanged; `index.json`, `contract.schema.json` and `SHA256SUMS.txt` are regenerated.

@@ -6,7 +6,7 @@
 // Fixture changes need review from both owners on issue #39.
 const fs = require("fs"); const path = require("path");
 const out = process.argv[2];
-for (const f of fs.readdirSync(out)) if (f.endsWith(".json")) fs.unlinkSync(path.join(out, f));
+for (const f of fs.readdirSync(out)) if (f.endsWith(".json") && f !== "contract.schema.json") fs.unlinkSync(path.join(out, f));
 fs.mkdirSync(out, {recursive: true});
 const V = "coach-film.v1";
 const TEAM = "team_fixture_a", UID = "uid-fixture-owner";
@@ -52,6 +52,14 @@ put("abandon.request.valid.json", req(OP.abandon, "abandonFilmUpload", {teamId: 
     {kind: "request", action: "abandonFilmUpload", valid: true});
 put("reserve.request.file-name-canonicalized.json", req("c13850d6-e34f-4a71-8c8d-9eafb0c1d2e3", "reserveFilmUpload", {...reservePayload, fileName: "  Cafe\u0301 drive.mp4\t"}),
     {kind: "request", action: "reserveFilmUpload", valid: true, canonicalFileName: "Caf\u00e9 drive.mp4", note: "NFC then trim; the server stores, hashes and returns the canonical form"});
+// C4 (r3) UTF-16 boundaries: limit counts UTF-16 code units after canonicalization.
+const EMOJI = "\u{1F600}";
+put("reserve.request.file-name-60-emoji-120-units.json", req("e35a72f8-0561-4c93-8eaf-b0c1d2e3f4a5", "reserveFilmUpload", {...reservePayload, fileName: EMOJI.repeat(60)}),
+    {kind: "request", action: "reserveFilmUpload", valid: true, utf16Units: 120, note: "60 astral code points = 120 UTF-16 units: accepted"});
+put("reserve.request.file-name-120-ascii.json", req("f46b8309-1672-4da4-9fb0-c1d2e3f4a5b6", "reserveFilmUpload", {...reservePayload, fileName: "a".repeat(116) + ".mp4"}),
+    {kind: "request", action: "reserveFilmUpload", valid: true, utf16Units: 120});
+put("reserve.request.file-name-120-ascii-padded.json", req("057c941a-2783-4eb5-8ac1-d2e3f4a5b6c7", "reserveFilmUpload", {...reservePayload, fileName: "  " + "a".repeat(116) + ".mp4 \t"}),
+    {kind: "request", action: "reserveFilmUpload", valid: true, utf16Units: 120, canonicalFileName: "a".repeat(116) + ".mp4", note: "length is measured after canonicalization"});
 // ---- requests the server must reject (schema-valid ones get a code from handler logic)
 const bad = (file, value, action, code, reason, schemaValid, note, placeholder) =>
   put(file, value, {kind: "request", action, valid: false, schemaValid, expect: {code, reason}, ...(note ? {note} : {}), ...(placeholder ? {placeholder} : {})});
@@ -71,6 +79,8 @@ bad("reserve.request.file-name-too-long.json", req("af1638b4-c12d-4e5f-8a6b-7c8d
     "reserveFilmUpload", "invalid-argument", "schema-invalid", false, "121 characters");
 bad("reserve.request.file-name-control-char.json", req("d24961e7-f450-4b82-9d9e-afb0c1d2e3f4", "reserveFilmUpload", {...reservePayload, fileName: "clip\u0007.mp4"}),
     "reserveFilmUpload", "invalid-argument", "schema-invalid", false);
+bad("reserve.request.file-name-61-emoji-122-units.json", req("168da52b-3894-4fc6-9bd2-e3f4a5b6c7d8", "reserveFilmUpload", {...reservePayload, fileName: EMOJI.repeat(61)}),
+    "reserveFilmUpload", "invalid-argument", "schema-invalid", false, "61 astral code points = 122 UTF-16 units: rejected");
 bad("reserve.request.operation-id-not-uuid-v4.json", req("not-a-uuid", "reserveFilmUpload", reservePayload),
     "reserveFilmUpload", "invalid-argument", "schema-invalid", false);
 bad("reserve.request.action-mismatch.json", req("b02749c5-d23e-4f60-9b7c-8d9eafb0c1d2", "abandonFilmUpload", {teamId: TEAM, filmId: FILM}),
@@ -149,6 +159,10 @@ filmMut("invalid.mutation.X10-validating-after-expiry.json", st({status: "valida
 mut("invalid.mutation.X11-receipt-not-reserved.json", ok(states.abandonedFromReserved), "reserveFilmUpload", "X11", "R4");
 mut("invalid.mutation.X12-abandon-from-validating-no-generation.json", okA("validating", states.abandonedFromReserved), "abandonFilmUpload", "X12", "A4");
 mut("invalid.mutation.X13-abandon-from-reserved-has-generation.json", okA("reserved", states.abandonedFromValidating), "abandonFilmUpload", "X13", "A3");
+put("film-state.file-name-60-emoji-120-units.json", st({fileName: EMOJI.repeat(60)}), {kind: "film-state", valid: true, utf16Units: 120});
+put("film-state.file-name-120-ascii.json", st({fileName: "a".repeat(116) + ".mp4"}), {kind: "film-state", valid: true, utf16Units: 120});
+filmMut("invalid.mutation.X14-stored-file-name-61-emoji.json", st({fileName: EMOJI.repeat(61)}), "X14", "file name length");
+filmMut("invalid.mutation.X15-stored-file-name-121-ascii.json", st({fileName: "a".repeat(117) + ".mp4"}), "X15", "file name length");
 // ---- film states (== Firestore doc with *At fields as Timestamp)
 for (const [name, s] of Object.entries(states)) {
   put(`film-state.${name}.json`, s, {kind: "film-state", valid: true});

@@ -203,6 +203,18 @@
       "valid": true
     },
     {
+      "file": "film-state.file-name-120-ascii.json",
+      "kind": "film-state",
+      "valid": true,
+      "utf16Units": 120
+    },
+    {
+      "file": "film-state.file-name-60-emoji-120-units.json",
+      "kind": "film-state",
+      "valid": true,
+      "utf16Units": 120
+    },
+    {
       "file": "film-state.rejected.json",
       "kind": "film-state",
       "valid": true
@@ -334,6 +346,20 @@
       "rule": "A3"
     },
     {
+      "file": "invalid.mutation.X14-stored-file-name-61-emoji.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X14",
+      "rule": "file name length"
+    },
+    {
+      "file": "invalid.mutation.X15-stored-file-name-121-ascii.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X15",
+      "rule": "file name length"
+    },
+    {
       "file": "invalid.mutation.X2-reserved-has-generation.json",
       "kind": "film-state",
       "valid": false,
@@ -442,6 +468,42 @@
       "valid": true,
       "placeholder": "PENDING_D3",
       "note": "exactly LIMITS.maxBytes; accepted"
+    },
+    {
+      "file": "reserve.request.file-name-120-ascii-padded.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "utf16Units": 120,
+      "canonicalFileName": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.mp4",
+      "note": "length is measured after canonicalization"
+    },
+    {
+      "file": "reserve.request.file-name-120-ascii.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "utf16Units": 120
+    },
+    {
+      "file": "reserve.request.file-name-60-emoji-120-units.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "utf16Units": 120,
+      "note": "60 astral code points = 120 UTF-16 units: accepted"
+    },
+    {
+      "file": "reserve.request.file-name-61-emoji-122-units.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "61 astral code points = 122 UTF-16 units: rejected"
     },
     {
       "file": "reserve.request.file-name-canonicalized.json",

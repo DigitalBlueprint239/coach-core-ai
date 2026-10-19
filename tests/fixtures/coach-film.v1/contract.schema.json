@@ -197,9 +197,7 @@
           "maxLength": 100
         },
         "fileName": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 120
+          "type": "string"
         },
         "rightsWordingVersion": {
           "type": "string",
@@ -309,9 +307,7 @@
               "maxLength": 100
             },
             "fileName": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120
+              "type": "string"
             },
             "rightsAcknowledged": {
               "type": "boolean"
@@ -455,9 +451,7 @@
               "maxLength": 100
             },
             "fileName": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120
+              "type": "string"
             },
             "rightsWordingVersion": {
               "type": "string",
@@ -608,9 +602,7 @@
               "maxLength": 100
             },
             "fileName": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120
+              "type": "string"
             },
             "rightsWordingVersion": {
               "type": "string",

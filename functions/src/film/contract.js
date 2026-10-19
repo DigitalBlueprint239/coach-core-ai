@@ -121,11 +121,18 @@ function uploadPathFor(team, film) {
 // returns the canonical form only. Never used in a path.
 // eslint-disable-next-line no-control-regex
 const CONTROL_CHARS = /[\u0000-\u001f\u007f-\u009f]/;
+// zod's string .min/.max count Unicode code points, NOT UTF-16 code units,
+// so the documented UTF-16 bound is enforced by an explicit `.length`
+// refinement, applied after canonicalization (C4, contract r3).
+const utf16Within = (v) =>
+  v.length >= 1 && v.length <= LIMITS.maxFileNameLength;
+const UTF16_BOUND = `1..${LIMITS.maxFileNameLength} UTF-16 code units`;
 const canonicalFileName = z.string().normalize("NFC").trim()
-    .min(1).max(LIMITS.maxFileNameLength)
+    .refine(utf16Within, `file name length ${UTF16_BOUND}`)
     .refine((v) => !CONTROL_CHARS.test(v), "control characters");
 // Stored/returned file names must already be canonical (no transform).
-const storedFileName = z.string().min(1).max(LIMITS.maxFileNameLength)
+const storedFileName = z.string()
+    .refine(utf16Within, `file name length ${UTF16_BOUND}`)
     .refine((v) => !CONTROL_CHARS.test(v) &&
       v === v.normalize("NFC").trim(), "file name not canonical");
 
