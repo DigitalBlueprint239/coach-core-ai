@@ -52,6 +52,23 @@
     "r2-second.log": "b96e82691bb517a9a489bf5fbe61a20f04ec0cf676da4c71fd7995fb51b068a8",
     "r2-typescript.log": "4083463ca2954a6a2134272809efac61a932f136ea334e7b8afdbe98472c820a",
     "r3-fs26.log": "17145937df2218582598676b8d5c3e4297ae0a0aa263aca202233548620ca45c",
-    "r3-typescript.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    "r3-typescript.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "review-fix-fs26.log": "1c344888bfacaf7c63cfcf06aef18356d915dabcc372a959796c3ca3bf6ce7c2",
+    "review-fix-typescript.log": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+  },
+  "reviewFix": {
+    "previousHead": "5e0bc7726f3e2ef33120bb4ccac5a43220187fda",
+    "review": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/80#pullrequestreview-5578562458",
+    "node": "v24.19.0",
+    "fs26": {
+      "passed": 146,
+      "failed": 0,
+      "skipped": 0,
+      "exit": 0
+    },
+    "typescriptExit": 0,
+    "workflow": ".github/workflows/film-client-contract.yml",
+    "ciStatus": "pending first exact-head run",
+    "scope": "CI and evidence only; client implementation/tests and all shared fixtures unchanged"
   }
 }
