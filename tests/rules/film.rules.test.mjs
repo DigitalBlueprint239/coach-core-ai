@@ -98,18 +98,29 @@ describe('FS-15..18 quarantine uploads (Storage)', () => {
     const unreserved = '8e6372b1-a0bf-4dce-bfe0-5b6c7d8e9fa0';
     await assertFails(uploadBytes(ref(store(ALICE), qpath(TEAM_A, unreserved)), BYTES, mp4));
   });
-  it('FS-18 no client read, update or delete under quarantine/, films/, frames/', async () => {
-    await env.withSecurityRulesDisabled(async (ctx) => {
-      await uploadBytes(ref(ctx.storage(), qpath(TEAM_A, FILM)), BYTES, mp4);
-      await uploadBytes(ref(ctx.storage(), `films/${TEAM_A}/${FILM}/source.mp4`), BYTES, mp4);
-      await uploadBytes(ref(ctx.storage(), `frames/${TEAM_A}/${FILM}/f.jpg`), BYTES, { contentType: 'image/jpeg' });
-    });
-    for (const p of [qpath(TEAM_A, FILM), `films/${TEAM_A}/${FILM}/source.mp4`, `frames/${TEAM_A}/${FILM}/f.jpg`]) {
+  const seedObjects = () => env.withSecurityRulesDisabled(async (ctx) => {
+    await uploadBytes(ref(ctx.storage(), qpath(TEAM_A, FILM)), BYTES, mp4);
+    await uploadBytes(ref(ctx.storage(), `films/${TEAM_A}/${FILM}/source.mp4`), BYTES, mp4);
+    await uploadBytes(ref(ctx.storage(), `frames/${TEAM_A}/${FILM}/f.jpg`), BYTES, { contentType: 'image/jpeg' });
+  });
+  const P18 = [qpath(TEAM_A, FILM), `films/${TEAM_A}/${FILM}/source.mp4`, `frames/${TEAM_A}/${FILM}/f.jpg`];
+  for (const p of P18) {
+    const label = p.split('/')[0];
+    it(`FS-18 ${label}: no client read`, async () => {
+      await seedObjects();
       await assertFails(getBytes(ref(store(ALICE), p)));
+    });
+    it(`FS-18 ${label}: no client delete`, async () => {
+      await seedObjects();
       await assertFails(deleteObject(ref(store(ALICE), p)));
+    });
+    it(`FS-18 ${label}: no client metadata update`, async () => {
+      await seedObjects();
       await assertFails(updateMetadata(ref(store(ALICE), p), { customMetadata: { x: '1' } }));
-    }
-    // An existing quarantine object cannot be overwritten (create-only).
+    });
+  }
+  it('FS-18 quarantine: an existing object cannot be overwritten (create-only)', async () => {
+    await seedObjects();
     await assertFails(uploadBytes(ref(store(ALICE), qpath(TEAM_A, FILM)), BYTES, mp4));
   });
 });

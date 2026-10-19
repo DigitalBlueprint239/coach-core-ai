@@ -60,6 +60,7 @@ service firebase.storage {
 
     match /quarantine/{teamId}/{filmId}/source.mp4 {
       allow create: if isBetaUser()
+        && resource == null
         && ownsTeam(teamId)
         && request.resource.size > 0
         && request.resource.size <= 100000000
