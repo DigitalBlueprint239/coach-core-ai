@@ -1,0 +1,5333 @@
+[
+  {
+    "name": "baseline complete selection",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "all acceptance memberships empty: zero executions in all12 jobs",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "acceptance .last-run missing/unparseable",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "duplicate acceptance identity/result (extra execution despite repeat1)",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 66,
+        "passed": 66,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "legitimate-empty artifact contains foreign-project failed test",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "diagnostic selected identities present but zero completed results",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 0,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "recorded narrowed diagnostic grep (rejection control)",
+    "eligible": false,
+    "reasons": [
+      "R5 E2E diagnostic (chromium): a dispatch grep \"N2-D0\" narrowed the selection"
+    ],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "FAIL"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "unrecorded narrowed diagnostic membership (rejection control)",
+    "eligible": false,
+    "reasons": [
+      "R5 E2E diagnostic (chromium): executed identities != membership (missing 1, extra 0); selection was narrowed or membership drifted"
+    ],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 9,
+        "passed": 0,
+        "failed": 9,
+        "verdict": "FAIL"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "wrong artifact sha (rejection control)",
+    "eligible": false,
+    "reasons": [
+      "R4 E2E acceptance (chromium): artifact sha cccccccccccccccccccccccccccccccccccccccc != candidate aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "FAIL"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "wrong artifact head_sha (rejection control)",
+    "eligible": false,
+    "reasons": [
+      "R4 E2E acceptance (chromium): artifact head_sha cccccccccccccccccccccccccccccccccccccccc != bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "FAIL"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "wrong artifact run_id (rejection control)",
+    "eligible": false,
+    "reasons": [
+      "R4 E2E acceptance (chromium): artifact run_id 999 != 123456789"
+    ],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "FAIL"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "wrong artifact run_attempt (rejection control)",
+    "eligible": false,
+    "reasons": [
+      "R4 E2E acceptance (chromium): artifact run_attempt 2 != 1 (stale artifact from another attempt)"
+    ],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "FAIL"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "listMembership accepts exit1/error JSON; evaluate issues ELIGIBLE for zero acceptance",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "real reader baseline: complete inventories",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  },
+  {
+    "name": "real reader: inventory covers only run.log; modified results/context unverified",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ],
+    "reader": {
+      "uploadOk": true,
+      "inventoryOk": true,
+      "context": {
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "head_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "event": "pull_request",
+        "run_id": "123456789",
+        "run_attempt": "1",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "repeat": "1",
+        "grep": ""
+      },
+      "results": {
+        "config": {},
+        "suites": [
+          {
+            "title": "root",
+            "file": "x",
+            "specs": [
+              {
+                "title": "ACC-00 does the thing",
+                "file": "acc.spec.ts",
+                "line": 10,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-01 does the thing",
+                "file": "acc.spec.ts",
+                "line": 11,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-02 does the thing",
+                "file": "acc.spec.ts",
+                "line": 12,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-03 does the thing",
+                "file": "acc.spec.ts",
+                "line": 13,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-04 does the thing",
+                "file": "acc.spec.ts",
+                "line": 14,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-05 does the thing",
+                "file": "acc.spec.ts",
+                "line": 15,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-06 does the thing",
+                "file": "acc.spec.ts",
+                "line": 16,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-07 does the thing",
+                "file": "acc.spec.ts",
+                "line": 17,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-08 does the thing",
+                "file": "acc.spec.ts",
+                "line": 18,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-09 does the thing",
+                "file": "acc.spec.ts",
+                "line": 19,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-10 does the thing",
+                "file": "acc.spec.ts",
+                "line": 20,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-11 does the thing",
+                "file": "acc.spec.ts",
+                "line": 21,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-12 does the thing",
+                "file": "acc.spec.ts",
+                "line": 22,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-13 does the thing",
+                "file": "acc.spec.ts",
+                "line": 23,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-14 does the thing",
+                "file": "acc.spec.ts",
+                "line": 24,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-15 does the thing",
+                "file": "acc.spec.ts",
+                "line": 25,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-16 does the thing",
+                "file": "acc.spec.ts",
+                "line": 26,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-17 does the thing",
+                "file": "acc.spec.ts",
+                "line": 27,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-18 does the thing",
+                "file": "acc.spec.ts",
+                "line": 28,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-19 does the thing",
+                "file": "acc.spec.ts",
+                "line": 29,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-20 does the thing",
+                "file": "acc.spec.ts",
+                "line": 30,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-21 does the thing",
+                "file": "acc.spec.ts",
+                "line": 31,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-22 does the thing",
+                "file": "acc.spec.ts",
+                "line": 32,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-23 does the thing",
+                "file": "acc.spec.ts",
+                "line": 33,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-24 does the thing",
+                "file": "acc.spec.ts",
+                "line": 34,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-25 does the thing",
+                "file": "acc.spec.ts",
+                "line": 35,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-26 does the thing",
+                "file": "acc.spec.ts",
+                "line": 36,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-27 does the thing",
+                "file": "acc.spec.ts",
+                "line": 37,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-28 does the thing",
+                "file": "acc.spec.ts",
+                "line": 38,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-29 does the thing",
+                "file": "acc.spec.ts",
+                "line": 39,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-30 does the thing",
+                "file": "acc.spec.ts",
+                "line": 40,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-31 does the thing",
+                "file": "acc.spec.ts",
+                "line": 41,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-32 does the thing",
+                "file": "acc.spec.ts",
+                "line": 42,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-33 does the thing",
+                "file": "acc.spec.ts",
+                "line": 43,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-34 does the thing",
+                "file": "acc.spec.ts",
+                "line": 44,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-35 does the thing",
+                "file": "acc.spec.ts",
+                "line": 45,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-36 does the thing",
+                "file": "acc.spec.ts",
+                "line": 46,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-37 does the thing",
+                "file": "acc.spec.ts",
+                "line": 47,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-38 does the thing",
+                "file": "acc.spec.ts",
+                "line": 48,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-39 does the thing",
+                "file": "acc.spec.ts",
+                "line": 49,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-40 does the thing",
+                "file": "acc.spec.ts",
+                "line": 50,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-41 does the thing",
+                "file": "acc.spec.ts",
+                "line": 51,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-42 does the thing",
+                "file": "acc.spec.ts",
+                "line": 52,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-43 does the thing",
+                "file": "acc.spec.ts",
+                "line": 53,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-44 does the thing",
+                "file": "acc.spec.ts",
+                "line": 54,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-45 does the thing",
+                "file": "acc.spec.ts",
+                "line": 55,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-46 does the thing",
+                "file": "acc.spec.ts",
+                "line": 56,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-47 does the thing",
+                "file": "acc.spec.ts",
+                "line": 57,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-48 does the thing",
+                "file": "acc.spec.ts",
+                "line": 58,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-49 does the thing",
+                "file": "acc.spec.ts",
+                "line": 59,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-50 does the thing",
+                "file": "acc.spec.ts",
+                "line": 60,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-51 does the thing",
+                "file": "acc.spec.ts",
+                "line": 61,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-52 does the thing",
+                "file": "acc.spec.ts",
+                "line": 62,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-53 does the thing",
+                "file": "acc.spec.ts",
+                "line": 63,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-54 does the thing",
+                "file": "acc.spec.ts",
+                "line": 64,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-55 does the thing",
+                "file": "acc.spec.ts",
+                "line": 65,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-56 does the thing",
+                "file": "acc.spec.ts",
+                "line": 66,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-57 does the thing",
+                "file": "acc.spec.ts",
+                "line": 67,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-58 does the thing",
+                "file": "acc.spec.ts",
+                "line": 68,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-59 does the thing",
+                "file": "acc.spec.ts",
+                "line": 69,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-60 does the thing",
+                "file": "acc.spec.ts",
+                "line": 70,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-61 does the thing",
+                "file": "acc.spec.ts",
+                "line": 71,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-62 does the thing",
+                "file": "acc.spec.ts",
+                "line": 72,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-63 does the thing",
+                "file": "acc.spec.ts",
+                "line": 73,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-64 does the thing",
+                "file": "acc.spec.ts",
+                "line": 74,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "suites": []
+          }
+        ],
+        "errors": [],
+        "stats": {
+          "expected": 65,
+          "unexpected": 0,
+          "skipped": 0,
+          "flaky": 0
+        }
+      },
+      "lastRun": {
+        "status": "passed",
+        "failedTests": []
+      }
+    }
+  },
+  {
+    "name": "real reader: malformed .last-run JSON with matching complete inventory",
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 65,
+        "executed": 65,
+        "passed": 65,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 10,
+        "executed": 10,
+        "passed": 0,
+        "failed": 10,
+        "verdict": "OK (coverage complete; 10 failing diagnostic test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "failure",
+        "artifact": "present",
+        "selected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "verdict": "OK (coverage complete; 1 failing obsolete-fault-model test(s) visible, not blocking)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "verdict": "OK"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ],
+    "reader": {
+      "uploadOk": true,
+      "inventoryOk": true,
+      "context": {
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "head_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "event": "pull_request",
+        "run_id": "123456789",
+        "run_attempt": "1",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "repeat": "1",
+        "grep": ""
+      },
+      "results": {
+        "config": {},
+        "suites": [
+          {
+            "title": "root",
+            "file": "x",
+            "specs": [
+              {
+                "title": "ACC-00 does the thing",
+                "file": "acc.spec.ts",
+                "line": 10,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-01 does the thing",
+                "file": "acc.spec.ts",
+                "line": 11,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-02 does the thing",
+                "file": "acc.spec.ts",
+                "line": 12,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-03 does the thing",
+                "file": "acc.spec.ts",
+                "line": 13,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-04 does the thing",
+                "file": "acc.spec.ts",
+                "line": 14,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-05 does the thing",
+                "file": "acc.spec.ts",
+                "line": 15,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-06 does the thing",
+                "file": "acc.spec.ts",
+                "line": 16,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-07 does the thing",
+                "file": "acc.spec.ts",
+                "line": 17,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-08 does the thing",
+                "file": "acc.spec.ts",
+                "line": 18,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-09 does the thing",
+                "file": "acc.spec.ts",
+                "line": 19,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-10 does the thing",
+                "file": "acc.spec.ts",
+                "line": 20,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-11 does the thing",
+                "file": "acc.spec.ts",
+                "line": 21,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-12 does the thing",
+                "file": "acc.spec.ts",
+                "line": 22,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-13 does the thing",
+                "file": "acc.spec.ts",
+                "line": 23,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-14 does the thing",
+                "file": "acc.spec.ts",
+                "line": 24,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-15 does the thing",
+                "file": "acc.spec.ts",
+                "line": 25,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-16 does the thing",
+                "file": "acc.spec.ts",
+                "line": 26,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-17 does the thing",
+                "file": "acc.spec.ts",
+                "line": 27,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-18 does the thing",
+                "file": "acc.spec.ts",
+                "line": 28,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-19 does the thing",
+                "file": "acc.spec.ts",
+                "line": 29,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-20 does the thing",
+                "file": "acc.spec.ts",
+                "line": 30,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-21 does the thing",
+                "file": "acc.spec.ts",
+                "line": 31,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-22 does the thing",
+                "file": "acc.spec.ts",
+                "line": 32,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-23 does the thing",
+                "file": "acc.spec.ts",
+                "line": 33,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-24 does the thing",
+                "file": "acc.spec.ts",
+                "line": 34,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-25 does the thing",
+                "file": "acc.spec.ts",
+                "line": 35,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-26 does the thing",
+                "file": "acc.spec.ts",
+                "line": 36,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-27 does the thing",
+                "file": "acc.spec.ts",
+                "line": 37,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-28 does the thing",
+                "file": "acc.spec.ts",
+                "line": 38,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-29 does the thing",
+                "file": "acc.spec.ts",
+                "line": 39,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-30 does the thing",
+                "file": "acc.spec.ts",
+                "line": 40,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-31 does the thing",
+                "file": "acc.spec.ts",
+                "line": 41,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-32 does the thing",
+                "file": "acc.spec.ts",
+                "line": 42,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-33 does the thing",
+                "file": "acc.spec.ts",
+                "line": 43,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-34 does the thing",
+                "file": "acc.spec.ts",
+                "line": 44,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-35 does the thing",
+                "file": "acc.spec.ts",
+                "line": 45,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-36 does the thing",
+                "file": "acc.spec.ts",
+                "line": 46,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-37 does the thing",
+                "file": "acc.spec.ts",
+                "line": 47,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-38 does the thing",
+                "file": "acc.spec.ts",
+                "line": 48,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-39 does the thing",
+                "file": "acc.spec.ts",
+                "line": 49,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-40 does the thing",
+                "file": "acc.spec.ts",
+                "line": 50,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-41 does the thing",
+                "file": "acc.spec.ts",
+                "line": 51,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-42 does the thing",
+                "file": "acc.spec.ts",
+                "line": 52,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-43 does the thing",
+                "file": "acc.spec.ts",
+                "line": 53,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-44 does the thing",
+                "file": "acc.spec.ts",
+                "line": 54,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-45 does the thing",
+                "file": "acc.spec.ts",
+                "line": 55,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-46 does the thing",
+                "file": "acc.spec.ts",
+                "line": 56,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-47 does the thing",
+                "file": "acc.spec.ts",
+                "line": 57,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-48 does the thing",
+                "file": "acc.spec.ts",
+                "line": 58,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-49 does the thing",
+                "file": "acc.spec.ts",
+                "line": 59,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-50 does the thing",
+                "file": "acc.spec.ts",
+                "line": 60,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-51 does the thing",
+                "file": "acc.spec.ts",
+                "line": 61,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-52 does the thing",
+                "file": "acc.spec.ts",
+                "line": 62,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-53 does the thing",
+                "file": "acc.spec.ts",
+                "line": 63,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-54 does the thing",
+                "file": "acc.spec.ts",
+                "line": 64,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-55 does the thing",
+                "file": "acc.spec.ts",
+                "line": 65,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-56 does the thing",
+                "file": "acc.spec.ts",
+                "line": 66,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-57 does the thing",
+                "file": "acc.spec.ts",
+                "line": 67,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-58 does the thing",
+                "file": "acc.spec.ts",
+                "line": 68,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-59 does the thing",
+                "file": "acc.spec.ts",
+                "line": 69,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-60 does the thing",
+                "file": "acc.spec.ts",
+                "line": 70,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-61 does the thing",
+                "file": "acc.spec.ts",
+                "line": 71,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-62 does the thing",
+                "file": "acc.spec.ts",
+                "line": 72,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-63 does the thing",
+                "file": "acc.spec.ts",
+                "line": 73,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "ACC-64 does the thing",
+                "file": "acc.spec.ts",
+                "line": 74,
+                "column": 1,
+                "tests": [
+                  {
+                    "projectName": "chromium",
+                    "expectedStatus": "passed",
+                    "status": "expected",
+                    "results": [
+                      {
+                        "status": "passed",
+                        "duration": 5
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "suites": []
+          }
+        ],
+        "errors": [],
+        "stats": {
+          "expected": 65,
+          "unexpected": 0,
+          "skipped": 0,
+          "flaky": 0
+        }
+      },
+      "lastRun": null
+    }
+  },
+  {
+    "name": "inventory traversal outside artifact accepted",
+    "inventoryOk": true
+  },
+  {
+    "name": "FULL CLI: errored collector and zero acceptance results produces exit0/ELIGIBLE",
+    "exit": 0,
+    "eligible": true,
+    "reasons": [],
+    "rows": [
+      {
+        "job": "E2E acceptance (chromium)",
+        "project": "chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (chromium)",
+        "project": "chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (chromium)",
+        "project": "chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (firefox)",
+        "project": "firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (firefox)",
+        "project": "firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (firefox)",
+        "project": "firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-chromium)",
+        "project": "phone-chromium",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E acceptance (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "acceptance",
+        "required": true,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E diagnostic (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "diagnostic",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      },
+      {
+        "job": "E2E obsolete-fault-model (phone-firefox)",
+        "project": "phone-firefox",
+        "bucket": "obsolete-fault-model",
+        "required": false,
+        "job_conclusion": "success",
+        "artifact": "present",
+        "selected": 0,
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)"
+      }
+    ]
+  }
+]

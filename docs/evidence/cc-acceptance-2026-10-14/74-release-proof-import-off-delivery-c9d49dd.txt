@@ -1,0 +1,62 @@
+Evidence 74 — Release-proof repair for import default-OFF: delivery record (draft PR #78)
+========================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+Base: 61448f0feee198a8796f4077f32a52f7b863f90d (PR #76, reviewed PASS — ev. 73).  Head: c9d49dd367933a92039ba40478d80ffe3a6af987
+Branch: ci/release-proof-import-off (outside claude/** so no full matrix auto-starts). Draft PR #78, base branch codex/runtime-import-integration-2026-10-17.
+Changed files (10, +558/-4): scripts/security/verify-release-build.sh; NEW scripts/security/release-import-config.js; NEW scripts/security/release-import-config.test.mjs;
+  src/features/legacy-import/import-legacy.ts (+5: IMPORT_CONFIG_MARKER); src/features/legacy-import/LegacyImport.tsx (data-import-config attribute);
+  NEW src/features/legacy-import/__tests__/import-config-marker.test.tsx; .github/workflows/e2e-emulator.yml (+1 step: Release-proof self-checks);
+  NEW docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md; NEW docs/support/LEGACY_IMPORT_RECOVERY_RUNBOOK_DRAFT_2026-10-18.md;
+  NEW docs/support/PRIVATE_BETA_DISCLOSURE_NOT_NOW_DRAFT_2026-10-18.md.
+Unchanged: enable check (=== 'true'), all import/recovery behaviour and accepted tests, .env.production/.env.test/build-app.sh opt-ins, identity UI,
+  e2e tests/config/reporter/evidence scripts, membership (76/15), execution settings, PR #77 files.
+
+Precedence audit (react-scripts 5.0.1 config/env.js + dotenv no-overwrite): shell > .env.production.local > .env.local > .env.production > .env
+  (.env.local skipped only for NODE_ENV=test). Empirically confirmed by check 7 (CRA loader in a child process agrees for every layer).
+
+Proof rules (fail closed): (1) exact .env.production pin; (2) effective value resolved independently AND by CRA's loader: must agree, be exactly "false",
+  from a committed file — enabling/local/shell/malformed/unset/disagreement -> FAIL and REFUSE TO BUILD; (3) shipped JS must contain the folded literal
+  coachcore:import-config=false, no =true, no inlined REACT_APP_ENABLE_LEGACY_IMPORT:"true", and the disabled-state copy (DCE'd in enabled builds);
+  missing canary -> inconclusive -> FAIL; (4) negative control: the opted-in emulator build must be DETECTED (=true present).
+
+Local validation on c9d49dd:
+  node scripts/security/release-import-config.test.mjs            -> 12 pass, 1 skipped (slow case)
+  RELEASE_PROOF_BUILD=1 node scripts/security/release-import-config.test.mjs -> 13/13 (incl. real release-shaped build; canary=false x1)
+    cases: committed pin OK; .env.local=true FAIL; .env.production.local=true FAIL; shell true FAIL; shell/local false FAIL (not committed);
+    TRUE/1/yes/False/""/" false"/"false "/off FAIL; unset FAIL; .env-only FAIL; precedence == CRA; scan OFF ok / ON fail / no canary inconclusive /
+    inlined true fail / =true alongside =false fail / no disabled copy fail / empty fail; negative-control both ways; source contract;
+    END-TO-END real verify-release-build.sh with shell override -> exit 1, "refusing to build", no build dir;
+    END-TO-END real script with a temporary enabling .env.local -> old pin check PASSes, new effective check FAILs by .env.local, no build.
+  Manual reproduction before the fix (61448f0, ev. 73): .env.local=true -> production env resolves "true", old proof 13/13 PASS.
+  bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239 (fresh emulator build present) -> RESULT: 17 passed, 0 failed:
+    PASS guard refuses an emulator build for coach-core-mvp-staging-239
+    PASS .env.production pins the emulator flag to false
+    PASS .env.production pins the import flag to false
+    PASS effective build-time import config is OFF (.env.production="false"; CRA loader agrees: "false")
+    PASS release-shaped build for coach-core-mvp-staging-239
+    PASS no test-hook marker (__coachCoreE2E)
+    PASS no test-hook module (e2e-support / emulator-hooks)
+    PASS no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 9199)
+    PASS no demo-* project values
+    PASS no emulator test password or placeholder secret
+    PASS bundle targets coach-core-mvp-staging-239
+    PASS shipped JS proves import OFF (canary=false x1, =true x0, inlined true x0, disabled copy x2)
+    PASS 2 JS files scanned
+    PASS negative control: pattern detects emulator build (__coachCoreE2E)
+    PASS negative control: pattern detects emulator build ([:,](9099|9199|5001|8080)[^0-9])
+    PASS negative control: pattern detects emulator build (demo-coach-core)
+    PASS negative control: import canary detects the opted-in emulator build (=true)
+    RESULT: 17 passed, 0 failed
+  Enabled emulator build scanned deliberately: canaryOff 0, canaryOn 1, inlinedTrue 6, disabledCopy 0 -> scan FAILS (as it must); negative-control OK.
+  Import unit suites: 7 suites / 49 tests PASS (47 accepted + 2 marker). tsc --noEmit clean. reporter 10/10; evidence 19 (18 + root skip).
+
+Actual CI (workflow_dispatch, repeat 1, grep "D10-01", run 39081774809 on c9d49dd, conclusion success): 12/12 jobs; every job ran the new
+  "Release-proof self-checks" step (success) and the "Release-build proof" step (success) with the annotation
+  "Release-build proof (coach-core-mvp-staging-239): 17 passed :: ... import proven OFF in the shipped JS (effective build config + canary) ...";
+  the emulator negative control ran against the same-commit e2e/.app-build. D10-01 PASS on all four acceptance jobs; finalize/upload OK.
+  Limitations: no full matrix (unchanged runtime); CI self-checks skip the slow real-build case (the proof step itself builds); ZIPs not opened from
+  this workspace. The proof is a local/CI release-SHAPED build, not a staging deployment.
+
+Drafts (proposals only; nothing activated; no channel or backend capability invented): docs/support/LEGACY_IMPORT_RECOVERY_RUNBOOK_DRAFT_2026-10-18.md
+  (ownership verification, authorized read-only operator access, audit trail, escalation, completion evidence; 7 explicit missing decisions D1–D7) and
+  docs/support/PRIVATE_BETA_DISCLOSURE_NOT_NOW_DRAFT_2026-10-18.md (wording + 3 missing decisions P1–P3).

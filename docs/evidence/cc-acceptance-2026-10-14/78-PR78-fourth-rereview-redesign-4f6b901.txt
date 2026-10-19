@@ -1,0 +1,120 @@
+Evidence 78 — PR #78 fourth re-review: verification contract reassessed and repaired (Codex review 6254186547): delivery record
+=============================================================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+Failed head: cab8cabe2baf00b8f3a37a36a88466f5c749613e.  New head: 4f6b901b6c4141f88f5d884af0d67d62b28f40c1.  Base unchanged: 61448f0 (PR #76).
+Changed vs cab8cab (11 files, +790/-920): scripts/security/release-import-config.js (rewritten), release-import-config.test.mjs,
+  verify-release-build.sh, e2e/scripts/build-app.sh, e2e/package.json, e2e/playwright.config.ts (+testIgnore), e2e/.gitignore,
+  NEW e2e/playwright.release-proof.config.ts, NEW e2e/tests/release-import-off.spec.ts, .github/workflows/e2e-emulator.yml,
+  docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md. src/ and docs/support/ byte-identical to cab8cab (git diff --stat: 0 lines).
+
+1. Reproduction of every fourth-review finding on cab8cab (Codex independent-probes.cjs + real-react-updater.cjs from c319c0b, run unmodified
+   against /root/cand5 at cab8cab; outputs retained: independent-probes.json sha256 51bf9924…e33e, real-react-updater.json sha256 84fe21ee…314f):
+   false OFF (cab8cab scan exit 0 verdict off while the real button reached the backend): React functional updater (copies 1), +evil valueOf
+   coercion (1), poison.call(globalThis) this.Error (1; decline 1), Reflect alias R.set(globalThis,"Error") (1; decline 1), unverified require
+   returning malicious hooks (4; decline 1), ref.current accessor (2), outer finally after inner rejection (1), duplicate onClick key (1);
+   real React 19.1.0 under jsdom: backend_copies 1, cab8cab verdict off. False ON: o.current="stale" -> real UI 0 copies/reads, cab8cab
+   negative-control exit 0 verdict on. All nine reproduced exactly as reported.
+
+2. Root cause (design doc §"Why the verifier repeatedly accepted…"): every revision tried to decide a semantic property of arbitrary compiled
+   JavaScript ("no backend effect reachable from this handler") with a syntactic whitelist; each review supplied an evaluation point the model
+   lacked (setter arguments React invokes, valueOf, accessors, explicit global receivers, aliased Reflect, tampered module loader, enclosing
+   finally, duplicate JSX keys) and each exemption added for the real bundle widened the accepted language. The ON control synthesised arguments
+   and predicates to execute outside a browser, so it could report ON where the real UI never enables. Both legs modelled the engine instead of
+   using it. Decision: retire all output-level behaviour claims; keep only decidable legs and a real-execution leg.
+
+3. New contract (smallest defensible; all three required, judged by `gate`):
+   L1 configuration — `resolve` (unchanged): effective REACT_APP_ENABLE_LEGACY_IMPORT exactly "false" from a committed-basename file, independent
+      dotenv + CRA loader agree; verify-release-build.sh refuses to build otherwise.
+   L2 inlining — `canary`: the chunks index.html ships contain `coachcore:import-config=<v>` as a STRING-LITERAL TOKEN (acorn tokenizer; comments
+      are not tokens), exactly one distinct <v>, equal to the resolved value; source scope: src/ reads the flag only at isLegacyImportEnabled +
+      IMPORT_CONFIG_MARKER (exact lines; __tests__ excluded) and the accepted guards (importLegacy/declineImport first-statement check, component
+      `enabled` switch, data-import-config, disabled-notice branch) are present verbatim. The report carries
+      claim="configuration literal in shipped code; NOT a behavioural claim".
+   L3 behaviour — real browsers (Chromium + Firefox) against the Firebase emulators, e2e/playwright.release-proof.config.ts serving two same-commit
+      builds side by side: :3100 import-OFF emulator build (E2E_IMPORT_OFF=1 -> REACT_APP_ENABLE_LEGACY_IMPORT=false) and :3000 the opted-in build.
+      RP-OFF-01 owner + device plays: region visible, data-import-config="coachcore:import-config=false", alert = disabled notice, ZERO buttons in
+        the region, support text present; after a 3 s window no `plays` doc for team or coach, no claim/pending/decision key, originals byte-identical;
+        same after reload.
+      RP-OFF-02 unfinished claim of this very coach/team (status pending + pendingKey): disabled notice, no resume/postpone, nothing copied, claim and
+        pending byte-identical, no decision.
+      RP-OFF-03 owner without device data: no region at all, nothing written.
+      ON control: the ACCEPTED D10-01 (accept copies every play) and D10-02 (decline writes nothing) on the opted-in build — real UI, real
+        arguments, real `() => current.current === session` predicate, real emulator writes. Nothing synthesised.
+   gate — reads the release-proof results.json: every RP-OFF-* and D10-01/D10-02 execution must be status "expected" with all results "passed";
+      a skip, flaky, missing title, missing/unparseable file or a non-config-false canary is inconclusive (exit 1). Writes release-gate.json with
+      executed titles per project, verdict, the "establishes" statement and host assumptions.
+   Reporting: verify-release-build.sh RESULT line = "N passed … (legs L1 configuration + L2 inlining; L3 behaviour is decided by
+      'release-import-config.js gate' after the browser run and is NOT claimed here)"; jobs that do not run L3 emit "Release gate not run in this
+      job … This job makes no OFF-behaviour claim."
+
+4. What the proof establishes / host assumptions (verbatim in the design doc and in gate.establishes): for the inspected commit and toolchain,
+   (1) the release-shaped build was configured OFF, (2) the compiler inlined that value and the source reads the flag nowhere else, (3) the app
+   compiled from that source with that value behaves disabled in Chromium and Firefox while the same commit opted-in behaves enabled.
+   Assumptions: DefinePlugin single substitution per compilation (toolchain integrity; versions recorded); the import-OFF emulator build and the
+   release build differ only by emulator/project env values — THE RELEASE BUNDLE ITSELF IS NOT EXECUTED; the shipped bundle is the one the proof
+   built (hashes retained; deployment comparison out of scope). Not established: anything about a bundle not built by this proof; any handler-
+   inertness claim from minified output.
+
+5. Alternative explained, not implemented (design doc §"Alternative considered"): a structural release boundary in src/features/legacy-import
+   (index.ts selecting LegacyImport vs a notice-only LegacyImportDisabled by the DefinePlugin constant so webpack drops the import UI from the
+   OFF graph). Gain is limited because EarlierDrafts.tsx already imports firebaseImport for accepted recovery (backend capability stays in the
+   bundle regardless), and it changes accepted PR #76 application code — proposed as a separate PR against 61448f0 if wanted.
+
+6. Focused checks on 4f6b901 (local, full git history):
+   node scripts/security/release-import-config.test.mjs -> 65 tests: 63 pass / 0 fail / 2 skipped (the two real-build cases) [focused65.txt
+     sha256 e96b34c0…f7ac]; RELEASE_PROOF_BUILD=1 --test-name-pattern "REAL|F2" -> both real-build cases pass [realbuild2.txt sha256 d777fd3c…1c04].
+     Contents: resolve 4; canary/source-scope 3 (comment-only marker, orphan chunk, two values, "undefined", missing html/chunk, parse failure,
+     template-literal form; flag read elsewhere / changed guard / removed marker / missing file -> inconclusive); retired-model regressions:
+     23 false-OFF fixtures (F1 decoy, R1–R3, D1–D2, Q1–Q8) each: reviewers' actual harness reaches the backend AND canary carries no behaviour claim
+     AND gate inconclusive; 2 false-ON fixtures (D3, Q9): no backend call, negative-control command no longer exists (usage error 2); Q1 with REAL
+     React 19.1.0/jsdom (copies 1); review reproductions (22 false-OFF + 2 false-ON + 1 real-React): superseded 905b1d4/d14aa7b/cab8cab scripts from
+     git return the false verdict — explicit SKIP (never pass) when history is shallow; gate 2 (all-pass -> off exit 0 with establishes text;
+     skipped/failed/missing/not-executed/flaky/missing-file/unparseable/config-true/no-canary -> exit 1); source+workflow contract 1; real-script
+     refusals 2 (shell override, .env.local; no build dir created); real builds 2.
+   verify-release-build.sh on 4f6b901 with fresh same-commit emulator + import-OFF builds: RESULT: 19 passed, 0 failed (L1+L2 only):
+     PASS guard refuses an emulator build / .env.production pins emulator flag / pins import flag / effective build-time import config is OFF
+     (.env.production="false"; CRA loader agrees: "false") / release-shaped build / no test-hook marker / no test-hook module / no emulator ports /
+     no demo-* values / no placeholder secret / bundle targets coach-core-mvp-staging-239 /
+     PASS source scope: import flag read only at the release boundary (import-legacy.ts:3, :8; guards verbatim)
+     PASS shipped entry chunks inline import-config=false (static/js/main.630c8567.js@654521; 1 literal(s), 1 value; configuration inlining, not a behaviour claim)
+     PASS 2 JS files scanned
+     PASS import-OFF emulator build (behavioural-leg input) inlines import-config=false; 12 files hashed
+     PASS negative control: pattern detects emulator build (x3) / PASS negative control: canary reads the opted-in emulator build as import-config=true
+     release-build.context: node v22.22.0 react_scripts 5.0.1 webpack 5.100.0 terser 5.43.1 react 19.1.0; canary_verdict=config-false literals=1;
+     build_manifest_sha256 8f88a3cc…53b7; import_off_build_manifest_sha256 d305504d…afe2 (12 files). gate on this canary without browser results ->
+     inconclusive exit 1 (a passing script is not the proof).
+   Import unit suites (react-scripts test src/features/legacy-import): 7 suites, 49/49 pass (src unchanged).
+   Playwright membership: main config `--list` = 182 tests in 9 files at cab8cab AND at 4f6b901 (the OFF spec is excluded by testIgnore);
+     release-proof config lists RP-OFF-01/02/03 × {chromium, firefox} + D10-01/D10-02 × {chromium, firefox} (RP_BROWSER selects per job).
+   tsc (spec + config): clean.
+   L3 NOT executed locally: the Firebase emulator JARs cannot be downloaded from this workspace (storage.googleapis.com refused). L3 and the
+     gate verdict come from CI only (section 7).
+
+7. Bounded CI on 4f6b901: run 39163048438 (workflow_dispatch, branch ci/release-proof-import-off, 12 jobs).
+   Dispatched with an EMPTY grep (full suite per bucket) because this head changes e2e/CI configuration; run conclusion = failure, caused
+   ONLY by the known pre-existing diagnostic timeout N2-D2 (evidence 64: 10/10 timeouts at e25272b; this is the case B11 bucketed so it cannot
+   turn acceptance red). Job conclusions (12): acceptance chromium/firefox/phone-chromium/phone-firefox success; obsolete-fault-model ×4 success;
+   diagnostic phone-chromium/phone-firefox success; diagnostic chromium (117780196913) and firefox (117780197131) FAILURE = N2-D2 timedOut 60 s,
+   9 other diagnostics passed in each. No step of this delivery failed anywhere.
+   E2E acceptance (chromium) job 117780197149 — steps: Build same-commit import-OFF emulator build -> success; Release-proof self-checks -> success,
+     annotation "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes)" (26 = 2 real-build + 24 review-reproduction checks that need
+     git history; the shallow checkout has none — reported as skips); Release-build proof L1+L2 -> success, annotation "19 passed … configuration
+     proof only; the behavioural leg … is reported by the release gate step"; Run browser tests (B11 acceptance bucket) -> 65 passed / 0 failed /
+     0 skipped; Release proof L3 (real browser) -> success; Release gate -> success, annotation:
+       verdict=off off=["RP-OFF-01@import-off-chromium:expected","RP-OFF-02@import-off-chromium:expected","RP-OFF-03@import-off-chromium:expected",
+       "D10-01@on-control-chromium:expected","D10-02@on-control-chromium:expected"] (same list under on=; one results.json feeds both legs);
+     evidence inventory 15 files, UPLOAD_OK; artifact manifest top-level includes release-proof/ (results.json copied under test-results).
+   E2E acceptance (firefox) job 117780197166 — identical step outcomes; gate annotation verdict=off with RP-OFF-01/02/03@import-off-firefox and
+     D10-01/D10-02@on-control-firefox all "expected"; self-checks 65 = 39 pass / 26 skipped; proof 19 passed; B11 acceptance 65/65.
+   Non-desktop/non-acceptance jobs: gate annotation "L1+L2 ran in this job; L3 … issued only by the chromium/firefox acceptance jobs. This job
+     makes no OFF-behaviour claim."
+   Artifacts (blob storage is unreachable from this workspace; NOT inspected by me — for Codex): e2e-results-acceptance-chromium-4f6b901… id
+     12149777500 (267,522 B), e2e-results-acceptance-firefox-4f6b901… id 12150195929 (267,580 B); each contains e2e/ci-evidence/release-build/
+     (index.html, static/js/*.js, asset-manifest.json, release-canary.json, import-off-build-manifest.sha256, release-build.context),
+     e2e/ci-evidence/release-canary.json, e2e/ci-evidence/release-gate.json, e2e/test-results/release-proof/results.json, INVENTORY.sha256.
+   Retained here: run-39163048438.json (run/job metadata), annotations-<job>.json for the four desktop jobs (verbatim GitHub annotations).
+
+8. Preserved: application code, support drafts, identity UI, accepted recovery behaviour (RP-OFF-02 additionally shows recovery does not run when
+   OFF), B11 suite membership/settings/buckets (182 tests), reporter/evidence scripts, B15 retention (release-build/, release-canary.json,
+   import-off-build-manifest.sha256, release-gate.json and test-results/release-proof/results.json all inventoried). PR #77 untouched.
+   No merge, deployment, production/protection change, recovery action or AI activation. Delivery ≠ acceptance. MVP NO-GO.

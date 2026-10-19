@@ -5,6 +5,7 @@ import {
   resetEmulators, grantBeta, disableUser, createUnverifiedPasswordUser,
 } from './support/emulator';
 import {
+  signInAsBetaCoach,
   coachEmail, skipOnboarding, signInScreen, dashboardFor, requestEmailLink,
   signInWithEmailLink, waitForE2EHooks, signOutViaUI, storage, LEGACY_PLAYS_KEY, EMAIL_KEY,
 } from './support/app';
@@ -96,7 +97,7 @@ test('E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in', 
   expect(await page.evaluate(() => (window as any).__coachCoreE2E.uid())).toBeNull();
 });
 
-test('E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears session keys, keeps legacy plays byte-identical', async ({ page }) => {
+test('E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical', async ({ page }) => {
   const email = coachEmail('a07');
   const legacy = JSON.stringify([{ id: 'legacy-1', name: 'Pre-account play', players: [{ x: 1.25, y: 2.5 }] }]);
   await page.goto('/');
@@ -116,7 +117,8 @@ test('E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload
   await expect(dashboardFor(page, email)).toHaveCount(0);
   const s = await storage(page);
   expect(s.currentTeamId).toBeUndefined();
-  expect(s.offline_operations).toBeUndefined();
+  // Contract change 2026-10-14 (#61): the quarantined legacy queue is kept byte-for-byte.
+  expect(s.offline_operations).toBe('[{"op":"stale"}]');
   // D10 pending: legacy device data is neither imported nor deleted.
   expect(s[LEGACY_PLAYS_KEY]).toBe(legacy);
 });
@@ -165,4 +167,58 @@ test('E2E-A09 [emulator Google IdP] "Continue with Google" goes through the emul
   await grantBeta(email);
   await page.getByRole('button', { name: 'Check again' }).click();
   await expect(dashboardFor(page, email)).toBeVisible();
+});
+
+test('E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved', async ({ page }) => {
+  const email = coachEmail('a10');
+  const uid = await signInAsBetaCoach(page, email);
+  const draftKey = `coachcore:v1:${uid}:team-x:drafts:plays`;
+  const draft = '{"scope":{"uid":"' + uid + '","teamId":"team-x"},"kind":"plays","id":"d1","expectedRevision":0,"pending":true,"fields":{"name":"Keep"}}';
+  await page.evaluate(([k, v]) => { localStorage.setItem(k, v); localStorage.setItem('offline_operations', '[{"op":"q"}]'); localStorage.setItem('currentTeamId', 't1'); }, [draftKey, draft]);
+  // Hold the post-sign-out cache cleanup so the window between sign-out and the
+  // app's reload stays open (same lifecycle point as #62's reproduction).
+  await page.evaluate(() => {
+    const w = window as any;
+    w.__beforeSignOut = true;
+    const original = window.caches.keys.bind(window.caches);
+    window.caches.keys = () => new Promise<string[]>((resolve) => { w.__releaseCleanup = () => { void original().then(resolve); }; });
+    // Record if the sign-in form EVER appears in this (old) document, including
+    // a late render after the checks below (verifier follow-up, 2026-10-14).
+    w.__formSeen = false;
+    const check = () => {
+      if ([...document.querySelectorAll('label')].some((l) => /sign-in link by email/i.test(l.textContent || ''))
+        || [...document.querySelectorAll('button')].some((b) => /Continue with Google/.test(b.textContent || ''))) w.__formSeen = true;
+    };
+    check();
+    new MutationObserver(check).observe(document.body, { childList: true, subtree: true, characterData: true });
+  });
+  expect(await page.evaluate(() => (window as any).__formSeen), 'observer baseline: no sign-in form on the dashboard').toBe(false);
+  await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+  // The seeded unsynced draft triggers the recovery guard first (expected).
+  await page.getByRole('dialog', { name: 'Unsynced draft recovery' }).getByRole('button', { name: 'Sign out anyway', exact: true }).click();
+  await page.waitForFunction(() => typeof (window as any).__releaseCleanup === 'function');
+  // While the old document is still alive: no form, no buttons, no coaching content.
+  // The defect's own symptoms are checked first, so pre-fix code fails on them.
+  await expect(page.getByText(`Welcome, ${email}`)).toHaveCount(0);
+  await expect(page.getByLabel('Or get a sign-in link by email')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Continue with Google' })).toHaveCount(0);
+  await expect(page.getByRole('status')).toContainText('Signing out');
+  expect(await page.evaluate(() => (window as any).__formSeen), 'sign-in form appeared in the old document').toBe(false);
+  expect(await page.evaluate(() => (window as any).__beforeSignOut)).toBe(true); // still the old document
+  await page.evaluate(() => (window as any).__releaseCleanup());
+  await page.waitForFunction(() => !(window as any).__beforeSignOut && document.readyState === 'complete');
+  await expect(signInScreen(page)).toBeVisible();
+  // Input typed now survives: no further reload follows.
+  await page.evaluate(() => { (window as any).__afterSignOutDoc = true; });
+  await page.getByLabel('Or get a sign-in link by email').fill('next-coach@e2e.coachcore.test');
+  await page.getByRole('button', { name: 'Continue with Google' }).hover();
+  await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+  expect(await page.evaluate(() => (window as any).__afterSignOutDoc)).toBe(true);
+  const s = await storage(page);
+  expect(s[draftKey]).toBe(draft);              // recovery draft preserved
+  expect(s.offline_operations).toBe('[{"op":"q"}]'); // quarantined queue preserved (L0)
+  expect(s.currentTeamId).toBeUndefined();      // session key cleared
+  // Still the same document, input intact, after the storage reads.
+  await expect(page.getByLabel('Or get a sign-in link by email')).toHaveValue('next-coach@e2e.coachcore.test');
+  expect(await page.evaluate(() => (window as any).__afterSignOutDoc)).toBe(true);
 });

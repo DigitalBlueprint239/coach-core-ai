@@ -1,0 +1,65 @@
+Evidence 69 — B15 fail-closed repair: bounded workflow validation (PR #74)
+=========================================================================
+Captured: 2026-10-17 (UTC) by the independent test/evidence owner (Claude), via GitHub REST API.
+Purpose: validate the repair of Codex's B15 FAIL finding (PR #74 review comment 6238546509, reviewed head 04d4be8).
+Scope: DELIVERY validation of the CI evidence pipeline only. Not an acceptance result for runtime 518e9e5.
+
+Repaired head (PR #74, branch claude/ci-evidence-retention-b15): 3befdf1ed439c8e69a0dfa5f67352c6edef41e0a
+Base of branch: 7d56300 (application runtime unchanged: 518e9e5817abd2a0e1bf1308468928f238fa8533)
+Changed files vs 04d4be8 (exactly 3):
+  .github/workflows/e2e-emulator.yml
+  e2e/scripts/evidence.sh
+  e2e/scripts/evidence.test.mjs
+
+Local focused checks (node e2e/scripts/evidence.test.mjs on 3befdf1): 13 checks, 12 pass, 1 skipped
+  (check 7 "unwritable evidence dir -> finalize fails" is skipped when running as root; it executes in CI under the runner user).
+  Deliberate-failure checks: 8 sed unavailable -> "redaction (sed) failed", no UPLOAD_OK, no INVENTORY;
+  9 defective sed -> "redaction verification failed"; 10 sha256sum unavailable -> "inventory creation failed" (log already redacted);
+  11 lying sha256sum -> "inventory verification failed". Synthetic sentinel "Bearer SYNTHETIC-SENTINEL-TOKEN-0123456789" never echoed.
+  Check 12: success path writes UPLOAD_OK and every inventory digest is recomputed from the FINAL (post-redaction) bytes.
+  Check 13: workflow upload step is gated on steps.finalize.outputs.eligible == 'true'.
+
+Bounded workflow run (workflow_dispatch, repeat_each=1, grep "D10-01|N2-A2", 4-job pre-split matrix):
+  run 39059137056  head_sha 3befdf1ed439c8e69a0dfa5f67352c6edef41e0a  created 2026-10-17T18:40:31Z  conclusion: failure
+  (overall failure is EXPECTED: N2-A2 is the [obsolete-fault-model] test, which times out on desktop projects; it is
+   included deliberately so that a FAILING test step exercises the finalize/upload path.)
+
+Per-job step conclusions (steps relevant to B15):
+  job 117473371809 E2E emulator (chromium)
+    Evidence self-checks (B15 retention contract) -> success
+    Run browser tests in the emulator suite -> failure          (N2-A2 timeout; D10-01 PASS; acceptance 1/0, obsolete-fault-model 0/1)
+    Finalize evidence (... fail closed on any processing error) -> success
+    Evidence NOT uploaded (finalize failed; ...) -> skipped
+    Run actions/upload-artifact@v4 -> success
+    notice "E2E evidence inventory (chromium)": 9 files; run.log redaction: bytes_before=21915 bytes_after=21823; UPLOAD_OK present
+  job 117473371622 E2E emulator (firefox)
+    Evidence self-checks -> success; Run browser tests -> failure (N2-A2); Finalize -> success; Evidence NOT uploaded -> skipped; upload -> success
+    notice: 9 files; run.log redaction: bytes_before=21969 bytes_after=21877; UPLOAD_OK present
+  job 117473371755 E2E emulator (phone-chromium)
+    Evidence self-checks -> success; Run browser tests -> success; Finalize -> success; Evidence NOT uploaded -> skipped; upload -> success
+    notice: 6 files; run.log redaction: bytes_before=18841 bytes_after=18795; UPLOAD_OK present
+  job 117473371748 E2E emulator (phone-firefox)
+    Evidence self-checks -> success; Run browser tests -> success; Finalize -> success; Evidence NOT uploaded -> skipped; upload -> success
+    notice: 6 files; run.log redaction: bytes_before=18764 bytes_after=18718; UPLOAD_OK present
+
+Uploaded artifact metadata (REST; names shown without the -<sha> suffix, all suffixed with 3befdf1...):
+  e2e-results-chromium        572784 B
+  e2e-results-firefox         511091 B
+  e2e-results-phone-chromium    7746 B
+  e2e-results-phone-firefox     7695 B
+
+What this run proves:
+  - The test step's failure status is preserved (test step "failure" on desktop jobs; job conclusion failure) while finalize still ran (if: always()) and succeeded.
+  - On the success path the UPLOAD_OK marker was written, the "Evidence NOT uploaded" step was skipped, and the upload executed only after eligible=true.
+  - Redaction changed run.log bytes on every job (the byte deltas correspond to redacted emulator auth parameters; no token value appears in any annotation).
+What this run does NOT prove:
+  - The fail-closed branch in CI (finalize failing -> upload skipped -> job error). That branch is proven only by the local focused checks 8-11 and
+    the self-checks step (which runs the same 13 checks, including check 7, in CI and succeeded on all 4 jobs). No CI job was deliberately broken.
+  - Archive CONTENTS. GitHub artifact ZIPs and job logs are served from blob storage that is unreachable from this agent workspace
+    (job-logs request to productionresultssa19.blob.core.windows.net fails at the proxy). Artifact names/sizes above are metadata only;
+    the file set inside each ZIP remains EXPLICITLY UNVERIFIED by the test owner. A reviewer with artifact download access should open one desktop
+    and one phone ZIP and confirm: e2e/ci-evidence/{run.log, run.exit, REDACTION.txt, INVENTORY.sha256, UPLOAD_OK, release-build-manifest.sha256}
+    and e2e/test-results/ present, run.log contains no oobCode=/Bearer/JWT values, and `sha256sum -c INVENTORY.sha256` passes.
+
+Unchanged: application code, browser tests, coverage, repetitions, retries=0, project matrix, accepted B11 behaviour (PR #73 is separate), PR #72 (separate).
+No merge, deployment, production change, protection change or AI activation. Coach Core remains MVP NO-GO.

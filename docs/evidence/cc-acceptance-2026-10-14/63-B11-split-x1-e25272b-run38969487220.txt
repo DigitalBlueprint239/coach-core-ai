@@ -1,0 +1,417 @@
+# B11 CI split structural validation, x1, retries 0; branch claude/ci-split-b11 @ e25272b = runtime 518e9e5 + harness 7d56300 + split commit (workflow, config, reporter only); PR #73 (draft)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38969487220 (12 jobs)
+# Expected on this runtime: acceptance desktop 63/2 (D10-08a/08d are PR #72 behaviour, absent on 518e9e5: evidence 57); diagnostic desktop red on N2-D2; obsolete desktop N2-A2 as observed; phone diagnostic/obsolete jobs run zero tests.
+
+=== JOB 117204654073 :: E2E acceptance (chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 13 executions
+PASS N2-A1 #0: A1 statusAt=51ms savedAfterRestore=5ms recoveredAfterRestore=15ms teams=1 net: [click@1] | CP 38-68 net::ERR_ABORTED | [restore@8001] | [end@11022] | Listen: 0 req, 0 open
+PASS N2-R1 #0: R1 heldCommits=1 statusAt=47ms serverDuringOutage=0 recovery=automatic/63ms net: [click@1] | CP 43-8028 net::ERR_ABORTED | [restore@8002] | [end@11065] | Listen: 0 req, 0 open
+PASS N2-R1b #0: R1b resets=1 statusAt=47ms serverDuringOutage=0 recovery=ui-retry/12123ms net: [click@0] | CP 38-48 net::ERR_CONNECTION_RESET | [restore@8008] | CP 20066-20097 net::ERR_ABORTED | [end@23130] | Listen: 0 req, 0 open
+PASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=58ms serverAfterCommit=1 recovery=automatic/74ms net: [click@0] | CP 43-86 net::ERR_ABORTED | [end@3144] | Listen: 0 req, 0 open
+PASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/62ms
+PASS N2-R3 #0: R3 recovery=ui-retry/12155ms
+PASS N2-R4 #0: R4 recovery=ui-retry/12159ms
+PASS N2-R5 #0: R5 fakedCommits=1 statusAt=48ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12101ms net: [click@0] | CP 43-61 net::ERR_ABORTED | RG 55-62 net::ERR_ABORTED | [restore@8014] | CP 20055-20086 net::ERR_ABORTED | [end@23115] | Listen: 0 req, 0 open
+PASS N2-R6 #0: R6 statusAt=48ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0
+PASS N2-R7 #0: R7 promptAt=35ms teamsBeforeAnswer=1 prompt="You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=58ms teamsWithName=2 distinctIds=2 distinctCodes=2
+PASS N2-R7b #0: R7b resets=1 statusAt=2ms serverDuring=1 recoveredAt=6 reprompts=0 teamsWithName=2
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=49ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12104ms
+PASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=49ms committedAt=62ms noFalseSuccessAt8s=true recovery=automatic/1415ms
+[notice] E2E chromium slow steps >= 10s: 2 of 65 executions
+FAIL D10-08a #0: resume offered to the original coach/team@legacy-import.spec.ts:474 10.0s
+FAIL D10-08d #0: Expect "toBeVisible"@legacy-import.spec.ts:530 10.0s
+[warning] E2E chromium diag: 2 failed executions
+D10-08a #0 failed 10.9s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:474 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:474 10.0s; Navigate@legacy.ts:44 0.1s; Click@app.ts:76 0.1s
+D10-08d #0 failed 10.9s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:530 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:530 10.0s; Navigate@legacy.ts:44 0.1s; Expect "toBeVisible"@app.ts:115 0.1s
+[failure] E2E chromium [acceptance]: 63 passed / 2 failed / 0 blocked / 0 skipped · acceptance 63/2 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 1/1 D10-08a [10.9/10.9/10.9s] -- Error: resume offered to the original coach/team | expect(locator).toBeVisible() failed | Locator: getByRole('region', {
+FAIL 1/1 D10-08d [10.9/10.9/10.9s] -- Error: expect(locator).toBeVisible() failed | Locator: getByRole('region', { name: 'Import device plays' }).getByRole('b
+PASS 1/1 E2E-AI01 [1.4/1.4/1.4s]
+PASS 1/1 E2E-AI01b [1.6/1.6/1.6s]
+PASS 1/1 E2E-A01 [0.2/0.2/0.2s]
+PASS 1/1 E2E-A02 [0.5/0.5/0.5s]
+PASS 1/1 E2E-A03 [0.6/0.6/0.6s]
+PASS 1/1 E2E-A04 [0.6/0.6/0.6s]
+PASS 1/1 E2E-A05 [0.2/0.2/0.2s]
+PASS 1/1 E2E-A06 [0.2/0.2/0.2s]
+PASS 1/1 E2E-A07 [0.7/0.7/0.7s]
+PASS 1/1 E2E-A08 [0.4/0.4/0.4s]
+PASS 1/1 E2E-A09 [1.1/1.1/1.1s]
+PASS 1/1 E2E-A10 [0.9/0.9/0.9s]
+PASS 1/1 CC-P10 [1.7/1.7/1.7s]
+PASS 1/1 CC-P10b [1.9/1.9/1.9s]
+PASS 1/1 CC-P11 [1.3/1.3/1.3s]
+PASS 1/1 CC-P12 [1.3/1.3/1.3s]
+PASS 1/1 CC-P14 [2.5/2.5/2.5s]
+PASS 1/1 CC-P15 [2.0/2.0/2.0s]
+PASS 1/1 CC-P16 [1.6/1.6/1.6s]
+PASS 1/1 CC-P16b [1.0/1.0/1.0s]
+PASS 1/1 CC-P17 [1.8/1.8/1.8s]
+PASS 1/1 CC-L0 [1.0/1.0/1.0s]
+PASS 1/1 CC-L1 [0.8/0.8/0.8s]
+PASS 1/1 CC-W0 [1.0/1.0/1.0s]
+PASS 1/1 D10-00 [0.7/0.7/0.7s]
+PASS 1/1 D10-01 [1.1/1.1/1.1s]
+PASS 1/1 D10-02 [1.2/1.2/1.2s]
+PASS 1/1 D10-03 [1.6/1.6/1.6s]
+PASS 1/1 D10-04 [1.1/1.1/1.1s]
+PASS 1/1 D10-05 [0.8/0.8/0.8s]
+PASS 1/1 D10-06 [1.7/1.7/1.7s]
+PASS 1/1 D10-06b [1.6/1.6/1.6s]
+PASS 1/1 D10-07 [6.1/6.1/6.1s]
+PASS 1/1 D10-07b [1.1/1.1/1.1s]
+PASS 1/1 D10-08 [1.5/1.5/1.5s]
+PASS 1/1 D10-09 [1.6/1.6/1.6s]
+PASS 1/1 D10-10 [1.0/1.0/1.0s]
+PASS 1/1 D10-11 [1.6/1.6/1.6s]
+PASS 1/1 D10-12 [0.6/0.6/0.6s]
+PASS 1/1 D10-06c [1.5/1.5/1.5s]
+PASS 1/1 D10-06d [1.9/1.9/1.9s]
+PASS 1/1 D10-06e [2.6/2.6/2.6s]
+PASS 1/1 D10-08b [3.0/3.0/3.0s]
+PASS 1/1 D10-08c [3.4/3.4/3.4s]
+PASS 1/1 N2-A1 [11.6/11.6/11.6s]
+PASS 1/1 N2-R1 [11.6/11.6/11.6s]
+PASS 1/1 N2-R1b [23.7/23.7/23.7s]
+PASS 1/1 N2-R1c [3.7/3.7/3.7s]
+PASS 1/1 N2-R2 [5.8/5.8/5.8s]
+PASS 1/1 N2-R3 [15.9/15.9/15.9s]
+PASS 1/1 N2-R4 [16.8/16.8/16.8s]
+PASS 1/1 N2-R5 [23.6/23.6/23.6s]
+PASS 1/1 N2-R6 [20.7/20.7/20.7s]
+PASS 1/1 N2-R7 [9.9/9.9/9.9s]
+PASS 1/1 N2-R7b [28.9/28.9/28.9s]
+PASS 1/1 N2-R8 [23.6/23.6/23.6s]
+PASS 1/1 N2-R8b [12.9/12.9/12.9s]
+PASS 1/1 E2E-C01 [1.1/1.1/1.1s]
+PASS 1/1 E2E-T01 [1.1/1.1/1.1s]
+PASS 1/1 E2E-T02 [1.7/1.7/1.7s]
+PASS 1/1 E2E-T03 [1.4/1.4/1.4s]
+PASS 1/1 UI-01 [0.6/0.6/0.6s]
+PASS 1/1 UI-02 [1.1/1.1/1.1s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654213 :: E2E acceptance (firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 13 executions
+PASS N2-A1 #0: A1 statusAt=94ms savedAfterRestore=6ms recoveredAfterRestore=27ms teams=1 net: [click@1] | CP 73-118 200 | [restore@8002] | [end@11035] | Listen: 0 req, 0 open
+PASS N2-R1 #0: R1 heldCommits=1 statusAt=76ms serverDuringOutage=0 recovery=automatic/85ms net: [click@1] | CP 62-8044 200 | [restore@7999] | [end@11085] | Listen: 0 req, 0 open
+PASS N2-R1b #0: R1b resets=1 statusAt=80ms serverDuringOutage=0 recovery=ui-retry/12165ms net: [click@1] | CP 62-66 NS_ERROR_NET_RESET | [restore@8006] | CP 20088-20137 200 | RG 20139-20139 NS_BINDING_ABORTED | [end@23171] | Listen: 0 req, 0 open
+PASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=91ms serverAfterCommit=1 recovery=automatic/87ms net: [click@1] | CP 62-129 NS_BINDING_ABORTED | [end@3198] | Listen: 0 req, 0 open
+PASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/77ms
+PASS N2-R3 #0: R3 recovery=ui-retry/12268ms
+PASS N2-R4 #0: R4 recovery=ui-retry/12237ms
+PASS N2-R5 #0: R5 fakedCommits=1 statusAt=85ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12179ms net: [click@1] | CP 63-67 200 | RG 70-80 403 | [restore@8033] | CP 20130-20174 200 | RG 20178-20179 NS_BINDING_ABORTED | [end@23213] | Listen: 0 req, 0 open
+PASS N2-R6 #0: R6 statusAt=79ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0
+PASS N2-R7 #0: R7 promptAt=79ms teamsBeforeAnswer=1 prompt="You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=9ms teamsWithName=2 distinctIds=2 distinctCodes=2
+PASS N2-R7b #0: R7b resets=1 statusAt=10ms serverDuring=1 recoveredAt=10 reprompts=0 teamsWithName=2
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=82ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12174ms
+PASS N2-R8b #0: R8b listenBlocked=5 readbacksFailed=1 statusAt=80ms committedAt=96ms noFalseSuccessAt8s=true recovery=automatic/1157ms
+[notice] E2E firefox slow steps >= 10s: 2 of 65 executions
+FAIL D10-08a #0: resume offered to the original coach/team@legacy-import.spec.ts:474 10.0s
+FAIL D10-08d #0: Expect "toBeVisible"@legacy-import.spec.ts:530 10.0s
+[warning] E2E firefox diag: 2 failed executions
+D10-08a #0 failed 12.2s | errors: Error: resume offered to the original coach/team | last step: resume offered to the original coach/team@legacy-import.spec.ts:474 (10.0s) | slowest: resume offered to the original coach/team@legacy-import.spec.ts:474 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.2s
+D10-08d #0 failed 12.3s | errors: Error: expect(locator).toBeVisible() failed | last step: Expect "toBeVisible"@legacy-import.spec.ts:530 (10.0s) | slowest: Expect "toBeVisible"@legacy-import.spec.ts:530 10.0s; Expect "toBeVisible"@app.ts:115 0.2s; Navigate@legacy.ts:44 0.2s
+[failure] E2E firefox [acceptance]: 63 passed / 2 failed / 0 blocked / 0 skipped · acceptance 63/2 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 1/1 D10-08a [12.2/12.2/12.2s] -- Error: resume offered to the original coach/team | expect(locator).toBeVisible() failed | Locator: getByRole('region', {
+FAIL 1/1 D10-08d [12.3/12.3/12.3s] -- Error: expect(locator).toBeVisible() failed | Locator: getByRole('region', { name: 'Import device plays' }).getByRole('b
+PASS 1/1 E2E-AI01 [4.0/4.0/4.0s]
+PASS 1/1 E2E-AI01b [2.8/2.8/2.8s]
+PASS 1/1 E2E-A01 [0.6/0.6/0.6s]
+PASS 1/1 E2E-A02 [1.1/1.1/1.1s]
+PASS 1/1 E2E-A03 [1.5/1.5/1.5s]
+PASS 1/1 E2E-A04 [1.4/1.4/1.4s]
+PASS 1/1 E2E-A05 [0.5/0.5/0.5s]
+PASS 1/1 E2E-A06 [1.5/1.5/1.5s]
+PASS 1/1 E2E-A07 [1.7/1.7/1.7s]
+PASS 1/1 E2E-A08 [1.0/1.0/1.0s]
+PASS 1/1 E2E-A09 [1.7/1.7/1.7s]
+PASS 1/1 E2E-A10 [1.5/1.5/1.5s]
+PASS 1/1 CC-P10 [3.3/3.3/3.3s]
+PASS 1/1 CC-P10b [3.8/3.8/3.8s]
+PASS 1/1 CC-P11 [2.4/2.4/2.4s]
+PASS 1/1 CC-P12 [2.5/2.5/2.5s]
+PASS 1/1 CC-P14 [4.6/4.6/4.6s]
+PASS 1/1 CC-P15 [5.2/5.2/5.2s]
+PASS 1/1 CC-P16 [3.3/3.3/3.3s]
+PASS 1/1 CC-P16b [2.0/2.0/2.0s]
+PASS 1/1 CC-P17 [3.6/3.6/3.6s]
+PASS 1/1 CC-L0 [2.2/2.2/2.2s]
+PASS 1/1 CC-L1 [1.9/1.9/1.9s]
+PASS 1/1 CC-W0 [1.8/1.8/1.8s]
+PASS 1/1 D10-00 [1.6/1.6/1.6s]
+PASS 1/1 D10-01 [3.3/3.3/3.3s]
+PASS 1/1 D10-02 [2.4/2.4/2.4s]
+PASS 1/1 D10-03 [2.8/2.8/2.8s]
+PASS 1/1 D10-04 [2.4/2.4/2.4s]
+PASS 1/1 D10-05 [1.9/1.9/1.9s]
+PASS 1/1 D10-06 [3.6/3.6/3.6s]
+PASS 1/1 D10-06b [3.5/3.5/3.5s]
+PASS 1/1 D10-07 [7.3/7.3/7.3s]
+PASS 1/1 D10-07b [2.4/2.4/2.4s]
+PASS 1/1 D10-08 [3.0/3.0/3.0s]
+PASS 1/1 D10-09 [4.0/4.0/4.0s]
+PASS 1/1 D10-10 [2.1/2.1/2.1s]
+PASS 1/1 D10-11 [3.6/3.6/3.6s]
+PASS 1/1 D10-12 [1.3/1.3/1.3s]
+PASS 1/1 D10-06c [3.3/3.3/3.3s]
+PASS 1/1 D10-06d [4.0/4.0/4.0s]
+PASS 1/1 D10-06e [5.9/5.9/5.9s]
+PASS 1/1 D10-08b [5.2/5.2/5.2s]
+PASS 1/1 D10-08c [5.4/5.4/5.4s]
+PASS 1/1 N2-A1 [13.4/13.4/13.4s]
+PASS 1/1 N2-R1 [12.3/12.3/12.3s]
+PASS 1/1 N2-R1b [24.4/24.4/24.4s]
+PASS 1/1 N2-R1c [4.3/4.3/4.3s]
+PASS 1/1 N2-R2 [6.6/6.6/6.6s]
+PASS 1/1 N2-R3 [16.9/16.9/16.9s]
+PASS 1/1 N2-R4 [18.4/18.4/18.4s]
+PASS 1/1 N2-R5 [24.4/24.4/24.4s]
+PASS 1/1 N2-R6 [21.5/21.5/21.5s]
+PASS 1/1 N2-R7 [11.2/11.2/11.2s]
+PASS 1/1 N2-R7b [29.8/29.8/29.8s]
+PASS 1/1 N2-R8 [24.3/24.3/24.3s]
+PASS 1/1 N2-R8b [13.4/13.4/13.4s]
+PASS 1/1 E2E-C01 [2.4/2.4/2.4s]
+PASS 1/1 E2E-T01 [2.3/2.3/2.3s]
+PASS 1/1 E2E-T02 [3.8/3.8/3.8s]
+PASS 1/1 E2E-T03 [3.9/3.9/3.9s]
+PASS 1/1 UI-01 [1.3/1.3/1.3s]
+PASS 1/1 UI-02 [2.4/2.4/2.4s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654277 :: E2E acceptance (phone-chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 15 executions
+none
+[notice] E2E phone-chromium [acceptance]: 15 passed / 0 failed / 0 blocked / 0 skipped · acceptance 15/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 E2E-A07 [1.2/1.2/1.2s]
+PASS 1/1 E2E-A10 [1.0/1.0/1.0s]
+PASS 1/1 CC-P10 [2.4/2.4/2.4s]
+PASS 1/1 CC-P11 [1.9/1.9/1.9s]
+PASS 1/1 CC-P12 [2.1/2.1/2.1s]
+PASS 1/1 CC-P14 [3.5/3.5/3.5s]
+PASS 1/1 CC-P15 [2.8/2.8/2.8s]
+PASS 1/1 CC-P16 [2.2/2.2/2.2s]
+PASS 1/1 CC-P17 [2.5/2.5/2.5s]
+PASS 1/1 CC-L0 [1.5/1.5/1.5s]
+PASS 1/1 CC-L1 [1.2/1.2/1.2s]
+PASS 1/1 D10-01 [1.7/1.7/1.7s]
+PASS 1/1 D10-06e [3.9/3.9/3.9s]
+PASS 1/1 E2E-T01 [1.5/1.5/1.5s]
+PASS 1/1 E2E-T02 [2.4/2.4/2.4s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654207 :: E2E acceptance (phone-firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 15 executions
+none
+[notice] E2E phone-firefox [acceptance]: 15 passed / 0 failed / 0 blocked / 0 skipped · acceptance 15/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 1/1 E2E-A07 [2.1/2.1/2.1s]
+PASS 1/1 E2E-A10 [1.2/1.2/1.2s]
+PASS 1/1 CC-P10 [2.7/2.7/2.7s]
+PASS 1/1 CC-P11 [2.0/2.0/2.0s]
+PASS 1/1 CC-P12 [2.2/2.2/2.2s]
+PASS 1/1 CC-P14 [3.9/3.9/3.9s]
+PASS 1/1 CC-P15 [3.1/3.1/3.1s]
+PASS 1/1 CC-P16 [3.2/3.2/3.2s]
+PASS 1/1 CC-P17 [3.5/3.5/3.5s]
+PASS 1/1 CC-L0 [1.7/1.7/1.7s]
+PASS 1/1 CC-L1 [1.6/1.6/1.6s]
+PASS 1/1 D10-01 [1.9/1.9/1.9s]
+PASS 1/1 D10-06e [4.4/4.4/4.4s]
+PASS 1/1 E2E-T01 [1.8/1.8/1.8s]
+PASS 1/1 E2E-T02 [2.9/2.9/2.9s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204653843 :: E2E diagnostic (chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 9 executions
+PASS N2-D0 #0: D0 server=575ms dialogClosed=628ms net: [click@2] | CP 96-617 net::ERR_ABORTED | RG 557-617 net::ERR_ABORTED | [end@630] | Listen: 1 req, 1 open
+PASS N2-D1 #0: D1 server=146ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8009ms teams=1 net: [click@2] | CP 49-134 net::ERR_ABORTED | RG 128-134 net::ERR_ABORTED | [unblock@8005] | [end@8011] | Listen: 0 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=0 server=150ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=162ms teams=1 net: [click@1] | CP 54-129 net::ERR_ABORTED | RG 129-131 net::ERR_ABORTED | [release@176] | [end@176] | Listen: 0 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=0 server=137ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=143ms teams=1 net: [click@1] | CP 48-112 net::ERR_ABORTED | [release@154] | [end@154] | Listen: 0 req, 0 open
+PASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS CC-E1 #0: e1 fault=commit-reset faultHits=4 statusSeries=["52ms:saving","310ms:saving","567ms:saving","824ms:saving","1085ms:saving","1342ms:saving","1600ms:saving","1859ms:saving","2115ms:saving","2373ms:saving","2630ms:saving","2885ms:saving","3141ms:saving","3397ms:saving","3654ms:saving","3910ms:saving","4167ms:saving","4423ms:saving","4679ms:saving","4935ms:saving","5192ms:saving","5449ms:saving","5705ms:saving","5961ms:saving","6217ms:saving","6474ms:saving","6731ms:saving","6987ms:saving","7244ms:saving","7500ms:saving","7757ms:saving"] serverAt8s=[{"rev":1,"name":"Edit path plan"}] alertsAt8s=[] recoveredAfterRestore=1953ms finalStatus=saved finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E2 #0: e2 fault=commit-hold faultHits=1 statusSeries=["51ms:saving","308ms:saving","565ms:saving","822ms:saving","1078ms:saving","1335ms:saving","1592ms:saving","1848ms:saving","2104ms:saving","2361ms:saving","2617ms:saving","2873ms:saving","3130ms:saving","3386ms:saving","3643ms:saving","3899ms:saving","4156ms:saving","4411ms:saving","4668ms:saving","4924ms:saving","5182ms:saving","5438ms:saving","5695ms:saving","5952ms:saving","6209ms:saving","6466ms:saving","6723ms:saving","6980ms:saving","7235ms:saving","7491ms:saving","7747ms:saving","8003ms:saving"] serverAt8s=[{"rev":1,"name":"Edit path plan"}] alertsAt8s=[] recoveredAfterRestore=236ms finalStatus=saved finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E3 #0: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=10441ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E4 #0: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["Xo9QWRE9MpymBGb5vQYB:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=10049ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+[notice] E2E chromium slow steps >= 10s: 2 of 10 executions
+FAIL N2-D2 #0: Click@n2.spec.ts:138 59.3s
+PASS CC-E3 #0: the failed save is reported@sdk-edit.spec.ts:118 10.3s
+[warning] E2E chromium diag: 1 failed executions
+N2-D2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:68 0.2s; Expect "toBeVisible"@app.ts:99 0.1s
+[failure] E2E chromium [diagnostic]: 9 passed / 1 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 9/1 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 1/1 N2-D2 [60.1/60.1/60.1s] -- Test timeout of 60000ms exceeded.
+PASS 1/1 N2-D0 [1.6/1.6/1.6s]
+PASS 1/1 N2-D1 [8.8/8.8/8.8s]
+PASS 1/1 N2-D3 [0.9/0.9/0.9s]
+PASS 1/1 N2-D4 [0.9/0.9/0.9s]
+PASS 1/1 N3-D5 [7.2/7.2/7.2s]
+PASS 1/1 CC-E1 [11.4/11.4/11.4s]
+PASS 1/1 CC-E2 [9.8/9.8/9.8s]
+PASS 1/1 CC-E3 [17.0/17.0/17.0s]
+PASS 1/1 CC-E4 [16.8/16.8/16.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654211 :: E2E diagnostic (firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 9 executions
+PASS N2-D0 #0: D0 server=321ms dialogClosed=373ms net: [click@1] | CP 79-325 NS_BINDING_ABORTED | [end@374] | Listen: 1 req, 1 open
+PASS N2-D1 #0: D1 server=145ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8009ms teams=1 net: [click@0] | CP 66-116 200 | RG 118-118 NS_BINDING_ABORTED | [unblock@8000] | [end@8009] | Listen: 0 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=0 server=124ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=131ms teams=1 net: [click@1] | CP 52-95 200 | [release@139] | [end@139] | Listen: 0 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=0 server=136ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=144ms teams=1 net: [click@1] | CP 68-111 200 | [release@152] | [end@152] | Listen: 0 req, 0 open
+PASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS CC-E1 #0: e1 fault=commit-reset faultHits=5 statusSeries=["79ms:saving","337ms:saving","594ms:saving","852ms:saving","1108ms:saving","1367ms:saving","1624ms:saving","1880ms:saving","2137ms:saving","2395ms:saving","2651ms:saving","2907ms:saving","3174ms:saving","3430ms:saving","3686ms:saving","3943ms:saving","4201ms:saving","4457ms:saving","4713ms:saving","4970ms:saving","5226ms:saving","5485ms:saving","5742ms:saving","5999ms:saving","6258ms:saving","6514ms:saving","6770ms:saving","7026ms:saving","7287ms:saving","7546ms:saving","7804ms:saving"] serverAt8s=[{"rev":1,"name":"Edit path plan"}] alertsAt8s=["Connection failed."] recoveredAfterRestore=NOT within 45 s finalStatus=failed finalDocs=[{"rev":1,"name":"Edit path plan"}]
+PASS CC-E2 #0: e2 fault=commit-hold faultHits=1 statusSeries=["79ms:saving","336ms:saving","594ms:saving","851ms:saving","1108ms:saving","1365ms:saving","1622ms:saving","1879ms:saving","2135ms:saving","2392ms:saving","2649ms:saving","2907ms:saving","3164ms:saving","3420ms:saving","3677ms:saving","3933ms:saving","4191ms:saving","4448ms:saving","4707ms:saving","4965ms:saving","5221ms:saving","5478ms:saving","5736ms:saving","5993ms:saving","6250ms:saving","6507ms:saving","6765ms:saving","7023ms:saving","7286ms:saving","7543ms:saving","7800ms:saving"] serverAt8s=[{"rev":1,"name":"Edit path plan"}] alertsAt8s=[] recoveredAfterRestore=243ms finalStatus=saved finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E3 #0: E3 afterFailure fields={"Plan.name":"Edit path plan v2","Plan.notes":"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=9010ms E3 alertAfterFailure="Connection failed." autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Edit path plan v2"}]
+PASS CC-E4 #0: E4 afterFailure nameFields=["Mesh after failure","Mesh after failure"] draftsWithEdit=["Qrkn4lTR96CqqxHHPXXg:drafts"] status=failed alerts=["Connection failed."] E4 commitResets=5 faultWindow=8164ms E4 autoRecoveredWithin5s=false finalDocs=[{"rev":2,"name":"Mesh after failure"}]
+[notice] E2E firefox slow steps >= 10s: 0 of 10 executions
+none
+[warning] E2E firefox diag: 1 failed executions
+N2-D2 #0 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Expect "toBeVisible"@n2.spec.ts:134 (0.0s) | slowest: Navigate@app.ts:68 0.1s; Navigate@app.ts:88 0.1s; Click@n2.spec.ts:21 0.1s
+[failure] E2E firefox [diagnostic]: 9 passed / 1 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 9/1 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 1/1 N2-D2 [60.3/60.3/60.3s] -- Test timeout of 60000ms exceeded.
+PASS 1/1 N2-D0 [2.3/2.3/2.3s]
+PASS 1/1 N2-D1 [8.9/8.9/8.9s]
+PASS 1/1 N2-D3 [1.0/1.0/1.0s]
+PASS 1/1 N2-D4 [1.1/1.1/1.1s]
+PASS 1/1 N3-D5 [9.5/9.5/9.5s]
+PASS 1/1 CC-E1 [54.7/54.7/54.7s]
+PASS 1/1 CC-E2 [9.9/9.9/9.9s]
+PASS 1/1 CC-E3 [15.8/15.8/15.8s]
+PASS 1/1 CC-E4 [15.3/15.3/15.3s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654086 :: E2E diagnostic (phone-chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654052 :: E2E diagnostic (phone-firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654193 :: E2E obsolete-fault-model (chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium slow steps >= 10s: 1 of 1 executions
+FAIL N2-A2 #0: Fill "N2 No Duplicate"@n2.spec.ts:221 58.7s
+[warning] E2E chromium diag: 1 failed executions
+N2-A2 #0 timedOut 60.2s | errors: Test timeout of 60000ms exceeded. || Error: locator.fill: Test timeout of 60000ms exceeded. | last step: Fill "N2 No Duplicate"@n2.spec.ts:221 (58.7s) | slowest: Fill "N2 No Duplicate"@n2.spec.ts:221 58.7s; Navigate@app.ts:68 0.2s; Click@n2.spec.ts:212 0.1s
+[failure] E2E chromium [obsolete-fault-model]: 0 passed / 1 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 0/0 · obsolete-fault-model 0/1 (pass/fail)
+FAIL 1/1 N2-A2 [60.2/60.2/60.2s] -- Test timeout of 60000ms exceeded.
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654184 :: E2E obsolete-fault-model (firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox diag data: 1 executions
+PASS N2-A2 #0: A2 cancelEnabled=true retrySubmitted=true savedAfterRelease=29ms teams=1
+[notice] E2E firefox slow steps >= 10s: 0 of 1 executions
+none
+[notice] E2E firefox [obsolete-fault-model]: 1 passed / 0 failed / 0 blocked / 0 skipped · acceptance 0/0 · diagnostic 0/0 · obsolete-fault-model 1/0 (pass/fail)
+PASS 1/1 N2-A2 [8.3/8.3/8.3s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654109 :: E2E obsolete-fault-model (phone-chromium)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117204654204 :: E2E obsolete-fault-model (phone-firefox)
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

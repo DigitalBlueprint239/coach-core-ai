@@ -1,0 +1,208 @@
+# DIAGNOSTIC stage (not the full acceptance matrix): grep N2-|N3- x10, retries 0
+# candidate 5911f7e = runtime 518e9e5817abd2a0e1bf1308468928f238fa8533 + harness f325a23
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38811068246 ; jobs chromium 116684498022, firefox 116684497816, phone-chromium 116684498220, phone-firefox 116684498171
+# NOTE (harness label only): R7 diag-data 'declineButton=Cancel' is recorded AFTER the decline click dismissed the alertdialog, so the count is 0 by then; the control present and clicked was 'Go back' (see prompt text in the same line). The assertion teamsAfterDecline=1 is unaffected.
+# IDs shown are synthetic demo-project emulator IDs.
+
+=== JOB 116684498022
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 187 executions
+PASS N2-D0 #0: D0 server=514ms dialogClosed=539ms net: [click@2] | CP 90-530 net::ERR_ABORTED | [end@541] | Listen: 1 req, 1 open
+PASS N2-D1 #0: D1 server=136ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8008ms teams=1 net: [click@1] | CP 44-143 net::ERR_ABORTED | RG 143-143 net::ERR_ABORTED | [unblock@8004] | [end@8009] | Listen: 0 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=0 server=138ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=144ms teams=1 net: [click@1] | CP 49-115 net::ERR_ABORTED | [release@155] | [end@155] | Listen: 0 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=0 server=133ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=140ms teams=1 net: [click@0] | CP 49-132 net::ERR_ABORTED | [release@152] | [end@152] | Listen: 0 req, 0 open
+PASS N2-A1 #0: A1 statusAt=70ms savedAfterRestore=10ms recoveredAfterRestore=19ms teams=1 net: [click@1] | CP 50-133 net::ERR_ABORTED | [restore@8001] | [end@11029] | Listen: 0 req, 0 open
+PASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS N2-R1 #0: R1 heldCommits=1 statusAt=61ms serverDuringOutage=0 recovery=automatic/75ms net: [click@1] | CP 51-8044 net::ERR_ABORTED | [restore@8004] | [end@11078] | Listen: 0 req, 0 open
+PASS N2-R1b #0: R1b resets=1 statusAt=63ms serverDuringOutage=0 recovery=ui-retry/12137ms net: [click@1] | CP 50-59 net::ERR_CONNECTION_RESET | [restore@8011] | CP 20061-20128 net::ERR_ABORTED | RG 20122-20133 net::ERR_ABORTED | [end@23147] | Listen: 0 req, 0 open
+PASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=78ms serverAfterCommit=1 recovery=automatic/28ms net: [click@1] | CP 50-127 net::ERR_ABORTED | [end@3141] | Listen: 0 req, 0 open
+PASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/74ms
+PASS N2-R3 #0: R3 recovery=ui-retry/12189ms
+PASS N2-R4 #0: R4 recovery=ui-retry/12199ms
+PASS N2-R5 #0: R5 fakedCommits=1 statusAt=64ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12149ms net: [click@0] | CP 50-92 net::ERR_ABORTED | RG 63-93 net::ERR_ABORTED | [restore@8022] | CP 20096-20140 net::ERR_ABORTED | [end@23170] | Listen: 0 req, 0 open
+PASS N2-R6 #0: R6 statusAt=55ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0
+PASS N2-R7 #0: R7 promptAt=56ms teamsBeforeAnswer=1 prompt="You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=16ms teamsWithName=2 distinctIds=2 distinctCodes=2
+PASS N2-R7b #0: R7b resets=1 statusAt=8ms serverDuring=1 recoveredAt=14 reprompts=0 teamsWithName=2
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=64ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12131ms
+PASS N2-R8b #0: R8b readbacksFailed=1 statusAt=64ms committedAt=85ms recovery=automatic/8ms
+PASS N2-D0 #1: D0 server=68ms dialogClosed=123ms net: [click@1] | CP 50-93 net::ERR_ABORTED | [end@124] | Listen: 0 req, 0 open
+PASS N2-D1 #1: D1 server=117ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8006ms teams=1 net: [click@1] | CP 49-105 net::ERR_ABORTED | [unblock@8002] | [end@8007] | Listen: 0 req, 0 open
+PASS N2-D3 #1: D3 leg=write-response held=0 server=121ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=127ms teams=1 net: [click@0] | CP 50-99 net::ERR_ABORTED | RG 97-100 net::ERR_ABORTED | [release@131] | [end@131] | Listen: 0 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=0 server=64ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=133ms teams=1 net: [click@1] | CP 49-92 net::ERR_ABORTED | [release@137] | [end@137] | Listen: 0 req, 0 open
+PASS N2-A1 #1: A1 statusAt=66ms savedAfterRestore=6ms recoveredAfterRestore=15ms teams=1 net: [click@1] | CP 51-103 net::ERR_ABORTED | [restore@8002] | [end@11026] | 
+[notice] E2E chromium slow steps >= 10s: 11 of 200 executions
+FAIL N2-D2 #0: Click@n2.spec.ts:138 59.3s
+FAIL N2-A2 #0: Click@n2.spec.ts:212 59.3s
+FAIL N2-D2 #1: Click@n2.spec.ts:138 59.3s
+FAIL N2-D2 #2: Click@n2.spec.ts:138 59.4s
+FAIL N2-D2 #3: Click@n2.spec.ts:138 59.3s
+FAIL N2-A2 #3: Click@n2.spec.ts:212 59.3s
+FAIL N2-D2 #4: Click@n2.spec.ts:138 59.3s
+FAIL N2-A2 #4: Click@n2.spec.ts:212 59.3s
+FAIL N2-D2 #5: Click@n2.spec.ts:138 59.3s
+FAIL N2-A2 #6: Click@n2.spec.ts:212 59.3s
+FAIL N2-A2 #7: Click@n2.spec.ts:212 59.4s
+[warning] E2E chromium diag: 13 failed executions
+N2-D2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-A2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.3s) | slowest: Click@n2.spec.ts:212 59.3s; Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s
+N2-D2 #1 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-A2 #1 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Query count@n2.spec.ts:211 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #2 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.4s) | slowest: Click@n2.spec.ts:138 59.4s; Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-A2 #2 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Query count@n2.spec.ts:211 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #3 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s
+N2-A2 #3 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.3s) | slowest: Click@n2.spec.ts:212 59.3s; Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s
+N2-D2 #4 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-A2 #4 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.3s) | slowest: Click@n2.spec.ts:212 59.3s; Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s
+N2-D2 #5 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-A2 #6 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.3s) | slowest: Click@n2.spec.ts:212 59.3s; Navigate@app.ts:31 0.2s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-A2 #7 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.4s) | slowest: Click@n2.spec.ts:212 59.4s; Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s
+[failure] E2E chromium: 187 passed / 13 failed / 0 blocked / 0 skipped · acceptance 130/0 · diagnostic 54/6 · obsolete-fault-model 3/7 (pass/fail)
+FAIL 6/10 N2-D2 [43.8/60.1/60.1s] -- Test timeout of 60000ms exceeded.
+FAIL 7/10 N2-A2 [6.1/60.1/60.1s] -- Test timeout of 60000ms exceeded.
+PASS 10/10 N2-D0 [1.0/1.1/1.5s]
+PASS 10/10 N2-D1 [8.7/8.8/8.8s]
+PASS 10/10 N2-D3 [0.8/0.9/1.0s]
+PASS 10/10 N2-D4 [0.9/0.9/1.0s]
+PASS 10/10 N2-A1 [11.8/11.9/12.0s]
+PASS 10/10 N3-D5 [6.7/6.9/7.2s]
+PASS 10/10 N2-R1 [11.8/11.8/11.9s]
+PASS 10/10 N2-R1b [23.8/23.9/24.0s]
+PASS 10/10 N2-R1c [3.8/3.9/4.1s]
+PASS 10/10 N2-R2 [6.1/6.1/6.2s]
+PASS 10/10 N2-R3 [16.1/16.2/16.3s]
+PASS 10/10 N2-R4 [17.2/17.3/17.4s]
+PASS 10/10 N2-R5 [23.8/23.9/24.0s]
+PASS 10/10 N2-R6 [20.9/21.0/21.1s]
+PASS 10/10 N2-R7 [10.2/10.3/10.4s]
+PASS 10/10 N2-R7b [29.2/29.2/29.3s]
+PASS 10/10 N2-R8 [23.9/24.0/24.0s]
+PASS 10/10 N2-R8b [11.7/11.8/11.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116684497816
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 180 executions
+PASS N2-D0 #0: D0 server=365ms dialogClosed=425ms net: [click@2] | CP 102-385 200 | RG 387-406 NS_BINDING_ABORTED | [end@427] | Listen: 1 req, 1 open
+PASS N2-D1 #0: D1 server=141ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8012ms teams=1 net: [click@1] | CP 64-114 NS_BINDING_ABORTED | [unblock@8002] | [end@8013] | Listen: 0 req, 0 open
+PASS N2-D3 #0: D3 leg=write-response held=0 server=131ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=138ms teams=1 net: [click@0] | CP 53-97 200 | [release@146] | [end@146] | Listen: 0 req, 0 open
+PASS N2-D4 #0: D4 leg=backchannel held=0 server=140ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=154ms teams=1 net: [click@0] | CP 65-109 NS_BINDING_ABORTED | [release@162] | [end@162] | Listen: 0 req, 0 open
+PASS N2-A1 #0: A1 statusAt=83ms savedAfterRestore=11ms recoveredAfterRestore=30ms teams=1 net: [click@1] | CP 64-116 200 | [restore@8001] | [end@11041] | Listen: 0 req, 0 open
+PASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS N2-R1 #0: R1 heldCommits=1 statusAt=74ms serverDuringOutage=0 recovery=automatic/80ms net: [click@0] | CP 63-8036 200 | [restore@8000] | [end@11081] | Listen: 0 req, 0 open
+PASS N2-R1b #0: R1b resets=1 statusAt=79ms serverDuringOutage=0 recovery=ui-retry/12147ms net: [click@0] | CP 66-69 NS_ERROR_NET_RESET | [restore@8008] | CP 20076-20113 NS_BINDING_ABORTED | [end@23155] | Listen: 0 req, 0 open
+PASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=86ms serverAfterCommit=1 recovery=automatic/34ms net: [click@0] | CP 65-120 NS_BINDING_ABORTED | [end@3152] | Listen: 0 req, 0 open
+PASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/71ms
+PASS N2-R3 #0: R3 recovery=ui-retry/12193ms
+PASS N2-R4 #0: R4 recovery=ui-retry/12218ms
+PASS N2-R5 #0: R5 fakedCommits=1 statusAt=84ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12154ms net: [click@1] | CP 67-70 200 | RG 73-102 403 | [restore@8030] | CP 20103-20144 200 | RG 20150-20151 NS_BINDING_ABORTED | [end@23184] | Listen: 0 req, 0 open
+PASS N2-R6 #0: R6 statusAt=71ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0
+PASS N2-R7 #0: R7 promptAt=76ms teamsBeforeAnswer=1 prompt="You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=63ms teamsWithName=2 distinctIds=2 distinctCodes=2
+PASS N2-R7b #0: R7b resets=1 statusAt=7ms serverDuring=1 recoveredAt=11 reprompts=0 teamsWithName=2
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=80ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12148ms
+PASS N2-R8b #0: R8b readbacksFailed=0 statusAt=79ms committedAt=102ms recovery=automatic/18ms
+PASS N2-D0 #1: D0 server=129ms dialogClosed=142ms net: [click@1] | CP 63-98 200 | [end@143] | Listen: 0 req, 0 open
+PASS N2-D1 #1: D1 server=126ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8012ms teams=1 net: [click@1] | CP 63-104 200 | [unblock@8001] | [end@8013] | Listen: 0 req, 0 open
+PASS N2-D3 #1: D3 leg=write-response held=0 server=127ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=134ms teams=1 net: [click@1] | CP 63-96 200 | RG 98-99 NS_BINDING_ABORTED | [release@138] | [end@138] | Listen: 0 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=0 server=126ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=134ms teams=1 net: [click@1] | CP 64-101 200 | [release@139] | [end@139] | Listen: 0 req, 0 open
+PASS N2-A1 #1: A1 statusAt=87ms savedAfterRestore=6ms recoveredAfterRestore=23ms teams=1 net: [click@1] | CP 65-108 200 | RG 113-115 NS_BINDING_ABORTED | [restore@8002] | [end@11030] | Listen: 0 req, 0 open
+PASS N3-D5 #1: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok
+PASS N2-R1 #1:
+[notice] E2E firefox slow steps >= 10s: 18 of 200 executions
+FAIL N2-D2 #0: Click@n2.spec.ts:138 59.2s
+FAIL N2-D2 #1: Click@n2.spec.ts:138 59.3s
+FAIL N2-D2 #2: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #2: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #3: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #3: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #4: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #4: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #5: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #5: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #6: Click@n2.spec.ts:138 59.3s
+FAIL N2-A2 #6: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #7: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #7: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #8: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #8: Click@n2.spec.ts:212 59.2s
+FAIL N2-D2 #9: Click@n2.spec.ts:138 59.2s
+FAIL N2-A2 #9: Click@n2.spec.ts:212 59.2s
+[warning] E2E firefox diag: 20 failed executions
+N2-D2 #0 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #0 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Query count@n2.spec.ts:211 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:36 0.1s
+N2-D2 #1 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #1 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.isEnabled: Test timeout of 60000ms exceeded. | last step: Query count@n2.spec.ts:211 (0.0s) | slowest: Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-D2 #2 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #2 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.2s) | slowest: Click@n2.spec.ts:212 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #3 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #3 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.2s) | slowest: Click@n2.spec.ts:212 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #4 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #4 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.2s) | slowest: Click@n2.spec.ts:212 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #5 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #5 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.2s) | slowest: Click@n2.spec.ts:212 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #6 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #6 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:212 (59.2s) | slowest: Click@n2.spec.ts:212 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-D2 #7 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.2s) | slowest: Click@n2.spec.ts:138 59.2s; Navigate@app.ts:31 0.1s; Navigate@app.ts:44 0.1s
+N2-A2 #7 timedOut 60.3s | errors: Test 
+[failure] E2E firefox: 180 passed / 20 failed / 0 blocked / 0 skipped · acceptance 130/0 · diagnostic 50/10 · obsolete-fault-model 0/10 (pass/fail)
+FAIL 10/10 N2-D2 [60.3/60.3/60.3s] -- Test timeout of 60000ms exceeded.
+FAIL 10/10 N2-A2 [60.3/60.3/60.3s] -- Test timeout of 60000ms exceeded.
+PASS 10/10 N2-D0 [2.0/2.1/2.5s]
+PASS 10/10 N2-D1 [9.0/9.0/9.0s]
+PASS 10/10 N2-D3 [1.1/1.1/1.2s]
+PASS 10/10 N2-D4 [1.1/1.1/1.2s]
+PASS 10/10 N2-A1 [12.9/13.0/13.0s]
+PASS 10/10 N3-D5 [9.5/10.0/10.1s]
+PASS 10/10 N2-R1 [12.1/12.1/12.1s]
+PASS 10/10 N2-R1b [24.1/24.2/24.2s]
+PASS 10/10 N2-R1c [4.1/4.2/4.2s]
+PASS 10/10 N2-R2 [6.4/6.5/6.5s]
+PASS 10/10 N2-R3 [16.5/16.6/16.6s]
+PASS 10/10 N2-R4 [18.0/18.1/18.1s]
+PASS 10/10 N2-R5 [24.2/24.2/24.3s]
+PASS 10/10 N2-R6 [21.2/21.2/21.3s]
+PASS 10/10 N2-R7 [10.9/10.9/11.0s]
+PASS 10/10 N2-R7b [29.5/29.6/29.7s]
+PASS 10/10 N2-R8 [24.1/24.2/24.2s]
+PASS 10/10 N2-R8b [12.0/12.0/12.1s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116684498220
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116684498171
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

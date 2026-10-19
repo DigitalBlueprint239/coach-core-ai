@@ -1,0 +1,15 @@
+PASS guard refuses an emulator build for coach-core-mvp-staging-239
+PASS .env.production pins the emulator flag to false
+PASS release-shaped build for coach-core-mvp-staging-239
+PASS no test-hook marker (__coachCoreE2E)
+PASS no test-hook module (e2e-support / emulator-hooks)
+PASS no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 9199)
+PASS no demo-* project values
+PASS no emulator test password or placeholder secret
+PASS bundle targets coach-core-mvp-staging-239
+PASS 3 JS files scanned
+manifest: /tmp/claude-0/-home-claude/776de4f4-e449-53d6-96fa-de0f4c3f3c3f/scratchpad/d10/c3-release-manifest.sha256 (12 files)
+PASS negative control: pattern detects emulator build (__coachCoreE2E)
+PASS negative control: pattern detects emulator build ([:,](9099|9199|5001|8080)[^0-9])
+PASS negative control: pattern detects emulator build (demo-coach-core)
+RESULT: 13 passed, 0 failed

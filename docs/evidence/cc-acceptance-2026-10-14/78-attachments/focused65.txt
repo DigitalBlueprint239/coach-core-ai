@@ -1,0 +1,400 @@
+TAP version 13
+# Subtest: resolve: committed .env.production pin -> OK; independent and CRA resolution agree on "false"
+ok 1 - resolve: committed .env.production pin -> OK; independent and CRA resolution agree on "false"
+  ---
+  duration_ms: 104.524541
+  type: 'test'
+  ...
+# Subtest: resolve: enabling .env.local / .env.production.local / shell variable -> FAIL (precedence over .env.production)
+ok 2 - resolve: enabling .env.local / .env.production.local / shell variable -> FAIL (precedence over .env.production)
+  ---
+  duration_ms: 521.331156
+  type: 'test'
+  ...
+# Subtest: resolve: shell/local "false" is not release configuration; malformed, unset and .env-only pins never PASS; ${VAR} expansion is reported inconclusive
+ok 3 - resolve: shell/local "false" is not release configuration; malformed, unset and .env-only pins never PASS; ${VAR} expansion is reported inconclusive
+  ---
+  duration_ms: 1881.399885
+  type: 'test'
+  ...
+# Subtest: resolve: precedence audit matches CRA (shell > .env.production.local > .env.local > .env.production > .env)
+ok 4 - resolve: precedence audit matches CRA (shell > .env.production.local > .env.local > .env.production > .env)
+  ---
+  duration_ms: 688.450016
+  type: 'test'
+  ...
+# Subtest: canary: OFF bundle -> config-false; ON bundle -> config-true; --expect mismatch fails; claim is configuration-only
+ok 5 - canary: OFF bundle -> config-false; ON bundle -> config-true; --expect mismatch fails; claim is configuration-only
+  ---
+  duration_ms: 245.529155
+  type: 'test'
+  ...
+# Subtest: canary fails closed: marker only in a comment, no literal, orphan chunk, two values, undefined value, missing index.html / chunk, unparseable chunk
+ok 6 - canary fails closed: marker only in a comment, no literal, orphan chunk, two values, undefined value, missing index.html / chunk, unparseable chunk
+  ---
+  duration_ms: 561.028235
+  type: 'test'
+  ...
+# Subtest: source scope fails closed: the flag read anywhere else under src/, a changed guard, a removed marker, or a missing boundary file -> inconclusive
+ok 7 - source scope fails closed: the flag read anywhere else under src/, a changed guard, a removed marker, or a missing boundary file -> inconclusive
+  ---
+  duration_ms: 439.05394
+  type: 'test'
+  ...
+# Subtest: retired-model regression: baselines really behave as labelled (ON copies/reads/writes; OFF does nothing)
+ok 8 - retired-model regression: baselines really behave as labelled (ON copies/reads/writes; OFF does nothing)
+  ---
+  duration_ms: 77.443735
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — F1 decoy 3: enabled behaviour behind an OFF marker attribute: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 9 - retired-model regression (false OFF) — F1 decoy 3: enabled behaviour behind an OFF marker attribute: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 156.050239
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 10 - retired-model regression (false OFF) — R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 144.746152
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — R1 global state read by the executor: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 11 - retired-model regression (false OFF) — R1 global state read by the executor: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 147.809099
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — R2 actual call arguments dropped: fifth/third argument enables: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 12 - retired-model regression (false OFF) — R2 actual call arguments dropped: fifth/third argument enables: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 151.098834
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — R2 unresolved member await before the inlined throw: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 13 - retired-model regression (false OFF) — R2 unresolved member await before the inlined throw: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 142.419951
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — R2 ambiguous onClick: enabled handler then disabled handler: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 14 - retired-model regression (false OFF) — R2 ambiguous onClick: enabled handler then disabled handler: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 144.725512
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — R3 backend read before the disabled throw: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 15 - retired-model regression (false OFF) — R3 backend read before the disabled throw: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 153.292695
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D1 argument getter evaluated before the throw: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 16 - retired-model regression (false OFF) — D1 argument getter evaluated before the throw: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 141.026917
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D1 default parameter runs before the body: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 17 - retired-model regression (false OFF) — D1 default parameter runs before the body: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 164.577361
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D1 handler default-getter parameter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 18 - retired-model regression (false OFF) — D1 handler default-getter parameter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 143.968239
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D1 onClick wrapper reads an effectful getter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 19 - retired-model regression (false OFF) — D1 onClick wrapper reads an effectful getter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 137.89518
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D1 destructured local that is backend code, not a verified setter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 20 - retired-model regression (false OFF) — D1 destructured local that is backend code, not a verified setter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 142.895396
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D2 computed literal global replacement globalThis["Error"]: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 21 - retired-model regression (false OFF) — D2 computed literal global replacement globalThis["Error"]: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 150.511301
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — D2 unresolved constructor is not trusted as native: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 22 - retired-model regression (false OFF) — D2 unresolved constructor is not trusted as native: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 169.611273
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q1 React state functional updater passed to a verified setter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 23 - retired-model regression (false OFF) — Q1 React state functional updater passed to a verified setter: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 159.257908
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q2 valueOf coercion of a local value (+evil): the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 24 - retired-model regression (false OFF) — Q2 valueOf coercion of a local value (+evil): the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 165.033894
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q3 explicit global receiver defeats the strict-this assumption (poison.call(globalThis)): the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 25 - retired-model regression (false OFF) — Q3 explicit global receiver defeats the strict-this assumption (poison.call(globalThis)): the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 142.406382
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q4 aliased Reflect rewrites Error: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 26 - retired-model regression (false OFF) — Q4 aliased Reflect rewrites Error: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 147.548946
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q5 unverified require function returns malicious hooks: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 27 - retired-model regression (false OFF) — Q5 unverified require function returns malicious hooks: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 153.818285
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q6 ref.current accessor installed in the component: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 28 - retired-model regression (false OFF) — Q6 ref.current accessor installed in the component: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 154.229696
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q7 outer finally executes after the inner rejection: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 29 - retired-model regression (false OFF) — Q7 outer finally executes after the inner rejection: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 147.7304
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false OFF) — Q8 duplicate onClick key selects the uninspected handler: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+ok 30 - retired-model regression (false OFF) — Q8 duplicate onClick key selects the uninspected handler: the real button reaches the backend; the fourth revision makes no behavioural claim and the gate stays inconclusive
+  ---
+  duration_ms: 137.174742
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true: the superseded 905b1d4 scanner returned OFF for this bundle
+ok 31 - review reproduction (false OFF) — R1 closure mutation: const cfg={enabled:false}; cfg.enabled=true: the superseded 905b1d4 scanner returned OFF for this bundle
+  ---
+  duration_ms: 67.135233
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — R1 global state read by the executor: the superseded 905b1d4 scanner returned OFF for this bundle
+ok 32 - review reproduction (false OFF) — R1 global state read by the executor: the superseded 905b1d4 scanner returned OFF for this bundle
+  ---
+  duration_ms: 68.98234
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — R2 actual call arguments dropped: fifth/third argument enables: the superseded 905b1d4 scanner returned OFF for this bundle
+ok 33 - review reproduction (false OFF) — R2 actual call arguments dropped: fifth/third argument enables: the superseded 905b1d4 scanner returned OFF for this bundle
+  ---
+  duration_ms: 100.20709
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — R2 unresolved member await before the inlined throw: the superseded 905b1d4 scanner returned OFF for this bundle
+ok 34 - review reproduction (false OFF) — R2 unresolved member await before the inlined throw: the superseded 905b1d4 scanner returned OFF for this bundle
+  ---
+  duration_ms: 76.574802
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — R2 ambiguous onClick: enabled handler then disabled handler: the superseded 905b1d4 scanner returned OFF for this bundle
+ok 35 - review reproduction (false OFF) — R2 ambiguous onClick: enabled handler then disabled handler: the superseded 905b1d4 scanner returned OFF for this bundle
+  ---
+  duration_ms: 69.907602
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — R3 backend read before the disabled throw: the superseded 905b1d4 scanner returned OFF for this bundle
+ok 36 - review reproduction (false OFF) — R3 backend read before the disabled throw: the superseded 905b1d4 scanner returned OFF for this bundle
+  ---
+  duration_ms: 74.998215
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D1 argument getter evaluated before the throw: the superseded d14aa7b scanner returned OFF for this bundle
+ok 37 - review reproduction (false OFF) — D1 argument getter evaluated before the throw: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 72.528126
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D1 default parameter runs before the body: the superseded d14aa7b scanner returned OFF for this bundle
+ok 38 - review reproduction (false OFF) — D1 default parameter runs before the body: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 75.573228
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D1 handler default-getter parameter: the superseded d14aa7b scanner returned OFF for this bundle
+ok 39 - review reproduction (false OFF) — D1 handler default-getter parameter: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 74.922272
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D1 onClick wrapper reads an effectful getter: the superseded d14aa7b scanner returned OFF for this bundle
+ok 40 - review reproduction (false OFF) — D1 onClick wrapper reads an effectful getter: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 68.354284
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D1 destructured local that is backend code, not a verified setter: the superseded d14aa7b scanner returned OFF for this bundle
+ok 41 - review reproduction (false OFF) — D1 destructured local that is backend code, not a verified setter: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 70.400417
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D2 computed literal global replacement globalThis["Error"]: the superseded d14aa7b scanner returned OFF for this bundle
+ok 42 - review reproduction (false OFF) — D2 computed literal global replacement globalThis["Error"]: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 75.395275
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — D2 unresolved constructor is not trusted as native: the superseded d14aa7b scanner returned OFF for this bundle
+ok 43 - review reproduction (false OFF) — D2 unresolved constructor is not trusted as native: the superseded d14aa7b scanner returned OFF for this bundle
+  ---
+  duration_ms: 68.460482
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q1 React state functional updater passed to a verified setter: the superseded cab8cab scanner returned OFF for this bundle
+ok 44 - review reproduction (false OFF) — Q1 React state functional updater passed to a verified setter: the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 77.387618
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q2 valueOf coercion of a local value (+evil): the superseded cab8cab scanner returned OFF for this bundle
+ok 45 - review reproduction (false OFF) — Q2 valueOf coercion of a local value (+evil): the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 89.919466
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q3 explicit global receiver defeats the strict-this assumption (poison.call(globalThis)): the superseded cab8cab scanner returned OFF for this bundle
+ok 46 - review reproduction (false OFF) — Q3 explicit global receiver defeats the strict-this assumption (poison.call(globalThis)): the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 94.547162
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q4 aliased Reflect rewrites Error: the superseded cab8cab scanner returned OFF for this bundle
+ok 47 - review reproduction (false OFF) — Q4 aliased Reflect rewrites Error: the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 87.979701
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q5 unverified require function returns malicious hooks: the superseded cab8cab scanner returned OFF for this bundle
+ok 48 - review reproduction (false OFF) — Q5 unverified require function returns malicious hooks: the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 80.948536
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q6 ref.current accessor installed in the component: the superseded cab8cab scanner returned OFF for this bundle
+ok 49 - review reproduction (false OFF) — Q6 ref.current accessor installed in the component: the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 75.048475
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q7 outer finally executes after the inner rejection: the superseded cab8cab scanner returned OFF for this bundle
+ok 50 - review reproduction (false OFF) — Q7 outer finally executes after the inner rejection: the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 73.20195
+  type: 'test'
+  ...
+# Subtest: review reproduction (false OFF) — Q8 duplicate onClick key selects the uninspected handler: the superseded cab8cab scanner returned OFF for this bundle
+ok 51 - review reproduction (false OFF) — Q8 duplicate onClick key selects the uninspected handler: the superseded cab8cab scanner returned OFF for this bundle
+  ---
+  duration_ms: 77.293433
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false ON) — D3 ON control must not drop explicit false arguments: the real UI performs no backend call; the fourth revision's ON control is the accepted browser suite, not output synthesis
+ok 52 - retired-model regression (false ON) — D3 ON control must not drop explicit false arguments: the real UI performs no backend call; the fourth revision's ON control is the accepted browser suite, not output synthesis
+  ---
+  duration_ms: 137.431089
+  type: 'test'
+  ...
+# Subtest: review reproduction (false ON) — D3 ON control must not drop explicit false arguments: the superseded d14aa7b negative control returned ON for this bundle
+ok 53 - review reproduction (false ON) — D3 ON control must not drop explicit false arguments: the superseded d14aa7b negative control returned ON for this bundle
+  ---
+  duration_ms: 78.56059
+  type: 'test'
+  ...
+# Subtest: retired-model regression (false ON) — Q9 ON predicate mapping is not faithful (o.current="stale"): the real UI performs no backend call; the fourth revision's ON control is the accepted browser suite, not output synthesis
+ok 54 - retired-model regression (false ON) — Q9 ON predicate mapping is not faithful (o.current="stale"): the real UI performs no backend call; the fourth revision's ON control is the accepted browser suite, not output synthesis
+  ---
+  duration_ms: 140.964224
+  type: 'test'
+  ...
+# Subtest: review reproduction (false ON) — Q9 ON predicate mapping is not faithful (o.current="stale"): the superseded cab8cab negative control returned ON for this bundle
+ok 55 - review reproduction (false ON) — Q9 ON predicate mapping is not faithful (o.current="stale"): the superseded cab8cab negative control returned ON for this bundle
+  ---
+  duration_ms: 82.162358
+  type: 'test'
+  ...
+# Subtest: retired-model regression — Q1 with REAL React 19 under jsdom (reviewer harness real-react-updater.cjs): the functional updater reaches the backend; cab8cab said OFF
+ok 56 - retired-model regression — Q1 with REAL React 19 under jsdom (reviewer harness real-react-updater.cjs): the functional updater reaches the backend; cab8cab said OFF
+  ---
+  duration_ms: 515.500145
+  type: 'test'
+  ...
+# Subtest: review reproduction — Q1 real-React bundle: the superseded cab8cab scanner returned OFF
+ok 57 - review reproduction — Q1 real-React bundle: the superseded cab8cab scanner returned OFF
+  ---
+  duration_ms: 80.494141
+  type: 'test'
+  ...
+# Subtest: retired-model regression: the fourth revision has no scan/negative-control output-execution commands at all (usage error), so none of the above can be re-accepted by a model
+ok 58 - retired-model regression: the fourth revision has no scan/negative-control output-execution commands at all (usage error), so none of the above can be re-accepted by a model
+  ---
+  duration_ms: 99.819644
+  type: 'test'
+  ...
+# Subtest: gate: config-false canary + all RP-OFF-* and D10-01/D10-02 passed -> off (exit 0) with the establishes/assumptions statement
+ok 59 - gate: config-false canary + all RP-OFF-* and D10-01/D10-02 passed -> off (exit 0) with the establishes/assumptions statement
+  ---
+  duration_ms: 124.707567
+  type: 'test'
+  ...
+# Subtest: gate fails closed: skipped OFF test, failed ON control, missing OFF test, not-executed test (no results), flaky pass, missing/unparseable files, config-true canary
+ok 60 - gate fails closed: skipped OFF test, failed ON control, missing OFF test, not-executed test (no results), flaky pass, missing/unparseable files, config-true canary
+  ---
+  duration_ms: 561.315484
+  type: 'test'
+  ...
+# Subtest: source contract: boundary unchanged, committed pin and explicit opt-ins preserved, import-OFF build mode, separate release-proof config, main suite excludes the OFF spec, workflow wiring
+ok 61 - source contract: boundary unchanged, committed pin and explicit opt-ins preserved, import-OFF build mode, separate release-proof config, main suite excludes the OFF spec, workflow wiring
+  ---
+  duration_ms: 1.110644
+  type: 'test'
+  ...
+# Subtest: END-TO-END (real script, fails closed BEFORE building): shell override -> exit 1, no build directory
+ok 62 - END-TO-END (real script, fails closed BEFORE building): shell override -> exit 1, no build directory
+  ---
+  duration_ms: 245.750993
+  type: 'test'
+  ...
+# Subtest: END-TO-END (real script, fails closed BEFORE building): a temporary enabling .env.local in the repo root -> exit 1, no build
+ok 63 - END-TO-END (real script, fails closed BEFORE building): a temporary enabling .env.local in the repo root -> exit 1, no build
+  ---
+  duration_ms: 241.796246
+  type: 'test'
+  ...
+# Subtest: REAL release-shaped build: the script EXITS 0 for L1+L2, claims no behaviour, retains output + canary + provenance; the gate on that canary WITHOUT browser results is inconclusive
+ok 64 - REAL release-shaped build: the script EXITS 0 for L1+L2, claims no behaviour, retains output + canary + provenance; the gate on that canary WITHOUT browser results is inconclusive # SKIP set RELEASE_PROOF_BUILD=1 to run the real builds
+  ---
+  duration_ms: 0.221731
+  type: 'test'
+  ...
+# Subtest: F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present
+ok 65 - F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present # SKIP set RELEASE_PROOF_BUILD=1 to run the real builds
+  ---
+  duration_ms: 0.089561
+  type: 'test'
+  ...
+1..65
+# tests 65
+# suites 0
+# pass 63
+# fail 0
+# cancelled 0
+# skipped 2
+# todo 0
+# duration_ms 11762.077756

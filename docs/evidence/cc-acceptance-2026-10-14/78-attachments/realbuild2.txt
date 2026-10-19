@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: REAL release-shaped build: the script EXITS 0 for L1+L2, claims no behaviour, retains output + canary + provenance; the gate on that canary WITHOUT browser results is inconclusive
+ok 1 - REAL release-shaped build: the script EXITS 0 for L1+L2, claims no behaviour, retains output + canary + provenance; the gate on that canary WITHOUT browser results is inconclusive
+  ---
+  duration_ms: 20138.36193
+  type: 'test'
+  ...
+# Subtest: F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present
+ok 2 - F2 regression: a nonzero real proof (broken negative control: comment-only ON marker, no hooks/ports/demo) is REJECTED by status, even though every OFF PASS line is present
+  ---
+  duration_ms: 19431.236971
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 39584.278689

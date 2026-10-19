@@ -1,0 +1,60 @@
+Evidence 73 — Independent review of runtime/import draft PR #76 (Codex)
+=======================================================================
+Reviewer: Claude. Date: 2026-10-18 (UTC). Candidate NOT modified during review (probe file created untracked and deleted; tree clean).
+Candidate: 61448f0feee198a8796f4077f32a52f7b863f90d (codex/runtime-import-integration-2026-10-17)   Base: efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc (PR #75)
+Handoff read: issue #39 comment 6243264884. Evidence folders: candidate docs/evidence/runtime-import-integration-2026-10-17 (SHA256SUMS 14 OK) and
+evidence-only commit fa56393 docs/evidence/runtime-import-validation-2026-10-17 (SHA256SUMS 24 OK; not part of PR #76 — confirmed).
+
+1. COMMITS / SCOPE
+  efc9116..61448f0 = 4 commits: acc2368 (cherry-pick of PR #72 runtime repair 35e0d77 — git patch-id IDENTICAL 45af0511cb84), 882f584 (default-off config,
+  disabled-flow guards, support copy, 7 config tests), 528c89a (docs/evidence), 61448f0 (.gitattributes + SHA256SUMS only).
+  Runtime diff: src/features/legacy-import/{import-legacy.ts, LegacyImport.tsx, __tests__/import-configuration.test.tsx, __tests__/risk-characterization.test.tsx},
+  .env.production (+REACT_APP_ENABLE_LEGACY_IMPORT=false), .env.test (new; =true for unit fixtures), e2e/scripts/build-app.sh (exports =true for emulator builds).
+  UNCHANGED vs efc9116: e2e/tests, playwright.config.ts, reporters/, evidence.sh/.test.mjs, .github/, package.json/lockfiles (root+e2e), functions/, firestore.rules,
+  all src outside legacy-import (identity UI untouched). Accepted B11/B15 behaviour is inherited byte-for-byte.
+  PR #72 head 48f4473 (docs-only beyond 35e0d77) has targeted evidence (ev. 58/61) but no formal approval — an unreviewed dependency only in the sense that
+  this is the first review of its runtime repair inside an accepted-CI candidate; the repair itself is now reviewed here.
+
+2. APPROVED IMPORT DECISIONS — implemented behaviour (verified)
+  - Default OFF: isLegacyImportEnabled() === (process.env.REACT_APP_ENABLE_LEGACY_IMPORT === 'true'); CRA env probe: production -> "false", development -> undefined
+    (off), test -> "true". Release-shaped build reproduced locally (verify-release-build.sh coach-core-mvp-staging-239): 13/13 PASS; bundle carries the baked
+    literal REACT_APP_ENABLE_LEGACY_IMPORT:"false". Disabled UI shows only an explanatory alert + support paragraph; no Import/Not now buttons; importLegacy/
+    declineImport throw "disabled in this build"; storage snapshot unchanged (config tests ×5 flags + my probe P6).
+  - Testing opt-in explicit: e2e/scripts/build-app.sh exports =true (emulator builds only); .env.test =true for unit fixtures; config suite toggles at runtime.
+  - Fresh "Not now" = permanent decline (approved ask-once private-beta limitation) — probe P7; unfinished original-owner decline -> 'postponed' (recoverable).
+  - Missing-team recovery: blocked in-app; copy directs to ownership-verified support; no claim clearing / transfer / same-name substitution / admin path added
+    (grep of src: none). SUPPORT PROCEDURE NOT IMPLEMENTED/DOCUMENTED: no runbook in docs/; Codex states this explicitly (candidate doc §"Support boundary").
+
+3. RECOVERY REPAIR — adversarial probes (jest, untracked file, 7/7 pass, then deleted)
+  P1 status-less claim of another account B + session A -> blocked ("another account"), nothing written, no buttons.
+  P2 status-less claim A/T1 + pending A/T1 + permanent decline -> resume ONLY for A/T1; A/T2 gets "Switch to Team One", nothing copied; A/T1 resume upgrades claim
+     to status 'imported', clears pending, originals byte-identical.
+  P3 INCONSISTENT older state (status-less claim A/T1 but pending marker A/T2, no decision): A/T1 -> switch notice (no resume); A/T2 -> no notice, hasUnfinished
+     false, UI shows a FRESH consent offer (explicit click required, same account). With a decline recorded, neither team resumes. Observation, not a defect under
+     the approved account-ownership policy; a fail-closed "ownership cannot be verified" for claim/pending team disagreement would be stricter (optional).
+  P4 D10-08d-style mismatching server copy -> "Saved copy does not match", claim stays pending T1, pending kept, decision kept, originals intact, still recoverable.
+  P5 malformed status-less claim (no teamId) -> "ownership cannot be verified", nothing written.
+  P6 flag off mid-session -> DISABLED thrown, pending recovery untouched.  P7 see §2.
+  Unit suites on candidate: 6 suites / 47 tests PASS (matches Codex). tsc --noEmit exit 0.
+
+4. CI EVIDENCE (independently read via check-run annotations + jobs API; both runs head_sha = 61448f0, event workflow_dispatch, attempt 1, 12/12 jobs success)
+  Run 39079505765 grep "D10-08[a-d]" repeat 10: chromium 40/0, firefox 40/0 — PASS 10/10 for each of D10-08a/08b/08c/08d per engine (= 80); 10 jobs empty
+    ("0 tests selected … grep "D10-08[a-d]"") — never counted as passes. Finalize ✅ / withheld skipped / upload ✅ on all 12.
+  Run 39079835692 grep "D10-" repeat 1: chromium 22/0, firefox 22/0 (D10-00…D10-12, 06b–06e, 07b, 08a–d), phone-chromium 2/0, phone-firefox 2/0 (D10-01, D10-06e)
+    (= 48); 8 jobs empty. Finalize ✅ / upload ✅ on all 12.
+  Local --list on candidate: chromium 76 / phone 15 (unset), 22 / 2 ("D10-"), 4 / 0 ("D10-08[a-d]") — matches Codex and base membership.
+  Codex's runtime-archive-verification.json: 24/24 records match live artifact metadata (id/name/digest/head_sha); records show 80 and 48 executions, all passed,
+  all run.exit=0, results config workers 1 / retries 0 / timeout 60000 / repeatEach 10 (run 1). Their verify-archives.py is assertion-based (ZIP digest = metadata,
+  inventory complete, every digest = bytes, token scan, required non-empty). PR75 records: 24/24 match metadata, exits 22×0 + 2×1 (expected D10-08a pre-PR72).
+  NOT independently done by me: opening any ZIP (gh api / gh run download -> blob storage "Forbidden" at the workspace proxy; Codex used a connector+curl path
+  unavailable here). My artifact-content verification is limited to metadata cross-checks of Codex's records and the aggregate-style checks above.
+
+5. RELEASE-PROOF GAP (prerequisite, not a code defect): verify-release-build.sh checks .env.production pins the EMULATOR flag but does NOT check the import flag,
+  and a git-ignored .env.local on the build machine overrides .env.production (CRA precedence probe: with .env.local=true, a production build resolves "true" and the
+  release proof would still pass 13/13). Recommend two bounded checks: (a) `.env.production` pins REACT_APP_ENABLE_LEGACY_IMPORT=false; (b) bundle canary: the
+  built JS must contain REACT_APP_ENABLE_LEGACY_IMPORT:"false" and must not contain :"true" (the literal is baked in, see §2). Until then, "default OFF" is a
+  configuration property, not a release-verified property.
+
+6. N2-A2 order/state observation: kept separate (Codex recorded it in docs/N2_TEAM_CREATION_HANDOFF.md as diagnostic; no acceptance change).
+
+VERDICT: PASS for PR #76 at 61448f0 as a bounded runtime/import candidate (code and evidence scope). Not release approval; MVP remains NO-GO.

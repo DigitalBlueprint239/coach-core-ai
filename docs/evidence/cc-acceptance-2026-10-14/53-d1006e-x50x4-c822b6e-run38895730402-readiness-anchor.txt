@@ -1,0 +1,64 @@
+# D10-06e x50 on all four projects, retries 0; candidate c822b6e = runtime 518e9e5 + harness c822b6e (owned-team readiness anchor before the exact-original-ID check; assertions unchanged)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38895730402
+# Compare evidence 41/42/47 (2/50 @425 on three runtimes with the premature checkpoint).
+
+=== JOB 116956177272
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E chromium: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 50/50 D10-06e [3.7/4.0/6.1s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116956177275
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E firefox: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 50/50 D10-06e [6.6/6.7/8.3s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116956176813
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-chromium slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E phone-chromium: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 50/50 D10-06e [3.6/3.9/5.7s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116956177180
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E phone-firefox slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E phone-firefox: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 50/50 D10-06e [6.4/6.6/8.1s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

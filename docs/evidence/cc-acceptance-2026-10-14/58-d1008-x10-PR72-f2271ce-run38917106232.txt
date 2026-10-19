@@ -1,0 +1,116 @@
+# PR #72 independent acceptance: D10-08a-d x10 per desktop engine, retries 0; candidate f2271ce = runtime 35e0d77887ba87d2714706f0cdbb2511b442d1a2 + harness 1006595 (e2e/, .github/ only)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38917106232 ; jobs chromium 117028001773, firefox 117028000964
+# Pre-repair discrimination on 518e9e5: evidence 57 (08a/08d FAIL 3/3, 08b/08c PASS).
+# Instrumented 08d run on the earlier regex: run 38915003832 (app showed 'Import not completed. Original plays preserved…', tampered doc unchanged, claim pending; regex corrected to the UI wording).
+
+##### RUN 38917106232
+=== JOB 117028000964
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E firefox diag data: 10 executions
+PASS D10-08d #0: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"1ac39d2e","name":"Tampered copy"}] claim={"uid":"NQ3Y1oawaarVU9UOCxmfYGwtIIz3","status":"pending","teamId":"fUSNJqrrCSOMLSnteQo3","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #1: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"b233e8cf","name":"Tampered copy"}] claim={"uid":"13fQEsU8uSnuNmwVddbzTjo31Fw0","status":"pending","teamId":"3XEkw1eRMnplfX3O7Vdc","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #2: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"ea401193","name":"Tampered copy"}] claim={"uid":"sK3ddkVpvlHrOYQktdIOj6B2JOtS","status":"pending","teamId":"ygRssg26fOHEfcC25uQ2","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #3: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"7d55633f","name":"Tampered copy"}] claim={"uid":"KzOv48y8tCdhdpJfszkEpjQmH6y4","status":"pending","teamId":"EpnG27R1lSPIfYvT2UOC","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #4: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"33a64203","name":"Tampered copy"}] claim={"uid":"z6PwVrAGcdFw0Rf3hwg5lnWf5a08","status":"pending","teamId":"XzVnrDGHJ5jNMlnD0uf1","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #5: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"c87febf7","name":"Tampered copy"}] claim={"uid":"ZJjqzOCXJtmnNo0YnsKSbmU8O4y7","status":"pending","teamId":"cuZ7HIRVVy5wwreWz1gz","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #6: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"249f8b0c","name":"Tampered copy"}] claim={"uid":"AwEjRIyDAzgSUjlP5ngcVZ5QROW9","status":"pending","teamId":"MyIRm5t6l1YoDXelGmRS","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #7: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"fd55ba6f","name":"Tampered copy"}] claim={"uid":"02bcpkViRqolRmjz94FuHm1uHiFt","status":"pending","teamId":"OcEomPYvgSJI8kF86dV1","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #8: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"33799a6d","name":"Tampered copy"}] claim={"uid":"FRPhxuFtNKfMDi4SD9H4pqjD
+[notice] E2E firefox slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E firefox: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 10/10 D10-08 [4.0/4.2/5.1s]
+PASS 10/10 D10-08a [2.7/2.9/3.3s]
+PASS 10/10 D10-08b [3.9/4.0/4.1s]
+PASS 10/10 D10-08c [5.1/5.2/5.2s]
+PASS 10/10 D10-08d [2.1/2.1/2.3s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117028001773
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] E2E chromium diag data: 10 executions
+PASS D10-08d #0: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"febed29b","name":"Tampered copy"}] claim={"uid":"042fyzdfi6Xx7GO8Hixu0H3dOra9","status":"pending","teamId":"rOVhURVkr6uXYJVSxEh3","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #1: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"c857a238","name":"Tampered copy"}] claim={"uid":"o3xFEjUsv1abVYoDvzKDUmVh4d45","status":"pending","teamId":"Ynz1KLnz1UApa2MRzaEO","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #2: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"be172ff7","name":"Tampered copy"}] claim={"uid":"tTU5G6ZUd18PQqgjEBMXcDpHWa3x","status":"pending","teamId":"92BoTUZO6JG1kOclWBff","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #3: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"ac532b41","name":"Tampered copy"}] claim={"uid":"3uADqN7S6OGZjwdGZfW5zbntiNPy","status":"pending","teamId":"5KNaQJoEQNHAdQsQsdmw","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #4: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"323ee4e5","name":"Tampered copy"}] claim={"uid":"SgwDaS0sXmY2v5zWYBCsLlyoAkZG","status":"pending","teamId":"Bk30SFAOS9zOarRB2Mza","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #5: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"565b3d4d","name":"Tampered copy"}] claim={"uid":"3nXNyNGPIQk8dsxghIaEO2jedvmc","status":"pending","teamId":"4mPNwH5D2j8AgUQegf1z","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #6: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"120a1572","name":"Tampered copy"}] claim={"uid":"jHCPQ5rmZ0F6yYUM598EogGcdIiJ","status":"pending","teamId":"Dv2DIitIqiVYyYcOZaNt","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #7: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"90e244a8","name":"Tampered copy"}] claim={"uid":"Yi8T8XZuCgyL0dZoI4osO6sGXMvu","status":"pending","teamId":"Z8vl4gU4ke8zYlfKqC2S","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+PASS D10-08d #8: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"65058fdd","name":"Tampered copy"}] claim={"uid":"qArslDrAAPseDxdiyVSWCy3l
+[notice] E2E chromium slow steps >= 10s: 0 of 50 executions
+none
+[notice] E2E chromium: 50 passed / 0 failed / 0 blocked / 0 skipped · acceptance 50/0 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+PASS 10/10 D10-08 [2.1/2.2/2.9s]
+PASS 10/10 D10-08a [1.8/2.0/2.5s]
+PASS 10/10 D10-08b [3.2/3.2/3.5s]
+PASS 10/10 D10-08c [4.0/4.0/4.1s]
+PASS 10/10 D10-08d [1.3/1.5/1.6s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
+##### RUN 38915003832 (08d instrumented, regex mismatch)
+=== JOB 117020802082
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 3 executions
+FAIL D10-08d #0: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"23536cc3","name":"Tampered copy"}] claim={"uid":"IEcWYvLwVDHT3lPqqEgt2BxNwjOO","status":"pending","teamId":"rLBM2QAO6OfEQzK4YbmQ","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+FAIL D10-08d #1: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"017cb1ab","name":"Tampered copy"}] claim={"uid":"Rivi9YOMu9euJAnO2KyO3fLgOKtL","status":"pending","teamId":"XY8ks9ve8otIvsKXhZJv","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+FAIL D10-08d #2: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"e253e20f","name":"Tampered copy"}] claim={"uid":"yadlRM9AEJJDXzi52shshOyD3EYh","status":"pending","teamId":"EgI5OcTe6oXMNC8mjCrg","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+[notice] E2E firefox slow steps >= 10s: 0 of 3 executions
+none
+[warning] E2E firefox diag: 3 failed executions
+D10-08d #0 failed 4.5s | errors: Error: import must surface an error, not success | last step: import must surface an error, not success@legacy-import.spec.ts:534 (0.0s) | slowest: Expect "toHaveCount"@app.ts:256 0.3s; Navigate@legacy.ts:44 0.3s; Expect "toBeVisible"@app.ts:115 0.2s
+D10-08d #1 failed 4.0s | errors: Error: import must surface an error, not success | last step: import must surface an error, not success@legacy-import.spec.ts:534 (0.0s) | slowest: Navigate@legacy.ts:44 0.4s; Expect "toBeVisible"@app.ts:115 0.3s; Click@app.ts:76 0.2s
+D10-08d #2 failed 3.7s | errors: Error: import must surface an error, not success | last step: Evaluate@legacy-import.spec.ts:533 (0.0s) | slowest: Navigate@legacy.ts:44 0.3s; Click@app.ts:76 0.2s; Expect "toBeVisible"@app.ts:115 0.2s
+[failure] E2E firefox: 0 passed / 3 failed / 0 blocked / 0 skipped · acceptance 0/3 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 3/3 D10-08d [3.7/4.0/4.5s] -- Error: import must surface an error, not success | expect(received).toMatch(expected) | Expected pattern: /changed elsew
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 117020802263
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 3 executions
+FAIL D10-08d #0: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"08737636","name":"Tampered copy"}] claim={"uid":"hpr8YYaWdQAAWnOTEufxAOxORFxo","status":"pending","teamId":"jvXDNYxdaL8kBBwUcGLL","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+FAIL D10-08d #1: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"9f479f5c","name":"Tampered copy"}] claim={"uid":"sBGDNz9dp0Rhpqx0DefxyepPR50b","status":"pending","teamId":"AnV56aCNpM2LXIFudLlb","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+FAIL D10-08d #2: D10-08d outcome="Import showed an error instead of completing: "Import not completed. Original plays preserved. Retry or review your team access."" tamperedUnchanged=true copies=[{"id":"304db80c","name":"Tampered copy"}] claim={"uid":"wz80XQOV1kIsHT2EQjim7agRLhGu","status":"pending","teamId":"G0SwRBeVhUgyim0ie969","teamName":"Alpha Eagles"} alerts=["Import not completed. Original plays preserved. Retry or review your team access."]
+[notice] E2E chromium slow steps >= 10s: 0 of 3 executions
+none
+[warning] E2E chromium diag: 3 failed executions
+D10-08d #0 failed 2.1s | errors: Error: import must surface an error, not success | last step: import must surface an error, not success@legacy-import.spec.ts:534 (0.0s) | slowest: Expect "toHaveCount"@app.ts:256 0.3s; Expect "poll toBe"@legacy.ts:142 0.1s; Navigate@legacy.ts:44 0.1s
+D10-08d #1 failed 1.8s | errors: Error: import must surface an error, not success | last step: import must surface an error, not success@legacy-import.spec.ts:534 (0.0s) | slowest: Navigate@legacy.ts:44 0.1s; Expect "poll toBe"@legacy.ts:142 0.1s; Expect "toBeVisible"@app.ts:96 0.1s
+D10-08d #2 failed 1.7s | errors: Error: import must surface an error, not success | last step: import must surface an error, not success@legacy-import.spec.ts:534 (0.0s) | slowest: Expect "poll toBe"@legacy.ts:142 0.1s; Navigate@legacy.ts:44 0.1s; Expect "toHaveCount"@app.ts:256 0.1s
+[failure] E2E chromium: 0 passed / 3 failed / 0 blocked / 0 skipped · acceptance 0/3 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 3/3 D10-08d [1.7/1.8/2.1s] -- Error: import must surface an error, not success | expect(received).toMatch(expected) | Expected pattern: /changed elsew
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

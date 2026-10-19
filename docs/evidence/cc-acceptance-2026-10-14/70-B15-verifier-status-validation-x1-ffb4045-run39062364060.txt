@@ -1,0 +1,74 @@
+Evidence 70 — B15 verifier-status repair: focused checks + bounded workflow validation (PR #74)
+================================================================================================
+Captured: 2026-10-17 (UTC) by the independent test/evidence owner (Claude), via GitHub REST API and local execution.
+Purpose: validate the repair of Codex's B15 FAIL at 3befdf1 (PR #74 comment 6238972665): the post-redaction verification
+grep conflated exit 1 (clean) with exit 2 (verifier error), so a verifier that could not run still produced UPLOAD_OK and
+eligible=true. Scope: DELIVERY validation of the CI evidence pipeline only. Not an acceptance result for runtime 518e9e5.
+
+Repaired head (PR #74, branch claude/ci-evidence-retention-b15): ffb40455c266c6d12171d5ce71923fe9313155f2
+Previous reviewed head: 3befdf1ed439c8e69a0dfa5f67352c6edef41e0a. Base: 7d56300. Runtime unchanged: 518e9e5817abd2a0e1bf1308468928f238fa8533.
+Changed files vs 3befdf1 (exactly 2): e2e/scripts/evidence.sh (+44/-8), e2e/scripts/evidence.test.mjs (+113). Workflow unchanged from 3befdf1.
+
+Audit of every verification command in `finalize` (status handling now explicit, no pipelines):
+  1. redaction verification `grep -Eq <token shapes> $tmp`:  0 -> reject ("token-shaped content remains");
+     1 -> continue (the ONLY proceeding status); 2/other -> reject ("redaction verification could not run (grep exit N); sanitization is UNPROVEN").
+  2. inventory digest-line extraction `grep -v '^#' INVENTORY > entries`: 0 -> continue; 1 -> reject ("inventory has no digest lines");
+     other -> reject ("inventory read failed (grep exit N); digests UNVERIFIED"). (Previously a pipeline into sha256sum -c with no pipefail.)
+  3. entry count `wc -l`: failure or non-numeric or <1 -> reject.
+  4. `sha256sum -c --quiet --status -- entries`: 0 -> continue; 1 -> reject ("a listed digest does not match"); other -> reject ("could not run (sha256sum exit N)").
+  Unchanged already-explicit checks: required-file `[ -s ]`, `wc -c`, `sed ... || fail`, `mv || fail`, inventory build subshell with pipefail (`|| exit 99`), marker write `|| fail`.
+  The temp entries file is excluded from the inventory and removed before the marker is written.
+
+Reproduction on the OLD script (3befdf1) vs NEW (ffb4045), PATH-local grep wrapper exiting 2 only for `-Eq` (forwarding all other calls), working sed:
+  old: exit=0  UPLOAD_OK=present   (Codex's defect reproduced)
+  new: exit=1  UPLOAD_OK=absent    ::error title=E2E evidence finalize failed::redaction verification could not run (grep exit 2); sanitization is UNPROVEN (evidence NOT eligible for upload)
+
+Focused checks `node e2e/scripts/evidence.test.mjs` on ffb4045 — local: 19 checks, 18 pass, 0 fail, 1 skipped (check 7 unwritable-dir skips under root; CI runs it).
+  New since 3befdf1:
+   14 redaction-verification grep exit 2 -> non-zero, exact ::error, no UPLOAD_OK, no INVENTORY, temp file removed, sentinel never printed.
+   15 control: real grep (exit 1) finalizes; a grep forced to exit 0 for the verification call rejects even a correctly redacted log.
+   16 inventory-extraction grep exit 2 -> non-zero "inventory read failed (grep exit 2)", no UPLOAD_OK, log already redacted.
+   17 sha256sum -c exit 2 -> non-zero "inventory verification could not run (sha256sum exit 2)", no UPLOAD_OK.
+   18 inventory with zero digest lines -> rejected.
+   19 WORKFLOW STEP EMULATION (script-level, NOT a CI run): the finalize step's exact `run:` block is extracted from e2e-emulator.yml
+      and executed in a repo-shaped temp tree with GITHUB_OUTPUT redirected. Success: exit 0, eligible=true, UPLOAD_OK, success notice.
+      With the grep-exit-2 wrapper: exit non-zero, NO eligible output, no UPLOAD_OK, no success notice, no content printed. The workflow's
+      literal `if:` expressions are asserted verbatim and evaluated for both eligible values: success -> upload true / withheld false;
+      failure -> upload false / withheld true.
+  Unchanged: checks 1-13 (incl. 12: digests recomputed from final post-redaction bytes; 2: exit 0/7 preserved; 13: textual gate).
+
+Bounded workflow run (workflow_dispatch, repeat_each=1, grep "D10-01|N2-A2", 4-job pre-split matrix) — ACTUAL CI execution:
+  run 39062364060  head_sha ffb40455c266c6d12171d5ce71923fe9313155f2  created 2026-10-17T19:24:59Z  conclusion: failure (EXPECTED: N2-A2 [obsolete-fault-model] times out on desktop)
+  job 117482791470 chromium:      self-checks success | tests FAILURE (N2-A2 timeout; D10-01 PASS; acceptance 1/0, obsolete 0/1) | Finalize success | Evidence NOT uploaded SKIPPED | upload success
+     notice: 9 files; run.log redaction: bytes_before=21917 bytes_after=21825; UPLOAD_OK present
+  job 117482791540 firefox:       self-checks success | tests FAILURE (N2-A2 timeout; D10-01 PASS) | Finalize success | withheld SKIPPED | upload success
+     notice: 9 files; bytes_before=21903 bytes_after=21811; UPLOAD_OK present
+  job 117482791327 phone-chromium: self-checks success | tests success (D10-01 PASS) | Finalize success | withheld SKIPPED | upload success
+     notice: 6 files; bytes_before=9079 bytes_after=9033; UPLOAD_OK present   (run.log smaller than the 3befdf1 run's 18841 B; observed, not interpreted)
+  job 117482791597 phone-firefox: self-checks success | tests success (D10-01 PASS) | Finalize success | withheld SKIPPED | upload success
+     notice: 6 files; bytes_before=18837 bytes_after=18791; UPLOAD_OK present
+  Artifacts (REST metadata; names suffixed -ffb4045…):
+    12112495385 e2e-results-chromium        602588 B  sha256:788d66b3e134d50844702fa6ac9b6b6db4ddc461e5b387ae27c88ac3cdde0074
+    12112126009 e2e-results-firefox         523077 B  sha256:ad345c31e647cf84c60e6f8a5bca9f69d18eac4782b084e07e9b86aee9d3958a
+    12111378285 e2e-results-phone-chromium    7159 B  sha256:6ce1d1bd498d858cf8948238f7c3a636774a3e68e3ec0d29e2307401eac8d9a3
+    12111603776 e2e-results-phone-firefox     7311 B  sha256:99326650db173335658d58f93a1a0137125076e83c70627ce202db38c8eb972f
+
+Distinguishing script-level checks from workflow execution:
+  - Script-level (local + the CI "Evidence self-checks" step, which ran the same 19 checks on all 4 jobs): proves the fail-closed branches
+    (checks 7-11, 14-19) including the emulated finalize step and the literal gate expressions.
+  - Actual workflow execution (run 39062364060): proves ONLY the success path of finalize/gate/upload after both passing and failing
+    browser-test steps, with the test step's own failure status preserved. No deliberate failure was introduced into the production
+    workflow, so the withheld-upload branch has NOT been executed by GitHub Actions itself.
+
+ZIP verification status:
+  - Prior run 39059137056 (head 3befdf1): Codex independently downloaded and verified all four archives (12110393943, 12109939329,
+    12110976530, 12111175317): ZIP SHA-256 = metadata, every inventory digest = retained bytes, file sets as expected, no residual token
+    shapes in run.log (PR #74 comment 6238972665). Carried forward as Codex's verification, not reproduced here.
+  - New run 39062364060 (head ffb4045): archive contents NOT verified by the test owner. Download attempted again from this workspace on
+    2026-10-17 and still fails (GitHub redirects to productionresultssa19.blob.core.windows.net, blocked at the workspace proxy; 0-byte file).
+    These four artifacts require their own verification by a reviewer with artifact access (ZIP sha256 vs the metadata digests above,
+    `sha256sum -c INVENTORY.sha256` after restoring the `e2e/` prefix, no oobCode=/Bearer/JWT values in run.log).
+
+Unchanged: application code, browser tests, coverage, repetitions, retries=0, project matrix, Playwright config/reporter, accepted B11
+behaviour (PR #73 accepted at f2e1fed; not combined here), PR #72 (separate). No merge, deployment, production change, protection change
+or AI activation. Coach Core remains MVP NO-GO.

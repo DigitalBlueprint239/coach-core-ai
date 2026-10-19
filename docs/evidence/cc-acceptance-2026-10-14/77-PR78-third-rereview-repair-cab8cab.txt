@@ -1,0 +1,81 @@
+Evidence 77 — PR #78 third re-review repair (D1–D3 of Codex review 6248146409): delivery record
+===============================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+Failed head: d14aa7bb9ec4442c3acca26b127b17f4194cbd64.  New head: cab8cabe2baf00b8f3a37a36a88466f5c749613e.  Base unchanged: 61448f0 (PR #76).
+Changed vs d14aa7b (3 files, +564/-241): scripts/security/release-import-config.js, scripts/security/release-import-config.test.mjs,
+  docs/security/RELEASE_PROOF_IMPORT_OFF_2026-10-18.md. src/, docs/support/, workflow, verify-release-build.sh byte-identical to d14aa7b.
+
+1. Reproduction of the reviewer's probes on d14aa7b (Codex surrounding-probes.cjs; "actual" = whole-module execution + real button):
+   argument getter / default parameters / handler default getter / onClick wrapper getter / destructured local / globalThis["Error"] / CustomError
+   -> d14aa7b scan exit 0 verdict off while the real button copied (1 each; destructured local: 2); ON-control probe (explicit false args):
+   real UI 0 copies/reads/writes, d14aa7b negative-control exit 0 (false ON). All reproduced in-suite (checks 20–27 run the d14aa7b script from git).
+
+2. Repair (design doc §third revision):
+   D1 effects around the throw — the complete supported path is validated: accept onClick must be exactly `()=>{y()}` to a component-local
+      ZERO-parameter handler; decline onClick is the handler and has no parameters; the OFF callee must have ZERO parameters; every node evaluated
+      before the import call (+ the enclosing try's catch/finally) must fit an effect-free grammar: literals, local reads, `ref.current` of a VERIFIED
+      React useRef, calls to VERIFIED React useState setters (destructuring initialised by `(0, r.useState)(..)` where r = n(<id>) and module <id> is
+      checked to be React by its source) with effect-free arguments; import-call arguments must be effect-free (member reads / calls rejected).
+   D2 constructor binding — `throw new Error(..)` only; `Error` not shadowed and not assigned/redefined as a global in any entry chunk: identifier,
+      member, computed-literal (`globalThis["Error"]`), static keys resolved through consts/IIFE args (`window[k]`), Object.defineProperty/assign/
+      Reflect.* on global objects, and any eval/Function other than webpack's `new Function("return this")`. Writes of non-constructible values
+      (arrows, literals, object/array literals) cannot hijack `new Error` and are not counted; strict-mode `this` writes are object writes.
+   D3 ON control — executes the callee with the ACTUAL call-site arguments mapped by role (localStorage, backend prop, uid/teamId/teamName,
+      literals as themselves, `()=>ref.current===x`), plain identifier parameters only; unmappable shapes -> inconclusive; reads/copies/writes counted.
+
+3. Results with the repaired verifier:
+   Reviewer probes (their script, harness adapted to the new fixture export): argument getter / default params / handler default getter / onClick
+   wrapper getter / globalThis["Error"] / CustomError / direct-argument call -> exit 1 inconclusive; ON-control false-args probe -> scan inconclusive,
+   negative-control exit 1 (no false ON); eval case -> now exit 1 inconclusive (no longer a mere documented limit); baselines on/off unchanged.
+   Real OFF release build: verdict off — executor inline -> disabled [static], decline inline -> disabled [static].
+   Real opted-in emulator build: verdict on — executed with 4 actual-mapped arguments: backend.copy x1, backend.read x1, storage writes 5; decline
+   with 2 actual-mapped arguments -> "declined".
+   Real-bundle global index (both builds): only property writes on builtins (Error.prepareStackTrace, document.cookie), static gtag keys
+   (dataLayer, gtag), webpackChunk alias, and non-constructible unknown-key writes (Firebase iframe callback) — none replaces Error.
+
+4. Focused checks: node scripts/security/release-import-config.test.mjs -> 37 tests; local fast 35 pass / 2 skipped; RELEASE_PROOF_BUILD=1 -> 37/37.
+   New (11): seven D1/D2 false-OFF probes (real backend reached; repaired scanner refuses OFF; d14aa7b false OFF shown), the D3 false-ON probe
+   (real UI makes no call; control must not report ON; d14aa7b did), actual-argument execution (5 mapped args; unmappable -> inconclusive),
+   surrounding-path grammar (direct backend call in an argument, member read before the throw, non-React setter), eval/Function rule.
+   Preserved: second-review six probes, first-review decoys, c9d49dd/905b1d4 demonstrations, real-status assertions, F2 broken-ON regression.
+   Fixture generator now mirrors the real chunk layout (module map with a React-shaped module, webpack require, useState/useRef hooks).
+   verify-release-build.sh on cab8cab (fresh same-commit emulator build): RESULT: 17 passed, 0 failed:
+     PASS guard refuses an emulator build for coach-core-mvp-staging-239
+     PASS .env.production pins the emulator flag to false
+     PASS .env.production pins the import flag to false
+     PASS effective build-time import config is OFF (.env.production="false"; CRA loader agrees: "false")
+     PASS release-shaped build for coach-core-mvp-staging-239
+     PASS no test-hook marker (__coachCoreE2E)
+     PASS no test-hook module (e2e-support / emulator-hooks)
+     PASS no emulator ports (Auth 9099, Firestore 8080, Functions 5001, Storage 9199)
+     PASS no demo-* project values
+     PASS no emulator test password or placeholder secret
+     PASS bundle targets coach-core-mvp-staging-239
+     PASS shipped executable import code is OFF (static/js/main.630c8567.js: executor inline -> disabled [static], decline inline -> disabled [static], data-import-config=coachcore:import-config=false)
+     PASS 2 JS files scanned
+     PASS negative control: pattern detects emulator build (__coachCoreE2E)
+     PASS negative control: pattern detects emulator build ([:,](9099|9199|5001|8080)[^0-9])
+     PASS negative control: pattern detects emulator build (demo-coach-core)
+     PASS negative control: executable analysis detects the opted-in emulator build as ON
+     RESULT: 17 passed, 0 failed
+   Import suites 7/49; tsc clean; reporter 10/10; evidence 19 (18 + root skip).
+
+5. Actual CI: workflow_dispatch run 39157201371 on cab8cab (grep D10-01, repeat 1): 12/12 jobs success.
+   Self-check annotation (every job): "tests=37 pass=34 fail=0 skipped=3 (skipped tests are NOT passes): 32: old implementation not available in
+   this clone; 36/37: set RELEASE_PROOF_BUILD=1 to run the real builds". Release-build proof annotation: "17 passed". B15 inventories 10 files
+   per job (retained release-build/{index.html, asset-manifest.json, static/js/main.<hash>.js, release-build.context}); finalize ✅ / withheld
+   skipped / upload ✅. Artifact metadata (names suffixed -cab8cab…):
+     12147880629 e2e-results-acceptance-chromium 238319B sha256:35e496119e6d9868e442d920e83a302f04544d761d18df58b4da79115c75717e
+     12147631460 e2e-results-acceptance-firefox 238298B sha256:3ad4c17b4eb0ba3e1be6e43eba86bf3362e470e75ed023b859c5b7c0dff9b776
+     12147256881 e2e-results-acceptance-phone-chromium 238335B sha256:c4a1c09e33d530ad20f80613155fe936112836634881c11e86ba2f2aab059976
+     12146444902 e2e-results-acceptance-phone-firefox 238297B sha256:7bc8b1f4c43664029b7d35a00ebaa1af21da5661bd5603cda8e6abf9641d031d
+     12147985260 e2e-results-diagnostic-chromium 236328B sha256:9e59ceeba3492dbe63c30cbebbfeaa05c02441c2d5082468b644933202892df9
+     12147068053 e2e-results-diagnostic-firefox 236304B sha256:bf690d9907087173de5efb1c18f591cc52df0962b4daac94cf49058ec900021f
+     12147124480 e2e-results-diagnostic-phone-chromium 236343B sha256:f110a1f0a70eff222e78762748419051d83a1c75b8edfe6ebc9580be6ca443f5
+     12146773961 e2e-results-diagnostic-phone-firefox 236317B sha256:1d3fe4aab222f5fe4a8b3a2065549b7d9b2d63c0452ebc19f20cddbf4dd3df84
+     12147243371 e2e-results-obsolete-fault-model-chromium 236342B sha256:5c8ae2097e705d04520d28295685cd49b3d651fe8392727da2997fedbc3337df
+     12147084572 e2e-results-obsolete-fault-model-firefox 236312B sha256:00362dc7644a7c306c6358fbb13afa6253dc2c5dd49878e7c60e0948097630a6
+     12147094572 e2e-results-obsolete-fault-model-phone-chromium 236364B sha256:56968d605d6ef1fe60dd549b4c013aad8ed40d2dfb6023a647a14195a6e04691
+     12147501096 e2e-results-obsolete-fault-model-phone-firefox 236327B sha256:f024258fd13e57cdb042578e35721297b26fe08b6122390bdf7c865c55b118ca
+   Limitations: ZIPs not opened from this workspace; release-SHAPED build, not a deployment; host assumptions stated narrowly (strict-mode chunk;
+   native runtime not rewritten by code outside the shipped entry chunks); CSS/sw.js/headers/robots/LICENSE manifest-only; no full matrix.

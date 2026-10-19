@@ -1,0 +1,161 @@
+# DIAGNOSTIC (not full acceptance): grep N2-R7|N2-R8 x10, retries 0, candidate f325a23 (runtime = bdb06ae; harness-only fix of R7/R7b team names)
+# Run https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/38807699055
+# IDs shown are synthetic demo-project emulator IDs.
+
+=== JOB 116673358424
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E chromium diag data: 30 executions
+FAIL N2-R7 #0: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #1: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #2: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #3: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #4: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #5: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #6: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #7: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #8: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #9: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=65ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12151ms
+PASS N2-R8b #0: R8b readbacksFailed=0 statusAt=75ms committedAt=115ms recovery=automatic/10ms
+PASS N2-R8 #1: R8 fakedCommits=1 readbacksFailed=1 statusAt=68ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12163ms
+PASS N2-R8b #1: R8b readbacksFailed=1 statusAt=73ms committedAt=109ms recovery=automatic/9ms
+PASS N2-R8 #2: R8 fakedCommits=1 readbacksFailed=1 statusAt=64ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12126ms
+PASS N2-R8b #2: R8b readbacksFailed=1 statusAt=71ms committedAt=99ms recovery=automatic/9ms
+PASS N2-R8 #3: R8 fakedCommits=1 readbacksFailed=1 statusAt=73ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12161ms
+PASS N2-R8b #3: R8b readbacksFailed=0 statusAt=76ms committedAt=112ms recovery=automatic/13ms
+PASS N2-R8 #4: R8 fakedCommits=1 readbacksFailed=1 statusAt=64ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12140ms
+PASS N2-R8b #4: R8b readbacksFailed=0 statusAt=81ms committedAt=106ms recovery=automatic/9ms
+PASS N2-R8 #5: R8 fakedCommits=1 readbacksFailed=1 statusAt=71ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12135ms
+PASS N2-R8b #5: R8b readbacksFailed=0 statusAt=66ms committedAt=92ms recovery=automatic/9ms
+PASS N2-R8 #6: R8 fakedCommits=1 readbacksFailed=1 statusAt=71ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12163ms
+PASS N2-R8b #6: R8b readbacksFailed=1 statusAt=76ms committedAt=104ms recovery=automatic/9ms
+PASS N2-R8 #7: R8 fakedCommits=1 readbacksFailed=1 statusAt=61ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12112ms
+PASS N2-R8b #7: R8b readbacksFailed=0 statusAt=63ms committedAt=86ms recovery=automatic/10ms
+PASS N2-R8 #8: R8 fakedCommits=1 readbacksFailed=1 statusAt=68ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12109ms
+PASS N2-R8b #8: R8b readbacksFailed=0 statusAt=82ms committedAt=109ms recovery=automatic/10ms
+PASS N2-R8 #9: R8 fakedCommits=1 readbacksFailed=1 statusAt=73ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12113ms
+PASS N2-R8b #9: R8b readbacksFailed=0 statusAt=81ms committedAt=110ms recovery=automatic/11ms
+[notice] E2E chromium slow steps >= 10s: 0 of 40 executions
+none
+[warning] E2E chromium diag: 20 failed executions
+N2-R7 #0 failed 13.2s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Expect "toHaveCount"@app.ts:169 0.8s; Navigate@app.ts:31 0.2s; Click@app.ts:162 0.1s
+N2-R7b #0 failed 9.4s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Click@app.ts:162 0.1s; Expect "toHaveCount"@app.ts:169 0.1s
+N2-R7 #1 failed 12.3s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7b #1 failed 9.3s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7 #2 failed 12.3s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7b #2 failed 9.5s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7 #3 failed 12.3s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Expect "toBeVisible"@app.ts:55 0.1s
+N2-R7b #3 failed 9.4s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7 #4 failed 12.3s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7b #4 failed 9.4s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7 #5 failed 12.3s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7b #5 failed 9.3s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s; Click@app.ts:162 0.1s
+N2-R7 #6 failed 12.3s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Navigate@app.ts:44 0.1s; Click@app.ts:77 0.1s
+N2-R7b #6 failed 9.4s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.2s; Expect "toHaveCount"@app.ts:169 0.1s; Navigate@app.ts:44 0.1s
+N2-R7 #7 failed 12.4s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31
+[failure] E2E chromium: 20 passed / 20 failed / 0 blocked / 0 skipped · acceptance 20/20 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 10/10 N2-R7 [12.3/12.3/13.2s] -- Error: an explicit same-name confirmation is shown within 8 s | expect(received).toBeGreaterThanOrEqual(expected) | Expe
+FAIL 10/10 N2-R7b [9.3/9.4/9.5s] -- Error: explicit same-name confirmation shown | expect(received).toBeGreaterThanOrEqual(expected) | Expected: >= 0 | Rece
+PASS 10/10 N2-R8 [24.1/24.1/24.2s]
+PASS 10/10 N2-R8b [11.7/11.8/11.8s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116673357968
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[failure] 
+Process completed with exit code 1.
+[notice] E2E firefox diag data: 30 executions
+FAIL N2-R7 #0: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #1: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #2: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #3: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #4: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #5: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #6: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #7: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #8: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+FAIL N2-R7 #9: R7 promptAt=-1ms teamsBeforeAnswer=2 prompt=""
+PASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=85ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12169ms
+PASS N2-R8b #0: R8b readbacksFailed=0 statusAt=88ms committedAt=117ms recovery=automatic/16ms
+PASS N2-R8 #1: R8 fakedCommits=1 readbacksFailed=1 statusAt=101ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12193ms
+PASS N2-R8b #1: R8b readbacksFailed=1 statusAt=92ms committedAt=127ms recovery=automatic/21ms
+PASS N2-R8 #2: R8 fakedCommits=1 readbacksFailed=1 statusAt=84ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12145ms
+PASS N2-R8b #2: R8b readbacksFailed=0 statusAt=86ms committedAt=125ms recovery=automatic/20ms
+PASS N2-R8 #3: R8 fakedCommits=1 readbacksFailed=1 statusAt=96ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12173ms
+PASS N2-R8b #3: R8b readbacksFailed=0 statusAt=86ms committedAt=116ms recovery=automatic/39ms
+PASS N2-R8 #4: R8 fakedCommits=1 readbacksFailed=1 statusAt=82ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12160ms
+PASS N2-R8b #4: R8b readbacksFailed=0 statusAt=83ms committedAt=108ms recovery=automatic/14ms
+PASS N2-R8 #5: R8 fakedCommits=1 readbacksFailed=1 statusAt=98ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12161ms
+PASS N2-R8b #5: R8b readbacksFailed=0 statusAt=86ms committedAt=108ms recovery=automatic/21ms
+PASS N2-R8 #6: R8 fakedCommits=1 readbacksFailed=1 statusAt=96ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12176ms
+PASS N2-R8b #6: R8b readbacksFailed=0 statusAt=89ms committedAt=114ms recovery=automatic/20ms
+PASS N2-R8 #7: R8 fakedCommits=1 readbacksFailed=1 statusAt=81ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12158ms
+PASS N2-R8b #7: R8b readbacksFailed=0 statusAt=95ms committedAt=121ms recovery=automatic/19ms
+PASS N2-R8 #8: R8 fakedCommits=1 readbacksFailed=1 statusAt=94ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12160ms
+PASS N2-R8b #8: R8b readbacksFailed=0 statusAt=82ms committedAt=101ms recovery=automatic/15ms
+PASS N2-R8 #9: R8 fakedCommits=1 readbacksFailed=1 statusAt=93ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12181ms
+PASS N2-R8b #9: R8b readbacksFailed=0 statusAt=87ms committedAt=112ms recovery=automatic/38ms
+[notice] E2E firefox slow steps >= 10s: 0 of 40 executions
+none
+[warning] E2E firefox diag: 20 failed executions
+N2-R7 #0 failed 14.5s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Expect "toHaveCount"@app.ts:169 0.3s; Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s
+N2-R7b #0 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.1s
+N2-R7 #1 failed 13.9s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:44 0.3s; Navigate@app.ts:31 0.3s; Expect "toHaveCount"@app.ts:169 0.1s
+N2-R7b #1 failed 11.2s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.2s
+N2-R7 #2 failed 14.0s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.1s
+N2-R7b #2 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.4s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.1s
+N2-R7 #3 failed 13.9s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.4s; Navigate@app.ts:44 0.3s; Click@app.ts:36 0.1s
+N2-R7b #3 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.1s
+N2-R7 #4 failed 13.9s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.4s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.2s
+N2-R7b #4 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.2s
+N2-R7 #5 failed 14.0s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.2s
+N2-R7b #5 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.4s; Navigate@app.ts:44 0.3s; Click@app.ts:36 0.1s
+N2-R7 #6 failed 14.0s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.4s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.2s
+N2-R7b #6 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name confirmation shown@n2.spec.ts:666 (0.0s) | slowest: Navigate@app.ts:31 0.3s; Navigate@app.ts:44 0.3s; Click@app.ts:36 0.1s
+N2-R7 #7 failed 14.0s | errors: Error: an explicit same-name confirmation is shown within 8 s | last step: an explicit same-name confirmation is shown within 8 s@n2.spec.ts:619 (0.0s) | slowest: Navigate@app.ts:31 0.4s; Click@app.ts:36 0.3s; Navigate@app.ts:44 0.2s
+N2-R7b #7 failed 11.1s | errors: Error: explicit same-name confirmation shown | last step: explicit same-name co
+[failure] E2E firefox: 20 passed / 20 failed / 0 blocked / 0 skipped · acceptance 20/20 · diagnostic 0/0 · obsolete-fault-model 0/0 (pass/fail)
+FAIL 10/10 N2-R7 [13.9/14.0/14.5s] -- Error: an explicit same-name confirmation is shown within 8 s | expect(received).toBeGreaterThanOrEqual(expected) | Expe
+FAIL 10/10 N2-R7b [11.1/11.1/11.2s] -- Error: explicit same-name confirmation shown | expect(received).toBeGreaterThanOrEqual(expected) | Expected: >= 0 | Rece
+PASS 10/10 N2-R8 [25.4/25.4/25.5s]
+PASS 10/10 N2-R8b [12.1/12.2/12.2s]
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116673357720
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+=== JOB 116673357949
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

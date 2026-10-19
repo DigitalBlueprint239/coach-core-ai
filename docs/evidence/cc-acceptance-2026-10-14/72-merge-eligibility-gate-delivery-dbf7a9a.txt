@@ -1,0 +1,46 @@
+Evidence 72 — Coach Core merge eligibility aggregate: delivery record (draft PR #77)
+===================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+
+Base: efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc (PR #75 head = accepted B11 f2e1fed + B15 ffb4045 on harness 7d56300; runtime 518e9e5)
+Head: dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4  branch claude/ci-merge-eligibility-gate  draft PR #77 (base branch codex/integrate-b11-b15-2026-10-17)
+Changed files vs efc9116 (5): .github/workflows/e2e-emulator.yml (+), e2e/package.json (test:gate), e2e/scripts/merge-eligibility.mjs (new),
+  e2e/scripts/merge-eligibility.test.mjs (new), docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md (new). 650 insertions, 1 deletion.
+  Untouched: src/, functions/, e2e/tests, playwright.config.ts, reporters/, evidence.sh/evidence.test.mjs (byte-identical to PR #75).
+  Only change inside the e2e jobs: a run.context provenance file written with printf %s from env before the browser run.
+
+Rules R1–R7: see docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md and the header of merge-eligibility.mjs.
+
+Focused validation (local, candidate tree):
+  node e2e/scripts/merge-eligibility.test.mjs -> 14/14 pass (success pull_request/merge_group; failed required job; failing acceptance tests under
+    green job; cancelled required/non-required; skipped; in-progress; missing/duplicate job; missing artifact; no UPLOAD_OK; inventory mismatch;
+    narrowed grep recorded/unrecorded; legitimate empty vs zero-with-membership; wrong sha/run/attempt/head; artifacts named for another sha;
+    repeat mismatch; run-level errors; skipped status; on-disk artifact reader with tamper detection; workflow contract).
+  node e2e/scripts/evidence.test.mjs -> 19 (18 pass, 1 root-only skip); node e2e/reporters/annotate.test.mjs -> 10/10 (accepted suites unchanged).
+  listMembership() on this checkout: chromium/firefox 65/10/1, phone-chromium/phone-firefox 15/0/0 (~17 s, no browsers).
+  These fixtures SIMULATE job conclusions and artifacts; they are not Actions executions.
+
+Actual GitHub Actions evidence (same head dbf7a9a):
+  A. Push run 39079741112 (event push, full matrix auto-started by the pre-existing claude/** push trigger) was CANCELLED by concurrency when the
+     bounded dispatch below was queued. All 12 e2e jobs AND the "Coach Core merge eligibility" job concluded `cancelled` — no verdict was left on
+     the commit (R7 / `if: always() && !cancelled()` observed in Actions itself).
+  B. Dispatch run 39079754536 (repeat 1, grep "D10-01|N2-D0|N2-A2"): 12/12 e2e jobs success (passing/empty buckets; N2-A2 passed again when run
+     alone, 6.5 s). "Coach Core merge eligibility" job 117535161737: checkout ✅, npm ci ✅, Gate self-checks ✅ (14 fixtures on the runner),
+     download-artifact ✅ (12 artifacts), Evaluate -> FAILURE by design, upload of merge-eligibility-dbf7a9a… ✅ (1812 B,
+     sha256:675c68efbd38ed349468ba61c1a4837f4bad422bdc6cdd07e6ee103fca005d82).
+     Verdict annotation: "INELIGIBLE — dbf7a9a… (workflow_dispatch, run 39079754536/1): R1 event "workflow_dispatch" is not a trusted merge event |
+     R5 E2E acceptance (chromium): a dispatch grep "D10-01|N2-D0|N2-A2" narrowed the selection | R5 … executed identities != membership
+     (missing 64, extra 0) | … +11 more" — 19 reasons in total, which is exactly R1 + the expected R5 set for this grep
+     (desktop: 2+2+1 per engine; phone: 2+1+1 per engine). NO R2/R3/R4/R7 reasons: the jobs API read, all 12 artifact downloads, UPLOAD_OK
+     presence, INVENTORY.sha256 re-verification against retained bytes and sha/run/attempt/event binding all PASSED on real artifacts.
+  Not produced (limitation): an actual pull_request ELIGIBLE verdict. It would need a PR into recovery/coach-core-mvp-2026 (full matrix) and the
+  acceptance bucket cannot be green on runtime 518e9e5 (D10-08a) — a dependency on Codex's runtime/import candidate, not something this slice fixes.
+  ZIP contents of the dispatch run's artifacts were not opened from this workspace (proxy); the aggregate's on-runner verification is the evidence.
+
+Enforcement proposal (NOT applied; no settings changed): require exactly one status check, "Coach Core merge eligibility" (GitHub Actions app), on
+  recovery/coach-core-mvp-2026 (observed 3992d8d; currently unprotected; rulesets 0), only after PR #75 and this slice are merged there. Events:
+  pull_request (opened/synchronize/reopened/ready_for_review) and merge_group:checks_requested (applies only if a merge queue is enabled — none today).
+  Consider "require branches up to date" or a merge queue, and at least one approving review. Do not require the four "E2E acceptance (*)" names.
+
+Dependencies: PR #75 merge (and its sequencing onto recovery); Codex's PR #72 + default-off import + runtime candidate for a green acceptance bucket;
+  owner decision on the frozen-harness-target trigger (not added); known upload-artifact re-run limitation (push a new commit instead of re-running).

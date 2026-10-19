@@ -1,0 +1,63 @@
+Evidence 80 — PR #77 N1/N2 repair (Codex re-review 6258461071): delivery record
+================================================================================
+Date: 2026-10-19 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO. Enforcement readiness NOT claimed.
+Failed head: b139d18d5ea617fd4d505dbdd19ef1e0403662a9.  New head: bb157ba057913bd0835db8df9ca5eb569df0011f
+  (two commits: 9f6cb69 = N1 + N2 + doc + tests; bb157ba = guard-step fix after Actions rejected 9f6cb69's env use of cancelled()).
+Changed vs b139d18 (4 files, +218/-50): .github/workflows/e2e-emulator.yml (merge-eligibility job only), e2e/scripts/merge-eligibility.mjs,
+  e2e/scripts/merge-eligibility.test.mjs, docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md. Diff vs efc9116 is still the same 5 files.
+  Matrix (e2e) job, e2e/package.json, app code, browser tests, Playwright config, reporter, evidence.sh: unchanged. PR #78 (4f6b901) untouched.
+
+N1 — retained-root symlinks
+ Reproduced on b139d18 with Codex's root-containment.mjs (728c1ff): ci-evidence link -> outside run.context parsed (sha=PUBLIC_OUTSIDE_CONTEXT_SENTINEL);
+   test-results link -> outside results.json parsed and lastRunProblem echoed "PUBLIC_OUT…"; both links -> both. [b139d18-root-containment-repro.json]
+ Repair: containment FIRST — artifact dir and both roots must be real directories (lstat, never followed) resolving to <artifact>/<root>, else the record
+   is rejected immediately (no UPLOAD_OK probe, inventory, provenance, results or last-run read). Only files from the no-follow walk are read (realpath
+   re-check, O_NOFOLLOW). Decision payloads parsed only after the inventory verified completely. Parser messages never echoed.
+ Same Codex probe on the repair: throws "Expected containment defect did not reproduce" for all three root cases (record: containment rejected, uploadOk
+   false, context/results/lastRun null, problems = "artifact root … is a symbolic link (not followed; nothing under it is read)").
+ Regressions (new): an fs tracer patches node:fs lstat/stat/exists/readdir/readFile/open/realpath(+native)/opendir/access and syncs the ESM bindings;
+   for ci-evidence, test-results and both: ZERO traced paths at or below the outside target, ZERO traced paths below the rejected roots, no sentinel in
+   the record/diagnostics/verdict, verdict INELIGIBLE (R3 "artifact rejected before any evidence read"). Also: symlinked artifact dir, symlinked
+   sub-directory inside test-results with a listed file under it (not read; unauthenticated evidence not parsed), missing / non-directory root, parse
+   errors not echoed, valid artifact verifies and every traced access stays inside it. Demonstration: b139d18 loaded from git opens run.context and
+   results.json through the linked roots, parses the outside sentinel, echoes "PUBLIC_OUT". Existing containment cases (traversal, absolute, file
+   symlink, self-exclusion, unlisted/hidden payload, digest mismatch) unchanged and passing.
+
+N2 — conditional skip of the authoritative job
+ Workflow (static logic): job if: ${{ always() }} (was always() && !cancelled()); every step if: always() except the first, a fail-closed guard with
+   if: ${{ cancelled() || needs.e2e.result == 'cancelled' || needs.e2e.result == 'skipped' }} that exits 1; download-artifact continue-on-error so
+   missing artifacts reach the evaluator (named R3/R7 reasons) instead of skipping evaluation; evaluator exits 1 for every non-ELIGIBLE verdict and on
+   crash. Static regression check added (explicitly not an Actions observation). actionlint 1.x: bb157ba clean; 9f6cb69 flagged the env cancelled().
+ Observed Actions behaviour on bb157ba (bounded; grep "D10-01|N2-D0|N2-A2"; no unchanged full matrix):
+   (a) Push run 39192236704, cancelled by concurrency when dispatch 39192236298 started: 12 E2E jobs cancelled; AGGREGATE RAN (job 117867343432):
+       guard step FAILURE ("INELIGIBLE — run cancelled or matrix cancelled …"), Evaluate FAILURE (R7 "artifacts directory gate/artifacts does not
+       exist" + R1 push + further reasons), report uploaded (artifact 12160233711). Aggregate conclusion: FAILURE.
+   (b) Dispatch 39192236298, normal completion: 12 E2E jobs completed (obsolete chromium = completed N2-A2 timeout); aggregate job 117868286899:
+       guard SKIPPED (run not cancelled), self-checks SUCCESS (33 tests: 27 pass / 6 skipped in the shallow CI checkout), download SUCCESS,
+       Evaluate FAILURE — INELIGIBLE, "+11 more" = 19 reasons (R1 + 12 recorded grep + 6 narrowed identity sets), report 12159534943. FAILURE.
+   (c) Dispatch 39192611416, cancelled by API during the matrix (12 jobs in_progress): 12 E2E cancelled; aggregate RAN (job 117868860744): guard
+       FAILURE, Evaluate FAILURE (R7 no artifacts), report 12160342700. Run conclusion cancelled; aggregate conclusion FAILURE.
+   (d) Dispatch 39192798939, normal cancel sent WHILE the aggregate was running (03:08:03 UTC): 12 E2E success; aggregate job 117870258994 kept
+       running its always() steps (guard skipped — the cancel arrived after it), Evaluate FAILURE (R1/R5), report 12160054133. Run conclusion
+       cancelled; aggregate conclusion FAILURE.
+   (e) Dispatch 39193301960, FORCE-CANCEL (POST …/force-cancel, 202) while the aggregate was running: aggregate job 117871163541 terminated
+       during self-checks (cancelled), later steps skipped, annotation "The run was canceled forcefully"; aggregate conclusion CANCELLED; no report.
+   (f) Push run 39192144156 at 9f6cb69 (invalid expression): rejected at parse time — run conclusion FAILURE with zero jobs; no check of that name.
+   All five "Coach Core merge eligibility" check runs on bb157ba (API, by check name): 4 failure + 1 cancelled; ZERO success, ZERO skipped.
+   [aggregate-check-runs-bb157ba.json, run-<id>.json, run-<id>-jobs.json (with step conclusions), annotations-<job>.json, artifacts-<run>.json]
+ Platform limit, documented (not claimed): only a hard termination of the aggregate itself (force-cancel, runner loss) prevents a verdict; it ends
+   CANCELLED, never success/skipped. GitHub's status-check reference documents skipped => Success but does not state how a required cancelled check is
+   treated; that must be verified on the protected target before enforcement. Not tested here: required-check blocking under protection, merge
+   queue, trusted-event ELIGIBLE, missing-check behaviour, timeout (expected timed_out; not observed).
+
+Counts
+ node e2e/scripts/merge-eligibility.test.mjs on bb157ba: 33 tests — local full history 33 pass / 0 fail / 0 skipped [gate33.txt]; shallow clone (as CI)
+   27 pass / 0 fail / 6 skipped (5 dbf7a9a + 1 b139d18 reproduction checks — skips, not passes); CI self-check step SUCCESS in (a)–(d).
+ Reporter 10/10; evidence 19 = 18 pass + 1 root-only skip locally (unchanged). Playwright main config --list: 182 tests in 9 files (unchanged).
+ Codex's original adversarial.mjs is not re-counted (its fixture extraction is incompatible since b139d18); its cases remain in-suite.
+
+Preserved: all F1–F4 corrected false-ELIGIBLE regressions (29 checks), stale-attempt rejection (R4), B11 buckets/settings, B15 finalize/upload,
+ application code, browser assertions, membership 182, execution limits (workers 1, retries 0, 60 s/10 s/30 s, 120-min jobs; aggregate 20 min).
+Artifacts for independent inspection (not downloaded by me — blob storage unreachable): run 39192236298 (12 E2E + report 12159534943), 39192798939
+ (12 E2E + report 12160054133), reports 12160233711 and 12160342700; run 39193301960 has 12 E2E artifacts and no report (force-cancelled).
+No merge, deployment, production/protection change, recovery action or AI activation. MVP NO-GO.

@@ -1,0 +1,31 @@
+# B11 review repairs — read-only checks, 2026-10-17 (PR #73 head e5b33ef, base 7d56300)
+
+## Branch protection / rulesets (read-only; GET only)
+default_branch=master
+branches/recovery/coach-core-mvp-2026 protected=false; GET /branches/recovery/coach-core-mvp-2026/protection -> 404 'Branch not protected'
+branches/master protected=false; GET /branches/master/protection -> 404 'Branch not protected'
+branches/main protected=false; GET /branches/main/protection -> 404 'Branch not protected'
+branches/claude/n2-repair-acceptance-518e9e5 protected=false; GET /branches/claude/n2-repair-acceptance-518e9e5/protection -> 404 'Branch not protected'
+GET /rulesets -> []  (repository rulesets: none)
+GET /rules/branches/recovery%2Fcoach-core-mvp-2026 -> []  (effective rules incl. org-level: none)
+GET /rules/branches/master -> []
+Conclusion: no required status-check names exist, so renaming 'E2E emulator (<project>)' to 'E2E <bucket> (<project>)' collides with nothing. No protection setting was changed.
+
+## Base vs head test-list comparison (playwright test --list; head = union of the three buckets)
+grep-chromium                base= 38 head-union= 38 identical=yes dup=0
+grep-firefox                 base= 38 head-union= 38 identical=yes dup=0
+grep-phone-chromium          base=  2 head-union=  2 identical=yes dup=0
+grep-phone-firefox           base=  2 head-union=  2 identical=yes dup=0
+nogrep-chromium              base= 76 head-union= 76 identical=yes dup=0
+nogrep-firefox               base= 76 head-union= 76 identical=yes dup=0
+nogrep-phone-chromium        base= 15 head-union= 15 identical=yes dup=0
+nogrep-phone-firefox         base= 15 head-union= 15 identical=yes dup=0
+(grep variant used E2E_GREP='N2-|D10-0'; phone projects keep their PHONE_WORKFLOWS filter in both)
+
+## Artifact store
+Artifact metadata for all 12 jobs of runs 38969487220 and 38971253773 retrieved (names, sizes > 0, not expired). ZIP download (archive_download_url -> blob storage) is NOT reachable from the agent workspace: contents not inspected here. Mitigation in e5b33ef: each job emits an 'artifact manifest' annotation (file count, bytes, results.json digest, execution count, top-level names).
+
+## Reporter self-checks
+# tests 6
+# pass 6
+# fail 0

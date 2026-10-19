@@ -1,0 +1,52 @@
+E2E emulator (Chromium + Firefox) success 2026-10-15T13:12:08Z 2026-10-15T13:17:03Z sha=7094c849fd1d993470cc7e70b460a2ebe4ff4faa
+[warning] 
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+[warning] 
+The process '/usr/bin/git' failed with exit code 128
+
+[notice] E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+
+[notice] E2E firefox diag data: 10 executions
+PASS N2-D4 #0: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8125ms teams=1 net: [click@0] | WP 62-79 200 | WG:xmlhttp 81-8065 200 | WG:xmlhttp 124-8058 200 | [release@8042] | WG:xmlhttp 8060-8067 200 | WP 8073-8105 200 | WG:xmlhttp 8074-8104 200 | WG:xmlhttp 8110-open | [end@8125] | Listen: 2 req, 0 open
+PASS N2-D4 #1: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8096ms teams=1 net: [click@0] | WP 69-84 200 | WG:xmlhttp 87-8026 200 | WG:xmlhttp 120-8027 200 | [release@8015] | WP 8033-8061 200 | WG:xmlhttp 8035-8063 200 | WG:xmlhttp 8066-open | [end@8096] | Listen: 2 req, 0 open
+PASS N2-D4 #2: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8121ms teams=1 net: [click@1] | WP 60-75 200 | WG:xmlhttp 81-8064 200 | WG:xmlhttp 125-8063 200 | [release@8048] | WP 8066-8095 200 | WG:xmlhttp 8070-8094 200 | WG:xmlhttp 8107-open | [end@8122] | Listen: 2 req, 0 open
+PASS N2-D4 #3: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8098ms teams=1 net: [click@1] | WP 62-75 200 | WG:xmlhttp 77-8063 200 | WG:xmlhttp 109-8027 200 | [release@8017] | WP 8036-8065 200 | WG:xmlhttp 8037-8066 200 | WG:xmlhttp 8080-open | [end@8099] | Listen: 2 req, 0 open
+PASS N2-D4 #4: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8091ms teams=1 net: [click@1] | WP 67-87 200 | WG:xmlhttp 92-8028 200 | WG:xmlhttp 132-8028 200 | [release@8017] | WP 8032-8060 200 | WG:xmlhttp 8033-8061 200 | WG:xmlhttp 8066-open | [end@8092] | Listen: 2 req, 0 open
+PASS N2-D4 #5: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8102ms teams=1 net: [click@1] | WP 67-84 200 | WG:xmlhttp 86-8039 200 | WG:xmlhttp 128-8041 200 | [release@8030] | WP 8047-8075 200 | WG:xmlhttp 8048-8076 200 | WG:xmlhttp 8088-open | [end@8103] | Listen: 2 req, 0 open
+PASS N2-D4 #6: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8096ms teams=1 net: [click@1] | WP 62-75 200 | WG:xmlhttp 79-8030 200 | WG:xmlhttp 109-8030 200 | [release@8017] | WP 8038-8068 200 | WG:xmlhttp 8040-8069 200 | WG:xmlhttp 8073-open | [end@8097] | Listen: 2 req, 0 open
+PASS N2-D4 #7: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8091ms teams=1 net: [click@1] | WP 63-80 200 | WG:xmlhttp 82-8027 200 | WG:xmlhttp 124-8026 200 | [release@8014] | WP 8032-8065 200 | WG:xmlhttp 8033-8061 200 | WG:xmlhttp 8075-open | [end@8092] | Listen: 2 req, 0 open
+PASS N2-D4 #8: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8098ms teams=1 net: [click@1] | WP 66-83 200 | WG:xmlhttp 86-8064 200 | WG:xmlhttp 127-8024 200 | [release@8013] | WP 8032-8067 200 | WG:xmlhttp 8033-8068 200 | WG:xmlhttp 8088-open | [end@8099] | Listen: 2 req, 0 open
+PASS N2-D4 #9: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8128ms teams=1 net: [click@1] | WP 66-84 200 | WG:xmlhttp 87-8068 200 | WG:xmlhttp 128-8057 200 | [release@8047] | WG:xmlhttp 8064-8069 200 | WP 8074-8105 200 | WG:xmlhttp 8075-8104 200 | WG:xmlhttp 8110-open | [end@8129] | Listen: 2 req, 0 open
+
+[notice] E2E firefox slow steps >= 10s: 0 of 10 executions
+none
+
+[notice] E2E firefox: 10 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 N2-D4 [9.8/9.9/9.9s]
+
+[notice] E2E chromium diag data: 10 executions
+PASS N2-D4 #0: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8239ms teams=1 net: [click@1] | WP 103-237 200 | WG:xmlhttp 237-8122 200 | WG:xmlhttp 510-8074 200 | [release@8056] | WP 8073-8216 200 | WG:xmlhttp 8074-8219 200 | WG:xmlhttp 8220-open | [end@8240] | Listen: 2 req, 1 open
+PASS N2-D4 #1: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8126ms teams=1 net: [click@1] | WP 52-69 200 | WG:xmlhttp 69-8125 200 | WG:xmlhttp 106-8078 200 | [release@8057] | WP 8079-8107 200 | WG:xmlhttp 8080-8108 200 | WG:xmlhttp 8109-open | [end@8127] | Listen: 2 req, 0 open
+PASS N2-D4 #2: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8093ms teams=1 net: [click@1] | WP 55-73 200 | WG:xmlhttp 73-8091 200 | WG:xmlhttp 113-8044 200 | [release@8029] | WP 8045-8074 200 | WG:xmlhttp 8046-8076 200 | WG:xmlhttp 8077-open | [end@8094] | Listen: 2 req, 0 open
+PASS N2-D4 #3: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8069ms teams=1 net: [click@1] | WP 46-63 200 | WG:xmlhttp 64-8017 net::ERR_ABORTED | WG:xmlhttp 99-8018 200 | [release@8005] | WP 8019-8053 200 | WG:xmlhttp 8020-8050 200 | WG:xmlhttp 8051-open | [end@8070] | Listen: 2 req, 0 open
+PASS N2-D4 #4: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8117ms teams=1 net: [click@2] | WP 51-65 200 | WG:xmlhttp 66-8117 200 | WG:xmlhttp 98-8071 200 | [release@8053] | WP 8067-8097 200 | WG:xmlhttp 8072-8098 200 | WG:xmlhttp 8099-open | [end@8118] | Listen: 2 req, 0 open
+PASS N2-D4 #5: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8093ms teams=1 net: [click@0] | WP 49-70 200 | WG:xmlhttp 72-8089 200 | WG:xmlhttp 112-8040 200 | [release@8026] | WP 8042-8078 200 | WG:xmlhttp 8042-8082 200 | WG:xmlhttp 8082-open | [end@8093] | Listen: 2 req, 0 open
+PASS N2-D4 #6: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8076ms teams=1 net: [click@1] | WP 49-60 200 | WG:xmlhttp 60-8075 200 | WG:xmlhttp 84-8024 200 | [release@8005] | WG:xmlhttp 8025-8032 200 | WP 8036-8067 200 | WG:xmlhttp 8037-8068 200 | WG:xmlhttp 8070-open | [end@8077] | Listen: 2 req, 0 open
+PASS N2-D4 #7: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8085ms teams=1 net: [click@1] | WP 61-76 200 | WG:xmlhttp 78-8083 200 | WG:xmlhttp 112-8035 200 | [release@8018] | WP 8035-8070 200 | WG:xmlhttp 8037-8064 200 | WG:xmlhttp 8065-open | [end@8086] | Listen: 2 req, 0 open
+PASS N2-D4 #8: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8124ms teams=1 net: [click@2] | WP 69-86 200 | WG:xmlhttp 88-8125 200 | WG:xmlhttp 128-8068 200 | [release@8054] | WP 8076-8122 200 | WG:xmlhttp 8076-8117 200 | WG:xmlhttp 8118-open | [end@8126] | Listen: 2 req, 0 open
+PASS N2-D4 #9: D4 leg=backchannel held=2 server=-1ms serverAt8s=0 dialogClosedWhileHeld=false dialogClosed=8123ms teams=1 net: [click@0] | WP 62-78 200 | WG:xmlhttp 76-8118 200 | WG:xmlhttp 100-8068 200 | [release@8048] | WP 8064-8098 200 | WG:xmlhttp 8069-8099 200 | WG:xmlhttp 8103-open | [end@8123] | Listen: 2 req, 0 open
+
+[notice] E2E chromium slow steps >= 10s: 0 of 10 executions
+none
+
+[notice] E2E chromium: 10 passed / 0 failed / 0 blocked / 0 skipped
+PASS 10/10 N2-D4 [8.8/8.8/9.0s]
+
+[notice] Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.
+
+[notice] 
+"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+

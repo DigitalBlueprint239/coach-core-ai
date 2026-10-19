@@ -1,0 +1,76 @@
+E2E browsers
+chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)
+E2E firefox: 259 passed / 21 failed / 70 blocked / 0 skipped
+FAIL 1/10 D10-02 -- Error: expect(locator).toBeVisible() failed | Locator: getByText('Team created successfully!') | Expected: visible | Timeout: 10000ms
+FAIL 10/10 D10-06b -- Error: coach B must not be offered device plays coach A already imported | expect(locator).toHaveCount(expected) failed | Locator:  getByRole('region', { name: 
+FAIL 10/10 D10-07b -- Error: team B prompt must disclose the unfinished import into team A | expect(locator).toContainText(expected) failed | Locator: getByRole('region', { name: 'Im
+PASS 10/10 E2E-AI01
+PASS 10/10 E2E-A01
+PASS 10/10 E2E-A02
+PASS 10/10 E2E-A03
+PASS 10/10 E2E-A04
+PASS 10/10 E2E-A05
+PASS 10/10 E2E-A06
+PASS 10/10 E2E-A07
+PASS 10/10 E2E-A08
+PASS 10/10 E2E-A09
+PASS 10/10 D10-00
+PASS 10/10 D10-01
+PASS 10/10 D10-03
+PASS 10/10 D10-04
+PASS 10/10 D10-05
+PASS 10/10 D10-06
+PASS 10/10 D10-07
+PASS 10/10 D10-08
+PASS 10/10 D10-09
+PASS 10/10 D10-10
+PASS 10/10 D10-11
+PASS 10/10 E2E-C01
+BLOCKED E2E-P10 -- Codex: uid+team-scoped draft storage in SmartPlaybook.tsx / firestore.ts (contract P-10)
+BLOCKED E2E-P11 -- Codex: scoped draft keys coachcore:v1:{uid}:{teamId}:* (contract P-11)
+BLOCKED E2E-P12b -- Codex: guard UI registered via registerSignOutGuard (contract P-12b)
+BLOCKED E2E-P14 -- Codex: runTransaction(expectedRevision) + 3-way conflict UI (contract P-14); rules half co
+BLOCKED E2E-P15 -- Codex: Smart Playbook cloud save/load (today plays live only in localStorage smartPlaybook
+BLOCKED E2E-P16 -- Codex: PracticePlanner save/edit UI + coach-ai.v1 -> practicePlans mapping (contract §2); 
+BLOCKED E2E-P17 -- Codex: per-session offline queue (contract P-16)
+PASS 10/10 E2E-T01
+PASS 10/10 E2E-T02
+PASS 10/10 E2E-T03
+E2E chromium: 260 passed / 20 failed / 70 blocked / 0 skipped
+FAIL 10/10 D10-06b -- Error: coach B must not be offered device plays coach A already imported | expect(locator).toHaveCount(expected) failed | Locator:  getByRole('region', { name: 
+FAIL 10/10 D10-07b -- Error: team B prompt must disclose the unfinished import into team A | expect(locator).toContainText(expected) failed | Locator: getByRole('region', { name: 'Im
+PASS 10/10 E2E-AI01
+PASS 10/10 E2E-A01
+PASS 10/10 E2E-A02
+PASS 10/10 E2E-A03
+PASS 10/10 E2E-A04
+PASS 10/10 E2E-A05
+PASS 10/10 E2E-A06
+PASS 10/10 E2E-A07
+PASS 10/10 E2E-A08
+PASS 10/10 E2E-A09
+PASS 10/10 D10-00
+PASS 10/10 D10-01
+PASS 10/10 D10-02
+PASS 10/10 D10-03
+PASS 10/10 D10-04
+PASS 10/10 D10-05
+PASS 10/10 D10-06
+PASS 10/10 D10-07
+PASS 10/10 D10-08
+PASS 10/10 D10-09
+PASS 10/10 D10-10
+PASS 10/10 D10-11
+PASS 10/10 E2E-C01
+BLOCKED E2E-P10 -- Codex: uid+team-scoped draft storage in SmartPlaybook.tsx / firestore.ts (contract P-10)
+BLOCKED E2E-P11 -- Codex: scoped draft keys coachcore:v1:{uid}:{teamId}:* (contract P-11)
+BLOCKED E2E-P12b -- Codex: guard UI registered via registerSignOutGuard (contract P-12b)
+BLOCKED E2E-P14 -- Codex: runTransaction(expectedRevision) + 3-way conflict UI (contract P-14); rules half co
+BLOCKED E2E-P15 -- Codex: Smart Playbook cloud save/load (today plays live only in localStorage smartPlaybook
+BLOCKED E2E-P16 -- Codex: PracticePlanner save/edit UI + coach-ai.v1 -> practicePlans mapping (contract §2); 
+BLOCKED E2E-P17 -- Codex: per-session offline queue (contract P-16)
+PASS 10/10 E2E-T01
+PASS 10/10 E2E-T02
+PASS 10/10 E2E-T03
+Release-build proof (coach-core-mvp-staging-239): 13 passed
+No test hooks/emulator wiring/demo values in a release-shaped build; guard refuses emulator mode for real projects.

@@ -132,6 +132,14 @@ export const AuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) 
           <span className="text-gray-600" role="status">Loading…</span>
         </div>
       );
+    case 'signing_out':
+      // FX-03: no form, no buttons and no coaching content until the reload.
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center gap-2">
+          <span className="text-xl font-bold text-gray-900">Coach Core AI</span>
+          <span className="text-gray-600" role="status">Signing out…</span>
+        </div>
+      );
     case 'needs_email_confirmation':
       return <ConfirmEmailScreen />;
     case 'unverified':

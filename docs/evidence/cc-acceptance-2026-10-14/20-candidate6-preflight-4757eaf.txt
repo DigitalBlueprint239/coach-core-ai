@@ -1,0 +1,13 @@
+candidate 6 4757eaf clean preflight
+== npm ci --legacy-peer-deps
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+== jest
+Test Suites: 29 passed, 29 total
+Tests:       434 passed, 434 total
+== tsc --noEmit exit 0
+== npm audit --omit=dev
+found 0 vulnerabilities
