@@ -1,0 +1,34 @@
+[
+  {
+    "id": 12227207957,
+    "name": "film-client-contract-29dfce93f29b698cb6d199d38e62f47626f57ffc-39338468243-1",
+    "digest": "sha256:d70cbf7e1121cc51469cc74d8d076923721cb2386aeba925e2820b98a90f3ae0",
+    "archive_verified": true,
+    "tests": 146,
+    "failed": 0,
+    "skipped": 0,
+    "fs26_exit": 0,
+    "typescript_exit": 0,
+    "files": {
+      "fs26.exit": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "fs26.log": "c540c0f86a221fb9da1149ddc8e36db573af92ace5f034c2c807d90a99c9b4a0",
+      "typescript.log": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    }
+  },
+  {
+    "id": 12228380586,
+    "name": "film-client-contract-5be29c420d5f27395175849b8ea77f7fcf3af215-39338472033-1",
+    "digest": "sha256:aeb9aebf40a0b4403a1ae281d809250ce7bc6353cdd96cadbd3939f5971a9e17",
+    "archive_verified": true,
+    "tests": 146,
+    "failed": 0,
+    "skipped": 0,
+    "fs26_exit": 0,
+    "typescript_exit": 0,
+    "files": {
+      "fs26.exit": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "fs26.log": "9d384e6deb6e9be335a38a37a6434f0a68951e6704be35ded950565bae9bea68",
+      "typescript.log": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    }
+  }
+]
