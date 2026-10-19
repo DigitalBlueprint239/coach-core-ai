@@ -1,0 +1,1226 @@
+[
+  {
+    "id": 12160342700,
+    "run": 39192611416,
+    "digest": "sha256:14172788b4860e391698219d7ec93a5283a10c23134f28ce3621fc25e822a667",
+    "files": 2,
+    "reasons": [
+      "R7 could not gather inputs (fail closed): artifacts directory gate/artifacts does not exist",
+      "R1 event \"workflow_dispatch\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+      "R2 E2E acceptance (chromium): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E acceptance (firefox): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E acceptance (phone-chromium): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (phone-chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (phone-chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E acceptance (phone-firefox): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (phone-firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (phone-firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)"
+    ],
+    "gatherErrors": [
+      "artifacts directory gate/artifacts does not exist"
+    ]
+  },
+  {
+    "id": 12161045114,
+    "run": 39192236298,
+    "digest": "sha256:72d19b1676cc199d5eed15bf66bdb266e4470e7f9a6250f7f8da64438e10359d",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:18.739Z",
+      "duration": 6137.723,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160751255,
+    "run": 39192236298,
+    "digest": "sha256:e4f1c60335e71661f0de7609ccd5c9074ce76cfdbbcf12b3d5c761c2a6b60e0f",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:57:45.684Z",
+      "duration": 503.60900000000004,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160726618,
+    "run": 39192236298,
+    "digest": "sha256:8b92462dad6e651a8e9f9b89322c6fc27cb3401161dc81faa5971cc0c9347572",
+    "files": 12,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:33.059Z",
+      "duration": 62907.272,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "last": {
+      "status": "failed",
+      "failedTests": [
+        "f1fe33de864ec03361b0-6d34d31b6605f6a419d9"
+      ]
+    },
+    "exit": "exit=1",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160666744,
+    "run": 39192236298,
+    "digest": "sha256:e5a29c16925e78ed562d1a7979a73f8175d4019595eac10585623e0d21680014",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:57:39.150Z",
+      "duration": 4081.7139999999995,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160527415,
+    "run": 39192236298,
+    "digest": "sha256:665215ed9580dfe26baad92588dcbb547f4fc8e084fe72b0b94f5d382a417535",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:19.745Z",
+      "duration": 679.0900000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160437864,
+    "run": 39192236298,
+    "digest": "sha256:6cf2aea449452983b837ffd582ad100a932a42bbf16e9e3cca5eded37399f2c0",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:06.615Z",
+      "duration": 5009.578,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160396940,
+    "run": 39192236298,
+    "digest": "sha256:4904580c6c2661d895a5648000bf196ad26cfb35cfe205235b9c38b6773d83f5",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:13.809Z",
+      "duration": 10180.094000000001,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160267438,
+    "run": 39192236298,
+    "digest": "sha256:894d4dc493f5b086d75069f8d52b28f14e96a01279db59743f344a022d39894a",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:57:54.791Z",
+      "duration": 3551.4519999999998,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12159729151,
+    "run": 39192236298,
+    "digest": "sha256:317e63952b82e05ef0fb40cd79b429196f8c3893c88b5a44b828de110e91766c",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:17.514Z",
+      "duration": 4458.439,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12159664272,
+    "run": 39192236298,
+    "digest": "sha256:275d84d841931ca706bddf1efa3bcce397e35e50946695e7a0d89fdee4cca0ce",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:14.002Z",
+      "duration": 655.457,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12159664270,
+    "run": 39192236298,
+    "digest": "sha256:7af8376e5445e6182b5d85cd7fa2a96e0c8572ef512bda0ba6b2db92ff18cb0d",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:13.118Z",
+      "duration": 671.3689999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12159534943,
+    "run": 39192236298,
+    "digest": "sha256:20d1221c3770c8709df63318587e622e297b9ba0d4750fcff1b1069ccf06c991",
+    "files": 2,
+    "reasons": [
+      "R1 event \"workflow_dispatch\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+      "R5 E2E acceptance (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (chromium): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R5 E2E diagnostic (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (chromium): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R5 E2E obsolete-fault-model (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R5 E2E diagnostic (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (firefox): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R5 E2E obsolete-fault-model (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R5 E2E diagnostic (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E obsolete-fault-model (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R5 E2E diagnostic (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E obsolete-fault-model (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection"
+    ],
+    "gatherErrors": []
+  },
+  {
+    "id": 12159449902,
+    "run": 39192236298,
+    "digest": "sha256:3191d1bfbbc92ab52ae86a8263fa340930cd94c522a76eaafa86edadffb9a06c",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192236298",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T02:58:17.574Z",
+      "duration": 2836.51,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161400074,
+    "run": 39193301960,
+    "digest": "sha256:a8afaf15f39fbe97a04485f190b93fb84c3fb94656a7f46b0e83ed3081a86bfc",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:10:50.655Z",
+      "duration": 8380.937,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161185624,
+    "run": 39193301960,
+    "digest": "sha256:5a2b50cd5978ca08c15ae2f1abc1803f9d71ef845b2676b548b8d190cefc5021",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:09.247Z",
+      "duration": 670.878,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161160621,
+    "run": 39193301960,
+    "digest": "sha256:d3482948f6dcb2eead2a6bffce1c927e13b26b9390a5be70153fbd1c8deefb96",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:10:49.946Z",
+      "duration": 9447.501,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161131358,
+    "run": 39193301960,
+    "digest": "sha256:510a51923d33a34250d32cc93d241779648633c955ea58813a4682004d0c3334",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:13.986Z",
+      "duration": 662.116,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161036838,
+    "run": 39193301960,
+    "digest": "sha256:604c7a6d8640c308e748e1e3199d8155aa3bc399444b06d27d9ab50f3e3edff6",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:10:31.249Z",
+      "duration": 4415.0419999999995,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160509478,
+    "run": 39193301960,
+    "digest": "sha256:fa46572a8b94751fdc9387ad55cf060d3a545f793349aa727a83153197592ec0",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:21.217Z",
+      "duration": 682.863,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160378284,
+    "run": 39193301960,
+    "digest": "sha256:85ed45c24ffdd195c6ba8abad73c9e06a260548c92239c0a79aac42d97eaa915",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:00.593Z",
+      "duration": 4884.21,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160278754,
+    "run": 39193301960,
+    "digest": "sha256:aaf605901ccd8906f524f50b4e4ff19e9b88c31bad5adbd83d95baad98e0b949",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:00.902Z",
+      "duration": 5923.369000000001,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160273802,
+    "run": 39193301960,
+    "digest": "sha256:6ab19752063d4ff575e8e676e99bfea3640f60309c84d67a6cb3d5acf9228a30",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:00.283Z",
+      "duration": 2593.066,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160059480,
+    "run": 39193301960,
+    "digest": "sha256:e33311599e18ba2bf5b5f68d5603aa2b869a5625dfbabb9e4b926d0c5a0494c8",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:10:52.548Z",
+      "duration": 3496.17,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160044636,
+    "run": 39193301960,
+    "digest": "sha256:f88bd5430acda8442ee316c69f89a6b6612509ce83471e2c4552c8921761fc5f",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:09.215Z",
+      "duration": 664.445,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12159979786,
+    "run": 39193301960,
+    "digest": "sha256:8555a5a5c41733fa06dcaba9883e55441845aedf00ce1f784bd1d9e869b69ff8",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39193301960",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:11:08.033Z",
+      "duration": 3926.3420000000006,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160233711,
+    "run": 39192236704,
+    "digest": "sha256:104e7f2a899dc30d152659eb26da10db5332f91edc5c361cd1ab1ca37da36231",
+    "files": 2,
+    "reasons": [
+      "R7 could not gather inputs (fail closed): artifacts directory gate/artifacts does not exist",
+      "R1 event \"push\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+      "R2 E2E acceptance (chromium): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E acceptance (firefox): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E acceptance (phone-chromium): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (phone-chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (phone-chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E acceptance (phone-firefox): required acceptance job concluded \"cancelled\"",
+      "R2 E2E diagnostic (phone-firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+      "R2 E2E obsolete-fault-model (phone-firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)"
+    ],
+    "gatherErrors": [
+      "artifacts directory gate/artifacts does not exist"
+    ]
+  },
+  {
+    "id": 12161290002,
+    "run": 39192798939,
+    "digest": "sha256:ca47eec66a98c7ef84869c03f0cf97166e8f2e35573aaab05abebc428b50d8f0",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:07:39.161Z",
+      "duration": 5040.482,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161225235,
+    "run": 39192798939,
+    "digest": "sha256:5253ae21db949e5ecc380bf747ccfbedbe6a465d7b02c15d7f0579a8a8ce738e",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:53.878Z",
+      "duration": 6170.085,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161090266,
+    "run": 39192798939,
+    "digest": "sha256:6738ac7480626c735a3ec25437aee88e165516efc56e54ade3a9f662eb3ca983",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:05:02.338Z",
+      "duration": 686.09,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161075714,
+    "run": 39192798939,
+    "digest": "sha256:58a40a35ce76c3b4a1f962e6e1a8fe82fe00cbd3f8b667ad0bd936f89ad38d6f",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:16.659Z",
+      "duration": 455.50100000000003,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161065874,
+    "run": 39192798939,
+    "digest": "sha256:ec96441e0e7248a6379a548fa5f3629be02c7f575c143fb4bc4303826de778c9",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:42.585Z",
+      "duration": 10097.693000000001,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12161030864,
+    "run": 39192798939,
+    "digest": "sha256:da58d619843529df12eebf18a468997065c32a85603196d73e5d18c22f6fac8d",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:22.086Z",
+      "duration": 413.595,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160951367,
+    "run": 39192798939,
+    "digest": "sha256:29eef22695866ac54b8cb9b37310efb7f9154109f78fe9d6c3e7566478a6181d",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:05:04.571Z",
+      "duration": 682.049,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160786976,
+    "run": 39192798939,
+    "digest": "sha256:73decb8616b4e9ffdaba7cb27ce7146f22e75dc247b85d3af3d9d3e5dbe990ec",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:53.964Z",
+      "duration": 3005.825,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160667815,
+    "run": 39192798939,
+    "digest": "sha256:a15102a6a733352c7f2226935c8c36ed9eb00fda229d59196076a124c570cf8e",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:55.630Z",
+      "duration": 8037.319,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160662696,
+    "run": 39192798939,
+    "digest": "sha256:88bce28bc9860d0f3f70ca28681b3422cced7042c7435ff1b04f89ae142f0629",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:05:04.430Z",
+      "duration": 5120.973,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160548110,
+    "run": 39192798939,
+    "digest": "sha256:566f9111f41b17edde22fd3b7700366f0cb181dc7b1e452b15e2491f6093410c",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:15.548Z",
+      "duration": 2853.807,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160453566,
+    "run": 39192798939,
+    "digest": "sha256:0ed1938cdc493e24e84a37dfc58b63b400a4ba5eb9ed87b7399e224cb5c2cda2",
+    "files": 9,
+    "context": {
+      "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "event": "workflow_dispatch",
+      "run_id": "39192798939",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "stats": {
+      "startTime": "2026-10-19T03:04:37.116Z",
+      "duration": 5114.024,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "last": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "exit": "exit=0",
+    "inventory_complete": true
+  },
+  {
+    "id": 12160054133,
+    "run": 39192798939,
+    "digest": "sha256:6397ad07804d25e259d95f965b5b728b66c0f065df44a42a914923bf35f5a906",
+    "files": 2,
+    "reasons": [
+      "R1 event \"workflow_dispatch\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+      "R5 E2E acceptance (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (chromium): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R5 E2E diagnostic (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (chromium): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R5 E2E obsolete-fault-model (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R5 E2E diagnostic (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (firefox): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R5 E2E obsolete-fault-model (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R5 E2E diagnostic (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E obsolete-fault-model (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R5 E2E diagnostic (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E obsolete-fault-model (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection"
+    ],
+    "gatherErrors": []
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "head": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+  "base": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+  "previous": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+  "changed_vs_previous": [
+    ".github/workflows/e2e-emulator.yml",
+    "docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md",
+    "e2e/scripts/merge-eligibility.mjs",
+    "e2e/scripts/merge-eligibility.test.mjs"
+  ],
+  "changed_vs_base": [
+    ".github/workflows/e2e-emulator.yml",
+    "docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md",
+    "e2e/package.json",
+    "e2e/scripts/merge-eligibility.mjs",
+    "e2e/scripts/merge-eligibility.test.mjs"
+  ],
+  "actionlint": {
+    "version": "1.7.7",
+    "exit": 0,
+    "diagnostics": []
+  },
+  "node": "24.19.0",
+  "npm": "11.9.0"
+}

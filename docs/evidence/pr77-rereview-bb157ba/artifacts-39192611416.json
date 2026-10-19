@@ -1,0 +1,25 @@
+{
+  "total_count": 1,
+  "artifacts": [
+    {
+      "id": 12160342700,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDM0MjcwMA==",
+      "name": "merge-eligibility-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 1733,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160342700",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160342700/zip",
+      "expired": false,
+      "digest": "sha256:14172788b4860e391698219d7ec93a5283a10c23134f28ce3621fc25e822a667",
+      "created_at": "2026-10-19T03:02:31Z",
+      "updated_at": "2026-10-19T03:02:31Z",
+      "expires_at": "2026-11-02T03:02:30Z",
+      "workflow_run": {
+        "id": 39192611416,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    }
+  ]
+}

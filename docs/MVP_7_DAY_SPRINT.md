@@ -151,3 +151,8 @@ in `docs/evidence/b11-b15-integration-2026-10-17/`.
 This is NOT independent combined-candidate acceptance. Bounded combined CI/ZIP review,
 PR72/default-off import configuration and recovery integration remain separate.
 No full matrix, merge, deployment, protection change or AI activation; MVP NO-GO.
+
+
+## 2026-10-19 — independent PR77 re-review at bb157ba
+
+Implementation PASS at bb157ba057913bd0835db8df9ca5eb569df0011f versus efc9116; enforcement NOT READY. Previous root-symlink defect corrected;33/33 local, CI27pass/6history skips; actionlint1.7.7 clean; all40 new ZIPs (36 E2E inventories/four reports) verified and four reports independently recomputed. Five aggregate outcomes:4failure/1cancelled, not protection proof. Exact remaining platform/combined-candidate/release/support owners and criteria: docs/PR77_REREVIEW_BB157BA.md. Evidence: docs/evidence/pr77-rereview-bb157ba. PR78 acceptance4f6b901 unchanged. Evidence-only review branch; no integration/settings/deployment/AI changes; MVP NO-GO.

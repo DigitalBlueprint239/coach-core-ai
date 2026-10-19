@@ -1,0 +1,65 @@
+[
+  {
+    "kind": "artifact",
+    "rejected": true,
+    "forbidden_calls": 0,
+    "accesses": []
+  },
+  {
+    "kind": "ci-evidence",
+    "rejected": true,
+    "forbidden_calls": 0,
+    "accesses": [
+      [
+        "realpathSync",
+        "/workspace/scratch/review77-r3/no-read-H21QCA/artifact"
+      ]
+    ]
+  },
+  {
+    "kind": "test-results",
+    "rejected": true,
+    "forbidden_calls": 0,
+    "accesses": [
+      [
+        "realpathSync",
+        "/workspace/scratch/review77-r3/no-read-Jfmr5n/artifact"
+      ],
+      [
+        "realpathSync",
+        "/workspace/scratch/review77-r3/no-read-Jfmr5n/artifact/ci-evidence"
+      ]
+    ]
+  },
+  {
+    "kind": "subdir",
+    "rejected": true,
+    "forbidden_calls": 0,
+    "accesses": [
+      [
+        "realpathSync",
+        "/workspace/scratch/review77-r3/no-read-ERhiu9/artifact"
+      ],
+      [
+        "realpathSync",
+        "/workspace/scratch/review77-r3/no-read-ERhiu9/artifact/ci-evidence"
+      ],
+      [
+        "realpathSync",
+        "/workspace/scratch/review77-r3/no-read-ERhiu9/artifact/test-results"
+      ],
+      [
+        "readdirSync",
+        "/workspace/scratch/review77-r3/no-read-ERhiu9/artifact"
+      ],
+      [
+        "readdirSync",
+        "/workspace/scratch/review77-r3/no-read-ERhiu9/artifact/ci-evidence"
+      ],
+      [
+        "readdirSync",
+        "/workspace/scratch/review77-r3/no-read-ERhiu9/artifact/test-results"
+      ]
+    ]
+  }
+]

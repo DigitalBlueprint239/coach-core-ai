@@ -1,0 +1,266 @@
+{
+  "eligible": false,
+  "reasons": [
+    "R7 could not gather inputs (fail closed): artifacts directory gate/artifacts does not exist",
+    "R1 event \"push\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+    "R2 E2E acceptance (chromium): required acceptance job concluded \"cancelled\"",
+    "R2 E2E diagnostic (chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E obsolete-fault-model (chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E acceptance (firefox): required acceptance job concluded \"cancelled\"",
+    "R2 E2E diagnostic (firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E obsolete-fault-model (firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E acceptance (phone-chromium): required acceptance job concluded \"cancelled\"",
+    "R2 E2E diagnostic (phone-chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E obsolete-fault-model (phone-chromium): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E acceptance (phone-firefox): required acceptance job concluded \"cancelled\"",
+    "R2 E2E diagnostic (phone-firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)",
+    "R2 E2E obsolete-fault-model (phone-firefox): job concluded \"cancelled\" (cancelled/skipped/timed out jobs leave coverage unproven)"
+  ],
+  "rows": [
+    {
+      "job": "E2E acceptance (chromium)",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 65,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (chromium)",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 10,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (chromium)",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 1,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (firefox)",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 65,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (firefox)",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 10,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (firefox)",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 1,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 15,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 0,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 0,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 15,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 0,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "cancelled",
+      "artifact": "missing",
+      "selected": 0,
+      "executed": null,
+      "passed": null,
+      "failed": null,
+      "verdict": "FAIL",
+      "notes": []
+    }
+  ],
+  "sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+  "headSha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+  "event": "push",
+  "runId": "39192236704",
+  "attempt": "1",
+  "repeat": 1,
+  "gatherErrors": [
+    "artifacts directory gate/artifacts does not exist"
+  ],
+  "artifactsSeen": [],
+  "jobsSeen": [
+    {
+      "name": "E2E obsolete-fault-model (phone-chromium)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E diagnostic (firefox)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E diagnostic (phone-chromium)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E obsolete-fault-model (chromium)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E acceptance (phone-firefox)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E diagnostic (phone-firefox)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E obsolete-fault-model (phone-firefox)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E acceptance (phone-chromium)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E diagnostic (chromium)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E acceptance (firefox)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E acceptance (chromium)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "E2E obsolete-fault-model (firefox)",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "Coach Core merge eligibility",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ]
+}

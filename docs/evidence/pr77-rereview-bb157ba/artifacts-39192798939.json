@@ -1,0 +1,265 @@
+{
+  "total_count": 13,
+  "artifacts": [
+    {
+      "id": 12161290002,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MTI5MDAwMg==",
+      "name": "e2e-results-acceptance-phone-chromium-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 7612,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161290002",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161290002/zip",
+      "expired": false,
+      "digest": "sha256:ca47eec66a98c7ef84869c03f0cf97166e8f2e35573aaab05abebc428b50d8f0",
+      "created_at": "2026-10-19T03:07:48Z",
+      "updated_at": "2026-10-19T03:07:48Z",
+      "expires_at": "2026-11-02T03:07:47Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12161225235,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MTIyNTIzNQ==",
+      "name": "e2e-results-acceptance-firefox-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 7417,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161225235",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161225235/zip",
+      "expired": false,
+      "digest": "sha256:5253ae21db949e5ecc380bf747ccfbedbe6a465d7b02c15d7f0579a8a8ce738e",
+      "created_at": "2026-10-19T03:05:03Z",
+      "updated_at": "2026-10-19T03:05:03Z",
+      "expires_at": "2026-11-02T03:05:02Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12161090266,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MTA5MDI2Ng==",
+      "name": "e2e-results-obsolete-fault-model-phone-chromium-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 5686,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161090266",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161090266/zip",
+      "expired": false,
+      "digest": "sha256:6738ac7480626c735a3ec25437aee88e165516efc56e54ade3a9f662eb3ca983",
+      "created_at": "2026-10-19T03:05:08Z",
+      "updated_at": "2026-10-19T03:05:08Z",
+      "expires_at": "2026-11-02T03:05:07Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12161075714,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MTA3NTcxNA==",
+      "name": "e2e-results-diagnostic-phone-chromium-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 5683,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161075714",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161075714/zip",
+      "expired": false,
+      "digest": "sha256:58a40a35ce76c3b4a1f962e6e1a8fe82fe00cbd3f8b667ad0bd936f89ad38d6f",
+      "created_at": "2026-10-19T03:04:19Z",
+      "updated_at": "2026-10-19T03:04:19Z",
+      "expires_at": "2026-11-02T03:04:19Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12161065874,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MTA2NTg3NA==",
+      "name": "e2e-results-obsolete-fault-model-firefox-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 6472,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161065874",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161065874/zip",
+      "expired": false,
+      "digest": "sha256:ec96441e0e7248a6379a548fa5f3629be02c7f575c143fb4bc4303826de778c9",
+      "created_at": "2026-10-19T03:04:55Z",
+      "updated_at": "2026-10-19T03:04:55Z",
+      "expires_at": "2026-11-02T03:04:55Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12161030864,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MTAzMDg2NA==",
+      "name": "e2e-results-obsolete-fault-model-phone-firefox-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 5656,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161030864",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12161030864/zip",
+      "expired": false,
+      "digest": "sha256:da58d619843529df12eebf18a468997065c32a85603196d73e5d18c22f6fac8d",
+      "created_at": "2026-10-19T03:04:27Z",
+      "updated_at": "2026-10-19T03:04:27Z",
+      "expires_at": "2026-11-02T03:04:26Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160951367,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDk1MTM2Nw==",
+      "name": "e2e-results-diagnostic-phone-firefox-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 5648,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160951367",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160951367/zip",
+      "expired": false,
+      "digest": "sha256:29eef22695866ac54b8cb9b37310efb7f9154109f78fe9d6c3e7566478a6181d",
+      "created_at": "2026-10-19T03:05:09Z",
+      "updated_at": "2026-10-19T03:05:09Z",
+      "expires_at": "2026-11-02T03:05:08Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160786976,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDc4Njk3Ng==",
+      "name": "e2e-results-diagnostic-chromium-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 6564,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160786976",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160786976/zip",
+      "expired": false,
+      "digest": "sha256:73decb8616b4e9ffdaba7cb27ce7146f22e75dc247b85d3af3d9d3e5dbe990ec",
+      "created_at": "2026-10-19T03:05:00Z",
+      "updated_at": "2026-10-19T03:05:00Z",
+      "expires_at": "2026-11-02T03:04:59Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160667815,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDY2NzgxNQ==",
+      "name": "e2e-results-obsolete-fault-model-chromium-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 6494,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160667815",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160667815/zip",
+      "expired": false,
+      "digest": "sha256:a15102a6a733352c7f2226935c8c36ed9eb00fda229d59196076a124c570cf8e",
+      "created_at": "2026-10-19T03:05:07Z",
+      "updated_at": "2026-10-19T03:05:07Z",
+      "expires_at": "2026-11-02T03:05:06Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160662696,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDY2MjY5Ng==",
+      "name": "e2e-results-diagnostic-firefox-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 6545,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160662696",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160662696/zip",
+      "expired": false,
+      "digest": "sha256:88bce28bc9860d0f3f70ca28681b3422cced7042c7435ff1b04f89ae142f0629",
+      "created_at": "2026-10-19T03:05:14Z",
+      "updated_at": "2026-10-19T03:05:14Z",
+      "expires_at": "2026-11-02T03:05:13Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160548110,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDU0ODExMA==",
+      "name": "e2e-results-acceptance-chromium-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 7624,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160548110",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160548110/zip",
+      "expired": false,
+      "digest": "sha256:566f9111f41b17edde22fd3b7700366f0cb181dc7b1e452b15e2491f6093410c",
+      "created_at": "2026-10-19T03:04:24Z",
+      "updated_at": "2026-10-19T03:04:24Z",
+      "expires_at": "2026-11-02T03:04:23Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160453566,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDQ1MzU2Ng==",
+      "name": "e2e-results-acceptance-phone-firefox-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 7626,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160453566",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160453566/zip",
+      "expired": false,
+      "digest": "sha256:0ed1938cdc493e24e84a37dfc58b63b400a4ba5eb9ed87b7399e224cb5c2cda2",
+      "created_at": "2026-10-19T03:04:46Z",
+      "updated_at": "2026-10-19T03:04:46Z",
+      "expires_at": "2026-11-02T03:04:45Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    },
+    {
+      "id": 12160054133,
+      "node_id": "MDg6QXJ0aWZhY3QxMjE2MDA1NDEzMw==",
+      "name": "merge-eligibility-bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "size_in_bytes": 2439,
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160054133",
+      "archive_download_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/artifacts/12160054133/zip",
+      "expired": false,
+      "digest": "sha256:6397ad07804d25e259d95f965b5b728b66c0f065df44a42a914923bf35f5a906",
+      "created_at": "2026-10-19T03:08:28Z",
+      "updated_at": "2026-10-19T03:08:28Z",
+      "expires_at": "2026-11-02T03:08:27Z",
+      "workflow_run": {
+        "id": 39192798939,
+        "repository_id": 1018633922,
+        "head_repository_id": 1018633922,
+        "head_branch": "claude/ci-merge-eligibility-gate",
+        "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f"
+      }
+    }
+  ]
+}

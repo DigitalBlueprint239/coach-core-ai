@@ -1,0 +1,2769 @@
+{
+  "total_count": 13,
+  "jobs": [
+    {
+      "id": 117867485782,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMaVg",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485782",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485782",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:57:49Z",
+      "name": "E2E acceptance (phone-firefox)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:22Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:22Z",
+          "completed_at": "2026-10-19T02:56:22Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:22Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:37Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:37Z",
+          "completed_at": "2026-10-19T02:57:05Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:05Z",
+          "completed_at": "2026-10-19T02:57:05Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:05Z",
+          "completed_at": "2026-10-19T02:57:05Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:05Z",
+          "completed_at": "2026-10-19T02:57:06Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:06Z",
+          "completed_at": "2026-10-19T02:57:19Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:19Z",
+          "completed_at": "2026-10-19T02:57:28Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:28Z",
+          "completed_at": "2026-10-19T02:57:44Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:57:44Z",
+          "completed_at": "2026-10-19T02:57:44Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:57:44Z",
+          "completed_at": "2026-10-19T02:57:45Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:57:45Z",
+          "completed_at": "2026-10-19T02:57:45Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:57:45Z",
+          "completed_at": "2026-10-19T02:57:45Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:57:45Z",
+          "completed_at": "2026-10-19T02:57:45Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:57:45Z",
+          "completed_at": "2026-10-19T02:57:46Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:57:46Z",
+          "completed_at": "2026-10-19T02:57:46Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:57:46Z",
+          "completed_at": "2026-10-19T02:57:46Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:57:46Z",
+          "completed_at": "2026-10-19T02:57:46Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:57:46Z",
+          "completed_at": "2026-10-19T02:57:46Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:57:46Z",
+          "completed_at": "2026-10-19T02:57:46Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485782",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002707,
+      "runner_name": "GitHub Actions 1000002707",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485882,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMaug",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485882",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485882",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:59:43Z",
+      "name": "E2E obsolete-fault-model (chromium)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:19Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:27Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:27Z",
+          "completed_at": "2026-10-19T02:56:57Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:57Z",
+          "completed_at": "2026-10-19T02:57:35Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:35Z",
+          "completed_at": "2026-10-19T02:57:35Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:35Z",
+          "completed_at": "2026-10-19T02:57:35Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:35Z",
+          "completed_at": "2026-10-19T02:57:37Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:37Z",
+          "completed_at": "2026-10-19T02:58:00Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:58:00Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 13,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:59:37Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:59:37Z",
+          "completed_at": "2026-10-19T02:59:37Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:59:37Z",
+          "completed_at": "2026-10-19T02:59:38Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:59:38Z",
+          "completed_at": "2026-10-19T02:59:38Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:59:38Z",
+          "completed_at": "2026-10-19T02:59:38Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:59:38Z",
+          "completed_at": "2026-10-19T02:59:38Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:59:38Z",
+          "completed_at": "2026-10-19T02:59:40Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 35,
+          "started_at": "2026-10-19T02:59:40Z",
+          "completed_at": "2026-10-19T02:59:40Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:59:40Z",
+          "completed_at": "2026-10-19T02:59:40Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 37,
+          "started_at": "2026-10-19T02:59:40Z",
+          "completed_at": "2026-10-19T02:59:40Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:59:40Z",
+          "completed_at": "2026-10-19T02:59:40Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:59:40Z",
+          "completed_at": "2026-10-19T02:59:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485882",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002706,
+      "runner_name": "GitHub Actions 1000002706",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485902,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMazg",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485902",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485902",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:57:53Z",
+      "name": "E2E obsolete-fault-model (phone-chromium)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:19Z",
+          "completed_at": "2026-10-19T02:56:22Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:22Z",
+          "completed_at": "2026-10-19T02:56:22Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:22Z",
+          "completed_at": "2026-10-19T02:56:25Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:25Z",
+          "completed_at": "2026-10-19T02:56:39Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:39Z",
+          "completed_at": "2026-10-19T02:57:05Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:05Z",
+          "completed_at": "2026-10-19T02:57:05Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:05Z",
+          "completed_at": "2026-10-19T02:57:05Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:05Z",
+          "completed_at": "2026-10-19T02:57:06Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:06Z",
+          "completed_at": "2026-10-19T02:57:22Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:22Z",
+          "completed_at": "2026-10-19T02:57:31Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:31Z",
+          "completed_at": "2026-10-19T02:57:47Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:57:47Z",
+          "completed_at": "2026-10-19T02:57:47Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:57:47Z",
+          "completed_at": "2026-10-19T02:57:48Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:57:48Z",
+          "completed_at": "2026-10-19T02:57:48Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:57:48Z",
+          "completed_at": "2026-10-19T02:57:48Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:57:48Z",
+          "completed_at": "2026-10-19T02:57:48Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:57:48Z",
+          "completed_at": "2026-10-19T02:57:49Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:57:49Z",
+          "completed_at": "2026-10-19T02:57:49Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:57:49Z",
+          "completed_at": "2026-10-19T02:57:49Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:57:49Z",
+          "completed_at": "2026-10-19T02:57:49Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:57:49Z",
+          "completed_at": "2026-10-19T02:57:50Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:57:50Z",
+          "completed_at": "2026-10-19T02:57:50Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485902",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002709,
+      "runner_name": "GitHub Actions 1000002709",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485928,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMa6A",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485928",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485928",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:30Z",
+      "name": "E2E acceptance (chromium)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:19Z",
+          "completed_at": "2026-10-19T02:56:22Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:22Z",
+          "completed_at": "2026-10-19T02:56:23Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:23Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:53Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:53Z",
+          "completed_at": "2026-10-19T02:57:19Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:19Z",
+          "completed_at": "2026-10-19T02:57:19Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:19Z",
+          "completed_at": "2026-10-19T02:57:19Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:19Z",
+          "completed_at": "2026-10-19T02:57:21Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:21Z",
+          "completed_at": "2026-10-19T02:57:44Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:44Z",
+          "completed_at": "2026-10-19T02:57:59Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:59Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:25Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:25Z",
+          "completed_at": "2026-10-19T02:58:25Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:25Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485928",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002710,
+      "runner_name": "GitHub Actions 1000002710",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485950,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMa_g",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485950",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485950",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:19Z",
+      "name": "E2E diagnostic (phone-firefox)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:17Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:17Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:21Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:21Z",
+          "completed_at": "2026-10-19T02:56:49Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:49Z",
+          "completed_at": "2026-10-19T02:57:18Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:18Z",
+          "completed_at": "2026-10-19T02:57:18Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:18Z",
+          "completed_at": "2026-10-19T02:57:18Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:18Z",
+          "completed_at": "2026-10-19T02:57:20Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:20Z",
+          "completed_at": "2026-10-19T02:57:43Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:43Z",
+          "completed_at": "2026-10-19T02:57:57Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:57Z",
+          "completed_at": "2026-10-19T02:58:14Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:14Z",
+          "completed_at": "2026-10-19T02:58:14Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:14Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485950",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002716,
+      "runner_name": "GitHub Actions 1000002716",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485969,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMbEQ",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485969",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485969",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:18Z",
+      "name": "E2E diagnostic (firefox)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:17Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:17Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:21Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:21Z",
+          "completed_at": "2026-10-19T02:56:49Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:49Z",
+          "completed_at": "2026-10-19T02:57:14Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:14Z",
+          "completed_at": "2026-10-19T02:57:14Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:14Z",
+          "completed_at": "2026-10-19T02:57:14Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:14Z",
+          "completed_at": "2026-10-19T02:57:16Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:16Z",
+          "completed_at": "2026-10-19T02:57:38Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:38Z",
+          "completed_at": "2026-10-19T02:57:51Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:51Z",
+          "completed_at": "2026-10-19T02:58:12Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:12Z",
+          "completed_at": "2026-10-19T02:58:12Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:12Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:16Z",
+          "completed_at": "2026-10-19T02:58:16Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485969",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002708,
+      "runner_name": "GitHub Actions 1000002708",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485970,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMbEg",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485970",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485970",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:30Z",
+      "name": "E2E obsolete-fault-model (firefox)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:23Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:23Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:26Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:26Z",
+          "completed_at": "2026-10-19T02:56:54Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:54Z",
+          "completed_at": "2026-10-19T02:57:21Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:21Z",
+          "completed_at": "2026-10-19T02:57:21Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:21Z",
+          "completed_at": "2026-10-19T02:57:21Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:21Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:45Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:45Z",
+          "completed_at": "2026-10-19T02:57:59Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:59Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:26Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:26Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:28Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:28Z",
+          "completed_at": "2026-10-19T02:58:28Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:28Z",
+          "completed_at": "2026-10-19T02:58:28Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:28Z",
+          "completed_at": "2026-10-19T02:58:28Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485970",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002713,
+      "runner_name": "GitHub Actions 1000002713",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485973,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMbFQ",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485973",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485973",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:16Z",
+      "completed_at": "2026-10-19T02:58:27Z",
+      "name": "E2E diagnostic (chromium)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:17Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:27Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:27Z",
+          "completed_at": "2026-10-19T02:56:55Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:55Z",
+          "completed_at": "2026-10-19T02:57:22Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:22Z",
+          "completed_at": "2026-10-19T02:57:22Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:22Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:25Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:25Z",
+          "completed_at": "2026-10-19T02:57:47Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:47Z",
+          "completed_at": "2026-10-19T02:58:01Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:58:01Z",
+          "completed_at": "2026-10-19T02:58:21Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:21Z",
+          "completed_at": "2026-10-19T02:58:21Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:21Z",
+          "completed_at": "2026-10-19T02:58:22Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:22Z",
+          "completed_at": "2026-10-19T02:58:22Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:22Z",
+          "completed_at": "2026-10-19T02:58:23Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:23Z",
+          "completed_at": "2026-10-19T02:58:23Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:23Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485973",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002711,
+      "runner_name": "GitHub Actions 1000002711",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867485993,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMbKQ",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867485993",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867485993",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:28Z",
+      "name": "E2E obsolete-fault-model (phone-firefox)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:19Z",
+          "completed_at": "2026-10-19T02:56:23Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:23Z",
+          "completed_at": "2026-10-19T02:56:23Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:23Z",
+          "completed_at": "2026-10-19T02:56:26Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:26Z",
+          "completed_at": "2026-10-19T02:56:54Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:54Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:25Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:25Z",
+          "completed_at": "2026-10-19T02:57:48Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:48Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:58:02Z",
+          "completed_at": "2026-10-19T02:58:21Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:21Z",
+          "completed_at": "2026-10-19T02:58:21Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:21Z",
+          "completed_at": "2026-10-19T02:58:23Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:23Z",
+          "completed_at": "2026-10-19T02:58:23Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:23Z",
+          "completed_at": "2026-10-19T02:58:23Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:23Z",
+          "completed_at": "2026-10-19T02:58:23Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:23Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:24Z",
+          "completed_at": "2026-10-19T02:58:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:25Z",
+          "completed_at": "2026-10-19T02:58:25Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867485993",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002714,
+      "runner_name": "GitHub Actions 1000002714",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867486063,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMbbw",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867486063",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867486063",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:04Z",
+      "name": "E2E acceptance (phone-chromium)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:15Z",
+          "completed_at": "2026-10-19T02:56:17Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:17Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:21Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:21Z",
+          "completed_at": "2026-10-19T02:56:41Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:41Z",
+          "completed_at": "2026-10-19T02:57:11Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:11Z",
+          "completed_at": "2026-10-19T02:57:11Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:11Z",
+          "completed_at": "2026-10-19T02:57:11Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:11Z",
+          "completed_at": "2026-10-19T02:57:13Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:13Z",
+          "completed_at": "2026-10-19T02:57:30Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:30Z",
+          "completed_at": "2026-10-19T02:57:41Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:41Z",
+          "completed_at": "2026-10-19T02:58:00Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:00Z",
+          "completed_at": "2026-10-19T02:58:00Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:00Z",
+          "completed_at": "2026-10-19T02:58:01Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:01Z",
+          "completed_at": "2026-10-19T02:58:01Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:01Z",
+          "completed_at": "2026-10-19T02:58:01Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:01Z",
+          "completed_at": "2026-10-19T02:58:01Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:01Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:02Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:02Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:02Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:02Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:02Z",
+          "completed_at": "2026-10-19T02:58:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867486063",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002715,
+      "runner_name": "GitHub Actions 1000002715",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867486142,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMbvg",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867486142",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867486142",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:32Z",
+      "name": "E2E acceptance (firefox)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:19Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:25Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:25Z",
+          "completed_at": "2026-10-19T02:56:54Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:54Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:23Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:23Z",
+          "completed_at": "2026-10-19T02:57:24Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:24Z",
+          "completed_at": "2026-10-19T02:57:26Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:26Z",
+          "completed_at": "2026-10-19T02:57:48Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:48Z",
+          "completed_at": "2026-10-19T02:58:01Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:58:01Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:27Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:27Z",
+          "completed_at": "2026-10-19T02:58:29Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:29Z",
+          "completed_at": "2026-10-19T02:58:29Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:29Z",
+          "completed_at": "2026-10-19T02:58:29Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:29Z",
+          "completed_at": "2026-10-19T02:58:29Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:29Z",
+          "completed_at": "2026-10-19T02:58:30Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:30Z",
+          "completed_at": "2026-10-19T02:58:30Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:30Z",
+          "completed_at": "2026-10-19T02:58:30Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:30Z",
+          "completed_at": "2026-10-19T02:58:30Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:30Z",
+          "completed_at": "2026-10-19T02:58:30Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:30Z",
+          "completed_at": "2026-10-19T02:58:30Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867486142",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002717,
+      "runner_name": "GitHub Actions 1000002717",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117867486206,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcXMb_g",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117867486206",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117867486206",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T02:56:13Z",
+      "started_at": "2026-10-19T02:56:15Z",
+      "completed_at": "2026-10-19T02:58:21Z",
+      "name": "E2E diagnostic (phone-chromium)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:56:16Z",
+          "completed_at": "2026-10-19T02:56:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T02:56:18Z",
+          "completed_at": "2026-10-19T02:56:20Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:56:20Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:24Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:56:24Z",
+          "completed_at": "2026-10-19T02:56:26Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:56:26Z",
+          "completed_at": "2026-10-19T02:56:55Z"
+        },
+        {
+          "name": "Install browsers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:56:55Z",
+          "completed_at": "2026-10-19T02:57:21Z"
+        },
+        {
+          "name": "Emulator-only function config (placeholders, AI off)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T02:57:21Z",
+          "completed_at": "2026-10-19T02:57:21Z"
+        },
+        {
+          "name": "Reporter self-checks (annotation/summary contract, incl. empty jobs)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T02:57:21Z",
+          "completed_at": "2026-10-19T02:57:22Z"
+        },
+        {
+          "name": "Evidence self-checks (B15 retention contract)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-19T02:57:22Z",
+          "completed_at": "2026-10-19T02:57:24Z"
+        },
+        {
+          "name": "Build web app for emulators (demo project)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T02:57:24Z",
+          "completed_at": "2026-10-19T02:57:45Z"
+        },
+        {
+          "name": "Release-build proof (no hooks / emulator wiring in a staging-shaped build)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T02:57:45Z",
+          "completed_at": "2026-10-19T02:57:59Z"
+        },
+        {
+          "name": "Run browser tests in the emulator suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T02:57:59Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Emulator diagnostics (functions load/requests, no secrets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:15Z"
+        },
+        {
+          "name": "Browser versions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T02:58:15Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Artifact manifest (file names, sizes and results.json digest; no contents)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Finalize evidence (redact tokens, inventory with full SHA-256, fail closed on any processing error)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Evidence NOT uploaded (finalize failed; unsanitized or uninventoried evidence is never published)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:17Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T02:58:17Z",
+          "completed_at": "2026-10-19T02:58:18Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-19T02:58:18Z",
+          "completed_at": "2026-10-19T02:58:18Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36,
+          "started_at": "2026-10-19T02:58:18Z",
+          "completed_at": "2026-10-19T02:58:18Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-19T02:58:18Z",
+          "completed_at": "2026-10-19T02:58:18Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-19T02:58:18Z",
+          "completed_at": "2026-10-19T02:58:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-19T02:58:19Z",
+          "completed_at": "2026-10-19T02:58:19Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117867486206",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002712,
+      "runner_name": "GitHub Actions 1000002712",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 117868286899,
+      "run_id": 39192236298,
+      "workflow_name": "E2E (emulator, real browsers)",
+      "head_branch": "claude/ci-merge-eligibility-gate",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbcX9Tsw",
+      "head_sha": "bb157ba057913bd0835db8df9ca5eb569df0011f",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/117868286899",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39192236298/job/117868286899",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-10-19T02:59:43Z",
+      "started_at": "2026-10-19T02:59:45Z",
+      "completed_at": "2026-10-19T03:00:11Z",
+      "name": "Coach Core merge eligibility",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T02:59:45Z",
+          "completed_at": "2026-10-19T02:59:46Z"
+        },
+        {
+          "name": "Fail closed when the run was cancelled or the matrix did not complete",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 2,
+          "started_at": "2026-10-19T02:59:46Z",
+          "completed_at": "2026-10-19T02:59:46Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T02:59:46Z",
+          "completed_at": "2026-10-19T02:59:47Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T02:59:47Z",
+          "completed_at": "2026-10-19T02:59:48Z"
+        },
+        {
+          "name": "Install e2e (for source-derived --list membership; no browsers)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T02:59:48Z",
+          "completed_at": "2026-10-19T02:59:55Z"
+        },
+        {
+          "name": "Gate self-checks (fixtures for success / failed / cancelled / skipped / missing / narrowed / empty / wrong sha / containment)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T02:59:55Z",
+          "completed_at": "2026-10-19T02:59:56Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T02:59:56Z",
+          "completed_at": "2026-10-19T02:59:57Z"
+        },
+        {
+          "name": "Evaluate merge eligibility",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-10-19T02:59:57Z",
+          "completed_at": "2026-10-19T03:00:09Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T03:00:09Z",
+          "completed_at": "2026-10-19T03:00:10Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-19T03:00:10Z",
+          "completed_at": "2026-10-19T03:00:10Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-19T03:00:10Z",
+          "completed_at": "2026-10-19T03:00:10Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T03:00:10Z",
+          "completed_at": "2026-10-19T03:00:10Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/117868286899",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002718,
+      "runner_name": "GitHub Actions 1000002718",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

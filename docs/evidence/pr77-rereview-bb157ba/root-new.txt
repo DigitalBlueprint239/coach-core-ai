@@ -1,0 +1,8 @@
+file:///workspace/scratch/review77-r2/root-containment.mjs:13
+ if(!row.inventory_rejected||(!row.outside_context_parsed&&!row.outside_results_parsed))throw Error('Expected containment defect did not reproduce');rows.push(row);console.log(JSON.stringify({roots,inventory_rejected:row.inventory_rejected,outside_context_parsed:row.outside_context_parsed,outside_results_parsed:row.outside_results_parsed,last_run_problem:row.last_run_problem}));
+                                                                                              ^
+
+Error: Expected containment defect did not reproduce
+    at file:///workspace/scratch/review77-r2/root-containment.mjs:13:95
+
+Node.js v24.19.0
