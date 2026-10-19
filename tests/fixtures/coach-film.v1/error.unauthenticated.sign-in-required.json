@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "error": {
+    "code": "unauthenticated",
+    "retryable": false,
+    "reason": "sign-in-required"
+  }
+}

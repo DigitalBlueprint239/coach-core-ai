@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "error": {
+    "code": "limit-exceeded",
+    "retryable": false,
+    "reason": "format-not-allowed"
+  }
+}

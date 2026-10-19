@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "coach-film.v1",
+  "operationId": "8df41692-af0b-4c3d-ae4f-5a6b7c8d9eaf",
+  "action": "reserveFilmUpload",
+  "payload": {
+    "teamId": "team_fixture_a",
+    "declaredBytes": 48211954,
+    "declaredContentType": "video/mp4",
+    "fileName": "vs-eagles-q2-drive.mp4",
+    "rightsAcknowledged": true,
+    "rightsWordingVersion": "rights-v1",
+    "status": "ready"
+  }
+}

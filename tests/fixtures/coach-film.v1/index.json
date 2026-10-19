@@ -1,0 +1,355 @@
+{
+  "contract": "coach-film.v1",
+  "fixtures": [
+    {
+      "file": "abandon.request.valid.json",
+      "kind": "request",
+      "action": "abandonFilmUpload",
+      "valid": true
+    },
+    {
+      "file": "abandon.response.ok-from-reserved.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "respondsTo": "abandon.request.valid.json"
+    },
+    {
+      "file": "abandon.response.ok-from-validating.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true
+    },
+    {
+      "file": "abandon.response.ok-repeat-new-operation.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "note": "second abandon of the same film under a NEW operationId; film unchanged"
+    },
+    {
+      "file": "error.conflict.operation-id-reused.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.failed-precondition.film-not-found.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.failed-precondition.invalid-state.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.failed-precondition.rights-wording-outdated.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.invalid-argument.action-mismatch.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.invalid-argument.rights-acknowledgement-required.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.invalid-argument.schema-invalid.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.limit-exceeded.bytes-over-limit.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.limit-exceeded.format-not-allowed.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.permission-denied.anonymous-not-allowed.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.permission-denied.beta-access-required.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.permission-denied.email-not-verified.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.permission-denied.not-team-owner.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.team-cap-reached.team-film-cap.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.unauthenticated.account-disabled.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.unauthenticated.sign-in-required.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.unavailable.backend-unavailable.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.unavailable.transport.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": false,
+      "clientOnly": true,
+      "note": "client mirror synthesizes this for network/HttpsError/non-envelope failures; the server never returns it"
+    },
+    {
+      "file": "film-state.abandonedFromReserved.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "film-state.abandonedFromValidating.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "film-state.expired.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "film-state.rejected.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "film-state.reserved.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "film-state.validating.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "invalid.response.extra-key.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "note": "strict: no unknown keys"
+    },
+    {
+      "file": "invalid.response.reason-not-for-code.json",
+      "kind": "response",
+      "action": "*",
+      "valid": false
+    },
+    {
+      "file": "invalid.response.retryable-mismatch.json",
+      "kind": "response",
+      "action": "*",
+      "valid": false,
+      "note": "retryable must equal RETRYABLE[code]"
+    },
+    {
+      "file": "invalid.response.timestamp-no-millis.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "note": "timestamps need exactly 3 fractional digits"
+    },
+    {
+      "file": "reserve.request.action-mismatch.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "action-mismatch"
+      },
+      "note": "valid abandon envelope sent to the reserveFilmUpload callable"
+    },
+    {
+      "file": "reserve.request.at-byte-limit.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "placeholder": "PENDING_D3",
+      "note": "exactly LIMITS.maxBytes; accepted"
+    },
+    {
+      "file": "reserve.request.file-name-too-long.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "121 characters"
+    },
+    {
+      "file": "reserve.request.format-not-allowed.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "limit-exceeded",
+        "reason": "format-not-allowed"
+      },
+      "placeholder": "PENDING_D3"
+    },
+    {
+      "file": "reserve.request.operation-id-not-uuid-v4.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      }
+    },
+    {
+      "file": "reserve.request.operation-id-reused.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "conflict",
+        "reason": "operation-id-reused"
+      },
+      "note": "same caller + operationId as reserve.request.valid.json, different payload"
+    },
+    {
+      "file": "reserve.request.over-byte-limit.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "limit-exceeded",
+        "reason": "bytes-over-limit"
+      },
+      "note": "LIMITS.maxBytes + 1",
+      "placeholder": "PENDING_D3"
+    },
+    {
+      "file": "reserve.request.rights-not-acknowledged.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "rights-acknowledgement-required"
+      }
+    },
+    {
+      "file": "reserve.request.rights-wording-outdated.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "failed-precondition",
+        "reason": "rights-wording-outdated"
+      },
+      "placeholder": "PENDING_D7"
+    },
+    {
+      "file": "reserve.request.unknown-field.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "client-chosen status must be rejected, not ignored"
+    },
+    {
+      "file": "reserve.request.valid.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true
+    },
+    {
+      "file": "reserve.request.wrong-schema-version.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      }
+    },
+    {
+      "file": "reserve.response.ok.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "respondsTo": "reserve.request.valid.json"
+    }
+  ]
+}

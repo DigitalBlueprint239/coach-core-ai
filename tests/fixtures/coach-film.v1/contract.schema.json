@@ -1,0 +1,737 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "coach-film.v1",
+  "x-coach-film": {
+    "contractVersion": "coach-film.v1",
+    "actions": [
+      "reserveFilmUpload",
+      "abandonFilmUpload"
+    ],
+    "filmStatuses": [
+      "reserved",
+      "validating",
+      "ready",
+      "rejected",
+      "abandoned",
+      "expired"
+    ],
+    "slotHoldingStatuses": [
+      "reserved",
+      "validating",
+      "ready"
+    ],
+    "terminalStatuses": [
+      "rejected",
+      "abandoned",
+      "expired"
+    ],
+    "transitions": {
+      "reserved": [
+        "validating",
+        "rejected",
+        "abandoned",
+        "expired"
+      ],
+      "validating": [
+        "ready",
+        "rejected",
+        "abandoned"
+      ],
+      "ready": [],
+      "rejected": [],
+      "abandoned": [],
+      "expired": []
+    },
+    "rejectionReasons": [
+      "size-mismatch",
+      "content-type-mismatch",
+      "signature-invalid"
+    ],
+    "timestampFields": [
+      "createdAt",
+      "statusChangedAt",
+      "reservationExpiresAt",
+      "rightsAcknowledgedAt",
+      "abandonedAt"
+    ],
+    "timestampEncoding": "ISO 8601 UTC, exactly 3 fractional digits, 'Z'",
+    "generationEncoding": "decimal string",
+    "errorCodes": [
+      "unauthenticated",
+      "permission-denied",
+      "invalid-argument",
+      "limit-exceeded",
+      "team-cap-reached",
+      "failed-precondition",
+      "conflict",
+      "unavailable"
+    ],
+    "retryable": {
+      "unauthenticated": false,
+      "permission-denied": false,
+      "invalid-argument": false,
+      "limit-exceeded": false,
+      "team-cap-reached": false,
+      "failed-precondition": false,
+      "conflict": false,
+      "unavailable": true
+    },
+    "errorReasons": {
+      "unauthenticated": [
+        "sign-in-required",
+        "account-disabled"
+      ],
+      "permission-denied": [
+        "anonymous-not-allowed",
+        "email-not-verified",
+        "beta-access-required",
+        "not-team-owner"
+      ],
+      "invalid-argument": [
+        "schema-invalid",
+        "action-mismatch",
+        "rights-acknowledgement-required"
+      ],
+      "limit-exceeded": [
+        "bytes-over-limit",
+        "format-not-allowed"
+      ],
+      "team-cap-reached": [
+        "team-film-cap"
+      ],
+      "failed-precondition": [
+        "rights-wording-outdated",
+        "film-not-found",
+        "invalid-state"
+      ],
+      "conflict": [
+        "operation-id-reused"
+      ],
+      "unavailable": [
+        "backend-unavailable",
+        "transport"
+      ]
+    },
+    "clientOnlyReasons": [
+      "transport"
+    ],
+    "uploadPathTemplate": "quarantine/{teamId}/{filmId}/source.mp4",
+    "limits": {
+      "maxBytes": 100000000,
+      "maxDurationMs": 300000,
+      "maxWidth": 1920,
+      "maxHeight": 1080,
+      "teamFilmCap": 20,
+      "allowedContentTypes": [
+        "video/mp4"
+      ],
+      "acceptedRightsWordingVersions": [
+        "rights-v1"
+      ],
+      "reservationLifetimeMs": 3600000,
+      "maxFileNameLength": 120
+    },
+    "limitsStatus": {
+      "maxBytes": "PENDING_D3",
+      "maxDurationMs": "PENDING_D3",
+      "maxWidth": "PENDING_D3",
+      "maxHeight": "PENDING_D3",
+      "teamFilmCap": "PENDING_D3",
+      "allowedContentTypes": "PENDING_D3",
+      "acceptedRightsWordingVersions": "PENDING_D7",
+      "reservationLifetimeMs": "DELEGATED",
+      "maxFileNameLength": "DELEGATED"
+    },
+    "placeholderStatus": "TEST_PLACEHOLDER_NOT_APPROVED"
+  },
+  "$defs": {
+    "FilmState": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "filmId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "teamId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "createdBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "reserved",
+            "validating",
+            "ready",
+            "rejected",
+            "abandoned",
+            "expired"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "statusChangedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "reservationExpiresAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "declaredBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "declaredContentType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "fileName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "rightsWordingVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "rightsAcknowledgedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "uploadPath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "objectGeneration": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,19}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rejectionReason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "size-mismatch",
+                "content-type-mismatch",
+                "signature-invalid"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "abandonedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "filmId",
+        "teamId",
+        "createdBy",
+        "status",
+        "createdAt",
+        "statusChangedAt",
+        "reservationExpiresAt",
+        "declaredBytes",
+        "declaredContentType",
+        "fileName",
+        "rightsWordingVersion",
+        "rightsAcknowledgedAt",
+        "uploadPath",
+        "objectGeneration",
+        "rejectionReason",
+        "abandonedAt"
+      ],
+      "additionalProperties": false
+    },
+    "ReserveRequest": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "coach-film.v1"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "action": {
+          "type": "string",
+          "const": "reserveFilmUpload"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "teamId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            "declaredBytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "declaredContentType": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "fileName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "rightsAcknowledged": {
+              "type": "boolean"
+            },
+            "rightsWordingVersion": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            }
+          },
+          "required": [
+            "teamId",
+            "declaredBytes",
+            "declaredContentType",
+            "fileName",
+            "rightsAcknowledged",
+            "rightsWordingVersion"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operationId",
+        "action",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    "AbandonRequest": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "coach-film.v1"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "action": {
+          "type": "string",
+          "const": "abandonFilmUpload"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "teamId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            "filmId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          },
+          "required": [
+            "teamId",
+            "filmId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operationId",
+        "action",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    "ReserveData": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "filmId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "uploadPath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "expiresAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "film": {
+          "type": "object",
+          "properties": {
+            "filmId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "teamId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            "createdBy": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "reserved",
+                "validating",
+                "ready",
+                "rejected",
+                "abandoned",
+                "expired"
+              ]
+            },
+            "createdAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "statusChangedAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "reservationExpiresAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "declaredBytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "declaredContentType": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "fileName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "rightsWordingVersion": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "rightsAcknowledgedAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "uploadPath": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "objectGeneration": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]{0,19}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rejectionReason": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "size-mismatch",
+                    "content-type-mismatch",
+                    "signature-invalid"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "abandonedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "filmId",
+            "teamId",
+            "createdBy",
+            "status",
+            "createdAt",
+            "statusChangedAt",
+            "reservationExpiresAt",
+            "declaredBytes",
+            "declaredContentType",
+            "fileName",
+            "rightsWordingVersion",
+            "rightsAcknowledgedAt",
+            "uploadPath",
+            "objectGeneration",
+            "rejectionReason",
+            "abandonedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "filmId",
+        "uploadPath",
+        "expiresAt",
+        "film"
+      ],
+      "additionalProperties": false
+    },
+    "AbandonData": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "filmId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "previousStatus": {
+          "type": "string",
+          "enum": [
+            "reserved",
+            "validating",
+            "abandoned"
+          ]
+        },
+        "film": {
+          "type": "object",
+          "properties": {
+            "filmId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "teamId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            "createdBy": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "status": {
+              "type": "string",
+              "const": "abandoned"
+            },
+            "createdAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "statusChangedAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "reservationExpiresAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "declaredBytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "declaredContentType": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "fileName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "rightsWordingVersion": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "rightsAcknowledgedAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "uploadPath": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "objectGeneration": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]{0,19}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rejectionReason": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "size-mismatch",
+                    "content-type-mismatch",
+                    "signature-invalid"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "abandonedAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "filmId",
+            "teamId",
+            "createdBy",
+            "status",
+            "createdAt",
+            "statusChangedAt",
+            "reservationExpiresAt",
+            "declaredBytes",
+            "declaredContentType",
+            "fileName",
+            "rightsWordingVersion",
+            "rightsAcknowledgedAt",
+            "uploadPath",
+            "objectGeneration",
+            "rejectionReason",
+            "abandonedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "filmId",
+        "previousStatus",
+        "film"
+      ],
+      "additionalProperties": false
+    },
+    "ErrorResponse": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "const": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "enum": [
+                "unauthenticated",
+                "permission-denied",
+                "invalid-argument",
+                "limit-exceeded",
+                "team-cap-reached",
+                "failed-precondition",
+                "conflict",
+                "unavailable"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            }
+          },
+          "required": [
+            "code",
+            "retryable",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ok",
+        "error"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
