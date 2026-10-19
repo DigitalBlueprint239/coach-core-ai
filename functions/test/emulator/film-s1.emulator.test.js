@@ -425,28 +425,61 @@ describe("R1-R5 backend repairs", () => {
     assert.equal(await h.onQuarantineFinalized(e), "stale-abandoned");
     assert.equal(await exists(r.uploadPath), false);
   });
-  it("R2 stale cleanup leaves a newer generation at the same path alone",
+  // The Firebase Storage emulator ignores object generations: a read of an
+  // old generation returns the current bytes and a delete with a stale
+  // ifGenerationMatch removes the current object (recorded at 283e731:
+  // readOld=bytes, deleteOld=true). Real Cloud Storage honours both. So the
+  // handler's generation logic is proven here against Firestore emulator +
+  // an in-memory store with Cloud Storage generation semantics, and the
+  // adapter's exact options are pinned by unit tests (test/film-s1.test.js).
+  it("R2 stale cleanup leaves a newer generation alone (GCS semantics)",
       async () => {
-        const r = (await reserve(reserveReq())).data;
-        const e1 = await putObject(r.uploadPath, MP4);
-        await abandon(abandonReq(r.filmId));
-        const e2 = await putObject(r.uploadPath, MP4); // replaces e1 (admin)
-        const obs = {g1: String(e1.generation), g2: String(e2.generation)};
-        obs.readOld = await storage.readHead({name: r.uploadPath,
-          generation: obs.g1, bytes: 4}).then((b) => b ? "bytes" : "null",
-            (e) => `throw:${e.code}`);
-        obs.deleteOld = await storage.deleteObject({name: r.uploadPath,
-          generation: obs.g1}).then(String, (e) => `throw:${e.code}`);
-        obs.existsAfterDeleteOld = await exists(r.uploadPath);
-        obs.eventOld = await h.onQuarantineFinalized(e1);
-        obs.existsAfterEventOld = await exists(r.uploadPath);
-        obs.eventNew = await h.onQuarantineFinalized(e2);
-        obs.existsAfterEventNew = await exists(r.uploadPath);
-        assert.deepEqual(obs, {g1: obs.g1, g2: obs.g2, readOld: "null",
-          deleteOld: "false", existsAfterDeleteOld: true,
-          eventOld: "object-gone", existsAfterEventOld: true,
-          eventNew: "stale-abandoned", existsAfterEventNew: false},
-        `R2 observed ${JSON.stringify(obs)}`);
+        const objects = new Map(); // name -> {generation, bytes}
+        let nextGen = 1000;
+        const gcs = {
+          put(name, bytes) {
+            const generation = String(++nextGen);
+            objects.set(name, {generation, bytes});
+            return {name, size: bytes.length, contentType: "video/mp4",
+              generation};
+          },
+          async readHead({name, generation, bytes}) {
+            const o = objects.get(name);
+            if (!o || o.generation !== generation) return null;
+            return o.bytes.subarray(0, bytes);
+          },
+          async deleteObject({name, generation}) {
+            const o = objects.get(name);
+            if (!o || o.generation !== generation) return false;
+            objects.delete(name);
+            return true;
+          },
+        };
+        const hg = createFilmHandlers({...deps,
+          readHead: (t) => gcs.readHead(t),
+          deleteObject: (t) => gcs.deleteObject(t)});
+        const r = (await hg.reserveFilmUpload({auth: auth(OWNER),
+          data: reserveReq()})).data;
+        const e1 = gcs.put(r.uploadPath, MP4);
+        await hg.abandonFilmUpload({auth: auth(OWNER),
+          data: abandonReq(r.filmId)});
+        assert.equal(objects.has(r.uploadPath), true); // not processed yet
+        const e2 = gcs.put(r.uploadPath, MP4); // newer generation, same path
+        assert.equal(await hg.onQuarantineFinalized(e1), "object-gone");
+        assert.equal(objects.get(r.uploadPath).generation, e2.generation);
+        assert.equal(await hg.onQuarantineFinalized(e2), "stale-abandoned");
+        assert.equal(objects.has(r.uploadPath), false);
+      });
+  it("emulator limitation recorded: Storage emulator ignores generations",
+      async () => {
+        // If this starts failing, the emulator gained generation support:
+        // switch the R2 case above back to the real emulator bucket.
+        const p = `quarantine/${TEAM}/${op()}/source.mp4`;
+        const g1 = String((await putObject(p, MP4)).generation);
+        await putObject(p, MP4);
+        assert.equal(await storage.deleteObject({name: p, generation: g1}),
+            true);
+        assert.equal(await exists(p), false);
       });
   it("R3 transient head-read error: throws, film stays reserved, " +
       "object kept", async () => {
