@@ -1,0 +1,138 @@
+[
+  {
+    "symlinked_roots": [
+      "ci-evidence"
+    ],
+    "inventory_rejected": true,
+    "outside_context_parsed": true,
+    "outside_results_parsed": false,
+    "last_run_problem": null,
+    "read": {
+      "uploadOk": true,
+      "inventoryOk": "9 inventory problem(s): artifact root ci-evidence is not a real directory; inventory has no digest lines; retained file test-results/.last-run.json is NOT listed in the inventory (unlisted payload); …",
+      "inventory": {
+        "listed": 0,
+        "retained": 2,
+        "problems": [
+          "artifact root ci-evidence is not a real directory",
+          "inventory has no digest lines",
+          "retained file test-results/.last-run.json is NOT listed in the inventory (unlisted payload)",
+          "retained file test-results/results.json is NOT listed in the inventory (unlisted payload)",
+          "required evidence file ci-evidence/run.context is absent or unlisted",
+          "required evidence file ci-evidence/run.log is absent or unlisted",
+          "required evidence file ci-evidence/run.exit is absent or unlisted",
+          "required evidence file test-results/results.json is absent or unlisted",
+          "required evidence file test-results/.last-run.json is absent or unlisted"
+        ]
+      },
+      "context": {
+        "sha": "PUBLIC_OUTSIDE_CONTEXT_SENTINEL"
+      },
+      "results": {
+        "suites": [],
+        "errors": [],
+        "stats": {
+          "expected": 0,
+          "unexpected": 0,
+          "skipped": 0,
+          "flaky": 0
+        }
+      },
+      "resultsProblem": null,
+      "lastRun": {
+        "status": "passed",
+        "failedTests": []
+      },
+      "lastRunProblem": null
+    }
+  },
+  {
+    "symlinked_roots": [
+      "test-results"
+    ],
+    "inventory_rejected": true,
+    "outside_context_parsed": false,
+    "outside_results_parsed": true,
+    "last_run_problem": "unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)",
+    "read": {
+      "uploadOk": true,
+      "inventoryOk": "8 inventory problem(s): artifact root test-results is not a real directory; inventory has no digest lines; retained file ci-evidence/run.context is NOT listed in the inventory (unlisted payload); …",
+      "inventory": {
+        "listed": 0,
+        "retained": 1,
+        "problems": [
+          "artifact root test-results is not a real directory",
+          "inventory has no digest lines",
+          "retained file ci-evidence/run.context is NOT listed in the inventory (unlisted payload)",
+          "required evidence file ci-evidence/run.context is absent or unlisted",
+          "required evidence file ci-evidence/run.log is absent or unlisted",
+          "required evidence file ci-evidence/run.exit is absent or unlisted",
+          "required evidence file test-results/results.json is absent or unlisted",
+          "required evidence file test-results/.last-run.json is absent or unlisted"
+        ]
+      },
+      "context": {
+        "sha": "PUBLIC_INSIDE_CONTEXT"
+      },
+      "results": {
+        "suites": [],
+        "errors": [],
+        "stats": {
+          "expected": 0,
+          "unexpected": 0,
+          "skipped": 0,
+          "flaky": 0
+        },
+        "PUBLIC_OUTSIDE_JSON_SENTINEL": true
+      },
+      "resultsProblem": null,
+      "lastRun": null,
+      "lastRunProblem": "unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)"
+    }
+  },
+  {
+    "symlinked_roots": [
+      "ci-evidence",
+      "test-results"
+    ],
+    "inventory_rejected": true,
+    "outside_context_parsed": true,
+    "outside_results_parsed": true,
+    "last_run_problem": "unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)",
+    "read": {
+      "uploadOk": true,
+      "inventoryOk": "8 inventory problem(s): artifact root ci-evidence is not a real directory; artifact root test-results is not a real directory; inventory has no digest lines; …",
+      "inventory": {
+        "listed": 0,
+        "retained": 0,
+        "problems": [
+          "artifact root ci-evidence is not a real directory",
+          "artifact root test-results is not a real directory",
+          "inventory has no digest lines",
+          "required evidence file ci-evidence/run.context is absent or unlisted",
+          "required evidence file ci-evidence/run.log is absent or unlisted",
+          "required evidence file ci-evidence/run.exit is absent or unlisted",
+          "required evidence file test-results/results.json is absent or unlisted",
+          "required evidence file test-results/.last-run.json is absent or unlisted"
+        ]
+      },
+      "context": {
+        "sha": "PUBLIC_OUTSIDE_CONTEXT_SENTINEL"
+      },
+      "results": {
+        "suites": [],
+        "errors": [],
+        "stats": {
+          "expected": 0,
+          "unexpected": 0,
+          "skipped": 0,
+          "flaky": 0
+        },
+        "PUBLIC_OUTSIDE_JSON_SENTINEL": true
+      },
+      "resultsProblem": null,
+      "lastRun": null,
+      "lastRunProblem": "unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)"
+    }
+  }
+]
