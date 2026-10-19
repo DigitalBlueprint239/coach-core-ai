@@ -1,0 +1,75 @@
+name: Film client contract checks
+
+# FILM-S1 / PR80 review P1: the test-only server-schema oracle needs the
+# functions lockfile dependencies. This bounded workflow never builds, deploys,
+# runs emulators, reads secrets, activates film, or calls a provider.
+on:
+  pull_request:
+    paths:
+      - 'src/features/film-analyzer/contracts.ts'
+      - 'src/features/film-analyzer/__tests__/contracts.test.ts'
+      - 'functions/src/film/contract.js'
+      - 'functions/package*.json'
+      - 'tests/fixtures/coach-film.v1/**'
+      - 'docs/film/COACH_FILM_V1_CONTRACT.md'
+      - 'package*.json'
+      - 'tsconfig.json'
+      - '.github/workflows/film-client-contract.yml'
+  push:
+    branches: [codex/film-s1-client-contract-final]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: film-client-contract-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  film-client-contract:
+    name: Film client contract (FS-26)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+      - name: Install web dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+      - name: Install functions dependencies (test-only server schema oracle)
+        run: npm ci --prefix functions --no-audit --no-fund
+      - name: FS-26 client contract parity (actual process exit retained)
+        run: |
+          mkdir -p film-client-evidence
+          set -o pipefail
+          set +e
+          CI=true npx react-scripts test --watchAll=false --runInBand --runTestsByPath \
+            src/features/film-analyzer/__tests__/contracts.test.ts \
+            2>&1 | tee film-client-evidence/fs26.log
+          st=${PIPESTATUS[0]}
+          set -e
+          echo "exit=$st" | tee film-client-evidence/fs26.exit
+          exit "$st"
+      - name: TypeScript (explicit exit retained)
+        run: |
+          set +e
+          npx tsc --noEmit > film-client-evidence/typescript.log 2>&1
+          st=$?
+          set -e
+          cat film-client-evidence/typescript.log
+          echo "exit=$st" | tee -a film-client-evidence/typescript.log
+          exit "$st"
+      - name: Retain focused evidence (no credentials or live data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: film-client-contract-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: film-client-evidence/
+          if-no-files-found: error
+          retention-days: 14
