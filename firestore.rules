@@ -201,6 +201,16 @@ service cloud.firestore {
       allow delete: if isBetaUser() && ownsTeam(resource.data.teamId);
     }
 
+    // ---------- film (coach-film.v1, FILM-S1) ----------
+    // Film documents are server-owned: the team owner may read them; no
+    // client may create, update or delete them. The cap ledger
+    // (teams/*/filmLedger) and idempotency records (filmOperations) have no
+    // client access and fall through to the default deny below.
+    match /teams/{teamId}/films/{filmId} {
+      allow get, list: if isBetaUser() && ownsTeam(teamId);
+      allow write: if false;
+    }
+
     // Everything else: no client access.
     match /{document=**} {
       allow read, write: if false;

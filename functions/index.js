@@ -330,3 +330,45 @@ exports.cleanupOldNotifications = onSchedule({
 exports.healthCheck = onRequest((req, res) => {
   res.json({status: "ok", timestamp: new Date().toISOString()});
 });
+
+// ============================================
+// FILM (coach-film.v1, FILM-S1: reservation + cancellation only)
+// ============================================
+// Appended block. No decoder, no playback, no AI, no `ready` state.
+// Limits are TEST PLACEHOLDERS (src/film/limits.js, PENDING_D3/D7).
+const {onObjectFinalized} = require("firebase-functions/v2/storage");
+const {Timestamp: FilmTimestamp} = require("firebase-admin/firestore");
+const {getStorage} = require("firebase-admin/storage");
+const {createFilmHandlers} = require("./src/film/handlers");
+
+const filmHandlers = createFilmHandlers({
+  db,
+  Timestamp: FilmTimestamp,
+  getUser: (uid) => getAuth().getUser(uid),
+  deleteObject: (name) =>
+    getStorage().bucket().file(name).delete({ignoreNotFound: true}),
+  readHead: async (name, n) => {
+    const [buf] = await getStorage().bucket().file(name)
+        .download({start: 0, end: n - 1, validation: false});
+    return buf;
+  },
+  logger,
+});
+
+exports.reserveFilmUpload = onCall({
+  cors: ALLOWED_ORIGINS,
+  timeoutSeconds: 30,
+  maxInstances: 5,
+}, filmHandlers.reserveFilmUpload);
+
+exports.abandonFilmUpload = onCall({
+  cors: ALLOWED_ORIGINS,
+  timeoutSeconds: 30,
+  maxInstances: 5,
+}, filmHandlers.abandonFilmUpload);
+
+exports.onFilmQuarantineFinalized = onObjectFinalized({
+  timeoutSeconds: 60,
+  memory: "256MiB",
+  maxInstances: 5,
+}, (event) => filmHandlers.onQuarantineFinalized(event.data));
