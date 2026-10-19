@@ -39,6 +39,52 @@ service firebase.storage {
       allow create, update: if isBetaUser() && ownsTeam(teamId) && isAllowedUpload();
     }
 
+    // ---------- film analyzer (FILM-S1: quarantine intake only) ----------
+    // A coach may CREATE exactly one object, at the path the server reserved
+    // for them, while that reservation is open. The object must match the
+    // reservation's declared size and the allowed content type. Nothing under
+    // quarantine/, films/ or frames/ is readable, updatable or deletable by
+    // any client: processing, playback and cleanup are server-only.
+    //
+    // PENDING_D3 placeholder: the 100000000-byte literal below mirrors
+    // functions/src/film/limits.js (test FS-25 pins them together). It is
+    // NOT an approved limit.
+    function filmReservation(teamId, filmId) {
+      return firestore.get(/databases/(default)/documents/teams/$(teamId)/films/$(filmId)).data;
+    }
+
+    function filmReservationOpen(teamId, filmId) {
+      return firestore.exists(/databases/(default)/documents/teams/$(teamId)/films/$(filmId))
+        && filmReservation(teamId, filmId).status == 'reserved'
+        && filmReservation(teamId, filmId).createdBy == request.auth.uid
+        && filmReservation(teamId, filmId).reservationExpiresAt > request.time;
+    }
+
+    function isReservedFilmUpload(teamId, filmId) {
+      return request.resource.size > 0
+        && request.resource.size <= 100000000
+        && request.resource.size == filmReservation(teamId, filmId).declaredBytes
+        && request.resource.contentType == 'video/mp4';
+    }
+
+    match /quarantine/{teamId}/{filmId}/source.mp4 {
+      allow create: if isBetaUser()
+        && ownsTeam(teamId)
+        && filmReservationOpen(teamId, filmId)
+        && isReservedFilmUpload(teamId, filmId);
+      allow read, update, delete: if false;
+    }
+
+    match /quarantine/{allPaths=**} {
+      allow read, write: if false;
+    }
+    match /films/{allPaths=**} {
+      allow read, write: if false;
+    }
+    match /frames/{allPaths=**} {
+      allow read, write: if false;
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
     }

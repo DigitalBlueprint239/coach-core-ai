@@ -104,6 +104,18 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // ---------- film analyzer (FILM-S1: reservation slice) ----------
+    // Film documents are SERVER-OWNED. The team owner may read them (to show
+    // upload/validation state); no client may create, update or delete one.
+    // Status, generation, byte counts and the rights acknowledgement are set
+    // only by Cloud Functions. The cap ledger (teams/*/filmLedger) and the
+    // idempotency records (filmOperations) have no client rules at all.
+    // No `ready`/playable state exists in this slice.
+    match /teams/{teamId}/films/{filmId} {
+      allow get, list: if isBetaUser() && ownsTeam(teamId);
+      allow create, update, delete: if false;
+    }
+
     // ---------- plays ----------
     function validPlayFields(d) {
       return d.keys().hasAll(['name', 'teamId', 'createdBy', 'createdAt', 'updatedAt'])

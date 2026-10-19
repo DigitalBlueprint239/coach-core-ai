@@ -29,6 +29,11 @@ const logger = require("firebase-functions/logger");
 const {createCoachAIHandler} = require("./src/ai/gateway");
 const {createOpenAIProvider} = require("./src/ai/providers/openai");
 const {reserveQuota, recordUsage} = require("./src/ai/quota");
+const {createFilmHandlers} = require("./src/film/reservation");
+const {createQuarantineFinalizeHandler} = require("./src/film/quarantine");
+const {createStorageAdapter} = require("./src/film/storage-adapter");
+const {onObjectFinalized} = require("firebase-functions/v2/storage");
+const {getStorage} = require("firebase-admin/storage");
 
 initializeApp();
 
@@ -321,6 +326,66 @@ exports.cleanupOldNotifications = onSchedule({
   }
   logger.info("cleanupOldNotifications", {deleted});
 });
+
+// ============================================
+// FILM ANALYZER — FILM-S1 (reservation slice only)
+// ============================================
+//
+// DEPLOY BLOCKED while D3/D7 terms are PENDING (functions/scripts/
+// film-terms-guard.js, firebase.json predeploy). Default OFF. No `ready`
+// state, decoder, playback, frames or AI exist in this slice.
+
+const FILM_ENABLED = defineBoolean("COACH_CORE_FILM_ENABLED", {
+  default: false,
+  description: "Kill switch for the Film Analyzer callables. Keep false in " +
+    "every deployed environment until the settled D3/D7 terms replace the " +
+    "PENDING placeholders in functions/src/film/limits.js.",
+});
+
+let cachedFilmStorage = null;
+/**
+ * Lazily build the generation-aware Storage adapter (default bucket).
+ * @return {object}
+ */
+function getFilmStorage() {
+  if (!cachedFilmStorage) {
+    cachedFilmStorage = createStorageAdapter(getStorage().bucket());
+  }
+  return cachedFilmStorage;
+}
+
+const filmHandlers = createFilmHandlers({
+  isEnabled: () => FILM_ENABLED.value() === true,
+  getUser: (uid) => getAuth().getUser(uid),
+  db,
+  deleteObject: (target) => getFilmStorage().deleteObject(target),
+  logger,
+});
+
+const filmCallableOptions = {
+  cors: ALLOWED_ORIGINS,
+  timeoutSeconds: 30,
+  memory: "256MiB",
+  maxInstances: 5,
+};
+
+exports.reserveFilmUpload = onCall(filmCallableOptions, filmHandlers.reserve);
+exports.abandonFilmUpload = onCall(filmCallableOptions, filmHandlers.abandon);
+
+const quarantineFinalizeHandler = createQuarantineFinalizeHandler({
+  db,
+  deleteObject: (target) => getFilmStorage().deleteObject(target),
+  readHead: (target) => getFilmStorage().readHead(target),
+  logger,
+});
+
+// Initial header check only (size, declared type, `ftyp` signature). Not
+// media validation; the best outcome is `validating`.
+exports.onFilmQuarantineFinalized = onObjectFinalized({
+  timeoutSeconds: 60,
+  memory: "256MiB",
+  maxInstances: 5,
+}, (event) => quarantineFinalizeHandler(event));
 
 // ============================================
 // HEALTH CHECK
