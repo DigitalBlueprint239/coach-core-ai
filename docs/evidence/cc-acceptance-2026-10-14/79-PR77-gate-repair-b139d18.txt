@@ -1,0 +1,71 @@
+Evidence 79 — PR #77 aggregate-gate repair (F1–F4 of Codex review 6256897327): delivery record
+==============================================================================================
+Date: 2026-10-18 (UTC). Author: Claude. Delivery, NOT independent acceptance. MVP remains NO-GO.
+Failed head: dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4.  New head: b139d18d5ea617fd4d505dbdd19ef1e0403662a9.
+Branch claude/ci-merge-eligibility-gate (PR #77, base codex/integrate-b11-b15-2026-10-17 = efc9116; unchanged).
+Changed vs dbf7a9a (3 files, +667/-239): e2e/scripts/merge-eligibility.mjs, e2e/scripts/merge-eligibility.test.mjs,
+  docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md. Workflow, e2e/package.json, application code, browser tests, Playwright
+  config, reporter, evidence.sh (B15) byte-identical to dbf7a9a. Diff vs efc9116 remains the same five files. PR #78 untouched.
+
+1. Reproduction on dbf7a9a (Codex adversarial.mjs from 6d9fdf5, run unmodified against a dbf7a9a worktree):
+   ELIGIBLE for: all-acceptance-empty; .last-run missing; duplicate acceptance identity; foreign-project failed test in an empty
+   phone-diagnostic artifact; diagnostic identities with zero completed results; erroring collector + zero acceptance; real reader
+   run.log-only inventory with modified unlisted results; real reader malformed .last-run with matching inventory; inventoryOk:true for
+   ../outside-proof.txt; FULL CLI exit 0 ELIGIBLE with the exit-1/errors[] collector. Rejection controls (grep recorded/unrecorded,
+   wrong sha/head/run/attempt) INELIGIBLE. Output identical to Codex's adversarial.txt. Retained: dbf7a9a-adversarial-reproduction.json.
+
+2. Repair (rules R1–R7 in the doc):
+   F1 collector: `--list --pass-with-no-tests` (verified: phone diagnostic now exits 0, errors []); any spawn error, nonzero exit/signal,
+      non-JSON/non-report, JSON errors[], foreign-project rows, missing/duplicate stable ids, bucket partition != unfiltered selection
+      (E2E_BUCKET=all), bucket overlap, or EMPTY acceptance throws -> R7 reason, CLI exit 1. evaluate() independently rejects empty
+      acceptance membership per project. No counts hard-coded; legitimate empty non-required buckets preserved.
+   F2 inventory: strict grammar (malformed lines rejected, not filtered), canonical in-artifact paths only (string check before any fs
+      access: no absolute, '..', '.', empty segment, backslash, wrong root), no duplicates, self-exclusions exactly B15's
+      (INVENTORY.sha256, UPLOAD_OK); COMPLETE coverage of every retained regular file under ci-evidence/ and test-results/ incl. hidden;
+      listed files must exist as regular in-artifact files and match; symlinks rejected and never followed; unexpected top-level entries
+      rejected; run.context, run.log, run.exit, results.json, .last-run.json required and listed.
+   F3 identities: Playwright stable test id (spec.id; same in --list and run — verified on 1.64 with a probe project); strict multiset
+      (missing/extra/duplicate); foreign-project rows rejected before filtering; legit-empty artifacts must contain zero test rows of any
+      project; every expected identity in every bucket needs `repeat` completed results (passed/failed/timedOut) — skipped/interrupted/
+      absent = "not executed to completion — selection is not coverage"; results.json schema + stats tally validated. Completed
+      diagnostic/obsolete failures remain visible and non-blocking.
+   F4 last-run: parsed, schema-valid record required in every bucket; failedTests == Playwright's own rule over results.json
+      (runner/lastRun.ts: !ok || didNotRun); passed/failed reconciled with failures/errors; interrupted/timedout block; acceptance needs
+      passed + no ids; non-required job "success" with last-run "failed" is inconsistent (R2).
+
+3. Focused checks on b139d18 (local, full history): node e2e/scripts/merge-eligibility.test.mjs -> 29 tests: 29 pass / 0 fail / 0 skipped
+   [gate29.txt]. Shallow clone of b139d18 (as in CI): 29 tests: 24 pass / 0 fail / 5 skipped (the five dbf7a9a reproduction checks —
+   reported as skips, never passes). Breakdown: 11 preserved behaviour checks; F1 8 (collector healthy, 12 fail-closed collector cases,
+   all-zero acceptance, full-CLI positive control exit 0 ELIGIBLE, full-CLI reviewer reproduction exit 1 R7, full-CLI empty collector
+   exit 1, + 2 dbf7a9a reproductions); F2 3 + 1 reproduction (17 inventory cases rejected by reader AND evaluator, canonical-path cases,
+   twelve on-disk artifacts end to end); F3 1 + 1 reproduction (10 cases); F4 2 + 1 reproduction (11 cases + real malformed file under
+   matching inventory); workflow contract 1 (now also pins B15's find exclusions and both upload paths incl. hidden files).
+   Note: the doc says "Reproduction legs (6)"; precisely, 5 checks cover 6 reproductions (F2 covers two). Doc wording only.
+   Codex's adversarial.mjs on b139d18: exits 1 at its fixture-extraction line (it slices dbf7a9a's test-file fixtures, which no longer
+   exist in that form) — not a verdict; its cases are re-implemented in-suite. [codex-harness-on-b139d18.txt]
+   Accepted suites unchanged: reporter 10/10; evidence 19 = 18 pass + 1 root-only skip locally.
+   Real collector on this checkout: 65/10/1 x2 desktop, 15/0/0 x2 phone = 182, partition verified.
+
+4. Actual Actions (bounded; no unchanged full matrix):
+   Push run 39186218419 (E2E, push @ b139d18): all 13 jobs CANCELLED by concurrency when the dispatch started; no aggregate verdict left.
+   Dispatch run 39186218570 attempt 1 (grep "D10-01|N2-D0|N2-A2", repeat 1): 12 E2E jobs completed (11 success; obsolete-fault-model
+     (chromium) failure = N2-A2 timeout, a completed obsolete failure); aggregate job 117849711179: self-checks SUCCESS (29 checks; shallow
+     checkout), download SUCCESS (12 artifacts), Evaluate FAILURE (exit 1), report upload SUCCESS. Annotation: INELIGIBLE, R1 + R5 reasons,
+     "+11 more" = 19 reasons total. Arithmetic: R1 (1) + recorded grep in all 12 artifacts (12) + identity mismatches acceptance chromium/
+     firefox missing 64, phone acceptance x2 missing 14, diagnostic desktop x2 missing 9 (6) = 19 -> ZERO R2/R3/R4/R6/R7 reasons: the
+     real artifacts satisfy the stricter complete-inventory, schema, last-run and job-reconciliation rules (incl. the failed obsolete job:
+     completed timedOut result, last-run failed, job failure — consistent, non-blocking).
+   Aggregate-only RERUN, attempt 2 (job 117850082844): the per-attempt jobs API lists all 13 jobs under attempt 2 (12 carried over, new ids);
+     download took the attempt-1 artifacts; verdict INELIGIBLE exit 1 with 31 reasons = the same 19 + 12 "R4 … artifact run_attempt 1 != 2
+     (stale artifact from another attempt)". A rerun can never reuse earlier evidence; the report upload under the same name succeeded on
+     attempt 2. Retained: annotations-<job>.json, run-39186218570-attempt{1,2}-jobs.json, run-39186218570-artifacts.json (13 artifact ids),
+     run-39186218419-push-cancelled-jobs.json.
+   Artifacts NOT downloaded by me (blob storage unreachable from this workspace) — for Codex: e2e-results-*-b139d18… (12) and
+     merge-eligibility-b139d18… id 12158247066 (attempt 1).
+
+5. Explicitly UNVERIFIED (not claimed): an actual pull_request / merge_group ELIGIBLE verdict on an appropriate candidate; merge-queue
+   execution; required-check selection across reruns on one SHA; safe terminal conclusions for a skipped aggregate (GitHub reports skipped
+   as Success — the earlier doc claim is corrected); enforcement (recovery branch unprotected, rulesets [] per Codex's read-only check).
+   Integration of PR #77 with accepted PR #78 (overlap: workflow + e2e/package.json) is a separate review.
+
+No merge, deployment, production/protection change, recovery action or AI activation. Delivery ≠ acceptance. MVP NO-GO.

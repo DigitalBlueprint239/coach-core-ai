@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: complete successful acceptance (pull_request): ELIGIBLE; diagnostic/obsolete failures visible, not blocking; phone empties legitimately empty
+ok 1 - complete successful acceptance (pull_request): ELIGIBLE; diagnostic/obsolete failures visible, not blocking; phone empties legitimately empty
+  ---
+  duration_ms: 15.616375
+  type: 'test'
+  ...
+# Subtest: merge_group is a trusted event too; workflow_dispatch and push are NOT (bounded/manual runs cannot satisfy the gate)
+ok 2 - merge_group is a trusted event too; workflow_dispatch and push are NOT (bounded/manual runs cannot satisfy the gate)
+  ---
+  duration_ms: 19.029849
+  type: 'test'
+  ...
+# Subtest: one failed required job (acceptance firefox) -> INELIGIBLE, named; other required rows unaffected
+ok 3 - one failed required job (acceptance firefox) -> INELIGIBLE, named; other required rows unaffected
+  ---
+  duration_ms: 2.730141
+  type: 'test'
+  ...
+# Subtest: failing acceptance TESTS with a (hypothetically) green job are still caught from results.json (R6)
+ok 4 - failing acceptance TESTS with a (hypothetically) green job are still caught from results.json (R6)
+  ---
+  duration_ms: 5.846451
+  type: 'test'
+  ...
+# Subtest: cancelled required job -> INELIGIBLE; cancelled NON-required job also blocks (coverage unproven)
+ok 5 - cancelled required job -> INELIGIBLE; cancelled NON-required job also blocks (coverage unproven)
+  ---
+  duration_ms: 7.147678
+  type: 'test'
+  ...
+# Subtest: skipped job -> INELIGIBLE; in-progress (not completed) job -> INELIGIBLE
+ok 6 - skipped job -> INELIGIBLE; in-progress (not completed) job -> INELIGIBLE
+  ---
+  duration_ms: 5.218664
+  type: 'test'
+  ...
+# Subtest: missing required job, duplicate job, and missing artifact -> INELIGIBLE
+ok 7 - missing required job, duplicate job, and missing artifact -> INELIGIBLE
+  ---
+  duration_ms: 9.530628
+  type: 'test'
+  ...
+# Subtest: finalize not successful (no UPLOAD_OK) or inventory problem in ANY job -> INELIGIBLE
+ok 8 - finalize not successful (no UPLOAD_OK) or inventory problem in ANY job -> INELIGIBLE
+  ---
+  duration_ms: 6.254314
+  type: 'test'
+  ...
+# Subtest: narrowed dispatch selection: grep recorded in run.context AND identities != membership -> INELIGIBLE (even with all-green results); diagnostic narrowing rejected too
+ok 9 - narrowed dispatch selection: grep recorded in run.context AND identities != membership -> INELIGIBLE (even with all-green results); diagnostic narrowing rejected too
+  ---
+  duration_ms: 10.722322
+  type: 'test'
+  ...
+# Subtest: results belonging to a different sha / run / attempt / head -> INELIGIBLE
+ok 10 - results belonging to a different sha / run / attempt / head -> INELIGIBLE
+  ---
+  duration_ms: 14.340561
+  type: 'test'
+  ...
+# Subtest: repeat mismatch and run-level errors -> INELIGIBLE; skipped / repeated results in acceptance -> INELIGIBLE
+ok 11 - repeat mismatch and run-level errors -> INELIGIBLE; skipped / repeated results in acceptance -> INELIGIBLE
+  ---
+  duration_ms: 10.184775
+  type: 'test'
+  ...
+# Subtest: F1 collector: a healthy source checkout yields per-bucket membership, partition verified, legitimate empty phone diagnostic/obsolete preserved; --pass-with-no-tests is used
+ok 12 - F1 collector: a healthy source checkout yields per-bucket membership, partition verified, legitimate empty phone diagnostic/obsolete preserved; --pass-with-no-tests is used
+  ---
+  duration_ms: 31.923653
+  type: 'test'
+  ...
+# Subtest: F1 collector fails CLOSED: nonzero exit (even with JSON), errors[] with exit 0, spawn error, signal, non-JSON, non-report, foreign project, missing/duplicate ids, partition mismatch, overlap, empty acceptance
+ok 13 - F1 collector fails CLOSED: nonzero exit (even with JSON), errors[] with exit 0, spawn error, signal, non-JSON, non-report, foreign project, missing/duplicate ids, partition mismatch, overlap, empty acceptance
+  ---
+  duration_ms: 24.923162
+  type: 'test'
+  ...
+# Subtest: F1 evaluate: empty ACCEPTANCE membership is never eligible (all-zero acceptance, reviewer fixture) — while empty non-required phone buckets stay legitimately empty
+ok 14 - F1 evaluate: empty ACCEPTANCE membership is never eligible (all-zero acceptance, reviewer fixture) — while empty non-required phone buckets stay legitimately empty
+  ---
+  duration_ms: 3.212062
+  type: 'test'
+  ...
+# Subtest: F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE
+ok 15 - F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE
+  ---
+  duration_ms: 2.554022
+  type: 'test'
+  ...
+# Subtest: F1 FULL CLI positive control: healthy collector + twelve complete on-disk artifacts + jobs -> exit 0 ELIGIBLE
+ok 16 - F1 FULL CLI positive control: healthy collector + twelve complete on-disk artifacts + jobs -> exit 0 ELIGIBLE
+  ---
+  duration_ms: 746.519326
+  type: 'test'
+  ...
+# Subtest: F1 FULL CLI: erroring collector (exit 1 + JSON errors[]) with zero-result artifacts and twelve green jobs -> nonzero exit, INELIGIBLE, R7 named (reviewer reproduction)
+ok 17 - F1 FULL CLI: erroring collector (exit 1 + JSON errors[]) with zero-result artifacts and twelve green jobs -> nonzero exit, INELIGIBLE, R7 named (reviewer reproduction)
+  ---
+  duration_ms: 136.945132
+  type: 'test'
+  ...
+# Subtest: F1 FULL CLI: collector that lists NOTHING anywhere (exit 0, no errors) -> nonzero exit, INELIGIBLE (empty acceptance never trusted)
+ok 18 - F1 FULL CLI: collector that lists NOTHING anywhere (exit 0, no errors) -> nonzero exit, INELIGIBLE (empty acceptance never trusted)
+  ---
+  duration_ms: 223.144216
+  type: 'test'
+  ...
+# Subtest: F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE
+ok 19 - F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE
+  ---
+  duration_ms: 419.030353
+  type: 'test'
+  ...
+# Subtest: F2 reader: an artifact written like evidence.sh (complete inventory incl. hidden .last-run.json, e2e/ prefix) verifies; context/results/last-run parsed
+ok 20 - F2 reader: an artifact written like evidence.sh (complete inventory incl. hidden .last-run.json, e2e/ prefix) verifies; context/results/last-run parsed
+  ---
+  duration_ms: 7.455637
+  type: 'test'
+  ...
+# Subtest: F2 reader + evaluator: incomplete, tampered, malformed, duplicate, escaping, symlinked, self-listing or missing inventories -> inventory rejected AND verdict INELIGIBLE (named R3)
+ok 21 - F2 reader + evaluator: incomplete, tampered, malformed, duplicate, escaping, symlinked, self-listing or missing inventories -> inventory rejected AND verdict INELIGIBLE (named R3)
+  ---
+  duration_ms: 51.268384
+  type: 'test'
+  ...
+# Subtest: F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted
+ok 22 - F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted
+  ---
+  duration_ms: 7.287881
+  type: 'test'
+  ...
+# Subtest: F2 real reader end to end: twelve complete on-disk artifacts -> ELIGIBLE; the same set with one run.log-only inventory -> INELIGIBLE
+ok 23 - F2 real reader end to end: twelve complete on-disk artifacts -> ELIGIBLE; the same set with one run.log-only inventory -> INELIGIBLE
+  ---
+  duration_ms: 7.882191
+  type: 'test'
+  ...
+# Subtest: F3: duplicate, foreign-project, unexpected, unexecuted, interrupted and malformed identities -> INELIGIBLE with named reasons; completed diagnostic failures remain visible and non-blocking
+ok 24 - F3: duplicate, foreign-project, unexpected, unexecuted, interrupted and malformed identities -> INELIGIBLE with named reasons; completed diagnostic failures remain visible and non-blocking
+  ---
+  duration_ms: 22.065287
+  type: 'test'
+  ...
+# Subtest: F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE
+ok 25 - F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE
+  ---
+  duration_ms: 6.432118
+  type: 'test'
+  ...
+# Subtest: F4: missing, malformed, schema-invalid or inconsistent last-run records (vs results.json and job conclusion) -> INELIGIBLE with named reasons
+ok 26 - F4: missing, malformed, schema-invalid or inconsistent last-run records (vs results.json and job conclusion) -> INELIGIBLE with named reasons
+  ---
+  duration_ms: 21.911227
+  type: 'test'
+  ...
+# Subtest: F4 real reader: a malformed .last-run.json with a MATCHING complete inventory is still rejected (hash integrity is not validity)
+ok 27 - F4 real reader: a malformed .last-run.json with a MATCHING complete inventory is still rejected (hash integrity is not validity)
+  ---
+  duration_ms: 3.325199
+  type: 'test'
+  ...
+# Subtest: F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE
+ok 28 - F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE
+  ---
+  duration_ms: 6.279867
+  type: 'test'
+  ...
+# Subtest: workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes
+ok 29 - workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes
+  ---
+  duration_ms: 0.572908
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1994.275272
