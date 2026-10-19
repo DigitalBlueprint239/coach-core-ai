@@ -1,0 +1,14 @@
+Base: efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc (accepted PR75).
+PR72 source cherry-pick: 35e0d77887ba87d2714706f0cdbb2511b442d1a2 -> acc2368 (full SHA in Git history).
+Configuration implementation: 882f584417c4827ff7ed81148a566ec35a49d344.
+Node24.19.0/npm11.9.0; clean npm ci --legacy-peer-deps at root, npm ci for functions/e2e; no lockfile changes.
+CI=true REACT_APP_ENABLE_LEGACY_IMPORT=true npm test -- --watchAll=false --runInBand --testPathPattern=src/features/legacy-import : 47 PASS /6 suites /exit0.
+CI=true REACT_APP_ENABLE_LEGACY_IMPORT=true npm test -- --watchAll=false --runInBand : 496 PASS /39 suites /exit0.
+CI=true npm test -- --watchAll=false --runInBand : 496 PASS /39 suites /exit0 (explicit .env.test testing opt-in).
+REACT_APP_ENABLE_LEGACY_IMPORT= CI=true npm test -- --watchAll=false --runInBand --runTestsByPath src/features/legacy-import/__tests__/import-configuration.test.tsx :7 PASS /exit0.
+node node_modules/typescript/bin/tsc --noEmit :exit0, empty diagnostic output retained.
+npm --prefix e2e run test:reporter :10 PASS /exit0.
+npm --prefix e2e run test:evidence :19 PASS /exit0.
+24 PR75 archives: downloaded each with artifact connector + curl; ZIP digest/size vs API; parse inventory, map e2e/ prefix to archive root; recompute every digest; exact membership except inventory/marker; inspect run.exit, results stats, required nonempty files and residual token shapes. All passed, no access gap.
+CRA env resolution checked in independent processes for dev/test/production/explicit opt-in, no other environment values printed.
+Browser install --with-deps failed locally because su authentication is unavailable; no local browser run claimed. Exact-head Actions dispatch is the intended browser validation lane.

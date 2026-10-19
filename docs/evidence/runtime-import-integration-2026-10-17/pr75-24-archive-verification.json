@@ -1,0 +1,482 @@
+[
+  {
+    "run": 39078328001,
+    "id": 12118390572,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:44.820Z",
+      "duration": 683.1059999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12118335763,
+    "name": "e2e-results-acceptance-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:41.563Z",
+      "duration": 5946.567,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12118256008,
+    "name": "e2e-results-acceptance-phone-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:50.697Z",
+      "duration": 6208.189,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12118235904,
+    "name": "e2e-results-obsolete-fault-model-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:14.694Z",
+      "duration": 7170.1849999999995,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12118185589,
+    "name": "e2e-results-diagnostic-phone-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:52.836Z",
+      "duration": 705.5139999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12118166179,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:12.256Z",
+      "duration": 459.20000000000005,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12117952189,
+    "name": "e2e-results-acceptance-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:55.630Z",
+      "duration": 5282.483,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12117932667,
+    "name": "e2e-results-acceptance-phone-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:45.838Z",
+      "duration": 4497.657,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12117887964,
+    "name": "e2e-results-diagnostic-phone-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:41.428Z",
+      "duration": 661.4549999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12117502905,
+    "name": "e2e-results-diagnostic-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:56.918Z",
+      "duration": 5100.657999999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12117423004,
+    "name": "e2e-results-diagnostic-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:57.848Z",
+      "duration": 4046.588,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078328001,
+    "id": 12117348074,
+    "name": "e2e-results-obsolete-fault-model-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:17:09.011Z",
+      "duration": 8433.861,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12118565140,
+    "name": "e2e-results-diagnostic-phone-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:42.760Z",
+      "duration": 675.9530000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12118500446,
+    "name": "e2e-results-acceptance-phone-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:21.765Z",
+      "duration": 524.251,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12118416005,
+    "name": "e2e-results-acceptance-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=1",
+    "stats": {
+      "startTime": "2026-10-17T23:21:35.938Z",
+      "duration": 16005.759000000002,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12118241350,
+    "name": "e2e-results-diagnostic-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:41.316Z",
+      "duration": 681.372,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12118221511,
+    "name": "e2e-results-acceptance-phone-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:22.921Z",
+      "duration": 522.9579999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12118111050,
+    "name": "e2e-results-diagnostic-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:21.115Z",
+      "duration": 516.1759999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12117858411,
+    "name": "e2e-results-obsolete-fault-model-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:44.044Z",
+      "duration": 649.214,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12117853485,
+    "name": "e2e-results-acceptance-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=1",
+    "stats": {
+      "startTime": "2026-10-17T23:21:27.160Z",
+      "duration": 13607.17,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12117763691,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:07.855Z",
+      "duration": 508.86100000000005,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12117748661,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:37.869Z",
+      "duration": 661.0160000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12117509558,
+    "name": "e2e-results-diagnostic-phone-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:08.106Z",
+      "duration": 467.747,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": 39078584595,
+    "id": 12117373327,
+    "name": "e2e-results-obsolete-fault-model-firefox-efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "archive_digest_match": true,
+    "size_match": true,
+    "inventory_complete": true,
+    "final_hashes_match": true,
+    "token_scan_clear": true,
+    "required_nonempty": true,
+    "test_exit": "exit=0",
+    "stats": {
+      "startTime": "2026-10-17T23:21:14.457Z",
+      "duration": 446.056,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

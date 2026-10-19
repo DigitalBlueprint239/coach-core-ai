@@ -1,4 +1,12 @@
-export const D10_APPROVED = true; // Coach Drew, 2026-10-13: implementation/testing only.
+// Public build configuration, not consent or authorization. Only an exact opt-in
+// enables the reviewed import flow; ordinary/release builds default OFF.
+export const isLegacyImportEnabled = () => process.env.REACT_APP_ENABLE_LEGACY_IMPORT === 'true';
+// Output-level canary for the release-build proof (scripts/security/release-import-config.js):
+// CRA inlines the build-time value, so the shipped bundle carries the literal
+// "coachcore:import-config=false" (or "=true" for the explicit emulator/test opt-in).
+// An unpinned build leaves no literal, which the proof treats as inconclusive and FAILS.
+export const IMPORT_CONFIG_MARKER = `coachcore:import-config=${process.env.REACT_APP_ENABLE_LEGACY_IMPORT}`;
+const DISABLED = 'Device-play import is disabled in this build. Originals preserved.';
 export const LEGACY_KEY = 'smartPlaybook_plays';
 export const decisionKey = (uid: string) => `coachcore:v1:${uid}:legacyImportDecision`;
 export const CLAIM_KEY = 'coachcore:v1:legacyImportClaim';
@@ -86,10 +94,17 @@ export const sameContent = (a: unknown, b: unknown): boolean => {
 export function hasUnfinishedImport(storage: Storage, session: ImportSession): boolean {
   if (importNotice(storage, session)) return false;
   const claim = storage.getItem(CLAIM_KEY);
-  if (claim) return JSON.parse(claim).status === 'pending';
+  if (claim) {
+    const value = JSON.parse(claim);
+    if (value.status !== undefined) return value.status === 'pending';
+    // Older clients could stop after writing a status-less claim but before
+    // recording completion/clearing pending. Resume only its original team.
+    if (value.teamId !== session.teamId) return false;
+  }
   return !!storage.getItem(pendingKey(session.uid));
 }
 export function declineImport(storage: Storage, session: ImportSession) {
+  if (!isLegacyImportEnabled()) throw new Error(DISABLED);
   const notice = importNotice(storage, session);
   if (notice) throw new Error(notice);
   if (hasUnfinishedImport(storage, session)) return 'postponed';
@@ -97,7 +112,8 @@ export function declineImport(storage: Storage, session: ImportSession) {
   return 'declined';
 }
 export async function importLegacy(storage: Storage, session: ImportSession, stillCurrent: () => boolean, backend: ImportBackend) {
-  if (!D10_APPROVED || !stillCurrent()) throw new Error('Account or team changed.');
+  if (!isLegacyImportEnabled()) throw new Error(DISABLED);
+  if (!stillCurrent()) throw new Error('Account or team changed.');
   const notice = importNotice(storage, session);
   if (notice) throw new Error(notice);
   if (storage.getItem(decisionKey(session.uid)) && !hasUnfinishedImport(storage, session)) return [];
