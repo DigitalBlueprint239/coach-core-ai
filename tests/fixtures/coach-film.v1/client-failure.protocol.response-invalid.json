@@ -1,0 +1,7 @@
+{
+  "clientFailure": {
+    "kind": "protocol",
+    "category": "response-invalid",
+    "retryEligible": false
+  }
+}

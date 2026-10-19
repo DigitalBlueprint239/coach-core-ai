@@ -47,6 +47,15 @@ jobs:
         run: npm ci --prefix tests/rules --no-audit --no-fund
       - name: Run rules tests in the emulator
         run: npm --prefix tests/rules test
+      # FILM-S1 (coach-film.v1): server handlers against the same local
+      # Firestore + Storage emulators, demo-* project, injected identity.
+      - name: Install functions dependencies (film emulator tests)
+        run: npm ci --prefix functions --no-audit --no-fund
+      - name: Run film handler tests in the emulator
+        run: >-
+          npx --prefix tests/rules firebase emulators:exec
+          --project demo-coach-core-beta --only firestore,storage
+          "npm --prefix functions run test:film-emulator"
 
   functions-gateway:
     name: Cloud Functions + OpenAI gateway (mocked provider)

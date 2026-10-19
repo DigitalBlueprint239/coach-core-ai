@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "coach-film.v1",
+  "operationId": "b02749c5-d23e-4f60-9b7c-8d9eafb0c1d2",
+  "action": "abandonFilmUpload",
+  "payload": {
+    "teamId": "team_fixture_a",
+    "filmId": "3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b"
+  }
+}

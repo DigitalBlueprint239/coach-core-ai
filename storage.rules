@@ -39,6 +39,44 @@ service firebase.storage {
       allow create, update: if isBetaUser() && ownsTeam(teamId) && isAllowedUpload();
     }
 
+    // ---------- film (coach-film.v1, FILM-S1) ----------
+    // Quarantine upload: create-only, by the reservation's creator, while the
+    // server-owned film document says `reserved` and unexpired, with the
+    // exact declared size. No client read/update/delete under quarantine/,
+    // films/ or frames/ (default deny). Literals below must equal
+    // functions/src/film/limits.js (static test FS-25). TEST PLACEHOLDERS:
+    // maxBytes PENDING_D3, content type PENDING_D3.
+    function filmDocPath(teamId, filmId) {
+      return /databases/(default)/documents/teams/$(teamId)/films/$(filmId);
+    }
+
+    // R7: the film document is read once and evaluated as a value
+    // (one exists + one get on the same path) instead of five gets.
+    function isLiveFilm(film, teamId, filmId) {
+      return film.teamId == teamId
+        && film.filmId == filmId
+        && film.createdBy == request.auth.uid
+        && film.status == 'reserved'
+        && request.time < film.reservationExpiresAt
+        && request.resource.size == film.declaredBytes;
+    }
+
+    function isLiveFilmReservation(teamId, filmId) {
+      return firestore.exists(filmDocPath(teamId, filmId))
+        && isLiveFilm(firestore.get(filmDocPath(teamId, filmId)).data, teamId, filmId);
+    }
+
+    match /quarantine/{teamId}/{filmId}/source.mp4 {
+      allow create: if isBetaUser()
+        && resource == null
+        && ownsTeam(teamId)
+        && request.resource.size > 0
+        && request.resource.size <= 100000000
+        && request.resource.contentType == 'video/mp4'
+        && isLiveFilmReservation(teamId, filmId);
+      allow read, update, delete: if false;
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
     }

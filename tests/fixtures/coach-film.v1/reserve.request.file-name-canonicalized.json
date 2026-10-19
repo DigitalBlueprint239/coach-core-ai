@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "coach-film.v1",
+  "operationId": "c13850d6-e34f-4a71-8c8d-9eafb0c1d2e3",
+  "action": "reserveFilmUpload",
+  "payload": {
+    "teamId": "team_fixture_a",
+    "declaredBytes": 48211954,
+    "declaredContentType": "video/mp4",
+    "fileName": "  Café drive.mp4\t",
+    "rightsAcknowledged": true,
+    "rightsWordingVersion": "rights-v1"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "error": {
+    "code": "failed-precondition",
+    "retryable": false,
+    "reason": "invalid-state"
+  }
+}

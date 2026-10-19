@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "coach-film.v1",
+  "operationId": "057c941a-2783-4eb5-8ac1-d2e3f4a5b6c7",
+  "action": "reserveFilmUpload",
+  "payload": {
+    "teamId": "team_fixture_a",
+    "declaredBytes": 48211954,
+    "declaredContentType": "video/mp4",
+    "fileName": "  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.mp4 \t",
+    "rightsAcknowledged": true,
+    "rightsWordingVersion": "rights-v1"
+  }
+}
