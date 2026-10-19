@@ -151,3 +151,8 @@ in `docs/evidence/b11-b15-integration-2026-10-17/`.
 This is NOT independent combined-candidate acceptance. Bounded combined CI/ZIP review,
 PR72/default-off import configuration and recovery integration remain separate.
 No full matrix, merge, deployment, protection change or AI activation; MVP NO-GO.
+
+
+## Independent PR #77 repair re-review — 2026-10-19 / Codex
+
+Headb139d18d5ea617fd4d505dbdd19ef1e0403662a9 againstefc9116: FAIL implementation acceptance for residual retained-root symlink reads (invalid inventory blocks eligibility, but outside inputs are still read/parsed and parser diagnostics include content). Prior F1–F4 false-ELIGIBLE repairs verified with frozen CLI inputs and valid new-format controls.29/29 local/full history; CI24pass/5explicit skips per attempt; reporter10/evidence19 pass. Fourteen new39186218570 ZIPs verified; both attempt reports recomputed exactly (19/31 reasons); attempt2 carries prior12 jobs but rejects12 stale contexts. Same-named aggregate upload succeeded: earlier blanket collision assumption corrected. Eight actual Node-only Playwright semantics/stable-ID probes agree with last-run logic. Enforcement NOT READY: !cancelled job skip path unchanged; actualcancel39186218419 all13cancelled, not skip-bypass proof. No trusted-event ELIGIBLE/queue/protection behavior established. PR78 accepted4f6b901 remains separate. Detail [PR77_REREVIEW_B139D18.md](PR77_REREVIEW_B139D18.md). No integration/full matrix/merge/deploy/protection/AI action; MVP NO-GO.

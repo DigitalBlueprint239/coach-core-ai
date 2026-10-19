@@ -1,0 +1,62 @@
+{
+  "original_script_sha256": "f16d1dc843ab38535c537e4aa9007e6b8859d82f07c206ea3b45ea0f403affe8",
+  "cli": [
+    {
+      "head": "dbf7a9a",
+      "exit": 0,
+      "eligible": true,
+      "reasons": []
+    },
+    {
+      "head": "b139d18",
+      "exit": 1,
+      "eligible": false,
+      "reasons": [
+        "R7 could not gather inputs (fail closed): membership: playwright --list chromium/acceptance: collector exited 1: ",
+        "R5 E2E acceptance (chromium): no source-derived membership available",
+        "R5 E2E diagnostic (chromium): no source-derived membership available",
+        "R5 E2E obsolete-fault-model (chromium): no source-derived membership available",
+        "R5 E2E acceptance (firefox): no source-derived membership available",
+        "R5 E2E diagnostic (firefox): no source-derived membership available",
+        "R5 E2E obsolete-fault-model (firefox): no source-derived membership available",
+        "R5 E2E acceptance (phone-chromium): no source-derived membership available",
+        "R5 E2E diagnostic (phone-chromium): no source-derived membership available",
+        "R5 E2E obsolete-fault-model (phone-chromium): no source-derived membership available",
+        "R5 E2E acceptance (phone-firefox): no source-derived membership available",
+        "R5 E2E diagnostic (phone-firefox): no source-derived membership available",
+        "R5 E2E obsolete-fault-model (phone-firefox): no source-derived membership available"
+      ]
+    }
+  ],
+  "root_symlink": {
+    "artifact_dir": "/workspace/scratch/review77-r2/root-links-uzNNDO",
+    "outside_dir": "/workspace/scratch/review77-r2/outside-jiFiit",
+    "read": {
+      "uploadOk": true,
+      "inventoryOk": "8 inventory problem(s): artifact root ci-evidence is not a real directory; artifact root test-results is not a real directory; inventory has no digest lines; …",
+      "inventory": {
+        "listed": 0,
+        "retained": 0,
+        "problems": [
+          "artifact root ci-evidence is not a real directory",
+          "artifact root test-results is not a real directory",
+          "inventory has no digest lines",
+          "required evidence file ci-evidence/run.context is absent or unlisted",
+          "required evidence file ci-evidence/run.log is absent or unlisted",
+          "required evidence file ci-evidence/run.exit is absent or unlisted",
+          "required evidence file test-results/results.json is absent or unlisted",
+          "required evidence file test-results/.last-run.json is absent or unlisted"
+        ]
+      },
+      "context": {
+        "sha": "PUBLIC_OUTSIDE_CONTEXT_SENTINEL"
+      },
+      "results": {
+        "PUBLIC_OUTSIDE_JSON_SENTINEL": true
+      },
+      "resultsProblem": null,
+      "lastRun": null,
+      "lastRunProblem": "unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)"
+    }
+  }
+}

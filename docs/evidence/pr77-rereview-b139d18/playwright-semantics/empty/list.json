@@ -1,0 +1,90 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/coach-core-review77-r2/e2e/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "/workspace/scratch/review77-r2/semantics/empty/playwright.config.cjs",
+      "--reporter=json",
+      "--pass-with-no-tests",
+      "--list"
+    ],
+    "configFile": "/workspace/scratch/review77-r2/semantics/empty/playwright.config.cjs",
+    "rootDir": "/workspace/scratch/review77-r2/semantics/empty",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/scratch/review77-r2/semantics/empty/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "probe",
+        "name": "probe",
+        "testDir": "/workspace/scratch/review77-r2/semantics/empty",
+        "testIgnore": [],
+        "testMatch": [
+          "sample.spec.cjs"
+        ],
+        "timeout": 300
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/scratch/review77-r2/semantics/empty/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "name": "probe",
+        "testDir": "/workspace/scratch/review77-r2/semantics/empty",
+        "snapshotDir": "/workspace/scratch/review77-r2/semantics/empty",
+        "testIgnore": [],
+        "testMatch": "sample.spec.cjs",
+        "timeout": 300,
+        "use": {},
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "probe"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-19T02:26:14.065Z",
+    "duration": 19.734000000000037,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

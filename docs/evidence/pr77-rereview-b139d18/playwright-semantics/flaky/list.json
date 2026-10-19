@@ -1,0 +1,119 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/coach-core-review77-r2/e2e/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "/workspace/scratch/review77-r2/semantics/flaky/playwright.config.cjs",
+      "--reporter=json",
+      "--pass-with-no-tests",
+      "--list"
+    ],
+    "configFile": "/workspace/scratch/review77-r2/semantics/flaky/playwright.config.cjs",
+    "rootDir": "/workspace/scratch/review77-r2/semantics/flaky",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/scratch/review77-r2/semantics/flaky/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "probe",
+        "name": "probe",
+        "testDir": "/workspace/scratch/review77-r2/semantics/flaky",
+        "testIgnore": [],
+        "testMatch": [
+          "sample.spec.cjs"
+        ],
+        "timeout": 300
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/scratch/review77-r2/semantics/flaky/results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "name": "probe",
+        "testDir": "/workspace/scratch/review77-r2/semantics/flaky",
+        "snapshotDir": "/workspace/scratch/review77-r2/semantics/flaky",
+        "testIgnore": [],
+        "testMatch": "sample.spec.cjs",
+        "timeout": 300,
+        "use": {},
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "probe"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "sample.spec.cjs",
+      "file": "sample.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "flaky",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "probe",
+              "projectName": "probe",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8aa1cfe786b44e0de529-b8ef9a0e87f5fc337001",
+          "file": "sample.spec.cjs",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-19T02:26:12.195Z",
+    "duration": 27.887,
+    "expected": 0,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

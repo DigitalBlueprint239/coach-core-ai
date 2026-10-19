@@ -1,0 +1,294 @@
+{
+  "eligible": false,
+  "reasons": [
+    "R1 event \"workflow_dispatch\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+    "R4 E2E acceptance (chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E acceptance (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R5 E2E acceptance (chromium): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted — first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+    "R4 E2E diagnostic (chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E diagnostic (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R5 E2E diagnostic (chromium): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted — first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+    "R4 E2E obsolete-fault-model (chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E obsolete-fault-model (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R4 E2E acceptance (firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E acceptance (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R5 E2E acceptance (firefox): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted — first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+    "R4 E2E diagnostic (firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E diagnostic (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R5 E2E diagnostic (firefox): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted — first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+    "R4 E2E obsolete-fault-model (firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E obsolete-fault-model (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R4 E2E acceptance (phone-chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E acceptance (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R5 E2E acceptance (phone-chromium): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted — first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+    "R4 E2E diagnostic (phone-chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E diagnostic (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R4 E2E obsolete-fault-model (phone-chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E obsolete-fault-model (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R4 E2E acceptance (phone-firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E acceptance (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R5 E2E acceptance (phone-firefox): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted — first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+    "R4 E2E diagnostic (phone-firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E diagnostic (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+    "R4 E2E obsolete-fault-model (phone-firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+    "R5 E2E obsolete-fault-model (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection"
+  ],
+  "rows": [
+    {
+      "job": "E2E acceptance (chromium)",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 65,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (chromium)",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 10,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (chromium)",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "failure",
+      "artifact": "present",
+      "selected": 1,
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (firefox)",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 65,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (firefox)",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 10,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (firefox)",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 15,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 15,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "FAIL",
+      "notes": []
+    }
+  ],
+  "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+  "headSha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+  "event": "workflow_dispatch",
+  "runId": "39186218570",
+  "attempt": "2",
+  "repeat": 1,
+  "gatherErrors": [],
+  "artifactsSeen": [
+    "e2e-results-acceptance-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-acceptance-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-acceptance-phone-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-acceptance-phone-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-diagnostic-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-diagnostic-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-diagnostic-phone-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-diagnostic-phone-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-obsolete-fault-model-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-obsolete-fault-model-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-obsolete-fault-model-phone-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "e2e-results-obsolete-fault-model-phone-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9"
+  ],
+  "jobsSeen": [
+    {
+      "name": "Coach Core merge eligibility",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "E2E diagnostic (chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E diagnostic (firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E obsolete-fault-model (phone-chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E diagnostic (phone-chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E diagnostic (phone-firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (phone-chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (phone-firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E obsolete-fault-model (firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E obsolete-fault-model (chromium)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "E2E acceptance (firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E obsolete-fault-model (phone-firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

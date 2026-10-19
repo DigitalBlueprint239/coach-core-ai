@@ -1,0 +1,42 @@
+{
+  "base": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+  "head": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+  "previous": "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4",
+  "changed_vs_base": [
+    ".github/workflows/e2e-emulator.yml",
+    "docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md",
+    "e2e/package.json",
+    "e2e/scripts/merge-eligibility.mjs",
+    "e2e/scripts/merge-eligibility.test.mjs"
+  ],
+  "changed_vs_previous": [
+    "docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md",
+    "e2e/scripts/merge-eligibility.mjs",
+    "e2e/scripts/merge-eligibility.test.mjs"
+  ],
+  "accepted_pr78": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+  "pr78_overlap": [
+    ".github/workflows/e2e-emulator.yml",
+    "e2e/package.json"
+  ],
+  "unchanged": {
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:.github/workflows/e2e-emulator.yml": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:e2e/package.json": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:src": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:e2e/tests": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:e2e/playwright.config.ts": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:e2e/reporters": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:e2e/scripts/evidence.sh": true,
+    "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4:e2e/scripts/evidence.test.mjs": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:src": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/tests": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/playwright.config.ts": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/reporters": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/scripts/evidence.sh": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/scripts/evidence.test.mjs": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/scripts/build-app.sh": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:package.json": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:package-lock.json": true,
+    "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc:e2e/package-lock.json": true
+  }
+}

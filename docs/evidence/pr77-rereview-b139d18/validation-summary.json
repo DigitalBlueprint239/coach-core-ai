@@ -1,0 +1,27 @@
+{
+  "local_node": "v24.19.0",
+  "local_npm": "11.9.0",
+  "local_gate": {
+    "tests": 29,
+    "pass": 29,
+    "fail": 0,
+    "skipped": 0
+  },
+  "ci_gate_each_attempt": {
+    "tests": 29,
+    "pass": 24,
+    "fail": 0,
+    "skipped": 5
+  },
+  "reporter_local": {
+    "pass": 10,
+    "skip": 0
+  },
+  "evidence_local": {
+    "pass": 19,
+    "skip": 0
+  },
+  "failed_head_history_available": true,
+  "actual_trusted_eligible_verified": false,
+  "actual_merge_queue_verified": false
+}

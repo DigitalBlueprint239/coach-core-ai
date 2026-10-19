@@ -1,0 +1,58 @@
+[
+  {
+    "name": "passed",
+    "exit": 0,
+    "last": "passed",
+    "failed_ids": 0,
+    "stable_ids_match": true
+  },
+  {
+    "name": "failed",
+    "exit": 1,
+    "last": "failed",
+    "failed_ids": 1,
+    "stable_ids_match": true
+  },
+  {
+    "name": "expected-failure",
+    "exit": 0,
+    "last": "passed",
+    "failed_ids": 0,
+    "stable_ids_match": true
+  },
+  {
+    "name": "explicit-skip",
+    "exit": 0,
+    "last": "passed",
+    "failed_ids": 0,
+    "stable_ids_match": true
+  },
+  {
+    "name": "timed-out",
+    "exit": 1,
+    "last": "failed",
+    "failed_ids": 1,
+    "stable_ids_match": true
+  },
+  {
+    "name": "before-all-failure",
+    "exit": 1,
+    "last": "failed",
+    "failed_ids": 2,
+    "stable_ids_match": true
+  },
+  {
+    "name": "flaky",
+    "exit": 0,
+    "last": "passed",
+    "failed_ids": 0,
+    "stable_ids_match": true
+  },
+  {
+    "name": "empty",
+    "exit": 0,
+    "last": "passed",
+    "failed_ids": 0,
+    "stable_ids_match": true
+  }
+]

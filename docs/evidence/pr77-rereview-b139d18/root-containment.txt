@@ -1,0 +1,3 @@
+{"roots":["ci-evidence"],"inventory_rejected":true,"outside_context_parsed":true,"outside_results_parsed":false,"last_run_problem":null}
+{"roots":["test-results"],"inventory_rejected":true,"outside_context_parsed":false,"outside_results_parsed":true,"last_run_problem":"unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)"}
+{"roots":["ci-evidence","test-results"],"inventory_rejected":true,"outside_context_parsed":true,"outside_results_parsed":true,"last_run_problem":"unparseable (Unexpected token 'P', \"PUBLIC_OUT\"... is not valid JSON)"}

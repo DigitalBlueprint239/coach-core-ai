@@ -1,0 +1,14 @@
+evalmachine.<anonymous>:7
+const idOf = (label, project) => sha256(`${project}|${label}`).slice(0, 20) + '-' + sha256(label).slice(0, 20);
+                                                               ^
+
+ReferenceError: sha256 is not defined
+    at idOf (evalmachine.<anonymous>:7:64)
+    at evalmachine.<anonymous>:9:65
+    at Array.map (<anonymous>)
+    at memberOf (evalmachine.<anonymous>:9:54)
+    at membershipFor (evalmachine.<anonymous>:15:19)
+    at Object.base (evalmachine.<anonymous>:45:41)
+    at file:///workspace/scratch/review77/adversarial.mjs:6:44
+
+Node.js v24.19.0

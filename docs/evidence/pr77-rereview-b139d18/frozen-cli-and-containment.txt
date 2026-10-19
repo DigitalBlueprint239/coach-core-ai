@@ -1,0 +1,3 @@
+Frozen original CLI payload dbf7a9a 0 true
+Frozen original CLI payload b139d18 1 false
+Root-symlink inventory rejected: true outside context parsed: true outside results parsed: true outside parse error: unparseable (Unexpected token 'P', "PUBLIC_OUT"... is not valid JSON)

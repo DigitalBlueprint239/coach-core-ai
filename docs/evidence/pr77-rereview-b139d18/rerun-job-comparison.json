@@ -1,0 +1,132 @@
+[
+  {
+    "name": "E2E diagnostic (chromium)",
+    "attempt1_id": 117849103910,
+    "attempt2_id": 117850082862,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E obsolete-fault-model (phone-firefox)",
+    "attempt1_id": 117849104003,
+    "attempt2_id": 117850118558,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E acceptance (phone-firefox)",
+    "attempt1_id": 117849104020,
+    "attempt2_id": 117850107788,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E obsolete-fault-model (phone-chromium)",
+    "attempt1_id": 117849104023,
+    "attempt2_id": 117850083380,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E obsolete-fault-model (firefox)",
+    "attempt1_id": 117849104027,
+    "attempt2_id": 117850108875,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E diagnostic (firefox)",
+    "attempt1_id": 117849104070,
+    "attempt2_id": 117850083089,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E obsolete-fault-model (chromium)",
+    "attempt1_id": 117849104077,
+    "attempt2_id": 117850109000,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "failure"
+  },
+  {
+    "name": "E2E acceptance (chromium)",
+    "attempt1_id": 117849104078,
+    "attempt2_id": 117850102655,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E diagnostic (phone-chromium)",
+    "attempt1_id": 117849104092,
+    "attempt2_id": 117850083436,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E acceptance (phone-chromium)",
+    "attempt1_id": 117849104103,
+    "attempt2_id": 117850083575,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E acceptance (firefox)",
+    "attempt1_id": 117849104176,
+    "attempt2_id": 117850112067,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "E2E diagnostic (phone-firefox)",
+    "attempt1_id": 117849104191,
+    "attempt2_id": 117850083522,
+    "same_start": true,
+    "same_end": true,
+    "attempt1_start": "2026-10-19T01:37:45Z",
+    "attempt2_start": "2026-10-19T01:37:45Z",
+    "conclusion": "success"
+  },
+  {
+    "name": "Coach Core merge eligibility",
+    "attempt1_id": 117849711179,
+    "attempt2_id": 117850082844,
+    "same_start": false,
+    "same_end": false,
+    "attempt1_start": "2026-10-19T01:40:29Z",
+    "attempt2_start": "2026-10-19T01:42:14Z",
+    "conclusion": "failure"
+  }
+]

@@ -1,0 +1,37 @@
+✔ complete successful acceptance (pull_request): ELIGIBLE; diagnostic/obsolete failures visible, not blocking; phone empties legitimately empty (21.256293ms)
+✔ merge_group is a trusted event too; workflow_dispatch and push are NOT (bounded/manual runs cannot satisfy the gate) (9.282167ms)
+✔ one failed required job (acceptance firefox) -> INELIGIBLE, named; other required rows unaffected (2.635958ms)
+✔ failing acceptance TESTS with a (hypothetically) green job are still caught from results.json (R6) (2.539282ms)
+✔ cancelled required job -> INELIGIBLE; cancelled NON-required job also blocks (coverage unproven) (4.81151ms)
+✔ skipped job -> INELIGIBLE; in-progress (not completed) job -> INELIGIBLE (4.928576ms)
+✔ missing required job, duplicate job, and missing artifact -> INELIGIBLE (6.825479ms)
+✔ finalize not successful (no UPLOAD_OK) or inventory problem in ANY job -> INELIGIBLE (8.13149ms)
+✔ narrowed dispatch selection: grep recorded in run.context AND identities != membership -> INELIGIBLE (even with all-green results); diagnostic narrowing rejected too (7.034214ms)
+✔ results belonging to a different sha / run / attempt / head -> INELIGIBLE (7.939489ms)
+✔ repeat mismatch and run-level errors -> INELIGIBLE; skipped / repeated results in acceptance -> INELIGIBLE (8.824185ms)
+✔ F1 collector: a healthy source checkout yields per-bucket membership, partition verified, legitimate empty phone diagnostic/obsolete preserved; --pass-with-no-tests is used (25.436741ms)
+✔ F1 collector fails CLOSED: nonzero exit (even with JSON), errors[] with exit 0, spawn error, signal, non-JSON, non-report, foreign project, missing/duplicate ids, partition mismatch, overlap, empty acceptance (16.742783ms)
+✔ F1 evaluate: empty ACCEPTANCE membership is never eligible (all-zero acceptance, reviewer fixture) — while empty non-required phone buckets stay legitimately empty (5.096099ms)
+✔ F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE (2.429536ms)
+✔ F1 FULL CLI positive control: healthy collector + twelve complete on-disk artifacts + jobs -> exit 0 ELIGIBLE (651.416616ms)
+✔ F1 FULL CLI: erroring collector (exit 1 + JSON errors[]) with zero-result artifacts and twelve green jobs -> nonzero exit, INELIGIBLE, R7 named (reviewer reproduction) (108.745655ms)
+✔ F1 FULL CLI: collector that lists NOTHING anywhere (exit 0, no errors) -> nonzero exit, INELIGIBLE (empty acceptance never trusted) (198.218493ms)
+✔ F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE (413.314327ms)
+✔ F2 reader: an artifact written like evidence.sh (complete inventory incl. hidden .last-run.json, e2e/ prefix) verifies; context/results/last-run parsed (4.872623ms)
+✔ F2 reader + evaluator: incomplete, tampered, malformed, duplicate, escaping, symlinked, self-listing or missing inventories -> inventory rejected AND verdict INELIGIBLE (named R3) (60.085061ms)
+✔ F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted (9.033311ms)
+✔ F2 real reader end to end: twelve complete on-disk artifacts -> ELIGIBLE; the same set with one run.log-only inventory -> INELIGIBLE (9.149574ms)
+✔ F3: duplicate, foreign-project, unexpected, unexecuted, interrupted and malformed identities -> INELIGIBLE with named reasons; completed diagnostic failures remain visible and non-blocking (42.461594ms)
+✔ F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE (6.604836ms)
+✔ F4: missing, malformed, schema-invalid or inconsistent last-run records (vs results.json and job conclusion) -> INELIGIBLE with named reasons (21.395704ms)
+✔ F4 real reader: a malformed .last-run.json with a MATCHING complete inventory is still rejected (hash integrity is not validity) (2.678161ms)
+✔ F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE (5.225524ms)
+✔ workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes (0.437971ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1698.408031

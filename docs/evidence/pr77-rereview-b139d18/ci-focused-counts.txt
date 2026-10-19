@@ -1,0 +1,9 @@
+2026-10-19T01:40:42.1797518Z ok 15 - F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T01:40:42.1814613Z ok 19 - F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T01:40:42.1828964Z ok 22 - F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T01:40:42.1843760Z ok 25 - F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T01:40:42.1857432Z ok 28 - F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T01:40:42.2902007Z # tests 29
+2026-10-19T01:40:42.2902666Z # pass 24
+2026-10-19T01:40:42.2903050Z # fail 0
+2026-10-19T01:40:42.2903735Z # skipped 5

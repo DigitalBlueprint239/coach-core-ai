@@ -1,0 +1,498 @@
+[
+  {
+    "id": 12158665378,
+    "name": "merge-eligibility-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:9845832fa9cf5e136dd3f554a6dacd65768efa95e4eac7a44461aabe1fae8df0",
+    "attempt": 2,
+    "verdict": "INELIGIBLE",
+    "reason_count": 31,
+    "reasons": [
+      "R1 event \"workflow_dispatch\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+      "R4 E2E acceptance (chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E acceptance (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (chromium): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R4 E2E diagnostic (chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E diagnostic (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (chromium): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R4 E2E obsolete-fault-model (chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E obsolete-fault-model (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R4 E2E acceptance (firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E acceptance (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R4 E2E diagnostic (firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E diagnostic (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (firefox): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R4 E2E obsolete-fault-model (firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E obsolete-fault-model (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R4 E2E acceptance (phone-chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E acceptance (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R4 E2E diagnostic (phone-chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E diagnostic (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R4 E2E obsolete-fault-model (phone-chromium): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E obsolete-fault-model (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R4 E2E acceptance (phone-firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E acceptance (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R4 E2E diagnostic (phone-firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E diagnostic (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R4 E2E obsolete-fault-model (phone-firefox): artifact run_attempt 1 != 2 (stale artifact from another attempt)",
+      "R5 E2E obsolete-fault-model (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection"
+    ]
+  },
+  {
+    "id": 12158570798,
+    "name": "e2e-results-diagnostic-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:d3ea054d37217b0549b3957a91e1b2b212aa672c7e71470e9ffa95a873ebb584",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-164b5f667a474a7d800d",
+        "title": "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team",
+        "project": "chromium",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12158506048,
+    "name": "e2e-results-acceptance-phone-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:d6daf6c25b56d7f166c2bb58d830e154e27b2c5e03a44abac07a49f149884d43",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "05d3bb950b4a0761726b-1ad1ad193959c8d686bb",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12158480992,
+    "name": "e2e-results-acceptance-phone-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:281720dee95a1acae1a88b34438f17e9714662ed2fa524dc739e175c87073211",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "05d3bb950b4a0761726b-66a56b19fa89b22d55f3",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12158251165,
+    "name": "e2e-results-diagnostic-phone-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:18c3fa0c792d8d3dd92998b8e050b25ebe610d5d69468d6403d31716776c13bc",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12158247066,
+    "name": "merge-eligibility-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:5201b27bb4b07f3ab331d06d648e655623a8898606531ecca995f00c97eeadd1",
+    "attempt": 1,
+    "verdict": "INELIGIBLE",
+    "reason_count": 19,
+    "reasons": [
+      "R1 event \"workflow_dispatch\" is not a trusted merge event (pull_request/merge_group); bounded or manual runs cannot satisfy the release gate",
+      "R5 E2E acceptance (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (chromium): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R5 E2E diagnostic (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (chromium): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R5 E2E obsolete-fault-model (chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (firefox): executed identities != membership (missing 64, extra 0); selection was narrowed or membership drifted \u2014 first missing: ai-gateway.spec.ts:14:1 E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+      "R5 E2E diagnostic (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E diagnostic (firefox): executed identities != membership (missing 9, extra 0); selection was narrowed or membership drifted \u2014 first missing: n2.spec.ts:51:1 N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+      "R5 E2E obsolete-fault-model (firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-chromium): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R5 E2E diagnostic (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E obsolete-fault-model (phone-chromium): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E acceptance (phone-firefox): executed identities != membership (missing 14, extra 0); selection was narrowed or membership drifted \u2014 first missing: auth.spec.ts:100:1 E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+      "R5 E2E diagnostic (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection",
+      "R5 E2E obsolete-fault-model (phone-firefox): a dispatch grep \"D10-01|N2-D0|N2-A2\" narrowed the selection"
+    ]
+  },
+  {
+    "id": 12158121625,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:6166f17234a452a63be6326c9f6e86e8101f7ac7894792b7f56fef28d2934009",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157993476,
+    "name": "e2e-results-diagnostic-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:54b5c78439f60cf05eed5f9f6130964662b9def837c6eb1eebeb1d8062c7b991",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-ec9721576db84de1d631",
+        "title": "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team",
+        "project": "firefox",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157977364,
+    "name": "e2e-results-obsolete-fault-model-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:64cd95200496c8eea6f165125f4acc7b879b6c78f341df0f590219e05a8e2d5e",
+    "inventory_complete": true,
+    "inventory_file_count": 10,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 1,
+    "last_run": {
+      "status": "failed",
+      "failedTests": [
+        "f1fe33de864ec03361b0-6d34d31b6605f6a419d9"
+      ]
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-6d34d31b6605f6a419d9",
+        "title": "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team",
+        "project": "chromium",
+        "status": "unexpected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "timedOut",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157912358,
+    "name": "e2e-results-diagnostic-phone-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:7240a861e4fdde849d93d2affbd53022a24bc391de55b0a8f6cd0b53742a62a5",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157898848,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:fe5dfcd22a63b90f20da30be62e7863bf582ec6b4ff9a9a1c6e6eb9f1a5f731d",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157847611,
+    "name": "e2e-results-acceptance-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:fce2cb3ee608460c55a2d898e33ce708d19ae418fad1ea58fddaaa9138785908",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "05d3bb950b4a0761726b-0af466174f870bc0fab5",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157819135,
+    "name": "e2e-results-acceptance-chromium-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:02c5fe2861e119ba6b951a0a4e8fc466f17171a58de5d41fbf6179f52e5be241",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "05d3bb950b4a0761726b-2b8c59e0e5dc054529eb",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  },
+  {
+    "id": 12157099979,
+    "name": "e2e-results-obsolete-fault-model-firefox-b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+    "digest": "sha256:668b1666f3e4915da12213f1ea46b41fecdc55f48ad6f3684aa3131fb21f0a0e",
+    "inventory_complete": true,
+    "inventory_file_count": 7,
+    "all_hashes_verified": true,
+    "context": {
+      "sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "head_sha": "b139d18d5ea617fd4d505dbdd19ef1e0403662a9",
+      "event": "workflow_dispatch",
+      "run_id": "39186218570",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": "D10-01|N2-D0|N2-A2"
+    },
+    "test_exit": 0,
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-053a6d0f2cf86ecc05f6",
+        "title": "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team",
+        "project": "firefox",
+        "status": "expected",
+        "expectedStatus": "passed",
+        "results": [
+          [
+            "passed",
+            0
+          ]
+        ]
+      }
+    ],
+    "configured_text_token_scans_clear": true
+  }
+]

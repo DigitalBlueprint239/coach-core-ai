@@ -1,0 +1,13 @@
+valid baseline / completed diagnostic failures / real empty buckets {"old":true,"new":true}
+original mutation: zero acceptance everywhere {"old":true,"new":false}
+original mutation: missing last-run {"old":true,"new":false}
+original mutation: duplicate passing identity {"old":true,"new":false}
+original mutation: foreign row in empty bucket {"old":true,"new":false}
+original mutation: diagnostic selection but no completed executions {"old":true,"new":false}
+partial inventory rejected
+duplicate digest entry rejected
+malformed line rejected
+unlisted hidden payload rejected
+traversal rejected
+file symlink rejected
+malformed last-run under matching inventory rejected

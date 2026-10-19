@@ -1,0 +1,18 @@
+baseline complete selection {"eligible":true,"reasons":0}
+all acceptance memberships empty: zero executions in all12 jobs {"eligible":true,"reasons":0}
+acceptance .last-run missing/unparseable {"eligible":true,"reasons":0}
+duplicate acceptance identity/result (extra execution despite repeat1) {"eligible":true,"reasons":0}
+legitimate-empty artifact contains foreign-project failed test {"eligible":true,"reasons":0}
+diagnostic selected identities present but zero completed results {"eligible":true,"reasons":0}
+recorded narrowed diagnostic grep (rejection control) {"eligible":false,"reasons":1}
+unrecorded narrowed diagnostic membership (rejection control) {"eligible":false,"reasons":1}
+wrong artifact sha (rejection control) {"eligible":false,"reasons":1}
+wrong artifact head_sha (rejection control) {"eligible":false,"reasons":1}
+wrong artifact run_id (rejection control) {"eligible":false,"reasons":1}
+wrong artifact run_attempt (rejection control) {"eligible":false,"reasons":1}
+listMembership accepts exit1/error JSON; evaluate issues ELIGIBLE for zero acceptance {"eligible":true,"reasons":0}
+real reader baseline: complete inventories {"eligible":true,"reasons":0}
+real reader: inventory covers only run.log; modified results/context unverified {"eligible":true,"reasons":0}
+real reader: malformed .last-run JSON with matching complete inventory {"eligible":true,"reasons":0}
+inventory traversal outside artifact accepted true
+FULL CLI failed collector + zero acceptance {"exit":0,"eligible":true}

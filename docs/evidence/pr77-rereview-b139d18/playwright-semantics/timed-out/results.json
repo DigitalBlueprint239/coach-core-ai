@@ -1,0 +1,152 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/coach-core-review77-r2/e2e/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "/workspace/scratch/review77-r2/semantics/timed-out/playwright.config.cjs",
+      "--reporter=json",
+      "--pass-with-no-tests"
+    ],
+    "configFile": "/workspace/scratch/review77-r2/semantics/timed-out/playwright.config.cjs",
+    "rootDir": "/workspace/scratch/review77-r2/semantics/timed-out",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/scratch/review77-r2/semantics/timed-out/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "probe",
+        "name": "probe",
+        "testDir": "/workspace/scratch/review77-r2/semantics/timed-out",
+        "testIgnore": [],
+        "testMatch": [
+          "sample.spec.cjs"
+        ],
+        "timeout": 300
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/scratch/review77-r2/semantics/timed-out/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "probe",
+        "testDir": "/workspace/scratch/review77-r2/semantics/timed-out",
+        "snapshotDir": "/workspace/scratch/review77-r2/semantics/timed-out",
+        "testIgnore": [],
+        "testMatch": "sample.spec.cjs",
+        "timeout": 300,
+        "use": {},
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "probe"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "sample.spec.cjs",
+      "file": "sample.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "times out",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "probe",
+              "projectName": "probe",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 302,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 300ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 300ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 300ms exceeded.\u001b[39m"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-19T02:26:09.952Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/review77-r2/semantics/timed-out/results/sample-times-out-probe/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "8aa1cfe786b44e0de529-269a8b92d406faaf0176",
+          "file": "sample.spec.cjs",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-19T02:26:09.560Z",
+    "duration": 749.6690000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
