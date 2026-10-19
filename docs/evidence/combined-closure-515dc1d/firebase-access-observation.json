@@ -1,0 +1,13 @@
+{
+  "source_config_only": true,
+  "default_firebase_project": "coach-core-ai",
+  "release_proof_project_label": "coach-core-mvp-staging-239",
+  "ci_emulator_project": "demo-coach-core-e2e",
+  "github_environments": 0,
+  "github_deployment_records": 0,
+  "live_firebase_access_verified": false,
+  "configured_firebase_identity_selected": false,
+  "live_auth_rules_domains_billing_keys_storage_read": false,
+  "deploy_actions_performed": false,
+  "limitation": "GitHub metadata and source configuration do not establish live Firebase state. No live Firebase credentials/access are established; owner evidence required. Future deployment must explicitly select approved project rather than inherit original default."
+}

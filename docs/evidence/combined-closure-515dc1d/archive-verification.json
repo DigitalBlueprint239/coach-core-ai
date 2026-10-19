@@ -1,0 +1,3066 @@
+[
+  {
+    "id": 12195200167,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:cb8c023c7cc48caa270f2385413ef3c7fde4e02e3b1eee7ac439fb7deec36b5c",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=phone-chromium matrix_bucket=obsolete-fault-model",
+      "built_at": "2026-10-19T14:24:40Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:59.493Z",
+      "duration": 724.419,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12195190252,
+    "name": "e2e-results-obsolete-fault-model-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:80a5bd2eb7ae0d850445bd7c03f32e3f3b7072e33ff70960794e002a7fbc9bff",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-6d34d31b6605f6a419d9",
+        "title": "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=chromium matrix_bucket=obsolete-fault-model",
+      "built_at": "2026-10-19T14:24:36Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:53.620Z",
+      "duration": 8307.744999999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12194961595,
+    "name": "merge-eligibility-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:7d4dff58ed714cee227e37f62d1041c377479384ae115da13759f051d66ba605",
+    "files": 2,
+    "eligible": true,
+    "reasons": []
+  },
+  {
+    "id": 12194620692,
+    "name": "e2e-results-acceptance-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:a1eed690e7120cbcc381cf4ab4c9a467c6350d92a5e1b5727cf5331ffaac40bf",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "d748ac400d08b85935ef-9690ea5ece8a125cb5fe",
+        "title": "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-9e8721a9170a92ab9df3",
+        "title": "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-8573be6f74debda13597",
+        "title": "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-6e14a5f02b2b41003a82",
+        "title": "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-077109428e7b422c65c7",
+        "title": "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-1766da5eeb302c02ba81",
+        "title": "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-92943c34b6c57c6182db",
+        "title": "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-b95f439ca5efebac072c",
+        "title": "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-4cb248767ba4fed7b5f6",
+        "title": "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-38f3f32a26e8a2bd76e9",
+        "title": "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-2a5c16a671017419c570",
+        "title": "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-66a56b19fa89b22d55f3",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-6784980bf0731505876c",
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-4cb199fcfd1da0f55251",
+        "title": "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-90c198221f33eebbee7d",
+        "title": "E2E-T02 account switching on one browser profile shows each coach only their own team",
+        "project": "phone-chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=phone-chromium matrix_bucket=acceptance",
+      "built_at": "2026-10-19T14:24:35Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:54.092Z",
+      "duration": 32516.712,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12194575732,
+    "name": "e2e-results-obsolete-fault-model-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:198c0eda167976af5ffbfaa2547fc3012b234b2214c0668fc258482484200b43",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-053a6d0f2cf86ecc05f6",
+        "title": "N2-A2 [obsolete-fault-model] cancelling or leaving during a pending create and trying again never produces a duplicate team",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=firefox matrix_bucket=obsolete-fault-model",
+      "built_at": "2026-10-19T14:24:40Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:59.232Z",
+      "duration": 10585.105,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12194531733,
+    "name": "e2e-results-acceptance-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:9e8714b54cb09ff17be0bb22a3d37a0cfe084b4d53fc233f5fd38f39d2d3009e",
+    "files": 18,
+    "release_gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:30:40.042Z",
+            "duration": 22867.413,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:30:40.042Z",
+            "duration": 22867.413,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "release_proof_stats": {
+      "startTime": "2026-10-19T14:30:40.042Z",
+      "duration": 22867.413,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "3f83d434b5c6013e55da-ef800852175c196be667",
+        "title": "E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "3f83d434b5c6013e55da-dd8b248bcf4657feac33",
+        "title": "E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-f07c72eb8771229675cb",
+        "title": "E2E-A01 signed-out visitor sees only the sign-in screen",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-c64eb165d45febe700f2",
+        "title": "E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-2b7cf9c7ed1b2d10fd2d",
+        "title": "E2E-A03 [emulator email link] link opened on another device asks for the email first",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-419c04f8b01b7572db6a",
+        "title": "E2E-A04 [emulator email link] a used sign-in link cannot be replayed",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-9046cfe6323c76dffdb6",
+        "title": "E2E-A05 [SDK-in-browser] unverified email account is held at \"Verify your email\"",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-f5b501b1b2bac0fa625a",
+        "title": "E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-713c99fdacbc0a67121a",
+        "title": "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-a9c01a281522c8db5b12",
+        "title": "E2E-A08 [emulator] disabled account is signed out on the next access check",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-8692782167397c5e5b87",
+        "title": "E2E-A09 [emulator Google IdP] \"Continue with Google\" goes through the emulator popup and the beta gate",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-0a08050a59e8e7926bfe",
+        "title": "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-b5dcd35458b7c1f31050",
+        "title": "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-adedf9abd98490317591",
+        "title": "CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-c4ab42998884b79eaa0d",
+        "title": "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-2d945f66e08255a30474",
+        "title": "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-e9c5336f4bfc5a2dc04f",
+        "title": "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-5f35dd7ccf3038df04b7",
+        "title": "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-868f7cb1214cf28174fb",
+        "title": "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-03e257682586924f59af",
+        "title": "CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-106e8fc4c1ba328cb047",
+        "title": "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-569175f17e40b9603ac2",
+        "title": "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-2169682fef4dcb6f2b48",
+        "title": "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-0892dd8db11b1e970237",
+        "title": "CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-10b20c971088a2382980",
+        "title": "D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-0af466174f870bc0fab5",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-bc72899c615f571fe471",
+        "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-9522c380609b0e22203c",
+        "title": "D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-e70edeb2ab9a67644607",
+        "title": "D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-fbd256e9f86fb447b0a5",
+        "title": "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-9e42e478204a278098a0",
+        "title": "D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-a460db98e5c21b203009",
+        "title": "D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-06e679e2dd893abbb6f2",
+        "title": "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-dcca274da6335711cc0b",
+        "title": "D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-5a41ebdf36c4a83f7bac",
+        "title": "D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-3abe214a000181c82bd1",
+        "title": "D10-09 [SDK-in-browser] cross-team denial with an authorized positive control",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-c18299051a97c1837ca5",
+        "title": "D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-e0004ef21a05d6cef1cd",
+        "title": "D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-f9bdb6558d9ffb6a45bc",
+        "title": "D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-51356b3d6c9a4148f320",
+        "title": "D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-9c22fcabf23fcfe8d315",
+        "title": "D10-06d [founder rule: originals preserved, no dead end] after coach A declines (\"Not now\") an interrupted import, some account can still act on the device plays",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-ecdb1ad8387d0bf3b7fd",
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-ba0d06d3f5ab4acc2821",
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-3a35655df7ba2e4ce2fc",
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-7360a3dffad4ef0e87d6",
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-aca4d0426ddc6beebde3",
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-600b4c2c4e83667b946e",
+        "title": "N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-1d403c6c05b6afab53c5",
+        "title": "N2-R1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-3761ee82ae69ac926eda",
+        "title": "N2-R1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-f4b9acc01360ab54676a",
+        "title": "N2-R1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-59c27ce102db8ceed8b8",
+        "title": "N2-R2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-b07b88b23ed6611fc0be",
+        "title": "N2-R3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-069427a61457575fd8e8",
+        "title": "N2-R4 [acceptance] account isolation A -> B -> A: B cannot see or resume A's pending team; A recovers it once",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-42bd848c8e8e0980ec50",
+        "title": "N2-R5 [acceptance] commit appears to succeed but the authoritative readback finds nothing: no success is reported; after recovery the same operation is created once at the original ID",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-a94131f073f8414b7886",
+        "title": "N2-R6 [acceptance] a different team already exists at the operation's document ID: no success, no overwrite, no second team, even after Check and retry",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-5e378a054df49d8b17e0",
+        "title": "N2-R7 [acceptance] intentional same-name team: an explicit confirmation is required; declining creates nothing; confirming creates exactly one separate team",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-9915f3004b8b4115df30",
+        "title": "N2-R7b [acceptance] a confirmed same-name creation whose commit is reset is retried as the SAME operation: no third team",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-370c92480102565339bb",
+        "title": "N2-R8 [acceptance] authoritative readback fails at the network level (and nothing is on the server): no success; after restore the same operation is created once",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-eca1bd44d6e1132f22fd",
+        "title": "N2-R8b [acceptance] SDK listener unavailable, commit reaches the server, authoritative readback returns 503: no false success, no duplicate, no overwrite; the same operation is confirmed once after restore",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "a5ef73a4e2a1baaea746-b61e7054a978d9d98e85",
+        "title": "E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-a2adef7eb97c844a469e",
+        "title": "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-72756e12dd41812e2d45",
+        "title": "E2E-T02 account switching on one browser profile shows each coach only their own team",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-012591b9d8b732e2b636",
+        "title": "E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "2f1d2889850e574e2418-65ff5a3267a5e26ab0b9",
+        "title": "UI-01 [identity] signed-in account and explicit no-team state are displayed and accessible at 1440, 834 and 390 px",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "2f1d2889850e574e2418-67f732272428a63c90b9",
+        "title": "UI-02 [identity] the active team is displayed at every width; sample preview is marked \"not saved\" only while shown",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=firefox matrix_bucket=acceptance",
+      "built_at": "2026-10-19T14:24:24Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "d305504dc8fb6ad2491bf935e6cc0060ef2a6ee006637119beb6a81ec7d0afe2 (12 files; e2e/.app-build-import-off)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:41.497Z",
+      "duration": 345514.80600000004,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12194486475,
+    "name": "e2e-results-acceptance-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:27471b32e6c75de657dbc5d3b8b76654bdd819c5b67e03d7c8feed1ede305d94",
+    "files": 18,
+    "release_gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:29:59.221Z",
+            "duration": 17785.490999999998,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:29:59.221Z",
+            "duration": 17785.490999999998,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "release_proof_stats": {
+      "startTime": "2026-10-19T14:29:59.221Z",
+      "duration": 17785.490999999998,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "3f83d434b5c6013e55da-70d94ce960bb90f338d3",
+        "title": "E2E-AI01 practice planner offers no AI generation and makes no AI request while a plan is created and saved",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "3f83d434b5c6013e55da-8f540478363f3f564416",
+        "title": "E2E-AI01b [SDK-in-browser] the app's AI client reaches the emulated gateway, which refuses with ai-disabled (browser-side: no provider request; server-side provider not observable here)",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-a57e801b5b1c8fd9b0e7",
+        "title": "E2E-A01 signed-out visitor sees only the sign-in screen",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-92435a34f2ffe1f2cddc",
+        "title": "E2E-A02 [emulator email link] new coach waits for beta, then gets in after access is granted",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-9adddd002cbeee0369b4",
+        "title": "E2E-A03 [emulator email link] link opened on another device asks for the email first",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-1e7cee5864c2865ef42a",
+        "title": "E2E-A04 [emulator email link] a used sign-in link cannot be replayed",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-27ec73791b2db159a7c8",
+        "title": "E2E-A05 [SDK-in-browser] unverified email account is held at \"Verify your email\"",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-906abce6d6d8ee6c8f13",
+        "title": "E2E-A06 [SDK-in-browser] anonymous session is ended and told to sign in",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-ec5be8c1a3a0dea25173",
+        "title": "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-9159d627184bd2da5100",
+        "title": "E2E-A08 [emulator] disabled account is signed out on the next access check",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-57fd88fe71c16a54c52e",
+        "title": "E2E-A09 [emulator Google IdP] \"Continue with Google\" goes through the emulator popup and the beta gate",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-440ca5282b97185c7b35",
+        "title": "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-62b3945855d119de0d8f",
+        "title": "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-97cbdbe27fc8c6838536",
+        "title": "CC-P10b [SDK-in-browser] B is denied A's saved plan and A's team; the same write into B's own team is authorized",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-ed400c3ca55dc3daf23a",
+        "title": "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-316b506076142f644d8e",
+        "title": "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-f92a14c4d0a63c6b3400",
+        "title": "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-62a8ed095768636ed995",
+        "title": "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-207fe3b7893b55904d52",
+        "title": "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-8424015955c4a2494536",
+        "title": "CC-P16b existing AI-provenance plan: editing notes keeps source, aiRequestId, safety and hydration exactly; revision 1 -> 2; no AI call",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-2b123ff4a0d0962b417e",
+        "title": "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-a93e535312afb1fd6fe4",
+        "title": "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-6d966d572882a8fc114e",
+        "title": "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-717b5e7060d8d09a447e",
+        "title": "CC-W0 [positive control] bodyWatch detects a marker with spaces on both write paths: the app's plan save and an SDK (WebChannel) write",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-dcb6e26a9b20143acce0",
+        "title": "D10-00 [SDK-in-browser, diagnostic] a create-only transaction can check a not-yet-existing copy id",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-2b8c59e0e5dc054529eb",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-254f532086631adfcaae",
+        "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-843d7e1bf8f567ac57ae",
+        "title": "D10-03 repeat import is idempotent: same IDs, no duplicates, existing copies not rewritten",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-f3ab888530f967270a85",
+        "title": "D10-04 partial failure: commits fail mid-batch -> visible error, no decision, partial copies kept; retry completes without duplicates or rewrites",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-0dba243f7526d59c3de8",
+        "title": "D10-05 a copy changed elsewhere is never overwritten; import stops without acknowledging",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-dd8120f3e69dc0c9d00a",
+        "title": "D10-06 two coaches, one browser profile: coach B never sees or reads coach A's imported copies",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-1dd2e33a8ba748cfcdfb",
+        "title": "D10-06b [founder rule: no cross-account exposure / duplicates] device plays already imported by coach A are not offered to coach B",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-a03de43be6b516d0c766",
+        "title": "D10-07 team switch while a copy is in flight: no acknowledgement, nothing written to the new team, stale completion discarded (5 s observation window)",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-11135514c234fe3a418e",
+        "title": "D10-07b [founder rule: no duplicate imports] an import interrupted in team A is not silently re-offered as a fresh import into team B",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-a1d18dcde178e46beef3",
+        "title": "D10-08 sign-out (the app reloads the page) while a copy is in flight, then a second coach signs in: nothing attributed to that coach",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-a3b4381a641336f1e2c5",
+        "title": "D10-09 [SDK-in-browser] cross-team denial with an authorized positive control",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-3ee8e043e4e2416e7fa4",
+        "title": "D10-10 no acknowledgement until every copy verifies: with the last copy held, the decision is absent and the prompt stays",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-b521b07f625b8d2bfe9c",
+        "title": "D10-11 cloud reopen: a fresh browser profile with no device data shows the imported plays from the cloud with phase/type intact",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-ed26e6e7c1cba3a946dd",
+        "title": "D10-12 [R5] signed-in coach without an owned team: truthful block, no save action, nothing stored or uploaded",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-040d79c284ecb32525b9",
+        "title": "D10-06c [founder rule: no cross-account exposure / duplicates] while coach A's import is unfinished, coach B on the same device is not offered the same plays",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-b2adaf40d454506e6a5a",
+        "title": "D10-06d [founder rule: originals preserved, no dead end] after coach A declines (\"Not now\") an interrupted import, some account can still act on the device plays",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-d893a4405580f784d996",
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-fed30ae8941d83c39b37",
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-6979ae09f3216fd714d6",
+        "title": "D10-08b [PR #72] status-less claim for a DIFFERENT team of the same coach: no resume on this team; nothing copied; originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-16fc3f78562966fa2a00",
+        "title": "D10-08c [PR #72] status-less claim of coach A: another coach B on the same device is blocked, sees why, copies nothing under B; A's claim and originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-e951b28fd216039fa53c",
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-320531fbcca1f7ec4479",
+        "title": "N2-A1 [acceptance] after the Write stream is reset and connectivity restored, the team is saved exactly once, the UI recovers, and an explicit saving/connection status is shown while unconfirmed",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-61404bf150c6b1481566",
+        "title": "N2-R1 [acceptance] REST commit held through an 8 s outage (request not yet at the server): accessible status within 8 s; the same operation completes once; server and UI agree",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-eff79c835ee7a1b1e694",
+        "title": "N2-R1b [acceptance] REST commit fails with a connection reset during an 8 s outage: accessible status within 8 s; after restore the same operation completes once; server and UI agree",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-f30e57da8626a78c81c3",
+        "title": "N2-R1c [acceptance] lost response AFTER server commit (commit delivered, its response dropped): accessible status within 8 s; recovery confirms the same team without a duplicate; server and UI agree",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-52e5bc75cb73150df6d1",
+        "title": "N2-R2 [acceptance] REST create held pending; coach leaves and returns to Teams and tries the same team again: pending stays recoverable; exactly one team (owner, ID, name, code)",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-91c170c043fb5be6d836",
+        "title": "N2-R3 [acceptance] pending REST creation survives a page refresh and the same coach recovers it once",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-f219566a6a001117bce3",
+        "title": "N2-R4 [acceptance] account isolation A -> B -> A: B cannot see or resume A's pending team; A recovers it once",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-97a0066b4617da07a669",
+        "title": "N2-R5 [acceptance] commit appears to succeed but the authoritative readback finds nothing: no success is reported; after recovery the same operation is created once at the original ID",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-6dbae34c2487c8279559",
+        "title": "N2-R6 [acceptance] a different team already exists at the operation's document ID: no success, no overwrite, no second team, even after Check and retry",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-d933ec385fc3c5d0ac2c",
+        "title": "N2-R7 [acceptance] intentional same-name team: an explicit confirmation is required; declining creates nothing; confirming creates exactly one separate team",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-0edb6f4225dec476550d",
+        "title": "N2-R7b [acceptance] a confirmed same-name creation whose commit is reset is retried as the SAME operation: no third team",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-ac210cbc69b9f909bfa3",
+        "title": "N2-R8 [acceptance] authoritative readback fails at the network level (and nothing is on the server): no success; after restore the same operation is created once",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-20388d782da86ceb9061",
+        "title": "N2-R8b [acceptance] SDK listener unavailable, commit reaches the server, authoritative readback returns 503: no false success, no duplicate, no overwrite; the same operation is confirmed once after restore",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "a5ef73a4e2a1baaea746-8c8681db7f2e758c9474",
+        "title": "E2E-C01 [SDK-in-browser] two devices edit the same play: the stale second save is rejected, nothing is overwritten",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-384074fddb8e92b67683",
+        "title": "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-9af509e70bd8025e7d35",
+        "title": "E2E-T02 account switching on one browser profile shows each coach only their own team",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-06212fb74aa0e0ce7859",
+        "title": "E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "2f1d2889850e574e2418-f6588c6a16e36410cc37",
+        "title": "UI-01 [identity] signed-in account and explicit no-team state are displayed and accessible at 1440, 834 and 390 px",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "2f1d2889850e574e2418-b0ed296b845dcaf8b3f1",
+        "title": "UI-02 [identity] the active team is displayed at every width; sample preview is marked \"not saved\" only while shown",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=chromium matrix_bucket=acceptance",
+      "built_at": "2026-10-19T14:24:32Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "d305504dc8fb6ad2491bf935e6cc0060ef2a6ee006637119beb6a81ec7d0afe2 (12 files; e2e/.app-build-import-off)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:48.400Z",
+      "duration": 298182.92500000005,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12194356346,
+    "name": "e2e-results-diagnostic-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:13f200c288f8c3b402fa37779005fcaf5114403653eb71da0a737e13f34ded20",
+    "files": 18,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=1",
+    "last_run": {
+      "status": "failed",
+      "failedTests": [
+        "f1fe33de864ec03361b0-2d57a2a674a90f99165b"
+      ]
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-164b5f667a474a7d800d",
+        "title": "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-3562a50780cce309faa3",
+        "title": "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-989c5f396b029cffe154",
+        "title": "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-941c432a90a6e98e2e6c",
+        "title": "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-2d57a2a674a90f99165b",
+        "title": "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?",
+        "project": "chromium",
+        "status": "unexpected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "timedOut",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-08a8e5293d6fbcef6610",
+        "title": "N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-52810febc509ec21358a",
+        "title": "CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save \u2014 what the coach sees; never false \"saved\"; one document; edit not lost",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-e7cdd28d39df715d4742",
+        "title": "CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save \u2014 does the save hang on \"saving\"?",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-3d594b2fca46a8f4b9f7",
+        "title": "CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-ff1db2de68a7674b86d3",
+        "title": "CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged",
+        "project": "chromium",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=chromium matrix_bucket=diagnostic",
+      "built_at": "2026-10-19T14:24:32Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:50.922Z",
+      "duration": 177788.09900000002,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12193873691,
+    "name": "e2e-results-diagnostic-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:7fb7ba902710d02090238540955f20f47b3cd4ff353b44d3bf7b81d4cd370bfd",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=phone-chromium matrix_bucket=diagnostic",
+      "built_at": "2026-10-19T14:23:59Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:13.110Z",
+      "duration": 500.15,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12193654576,
+    "name": "e2e-results-diagnostic-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:b6ce45c75ce4f81014543af9cdeb7dfb7522257d9b72aad3d06553aa7225de39",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=phone-firefox matrix_bucket=diagnostic",
+      "built_at": "2026-10-19T14:24:05Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:19.547Z",
+      "duration": 450.06800000000004,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12193514857,
+    "name": "e2e-results-diagnostic-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:006cfe05078024b15efd1883e23080b476e816ce0594ef8af286a6a3b709bcc9",
+    "files": 18,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=1",
+    "last_run": {
+      "status": "failed",
+      "failedTests": [
+        "f1fe33de864ec03361b0-33043a079b103a2b11d2"
+      ]
+    },
+    "tests": [
+      {
+        "id": "f1fe33de864ec03361b0-ec9721576db84de1d631",
+        "title": "N2-D0 [diagnostic] baseline lifecycle: server commit vs dialog close, Firestore channel traffic; exactly one team",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-a5d6aa457de9c48152a7",
+        "title": "N2-D1 [diagnostic] write reaches the server but its acknowledgement channel is cut for 8 s: does the dialog stick, recover, or duplicate?",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-d0b6e618fc30d366665d",
+        "title": "N2-D3 [diagnostic] the write POST reaches the server but its HTTP response is held 8 s: which channel carries the acknowledgement?",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-cc7c9ba5beb89d35bcb7",
+        "title": "N2-D4 [diagnostic] the Write stream back channel is held (not reset) 8 s: is the team saved while the dialog stays on Creating...?",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-33043a079b103a2b11d2",
+        "title": "N2-D2 [diagnostic] write held (pending, not on the server): coach cancels, leaves Teams, returns and creates again; how many teams result?",
+        "project": "firefox",
+        "status": "unexpected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "timedOut",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "f1fe33de864ec03361b0-84f06c06e7cead0ddf68",
+        "title": "N3-D5 [diagnostic] sign-out / sign-in / immediate Create Team cycles: auth state at submit, submit fired, pending state, request, persistence and UI text",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-115ce0a3d56ae6f1c359",
+        "title": "CC-E1 [diagnostic] SDK edit path: documents:commit reset for 8 s during a practice-plan edit save \u2014 what the coach sees; never false \"saved\"; one document; edit not lost",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-68a0417ef173b7d19006",
+        "title": "CC-E2 [diagnostic] SDK edit path: documents:commit held (request not at the server) for 8 s during a practice-plan edit save \u2014 does the save hang on \"saving\"?",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-a3172c99ab6cdcc150cc",
+        "title": "CC-E3 [diagnostic] practice plan: edited name, notes and a period focus survive a failed commit in the editor; manual re-save after restore lands exactly once with the intended values",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "5184d2e549ebb6def446-d3142c9e9c61c1108818",
+        "title": "CC-E4 [diagnostic] Smart Playbook play: edited name survives a failed commit in the editor; manual re-save after restore lands exactly once with players and routes unchanged",
+        "project": "firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=firefox matrix_bucket=diagnostic",
+      "built_at": "2026-10-19T14:24:36Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:55.477Z",
+      "duration": 188127.53399999999,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12193514385,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:846a79cf14762c60890c93b5d3d59f47757382453de72197d0b50745153a4ce7",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=phone-firefox matrix_bucket=obsolete-fault-model",
+      "built_at": "2026-10-19T14:24:42Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:25:02.744Z",
+      "duration": 735.7969999999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "id": 12193384524,
+    "name": "e2e-results-acceptance-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_digest": "sha256:ee79de0141ef58e9eca0934a3b7d5f05029214e3e24ce311136320e5154bb0b3",
+    "files": 15,
+    "inventory_complete": true,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "tests": [
+      {
+        "id": "d748ac400d08b85935ef-afea2b2cec8c61e8e852",
+        "title": "E2E-A07 [emulator email link] sign-out returns to sign-in, survives reload, clears the session team key, keeps legacy plays and the quarantined legacy queue byte-identical",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "d748ac400d08b85935ef-0aa87078ffec2144f809",
+        "title": "E2E-A10 [FX-03] sign-out never shows an interactive sign-in form before its reload; input typed after it is kept; private content hidden; recovery data preserved",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-88cdb0040f5193284c4f",
+        "title": "CC-P10 shared profile: A signs out anyway with an unsynced draft; B sees a blank planner, no A records or drafts, and nothing is uploaded under B",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-2d06ccbf8247e43bd437",
+        "title": "CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-e631414c52b6018e9627",
+        "title": "CC-P12 sign-out guard: Cancel keeps the editor; a failing Sync keeps the coach signed in with drafts; Export downloads only this coach's drafts; Sync now persists then signs out",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-0d83ce5713bef15e2ee4",
+        "title": "CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-97c14c5692273d95926e",
+        "title": "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-cc97d378ec4c087550d8",
+        "title": "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-8119a6bbe061c633ae05",
+        "title": "CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch)",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-2c2973069d2c7a6874bb",
+        "title": "CC-L0 legacy global offline queue: reconnect, reload and sign-out leave its bytes identical and nothing is replayed (request-body watch)",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "e46e8b3c690e0044e78a-5f25c43f17a553da9753",
+        "title": "CC-L1 [founder rule: no deletion] with a legacy per-team blob present, the rendered dashboard offers no destructive \"Migrate Now\", the blob stays byte-identical, nothing is uploaded",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-1ad1ad193959c8d686bb",
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "05d3bb950b4a0761726b-cca9a3e8c05cc2a0e2dd",
+        "title": "D10-06e [founder rule: R1c recovery] \"Not now\" postpones an unfinished import; the original coach and team can resume and finish with verified copies; another coach stays blocked; originals untouched",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-a2bfd7aba730e39ff21e",
+        "title": "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      },
+      {
+        "id": "108557b632e2e5e30b60-343ca20d7158895f23ac",
+        "title": "E2E-T02 account switching on one browser profile shows each coach only their own team",
+        "project": "phone-firefox",
+        "status": "expected",
+        "expected": "passed",
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0
+          }
+        ]
+      }
+    ],
+    "release_context": {
+      "candidate_sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "job": "e2e matrix_project=phone-firefox matrix_bucket=acceptance",
+      "built_at": "2026-10-19T14:24:21Z",
+      "node": "v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0",
+      "target_project": "coach-core-mvp-staging-239",
+      "effective_import_config": ".env.production=\"false\"",
+      "canary_verdict": "config-false literals=1 claim=configuration-inlining-only",
+      "behaviour_leg": "real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)",
+      "import_off_build_manifest_sha256": "absent (import-OFF emulator build not present when the proof ran)",
+      "build_manifest_sha256": "8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7"
+    },
+    "stats": {
+      "startTime": "2026-10-19T14:24:37.903Z",
+      "duration": 42481.666,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

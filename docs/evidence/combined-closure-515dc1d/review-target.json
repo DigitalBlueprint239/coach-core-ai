@@ -1,0 +1,99 @@
+{
+  "name": "review/coach-core-combined-2026-10-19",
+  "commit": {
+    "sha": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "node_id": "C_kwDOPLcewtoAKGVmYzkxMTZjZjkzYzVkMjM1YjBiMmVkZWI0ZDdiZTAzYTRlNzNjZGM",
+    "commit": {
+      "author": {
+        "name": "Big Dreams Sports TV",
+        "email": "bigdreamssportsads@gmail.com",
+        "date": "2026-10-17T22:23:56Z"
+      },
+      "committer": {
+        "name": "Big Dreams Sports TV",
+        "email": "bigdreamssportsads@gmail.com",
+        "date": "2026-10-17T22:24:05Z"
+      },
+      "message": "docs: deliver isolated B11+B15 candidate, evidence and enforcement proposal",
+      "tree": {
+        "sha": "57e2514b629b63e30e209315848a6ffd7d10d2ce",
+        "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/git/trees/57e2514b629b63e30e209315848a6ffd7d10d2ce"
+      },
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/git/commits/efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/commits/efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+    "comments_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/commits/efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc/comments",
+    "author": {
+      "login": "AndrewLay21",
+      "id": 195821448,
+      "node_id": "U_kgDOC6v_iA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/195821448?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/AndrewLay21",
+      "html_url": "https://github.com/AndrewLay21",
+      "followers_url": "https://api.github.com/users/AndrewLay21/followers",
+      "following_url": "https://api.github.com/users/AndrewLay21/following{/other_user}",
+      "gists_url": "https://api.github.com/users/AndrewLay21/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/AndrewLay21/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/AndrewLay21/subscriptions",
+      "organizations_url": "https://api.github.com/users/AndrewLay21/orgs",
+      "repos_url": "https://api.github.com/users/AndrewLay21/repos",
+      "events_url": "https://api.github.com/users/AndrewLay21/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/AndrewLay21/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "AndrewLay21",
+      "id": 195821448,
+      "node_id": "U_kgDOC6v_iA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/195821448?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/AndrewLay21",
+      "html_url": "https://github.com/AndrewLay21",
+      "followers_url": "https://api.github.com/users/AndrewLay21/followers",
+      "following_url": "https://api.github.com/users/AndrewLay21/following{/other_user}",
+      "gists_url": "https://api.github.com/users/AndrewLay21/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/AndrewLay21/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/AndrewLay21/subscriptions",
+      "organizations_url": "https://api.github.com/users/AndrewLay21/orgs",
+      "repos_url": "https://api.github.com/users/AndrewLay21/repos",
+      "events_url": "https://api.github.com/users/AndrewLay21/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/AndrewLay21/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "fd933ed30f814b22c095f0a69149f254971ec190",
+        "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/commits/fd933ed30f814b22c095f0a69149f254971ec190",
+        "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/fd933ed30f814b22c095f0a69149f254971ec190"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/branches/review/coach-core-combined-2026-10-19",
+    "html": "https://github.com/DigitalBlueprint239/coach-core-ai/tree/review/coach-core-combined-2026-10-19"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/branches/review/coach-core-combined-2026-10-19/protection"
+}

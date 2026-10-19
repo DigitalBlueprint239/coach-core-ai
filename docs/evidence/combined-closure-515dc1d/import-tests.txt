@@ -1,0 +1,47 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/features/legacy-import/__tests__/import-config-marker.test.tsx src/features/legacy-import/__tests__/import-legacy.test.ts src/features/legacy-import/__tests__/LegacyImport.test.tsx
+
+PASS src/features/legacy-import/__tests__/import-config-marker.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      16 |   localStorage.setItem(LEGACY_KEY, JSON.stringify([{ id: 'p1', name: 'Mesh', phase: 'offense', type: 'pass', players: [], routes: [] }]));
+      17 |   const owner = { uid: 'marker-owner', teamId: 't1', teamName: 'Team' };
+    > 18 |   const view = render(<LegacyImport {...owner} backend={{ copy: jest.fn(), read: jest.fn() }} />);
+         |                      ^
+      19 |   expect(screen.getByRole('region', { name: 'Import device plays' })).toHaveAttribute('data-import-config', 'coachcore:import-config=true');
+      20 |   view.unmount();
+      21 |   const flag = process.env.REACT_APP_ENABLE_LEGACY_IMPORT;
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/features/legacy-import/__tests__/import-config-marker.test.tsx:18:22)
+
+FAIL src/features/legacy-import/__tests__/LegacyImport.test.tsx
+  ● Test suite failed to run
+
+    ENOENT: no such file or directory, open '/workspace/coach-core-combined-closure/src/features/legacy-import/__tests__/LegacyImport.test.tsx'
+
+      at runTestInternal (../coach-core-integration/node_modules/jest-runner/build/runTest.js:202:27)
+
+FAIL src/features/legacy-import/__tests__/import-legacy.test.ts
+  ● Test suite failed to run
+
+    ENOENT: no such file or directory, open '/workspace/coach-core-combined-closure/src/features/legacy-import/__tests__/import-legacy.test.ts'
+
+      at runTestInternal (../coach-core-integration/node_modules/jest-runner/build/runTest.js:202:27)
+      at TestScheduler.scheduleTests (../coach-core-integration/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../coach-core-integration/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../coach-core-integration/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../coach-core-integration/node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 2 failed, 1 passed, 3 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        1.385 s
+Ran all test suites within paths "src/features/legacy-import/__tests__/import-config-marker.test.tsx", "src/features/legacy-import/__tests__/import-legacy.test.ts", "src/features/legacy-import/__tests__/LegacyImport.test.tsx".

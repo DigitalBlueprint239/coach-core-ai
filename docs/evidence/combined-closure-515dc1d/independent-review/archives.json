@@ -1,0 +1,446 @@
+[
+  {
+    "id": 12195200167,
+    "name": "e2e-results-obsolete-fault-model-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "cb8c023c7cc48caa270f2385413ef3c7fde4e02e3b1eee7ac439fb7deec36b5c",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=phone-chromium matrix_bucket=obsolete-fault-model\nbuilt_at=2026-10-19T14:24:40Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12195190252,
+    "name": "e2e-results-obsolete-fault-model-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "80a5bd2eb7ae0d850445bd7c03f32e3f3b7072e33ff70960794e002a7fbc9bff",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=chromium matrix_bucket=obsolete-fault-model\nbuilt_at=2026-10-19T14:24:36Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12194961595,
+    "name": "merge-eligibility-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "7d4dff58ed714cee227e37f62d1041c377479384ae115da13759f051d66ba605",
+    "files": 2
+  },
+  {
+    "id": 12194620692,
+    "name": "e2e-results-acceptance-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "a1eed690e7120cbcc381cf4ab4c9a467c6350d92a5e1b5727cf5331ffaac40bf",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=phone-chromium matrix_bucket=acceptance\nbuilt_at=2026-10-19T14:24:35Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12194575732,
+    "name": "e2e-results-obsolete-fault-model-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "198c0eda167976af5ffbfaa2547fc3012b234b2214c0668fc258482484200b43",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=firefox matrix_bucket=obsolete-fault-model\nbuilt_at=2026-10-19T14:24:40Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12194531733,
+    "name": "e2e-results-acceptance-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "9e8714b54cb09ff17be0bb22a3d37a0cfe084b4d53fc233f5fd38f39d2d3009e",
+    "files": 18,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 16,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "release_gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:30:40.042Z",
+            "duration": 22867.413,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:30:40.042Z",
+            "duration": 22867.413,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=firefox matrix_bucket=acceptance\nbuilt_at=2026-10-19T14:24:24Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=d305504dc8fb6ad2491bf935e6cc0060ef2a6ee006637119beb6a81ec7d0afe2 (12 files; e2e/.app-build-import-off)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12194486475,
+    "name": "e2e-results-acceptance-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "27471b32e6c75de657dbc5d3b8b76654bdd819c5b67e03d7c8feed1ede305d94",
+    "files": 18,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 16,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "release_gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:29:59.221Z",
+            "duration": 17785.490999999998,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:29:59.221Z",
+            "duration": 17785.490999999998,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=chromium matrix_bucket=acceptance\nbuilt_at=2026-10-19T14:24:32Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=d305504dc8fb6ad2491bf935e6cc0060ef2a6ee006637119beb6a81ec7d0afe2 (12 files; e2e/.app-build-import-off)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12194356346,
+    "name": "e2e-results-diagnostic-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "13f200c288f8c3b402fa37779005fcaf5114403653eb71da0a737e13f34ded20",
+    "files": 18,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 16,
+    "run_exit": "exit=1",
+    "last_run": {
+      "status": "failed",
+      "failedTests": [
+        "f1fe33de864ec03361b0-2d57a2a674a90f99165b"
+      ]
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=chromium matrix_bucket=diagnostic\nbuilt_at=2026-10-19T14:24:32Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12193873691,
+    "name": "e2e-results-diagnostic-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "7fb7ba902710d02090238540955f20f47b3cd4ff353b44d3bf7b81d4cd370bfd",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=phone-chromium matrix_bucket=diagnostic\nbuilt_at=2026-10-19T14:23:59Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12193654576,
+    "name": "e2e-results-diagnostic-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "b6ce45c75ce4f81014543af9cdeb7dfb7522257d9b72aad3d06553aa7225de39",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=phone-firefox matrix_bucket=diagnostic\nbuilt_at=2026-10-19T14:24:05Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12193514857,
+    "name": "e2e-results-diagnostic-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "006cfe05078024b15efd1883e23080b476e816ce0594ef8af286a6a3b709bcc9",
+    "files": 18,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 16,
+    "run_exit": "exit=1",
+    "last_run": {
+      "status": "failed",
+      "failedTests": [
+        "f1fe33de864ec03361b0-33043a079b103a2b11d2"
+      ]
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=firefox matrix_bucket=diagnostic\nbuilt_at=2026-10-19T14:24:36Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12193514385,
+    "name": "e2e-results-obsolete-fault-model-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "846a79cf14762c60890c93b5d3d59f47757382453de72197d0b50745153a4ce7",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=phone-firefox matrix_bucket=obsolete-fault-model\nbuilt_at=2026-10-19T14:24:42Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  },
+  {
+    "id": 12193384524,
+    "name": "e2e-results-acceptance-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "archive_sha256": "ee79de0141ef58e9eca0934a3b7d5f05029214e3e24ce311136320e5154bb0b3",
+    "files": 15,
+    "context": {
+      "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+      "head_sha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+      "event": "pull_request",
+      "run_id": "39268393120",
+      "run_attempt": "1",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "repeat": "1",
+      "grep": ""
+    },
+    "inventory_files": 13,
+    "run_exit": "exit=0",
+    "last_run": {
+      "status": "passed",
+      "failedTests": []
+    },
+    "provenance": "release-build provenance\ncandidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8\nhead_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1\nrun_id=39268393120\nrun_attempt=1\njob=e2e matrix_project=phone-firefox matrix_bucket=acceptance\nbuilt_at=2026-10-19T14:24:21Z\nnode=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0\ntarget_project=coach-core-mvp-staging-239\neffective_import_config=.env.production=\"false\"\ncanary_verdict=config-false literals=1 claim=configuration-inlining-only\nbehaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)\nimport_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)\nbuild_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7\n--- full build manifest (all 11 files) ---\nf7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers\n66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects\n3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json\nd3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html\n5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json\ndcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt\n55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml\nec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css\nc5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js\n1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt\nc2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js\n",
+    "retained_release_js": [
+      "static/js/main.630c8567.js"
+    ],
+    "release_manifest_files": 11
+  }
+]

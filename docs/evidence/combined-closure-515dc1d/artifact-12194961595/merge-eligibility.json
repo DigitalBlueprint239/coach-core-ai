@@ -1,0 +1,262 @@
+{
+  "eligible": true,
+  "reasons": [],
+  "rows": [
+    {
+      "job": "E2E acceptance (chromium)",
+      "project": "chromium",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 65,
+      "executed": 65,
+      "passed": 65,
+      "failed": 0,
+      "verdict": "OK",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (chromium)",
+      "project": "chromium",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "failure",
+      "artifact": "present",
+      "selected": 10,
+      "executed": 10,
+      "passed": 9,
+      "failed": 1,
+      "verdict": "OK (coverage complete: 10 of 10 executed to completion; 1 failing diagnostic test(s) visible, not blocking)",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (chromium)",
+      "project": "chromium",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "OK (coverage complete: 1 of 1 executed to completion; 0 failing obsolete-fault-model test(s) visible, not blocking)",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (firefox)",
+      "project": "firefox",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 65,
+      "executed": 65,
+      "passed": 65,
+      "failed": 0,
+      "verdict": "OK",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (firefox)",
+      "project": "firefox",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "failure",
+      "artifact": "present",
+      "selected": 10,
+      "executed": 10,
+      "passed": 9,
+      "failed": 1,
+      "verdict": "OK (coverage complete: 10 of 10 executed to completion; 1 failing diagnostic test(s) visible, not blocking)",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (firefox)",
+      "project": "firefox",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "verdict": "OK (coverage complete: 1 of 1 executed to completion; 0 failing obsolete-fault-model test(s) visible, not blocking)",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 15,
+      "executed": 15,
+      "passed": 15,
+      "failed": 0,
+      "verdict": "OK",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (phone-chromium)",
+      "project": "phone-chromium",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)",
+      "notes": []
+    },
+    {
+      "job": "E2E acceptance (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "acceptance",
+      "required": true,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 15,
+      "executed": 15,
+      "passed": 15,
+      "failed": 0,
+      "verdict": "OK",
+      "notes": []
+    },
+    {
+      "job": "E2E diagnostic (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "diagnostic",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)",
+      "notes": []
+    },
+    {
+      "job": "E2E obsolete-fault-model (phone-firefox)",
+      "project": "phone-firefox",
+      "bucket": "obsolete-fault-model",
+      "required": false,
+      "job_conclusion": "success",
+      "artifact": "present",
+      "selected": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "verdict": "OK (legitimately empty: 0 selected, 0 executed, 0 passed)",
+      "notes": []
+    }
+  ],
+  "sha": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+  "headSha": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+  "event": "pull_request",
+  "runId": "39268393120",
+  "attempt": "1",
+  "repeat": 1,
+  "gatherErrors": [],
+  "artifactsSeen": [
+    "e2e-results-acceptance-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-acceptance-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-acceptance-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-acceptance-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-diagnostic-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-diagnostic-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-diagnostic-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-diagnostic-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-obsolete-fault-model-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-obsolete-fault-model-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-obsolete-fault-model-phone-chromium-950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+    "e2e-results-obsolete-fault-model-phone-firefox-950addf164e4f789c6488bf5af7dd60dc2e43ce8"
+  ],
+  "jobsSeen": [
+    {
+      "name": "E2E obsolete-fault-model (chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E obsolete-fault-model (phone-chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E diagnostic (phone-firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (phone-chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E diagnostic (chromium)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "E2E obsolete-fault-model (firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E diagnostic (firefox)",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "E2E diagnostic (phone-chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E obsolete-fault-model (phone-firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E acceptance (phone-firefox)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Coach Core merge eligibility",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ]
+}

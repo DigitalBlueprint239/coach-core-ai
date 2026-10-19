@@ -1,0 +1,18 @@
+# Upload-aligned inventory: every regular file under the upload paths, hidden files INCLUDED (upload uses include-hidden-files: true).
+# paths: e2e/ci-evidence e2e/test-results
+8b47ac46b655627c0cd9b65db4aca48131ddf75f7b0ca8001a26effd6844a8aa  e2e/ci-evidence/REDACTION.txt
+8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7  e2e/ci-evidence/release-build-manifest.sha256
+3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  e2e/ci-evidence/release-build/asset-manifest.json
+d3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  e2e/ci-evidence/release-build/index.html
+53cfaff19025b4b06a66652a444d6df91710d430b8c4f1ca92d5dea82a945be0  e2e/ci-evidence/release-build/release-build.context
+0f462f8a40c1c047230c7f0649dc4f24f410008aa679c564367462f8c8d5ba0d  e2e/ci-evidence/release-build/release-canary.json
+c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  e2e/ci-evidence/release-build/static/js/main.630c8567.js
+0f462f8a40c1c047230c7f0649dc4f24f410008aa679c564367462f8c8d5ba0d  e2e/ci-evidence/release-canary.json
+8b634388eccb14e47b00068c4be845fd396ed82af2846280d69e8c5d65dc209b  e2e/ci-evidence/run.context
+cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22  e2e/ci-evidence/run.exit
+67782b3b4eb86ede4fab258500f5b9c247a88ceddc497032b98e75af7e47bc97  e2e/ci-evidence/run.log
+eae710928279c572019c5dc2d9fe79f0283bf2678012305dcd8bfe6773cb9caf  e2e/test-results/.last-run.json
+ab9808dea7a05e12105fe3c3ec6c93a48fb9a205ba060b37899d66e24e72419b  e2e/test-results/n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--firefox/error-context.md
+8d63380776f2d3156880024289aec292a40cccf5a76f067d699debc62c9a189f  e2e/test-results/n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--firefox/test-failed-1.png
+c008648fd381df68e5219e059801f27024eaccfc55f41b300969df43131d7222  e2e/test-results/n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--firefox/trace.zip
+c2db161be24edab1ca00d6a6d3b9f1daddbc04e6d1cdf3d56e633b937226cfff  e2e/test-results/results.json

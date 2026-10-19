@@ -1,0 +1,292 @@
+[
+  {
+    "id": 12195200167,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12195200167/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12195190252,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12195190252/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12194620692,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12194620692/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12194575732,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12194575732/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12194356346,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12194356346/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12193873691,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12193873691/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12193654576,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12193654576/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12193514857,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12193514857/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12193514385,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12193514385/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  },
+  {
+    "id": 12193384524,
+    "exit": 0,
+    "canary": {
+      "dir": "/workspace/scratch/combined-closure/extracted-12193384524/ci-evidence/release-build",
+      "entryChunks": [
+        "static/js/main.630c8567.js"
+      ],
+      "literals": [
+        {
+          "chunk": "static/js/main.630c8567.js",
+          "offset": 654521,
+          "value": "coachcore:import-config=false"
+        }
+      ],
+      "verdict": "config-false",
+      "claim": "configuration literal in shipped code; NOT a behavioural claim (see gate)",
+      "reasons": [],
+      "sourceScope": {
+        "ok": true,
+        "reasons": [],
+        "reads": [
+          "src/features/legacy-import/import-legacy.ts:3",
+          "src/features/legacy-import/import-legacy.ts:8"
+        ]
+      },
+      "ok": true
+    }
+  }
+]

@@ -1,0 +1,27 @@
+✔ Playwright "clear output" deletes files in outputDir (even via a still-open fd) but cannot touch a sibling evidence dir (1466.895972ms)
+✔ run: preserves the command exit status (failing command -> non-zero), with the log retained (13.079766ms)
+✔ finalize: inventory lists every file (hidden included) under both upload paths with full SHA-256; required files present -> exit 0 (38.236938ms)
+✔ finalize: missing or empty required evidence is reported with ::error and a non-zero exit (22.754954ms)
+✔ finalize: token-shaped strings in run.log are redacted; synthetic e-mail addresses are kept (33.182475ms)
+✔ workflow: evidence dir is outside every Playwright outputDir, upload paths include it with hidden files, and artifact names carry every matrix dimension (1.650359ms)
+✔ REGRESSION: redaction failure (evidence dir unwritable) -> non-zero, ::error naming the step, no UPLOAD_OK, sentinel not echoed (6.151069ms)
+✔ REGRESSION: redaction failure (sed unavailable) -> non-zero, clear ::error, no UPLOAD_OK, run.log left as-is but ineligible (64.630932ms)
+✔ REGRESSION: redaction that leaves a token shape behind fails verification -> non-zero, no UPLOAD_OK (19.831476ms)
+✔ REGRESSION: inventory creation failure (sha256sum unavailable) -> non-zero, clear ::error, no UPLOAD_OK; redacted log already safe (73.996048ms)
+✔ REGRESSION: inventory digest mismatch (file changed after hashing) is caught by verification (40.633741ms)
+✔ success path: UPLOAD_OK written; every inventory digest independently recomputed from the final (post-redaction) bytes (37.859363ms)
+✔ workflow: the upload is gated on the finalize eligibility output, and a withheld-evidence step reports the gate (0.253971ms)
+✔ REGRESSION: redaction verification grep exits 2 (operational failure) -> non-zero, no UPLOAD_OK, no inventory, original log untouched, no content printed (13.416944ms)
+✔ REGRESSION: grep exit 1 (clean scan) is the ONLY status that proceeds; grep exit 0 (match) still rejects (50.505615ms)
+✔ REGRESSION: inventory digest-line extraction grep exits 2 -> non-zero, no UPLOAD_OK (log already redacted) (30.671244ms)
+✔ REGRESSION: sha256sum -c exits 2 (operational failure, not a mismatch) -> non-zero, no UPLOAD_OK (42.377754ms)
+✔ REGRESSION: an inventory with zero digest lines (nothing hashed) is rejected, not treated as verified (13.490412ms)
+✔ WORKFLOW STEP EMULATION (script-level, not a CI run): the finalize step's exact run block emits eligible=true only on success; with a failing verifier it exits non-zero and emits no eligibility, so the upload condition is false and the withheld step's condition is true (56.56812ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2040.650137

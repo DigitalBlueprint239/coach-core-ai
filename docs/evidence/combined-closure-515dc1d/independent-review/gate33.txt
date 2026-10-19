@@ -1,0 +1,41 @@
+✔ complete successful acceptance (pull_request): ELIGIBLE; diagnostic/obsolete failures visible, not blocking; phone empties legitimately empty (10.09639ms)
+✔ merge_group is a trusted event too; workflow_dispatch and push are NOT (bounded/manual runs cannot satisfy the gate) (10.265774ms)
+✔ one failed required job (acceptance firefox) -> INELIGIBLE, named; other required rows unaffected (2.838924ms)
+✔ failing acceptance TESTS with a (hypothetically) green job are still caught from results.json (R6) (5.518898ms)
+✔ cancelled required job -> INELIGIBLE; cancelled NON-required job also blocks (coverage unproven) (4.459583ms)
+✔ skipped job -> INELIGIBLE; in-progress (not completed) job -> INELIGIBLE (5.802517ms)
+✔ missing required job, duplicate job, and missing artifact -> INELIGIBLE (9.510156ms)
+✔ finalize not successful (no UPLOAD_OK) or inventory problem in ANY job -> INELIGIBLE (4.214962ms)
+✔ narrowed dispatch selection: grep recorded in run.context AND identities != membership -> INELIGIBLE (even with all-green results); diagnostic narrowing rejected too (12.106636ms)
+✔ results belonging to a different sha / run / attempt / head -> INELIGIBLE (12.093927ms)
+✔ repeat mismatch and run-level errors -> INELIGIBLE; skipped / repeated results in acceptance -> INELIGIBLE (11.080294ms)
+✔ F1 collector: a healthy source checkout yields per-bucket membership, partition verified, legitimate empty phone diagnostic/obsolete preserved; --pass-with-no-tests is used (32.359177ms)
+✔ F1 collector fails CLOSED: nonzero exit (even with JSON), errors[] with exit 0, spawn error, signal, non-JSON, non-report, foreign project, missing/duplicate ids, partition mismatch, overlap, empty acceptance (14.477333ms)
+✔ F1 evaluate: empty ACCEPTANCE membership is never eligible (all-zero acceptance, reviewer fixture) — while empty non-required phone buckets stay legitimately empty (3.0673ms)
+✔ F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE (2.96323ms)
+✔ F1 FULL CLI positive control: healthy collector + twelve complete on-disk artifacts + jobs -> exit 0 ELIGIBLE (869.954468ms)
+✔ F1 FULL CLI: erroring collector (exit 1 + JSON errors[]) with zero-result artifacts and twelve green jobs -> nonzero exit, INELIGIBLE, R7 named (reviewer reproduction) (133.308072ms)
+✔ F1 FULL CLI: collector that lists NOTHING anywhere (exit 0, no errors) -> nonzero exit, INELIGIBLE (empty acceptance never trusted) (252.122007ms)
+✔ F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE (552.064964ms)
+✔ F2 reader: an artifact written like evidence.sh (complete inventory incl. hidden .last-run.json, e2e/ prefix) verifies; context/results/last-run parsed (6.342198ms)
+✔ F2 reader + evaluator: incomplete, tampered, malformed, duplicate, escaping, symlinked, self-listing or missing inventories -> inventory rejected AND verdict INELIGIBLE (named R3) (79.646183ms)
+✔ F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted (9.557567ms)
+✔ F2 real reader end to end: twelve complete on-disk artifacts -> ELIGIBLE; the same set with one run.log-only inventory -> INELIGIBLE (13.131117ms)
+✔ N1: a symlinked retained root (ci-evidence, test-results, or both) is rejected BEFORE any evidence read — the outside target is never stat-ed, listed, opened or read; no outside content reaches the record or its diagnostics (26.687059ms)
+✔ N1: symlinked artifact directory, a symlinked sub-directory inside a root, a missing root and a non-directory root are rejected without following; a valid artifact still verifies and is read only after its inventory verified (9.937404ms)
+✔ N1 reproduction on b139d18: the same root links were followed — outside run.context / results.json parsed and the outside parse error echoed (3.240808ms)
+✔ F3: duplicate, foreign-project, unexpected, unexecuted, interrupted and malformed identities -> INELIGIBLE with named reasons; completed diagnostic failures remain visible and non-blocking (22.463147ms)
+✔ F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE (8.513582ms)
+✔ F4: missing, malformed, schema-invalid or inconsistent last-run records (vs results.json and job conclusion) -> INELIGIBLE with named reasons (19.094534ms)
+✔ F4 real reader: a malformed .last-run.json with a MATCHING complete inventory is still rejected (hash integrity is not validity) (4.268632ms)
+✔ F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE (5.063734ms)
+✔ workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes (0.469107ms)
+✔ N2 workflow logic (static check of the workflow file, NOT an Actions observation): the authoritative job has no conditional-skip path — job and every step run under always(), a cancelled run or a cancelled/skipped matrix fails the job explicitly, an unavailable artifact download cannot skip the evaluation, and only the evaluation step can make the job succeed (1.068526ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2172.506322

@@ -1,0 +1,26 @@
+release-build provenance
+candidate_sha=950addf164e4f789c6488bf5af7dd60dc2e43ce8
+head_sha=515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1
+run_id=39268393120
+run_attempt=1
+job=e2e matrix_project=phone-chromium matrix_bucket=obsolete-fault-model
+built_at=2026-10-19T14:24:40Z
+node=v22.23.3 react_scripts=5.0.1 webpack=5.100.0 terser=5.43.1 react=19.1.0
+target_project=coach-core-mvp-staging-239
+effective_import_config=.env.production="false"
+canary_verdict=config-false literals=1 claim=configuration-inlining-only
+behaviour_leg=real-browser run of e2e/tests/release-import-off.spec.ts on the same-commit import-OFF emulator build + D10-01/D10-02 ON control; verdict issued by release-import-config.js gate (see release-gate.json)
+import_off_build_manifest_sha256=absent (import-OFF emulator build not present when the proof ran)
+build_manifest_sha256=8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7
+--- full build manifest (all 11 files) ---
+f7d37a0cf42fcbfb22580fceda3d03d8ffc5a9a53764893a37f681059af62bf1  ./_headers
+66584af744075248a042165adbdbd6a0551fa708a85650ea1e3e777eee17080c  ./_redirects
+3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  ./asset-manifest.json
+d3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  ./index.html
+5553448c1931359d659d961a318b6e6af2fa4cf4f201243ff220e5993436cedf  ./manifest.json
+dcf8c86142d4bef2806358b58c92f74aab8717d08d95b004258ce74345920d64  ./robots.txt
+55874a89fe0028e86350b79603d07dc3fd8ac04a7bafb8072adc5843a8a829d0  ./sitemap.xml
+ec93675dc4c905a80badf8a5b75158de3470a852742e0016cab195196f2b5081  ./static/css/main.d6011d57.css
+c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  ./static/js/main.630c8567.js
+1d430caa20166b66ad93fbb73fea50b36507554bf099111dd5f15bc278426bbd  ./static/js/main.630c8567.js.LICENSE.txt
+c2e91d521d79c4502cff1c619e90335fab3f1fb6ab4cb25f8c9a4c294b516a96  ./sw.js

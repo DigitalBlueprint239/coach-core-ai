@@ -1,0 +1,1 @@
+{"eligible":true,"reasons":[],"rows":12,"selected":182,"executed":182,"failed":2}

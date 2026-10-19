@@ -1,0 +1,850 @@
+[
+  {
+    "job": "E2E obsolete-fault-model (chromium)",
+    "id": 118113907206,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "13 files; run.log redaction: bytes_before=4691 bytes_after=4645; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model chromium)",
+        "message": "files=2 bytes=625764 results.json=349fbfe9ba745b61 executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  emulators:^[[22m^[[39m Starting emulators: auth, functions, firestore\n^[[36m^[[1mi  functions:^[[22m^[[39m Watching \"/home/runner/work/coach-core-ai/coach-core-ai/functions\" for Cloud Functions...\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Using node@22 from host.\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.\n^[[32m^[[1m\u2714  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).\n^[[32m^[[1m\u2714  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).\n^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.\n^[[32m^[[1m\u2714  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).\n^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator\n"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (chromium obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium diag data: 1 executions",
+        "message": "PASS N2-A2 #0: A2 cancelEnabled=true retrySubmitted=true savedAfterRelease=54ms teams=1"
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium [obsolete-fault-model]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 1/0 (pass/fail)",
+        "message": "PASS 1/1 N2-A2 [6.8/6.8/6.8s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (phone-chromium)",
+    "id": 118113907314,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "13 files; run.log redaction: bytes_before=4068 bytes_after=4068; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model phone-chromium)",
+        "message": "files=2 bytes=623747 results.json=725bfed23fd7d838 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  emulators:^[[22m^[[39m Starting emulators: auth, functions, firestore\n^[[36m^[[1mi  functions:^[[22m^[[39m Watching \"/home/runner/work/coach-core-ai/coach-core-ai/functions\" for Cloud Functions...\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Using node@22 from host.\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.\n^[[32m^[[1m\u2714  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).\n^[[32m^[[1m\u2714  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).\n^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.\n^[[32m^[[1m\u2714  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).\n^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator\n"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (phone-chromium obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-chromium [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-chromium\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"obsolete-fault-model\" tests exist for project \"phone-chromium\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model phone-chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (phone-firefox)",
+    "id": 118113907423,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "13 files; run.log redaction: bytes_before=4033 bytes_after=4033; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (diagnostic phone-firefox)",
+        "message": "files=2 bytes=623720 results.json=93a423163a4f5543 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  emulators:^[[22m^[[39m Starting emulators: auth, functions, firestore\n^[[36m^[[1mi  functions:^[[22m^[[39m Watching \"/home/runner/work/coach-core-ai/coach-core-ai/functions\" for Cloud Functions...\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Using node@22 from host.\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.\n^[[32m^[[1m\u2714  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).\n^[[32m^[[1m\u2714  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).\n^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.\n^[[32m^[[1m\u2714  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).\n^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator\n"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (phone-firefox diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-firefox [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-firefox\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"diagnostic\" tests exist for project \"phone-firefox\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (diagnostic phone-firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (phone-chromium)",
+    "id": 118113907449,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "13 files; run.log redaction: bytes_before=84825 bytes_after=83721; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (acceptance phone-chromium)",
+        "message": "files=2 bytes=650154 results.json=d3e6c10d4c4889b1 executions_in_results_json=15 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[90m> ^[[39m {\"severity\":\"ERROR\",\"message\":\"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\npath <\\n  Element {\\n    type: \\\"userProfiles\\\"\\n    name: \\\"tmwIsO40qH3uqDKpvcm83824JDr3\\\"\\n  }\\n>\\n\\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\\nfor call at\\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\\nCaused by: Error\\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:54:31)\\n    at ProxyTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:27:24)\\n    at EnabledTraceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28)\\n    at WriteBatch.commit (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:440:43)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/reference/document-reference.js:395:18\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30 {\\n  code: 5,\\n  details: 'no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\\\n' +\\n    'path <\\\\n' +\\n    '  Element {\\\\n' +\\n    '    type: "
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (phone-chromium acceptance)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-chromium slow steps >= 10s: 0 of 15 executions",
+        "message": "none"
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-chromium [acceptance]: 15 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 15/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-A07 [1.2/1.2/1.2s]\nPASS 1/1 E2E-A10 [1.0/1.0/1.0s]\nPASS 1/1 CC-P10 [2.3/2.3/2.3s]\nPASS 1/1 CC-P11 [1.7/1.7/1.7s]\nPASS 1/1 CC-P12 [2.1/2.1/2.1s]\nPASS 1/1 CC-P14 [3.6/3.6/3.6s]\nPASS 1/1 CC-P15 [2.8/2.8/2.8s]\nPASS 1/1 CC-P16 [2.1/2.1/2.1s]\nPASS 1/1 CC-P17 [2.3/2.3/2.3s]\nPASS 1/1 CC-L0 [1.4/1.4/1.4s]\nPASS 1/1 CC-L1 [1.1/1.1/1.1s]\nPASS 1/1 D10-01 [1.6/1.6/1.6s]\nPASS 1/1 D10-06e [3.8/3.8/3.8s]\nPASS 1/1 E2E-T01 [1.5/1.5/1.5s]\nPASS 1/1 E2E-T02 [2.2/2.2/2.2s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (acceptance phone-chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (firefox)",
+    "id": 118113907536,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "16 files; run.log redaction: bytes_before=342708 bytes_after=338890; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (acceptance firefox)",
+        "message": "files=3 bytes=1264738 results.json=be2c87df9b97e6ee executions_in_results_json=65 top-level: .last-run.json,release-proof,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[90m> ^[[39m {\"severity\":\"ERROR\",\"message\":\"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\npath <\\n  Element {\\n    type: \\\"userProfiles\\\"\\n    name: \\\"XCByHrXOpypl9HxHk74VTLfmlsZV\\\"\\n  }\\n>\\n\\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\\nfor call at\\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\\nCaused by: Error\\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:54:31)\\n    at ProxyTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:27:24)\\n    at EnabledTraceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28)\\n    at WriteBatch.commit (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:440:43)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/reference/document-reference.js:395:18\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30 {\\n  code: 5,\\n  details: 'no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\\\n' +\\n    'path <\\\\n' +\\n    '  Element {\\\\n' +\\n    '    type: "
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (firefox acceptance)",
+        "message": "verdict=off off=[\"RP-OFF-01@import-off-firefox:expected\",\"RP-OFF-02@import-off-firefox:expected\",\"RP-OFF-03@import-off-firefox:expected\",\"D10-01@on-control-firefox:expected\",\"D10-02@on-control-firefox:expected\"] on=[\"RP-OFF-01@import-off-firefox:expected\",\"RP-OFF-02@import-off-firefox:expected\",\"RP-OFF-03@import-off-firefox:expected\",\"D10-01@on-control-firefox:expected\",\"D10-02@on-control-firefox:expected\"]"
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox diag data: 14 executions",
+        "message": "PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"61eecfc3\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"BKcFhLD6cRlGlT5DX1QCOZRVW8tH\",\"status\":\"pending\",\"teamId\":\"195A3QoE8SMz1Ma5V25X\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]\nPASS N2-A1 #0: A1 statusAt=80ms savedAfterRestore=5ms recoveredAfterRestore=30ms teams=1 net: [click@1] | CP 67-111 200 | [restore@8002] | [end@11037] | Listen: 0 req, 0 open\nPASS N2-R1 #0: R1 heldCommits=1 statusAt=76ms serverDuringOutage=0 recovery=automatic/77ms net: [click@1] | CP 66-8042 200 | [restore@8002] | [end@11079] | Listen: 0 req, 0 open\nPASS N2-R1b #0: R1b resets=1 statusAt=79ms serverDuringOutage=0 recovery=ui-retry/12159ms net: [click@1] | CP 65-68 NS_ERROR_NET_RESET | [restore@8007] | CP 20087-20129 200 | [end@23167] | Listen: 0 req, 0 open\nPASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=85ms serverAfterCommit=1 recovery=automatic/68ms net: [click@1] | CP 67-121 NS_BINDING_ABORTED | [end@3167] | Listen: 0 req, 0 open\nPASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/75ms\nPASS N2-R3 #0: R3 recovery=ui-retry/12238ms\nPASS N2-R4 #0: R4 recovery=ui-retry/12226ms\nPASS N2-R5 #0: R5 fakedCommits=1 statusAt=77ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12167ms net: [click@1] | CP 66-70 200 | RG 71-81 403 | [restore@8030] | CP 20121-20159 200 | RG 20165-20166 NS_BINDING_ABORTED | [end@23197] | Listen: 0 req, 0 open\nPASS N2-R6 #0: R6 statusAt=77ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0\nPASS N2-R7 #0: R7 promptAt=64ms teamsBeforeAnswer=1 prompt=\"You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team\" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=59ms teamsWithName=2 distinctIds=2 distinctCodes=2\nPASS N2-R7b #0: R7b resets=1 statusAt=7ms serverDuring=1 recoveredAt=10 reprompts=0 teamsWithName=2\nPASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=81ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12172ms\nPASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=78ms committedAt=88ms noFalseSuccessAt8s=true recovery=automatic/5496ms"
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 0 of 65 executions",
+        "message": "none"
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox [acceptance]: 65 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 65/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-AI01 [2.8/2.8/2.8s]\nPASS 1/1 E2E-AI01b [2.2/2.2/2.2s]\nPASS 1/1 E2E-A01 [0.4/0.4/0.4s]\nPASS 1/1 E2E-A02 [0.8/0.8/0.8s]\nPASS 1/1 E2E-A03 [1.1/1.1/1.1s]\nPASS 1/1 E2E-A04 [1.3/1.3/1.3s]\nPASS 1/1 E2E-A05 [0.6/0.6/0.6s]\nPASS 1/1 E2E-A06 [1.1/1.1/1.1s]\nPASS 1/1 E2E-A07 [1.3/1.3/1.3s]\nPASS 1/1 E2E-A08 [0.7/0.7/0.7s]\nPASS 1/1 E2E-A09 [1.8/1.8/1.8s]\nPASS 1/1 E2E-A10 [1.4/1.4/1.4s]\nPASS 1/1 CC-P10 [2.8/2.8/2.8s]\nPASS 1/1 CC-P10b [3.3/3.3/3.3s]\nPASS 1/1 CC-P11 [2.1/2.1/2.1s]\nPASS 1/1 CC-P12 [2.1/2.1/2.1s]\nPASS 1/1 CC-P14 [4.0/4.0/4.0s]\nPASS 1/1 CC-P15 [4.0/4.0/4.0s]\nPASS 1/1 CC-P16 [2.8/2.8/2.8s]\nPASS 1/1 CC-P16b [1.7/1.7/1.7s]\nPASS 1/1 CC-P17 [3.0/3.0/3.0s]\nPASS 1/1 CC-L0 [1.9/1.9/1.9s]\nPASS 1/1 CC-L1 [1.5/1.5/1.5s]\nPASS 1/1 CC-W0 [1.6/1.6/1.6s]\nPASS 1/1 D10-00 [1.3/1.3/1.3s]\nPASS 1/1 D10-01 [2.8/2.8/2.8s]\nPASS 1/1 D10-02 [1.9/1.9/1.9s]\nPASS 1/1 D10-03 [2.2/2.2/2.2s]\nPASS 1/1 D10-04 [2.1/2.1/2.1s]\nPASS 1/1 D10-05 [1.6/1.6/1.6s]\nPASS 1/1 D10-06 [3.2/3.2/3.2s]\nPASS 1/1 D10-06b [3.0/3.0/3.0s]\nPASS 1/1 D10-07 [7.0/7.0/7.0s]\nPASS 1/1 D10-07b [2.0/2.0/2.0s]\nPASS 1/1 D10-08 [2.6/2.6/2.6s]\nPASS 1/1 D10-09 [3.3/3.3/3.3s]\nPASS 1/1 D10-10 [1.6/1.6/1.6s]\nPASS 1/1 D10-11 [2.7/2.7/2.7s]\nPASS 1/1 D10-12 [1.0/1.0/1.0s]\nPASS 1/1 D10-06c [2.8/2.8/2.8s]\nPASS 1/1 D10-06d [3.2/3.2/3.2s]\nPASS 1/1 D10-06e [5.0/5.0/5.0s]\nPASS 1/1 D10-08a [2.2/2.2/2.2s]\nPASS 1/1 D10-08b [4.3/4.3/4.3s]\nPASS 1/1 D10-08c [4.7/4.7/4.7s]\nPASS 1/1 D10-08d [1.8/1.8/1.8s]\nPASS 1/1 N2-A1 [12.0/12.0/12.0s]\nPASS 1/1 N2-R1 [12.1/12.1/12.1s]\nPASS 1/1 N2-R1b [24.2/24.2/24.2s]\nPASS 1/1 N2-R1c [4.1/4.1/4.1s]\nPASS 1/1 N2-R2 [6.5/6.5/6.5s]\nPASS 1/1 N2-R3 [16.5/16.5/16.5s]\nPASS 1/1 N2-R4 [18.1/18.1/18.1s]\nPASS 1/1 N2-R5 [24.4/24.4/24.4s]\nPASS 1/1 N2-R6 [21.2/21.2/21.2s]\nPASS 1/1 N2-R7 [10.6/10.6/10.6s]\nPASS 1/1 N2-R7b [29.6/29.6/29.6s]\nPASS 1/1 N2-R8 [24.2/24.2/24.2s]\nPASS 1/1 N2-R8b [17.5/17.5/17.5s]\nPASS 1/1 E2E-C01 [1.9/1.9/1.9s]\nPASS 1/1 E2E-T01 [2.1/2.1/2.1s]\nPASS 1/1 E2E-T02 [3.7/3.7/3.7s]\nPASS 1/1 E2E-T03 [2.5/2.5/2.5s]\nPASS 1/1 UI-01 [1.1/1.1/1.1s]\nPASS 1/1 UI-02 [2.1/2.1/2.1s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 19 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (acceptance firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (chromium)",
+    "id": 118113907604,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "16 files; run.log redaction: bytes_before=342457 bytes_after=338639; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (acceptance chromium)",
+        "message": "files=3 bytes=1265000 results.json=f3e6b51b5d9b3c7d executions_in_results_json=65 top-level: .last-run.json,release-proof,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[90m> ^[[39m {\"severity\":\"ERROR\",\"message\":\"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\npath <\\n  Element {\\n    type: \\\"userProfiles\\\"\\n    name: \\\"q4GRgapzw4TUpHtPi9CjhkGfC9Dn\\\"\\n  }\\n>\\n\\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\\nfor call at\\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\\nCaused by: Error\\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:54:31)\\n    at ProxyTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:27:24)\\n    at EnabledTraceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28)\\n    at WriteBatch.commit (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:440:43)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/reference/document-reference.js:395:18\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30 {\\n  code: 5,\\n  details: 'no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\\\n' +\\n    'path <\\\\n' +\\n    '  Element {\\\\n' +\\n    '    type: "
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (chromium acceptance)",
+        "message": "verdict=off off=[\"RP-OFF-01@import-off-chromium:expected\",\"RP-OFF-02@import-off-chromium:expected\",\"RP-OFF-03@import-off-chromium:expected\",\"D10-01@on-control-chromium:expected\",\"D10-02@on-control-chromium:expected\"] on=[\"RP-OFF-01@import-off-chromium:expected\",\"RP-OFF-02@import-off-chromium:expected\",\"RP-OFF-03@import-off-chromium:expected\",\"D10-01@on-control-chromium:expected\",\"D10-02@on-control-chromium:expected\"]"
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium diag data: 14 executions",
+        "message": "PASS D10-08d #0: D10-08d outcome=\"Import showed an error instead of completing: \"Import not completed. Original plays preserved. Retry or review your team access.\"\" tamperedUnchanged=true copies=[{\"id\":\"1778eab9\",\"name\":\"Tampered copy\"}] claim={\"uid\":\"Ly3NbghQIRgIXvFGhORUnxYCOKya\",\"status\":\"pending\",\"teamId\":\"CKtDLksvdus4TGjI6VL9\",\"teamName\":\"Alpha Eagles\"} alerts=[\"Import not completed. Original plays preserved. Retry or review your team access.\"]\nPASS N2-A1 #0: A1 statusAt=53ms savedAfterRestore=5ms recoveredAfterRestore=12ms teams=1 net: [click@1] | CP 39-75 net::ERR_ABORTED | [restore@8003] | [end@11021] | Listen: 0 req, 0 open\nPASS N2-R1 #0: R1 heldCommits=1 statusAt=44ms serverDuringOutage=0 recovery=automatic/63ms net: [click@0] | CP 38-8039 net::ERR_ABORTED | [restore@8004] | [end@11067] | Listen: 0 req, 0 open\nPASS N2-R1b #0: R1b resets=1 statusAt=49ms serverDuringOutage=0 recovery=ui-retry/12145ms net: [click@0] | CP 39-49 net::ERR_CONNECTION_RESET | [restore@8005] | CP 20085-20121 net::ERR_ABORTED | [end@23150] | Listen: 0 req, 0 open\nPASS N2-R1c #0: R1c dropped=1 serverCommitStatus=200 statusAt=59ms serverAfterCommit=1 recovery=automatic/65ms net: [click@0] | CP 38-88 net::ERR_ABORTED | [end@3138] | Listen: 0 req, 0 open\nPASS N2-R2 #0: R2 resumeVisibleWhilePending=true secondSubmitPossible=false recovery=automatic/74ms\nPASS N2-R3 #0: R3 recovery=ui-retry/12176ms\nPASS N2-R4 #0: R4 recovery=ui-retry/12145ms\nPASS N2-R5 #0: R5 fakedCommits=1 statusAt=48ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12117ms net: [click@0] | CP 41-63 net::ERR_ABORTED | RG 53-63 net::ERR_ABORTED | [restore@8017] | CP 20070-20112 net::ERR_ABORTED | [end@23133] | Listen: 0 req, 0 open\nPASS N2-R6 #0: R6 statusAt=44ms noSuccess=true alert=true retried=true noSuccessAfterRetry=true unchanged=true teamsWithName=0\nPASS N2-R7 #0: R7 promptAt=48ms teamsBeforeAnswer=1 prompt=\"You already have a team named N2 Dup Confirm FC. Do you intend to create a separate team? Go backCreate a separate team\" R7 declineButton=Cancel teamsAfterDecline=1 R7 confirmedCreatedAt=4ms teamsWithName=2 distinctIds=2 distinctCodes=2\nPASS N2-R7b #0: R7b resets=1 statusAt=3ms serverDuring=1 recoveredAt=12 reprompts=0 teamsWithName=2\nPASS N2-R8 #0: R8 fakedCommits=1 readbacksFailed=1 statusAt=45ms noFalseSuccessAt8s=true serverDuring=0 recovery=ui-retry/12116ms\nPASS N2-R8b #0: R8b listenBlocked=6 readbacksFailed=1 statusAt=51ms committedAt=63ms noFalseSuccessAt8s=true recovery=automatic/5156ms"
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 0 of 65 executions",
+        "message": "none"
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium [acceptance]: 65 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 65/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-AI01 [1.7/1.7/1.7s]\nPASS 1/1 E2E-AI01b [1.9/1.9/1.9s]\nPASS 1/1 E2E-A01 [0.2/0.2/0.2s]\nPASS 1/1 E2E-A02 [0.5/0.5/0.5s]\nPASS 1/1 E2E-A03 [0.6/0.6/0.6s]\nPASS 1/1 E2E-A04 [0.7/0.7/0.7s]\nPASS 1/1 E2E-A05 [0.3/0.3/0.3s]\nPASS 1/1 E2E-A06 [0.3/0.3/0.3s]\nPASS 1/1 E2E-A07 [0.9/0.9/0.9s]\nPASS 1/1 E2E-A08 [0.5/0.5/0.5s]\nPASS 1/1 E2E-A09 [1.0/1.0/1.0s]\nPASS 1/1 E2E-A10 [0.9/0.9/0.9s]\nPASS 1/1 CC-P10 [1.8/1.8/1.8s]\nPASS 1/1 CC-P10b [2.2/2.2/2.2s]\nPASS 1/1 CC-P11 [1.4/1.4/1.4s]\nPASS 1/1 CC-P12 [1.4/1.4/1.4s]\nPASS 1/1 CC-P14 [2.8/2.8/2.8s]\nPASS 1/1 CC-P15 [2.4/2.4/2.4s]\nPASS 1/1 CC-P16 [1.8/1.8/1.8s]\nPASS 1/1 CC-P16b [1.2/1.2/1.2s]\nPASS 1/1 CC-P17 [2.2/2.2/2.2s]\nPASS 1/1 CC-L0 [1.2/1.2/1.2s]\nPASS 1/1 CC-L1 [1.0/1.0/1.0s]\nPASS 1/1 CC-W0 [1.2/1.2/1.2s]\nPASS 1/1 D10-00 [0.8/0.8/0.8s]\nPASS 1/1 D10-01 [1.2/1.2/1.2s]\nPASS 1/1 D10-02 [1.4/1.4/1.4s]\nPASS 1/1 D10-03 [1.8/1.8/1.8s]\nPASS 1/1 D10-04 [1.5/1.5/1.5s]\nPASS 1/1 D10-05 [1.0/1.0/1.0s]\nPASS 1/1 D10-06 [2.0/2.0/2.0s]\nPASS 1/1 D10-06b [1.8/1.8/1.8s]\nPASS 1/1 D10-07 [6.3/6.3/6.3s]\nPASS 1/1 D10-07b [1.4/1.4/1.4s]\nPASS 1/1 D10-08 [1.7/1.7/1.7s]\nPASS 1/1 D10-09 [2.0/2.0/2.0s]\nPASS 1/1 D10-10 [1.1/1.1/1.1s]\nPASS 1/1 D10-11 [2.0/2.0/2.0s]\nPASS 1/1 D10-12 [0.6/0.6/0.6s]\nPASS 1/1 D10-06c [1.8/1.8/1.8s]\nPASS 1/1 D10-06d [2.2/2.2/2.2s]\nPASS 1/1 D10-06e [3.4/3.4/3.4s]\nPASS 1/1 D10-08a [1.7/1.7/1.7s]\nPASS 1/1 D10-08b [3.0/3.0/3.0s]\nPASS 1/1 D10-08c [3.7/3.7/3.7s]\nPASS 1/1 D10-08d [1.2/1.2/1.2s]\nPASS 1/1 N2-A1 [11.6/11.6/11.6s]\nPASS 1/1 N2-R1 [11.7/11.7/11.7s]\nPASS 1/1 N2-R1b [23.8/23.8/23.8s]\nPASS 1/1 N2-R1c [3.8/3.8/3.8s]\nPASS 1/1 N2-R2 [6.0/6.0/6.0s]\nPASS 1/1 N2-R3 [16.0/16.0/16.0s]\nPASS 1/1 N2-R4 [16.9/16.9/16.9s]\nPASS 1/1 N2-R5 [23.8/23.8/23.8s]\nPASS 1/1 N2-R6 [20.8/20.8/20.8s]\nPASS 1/1 N2-R7 [10.0/10.0/10.0s]\nPASS 1/1 N2-R7b [29.0/29.0/29.0s]\nPASS 1/1 N2-R8 [23.7/23.7/23.7s]\nPASS 1/1 N2-R8b [16.8/16.8/16.8s]\nPASS 1/1 E2E-C01 [1.4/1.4/1.4s]\nPASS 1/1 E2E-T01 [1.3/1.3/1.3s]\nPASS 1/1 E2E-T02 [2.0/2.0/2.0s]\nPASS 1/1 E2E-T03 [1.7/1.7/1.7s]\nPASS 1/1 UI-01 [0.7/0.7/0.7s]\nPASS 1/1 UI-02 [1.2/1.2/1.2s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 19 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (acceptance chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (chromium)",
+    "id": 118113907606,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (chromium)",
+        "message": "16 files; run.log redaction: bytes_before=39684 bytes_after=38902; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (diagnostic chromium)",
+        "message": "files=5 bytes=1257459 results.json=b3f949c356036707 executions_in_results_json=10 top-level: .last-run.json,n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--chromium,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  functions:^[[22m^[[39m Finished \"us-central1-onPracticePlanCreated\" in 73.751304ms\n^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of \"us-central1-onTeamMemberAdded\"\n^[[36m^[[1mi  functions:^[[22m^[[39m Finished \"us-central1-onTeamMemberAdded\" in 12.10098ms\n^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of \"us-central1-onTeamMemberAdded\"\n^[[36m^[[1mi  functions:^[[22m^[[39m Finished \"us-central1-onTeamMemberAdded\" in 6.978963ms\n^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of \"us-central1-onPracticePlanCreated\"\n^[[90m> ^[[39m {\"severity\":\"ERROR\",\"message\":\"Error updating stats for practice plan: Error: 5 NOT_FOUND: no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\npath <\\n  Element {\\n    type: \\\"userProfiles\\\"\\n    name: \\\"zPEthRatpQnGCjeR8gswP0fVaVgX\\\"\\n  }\\n>\\n\\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\\nfor call at\\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\\nCaused by: Error\\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:54:31)\\n    at ProxyTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:27:24)\\n    at EnabledTraceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28)\\n    at WriteBatch.commit (/home/runner/work/coach-co"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (chromium diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "failure",
+        "title": "",
+        "message": "Process completed with exit code 1."
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium diag data: 9 executions",
+        "message": "PASS N2-D0 #0: D0 server=459ms dialogClosed=555ms net: [click@2] | CP 88-523 net::ERR_ABORTED | RG 494-523 net::ERR_ABORTED | [end@557] | Listen: 1 req, 1 open\nPASS N2-D1 #0: D1 server=141ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8008ms teams=1 net: [click@1] | CP 49-140 net::ERR_ABORTED | [unblock@8003] | [end@8009] | Listen: 0 req, 0 open\nPASS N2-D3 #0: D3 leg=write-response held=0 server=127ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=140ms teams=1 net: [click@1] | CP 37-134 net::ERR_ABORTED | [release@152] | [end@152] | Listen: 0 req, 0 open\nPASS N2-D4 #0: D4 leg=backchannel held=0 server=132ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=138ms teams=1 net: [click@1] | CP 50-106 net::ERR_ABORTED | [release@147] | [end@147] | Listen: 0 req, 0 open\nPASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok\nPASS CC-E1 #0: e1 fault=commit-reset faultHits=5 statusSeries=[\"55ms:saving\",\"311ms:saving\",\"568ms:saving\",\"823ms:saving\",\"1081ms:saving\",\"1339ms:saving\",\"1596ms:saving\",\"1852ms:saving\",\"2109ms:saving\",\"2365ms:saving\",\"2621ms:saving\",\"2876ms:saving\",\"3132ms:saving\",\"3387ms:saving\",\"3643ms:saving\",\"3899ms:saving\",\"4155ms:saving\",\"4411ms:saving\",\"4666ms:saving\",\"4922ms:saving\",\"5176ms:saving\",\"5432ms:saving\",\"5688ms:saving\",\"5943ms:saving\",\"6198ms:saving\",\"6454ms:saving\",\"6710ms:saving\",\"6966ms:failed\",\"7221ms:failed\",\"7476ms:failed\",\"7732ms:failed\",\"7988ms:failed\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[\"Connection failed.\"] recoveredAfterRestore=NOT within 45 s finalStatus=failed finalDocs=[{\"rev\":1,\"name\":\"Edit path plan\"}]\nPASS CC-E2 #0: e2 fault=commit-hold faultHits=1 statusSeries=[\"48ms:saving\",\"304ms:saving\",\"560ms:saving\",\"816ms:saving\",\"1071ms:saving\",\"1326ms:saving\",\"1581ms:saving\",\"1835ms:saving\",\"2091ms:saving\",\"2346ms:saving\",\"2601ms:saving\",\"2855ms:saving\",\"3110ms:saving\",\"3365ms:saving\",\"3621ms:saving\",\"3876ms:saving\",\"4132ms:saving\",\"4386ms:saving\",\"4640ms:saving\",\"4894ms:saving\",\"5150ms:saving\",\"5405ms:saving\",\"5661ms:saving\",\"5916ms:saving\",\"6172ms:saving\",\"6427ms:saving\",\"6683ms:saving\",\"6937ms:saving\",\"7193ms:saving\",\"7447ms:saving\",\"7702ms:saving\",\"7956ms:saving\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[] recoveredAfterRestore=140ms finalStatus=saved finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E3 #0: E3 afterFailure fields={\"Plan.name\":\"Edit path plan v2\",\"Plan.notes\":\"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx\"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=9918ms E3 alertAfterFailure=\"Connection failed.\" autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E4 #0: E4 afterFailure nameFields=[\"Mesh after failure\",\"Mesh after failure\"] draftsWithEdit=[\"uw0fINA11OQK7pHErr12:drafts\"] status=failed alerts=[\"Connection failed.\"] E4 commitResets=5 faultWindow=9069ms E4 autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Mesh after failure\"}]"
+      },
+      {
+        "level": "notice",
+        "title": "E2E chromium slow steps >= 10s: 1 of 10 executions",
+        "message": "FAIL N2-D2 #0: Click@n2.spec.ts:138 59.3s"
+      },
+      {
+        "level": "warning",
+        "title": "E2E chromium diag: 1 failed executions",
+        "message": "N2-D2 #0 timedOut 60.1s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.3s) | slowest: Click@n2.spec.ts:138 59.3s; Navigate@app.ts:68 0.2s; Expect \"toBeVisible\"@app.ts:99 0.1s"
+      },
+      {
+        "level": "failure",
+        "title": "E2E chromium [diagnostic]: 9 passed / 1 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 9/1 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "FAIL 1/1 N2-D2 [60.1/60.1/60.1s] -- Test timeout of 60000ms exceeded.\nPASS 1/1 N2-D0 [1.5/1.5/1.5s]\nPASS 1/1 N2-D1 [8.8/8.8/8.8s]\nPASS 1/1 N2-D3 [0.9/0.9/0.9s]\nPASS 1/1 N2-D4 [0.8/0.8/0.8s]\nPASS 1/1 N3-D5 [6.6/6.6/6.6s]\nPASS 1/1 CC-E1 [54.7/54.7/54.7s]\nPASS 1/1 CC-E2 [9.6/9.6/9.6s]\nPASS 1/1 CC-E3 [16.4/16.4/16.4s]\nPASS 1/1 CC-E4 [15.7/15.7/15.7s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (diagnostic chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (firefox)",
+    "id": 118113907669,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "13 files; run.log redaction: bytes_before=4686 bytes_after=4640; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model firefox)",
+        "message": "files=2 bytes=625716 results.json=0a4eae0d658df068 executions_in_results_json=1 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  emulators:^[[22m^[[39m Starting emulators: auth, functions, firestore\n^[[36m^[[1mi  functions:^[[22m^[[39m Watching \"/home/runner/work/coach-core-ai/coach-core-ai/functions\" for Cloud Functions...\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Using node@22 from host.\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.\n^[[32m^[[1m\u2714  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).\n^[[32m^[[1m\u2714  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).\n^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.\n^[[32m^[[1m\u2714  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).\n^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator\n"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (firefox obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox diag data: 1 executions",
+        "message": "PASS N2-A2 #0: A2 cancelEnabled=true retrySubmitted=true savedAfterRelease=33ms teams=1"
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 0 of 1 executions",
+        "message": "none"
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox [obsolete-fault-model]: 1 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 1/0 (pass/fail)",
+        "message": "PASS 1/1 N2-A2 [8.4/8.4/8.4s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (firefox)",
+    "id": 118113907689,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (firefox)",
+        "message": "16 files; run.log redaction: bytes_before=39083 bytes_after=38301; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (diagnostic firefox)",
+        "message": "files=5 bytes=4961210 results.json=c2db161be24edab1 executions_in_results_json=10 top-level: .last-run.json,n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--firefox,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  functions:^[[22m^[[39m Finished \"us-central1-onPracticePlanCreated\" in 64.985439ms\n^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of \"us-central1-onTeamMemberAdded\"\n^[[36m^[[1mi  functions:^[[22m^[[39m Finished \"us-central1-onTeamMemberAdded\" in 4.785404ms\n^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of \"us-central1-onTeamMemberAdded\"\n^[[36m^[[1mi  functions:^[[22m^[[39m Finished \"us-central1-onTeamMemberAdded\" in 5.933795ms\n^[[36m^[[1mi  functions:^[[22m^[[39m Beginning execution of \"us-central1-onPracticePlanCreated\"\n^[[90m> ^[[39m {\"severity\":\"ERROR\",\"message\":\"Error updating stats for practice plan: Error: 5 NOT_FOUND: no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\npath <\\n  Element {\\n    type: \\\"userProfiles\\\"\\n    name: \\\"m67R2qQ3qSBhRM70NwJvGcryrDNo\\\"\\n  }\\n>\\n\\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\\nfor call at\\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\\nCaused by: Error\\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:54:31)\\n    at ProxyTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:27:24)\\n    at EnabledTraceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28)\\n    at WriteBatch.commit (/home/runner/work/coach-co"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (firefox diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "failure",
+        "title": "",
+        "message": "Process completed with exit code 1."
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox diag data: 9 executions",
+        "message": "PASS N2-D0 #0: D0 server=457ms dialogClosed=494ms net: [click@1] | CP 115-458 NS_BINDING_ABORTED | [end@495] | Listen: 1 req, 1 open\nPASS N2-D1 #0: D1 server=146ms stuckAt8s=false creatingAt8s=false abortedBackchannel=0 dialogClosed=8013ms teams=1 net: [click@1] | CP 59-119 200 | [unblock@8002] | [end@8014] | Listen: 0 req, 0 open\nPASS N2-D3 #0: D3 leg=write-response held=0 server=138ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=147ms teams=1 net: [click@1] | CP 62-116 200 | RG 120-120 NS_BINDING_ABORTED | [release@157] | [end@157] | Listen: 0 req, 0 open\nPASS N2-D4 #0: D4 leg=backchannel held=0 server=137ms serverAt8s=1 dialogClosedWhileHeld=true dialogClosed=146ms teams=1 net: [click@1] | CP 63-110 200 | [release@157] | [end@157] | Listen: 0 req, 0 open\nPASS N3-D5 #0: N3-D5 cycles=a0:ok b0:ok a1:ok b1:ok a2:ok b2:ok a3:ok b3:ok\nPASS CC-E1 #0: e1 fault=commit-reset faultHits=5 statusSeries=[\"75ms:saving\",\"336ms:saving\",\"598ms:saving\",\"858ms:saving\",\"1120ms:saving\",\"1378ms:saving\",\"1637ms:saving\",\"1897ms:saving\",\"2157ms:saving\",\"2417ms:saving\",\"2676ms:saving\",\"2934ms:saving\",\"3192ms:saving\",\"3449ms:saving\",\"3707ms:saving\",\"3973ms:saving\",\"4232ms:saving\",\"4490ms:saving\",\"4748ms:saving\",\"5006ms:saving\",\"5266ms:saving\",\"5525ms:saving\",\"5783ms:saving\",\"6041ms:saving\",\"6300ms:saving\",\"6564ms:saving\",\"6829ms:failed\",\"7088ms:failed\",\"7347ms:failed\",\"7605ms:failed\",\"7864ms:failed\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[\"Connection failed.\"] recoveredAfterRestore=NOT within 45 s finalStatus=failed finalDocs=[{\"rev\":1,\"name\":\"Edit path plan\"}]\nPASS CC-E2 #0: e2 fault=commit-hold faultHits=1 statusSeries=[\"72ms:saving\",\"331ms:saving\",\"589ms:saving\",\"852ms:saving\",\"1112ms:saving\",\"1370ms:saving\",\"1629ms:saving\",\"1888ms:saving\",\"2146ms:saving\",\"2403ms:saving\",\"2660ms:saving\",\"2917ms:saving\",\"3174ms:saving\",\"3433ms:saving\",\"3690ms:saving\",\"3947ms:saving\",\"4204ms:saving\",\"4462ms:saving\",\"4719ms:saving\",\"4977ms:saving\",\"5237ms:saving\",\"5495ms:saving\",\"5753ms:saving\",\"6011ms:saving\",\"6269ms:saving\",\"6528ms:saving\",\"6787ms:saving\",\"7046ms:saving\",\"7306ms:saving\",\"7564ms:saving\",\"7821ms:saving\"] serverAt8s=[{\"rev\":1,\"name\":\"Edit path plan\"}] alertsAt8s=[] recoveredAfterRestore=146ms finalStatus=saved finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E3 #0: E3 afterFailure fields={\"Plan.name\":\"Edit path plan v2\",\"Plan.notes\":\"Retention notes xxxxxxxxxxxxxxxxxxxxxxxx\"} draftsWithEdit=1 status=failed E3 commitResets=5 faultWindow=8042ms E3 alertAfterFailure=\"Connection failed.\" autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Edit path plan v2\"}]\nPASS CC-E4 #0: E4 afterFailure nameFields=[\"Mesh after failure\",\"Mesh after failure\"] draftsWithEdit=[\"zeOIG4W54GZIVWTVRgC1:drafts\"] status=failed alerts=[\"Connection failed.\"] E4 commitResets=5 faultWindow=10257ms E4 autoRecoveredWithin5s=false finalDocs=[{\"rev\":2,\"name\":\"Mesh after failure\"}]"
+      },
+      {
+        "level": "notice",
+        "title": "E2E firefox slow steps >= 10s: 1 of 10 executions",
+        "message": "FAIL N2-D2 #0: Click@n2.spec.ts:138 59.1s"
+      },
+      {
+        "level": "warning",
+        "title": "E2E firefox diag: 1 failed executions",
+        "message": "N2-D2 #0 timedOut 60.3s | errors: Test timeout of 60000ms exceeded. || Error: locator.click: Test timeout of 60000ms exceeded. | last step: Click@n2.spec.ts:138 (59.1s) | slowest: Click@n2.spec.ts:138 59.1s; Navigate@app.ts:68 0.1s; Navigate@app.ts:88 0.1s"
+      },
+      {
+        "level": "failure",
+        "title": "E2E firefox [diagnostic]: 9 passed / 1 failed / 0 blocked / 0 skipped \u00b7 acceptance 0/0 \u00b7 diagnostic 9/1 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "FAIL 1/1 N2-D2 [60.3/60.3/60.3s] -- Test timeout of 60000ms exceeded.\nPASS 1/1 N2-D0 [3.0/3.0/3.0s]\nPASS 1/1 N2-D1 [9.2/9.2/9.2s]\nPASS 1/1 N2-D3 [1.3/1.3/1.3s]\nPASS 1/1 N2-D4 [1.3/1.3/1.3s]\nPASS 1/1 N3-D5 [11.2/11.2/11.2s]\nPASS 1/1 CC-E1 [55.0/55.0/55.0s]\nPASS 1/1 CC-E2 [10.1/10.1/10.1s]\nPASS 1/1 CC-E3 [15.2/15.2/15.2s]\nPASS 1/1 CC-E4 [17.5/17.5/17.5s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (diagnostic firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E diagnostic (phone-chromium)",
+    "id": 118113907719,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (phone-chromium)",
+        "message": "13 files; run.log redaction: bytes_before=4038 bytes_after=4038; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (diagnostic phone-chromium)",
+        "message": "files=2 bytes=623746 results.json=7e28d16d2976b52b executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  emulators:^[[22m^[[39m Starting emulators: auth, functions, firestore\n^[[36m^[[1mi  functions:^[[22m^[[39m Watching \"/home/runner/work/coach-core-ai/coach-core-ai/functions\" for Cloud Functions...\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Using node@22 from host.\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.\n^[[32m^[[1m\u2714  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).\n^[[32m^[[1m\u2714  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).\n^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.\n^[[32m^[[1m\u2714  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).\n^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator\n"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (phone-chromium diagnostic)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-chromium [diagnostic]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-chromium\", bucket \"diagnostic\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"diagnostic\" tests exist for project \"phone-chromium\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (diagnostic phone-chromium)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E obsolete-fault-model (phone-firefox)",
+    "id": 118113907851,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "13 files; run.log redaction: bytes_before=4063 bytes_after=4063; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (obsolete-fault-model phone-firefox)",
+        "message": "files=2 bytes=623719 results.json=7a76a10200bd9d07 executions_in_results_json=0 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[36m^[[1mi  emulators:^[[22m^[[39m Starting emulators: auth, functions, firestore\n^[[36m^[[1mi  functions:^[[22m^[[39m Watching \"/home/runner/work/coach-core-ai/coach-core-ai/functions\" for Cloud Functions...\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Using node@22 from host.\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mLoaded environment variables from functions/.env.local\n^[[36m^[[1mi ^[[22m^[[39m ^[[36m^[[1mfunctions: ^[[22m^[[39mWriting new parameter values to disk: functions/.env.local\n^[[32m^[[1m\u2714  functions:^[[22m^[[39m Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck.\n^[[32m^[[1m\u2714  functions[us-central1-coachAI]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).\n^[[32m^[[1m\u2714  functions[us-central1-createUserProfile]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onTeamMemberAdded]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPracticePlanCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-onPlayCreated]:^[[22m^[[39m ^[[1mfirestore^[[22m function initialized.\n^[[32m^[[1m\u2714  functions[us-central1-trackUserActivity]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).\n^[[36m^[[1mi  functions[us-central1-cleanupOldNotifications]:^[[22m^[[39m function ignored because the pubsub emulator does not exist or is not running.\n^[[32m^[[1m\u2714  functions[us-central1-healthCheck]:^[[22m^[[39m ^[[1mhttp^[[22m function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).\n^[[36m^[[1mi  functions:^[[22m^[[39m Stopping Functions Emulator\n"
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (phone-firefox obsolete-fault-model)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-firefox [obsolete-fault-model]: 0 tests selected (empty selection; nothing ran)",
+        "message": "Project \"phone-firefox\", bucket \"obsolete-fault-model\": 0 tests selected, 0 executed, 0 passed, 0 failed; no \"obsolete-fault-model\" tests exist for project \"phone-firefox\" under its own filter. The job succeeds only via --pass-with-no-tests; this is an empty selection, not a passing test result."
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (obsolete-fault-model phone-firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "E2E acceptance (phone-firefox)",
+    "id": 118113908218,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "E2E evidence inventory (phone-firefox)",
+        "message": "13 files; run.log redaction: bytes_before=84806 bytes_after=83702; UPLOAD_OK present"
+      },
+      {
+        "level": "notice",
+        "title": "E2E artifact manifest (acceptance phone-firefox)",
+        "message": "files=2 bytes=650103 results.json=c22bc065bd3b6f7b executions_in_results_json=15 top-level: .last-run.json,results.json"
+      },
+      {
+        "level": "notice",
+        "title": "E2E browsers",
+        "message": "chromium 156.0.8078.4 firefox 157.0  (Playwright 1.64.0; Linux; desktop viewport; no physical devices)"
+      },
+      {
+        "level": "notice",
+        "title": "E2E emulator log (functions)",
+        "message": "^[[90m> ^[[39m {\"severity\":\"ERROR\",\"message\":\"Error updating stats for play: Error: 5 NOT_FOUND: no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\npath <\\n  Element {\\n    type: \\\"userProfiles\\\"\\n    name: \\\"YeKIINQeI6Ht8ktsaFLMpYUlZheA\\\"\\n  }\\n>\\n\\n    at callErrorFromStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/call.js:32:19)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:193:76)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:367:141)\\n    at Object.onReceiveStatus (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:327:181)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/resolving-call.js:155:78\\n    at process.processTicksAndRejections (node:internal/process/task_queues:84:11)\\nfor call at\\n    at ServiceClientImpl.makeUnaryRequest (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/client.js:161:32)\\n    at ServiceClientImpl.<anonymous> (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@grpc/grpc-js/build/src/make-client.js:105:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore-api/build/src/v1/firestore_client.js:257:29\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/timeout.js:44:16\\n    at repeat (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:121:25)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/retries.js:163:13\\n    at OngoingCallPromise.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/call.js:70:27)\\n    at NormalApiCaller.call (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/google-gax/build/src/createApiCall.js:170:37\\nCaused by: Error\\n    at _firestore._traceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30\\n    at NoopContextManager.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:14:19)\\n    at ContextAPI.with (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\\n    at NoopTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:54:31)\\n    at ProxyTracer.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:27:24)\\n    at EnabledTraceUtil.startActiveSpan (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28)\\n    at WriteBatch.commit (/home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/write-batch.js:440:43)\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/reference/document-reference.js:395:18\\n    at /home/runner/work/coach-core-ai/coach-core-ai/functions/node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30 {\\n  code: 5,\\n  details: 'no entity to update: app: \\\"dev~demo-coach-core-e2e\\\"\\\\n' +\\n    'path <\\\\n' +\\n    '  Element {\\\\n' +\\n    '    type: "
+      },
+      {
+        "level": "notice",
+        "title": "Release gate (phone-firefox acceptance)",
+        "message": "L1+L2 ran in this job; L3 (real-browser import-OFF run + ON control) and the gate verdict are issued only by the chromium/firefox acceptance jobs. This job makes no OFF-behaviour claim."
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-firefox slow steps >= 10s: 0 of 15 executions",
+        "message": "none"
+      },
+      {
+        "level": "notice",
+        "title": "E2E phone-firefox [acceptance]: 15 passed / 0 failed / 0 blocked / 0 skipped \u00b7 acceptance 15/0 \u00b7 diagnostic 0/0 \u00b7 obsolete-fault-model 0/0 (pass/fail)",
+        "message": "PASS 1/1 E2E-A07 [2.5/2.5/2.5s]\nPASS 1/1 E2E-A10 [1.3/1.3/1.3s]\nPASS 1/1 CC-P10 [2.8/2.8/2.8s]\nPASS 1/1 CC-P11 [2.1/2.1/2.1s]\nPASS 1/1 CC-P12 [2.6/2.6/2.6s]\nPASS 1/1 CC-P14 [4.1/4.1/4.1s]\nPASS 1/1 CC-P15 [3.3/3.3/3.3s]\nPASS 1/1 CC-P16 [3.3/3.3/3.3s]\nPASS 1/1 CC-P17 [3.0/3.0/3.0s]\nPASS 1/1 CC-L0 [1.8/1.8/1.8s]\nPASS 1/1 CC-L1 [1.5/1.5/1.5s]\nPASS 1/1 D10-01 [1.9/1.9/1.9s]\nPASS 1/1 D10-06e [4.7/4.7/4.7s]\nPASS 1/1 E2E-T01 [2.0/2.0/2.0s]\nPASS 1/1 E2E-T02 [3.6/3.6/3.6s]"
+      },
+      {
+        "level": "notice",
+        "title": "Release-build proof L1+L2 (coach-core-mvp-staging-239): 18 passed",
+        "message": "No test hooks/emulator wiring/demo values in a release-shaped build; import flag resolved OFF before building and inlined as import-config=false in the shipped entry chunks (configuration proof only); the behavioural leg (real browser, import-OFF emulator build + ON control) is reported by the release gate step."
+      },
+      {
+        "level": "notice",
+        "title": "Release-proof self-checks (acceptance phone-firefox)",
+        "message": "tests=65 pass=39 fail=0 skipped=26 (skipped tests are NOT passes): 31: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;32: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;33: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;34: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;35: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;36: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;37: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;38: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;39: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;40: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;41: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;42: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;43: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;44: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;45: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;46: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;47: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;48: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;49: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;50: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;51: superseded scanner 905b1d4 not available in this clone (shallow checkout); t;53: superseded scanner d14aa7b not available in this clone (shallow checkout); t;55: superseded scanner cab8cab not available in this clone (shallow checkout); t;57: superseded scanner cab8cab not available in this clone (shallow checkout); t;64: set RELEASE_PROOF_BUILD=1 to run the real builds;65: set RELEASE_PROOF_BUILD=1 to run the real builds;"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  },
+  {
+    "job": "Coach Core merge eligibility",
+    "id": 118118349642,
+    "annotations": [
+      {
+        "level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/download-artifact@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/"
+      },
+      {
+        "level": "warning",
+        "title": "",
+        "message": "The process '/usr/bin/git' failed with exit code 128"
+      },
+      {
+        "level": "notice",
+        "title": "Coach Core merge eligibility",
+        "message": "ELIGIBLE \u2014 950addf164e4f789c6488bf5af7dd60dc2e43ce8 (pull_request, run 39268393120/1): all 12 jobs completed, 4 acceptance jobs green with complete selections, 12 evidence artifacts fully inventoried and verified"
+      },
+      {
+        "level": "notice",
+        "title": "",
+        "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\""
+      }
+    ]
+  }
+]

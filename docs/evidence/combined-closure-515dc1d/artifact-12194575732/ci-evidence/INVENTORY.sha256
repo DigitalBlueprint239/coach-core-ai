@@ -1,0 +1,15 @@
+# Upload-aligned inventory: every regular file under the upload paths, hidden files INCLUDED (upload uses include-hidden-files: true).
+# paths: e2e/ci-evidence e2e/test-results
+88c2df0519b252c572720e64ec7c9b2b376d1620db1a0c41f2bb6ad4140e50ea  e2e/ci-evidence/REDACTION.txt
+8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7  e2e/ci-evidence/release-build-manifest.sha256
+3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  e2e/ci-evidence/release-build/asset-manifest.json
+d3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  e2e/ci-evidence/release-build/index.html
+cda2c86b220fea14df3e847430aa3458162c1a712fde3b59cca04513643ea990  e2e/ci-evidence/release-build/release-build.context
+0f462f8a40c1c047230c7f0649dc4f24f410008aa679c564367462f8c8d5ba0d  e2e/ci-evidence/release-build/release-canary.json
+c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  e2e/ci-evidence/release-build/static/js/main.630c8567.js
+0f462f8a40c1c047230c7f0649dc4f24f410008aa679c564367462f8c8d5ba0d  e2e/ci-evidence/release-canary.json
+96e856db22474a40ad5216002a666c1073e67afeec7dbd983847d27a758b8076  e2e/ci-evidence/run.context
+19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061  e2e/ci-evidence/run.exit
+0bbc6a0518dce6b2bf64cb58a85682036f521d70bab594c8850c7c58eedb3e37  e2e/ci-evidence/run.log
+91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903  e2e/test-results/.last-run.json
+0a4eae0d658df0681b021faddf9ab491ce715efc2bafd3830c0dc8c345f408e8  e2e/test-results/results.json

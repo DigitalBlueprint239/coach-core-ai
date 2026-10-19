@@ -1,0 +1,11 @@
+Coach Drew policy approval — October 16, 2026, 5:17 PM America/New_York.
+
+Founder explicitly replied “Ok I approve all three” to these three recommendations:
+
+1. R3 — ACCEPT the existing ask-once import limitation for private beta: declining “Not now” suppresses subsequent offers for that account on that device. Disclose the limitation. A future manual import entry point is a recommendation, not newly authorized feature implementation.
+2. R4 — APPROVE default-off import build configuration, with explicit opt-in for approved testing. Preparation of a bounded implementation is authorized; this does not authorize enabling import in production.
+3. Missing-original-team recovery — APPROVE blocking automatic recovery and requiring authenticated support to verify ownership. No ownership bypass is authorized. A detailed support procedure and evidence requirements still need preparation before manual recovery can be performed.
+
+These decisions resolve the three founder policy choices; they do not establish implementation, verification, or release completion. Firebase founder read-only checks G2–G4 remain open. MVP remains NO-GO; AI off. No merge, deployment, production configuration change, or release authorized by this approval. Preserve approved identity UI and existing verified repairs.
+
+Sponsor approval is separate; the Featured total-versus-additional social-post quantity remains unanswered and is not resolved by this three-policy approval.

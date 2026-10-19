@@ -1,0 +1,216 @@
+[
+  {
+    "artifact": 12194531733,
+    "gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:30:40.042Z",
+            "duration": 22867.413,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-firefox:expected",
+            "RP-OFF-02@import-off-firefox:expected",
+            "RP-OFF-03@import-off-firefox:expected",
+            "D10-01@on-control-firefox:expected",
+            "D10-02@on-control-firefox:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:30:40.042Z",
+            "duration": 22867.413,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "browser_tests": [
+      {
+        "title": "RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical",
+        "id": "15e34dca9800517c2d54-75b00a34a8fd26c36091",
+        "project": "import-off-firefox",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied",
+        "id": "15e34dca9800517c2d54-b856f075c647a098db1e",
+        "project": "import-off-firefox",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written",
+        "id": "15e34dca9800517c2d54-e723673acacbfe4d2279",
+        "project": "import-off-firefox",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "id": "05d3bb950b4a0761726b-0f861cf380c0658b6d28",
+        "project": "on-control-firefox",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+        "id": "05d3bb950b4a0761726b-36e192d997d093bd0430",
+        "project": "on-control-firefox",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      }
+    ],
+    "results_stats": {
+      "startTime": "2026-10-19T14:30:40.042Z",
+      "duration": 22867.413,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "artifact": 12194486475,
+    "gate": {
+      "verdict": "off",
+      "legs": {
+        "canary": {
+          "verdict": "config-false",
+          "literals": 1,
+          "chunks": [
+            "static/js/main.630c8567.js"
+          ]
+        },
+        "behaviourOff": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:29:59.221Z",
+            "duration": 17785.490999999998,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        },
+        "behaviourOnControl": {
+          "executed": [
+            "RP-OFF-01@import-off-chromium:expected",
+            "RP-OFF-02@import-off-chromium:expected",
+            "RP-OFF-03@import-off-chromium:expected",
+            "D10-01@on-control-chromium:expected",
+            "D10-02@on-control-chromium:expected"
+          ],
+          "stats": {
+            "startTime": "2026-10-19T14:29:59.221Z",
+            "duration": 17785.490999999998,
+            "expected": 5,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          }
+        }
+      },
+      "reasons": [],
+      "establishes": "release-shaped build configured OFF (L1), OFF value inlined by the compiler (L2), disabled behaviour observed in a real browser on the same-commit OFF build with a passing same-commit ON control (L3). Host assumptions: DefinePlugin single substitution; emulator build differs from the release build only by emulator/project env; the release bundle itself was not executed.",
+      "ok": true
+    },
+    "browser_tests": [
+      {
+        "title": "RP-OFF-01 [release proof] owner with device plays: the disabled build shows the notice only, offers no import or decline control, writes no play and no claim/decision, originals byte-identical",
+        "id": "15e34dca9800517c2d54-de13c5451a8233269887",
+        "project": "import-off-chromium",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "RP-OFF-02 [release proof] unfinished import of this very coach and team: the disabled build does not resume, postpone or clear it; claim and pending markers stay byte-identical; nothing is copied",
+        "id": "15e34dca9800517c2d54-ef50a0614a19ea9b967f",
+        "project": "import-off-chromium",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "RP-OFF-03 [release proof] owner without device plays: no import region at all, nothing written",
+        "id": "15e34dca9800517c2d54-6dfef0a79c9c7d0fd79d",
+        "project": "import-off-chromium",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "D10-01 accept: explicit consent copies every play exactly into the selected team, records the decision with the verified ids (ordering proven by D10-10), originals untouched",
+        "id": "05d3bb950b4a0761726b-ee568b3cf34d1c54f10d",
+        "project": "on-control-chromium",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "D10-02 decline: \"Not now\" writes nothing to the cloud and leaves originals byte-identical; no repeat prompt for that coach",
+        "id": "05d3bb950b4a0761726b-2f1d0a9df274172aefb5",
+        "project": "on-control-chromium",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      }
+    ],
+    "results_stats": {
+      "startTime": "2026-10-19T14:29:59.221Z",
+      "duration": 17785.490999999998,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

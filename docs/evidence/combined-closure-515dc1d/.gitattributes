@@ -1,0 +1,4 @@
+*.txt -whitespace
+*.md -whitespace
+*.json -whitespace
+*.js -whitespace

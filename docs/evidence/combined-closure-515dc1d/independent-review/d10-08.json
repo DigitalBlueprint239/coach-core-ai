@@ -1,0 +1,40 @@
+[
+  {
+    "artifact": 12194531733,
+    "rows": [
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      }
+    ]
+  },
+  {
+    "artifact": 12194486475,
+    "rows": [
+      {
+        "title": "D10-08a [PR #72] status-less claim + matching pending + prior decline: the original coach on the original team is offered the resume and finishes with exact verified copies; originals untouched",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "D10-08d [PR #72] resume with a mismatching server copy at the deterministic ID: no success, no overwrite, claim stays pending, originals untouched",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      }
+    ]
+  }
+]

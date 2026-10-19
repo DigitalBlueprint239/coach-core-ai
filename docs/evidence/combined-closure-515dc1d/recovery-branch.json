@@ -1,0 +1,99 @@
+{
+  "name": "recovery/coach-core-mvp-2026",
+  "commit": {
+    "sha": "3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53",
+    "node_id": "C_kwDOPLcewtoAKDM5OTJkOGQ1OGFlMGJiMjg0OTBjZmRmYzQ4ZWQ2NmU4NmI0ZmZkNTM",
+    "commit": {
+      "author": {
+        "name": "DigitalBlueprint239",
+        "email": "Digitalblueprint239@gmail.com",
+        "date": "2026-10-13T12:02:18Z"
+      },
+      "committer": {
+        "name": "DigitalBlueprint239",
+        "email": "Digitalblueprint239@gmail.com",
+        "date": "2026-10-13T12:02:18Z"
+      },
+      "message": "docs(recovery): add canonical shared context and 7-day agent coordination",
+      "tree": {
+        "sha": "af063f7a40339f326a5d3ab60c1f2afa0365d186",
+        "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/git/trees/af063f7a40339f326a5d3ab60c1f2afa0365d186"
+      },
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/git/commits/3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/commits/3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53",
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53",
+    "comments_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/commits/3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53/comments",
+    "author": {
+      "login": "DigitalBlueprint239",
+      "id": 206572958,
+      "node_id": "U_kgDODFANng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/206572958?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/DigitalBlueprint239",
+      "html_url": "https://github.com/DigitalBlueprint239",
+      "followers_url": "https://api.github.com/users/DigitalBlueprint239/followers",
+      "following_url": "https://api.github.com/users/DigitalBlueprint239/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DigitalBlueprint239/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/DigitalBlueprint239/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DigitalBlueprint239/subscriptions",
+      "organizations_url": "https://api.github.com/users/DigitalBlueprint239/orgs",
+      "repos_url": "https://api.github.com/users/DigitalBlueprint239/repos",
+      "events_url": "https://api.github.com/users/DigitalBlueprint239/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/DigitalBlueprint239/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "DigitalBlueprint239",
+      "id": 206572958,
+      "node_id": "U_kgDODFANng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/206572958?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/DigitalBlueprint239",
+      "html_url": "https://github.com/DigitalBlueprint239",
+      "followers_url": "https://api.github.com/users/DigitalBlueprint239/followers",
+      "following_url": "https://api.github.com/users/DigitalBlueprint239/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DigitalBlueprint239/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/DigitalBlueprint239/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DigitalBlueprint239/subscriptions",
+      "organizations_url": "https://api.github.com/users/DigitalBlueprint239/orgs",
+      "repos_url": "https://api.github.com/users/DigitalBlueprint239/repos",
+      "events_url": "https://api.github.com/users/DigitalBlueprint239/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/DigitalBlueprint239/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0e77366c8dbf9e1eff94e9971da1c104cc201320",
+        "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/commits/0e77366c8dbf9e1eff94e9971da1c104cc201320",
+        "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/commit/0e77366c8dbf9e1eff94e9971da1c104cc201320"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/branches/recovery/coach-core-mvp-2026",
+    "html": "https://github.com/DigitalBlueprint239/coach-core-ai/tree/recovery/coach-core-mvp-2026"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/branches/recovery/coach-core-mvp-2026/protection"
+}

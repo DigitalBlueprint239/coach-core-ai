@@ -1,0 +1,227 @@
+✔ complete successful acceptance (pull_request): ELIGIBLE; diagnostic/obsolete failures visible, not blocking; phone empties legitimately empty (13.012601ms)
+✔ merge_group is a trusted event too; workflow_dispatch and push are NOT (bounded/manual runs cannot satisfy the gate) (10.985105ms)
+✔ one failed required job (acceptance firefox) -> INELIGIBLE, named; other required rows unaffected (2.316162ms)
+✔ failing acceptance TESTS with a (hypothetically) green job are still caught from results.json (R6) (2.915362ms)
+✔ cancelled required job -> INELIGIBLE; cancelled NON-required job also blocks (coverage unproven) (4.510758ms)
+✔ skipped job -> INELIGIBLE; in-progress (not completed) job -> INELIGIBLE (7.242063ms)
+✔ missing required job, duplicate job, and missing artifact -> INELIGIBLE (9.057549ms)
+✔ finalize not successful (no UPLOAD_OK) or inventory problem in ANY job -> INELIGIBLE (6.494487ms)
+✔ narrowed dispatch selection: grep recorded in run.context AND identities != membership -> INELIGIBLE (even with all-green results); diagnostic narrowing rejected too (9.303589ms)
+✔ results belonging to a different sha / run / attempt / head -> INELIGIBLE (9.022228ms)
+✔ repeat mismatch and run-level errors -> INELIGIBLE; skipped / repeated results in acceptance -> INELIGIBLE (8.014676ms)
+✔ F1 collector: a healthy source checkout yields per-bucket membership, partition verified, legitimate empty phone diagnostic/obsolete preserved; --pass-with-no-tests is used (24.915033ms)
+✔ F1 collector fails CLOSED: nonzero exit (even with JSON), errors[] with exit 0, spawn error, signal, non-JSON, non-report, foreign project, missing/duplicate ids, partition mismatch, overlap, empty acceptance (18.052899ms)
+✔ F1 evaluate: empty ACCEPTANCE membership is never eligible (all-zero acceptance, reviewer fixture) — while empty non-required phone buckets stay legitimately empty (4.34949ms)
+✔ F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE (2.311333ms)
+✔ F1 FULL CLI positive control: healthy collector + twelve complete on-disk artifacts + jobs -> exit 0 ELIGIBLE (642.775322ms)
+✔ F1 FULL CLI: erroring collector (exit 1 + JSON errors[]) with zero-result artifacts and twelve green jobs -> nonzero exit, INELIGIBLE, R7 named (reviewer reproduction) (98.038566ms)
+✔ F1 FULL CLI: collector that lists NOTHING anywhere (exit 0, no errors) -> nonzero exit, INELIGIBLE (empty acceptance never trusted) (189.373347ms)
+✔ F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE (462.525343ms)
+✔ F2 reader: an artifact written like evidence.sh (complete inventory incl. hidden .last-run.json, e2e/ prefix) verifies; context/results/last-run parsed (8.98663ms)
+✔ F2 reader + evaluator: incomplete, tampered, malformed, duplicate, escaping, symlinked, self-listing or missing inventories -> inventory rejected AND verdict INELIGIBLE (named R3) (48.80961ms)
+✔ F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted (7.575724ms)
+✔ F2 real reader end to end: twelve complete on-disk artifacts -> ELIGIBLE; the same set with one run.log-only inventory -> INELIGIBLE (6.522995ms)
+✔ N1: a symlinked retained root (ci-evidence, test-results, or both) is rejected BEFORE any evidence read — the outside target is never stat-ed, listed, opened or read; no outside content reaches the record or its diagnostics (12.546124ms)
+✔ N1: symlinked artifact directory, a symlinked sub-directory inside a root, a missing root and a non-directory root are rejected without following; a valid artifact still verifies and is read only after its inventory verified (4.440746ms)
+✔ N1 reproduction on b139d18: the same root links were followed — outside run.context / results.json parsed and the outside parse error echoed (2.751872ms)
+✔ F3: duplicate, foreign-project, unexpected, unexecuted, interrupted and malformed identities -> INELIGIBLE with named reasons; completed diagnostic failures remain visible and non-blocking (23.04695ms)
+✔ F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE (6.623282ms)
+✔ F4: missing, malformed, schema-invalid or inconsistent last-run records (vs results.json and job conclusion) -> INELIGIBLE with named reasons (22.185834ms)
+✔ F4 real reader: a malformed .last-run.json with a MATCHING complete inventory is still rejected (hash integrity is not validity) (2.444981ms)
+✔ F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE (5.661846ms)
+✖ workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes (3.683065ms)
+✔ N2 workflow logic (static check of the workflow file, NOT an Actions observation): the authoritative job has no conditional-skip path — job and every step run under always(), a cancelled run or a cancelled/skipped matrix fails the job explicitly, an unavailable artifact download cannot skip the evaluation, and only the evaluation step can make the job succeed (0.966006ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 32
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1698.825073
+
+✖ failing tests:
+
+test at e2e/scripts/merge-eligibility.test.mjs:476:1
+✖ workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes (3.683065ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /pull_request:\n\s+branches: \[recovery\/coach-core-mvp-2026\]\n(?:\s+#.*\n)*\s+types: \[opened, synchronize, reopened, ready_for_review\]/. Input:
+  
+  'name: E2E (emulator, real browsers)\n' +
+    '\n' +
+    '# Real Chromium and Firefox against the local Firebase Emulator Suite with a\n' +
+    '# demo-* project. No repository secrets, no real Firebase project, no AI\n' +
+    '# provider: the gateway runs with COACH_CORE_AI_ENABLED=false and a\n' +
+    '# placeholder key. Authentication is EMULATOR authentication (no real Google\n' +
+    '# OAuth, no real email delivery). Never deploys.\n' +
+    '\n' +
+    'on:\n' +
+    '  pull_request:\n' +
+    '    branches: [recovery/coach-core-mvp-2026, review/coach-core-combined-2026-10-19]\n' +
+    '    # ready_for_review added (merge-eligibility gate, 2026-10-17) so a draft promoted to\n' +
+    "    # ready re-validates on its current head; the other three are GitHub's defaults.\n" +
+    '    types: [opened, synchronize, reopened, ready_for_review]\n' +
+    '  # merge_group only fires when a merge queue is enabled on the target branch (none is\n' +
+    "  # configured today). Declared now so that, if the owner enables a queue, the queue's\n" +
+    '  # candidate commit gets the same full validation and the same aggregate verdict.\n' +
+    '  merge_group:\n' +
+    '    types: [checks_requested]\n' +
+    '  push:\n' +
+    "    branches: ['claude/**', 'recovery/coach-core-mvp-2026']\n" +
+    '  workflow_dispatch:\n' +
+    '    inputs:\n' +
+    '      repeat_each:\n' +
+    "        description: 'Repeat each test N times (stability runs)'\n" +
+    "        default: '1'\n" +
+    '      grep:\n' +
+    "        description: 'Optional test-title regex for targeted re-runs (empty = full suite)'\n" +
+    "        default: ''\n" +
+    '\n' +
+    'permissions:\n' +
+    '  contents: read\n' +
+    '\n' +
+    'concurrency:\n' +
+    '  group: e2e-emulator-${{ github.ref }}\n' +
+    '  cancel-in-progress: true\n' +
+    '\n' +
+    'jobs:\n' +
+    '  e2e:\n' +
+    '    # One job per Playwright project (2026-10-15) AND per result bucket (B11,\n' +
+    '    # Coach Drew, 2026-10-16). The union of the twelve jobs is the complete\n' +
+    "    # matrix: the three buckets partition every project's tests by title tag\n" +
+    '    # (acceptance = untagged; diagnostic = "[diagnostic]"; obsolete-fault-model =\n' +
+    '    # "[obsolete-fault-model]"), so nothing is filtered out, no assertion,\n' +
+    "    # repetition or retries=0 setting changes, and the ACCEPTANCE job's\n" +
+    '    # conclusion stands on its own. Diagnostic and obsolete results are still\n' +
+    '    # published as annotations and artifacts and still investigated; they are\n' +
+    '    # simply no longer able to turn the acceptance job red. Phone projects carry\n' +
+    '    # no diagnostic/obsolete tests, so those jobs legitimately run zero tests\n' +
+    '    # (--pass-with-no-tests). The existing 120-minute limit is NOT raised.\n' +
+    '    # Branch-protection settings are not changed by this workflow.\n' +
+    '    name: E2E ${{ matrix.bucket }} (${{ matrix.project }})\n' +
+    '    runs-on: ubuntu-latest\n' +
+    '    timeout-minutes: 120\n' +
+    '    strategy:\n' +
+    '      fail-fast: false\n' +
+    '      matrix:\n' +
+    '        project: [chromium, firefox, phone-chromium, phone-firefox]\n' +
+    '        bucket: [acceptance, diagnostic, obsolete-fault-model]\n' +
+    '    env:\n' +
+    '      GCLOUD_PROJECT: demo-coach-core-e2e\n' +
+    "      OPENAI_API_KEY: ''\n" +
+    '    steps:\n' +
+    '      - uses: actions/checkout@v5\n' +
+    '      - uses: actions/setup-node@v5\n' +
+    '        with:\n' +
+    "          node-version: '22'\n" +
+    '          cache: npm\n' +
+    '          cache-dependency-path: |\n' +
+    '            package-lock.json\n' +
+    '            functions/package-lock.json\n' +
+    '            e2e/package-lock.json\n' +
+    '      - uses: actions/setup-java@v5\n' +
+    '        with:\n' +
+    '          distribution: temurin\n' +
+    "          java-version: '21'\n" +
+    '      - uses: actions/cache@v4\n' +
+    '        with:\n' +
+    '          path: ~/.cache/firebase/emulators\n' +
+    "          key: firebase-emulators-e2e-${{ hashFiles('e2e/package-lock.json') }}\n" +
+    '      - name: Install\n' +
+    '        run: |\n' +
+    '          npm ci --legacy-peer-deps --no-audit --no-fund\n' +
+    '          npm ci --prefix functions --no-audit --no-fund\n' +
+    '          npm ci --prefix e2e --no-audit --no-fund\n' +
+    '      - name: Install browsers\n' +
+    '        run: npx --prefix e2e playwright install --with-deps chromium firefox\n' +
+    '      - name: Emulator-only function config (placeholders, AI off)\n' +
+    '        run: |\n' +
+    '          # Both files are git-ignored and exist only on this runner.\n' +
+    '          # List params must be a JSON array in .env files; a bare URL fails to\n' +
+    '          # parse and the gateway then refuses every browser origin (fail closed).\n' +
+    `          printf 'COACH_CORE_AI_ENABLED=false\\nCOACH_CORE_ALLOWED_ORIGINS=["http://localhost:3000"]\\n' > functions/.env.local\n` +
+    "          printf 'COACH_CORE_OPENAI_API_KEY=e2e-placeholder-not-a-key\\n' > functions/.secret.local\n" +
+    '      - name: Reporter self-checks (annotation/summary contract, incl. empty jobs)\n' +
+    '        run: npm --prefix e2e run test:reporter\n' +
+    '      - name: Evidence self-checks (B15 retention contract)\n' +
+    '        run: node e2e/scripts/evidence.test.mjs\n' +
+    '      - name: Build web app for emulators (demo project)\n' +
+    '        run: |\n' +
+    '          npm --prefix e2e run build:app\n' +
+    '          # B15 (2026-10-17): evidence that must survive the run lives in e2e/ci-evidence.\n' +
+    `          # Playwright's "clear output" task deletes outputDir (e2e/test-results) at run\n` +
+    '          # start, which previously destroyed run.log and the release manifest before upload.\n' +
+    '          mkdir -p e2e/test-results e2e/ci-evidence\n' +
+    '      - name: Build same-commit import-OFF emulator build (release proof L3 input; desktop acceptance jobs only)\n' +
+    "        if: matrix.bucket == 'acceptance' && (matrix.project == 'chromium' || matrix.project == 'firefox')\n" +
+    '        run: npm --prefix e2e run build:app:import-off\n' +
+    '      - name: Release-proof self-checks (import default-OFF resolution, canary/source-scope, gate fail-closed cases, retired-model regressions)\n' +
+    '        run: |\n' +
+    '          set -o pipefail\n' +
+    '          node scripts/security/release-import-config.test.mjs 2>&1 | tee /tmp/release-proof-selfchecks.txt\n' +
+    '          # Accurate pass/fail/skip accounting as an annotation (job logs are not always reachable by reviewers).\n' +
+    "          t=$(grep -E '^# tests ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); p=$(grep -E '^# pass ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')\n" +
+    "          f=$(grep -E '^# fail ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}'); k=$(grep -E '^# skipped ' /tmp/release-proof-selfchecks.txt | tail -1 | awk '{print $3}')\n" +
+    "          sk=$(grep -E '^(ok|not ok) .* # SKIP' /tmp/release-proof-selfchecks.txt | sed -E 's/^(ok|not ok) ([0-9]+) - .*# SKIP ?/\\2: /' | cut -c1-80 | tr '\\n' ';')\n" +
+    '          echo "::notice title=Release-proof self-checks (${{ matrix.bucket }} ${{ matrix.project }})::tests=${t} pass=${p} fail=${f} skipped=${k} (skipped tests are NOT passes): ${sk}"\n' +
+    '      - name: Release-build proof L1+L2 (no hooks / emulator wiring in a staging-shaped build; import flag resolved OFF and inlined as import-config=false - no behavioural claim)\n' +
+    '        env:\n' +
+    '          MATRIX_PROJECT: ${{ matrix.project }}\n' +
+    '          MATRIX_BUCKET: ${{ matrix.bucket }}\n' +
+    '          CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}\n' +
+    '        run: |\n' +
+    '          # RELEASE_RETAIN_DIR (F3, 2026-10-18): the exact inspected release output (index.html, shipped\n' +
+    '          # JS, asset-manifest.json, provenance) is kept under e2e/ci-evidence so B15 inventories,\n' +
+    '          # hashes and uploads it. No source maps are generated; no .env* file is ever copied.\n' +
+    '          RELEASE_BUILD_DIR=release-build RELEASE_MANIFEST=e2e/ci-evidence/release-build-manifest.sha256 \\\n' +
+    '          RELEASE_RETAIN_DIR=e2e/ci-evidence/release-build RELEASE_CANARY_JSON=e2e/ci-evidence/release-canary.json \\\n' +
+    '            bash scripts/security/verify-release-build.sh coach-core-mvp-staging-239\n' +
+    '      - name: Run browser tests in the emulator suite\n' +
+    '        env:\n' +
+    "          REPEAT: ${{ github.event.inputs.repeat_each || '1' }}\n" +
+    '          # Passed as data via env (never interpolated into the shell command).\n' +
+    "          E2E_GREP: ${{ github.event.inputs.grep || '' }}\n" +
+    '          E2E_BUCKET: ${{ matrix.bucket }}\n' +
+    '          PROJECT: ${{ matrix.project }}\n' +
+    '          # PR head (pull_request), queue head (merge_group) or the pushed/dispatched commit.\n' +
+    '          CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}\n' +
+    '        run: |\n' +
+    '          mkdir -p e2e/test-results e2e/ci-evidence\n' +
+    "          # Provenance for the merge-eligibility aggregate: binds this job's evidence to the exact\n" +
+    '          # commit, run attempt, event, project/bucket and selection inputs. Values are written with\n' +
+    '          # printf %s from env (never interpolated into a command); the file is inventoried/hashed by B15.\n' +
+    "          printf 'sha=%s\\nhead_sha=%s\\nevent=%s\\nrun_id=%s\\nrun_attempt=%s\\nproject=%s\\nbucket=%s\\nrepeat=%s\\ngrep=%s\\n' \\\n" +
+    '            "$GITHUB_SHA" "$CANDIDATE_HEAD_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \\\n' +
+    '            "$PROJECT" "$E2E_BUCKET" "$REPEAT" "$E2E_GREP" > e2e/ci-evidence/run.context\n' +
+    "          # evidence.sh tees to e2e/ci-evidence/run.log and exits with the TEST process's status.\n" +
+    '          bash e2e/scripts/evidence.sh run e2e/ci-evidence -- \\\n' +
+    '            npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \\\n' +
+    '            --only auth,firestore,functions \\\n' +
+    '            "npm --prefix e2e run test:browser -- --repeat-each=${REPEAT} --project=${PROJECT} --pass-with-no-tests"\n' +
+    '      - name: Release proof L3 (real browser; import-OFF emulator build shows disabled behaviour; accepted D10-01/D10-02 on the opted-in build as ON control)\n' +
+    "        if: matrix.bucket == 'acceptance' && (matrix.project == 'chromium' || matrix.project == 'firefox')\n" +
+    '        env:\n' +
+    '          RP_BROWSER: ${{ matrix.project }}\n' +
+    '        run: |\n' +
+    '          # Separate Playwright config and output dir: the B11 suite above is untouched. Both same-commit\n' +
+    "          # builds are served side by side (:3100 import-OFF, :3000 opted-in). No tee of this run's\n" +
+    '          # console (only the redacted main run.log is retained); results.json + gate JSON are the evidence.\n' +
+    '          npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \\\n' +
+    '            --only auth,firestore,functions \\\n' +
+    '            "npm --prefix e2e run test:release-proof:browser"\n' +
+    '      - name: Release gate - L1 configuration + L2 inlining + L3 behaviour (refuses to PASS without executed browser evidence)\n' +
+    "        if: always() && matrix.bucket == 'acceptance' && (m"... 9707 more characters
+  
+      at TestContext.<anonymous> (file:///workspace/coach-core-combined-closure/e2e/scripts/merge-eligibility.test.mjs:483:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'name: E2E (emulator, real browsers)\n\n# Real Chromium and Firefox against the local Firebase Emulator Suite with a\n# demo-* project. No repository secrets, no real Firebase project, no AI\n# provider: the gateway runs with COACH_CORE_AI_ENABLED=false and a\n# placeholder key. Authentication is EMULATOR authentication (no real Google\n# OAuth, no real email delivery). Never deploys.\n\non:\n  pull_request:\n...',
+    expected: /pull_request:\n\s+branches: \[recovery\/coach-core-mvp-2026\]\n(?:\s+#.*\n)*\s+types: \[opened, synchronize, reopened, ready_for_review\]/,
+    operator: 'match',
+    diff: 'simple'
+  }

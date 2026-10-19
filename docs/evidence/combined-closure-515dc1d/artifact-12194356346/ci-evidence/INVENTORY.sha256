@@ -1,0 +1,18 @@
+# Upload-aligned inventory: every regular file under the upload paths, hidden files INCLUDED (upload uses include-hidden-files: true).
+# paths: e2e/ci-evidence e2e/test-results
+7638665fce5e61b10c247f4c423b83388a4667795182c0d4442b5bd3273941af  e2e/ci-evidence/REDACTION.txt
+8f88a3cc96c65c33f1e5e33b36e391dfaa3798fef7b87aa35a5d6058870753b7  e2e/ci-evidence/release-build-manifest.sha256
+3c4e4a237cbd4afecd9b0fc837483eb578deb9c201ce867d28262aa8162c4697  e2e/ci-evidence/release-build/asset-manifest.json
+d3feca8736b0deee0861d70065133dd5aae7053b7f0f0cc02794bcfa93b79df5  e2e/ci-evidence/release-build/index.html
+d3c33664164a81ec0e30aa63280f45c8e96a3ba354e4992a1d1fc108f4f47a62  e2e/ci-evidence/release-build/release-build.context
+0f462f8a40c1c047230c7f0649dc4f24f410008aa679c564367462f8c8d5ba0d  e2e/ci-evidence/release-build/release-canary.json
+c5f21eef1571663eac1b6dfa48a12b35b7b2ac2b5fff7ba75394ac4571fbb6f3  e2e/ci-evidence/release-build/static/js/main.630c8567.js
+0f462f8a40c1c047230c7f0649dc4f24f410008aa679c564367462f8c8d5ba0d  e2e/ci-evidence/release-canary.json
+b97c748d3414948d95c310775e4875bc0b702b36de23179c8d00a315e8474d09  e2e/ci-evidence/run.context
+cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22  e2e/ci-evidence/run.exit
+7607b52f215048bdf87d64574c829a27e60c5ed66feeb311e3d4f6da0f539ab8  e2e/ci-evidence/run.log
+5a72259165686e8fc0e69cec75a69d1863c67c6b2f06c3bd90df61b54f4ff27d  e2e/test-results/.last-run.json
+4d6bc2cb4e8d62db3361ae3dd2878b2518957c538ac306f138533d4d5a8d6c4d  e2e/test-results/n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--chromium/error-context.md
+5526b966751ab6593b6bcb5c80d4f9e2b73e1a110fdddcc9239be0107a9d588c  e2e/test-results/n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--chromium/test-failed-1.png
+7bbb665e4ff77b026bbb657a9e48a6ddee9dd639e6b4b57f89abd0bb8783744a  e2e/test-results/n2-N2-D2-diagnostic-write--e7163-gain-how-many-teams-result--chromium/trace.zip
+b3f949c3560367074bcb147c39a73ecf5e2f44886f914286d8c0834489311481  e2e/test-results/results.json

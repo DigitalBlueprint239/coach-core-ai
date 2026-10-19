@@ -1,0 +1,11 @@
+2026-10-19T14:31:28.4686292Z ok 15 - F1 reproduction on dbf7a9a: all-zero acceptance was ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T14:31:28.4708747Z ok 19 - F1 FULL CLI reproduction on dbf7a9a: the same erroring collector + zero results gave exit 0 ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T14:31:28.4727753Z ok 22 - F2 reproduction on dbf7a9a: a run.log-only inventory with tampered unlisted results (then ELIGIBLE) and a ../ escape were accepted # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T14:31:28.4757401Z ok 26 - N1 reproduction on b139d18: the same root links were followed — outside run.context / results.json parsed and the outside parse error echoed # SKIP failed head b139d18 not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T14:31:28.4895617Z ok 28 - F3 reproduction on dbf7a9a: duplicate identity, foreign-project row in an empty artifact and zero completed diagnostic results were ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T14:31:28.4913664Z ok 31 - F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.json with a matching inventory were ELIGIBLE # SKIP failed head dbf7a9a not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed
+2026-10-19T14:31:28.6138924Z # tests 33
+2026-10-19T14:31:28.6139562Z # pass 27
+2026-10-19T14:31:28.6139859Z # fail 0
+2026-10-19T14:31:28.6140636Z # skipped 6
+2026-10-19T14:31:45.1726262Z ##[notice]ELIGIBLE — 950addf164e4f789c6488bf5af7dd60dc2e43ce8 (pull_request, run 39268393120/1): all 12 jobs completed, 4 acceptance jobs green with complete selections, 12 evidence artifacts fully inventoried and verified

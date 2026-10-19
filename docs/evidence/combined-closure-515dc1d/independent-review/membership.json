@@ -1,0 +1,22 @@
+{
+  "chromium": {
+    "acceptance": 65,
+    "diagnostic": 10,
+    "obsolete-fault-model": 1
+  },
+  "firefox": {
+    "acceptance": 65,
+    "diagnostic": 10,
+    "obsolete-fault-model": 1
+  },
+  "phone-chromium": {
+    "acceptance": 15,
+    "diagnostic": 0,
+    "obsolete-fault-model": 0
+  },
+  "phone-firefox": {
+    "acceptance": 15,
+    "diagnostic": 0,
+    "obsolete-fault-model": 0
+  }
+}

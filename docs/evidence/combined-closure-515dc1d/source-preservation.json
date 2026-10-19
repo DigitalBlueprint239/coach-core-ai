@@ -1,0 +1,20 @@
+{
+  "head": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+  "tested_merge": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+  "tree_identical": true,
+  "paths": {
+    "4f6b901:src": "identical",
+    "4f6b901:e2e/tests": "identical",
+    "4f6b901:e2e/playwright.config.ts": "identical",
+    "4f6b901:e2e/playwright.release-proof.config.ts": "identical",
+    "4f6b901:e2e/reporters": "identical",
+    "4f6b901:e2e/scripts/evidence.sh": "identical",
+    "4f6b901:scripts/security": "identical",
+    "4f6b901:functions": "identical",
+    "4f6b901:firestore.rules": "identical",
+    "4f6b901:storage.rules": "identical",
+    "4f6b901:package-lock.json": "identical",
+    "4f6b901:e2e/package-lock.json": "identical",
+    "bb157ba:e2e/scripts/merge-eligibility.mjs": "identical"
+  }
+}

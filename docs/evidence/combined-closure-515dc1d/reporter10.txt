@@ -1,0 +1,18 @@
+✔ empty job: explicit zero-tests annotation and summary row; never "passed" (2.889211ms)
+✔ empty job without a bucket (local/all) still names the project and reason (0.520819ms)
+✔ empty selection under a dispatch grep is explained by the filters, not as bucket absence (2.128789ms)
+✔ REGRESSION (Codex re-review of e5b33ef): selected > 0 but no result before interruption is reported as INCOMPLETE, never as an empty selection or a pass (2.55441ms)
+✔ REGRESSION: run-level timedout with a non-empty selection and no results is INCOMPLETE (0.511705ms)
+✔ REGRESSION: a setup/global error (run failed) with a non-empty selection and zero results is INCOMPLETE, not empty (0.470917ms)
+✔ passing job: tally annotation, acceptance bucket count, summary row; no empty-selection notice (3.91504ms)
+✔ failing job: error-level annotation, FAIL line with the first error, diag annotation; buckets split by tag (3.380446ms)
+✔ interrupted run: an error annotation marks results as partial, in addition to any per-test rows (0.769749ms)
+✔ outside GitHub Actions the reporter is silent (0.315526ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23.980132
