@@ -9,7 +9,7 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "node --test --test-reporter=spec test/*.test.js",
-    "test:film-emulator": "node --test --test-concurrency=1 --test-reporter=spec test/emulator/film-s1.emulator.test.js",
+    "test:film-emulator": "ANNOTATE_LABEL='Film emulator' node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout test/emulator/film-s1.emulator.test.js",
     "test:ci": "ANNOTATE_LABEL='Functions gateway' node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout 'test/*.test.js'"
   },
   "engines": {
