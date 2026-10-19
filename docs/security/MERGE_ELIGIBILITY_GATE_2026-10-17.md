@@ -46,15 +46,18 @@ retained file. This is the only change inside the e2e job.
 
 ## Success / failure rules (fail closed; any reason ⇒ INELIGIBLE, exit 1, `::error`)
 
+Repaired 2026-10-18 after the independent review of `dbf7a9a` (c-6256897327, F1–F4). The consumer no
+longer trusts anything it has not authenticated (complete inventory) and validated (schema).
+
 | Rule | Requirement |
 |---|---|
 | R1 | event ∈ {`pull_request`, `merge_group`}. `workflow_dispatch` and `push` can never satisfy the gate. |
-| R2 | every expected job (4 projects × 3 buckets) exists exactly once and is `completed`; the 4 **acceptance** jobs concluded `success`; diagnostic / obsolete-fault-model jobs may be `success` or `failure` (their test failures stay visible and non-blocking — approved B11 classification) but `cancelled` / `skipped` / in-progress / missing / duplicate blocks. |
-| R3 | every expected job's artifact exists, carries `UPLOAD_OK`, and its `INVENTORY.sha256` verifies against the retained bytes (B15 fail-closed finalize is thereby re-checked by the consumer). |
+| R2 | every expected job (4 projects × 3 buckets) exists exactly once and is `completed`; the 4 **acceptance** jobs concluded `success`; diagnostic / obsolete-fault-model jobs may be `success` or `failure` (completed test failures stay visible and non-blocking — approved B11) but `cancelled` / `skipped` / in-progress / missing / duplicate blocks. A non-required job that concluded `success` while its own `.last-run.json` says `failed` is inconsistent evidence and blocks. |
+| R3 (F2) | every expected job's artifact exists, carries `UPLOAD_OK`, and its `INVENTORY.sha256` is **complete and authentic**: every non-comment line is `<64 hex><2 spaces>e2e/{ci-evidence\|test-results}/<canonical path>` (malformed lines are rejected, not filtered); no duplicates; no absolute, `..`, `.`, empty-segment or backslash paths; every retained regular file under `ci-evidence/` and `test-results/` (hidden files included) is listed except the documented self-exclusions `ci-evidence/INVENTORY.sha256` and `ci-evidence/UPLOAD_OK` (exactly B15's `find` exclusions); every listed file exists as a regular in-artifact file and its digest matches; symlinks are rejected and never followed, unexpected top-level entries are rejected, and `run.context`, `run.log`, `run.exit`, `results.json`, `.last-run.json` must be present and listed. Path validation is a string check before any filesystem access, so validation never reads outside the artifact root. |
 | R4 | each artifact's `run.context` binds to this `sha`, `head_sha`, `run_id`, `run_attempt`, `event`, the right project/bucket, and `repeat` = 1; a stale artifact from another attempt or commit is rejected. |
-| R5 | executed identities (`file:line:column title`, per project) in `results.json` **equal** the source-derived membership for that project × bucket. A dispatch `grep`, a narrowed project/bucket, or membership drift fails. Zero executions pass **only** when membership is itself empty **and** `results.json` holds zero tests — reported as "legitimately empty: 0 selected, 0 executed, 0 passed", never as passed tests. |
-| R6 | acceptance results: every test `status: expected`, `results.length == repeat`, every result `passed`; no skipped / interrupted / timedOut; `errors[]` empty; `.last-run.json` status `passed`; stats unexpected/skipped/flaky = 0. |
-| R7 | the aggregate never concludes on a cancelled run (`!cancelled()`), and if it cannot gather inputs (API, download, `--list`) it fails closed. |
+| R5 (F1, F3) | identities are Playwright's **stable test ids** (`spec.id`; identical in `--list` and in a run of the same config — verified on 1.64 — and what `.last-run.json` references); the identities in `results.json` must equal the source membership for that project × bucket as a **strict multiset**: no missing, no extra, no duplicate, and **no test row of another project** (checked before any filtering). Acceptance membership must be **non-empty** for every project. Zero executions pass **only** for a legitimately empty non-required selection: membership empty **and** `results.json` holds no test row of any project **and** a clean last-run — reported "legitimately empty: 0 selected, 0 executed, 0 passed". |
+| R6 (F3, F4) | `results.json` must be schema-valid (suites/errors/stats; every spec has id/file/line/column/title, every test a projectName and a known status, every result a known status) with `errors[]` empty and `stats` equal to the per-test outcome tally. **Every** expected identity in **every** bucket must have `repeat` completed results (`passed`/`failed`/`timedOut`); skipped, interrupted or absent results are reported as "not executed to completion — selection is not coverage". Acceptance additionally requires `status: expected` and all results `passed`. `.last-run.json` must be a parsed, schema-valid record (`status` ∈ passed/failed/timedout/interrupted; `failedTests` an array of unique ids) in every bucket; its `failedTests` must equal Playwright's own rule over `results.json` (unexpected + did-not-run), `passed`/`failed` must agree with failures/errors, `interrupted`/`timedout` block; acceptance requires `passed` with no failed ids. |
+| R7 (F1) | the aggregate never concludes on a cancelled run (`!cancelled()`). Any gathering failure is a reason and a nonzero exit: collector spawn error, nonzero exit or signal, non-JSON or non-report output, non-empty `errors[]`, foreign-project rows, missing/duplicate ids, bucket partition ≠ unfiltered selection, **empty acceptance selection**, unreadable artifact, malformed jobs API response. `--list` now runs with `--pass-with-no-tests`, so a legitimately empty bucket exits 0 with `errors: []` (verified for the phone diagnostic/obsolete buckets) and the former "exit 1 + JSON is fine" tolerance — which also trusted genuine collection failures — is removed. No test counts are hard-coded. |
 
 Output: step summary table (job, conclusion, artifact, selected, executed, passed, failed, verdict), a
 `::notice`/`::error`, and artifact `merge-eligibility-<sha>` (`merge-eligibility.json|md`).
@@ -69,9 +72,12 @@ Output: step summary table (job, conclusion, artifact, selected, executed, passe
 - `push` (claude/**, recovery) and `workflow_dispatch` unchanged: still run the matrix for evidence, but
   the aggregate reports INELIGIBLE on them by rule R1 (so bounded runs are visibly red on the aggregate
   and green/red on the informative per-job checks).
-- Concurrency: unchanged `cancel-in-progress`. A cancelled run cancels the matrix **and** skips the
-  aggregate (`!cancelled()`), so no success verdict can remain from an incomplete run; the next run on the
-  new head produces the verdict for that head. Artifact binding (R4) additionally rejects stale attempts.
+- Concurrency: unchanged `cancel-in-progress`. Observed (run 39079741112): a cancelled run left the 12 E2E
+  jobs **and the aggregate `cancelled`**, and no ELIGIBLE report. **Correction (review of dbf7a9a):** the
+  earlier statement that a *skipped* aggregate is safe is **not established** — GitHub reports a skipped
+  job as Success for required-check purposes. Safe terminal conclusions for cancel / skip / missing cases
+  must be defined and verified on Actions before enforcement; until then this is an open prerequisite, not
+  a property of the gate. Artifact binding (R4) additionally rejects stale attempts.
 - Not added: a trigger for PRs targeting the frozen harness branch `claude/n2-repair-acceptance-518e9e5`
   (it would start full matrices for stacked review PRs; owner decision).
 
@@ -88,28 +94,50 @@ Output: step summary table (job, conclusion, artifact, selected, executed, passe
   merging or enable a merge queue (either forces the verdict onto the exact merge candidate); require at
   least one approving review; no bypass for routine use; do not enable the rule until this slice and PR #75
   are merged into recovery (otherwise every PR is blocked by a context that never appears).
-- **Known limitation:** re-running jobs inside the same run re-uses artifact names that `upload-artifact@v4`
-  refuses to overwrite (pre-existing B15 behaviour); R4 also rejects artifacts from another attempt. Fix by
-  pushing a new commit (new run) rather than re-running; an `overwrite`/attempt-suffixed artifact scheme is a
-  separate B15 follow-up if desired.
+- **Known limitation (reruns):** re-running jobs inside the same run re-uses artifact names that
+  `upload-artifact@v4` refuses to overwrite (pre-existing B15 behaviour), and an aggregate-only or
+  failed-jobs rerun cannot reuse attempt-1 artifacts as current-attempt evidence (R4 rejects them; the
+  per-attempt jobs API is consulted). The supported path is a fresh commit / new run. An attempt-aware
+  retry scheme is a separate change with its own review. Observed rerun behaviour is recorded in the
+  delivery evidence for this revision.
+- **Unverified until demonstrated (stated explicitly):** an actual `pull_request` or `merge_group`
+  **ELIGIBLE** verdict on an appropriate candidate (requires the combined runtime/CI candidate and a full
+  acceptance run); merge-queue execution; GitHub required-check selection across reruns on the same SHA;
+  safe terminal conclusions for skipped/cancelled aggregates. No green verdict is manufactured here.
 
 ## Focused validation
 
-- `node e2e/scripts/merge-eligibility.test.mjs` (also `npm --prefix e2e run test:gate`): 14 executable
-  fixtures — complete success (pull_request; merge_group), one failed required job, failing acceptance tests
-  under a green job, cancelled required / cancelled non-required, skipped, in-progress, missing / duplicate
-  job, missing artifact, no `UPLOAD_OK`, inventory mismatch, narrowed grep (recorded and unrecorded),
-  legitimate empty vs. zero-executions-with-membership, different sha / run / attempt / head, artifacts
-  named for another sha, repeat mismatch, run-level errors, skipped status, real on-disk artifact reader
-  (digests re-verified, tamper detected), workflow contract.
+- `node e2e/scripts/merge-eligibility.test.mjs` (also `npm --prefix e2e run test:gate`): **29 checks**.
+  Preserved (11): complete success (pull_request; merge_group), dispatch/push rejected, failed required job,
+  failing tests under a green job, cancelled required / non-required, skipped, in-progress, missing /
+  duplicate job, missing artifact, no `UPLOAD_OK`, inventory problem, narrowed grep recorded/unrecorded
+  (acceptance and diagnostic), different sha / run / attempt / head, repeat mismatch, run-level errors,
+  skipped/repeated results. New per finding: **F1** collector healthy/partition/`--pass-with-no-tests`,
+  12 collector fail-closed cases, all-zero acceptance in `evaluate`, **full CLI** positive control (exit 0
+  ELIGIBLE), the reviewer's erroring collector + zero results (exit 1, R7 named), a collector listing
+  nothing (exit 1); **F2** reader baseline, 17 inventory cases (run.log-only + tampered unlisted results,
+  digest mismatch, unlisted payload incl. hidden, listed-missing, duplicate, malformed, single space,
+  `../` escape with matching digest, in-prefix traversal, absolute, symlink to outside, self-exclusion
+  listed, stray top-level entry, missing required evidence, no inventory, empty inventory) each rejected
+  by the reader **and** the evaluator, canonical-path unit cases, twelve on-disk artifacts end to end;
+  **F3** 10 identity cases (duplicate execution, foreign failed row in an empty artifact, all-skipped
+  diagnostic, foreign row next to complete acceptance, interrupted, extra identity, duplicate source id,
+  missing id, stats mismatch, unknown status) with completed diagnostic failures still non-blocking;
+  **F4** 11 last-run cases plus a real malformed `.last-run.json` under a matching complete inventory.
+  **Reproduction legs (6):** the `dbf7a9a` implementation is loaded from git and shown to accept the
+  reviewer's invalid inputs (F1 all-zero acceptance; F1 full CLI exit 0 ELIGIBLE; F2 run.log-only
+  inventory → ELIGIBLE and `../` escape authenticated; F3 duplicate / foreign / zero-completed → ELIGIBLE;
+  F4 null and malformed last-run → ELIGIBLE). They are **skipped** (never passed) when history is shallow,
+  as in the CI checkout.
 - Accepted suites unchanged and still passing on this tree: reporter 10/10, evidence 19 (18 pass + 1
-  root-only skip; CI runs all 19).
-- `listMembership()` on this checkout: 65/10/1 ×2 desktop, 15/0/0 ×2 phone (≈17 s, no browsers).
-- **Simulated vs. actual:** the fixtures simulate job conclusions and artifacts. Actual Actions execution of
-  the aggregate is evidenced by the bounded dispatch run recorded in the handoff (expected verdict:
-  INELIGIBLE by R1/R5 — proving a bounded/manual run cannot satisfy the gate while exercising the real
-  download, API and `--list` paths). An actual `pull_request` ELIGIBLE verdict cannot be produced on this
-  runtime (D10-08a) and would require a full matrix; it is a dependency on Codex's runtime/import candidate.
+  root-only skip locally; CI runs all 19).
+- Real `listMembership()` on this checkout (repaired collector): 65/10/1 ×2 desktop, 15/0/0 ×2 phone =
+  182, partition verified.
+- **Simulated vs. actual:** fixtures simulate job conclusions and artifacts; the full-CLI cases execute the
+  real CLI, reader, collector and evaluator with only the jobs API (fetch) and `npx` replaced. Actual
+  Actions behaviour of this revision (real download, real artifacts under the stricter inventory rules,
+  dispatch rejection, cancellation and rerun) is recorded in the delivery evidence. An actual trusted-event
+  ELIGIBLE verdict remains **unverified**.
 
 ## Independent Codex review checklist
 
@@ -117,7 +145,7 @@ Output: step summary table (job, conclusion, artifact, selected, executed, passe
    `merge-eligibility.test.mjs`, this doc. App code, browser tests, config, reporter, evidence script
    unchanged (byte-identical to PR #75).
 2. The only e2e-job change is the `run.context` write (printf %s from env; inventoried by B15).
-3. Run the 14 fixtures; probe `evaluate()` with your own cases (e.g., membership drift, extra project).
+3. Run the 29 checks with full git history (so the 6 dbf7a9a reproduction legs execute); rerun `adversarial.mjs`-style probes against the CLI, reader and collector.
 4. Confirm the aggregate cannot be satisfied by dispatch/push (R1) and that its `if:` skips on cancel.
 5. Inspect the bounded dispatch run: aggregate INELIGIBLE with R1/R5 reasons, summary table, artifact.
 6. Confirm `permissions` and that `GITHUB_TOKEN` is read-only; no secrets in output.
