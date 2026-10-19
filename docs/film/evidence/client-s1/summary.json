@@ -1,0 +1,57 @@
+{
+  "task": "FILM-S1 / FS-26",
+  "sourceSha": "4303e7e78efb8623c929a92983b2e67256c825fc",
+  "contractSha": "8f7723952bdf38c18d12d8f2611e87830b658467",
+  "node": "v22.23.1",
+  "unit": {
+    "passed": 146,
+    "failed": 0,
+    "skipped": 0,
+    "suites": 1,
+    "command": "CI=true npm test -- --watchAll=false --runInBand --runTestsByPath src/features/film-analyzer/__tests__/contracts.test.ts"
+  },
+  "typecheck": {
+    "exit": 0,
+    "command": "tsc --noEmit"
+  },
+  "fixtures": {
+    "count": 86,
+    "modified": false,
+    "checksumEncoding": "LF source text (Windows Git autocrlf checkout)"
+  },
+  "historicalRuns": [
+    {
+      "name": "r2-first",
+      "pass": 135,
+      "fail": 2,
+      "skip": 0,
+      "typecheckExit": 2
+    },
+    {
+      "name": "r2-second",
+      "pass": 137,
+      "fail": 1,
+      "skip": 0,
+      "typecheckExit": 0
+    }
+  ],
+  "notMeasured": [
+    "new production build",
+    "film emulator",
+    "staging",
+    "physical devices",
+    "provider/model access",
+    "film quality"
+  ],
+  "backendAcceptance": "PENDING / separate",
+  "mvp": "NO-GO",
+  "evidenceHashes": {
+    "r1-probes.json": "6d4b9e143901226cda3fd080b07bf4e0b76a83fbcd6135c8aa1879c0d826d7e8",
+    "r2-first.log": "d6103b6ce5838865db3e2ae45bb2319a27bdcb47b806cfb2f091d775c72dba1d",
+    "r2-probes.json": "efd76c90b8843d5f802938d7babdf3b44cedddafbd120c106c3f59988b98af57",
+    "r2-second.log": "b96e82691bb517a9a489bf5fbe61a20f04ec0cf676da4c71fd7995fb51b068a8",
+    "r2-typescript.log": "4083463ca2954a6a2134272809efac61a932f136ea334e7b8afdbe98472c820a",
+    "r3-fs26.log": "17145937df2218582598676b8d5c3e4297ae0a0aa263aca202233548620ca45c",
+    "r3-typescript.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
