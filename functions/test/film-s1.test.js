@@ -64,12 +64,44 @@ describe("identity reason mapping", () => {
           auth: {...AUTH, token: {...AUTH.token, auth_time: 1}}, data: {}}),
         c.errorResponseFor("unauthenticated", "sign-in-required"));
       });
-  it("unexpected failure -> unavailable/backend-unavailable", async () => {
-    const res = await h.reserveFilmUpload({auth: AUTH,
-      data: fixture("reserve.request.valid.json")});
-    assert.deepEqual(res,
-        c.errorResponseFor("unavailable", "backend-unavailable"));
-  });
+  it("unknown failure -> thrown sanitized internal (not retry-eligible)",
+      async () => {
+        await assert.rejects(h.reserveFilmUpload({auth: AUTH,
+          data: fixture("reserve.request.valid.json")}), (e) =>
+          e.code === "internal" && e.message === "internal" &&
+          e.details === undefined);
+      });
+  for (const code of [10, 4, 14, "aborted", "unavailable"]) {
+    it(`known transient (${code}) -> unavailable/backend-unavailable`,
+        async () => {
+          const t = createFilmHandlers({
+            db: {runTransaction: async () => {
+              throw Object.assign(new Error("x"), {code});
+            }},
+            Timestamp: null,
+            getUser: async () => ({disabled: false, customClaims: {beta: true}}),
+            deleteObject: async () => {}, readHead: async () => null,
+            logger: {info() {}, warn() {}, error() {}}});
+          assert.deepEqual(await t.reserveFilmUpload({auth: AUTH,
+            data: fixture("reserve.request.valid.json")}),
+          c.errorResponseFor("unavailable", "backend-unavailable"));
+        });
+  }
+  for (const code of [7, 8, 13, "permission-denied", undefined]) {
+    it(`non-transient (${code}) -> thrown internal`, async () => {
+      const t = createFilmHandlers({
+        db: {runTransaction: async () => {
+          throw Object.assign(new Error("secret detail"), {code});
+        }},
+        Timestamp: null,
+        getUser: async () => ({disabled: false, customClaims: {beta: true}}),
+        deleteObject: async () => {}, readHead: async () => null,
+        logger: {info() {}, warn() {}, error() {}}});
+      await assert.rejects(t.reserveFilmUpload({auth: AUTH,
+        data: fixture("reserve.request.valid.json")}), (e) =>
+        e.code === "internal" && !/secret/.test(e.message));
+    });
+  }
 });
 
 describe("FS-25 rules literals == limits module", () => {

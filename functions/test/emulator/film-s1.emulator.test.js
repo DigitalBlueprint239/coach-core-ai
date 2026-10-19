@@ -265,6 +265,51 @@ describe("FS-11 idempotency", () => {
       });
 });
 
+describe("C3 retry horizon, receipts and file names", () => {
+  it("replay is a receipt snapshot, not current permission", async () => {
+    const id = op();
+    const a = await reserve(reserveReq({}, id));
+    await abandon(abandonReq(a.data.filmId));
+    clock = new Date(T0.getTime() + 60000);
+    const b = valid("reserveFilmUpload", await reserve(reserveReq({}, id)));
+    assert.deepEqual(b, a);
+    assert.equal(b.data.film.status, "reserved");
+    const cur = (await db.doc(`teams/${TEAM}/films/${a.data.filmId}`).get())
+        .data();
+    assert.equal(cur.status, "abandoned");
+    // An upload after cancellation is still discarded by the finalize path.
+    const e = await putObject(a.data.uploadPath, MP4);
+    assert.equal(await h.onQuarantineFinalized(e), "stale-abandoned");
+    assert.equal(await exists(a.data.uploadPath), false);
+  });
+  it("after the replay window the same operation is refused, never re-run",
+      async () => {
+        const id = op();
+        await reserve(reserveReq({}, id));
+        clock = new Date(T0.getTime() + LIMITS.operationReplayWindowMs - 1);
+        assert.equal((await reserve(reserveReq({}, id))).ok, true);
+        clock = new Date(T0.getTime() + LIMITS.operationReplayWindowMs);
+        expectErr("reserveFilmUpload", await reserve(reserveReq({}, id)),
+            "failed-precondition", "operation-expired");
+        clock = new Date(T0.getTime() + 30 * LIMITS.operationReplayWindowMs);
+        expectErr("reserveFilmUpload", await reserve(reserveReq({}, id)),
+            "failed-precondition", "operation-expired");
+        expectErr("reserveFilmUpload",
+            await reserve(reserveReq({declaredBytes: 99}, id)),
+            "conflict", "operation-id-reused");
+        assert.equal((await filmDocs()).length, 1);
+      });
+  it("file name stored canonical; equivalent spellings are one operation",
+      async () => {
+        const id = op();
+        const a = await reserve(reserveReq({fileName: "  Cafe\u0301.mp4 "}, id));
+        assert.equal(a.data.film.fileName, "Caf\u00e9.mp4");
+        const b = await reserve(reserveReq({fileName: "Caf\u00e9.mp4"}, id));
+        assert.deepEqual(b, a);
+        assert.equal((await filmDocs()).length, 1);
+      });
+});
+
 describe("FS-19..22 finalize and abandon", () => {
   it("FS-19 size mismatch and spoofed signature -> rejected, deleted",
       async () => {

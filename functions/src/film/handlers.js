@@ -16,10 +16,14 @@
  * transaction, so the ledger is the authoritative cap count.
  */
 const crypto = require("crypto");
+const {HttpsError} = require("firebase-functions/v2/https");
 const c = require("./contract");
 const {LIMITS} = require("./limits");
 
-const OP_RETENTION_MS = 24 * 60 * 60 * 1000; // DELEGATED (contract doc §7)
+// gRPC / Firestore codes treated as known-transient: ABORTED (contention),
+// DEADLINE_EXCEEDED, UNAVAILABLE. Anything else is not retry-eligible.
+const TRANSIENT_CODES = new Set([10, 4, 14, "aborted", "deadline-exceeded",
+  "unavailable", "ABORTED", "DEADLINE_EXCEEDED", "UNAVAILABLE"]);
 const QUARANTINE_RE =
   /^quarantine\/([A-Za-z0-9_-]{1,128})\/([0-9a-f-]{36})\/source\.mp4$/;
 
@@ -146,8 +150,10 @@ function createFilmHandlers(deps) {
     db.collection("filmOperations").doc(sha256(`${uid}\n${operationId}`));
 
   /**
-   * Wrap a handler: contract outcomes are returned, unexpected failures
-   * become unavailable/backend-unavailable (retryable with the same opId).
+   * Wrap a handler: contract outcomes are returned; KNOWN transient backend
+   * failures become unavailable/backend-unavailable (retryable, same opId);
+   * anything else is thrown as a sanitized `internal` HttpsError, which the
+   * client classifies as sdk/internal (not retry-eligible).
    * @param {string} name
    * @param {function(object): Promise<object>} fn
    * @return {function(object): Promise<object>}
@@ -158,9 +164,13 @@ function createFilmHandlers(deps) {
         return await fn(request);
       } catch (err) {
         if (err instanceof Outcome) return err.response;
+        const transient = err && TRANSIENT_CODES.has(err.code);
         logger.error(`film.${name}.error`,
-            {error: String(err && err.message)});
-        return c.errorResponseFor("unavailable", "backend-unavailable");
+            {transient, code: err && err.code ? String(err.code) : null});
+        if (transient) {
+          return c.errorResponseFor("unavailable", "backend-unavailable");
+        }
+        throw new HttpsError("internal", "internal");
       }
     };
   }
@@ -171,14 +181,20 @@ function createFilmHandlers(deps) {
    * @param {object} ref
    * @param {string} action
    * @param {string} payloadHash
+   * @param {Date} at request time
    * @return {Promise<?object>}
    */
-  async function checkOperation(tx, ref, action, payloadHash) {
+  async function checkOperation(tx, ref, action, payloadHash, at) {
     const snap = await tx.get(ref);
     if (!snap.exists) return null;
     const op = snap.data();
     if (op.action !== action || op.payloadHash !== payloadHash) {
       throw stop("conflict", "operation-id-reused");
+    }
+    // Records are never pruned (tombstones); past the window the same key is
+    // refused, so an old retry can never create a second reservation.
+    if (at.getTime() >= op.replayableUntil.toMillis()) {
+      throw stop("failed-precondition", "operation-expired");
     }
     return JSON.parse(op.responseJson);
   }
@@ -195,7 +211,8 @@ function createFilmHandlers(deps) {
       uid, operationId, action, payloadHash,
       responseJson: JSON.stringify(response),
       createdAt: ts(at),
-      expiresAt: ts(new Date(at.getTime() + OP_RETENTION_MS)),
+      replayableUntil: ts(new Date(at.getTime() +
+        LIMITS.operationReplayWindowMs)),
     });
   }
 
@@ -221,7 +238,7 @@ function createFilmHandlers(deps) {
 
     return db.runTransaction(async (tx) => {
       const oRef = opRef(uid, operationId);
-      const replay = await checkOperation(tx, oRef, action, payloadHash);
+      const replay = await checkOperation(tx, oRef, action, payloadHash, at);
       if (replay) return replay;
       await assertOwner(tx, payload.teamId, uid);
 
@@ -301,7 +318,7 @@ function createFilmHandlers(deps) {
     const response = await db.runTransaction(async (tx) => {
       deletePath = null;
       const oRef = opRef(uid, operationId);
-      const replay = await checkOperation(tx, oRef, action, payloadHash);
+      const replay = await checkOperation(tx, oRef, action, payloadHash, at);
       if (replay) return replay;
       await assertOwner(tx, payload.teamId, uid);
 
