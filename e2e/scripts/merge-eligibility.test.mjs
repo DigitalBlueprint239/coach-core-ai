@@ -502,11 +502,13 @@ test('N2 workflow logic (static check of the workflow file, NOT an Actions obser
   assert.doesNotMatch(job.split('\n').filter((l) => !l.trim().startsWith('#')).join('\n'), /!cancelled\(\)|if: \$\{\{ success\(\)|if: success\(\)|if: \$\{\{ github\.event_name/, 'no condition anywhere in the job can skip it on cancel/event');
   const steps = job.split('\n      - ').slice(1);
   assert.ok(steps.length >= 8, `steps found: ${steps.length}`);
-  for (const st of steps) assert.match(st, /\n        if: (\$\{\{ always\(\) \}\}|always\(\))(\n|$)/, `every step runs under always(): ${st.split('\n')[0]}`);
   const guard = steps[0];
   assert.match(guard, /^name: Fail closed when the run was cancelled or the matrix did not complete/);
-  assert.match(guard, /RUN_CANCELLED: \$\{\{ cancelled\(\) \}\}/); assert.match(guard, /MATRIX_RESULT: \$\{\{ needs\.e2e\.result \}\}/);
-  assert.match(guard, /\[ "\$RUN_CANCELLED" = "true" \] \|\| \[ "\$MATRIX_RESULT" = "cancelled" \] \|\| \[ "\$MATRIX_RESULT" = "skipped" \]/); assert.match(guard, /exit 1/);
+  // Status functions are valid only in `if:` (an env use of cancelled() is rejected by Actions at parse time — observed).
+  assert.match(guard, /\n        if: \$\{\{ cancelled\(\) \|\| needs\.e2e\.result == 'cancelled' \|\| needs\.e2e\.result == 'skipped' \}\}\n/);
+  assert.match(guard, /\n          exit 1(\n|$)/); assert.doesNotMatch(guard, /\$\{\{ cancelled\(\) \}\}/);
+  for (const st of steps.slice(1)) assert.match(st, /\n        if: (\$\{\{ always\(\) \}\}|always\(\))(\n|$)/, `every other step runs under always(): ${st.split('\n')[0]}`);
+  assert.doesNotMatch(job.replace(/\n\s*#.*/g, ''), /env:\n(?:\s+\w+: .*\n)*\s+\w+: \$\{\{ (cancelled|success|failure|always)\(\)/, 'no status function outside if:');
   const dl = steps.find((st) => st.startsWith('uses: actions/download-artifact@v4'));
   assert.match(dl, /continue-on-error: true/, 'missing artifacts reach the evaluator (R3) instead of skipping it');
   assert.equal(steps.filter((st) => /continue-on-error: true/.test(st)).length, 1, 'only the download may continue on error; the guard, self-checks and evaluation cannot');
