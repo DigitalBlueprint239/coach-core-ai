@@ -1,0 +1,17 @@
+{
+  "candidate": "515dc1d92bf237dae4d70ff2cc38c2aee07d5ae1",
+  "tested_pr_merge": "950addf164e4f789c6488bf5af7dd60dc2e43ce8",
+  "accepted_evidence_commit": "9984b7cf7a7301b4423595eaa516d59d1f17ac1a",
+  "pr": 79,
+  "run": 39268393120,
+  "attempt": 1,
+  "posted_closure_comment": 6269823320,
+  "inspected_queue_commit": "8953a38a52f9dfc913461196e4cd8fe3c34e849f",
+  "policy_comment": 6224877757,
+  "kev_and_manual_resave_comment": 6221265245,
+  "new_tests_or_platform_checks_run": false,
+  "settings_changes": false,
+  "deployment_or_recovery_actions": false,
+  "package_type": "documentation and proposed configuration only",
+  "release_status": "MVP NO-GO"
+}
