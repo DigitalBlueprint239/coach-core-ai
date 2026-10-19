@@ -1,0 +1,2 @@
+src/features/film-analyzer/contracts.ts(132,10): error TS2352: Conversion of type '{ payload: { [x: string]: unknown; }; }' to type 'FilmRequest<A>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ payload: { [x: string]: unknown; }; }' is missing the following properties from type '{ schemaVersion: "coach-film.v1"; operationId: string; action: A; payload: PayloadByAction[A]; }': schemaVersion, operationId, action
