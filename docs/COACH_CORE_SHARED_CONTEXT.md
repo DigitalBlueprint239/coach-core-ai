@@ -149,3 +149,17 @@ Isolated codex/n2-team-creation-reliability, draft #71, source bdb06ae6d39ff9ed3
 Baseline453/453,TS0,buildPASS; final477/477,TS0,production/emulator buildsPASS with inherited warnings. Owned pre-repair modal regression5FAIL/5; initial fixture failures retained; corrected listener testsPASS. Real focused emulator browser8/8 (Chromium156.0.8078.4/Firefox157.0, retries0/skips0). Clean install, dependencies unchanged/full graph98 findings. docs/N2_TEAM_CREATION_HANDOFF.md and docs/evidence/n2-team-creation contain commands, failures, results, hashes, limits and rollback. This is implementation evidence, not Claude independent acceptance.
 
 Claude next: independently fault the new REST path and run existing full coaching/identity matrix on a separate candidate; original Write-channel diagnostics alone do not test the new transport. Historical H2/FX02/N3/import residual/R3/R4/touch/missing initial ZIP/PNG preserved; staging/physical/hidden tabs NOT MEASURED. D1–D9 directions settled with exact approval provenance still missing per CC007; no film/AI activation. MVP NO-GO, BDN-AEO-001 queued; no merge/deploy/spend/live changes/deletion.
+
+## 2026-10-19 — PR82 local proxy discrepancy closed; S2 proposal only
+
+Read independent review5579020608 / #39comment6279703720 accepting bounded combined
+49bd3f3. Only unchanged rules suite rerun at exact49bd3f3 with process-local
+HTTP/HTTPS and NO_PROXY variants unset:68pass/0fail/0skip/0cancelled, exit0;
+three prior Storage positives all pass. Confirms local proxy/environment attribution;
+historical65/68 logs retained, not erased. Evidence docs/evidence/film-s1-proxy-2026-10-19.
+No helper/source/assertion change. Proposed next FILM-S2 validation-worker scope,
+owners, entry gates and acceptance in docs/film/FILM_S2_PROPOSED_TASK.md; maps to old
+security plan S3, not already-implemented reservation slice. Planning only, no
+decoder install/code/implementation. D3/D7 guard/defaultOFF, realGCS limitation,
+no deploy/merge/activation and MVP NO-GO preserved. Drew next: approve bounded
+scope/owners and policy provenance; independent acceptance remains separate.

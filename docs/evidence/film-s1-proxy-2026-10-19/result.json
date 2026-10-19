@@ -1,0 +1,24 @@
+{
+  "candidate": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+  "command": "env -u HTTPS_PROXY -u HTTP_PROXY -u https_proxy -u http_proxy -u NO_PROXY -u no_proxy npm --prefix tests/rules test",
+  "cwd": "/workspace/coach-core-film-s1-combined",
+  "node": "v24.19.0",
+  "java": "21.0.12.1",
+  "firebaseTools": "15.33.0",
+  "project": "demo-coach-core-beta",
+  "pass": 68,
+  "fail": 0,
+  "skip": 0,
+  "cancelled": 0,
+  "exit": 0,
+  "proxyVariablesSet": [
+    "HTTPS_PROXY",
+    "HTTP_PROXY",
+    "https_proxy",
+    "http_proxy",
+    "NO_PROXY",
+    "no_proxy"
+  ],
+  "sourceChanges": false,
+  "otherSuitesRun": false
+}
