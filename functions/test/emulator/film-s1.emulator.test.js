@@ -431,16 +431,22 @@ describe("R1-R5 backend repairs", () => {
         const e1 = await putObject(r.uploadPath, MP4);
         await abandon(abandonReq(r.filmId));
         const e2 = await putObject(r.uploadPath, MP4); // replaces e1 (admin)
-        assert.notEqual(String(e1.generation), String(e2.generation));
-        // e1's generation is gone: the event sees object-gone, deletes nothing
-        assert.equal(await h.onQuarantineFinalized(e1), "object-gone");
-        assert.equal(await exists(r.uploadPath), true);
-        assert.equal(await storage.deleteObject({name: r.uploadPath,
-          generation: String(e1.generation)}), false);
-        assert.equal(await exists(r.uploadPath), true);
-        // the current generation's own event removes it
-        assert.equal(await h.onQuarantineFinalized(e2), "stale-abandoned");
-        assert.equal(await exists(r.uploadPath), false);
+        const obs = {g1: String(e1.generation), g2: String(e2.generation)};
+        obs.readOld = await storage.readHead({name: r.uploadPath,
+          generation: obs.g1, bytes: 4}).then((b) => b ? "bytes" : "null",
+            (e) => `throw:${e.code}`);
+        obs.deleteOld = await storage.deleteObject({name: r.uploadPath,
+          generation: obs.g1}).then(String, (e) => `throw:${e.code}`);
+        obs.existsAfterDeleteOld = await exists(r.uploadPath);
+        obs.eventOld = await h.onQuarantineFinalized(e1);
+        obs.existsAfterEventOld = await exists(r.uploadPath);
+        obs.eventNew = await h.onQuarantineFinalized(e2);
+        obs.existsAfterEventNew = await exists(r.uploadPath);
+        assert.deepEqual(obs, {g1: obs.g1, g2: obs.g2, readOld: "null",
+          deleteOld: "false", existsAfterDeleteOld: true,
+          eventOld: "object-gone", existsAfterEventOld: true,
+          eventNew: "stale-abandoned", existsAfterEventNew: false},
+        `R2 observed ${JSON.stringify(obs)}`);
       });
   it("R3 transient head-read error: throws, film stays reserved, " +
       "object kept", async () => {
