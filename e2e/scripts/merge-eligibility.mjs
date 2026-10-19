@@ -46,7 +46,7 @@
 //       nonzero exit, invalid/erroring list report, bucket partition mismatch, empty acceptance
 //       membership, unreadable artifact, jobs API failure (F1) — and never runs on a cancelled run
 //       (workflow if: !cancelled())
-import { readFileSync, readdirSync, existsSync, lstatSync, realpathSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, lstatSync, realpathSync, mkdirSync, writeFileSync, openSync, closeSync, constants as fsConstants } from 'node:fs';
 import { join, resolve, posix, sep } from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -177,7 +177,7 @@ export function evaluate(input) {
       if (!art.uploadOk) fail(`R3 ${name}: UPLOAD_OK marker absent in ${aName} (finalize did not succeed)`);
       if (art.inventoryOk !== true) fail(`R3 ${name}: INVENTORY.sha256 did not verify in ${aName}${typeof art.inventoryOk === 'string' ? ` (${art.inventoryOk})` : ''}`);
       const ctx = art.context;
-      if (!ctx) fail(`R4 ${name}: run.context missing in ${aName}`);
+      if (!ctx) fail(`R4 ${name}: run.context ${art.contextProblem || 'missing'} in ${aName}`);
       else {
         if (ctx.sha !== input.sha) fail(`R4 ${name}: artifact sha ${ctx.sha} != candidate ${input.sha}`);
         if (input.headSha && ctx.head_sha !== input.headSha) fail(`R4 ${name}: artifact head_sha ${ctx.head_sha} != ${input.headSha}`);
@@ -288,29 +288,59 @@ export function canonicalInventoryPath(p, stripPrefix = INVENTORY_PREFIX) {
   if (!ARTIFACT_ROOTS.includes(parts[0]) || parts.length < 2) return null;
   return parts.join('/');
 }
+// Reader policy (N1 repair of b139d18): CONTAINMENT FIRST. The artifact directory and both retained roots
+// must be real directories (lstat, never followed) whose realpath is exactly <artifact>/<root>; otherwise the
+// record is rejected immediately and NOTHING under the artifact is opened — no marker probe, no inventory, no
+// provenance/results/last-run read. Only files discovered by the no-follow walk (every ancestor a real
+// directory) are ever read, each re-checked for realpath containment and opened with O_NOFOLLOW. Decision
+// payloads (run.context, results.json, .last-run.json) are read only after the inventory verified completely.
+// Parser exceptions are never copied into diagnostics (they can echo untrusted content).
+const NOFOLLOW = (fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW || 0));
 export function readArtifactDir(dir, { stripPrefix = INVENTORY_PREFIX } = {}) {
-  const out = { uploadOk: false, inventoryOk: 'no inventory', inventory: { listed: 0, retained: 0, problems: [] }, context: null, results: null, resultsProblem: 'missing', lastRun: null, lastRunProblem: 'missing' };
+  const out = { containment: 'unchecked', uploadOk: false, inventoryOk: 'not checked', inventory: { listed: 0, retained: 0, problems: [] }, context: null, contextProblem: 'not read', results: null, resultsProblem: 'not read', lastRun: null, lastRunProblem: 'not read' };
   const problems = out.inventory.problems;
-  if (!existsSync(dir) || !lstatSync(dir).isDirectory()) { out.inventoryOk = 'artifact directory missing'; return out; }
+  const reject = (why) => {
+    problems.push(why); out.containment = 'rejected';
+    out.inventoryOk = `artifact rejected before any evidence read: ${why}`;
+    out.contextProblem = out.resultsProblem = out.lastRunProblem = 'not read (artifact rejected by containment check)';
+    return out;
+  };
+  // 1. Containment of the artifact directory and both retained roots — before any content access.
+  let st;
+  try { st = lstatSync(dir); } catch { return reject('artifact directory missing'); }
+  if (st.isSymbolicLink() || !st.isDirectory()) return reject('artifact directory is not a real directory');
   const realDir = realpathSync(dir);
-  const isRegular = (rel) => { const f = join(dir, ...rel.split('/')); return existsSync(f) && lstatSync(f).isFile(); };
-  out.uploadOk = isRegular('ci-evidence/UPLOAD_OK') && lstatSync(join(dir, 'ci-evidence', 'UPLOAD_OK')).size > 0;
-  // Retained payload: every regular file under the roots (hidden included) except the self-exclusions.
+  for (const root of ARTIFACT_ROOTS) {
+    let rs;
+    try { rs = lstatSync(join(dir, root)); } catch { return reject(`artifact root ${root} is missing`); }
+    if (rs.isSymbolicLink()) return reject(`artifact root ${root} is a symbolic link (not followed; nothing under it is read)`);
+    if (!rs.isDirectory()) return reject(`artifact root ${root} is not a directory`);
+    if (realpathSync(join(dir, root)) !== join(realDir, root)) return reject(`artifact root ${root} does not resolve to <artifact>/${root}`);
+  }
+  out.containment = 'ok';
+  // 2. No-follow walk of the retained payload (hidden included); this set is the ONLY readable set.
   for (const entry of readdirSync(dir)) if (!ARTIFACT_ROOTS.includes(entry)) problems.push(`unexpected top-level entry in artifact: ${entry}`);
   const retained = [];
-  for (const root of ARTIFACT_ROOTS) {
-    const p = join(dir, root);
-    if (!existsSync(p)) continue;
-    if (lstatSync(p).isSymbolicLink() || !lstatSync(p).isDirectory()) { problems.push(`artifact root ${root} is not a real directory`); continue; }
-    walkRetained(dir, root, retained, problems);
-  }
+  for (const root of ARTIFACT_ROOTS) walkRetained(dir, root, retained, problems);
+  const retainedSet = new Set(retained);
+  const readContained = (rel) => {
+    if (!retainedSet.has(rel)) return null;
+    const f = join(dir, ...rel.split('/'));
+    const real = realpathSync(f);
+    if (!real.startsWith(realDir + sep)) { problems.push(`path ${rel} resolves outside the artifact (not read)`); return null; }
+    const fd = openSync(f, NOFOLLOW);
+    try { return readFileSync(fd); } finally { closeSync(fd); }
+  };
+  out.uploadOk = retainedSet.has('ci-evidence/UPLOAD_OK') && lstatSync(join(dir, 'ci-evidence', 'UPLOAD_OK')).size > 0;
   const payload = retained.filter((r) => !INVENTORY_SELF_EXCLUSIONS.has(r));
+  const payloadSet = new Set(payload);
   out.inventory.retained = payload.length;
-  if (!isRegular('ci-evidence/INVENTORY.sha256')) problems.push('no inventory (ci-evidence/INVENTORY.sha256 missing or not a regular file)');
+  // 3. Inventory: grammar, canonical in-artifact paths, uniqueness, complete coverage, digests.
+  const invBytes = readContained('ci-evidence/INVENTORY.sha256');
+  if (invBytes === null) problems.push('no inventory (ci-evidence/INVENTORY.sha256 missing or not a regular file)');
   else {
-    // Grammar: every non-comment, non-blank line is "<64 lowercase hex><two spaces><path>"; canonical, in-artifact, unique.
     const listed = new Map();
-    readFileSync(join(dir, 'ci-evidence', 'INVENTORY.sha256'), 'utf8').split('\n').forEach((l, i) => {
+    invBytes.toString('utf8').split('\n').forEach((l, i) => {
       if (l === '' || l.startsWith('#')) return;
       const m = /^([0-9a-f]{64})  (.+)$/.exec(l);
       if (!m) { problems.push(`inventory line ${i + 1} is malformed`); return; }
@@ -322,23 +352,27 @@ export function readArtifactDir(dir, { stripPrefix = INVENTORY_PREFIX } = {}) {
     });
     out.inventory.listed = listed.size;
     if (!listed.size) problems.push('inventory has no digest lines');
-    const payloadSet = new Set(payload);
     for (const r of payload) if (!listed.has(r)) problems.push(`retained file ${r} is NOT listed in the inventory (unlisted payload)`);
     for (const [canon, digest] of listed) {
       if (!payloadSet.has(canon)) { problems.push(`listed file ${canon} is missing from the artifact`); continue; }
-      const f = join(dir, ...canon.split('/'));
-      const real = realpathSync(f);
-      if (real !== realDir && !real.startsWith(realDir + sep)) { problems.push(`listed path ${canon} resolves outside the artifact`); continue; }
-      if (createHash('sha256').update(readFileSync(f)).digest('hex') !== digest) problems.push(`digest mismatch for ${canon}`);
+      const bytes = readContained(canon);
+      if (bytes === null) continue;
+      if (createHash('sha256').update(bytes).digest('hex') !== digest) problems.push(`digest mismatch for ${canon}`);
     }
     for (const req of REQUIRED_EVIDENCE_FILES) if (!listed.has(req) || !payloadSet.has(req)) problems.push(`required evidence file ${req} is absent or unlisted`);
   }
   out.inventoryOk = problems.length === 0 ? true : `${problems.length} inventory problem(s): ${problems.slice(0, 3).join('; ')}${problems.length > 3 ? '; …' : ''}`;
-  // Decision inputs are read only from regular in-artifact files (never through links).
-  if (isRegular('ci-evidence/run.context')) out.context = parseContext(readFileSync(join(dir, 'ci-evidence', 'run.context'), 'utf8'));
+  // 4. Decision payloads only from an authenticated (completely inventoried) artifact.
+  if (out.inventoryOk !== true) {
+    out.contextProblem = out.resultsProblem = out.lastRunProblem = 'not read (inventory did not verify; unauthenticated evidence is never parsed)';
+    return out;
+  }
+  const ctxBytes = readContained('ci-evidence/run.context');
+  if (ctxBytes === null) out.contextProblem = 'missing'; else { out.context = parseContext(ctxBytes.toString('utf8')); out.contextProblem = null; }
   const readJson = (rel, key, problemKey) => {
-    if (!isRegular(rel)) { out[problemKey] = 'missing'; return; }
-    try { out[key] = JSON.parse(readFileSync(join(dir, ...rel.split('/')), 'utf8')); out[problemKey] = null; } catch (e) { out[key] = null; out[problemKey] = `unparseable (${String(e.message).slice(0, 60)})`; }
+    const bytes = readContained(rel);
+    if (bytes === null) { out[problemKey] = 'missing'; return; }
+    try { out[key] = JSON.parse(bytes.toString('utf8')); out[problemKey] = null; } catch { out[key] = null; out[problemKey] = 'unparseable JSON (parser message not echoed)'; }
   };
   readJson('test-results/results.json', 'results', 'resultsProblem');
   readJson('test-results/.last-run.json', 'lastRun', 'lastRunProblem');

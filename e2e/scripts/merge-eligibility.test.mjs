@@ -12,6 +12,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, symlinkSync, rmSync, appendFileSync, renameSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import { createRequire, syncBuiltinESMExports } from 'node:module';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
@@ -32,6 +33,15 @@ const OLD = await (async () => {
   writeFileSync(f, spawnSync('git', ['-C', repo, 'show', `${FAILED_HEAD}:e2e/scripts/merge-eligibility.mjs`], { encoding: 'utf8' }).stdout);
   return { mod: await import(pathToFileURL(f)), file: f };
 })();
+// The b139d18 implementation (N1 demonstration legs only).
+const PREV_HEAD = 'b139d18d5ea617fd4d505dbdd19ef1e0403662a9';
+const PREV = await (async () => {
+  if (spawnSync('git', ['-C', repo, 'cat-file', '-e', `${PREV_HEAD}:e2e/scripts/merge-eligibility.mjs`]).status !== 0) return null;
+  const d = mkdtempSync(join(tmpdir(), 'gate-prev-')); const f = join(d, 'merge-eligibility.mjs');
+  writeFileSync(f, spawnSync('git', ['-C', repo, 'show', `${PREV_HEAD}:e2e/scripts/merge-eligibility.mjs`], { encoding: 'utf8' }).stdout);
+  return { mod: await import(pathToFileURL(f)), file: f };
+})();
+const PREV_SKIP = PREV ? false : `failed head ${PREV_HEAD.slice(0, 7)} not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed`;
 const OLD_SKIP = OLD ? false : `failed head ${FAILED_HEAD.slice(0, 7)} not available in this clone (shallow checkout); the reproduction leg is SKIPPED, not passed`;
 
 const SHA = 'a'.repeat(40);
@@ -339,6 +349,78 @@ test('F2 real reader end to end: twelve complete on-disk artifacts -> ELIGIBLE; 
   expectIneligible(b, /R3 E2E acceptance \(chromium\): INVENTORY\.sha256 did not verify .*NOT listed/, 'run.log-only');
 });
 
+// ======================================================================================== N1 retained-root containment
+// Filesystem tracer: every path handed to the node:fs calls the reader can use is recorded (CJS fs patched,
+// then syncBuiltinESMExports() so the gate's ESM named imports see the patched functions). This proves the
+// symlink TARGET is never touched — not merely that the final verdict is INELIGIBLE.
+const fsCjs = createRequire(import.meta.url)('node:fs');
+const TRACED = ['lstatSync', 'statSync', 'existsSync', 'readdirSync', 'readFileSync', 'openSync', 'realpathSync', 'opendirSync', 'accessSync'];
+const traceFs = (fn) => {
+  const seen = []; const orig = {};
+  for (const k of TRACED) { orig[k] = fsCjs[k]; fsCjs[k] = function traced(p, ...rest) { if (typeof p === 'string' || p instanceof URL || Buffer.isBuffer(p)) seen.push(String(p)); return orig[k].call(this, p, ...rest); }; }
+  const origNative = fsCjs.realpathSync.native; fsCjs.realpathSync.native = (p, ...r) => { seen.push(String(p)); return origNative(p, ...r); };
+  syncBuiltinESMExports();
+  try { return { value: fn(), seen }; } finally { for (const k of TRACED) fsCjs[k] = orig[k]; fsCjs.realpathSync.native = origNative; syncBuiltinESMExports(); }
+};
+const SENTINEL = 'PUBLIC_OUTSIDE_SENTINEL_' + process.pid;
+// A complete, valid outside copy of an artifact (so a follower WOULD find well-formed evidence there).
+const rootLinkCase = (roots) => {
+  const parent = mkdtempSync(join(tmpdir(), 'rootlink-'));
+  const art = A(base(), 'acceptance', 'chromium');
+  const outside = materialize({ ...art, context: { ...art.context, sha: SENTINEL } });
+  writeFileSync(join(outside, 'test-results', '.last-run.json'), SENTINEL + ' not json'); writeInventory(outside, ALL_FILES);
+  const d = join(parent, 'artifact'); renameSync(materialize(art), d);
+  for (const r of roots) { rmSync(join(d, r), { recursive: true }); symlinkSync(join(outside, r), join(d, r), 'dir'); }
+  return { d, outside };
+};
+// Any read of a link target goes through a path below the link (or names the target directly); both are traced.
+const touched = (seen, outside) => seen.filter((p) => p === outside || p.startsWith(outside + '/'));
+test('N1: a symlinked retained root (ci-evidence, test-results, or both) is rejected BEFORE any evidence read — the outside target is never stat-ed, listed, opened or read; no outside content reaches the record or its diagnostics', () => {
+  for (const roots of [['ci-evidence'], ['test-results'], ['ci-evidence', 'test-results']]) {
+    const { d, outside } = rootLinkCase(roots);
+    const { value: a, seen } = traceFs(() => readArtifactDir(d));
+    assert.deepEqual(touched(seen, outside), [], `${roots}: outside paths touched: ${touched(seen, outside).join(', ')}`);
+    assert.equal(a.containment, 'rejected'); assert.match(a.inventoryOk, new RegExp(`artifact rejected before any evidence read: artifact root ${roots[0]} is a symbolic link`));
+    assert.equal(a.uploadOk, false, 'marker not probed through the link'); assert.equal(a.context, null); assert.equal(a.results, null); assert.equal(a.lastRun, null);
+    assert.ok(!JSON.stringify(a).includes(SENTINEL) && !JSON.stringify(a).includes('PUBLIC_OUT'), 'no outside content in the record or diagnostics');
+    assert.equal(seen.filter((p) => p.startsWith(d + '/ci-evidence/') || p.startsWith(d + '/test-results/')).length, 0, `${roots}: nothing below the roots was accessed`);
+    const b = base(); b.artifacts[artifactName('acceptance', 'chromium', SHA)] = a;
+    const v = expectIneligible(b, /R3 E2E acceptance \(chromium\): INVENTORY\.sha256 did not verify .*artifact rejected before any evidence read/, `${roots} verdict`);
+    assert.ok(!reasonsOf(v).includes(SENTINEL));
+  }
+});
+test('N1: symlinked artifact directory, a symlinked sub-directory inside a root, a missing root and a non-directory root are rejected without following; a valid artifact still verifies and is read only after its inventory verified', () => {
+  const art = A(base(), 'acceptance', 'chromium');
+  // Artifact directory itself is a link.
+  const outside = materialize(art); const p1 = mkdtempSync(join(tmpdir(), 'dirlink-')); symlinkSync(outside, join(p1, 'artifact'), 'dir');
+  let r = traceFs(() => readArtifactDir(join(p1, 'artifact')));
+  assert.match(r.value.inventoryOk, /artifact directory is not a real directory/); assert.deepEqual(touched(r.seen, outside), []);
+  // Sub-directory link inside test-results, with a file under it listed in the inventory.
+  const d2 = materialize(art); const o2 = mkdtempSync(join(tmpdir(), 'sublink-')); writeFileSync(join(o2, 'x.json'), SENTINEL);
+  symlinkSync(o2, join(d2, 'test-results', 'sub'), 'dir'); writeInventory(d2, ALL_FILES, [`${sha256(SENTINEL)}  e2e/test-results/sub/x.json`]);
+  r = traceFs(() => readArtifactDir(d2));
+  assert.deepEqual(touched(r.seen, o2), []); assert.match(r.value.inventory.problems.join('\n'), /retained path test-results\/sub is a symbolic link \(rejected, not followed\)/); assert.match(r.value.inventory.problems.join('\n'), /listed file test-results\/sub\/x\.json is missing from the artifact/);
+  assert.equal(r.value.context, null, 'unauthenticated evidence is not parsed'); assert.match(r.value.contextProblem, /inventory did not verify/);
+  // Missing root / non-directory root.
+  const d3 = materialize(art); rmSync(join(d3, 'test-results'), { recursive: true }); assert.match(readArtifactDir(d3).inventoryOk, /artifact root test-results is missing/);
+  const d4 = materialize(art); rmSync(join(d4, 'test-results'), { recursive: true }); writeFileSync(join(d4, 'test-results'), 'x'); assert.match(readArtifactDir(d4).inventoryOk, /artifact root test-results is not a directory/);
+  // Valid artifact: every read stays inside, decision payloads parsed.
+  const d5 = materialize(art); r = traceFs(() => readArtifactDir(d5));
+  assert.equal(r.value.inventoryOk, true); assert.equal(r.value.context.sha, SHA); assert.equal(r.value.lastRun.status, 'passed');
+  const realD5 = fsCjs.realpathSync(d5); assert.ok(r.seen.every((p) => p === d5 || p.startsWith(d5 + '/') || p === realD5 || p.startsWith(realD5 + '/') || /^\d+$/.test(p)), `every traced access is inside the artifact: ${r.seen.filter((p) => !p.startsWith(d5)).join(', ')}`);
+  // Parser exceptions are not echoed into diagnostics.
+  const d6 = materialize(art); writeFileSync(join(d6, 'test-results', '.last-run.json'), SENTINEL); writeInventory(d6, ALL_FILES);
+  const a6 = readArtifactDir(d6); assert.equal(a6.lastRunProblem, 'unparseable JSON (parser message not echoed)'); assert.ok(!JSON.stringify(a6).includes(SENTINEL.slice(0, 10)));
+});
+test('N1 reproduction on b139d18: the same root links were followed — outside run.context / results.json parsed and the outside parse error echoed', { skip: PREV_SKIP }, () => {
+  const { d, outside } = rootLinkCase(['ci-evidence', 'test-results']);
+  const { value: a, seen } = traceFs(() => PREV.mod.readArtifactDir(d));
+  assert.notEqual(a.inventoryOk, true, 'b139d18 did reject the inventory');
+  const throughLink = seen.filter((p) => p.startsWith(d + '/ci-evidence/') || p.startsWith(d + '/test-results/'));
+  assert.ok(throughLink.some((p) => p.endsWith('/run.context')) && throughLink.some((p) => p.endsWith('/results.json')), `b139d18 opened evidence through the linked roots: ${throughLink.join(', ')}`);
+  assert.equal(a.context.sha, SENTINEL, 'b139d18 parsed the outside run.context'); assert.match(a.lastRunProblem, /PUBLIC_OUT/, 'b139d18 echoed outside content in diagnostics');
+});
+
 // ======================================================================================== F3 identities
 const f3Cases = () => [
   ['duplicate acceptance identity with an extra passing execution (reviewer reproduction)', (b) => { const a = A(b, 'acceptance', 'chromium'); a.results.suites[0].specs.push(copy(a.results.suites[0].specs[0])); a.results.stats.expected += 1; }, /R5 E2E acceptance \(chromium\): 1 identity\(ies\) appear more than once/],
@@ -393,7 +475,7 @@ test('F4 reproduction on dbf7a9a: lastRun:null and a real malformed .last-run.js
 // ======================================================================================== workflow contract
 test('workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha\'s artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, every e2e job writes run.context, and the inventory the gate requires is the one B15 writes', () => {
   const wf = readFileSync(join(repo, '.github', 'workflows', 'e2e-emulator.yml'), 'utf8');
-  assert.match(wf, /merge-eligibility:\n\s+name: Coach Core merge eligibility\n\s+needs: e2e\n(?:\s+#.*\n)*\s+if: \$\{\{ always\(\) && !cancelled\(\) \}\}/);
+  assert.match(wf, /merge-eligibility:\n\s+name: Coach Core merge eligibility\n\s+needs: e2e\n(?:\s+#.*\n)*\s+if: \$\{\{ always\(\) \}\}\n/);
   assert.match(wf, /pattern: e2e-results-\*-\$\{\{ github\.sha \}\}/);
   assert.match(wf, /node e2e\/scripts\/merge-eligibility\.mjs \\\n\s+--sha "\$GITHUB_SHA" --head-sha "\$CANDIDATE_HEAD_SHA" --event "\$GITHUB_EVENT_NAME"/);
   assert.match(wf, /--run-id "\$GITHUB_RUN_ID" --attempt "\$GITHUB_RUN_ATTEMPT"/);
@@ -410,3 +492,27 @@ test('workflow contract: aggregate job exists with the exact check name, needs t
   const ev = readFileSync(join(repo, 'e2e', 'scripts', 'evidence.sh'), 'utf8');
   assert.match(ev, /find "\$root" -type f ! -name INVENTORY\.sha256 ! -name '\.INVENTORY\.sha256\.tmp' ! -name '\.INVENTORY\.entries\.tmp' ! -name UPLOAD_OK/);
 });
+
+test('N2 workflow logic (static check of the workflow file, NOT an Actions observation): the authoritative job has no conditional-skip path — job and every step run under always(), a cancelled run or a cancelled/skipped matrix fails the job explicitly, an unavailable artifact download cannot skip the evaluation, and only the evaluation step can make the job succeed', () => {
+  const wf = readFileSync(join(repo, '.github', 'workflows', 'e2e-emulator.yml'), 'utf8');
+  const job = wf.slice(wf.indexOf('  merge-eligibility:\n'));
+  assert.ok(job.length > 100, 'aggregate job present and last in the file');
+  const jobIf = /\n    if: (.*)\n/.exec(job)[1];
+  assert.equal(jobIf, '${{ always() }}', 'job-level condition is exactly always(): no !cancelled(), success() or other skip path');
+  assert.doesNotMatch(job.split('\n').filter((l) => !l.trim().startsWith('#')).join('\n'), /!cancelled\(\)|if: \$\{\{ success\(\)|if: success\(\)|if: \$\{\{ github\.event_name/, 'no condition anywhere in the job can skip it on cancel/event');
+  const steps = job.split('\n      - ').slice(1);
+  assert.ok(steps.length >= 8, `steps found: ${steps.length}`);
+  for (const st of steps) assert.match(st, /\n        if: (\$\{\{ always\(\) \}\}|always\(\))(\n|$)/, `every step runs under always(): ${st.split('\n')[0]}`);
+  const guard = steps[0];
+  assert.match(guard, /^name: Fail closed when the run was cancelled or the matrix did not complete/);
+  assert.match(guard, /RUN_CANCELLED: \$\{\{ cancelled\(\) \}\}/); assert.match(guard, /MATRIX_RESULT: \$\{\{ needs\.e2e\.result \}\}/);
+  assert.match(guard, /\[ "\$RUN_CANCELLED" = "true" \] \|\| \[ "\$MATRIX_RESULT" = "cancelled" \] \|\| \[ "\$MATRIX_RESULT" = "skipped" \]/); assert.match(guard, /exit 1/);
+  const dl = steps.find((st) => st.startsWith('uses: actions/download-artifact@v4'));
+  assert.match(dl, /continue-on-error: true/, 'missing artifacts reach the evaluator (R3) instead of skipping it');
+  assert.equal(steps.filter((st) => /continue-on-error: true/.test(st)).length, 1, 'only the download may continue on error; the guard, self-checks and evaluation cannot');
+  assert.match(steps.find((st) => st.startsWith('name: Evaluate merge eligibility')), /node e2e\/scripts\/merge-eligibility\.mjs/);
+  // The evaluator itself exits nonzero for every non-ELIGIBLE verdict and on crash (fail closed).
+  const gate = readFileSync(join(here, 'merge-eligibility.mjs'), 'utf8');
+  assert.match(gate, /process\.exit\(verdict\.eligible \? 0 : 1\)/); assert.match(gate, /gate crashed \(fail closed\).*\n?.*process\.exit\(1\)/);
+});
+
