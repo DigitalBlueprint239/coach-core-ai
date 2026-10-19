@@ -37,3 +37,16 @@ Claude reviewer is **review-only**: independently inspect the client delta, reru
 Proposed owner policy sheet: [OWNER_DECISION_SHEET_2026-10-19.md](OWNER_DECISION_SHEET_2026-10-19.md). Its recommendations remain unapproved and are not runtime configuration. No blanket adoption requested.
 
 Rollback before integration: leave this draft unmerged. If later incorporated with approval, revert only the client source commit; no persistent data, schema, package or configuration migration exists in this delta. No deletion, deploy, billing, provider call or AI activation was performed or authorized.
+
+## PR80 independent review findings addressed (2026-10-19 UTC)
+
+Review5578562458 at5e0bc77: independent **PASS for r3 contract parity**, with P1 CI prerequisite/coverage and P2 empty-typecheck-log findings. The client module and its146 tests remain unchanged.
+
+- **P1:** added dedicated `.github/workflows/film-client-contract.yml`, leaving Claude-owned `security-rules.yml` untouched. Clean CI installs root dependencies with `npm ci --legacy-peer-deps --no-audit --no-fund` **and** `npm ci --prefix functions --no-audit --no-fund` before FS-26. The server-schema oracle is test-only and needs functions' zod. This install is also a required local prerequisite; do not claim a clean-checkout run after installing only root dependencies. New workflow covers relevant PR paths, this client branch's pushes and bounded manual dispatch. It never deploys/builds/runs emulators or reads secrets.
+- **P2:** retained `review-fix-typescript.log` with explicit `exit=0`; historical empty r3 log/hash remains unchanged. New FS-26 log also records exit0; summary hashes updated.
+- **P3 info only:** switch-OFF `sdk/internal` is non-retryable. Later UI wording must describe unavailable/not-enabled film, not invent a transient retry; no UI implemented. Backend R1 deviation still needs independent backend adjudication.
+- **P4 info only:** strict client timing invariants remain; any backend timing change requires fixture/emission parity review, not client relaxation.
+
+Local Node24.19.0:146pass/0fail/0skip; tsc exit0, actionlint1.7.7 clean. Existing shared root dependencies were linked; functions dependencies were installed from their own lockfile. Clean-root CI evidence is pending until its actual exact-head run completes; no CI claim is inferred from workflow source alone. No unrelated unchanged test matrix rerun.
+
+This update needs focused independent review of the CI/evidence fix and its actual run. It does not give PR81 backend PASS or permit combination before both exact slices have independent PASS. See FILM_S1_INTEGRATION_PLAN.md. D3/D7 placeholders and PR79 remain unchanged.
