@@ -1,0 +1,126 @@
+
+Running 20 tests using 1 worker
+
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   1 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (6.2s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   2 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.0s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   3 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.0s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   4 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (6.0s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   5 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (6.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   6 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (5.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   7 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (7.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   8 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (7.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓   9 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (7.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'desktop-mouse'
+}
+  ✓  10 [desktop-mouse] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (6.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  11 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  12 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.8s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  13 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.9s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  14 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.5s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  15 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (9.1s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  16 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.7s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  17 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (9.4s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  18 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.3s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  19 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (7.6s)
+Browser evidence {
+  version: '141.0.7390.37',
+  channel: 'msedge',
+  project: 'tablet-touch'
+}
+  ✓  20 [tablet-touch] › tests/browser/diag.spec.ts:146:1 › DIAG2 real route waypoint original timing (8.1s)
+
+  20 passed (3.1m)
+EXIT=0

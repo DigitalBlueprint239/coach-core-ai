@@ -1,0 +1,15 @@
+1ffdc2b73f782730b7c29afec45b68429f50d70f7b20ba5bd922421414f6f221  ./01-baseline-pr2-aea4fd9-original-test-x10.txt
+af23a81a02710e4ae6a10da055dbd728b4f3820ad6cc7c5f6a5064b25a36d855  ./02-diag1-settle-instrumented-aea4fd9-x10.txt
+f15659cbc05354cb38cb808c0d74cef1867fddeec3b05c8c20d37bbf5fe8971b  ./03-diag2-3s-observation-aea4fd9-x10.txt
+4a5334a088b0e5233a4a46da6f9e315d67bf6c7effa0a42dee60c62429d6cb61  ./04-diag3-unmodified-test-plus-timeline-aea4fd9-x10.txt
+510245ac453f8012eed856ce27845ae94f1af867156be76a216a92dfe7a7de27  ./05-final-pr3-04946b7-full-suite-x10.txt
+749cee0890d984e2279d00cdc6acca70e8b0af7191febaff1d4ede87d177df02  ./diag3-failure-contexts/repeat1.error-context.md
+58f3fe3caeb90a57c67ebcbe4c91be628d2f1ba5dc40a254dc15ebefd87173c7  ./diag3-failure-contexts/repeat2.error-context.md
+cfe32799a8a45c06209b4ef59f2cfaa417414b194f1c35257278baa98e4300ac  ./diag3-failure-contexts/repeat6.error-context.md
+0fb89eefbbf00ac5adf690792693c5e4c27323035fb42c26511893694b644cd0  ./diag3-failure-contexts/repeat7.error-context.md
+3ff3aa6b45c251b7584a316fd49aa0e8e778935635a022527824f5d1487b7e24  ./diag3-failure-contexts/repeat8.error-context.md
+b134487aefedef24f5a9eb1f7de132853471bd90b40e3bc31d60701c218e20fe  ./diagnostic-specs/diag.spec.ts.txt
+b2227f8ef8398ded46de3fb95b8885724c287e6f87d4616ea43fbaff4e4c546c  ./diagnostic-specs/diag3.spec.ts.txt
+d763ef1469254be716295edc68038bfaaacb43b48f78188555c54b381842194a  ./diagnostic-specs/pw.claude.config.ts.txt
+c7d17ac037e61f845a702f16c45e613f6b9d3523775d7e7088eb60b62d79d215  ./diagnostic-specs/pw.diag3.config.ts.txt
+f77be53ec2b5ca8d45cd33e709b7bbd0c3178a4b2c9faab062f5102228af513b  ./diagnostic-specs/pw.orig.config.ts.txt
