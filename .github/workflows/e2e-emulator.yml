@@ -9,6 +9,14 @@ name: E2E (emulator, real browsers)
 on:
   pull_request:
     branches: [recovery/coach-core-mvp-2026]
+    # ready_for_review added (merge-eligibility gate, 2026-10-17) so a draft promoted to
+    # ready re-validates on its current head; the other three are GitHub's defaults.
+    types: [opened, synchronize, reopened, ready_for_review]
+  # merge_group only fires when a merge queue is enabled on the target branch (none is
+  # configured today). Declared now so that, if the owner enables a queue, the queue's
+  # candidate commit gets the same full validation and the same aggregate verdict.
+  merge_group:
+    types: [checks_requested]
   push:
     branches: ['claude/**', 'recovery/coach-core-mvp-2026']
   workflow_dispatch:
@@ -106,8 +114,16 @@ jobs:
           E2E_GREP: ${{ github.event.inputs.grep || '' }}
           E2E_BUCKET: ${{ matrix.bucket }}
           PROJECT: ${{ matrix.project }}
+          # PR head (pull_request), queue head (merge_group) or the pushed/dispatched commit.
+          CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
         run: |
           mkdir -p e2e/test-results e2e/ci-evidence
+          # Provenance for the merge-eligibility aggregate: binds this job's evidence to the exact
+          # commit, run attempt, event, project/bucket and selection inputs. Values are written with
+          # printf %s from env (never interpolated into a command); the file is inventoried/hashed by B15.
+          printf 'sha=%s\nhead_sha=%s\nevent=%s\nrun_id=%s\nrun_attempt=%s\nproject=%s\nbucket=%s\nrepeat=%s\ngrep=%s\n' \
+            "$GITHUB_SHA" "$CANDIDATE_HEAD_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            "$PROJECT" "$E2E_BUCKET" "$REPEAT" "$E2E_GREP" > e2e/ci-evidence/run.context
           # evidence.sh tees to e2e/ci-evidence/run.log and exits with the TEST process's status.
           bash e2e/scripts/evidence.sh run e2e/ci-evidence -- \
             npx --prefix e2e firebase emulators:exec --project demo-coach-core-e2e \
@@ -163,5 +179,82 @@ jobs:
             e2e/test-results
             e2e/ci-evidence
           include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------------------
+  # Coach Core merge eligibility (2026-10-17): the ONE check to require. It succeeds only when
+  # the complete required acceptance validation finished successfully on the exact candidate
+  # commit, by reading what the twelve jobs above produced (job conclusions via the Actions API,
+  # evidence artifacts with UPLOAD_OK + verified INVENTORY.sha256, run.context provenance, and a
+  # source-derived --list membership on this very checkout). Rules R1-R7 are documented in
+  # e2e/scripts/merge-eligibility.mjs. It cannot be satisfied by workflow_dispatch or push runs,
+  # by a narrowed grep, by a cancelled/skipped/missing job, by artifacts from another sha or
+  # attempt, or by zero tests posing as passes. Individual "E2E acceptance (*)" names remain
+  # informative but are NOT sufficient as required checks (a one-test dispatch turns them green).
+  # ---------------------------------------------------------------------------------------
+  merge-eligibility:
+    name: Coach Core merge eligibility
+    needs: e2e
+    # N2 repair (review of b139d18): NO conditional-skip path. A skipped job reports "Success" to
+    # required-check rules, so the job-level condition is plain always(): it is scheduled after the matrix
+    # whatever the matrix did — failed, cancelled, timed out or never produced artifacts — and its only
+    # successful outcome is a successful eligibility evaluation. Every step also runs under always() so a
+    # cancelled/failed prerequisite cannot turn into "all steps skipped"; the first step fails the job
+    # outright when the run was cancelled. A hard platform cancellation/termination of THIS job yields
+    # "cancelled" (never success); how required-check rules treat that state is documented, not assumed.
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    env:
+      CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
+    steps:
+      - name: Fail closed when the run was cancelled or the matrix did not complete
+        # Status functions are only valid in `if:`; this step runs exactly in the fail-closed cases.
+        if: ${{ cancelled() || needs.e2e.result == 'cancelled' || needs.e2e.result == 'skipped' }}
+        env:
+          MATRIX_RESULT: ${{ needs.e2e.result }}
+        run: |
+          echo "::error title=Coach Core merge eligibility::INELIGIBLE — run cancelled or matrix ${MATRIX_RESULT}; no eligibility can be established for ${GITHUB_SHA} (fail closed)"
+          exit 1
+      - uses: actions/checkout@v5
+        if: ${{ always() }}
+      - uses: actions/setup-node@v5
+        if: ${{ always() }}
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+      - name: Install e2e (for source-derived --list membership; no browsers)
+        if: ${{ always() }}
+        run: npm ci --prefix e2e --no-audit --no-fund
+      - name: Gate self-checks (fixtures for success / failed / cancelled / skipped / missing / narrowed / empty / wrong sha / containment)
+        if: ${{ always() }}
+        run: node e2e/scripts/merge-eligibility.test.mjs
+      - uses: actions/download-artifact@v4
+        if: ${{ always() }}
+        # A missing/unavailable artifact must not skip the evaluation: the evaluator names it (R3) and fails.
+        continue-on-error: true
+        with:
+          pattern: e2e-results-*-${{ github.sha }}
+          path: gate/artifacts
+          merge-multiple: false
+      - name: Evaluate merge eligibility
+        if: ${{ always() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node e2e/scripts/merge-eligibility.mjs \
+            --sha "$GITHUB_SHA" --head-sha "$CANDIDATE_HEAD_SHA" --event "$GITHUB_EVENT_NAME" \
+            --run-id "$GITHUB_RUN_ID" --attempt "$GITHUB_RUN_ATTEMPT" \
+            --artifacts gate/artifacts --e2e e2e --out gate/report --expected-repeat 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: merge-eligibility-${{ github.sha }}
+          path: gate/report
           if-no-files-found: error
           retention-days: 14
