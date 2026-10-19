@@ -1,0 +1,156 @@
+PASS src/features/film-analyzer/__tests__/contracts.test.ts
+  FS-26 golden parity at contract r3
+    ✓ manifest covers every fixture and SHA256SUMS matches LF source text (Git autocrlf checkout) (18 ms)
+    ✓ abandon.request.valid.json: client and authoritative schema agree (3 ms)
+    ✓ abandon.response.ok-from-reserved.json: client and authoritative schema agree (4 ms)
+    ✓ abandon.response.ok-from-validating.json: client and authoritative schema agree
+    ✓ abandon.response.ok-repeat-new-operation.json: client and authoritative schema agree (1 ms)
+    ✓ client-failure.network.network.json: client and authoritative schema agree (1 ms)
+    ✓ client-failure.protocol.response-invalid.json: client and authoritative schema agree
+    ✓ client-failure.sdk.deadline-exceeded.json: client and authoritative schema agree
+    ✓ client-failure.sdk.internal.json: client and authoritative schema agree (1 ms)
+    ✓ client-failure.sdk.permission-denied.json: client and authoritative schema agree (2 ms)
+    ✓ client-failure.sdk.unavailable.json: client and authoritative schema agree
+    ✓ error.conflict.operation-id-reused.json: client and authoritative schema agree (1 ms)
+    ✓ error.failed-precondition.film-not-found.json: client and authoritative schema agree (1 ms)
+    ✓ error.failed-precondition.invalid-state.json: client and authoritative schema agree
+    ✓ error.failed-precondition.operation-expired.json: client and authoritative schema agree (1 ms)
+    ✓ error.failed-precondition.rights-wording-outdated.json: client and authoritative schema agree
+    ✓ error.invalid-argument.action-mismatch.json: client and authoritative schema agree
+    ✓ error.invalid-argument.rights-acknowledgement-required.json: client and authoritative schema agree
+    ✓ error.invalid-argument.schema-invalid.json: client and authoritative schema agree
+    ✓ error.limit-exceeded.bytes-over-limit.json: client and authoritative schema agree (1 ms)
+    ✓ error.limit-exceeded.format-not-allowed.json: client and authoritative schema agree
+    ✓ error.permission-denied.anonymous-not-allowed.json: client and authoritative schema agree
+    ✓ error.permission-denied.beta-access-required.json: client and authoritative schema agree (1 ms)
+    ✓ error.permission-denied.email-not-verified.json: client and authoritative schema agree
+    ✓ error.permission-denied.not-team-owner.json: client and authoritative schema agree
+    ✓ error.team-cap-reached.team-film-cap.json: client and authoritative schema agree
+    ✓ error.unauthenticated.account-disabled.json: client and authoritative schema agree
+    ✓ error.unauthenticated.sign-in-required.json: client and authoritative schema agree
+    ✓ error.unavailable.backend-unavailable.json: client and authoritative schema agree
+    ✓ film-state.abandonedFromReserved.json: client and authoritative schema agree
+    ✓ film-state.abandonedFromValidating.json: client and authoritative schema agree (1 ms)
+    ✓ film-state.expired.json: client and authoritative schema agree (1 ms)
+    ✓ film-state.file-name-120-ascii.json: client and authoritative schema agree
+    ✓ film-state.file-name-60-emoji-120-units.json: client and authoritative schema agree (1 ms)
+    ✓ film-state.rejected.json: client and authoritative schema agree
+    ✓ film-state.reserved.json: client and authoritative schema agree
+    ✓ film-state.validating.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.client-failure.internal-retry-eligible.json: client and authoritative schema agree (19 ms)
+    ✓ invalid.client-failure.protocol-retry-eligible.json: client and authoritative schema agree (2 ms)
+    ✓ invalid.client-failure.unknown-category.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.M1-reserve-film-id-mismatch.json: client and authoritative schema agree (2 ms)
+    ✓ invalid.mutation.M2-reserve-upload-path-foreign.json: client and authoritative schema agree
+    ✓ invalid.mutation.M3-reserve-expires-at-mismatch.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.M4-reserved-has-abandoned-at.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.M5-rejected-null-reason.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.M6-abandon-null-abandoned-at.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.M7-validating-null-generation.json: client and authoritative schema agree (2 ms)
+    ✓ invalid.mutation.M8-expiry-before-creation.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X1-expired-before-expiry.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X10-validating-after-expiry.json: client and authoritative schema agree
+    ✓ invalid.mutation.X11-receipt-not-reserved.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X12-abandon-from-validating-no-generation.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X13-abandon-from-reserved-has-generation.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X14-stored-file-name-61-emoji.json: client and authoritative schema agree
+    ✓ invalid.mutation.X15-stored-file-name-121-ascii.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X2-reserved-has-generation.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X3-rejected-null-generation.json: client and authoritative schema agree
+    ✓ invalid.mutation.X4-reserved-status-changed.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X5-abandoned-at-not-status-changed.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X6-status-changed-before-created.json: client and authoritative schema agree
+    ✓ invalid.mutation.X7-rights-after-creation.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X8-upload-path-template.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.mutation.X9-file-name-not-canonical.json: client and authoritative schema agree
+    ✓ invalid.response.client-transport-as-server.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.response.extra-key.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.response.reason-not-for-code.json: client and authoritative schema agree
+    ✓ invalid.response.retryable-mismatch.json: client and authoritative schema agree (1 ms)
+    ✓ invalid.response.timestamp-no-millis.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.action-mismatch.json: client and authoritative schema agree (2 ms)
+    ✓ reserve.request.at-byte-limit.json: client and authoritative schema agree
+    ✓ reserve.request.file-name-120-ascii-padded.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.file-name-120-ascii.json: client and authoritative schema agree
+    ✓ reserve.request.file-name-60-emoji-120-units.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.file-name-61-emoji-122-units.json: client and authoritative schema agree
+    ✓ reserve.request.file-name-canonicalized.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.file-name-control-char.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.file-name-too-long.json: client and authoritative schema agree (4 ms)
+    ✓ reserve.request.format-not-allowed.json: client and authoritative schema agree
+    ✓ reserve.request.operation-id-not-uuid-v4.json: client and authoritative schema agree
+    ✓ reserve.request.operation-id-reused.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.over-byte-limit.json: client and authoritative schema agree
+    ✓ reserve.request.rights-not-acknowledged.json: client and authoritative schema agree
+    ✓ reserve.request.rights-wording-outdated.json: client and authoritative schema agree (1 ms)
+    ✓ reserve.request.unknown-field.json: client and authoritative schema agree
+    ✓ reserve.request.valid.json: client and authoritative schema agree
+    ✓ reserve.request.wrong-schema-version.json: client and authoritative schema agree
+    ✓ reserve.response.ok.json: client and authoritative schema agree
+    ✓ all status, transition, error and SDK category tables match (1 ms)
+    ✓ every supported server reason has a golden fixture, accepted for both actions (3 ms)
+  FS-26 strict runtime boundaries
+    ✓ unknown fields rejected at envelope (1 ms)
+    ✓ unknown fields rejected at payload
+    ✓ unknown fields rejected at response (1 ms)
+    ✓ unknown fields rejected at data
+    ✓ unknown fields rejected at film
+    ✓ unknown fields rejected at error (1 ms)
+    ✓ unknown fields rejected at clientFailure (4 ms)
+    ✓ malformed message null fails closed
+    ✓ malformed message [] fails closed (1 ms)
+    ✓ malformed message 1 fails closed (1 ms)
+    ✓ malformed message "" fails closed
+    ✓ malformed message {} fails closed (1 ms)
+    ✓ malformed message {"schemaVersion":"coach-film.v2"} fails closed
+    ✓ malformed message {"ok":"true"} fails closed (1 ms)
+    ✓ timestamp "2026-02-30T00:00:00.000Z" rejected by both
+    ✓ timestamp "2026-10-19T21:15:00Z" rejected by both
+    ✓ timestamp "2026-10-19T21:15:00.000+00:00" rejected by both (1 ms)
+    ✓ timestamp 1760908500000 rejected by both
+    ✓ canonical filename "  Café.mp4 " matches server without changing operation identity (1 ms)
+    ✓ canonical filename "\tCafé.mp4\n" matches server without changing operation identity
+    ✓ canonical filename " Café.mp4 " matches server without changing operation identity (1 ms)
+    ✓ invalid filename "a\u0000.mp4" rejected
+    ✓ invalid filename "a.mp4" rejected (1 ms)
+    ✓ invalid filename " " rejected (1 ms)
+    ✓ invalid filename "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀" rejected
+    ✓ invalid byte value 0 rejected by both (1 ms)
+    ✓ invalid byte value -1 rejected by both (1 ms)
+    ✓ invalid byte value 1.5 rejected by both
+    ✓ invalid byte value null rejected by both (1 ms)
+    ✓ invalid byte value null rejected by both
+    ✓ invalid byte value 9007199254740992 rejected by both (1 ms)
+    ✓ invalid byte value "1" rejected by both (1 ms)
+    ✓ opaque string bounds match Zod4 code-point semantics; filename has separate UTF-16 contract
+    ✓ state ready is representable but a reserve receipt cannot claim ready (1 ms)
+    ✓ historical receipt parses unchanged after expiry; parsing never claims live upload permission (1 ms)
+  FS-26 distinct local failures, no retry executor
+    ✓ SDK cancelled stays distinct and sanitizes details (1 ms)
+    ✓ SDK unknown stays distinct and sanitizes details (5 ms)
+    ✓ SDK invalid-argument stays distinct and sanitizes details (2 ms)
+    ✓ SDK deadline-exceeded stays distinct and sanitizes details (1 ms)
+    ✓ SDK not-found stays distinct and sanitizes details (2 ms)
+    ✓ SDK already-exists stays distinct and sanitizes details (1 ms)
+    ✓ SDK permission-denied stays distinct and sanitizes details (1 ms)
+    ✓ SDK resource-exhausted stays distinct and sanitizes details (2 ms)
+    ✓ SDK failed-precondition stays distinct and sanitizes details (1 ms)
+    ✓ SDK aborted stays distinct and sanitizes details (2 ms)
+    ✓ SDK out-of-range stays distinct and sanitizes details (1 ms)
+    ✓ SDK unimplemented stays distinct and sanitizes details (1 ms)
+    ✓ SDK internal stays distinct and sanitizes details (2 ms)
+    ✓ SDK unavailable stays distinct and sanitizes details (1 ms)
+    ✓ SDK data-loss stays distinct and sanitizes details (2 ms)
+    ✓ SDK unauthenticated stays distinct and sanitizes details (1 ms)
+    ✓ unknown thrown error is not assumed transient: {}
+    ✓ unknown thrown error is not assumed transient: null (1 ms)
+    ✓ unknown thrown error is not assumed transient: {}
+    ✓ unknown thrown error is not assumed transient: {"code":"unrecognized"}
+    ✓ unknown thrown error is not assumed transient: {"code":"auth/permission-denied"} (1 ms)
+    ✓ network classification requires explicit caller evidence; malformed resolutions are protocol failures (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       146 passed, 146 total
+Snapshots:   0 total
+Time:        1.511 s
+Ran all test suites within paths "src/features/film-analyzer/__tests__/contracts.test.ts".

@@ -1,0 +1,345 @@
+{
+  "total_count": 3,
+  "jobs": [
+    {
+      "id": 118355745416,
+      "run_id": 39339050594,
+      "workflow_name": "Security gates",
+      "head_branch": "codex/film-s1-combined-2026-10-19",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39339050594",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbjo1aiA",
+      "head_sha": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/118355745416",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39339050594/job/118355745416",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T23:02:46Z",
+      "started_at": "2026-10-19T23:02:47Z",
+      "completed_at": "2026-10-19T23:03:05Z",
+      "name": "Cloud Functions + OpenAI gateway (mocked provider)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T23:02:48Z",
+          "completed_at": "2026-10-19T23:02:49Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T23:02:49Z",
+          "completed_at": "2026-10-19T23:02:50Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T23:02:50Z",
+          "completed_at": "2026-10-19T23:02:53Z"
+        },
+        {
+          "name": "Install",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T23:02:53Z",
+          "completed_at": "2026-10-19T23:03:00Z"
+        },
+        {
+          "name": "Lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T23:03:00Z",
+          "completed_at": "2026-10-19T23:03:01Z"
+        },
+        {
+          "name": "Test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T23:03:01Z",
+          "completed_at": "2026-10-19T23:03:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T23:03:02Z",
+          "completed_at": "2026-10-19T23:03:03Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T23:03:03Z",
+          "completed_at": "2026-10-19T23:03:03Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T23:03:03Z",
+          "completed_at": "2026-10-19T23:03:03Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/118355745416",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002941,
+      "runner_name": "GitHub Actions 1000002941",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 118355745773,
+      "run_id": 39339050594,
+      "workflow_name": "Security gates",
+      "head_branch": "codex/film-s1-combined-2026-10-19",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39339050594",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbjo1b7Q",
+      "head_sha": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/118355745773",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39339050594/job/118355745773",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T23:02:46Z",
+      "started_at": "2026-10-19T23:02:48Z",
+      "completed_at": "2026-10-19T23:03:35Z",
+      "name": "Web auth tests + browser-bundle credential scan",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T23:02:49Z",
+          "completed_at": "2026-10-19T23:02:49Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T23:02:49Z",
+          "completed_at": "2026-10-19T23:02:52Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T23:02:52Z",
+          "completed_at": "2026-10-19T23:02:52Z"
+        },
+        {
+          "name": "Install (legacy peer deps; see Codex issue",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T23:02:52Z",
+          "completed_at": "2026-10-19T23:03:08Z"
+        },
+        {
+          "name": "Auth + AI-client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T23:03:08Z",
+          "completed_at": "2026-10-19T23:03:12Z"
+        },
+        {
+          "name": "Browser-bundle credential scan",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T23:03:12Z",
+          "completed_at": "2026-10-19T23:03:30Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-19T23:03:30Z",
+          "completed_at": "2026-10-19T23:03:33Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-19T23:03:33Z",
+          "completed_at": "2026-10-19T23:03:33Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-19T23:03:33Z",
+          "completed_at": "2026-10-19T23:03:33Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/118355745773",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002942,
+      "runner_name": "GitHub Actions 1000002942",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 118355745802,
+      "run_id": 39339050594,
+      "workflow_name": "Security gates",
+      "head_branch": "codex/film-s1-combined-2026-10-19",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39339050594",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbjo1cCg",
+      "head_sha": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/118355745802",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39339050594/job/118355745802",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T23:02:46Z",
+      "started_at": "2026-10-19T23:02:48Z",
+      "completed_at": "2026-10-19T23:04:08Z",
+      "name": "Firestore & Storage rules (emulator, demo project)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T23:02:48Z",
+          "completed_at": "2026-10-19T23:02:49Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T23:02:49Z",
+          "completed_at": "2026-10-19T23:02:50Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T23:02:50Z",
+          "completed_at": "2026-10-19T23:02:53Z"
+        },
+        {
+          "name": "Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T23:02:53Z",
+          "completed_at": "2026-10-19T23:02:53Z"
+        },
+        {
+          "name": "Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T23:02:53Z",
+          "completed_at": "2026-10-19T23:02:54Z"
+        },
+        {
+          "name": "Install test dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T23:02:54Z",
+          "completed_at": "2026-10-19T23:03:07Z"
+        },
+        {
+          "name": "Run rules tests in the emulator",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T23:03:07Z",
+          "completed_at": "2026-10-19T23:03:29Z"
+        },
+        {
+          "name": "Install functions dependencies (film emulator tests)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T23:03:29Z",
+          "completed_at": "2026-10-19T23:03:34Z"
+        },
+        {
+          "name": "Run film handler tests in the emulator",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-19T23:03:34Z",
+          "completed_at": "2026-10-19T23:04:00Z"
+        },
+        {
+          "name": "Post Run actions/cache@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T23:04:00Z",
+          "completed_at": "2026-10-19T23:04:04Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T23:04:04Z",
+          "completed_at": "2026-10-19T23:04:04Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T23:04:04Z",
+          "completed_at": "2026-10-19T23:04:07Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-19T23:04:07Z",
+          "completed_at": "2026-10-19T23:04:07Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-19T23:04:07Z",
+          "completed_at": "2026-10-19T23:04:07Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/118355745802",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002943,
+      "runner_name": "GitHub Actions 1000002943",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

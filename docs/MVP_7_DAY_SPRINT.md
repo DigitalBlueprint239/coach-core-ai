@@ -169,3 +169,8 @@ No aggregate enforcement implementation, merge/deployment or activation; MVP NO-
 ## 2026-10-19 — isolated combined closure candidate starts
 
 Codex combines accepted PR76 61448f0 +PR78 4f6b901 +PR77 bb157ba on a dedicated branch, preserving originals. Exact integration starting base4f6b901; isolated PR review target frozenefc9116; workflow/package unions retained, only additional PR target/static assertion. Candidate creation/validation protocol, owners, enforcement/release gaps and Kev audit boundary: docs/COMBINED_CLOSURE_CANDIDATE_2026-10-19.md. Full exact-candidate PR-event acceptance/evidence and independent review pending. No merge/deploy/production/protection/recovery/AI changes; MVP NO-GO.
+
+
+## 2026-10-19 — FILM-S1 isolated combined delivery
+
+Backend9912f85 andclient29dfce9 received independentboundedPASS; clientP1/P2resolved with actual146CI/exits/ZIPverification. Combinedsource49bd3f3f1153d9d5d2637a39897b7c91be08b9fc,base9912f85,draftPR82,testedPRmerge8368e01. SecurityCI39339050594207/68/36andweb24+canarypass; clientCI39339050996146/0/0. Local207/146+lint/schema/types/guard andfilm36/150emissionparitypass; localrules65/3twiceOPEN,notmaskedbyCI. docs/film/FILM_S1_COMBINED_HANDOFF.md namesnextindependentreviewer/limitations. SourcePR79andPR80/81unmergedunchangedbycombination. TestonlyD3/D7/defaultOFF/predeployguardpreserved; no decoder/playback/UI/AI/deploy/liveFirebase/spending/activation; MVPNOGO.

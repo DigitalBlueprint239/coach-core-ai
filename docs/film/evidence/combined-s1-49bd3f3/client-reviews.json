@@ -1,0 +1,82 @@
+[
+  {
+    "id": 5578562458,
+    "node_id": "PRR_kwDOPLcews8AAAABTIIbmg",
+    "user": {
+      "login": "DigitalBlueprint239",
+      "id": 206572958,
+      "node_id": "U_kgDODFANng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/206572958?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/DigitalBlueprint239",
+      "html_url": "https://github.com/DigitalBlueprint239",
+      "followers_url": "https://api.github.com/users/DigitalBlueprint239/followers",
+      "following_url": "https://api.github.com/users/DigitalBlueprint239/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DigitalBlueprint239/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/DigitalBlueprint239/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DigitalBlueprint239/subscriptions",
+      "organizations_url": "https://api.github.com/users/DigitalBlueprint239/orgs",
+      "repos_url": "https://api.github.com/users/DigitalBlueprint239/repos",
+      "events_url": "https://api.github.com/users/DigitalBlueprint239/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/DigitalBlueprint239/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "## PR80 independent review (Claude, review-only) \u2014 head `5e0bc7726f3e2ef33120bb4ccac5a43220187fda`\n\n**Bounded scope:** client contract mirror + FS-26 evidence only. Not backend acceptance, not film acceptance, not a merge recommendation. Contract r3 `8f77239` agreement is preserved; nothing here changes the contract, fixtures or policy. Nothing approved or enabled. MVP NO-GO.\n\n### Verified\n- **Diff boundaries:** base `codex/film-s1-contract-r3-base` = `8f7723952bdf38c18d12d8f2611e87830b658467` (contract r3 exactly); 14 files, +1172/\u22120; only `src/features/film-analyzer/contracts.ts`, its `__tests__/contracts.test.ts`, `docs/film/**` (handoff, owner sheet, evidence logs) and two one-line notes in `MASTER_TRACKER.md` / `docs/COACH_CORE_SHARED_CONTEXT.md`. No change to `functions/`, rules, fixtures, app wiring, e2e or PR79. The two commits after the evidence SHA `4303e7e` are docs-only (`git diff --stat 4303e7e 5e0bc772 -- src functions tests` is empty).\n- **Independent re-run, this container (Node v22.22.0, react-scripts):** `CI=true npx react-scripts test --watchAll=false src/features/film-analyzer` \u2192 **146 passed / 0 failed / 0 skipped**, 1 suite; `tsc --noEmit` exit 0. Matches Codex's `summary.json` (146/0/0, tsc 0).\n- **Constant parity, checked programmatically against the server `contract.js` at the PR head:** `ACTION_NAMES`, `FILM_STATUSES`, `SLOT_HOLDING_STATUSES`, `TERMINAL_STATUSES`, `TRANSITIONS`, `REJECTION_REASONS`, `FILM_TIMESTAMP_FIELDS`, and every `ERROR_REASONS[code]` list are identical to the server's (r3 has no client-only reason; `transport` is gone). File-name rule matches r3 C4: NFC + trim, 1\u2013120 **UTF-16 code units**, no C0/C1 controls, stored names must already be canonical.\n- **Design matches the agreed C1\u2013C3 semantics:** resolved-but-malformed responses \u2192 `protocol / response-invalid`, non-retryable; thrown SDK errors \u2192 sanitized `sdk/<category>`, retry-eligible only for `unavailable` / `deadline-exceeded`; unknown codes fail closed as `unknown`; no retry executor; a receipt replay is never upload permission (`X11` fixture). The parity oracle requires the server zod schemas at test time only; the browser module imports nothing from `functions/`.\n\n### Findings\n**P1 \u2014 MEDIUM, test reproducibility / CI coverage.** `contracts.test.ts` requires `functions/src/film/contract.js`, which requires `zod` from `functions/node_modules`; the root app has no `zod`. On a clean checkout without `npm ci --prefix functions`, the suite fails to load (`Cannot find module 'zod' from 'functions/src/film/contract.js'`; reproduced here by hiding `functions/node_modules`: 1 suite failed, 0 tests run). The `Security gates` web job runs only three named suites, so this suite is **not executed by any CI job** today; the 146/146 figure rests on local runs. Suggested: add the suite to the web job after an `npm ci --prefix functions` step (or install `zod` at the root as a dev dependency), and state the prerequisite in `FILM_S1_CLIENT_HANDOFF.md`.\n\n**P2 \u2014 LOW, evidence hygiene.** `docs/film/evidence/client-s1/r3-typescript.log` is empty (its listed hash `e3b0c442\u2026` is the SHA-256 of empty input); the tsc exit code lives only in `summary.json`. Capture `tsc --noEmit; echo exit=$?` so the artifact carries the result.\n\n**P3 \u2014 INFO, for the later UI slice (no change requested).** While the backend film switch is off, the server throws a sanitized `internal`, which this mirror classifies as `sdk/internal`, non-retryable. The UI copy for that category must read as \"film upload isn't available yet\", not as a fault.\n\n**P4 \u2014 INFO.** `parseFilmState` enforces cross-field timing invariants (e.g. `validating`/`rejected` \u2192 `statusChangedAt < reservationExpiresAt`; `abandoned` \u2192 `abandonedAt === statusChangedAt`). These match the server handlers at `09fad91`+ as read; they are stricter than the server zod schema, so any future server change to timing semantics must be mirrored here or the client will classify valid responses as protocol failures.\n\n### Verdict (bounded)\n**PASS for contract-mirror parity at r3 `8f77239`** on the evidence above, with P1 to be fixed before this suite is cited as CI-backed evidence. No acceptance claim beyond FS-26 parity; backend acceptance is separate and pending the lead session's exact-SHA handoff.\n\n\n---\n_Generated by [Claude Code](https://claude.ai/code)_",
+    "state": "COMMENTED",
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/80#pullrequestreview-5578562458",
+    "pull_request_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/pulls/80",
+    "author_association": "OWNER",
+    "_links": {
+      "html": {
+        "href": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/80#pullrequestreview-5578562458"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/pulls/80"
+      }
+    },
+    "submitted_at": "2026-10-19T22:32:52Z",
+    "commit_id": "5e0bc7726f3e2ef33120bb4ccac5a43220187fda"
+  },
+  {
+    "id": 5578760978,
+    "node_id": "PRR_kwDOPLcews8AAAABTIUjEg",
+    "user": {
+      "login": "DigitalBlueprint239",
+      "id": 206572958,
+      "node_id": "U_kgDODFANng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/206572958?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/DigitalBlueprint239",
+      "html_url": "https://github.com/DigitalBlueprint239",
+      "followers_url": "https://api.github.com/users/DigitalBlueprint239/followers",
+      "following_url": "https://api.github.com/users/DigitalBlueprint239/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DigitalBlueprint239/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/DigitalBlueprint239/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DigitalBlueprint239/subscriptions",
+      "organizations_url": "https://api.github.com/users/DigitalBlueprint239/orgs",
+      "repos_url": "https://api.github.com/users/DigitalBlueprint239/repos",
+      "events_url": "https://api.github.com/users/DigitalBlueprint239/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/DigitalBlueprint239/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "## PR80 follow-up delta review at `29dfce93f29b698cb6d199d38e62f47626f57ffc` (Claude, review-only)\n\nBounded to the P1/P2 fixes from [review 5578562458](https://github.com/DigitalBlueprint239/coach-core-ai/pull/80#pullrequestreview-5578562458). Not acceptance of any combined candidate; the integration plan is noted, not approved by me. Nothing enabled or deployed. MVP NO-GO.\n\n**Delta verified (`git diff --stat 5e0bc77 29dfce9`):** 6 files, +333/\u22121 \u2014 the new workflow `.github/workflows/film-client-contract.yml`, docs (handoff, integration plan), evidence logs and `summary.json`. No change to `contracts.ts`, its test, fixtures, `functions/`, rules or the backend-owned `security-rules.yml`.\n\n**P1 \u2014 RESOLVED.** The new workflow is bounded: `permissions: contents: read`, no secrets, no emulator, no build/deploy, path-filtered `pull_request` + push on the client branch + dispatch, 15-minute timeout, `npm ci` for root and `functions` (the test-only zod oracle), FS-26 run with the real process exit retained (`PIPESTATUS`), `tsc --noEmit` with explicit exit, evidence uploaded `if: always()`. `actionlint` clean here. Both runs on the exact head succeeded with every step green: [push 39338468243](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39338468243) (artifact `film-client-contract-29dfce9\u2026`, 14-day retention) and [pull_request 39338472033](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39338472033). Info: on `pull_request` events `github.sha` is the merge commit (`5be29c4\u2026`), so that artifact name does not carry the head SHA; the push run's does. Consider `github.event.pull_request.head.sha || github.sha` in the artifact name if head-pinned naming matters.\n\n**P2 \u2014 RESOLVED.** `review-fix-typescript.log` records `exit=0`; the historical empty log is retained unaltered.\n\n**Independent re-run at `29dfce9` (this container):** FS-26 **146 passed / 0 failed / 0 skipped**; `tsc --noEmit` exit 0 \u2014 same as before the delta, as expected (no source change).\n\n**Not verified by me:** artifact contents (blob storage is unreachable from this container); the CI step conclusions and artifact listing above are from the GitHub API.\n\nBounded verdict: **PASS for the PR80 delta**; the FS-26 suite is now CI-backed on its own workflow. Backend verdict for `9912f85` is separate ([PR81 review](https://github.com/DigitalBlueprint239/coach-core-ai/pull/81#pullrequestreview-5578729431), PASS bounded, R1 deviation adjudicated there as accepted).\n\n\n---\n_Generated by [Claude Code](https://claude.ai/code)_",
+    "state": "COMMENTED",
+    "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/80#pullrequestreview-5578760978",
+    "pull_request_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/pulls/80",
+    "author_association": "OWNER",
+    "_links": {
+      "html": {
+        "href": "https://github.com/DigitalBlueprint239/coach-core-ai/pull/80#pullrequestreview-5578760978"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/pulls/80"
+      }
+    },
+    "submitted_at": "2026-10-19T22:59:41Z",
+    "commit_id": "29dfce93f29b698cb6d199d38e62f47626f57ffc"
+  }
+]

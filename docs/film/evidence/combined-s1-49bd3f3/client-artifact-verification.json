@@ -1,0 +1,12 @@
+{
+  "id": 12227158935,
+  "digest": "sha256:11461b6996b6138eb2278d98a98fa765b24cb27953f5f644b47d287ec8da6c1d",
+  "verified": true,
+  "tests": 146,
+  "failed": 0,
+  "skipped": 0,
+  "fs26Exit": 0,
+  "typescriptExit": 0,
+  "sourceSha": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+  "testedMerge": "8368e01c9af1c9dcfb76d01b5367ed8f0cd1df6e"
+}

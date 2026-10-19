@@ -1,0 +1,10 @@
+
+=================== DEPLOY BLOCKED: FILM TERMS PENDING ===================
+Pending founder terms: D3, D7
+functions/src/film/limits.js still carries PENDING_D3 / PENDING_D7 test
+placeholders. They are NOT approved limits or approved rights wording.
+Attach Coach Drew's settled D1-D9 record, replace the placeholders, mark
+the terms SETTLED in functions/src/film/terms.js and rerun the checks in
+docs/film/FILM_S1_BACKEND.md before any deploy.
+==========================================================================
+exit=0

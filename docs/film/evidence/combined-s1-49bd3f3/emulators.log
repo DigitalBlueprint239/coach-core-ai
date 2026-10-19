@@ -1,0 +1,303 @@
+i  emulators: Starting emulators: firestore, storage
+i  emulators: Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: downloading cloud-firestore-emulator-v1.22.0.jar...
+
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  storage: downloading cloud-storage-rules-runtime-v1.1.3.jar...
+
+i  Running script: npm --prefix tests/rules run test:unit && NODE_OPTIONS="--require /workspace/scratch/film-s1-combined/emitted-client-parity.cjs" npm --prefix functions run test:film-emulator
+
+> test:unit
+> ANNOTATE_LABEL='Rules emulator' node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout firestore.rules.test.mjs storage.rules.test.mjs persistence.rules.test.mjs film.rules.test.mjs
+
+[2026-10-19T23:03:07.893Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1096bdcd error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L211, false for 'update' @ L216
+[2026-10-19T23:03:07.913Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1096bdce error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L211, false for 'update' @ L216
+[2026-10-19T23:03:07.925Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1096bdcf error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L211, false for 'update' @ L216
+[2026-10-19T23:03:07.939Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1096bdd0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L211, false for 'delete' @ L216
+[2026-10-19T23:03:07.958Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1096bdd1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L211, false for 'create' @ L216, false for 'update' @ L211, false for 'update' @ L216
+▶ FS-12..14 film documents (Firestore)
+  ✔ FS-12 no client create/update/delete of film docs, even by the owner (559.156125ms)
+[2026-10-19T23:03:08.267Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1096bdd6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+  ✔ FS-13 foreign team film docs unreadable; ledger and operations never readable (328.567947ms)
+  ✔ FS-14 owner can get and list own team films; ineligible callers cannot (287.413523ms)
+✔ FS-12..14 film documents (Firestore) (2247.589071ms)
+▶ FS-15..18 quarantine uploads (Storage)
+  ✖ FS-15 creator uploads the exact declared size (189.442812ms)
+  ✔ FS-16 wrong size or wrong content type denied (108.050823ms)
+  ✔ FS-17 wrong path, other user, ineligible tokens, foreign team denied (208.560784ms)
+  ✔ FS-18 quarantine: no client read (80.962979ms)
+  ✔ FS-18 quarantine: no client delete (71.609169ms)
+  ✔ FS-18 quarantine: no client metadata update (81.324309ms)
+  ✔ FS-18 films: no client read (66.839443ms)
+  ✔ FS-18 films: no client delete (63.112052ms)
+  ✔ FS-18 films: no client metadata update (68.37848ms)
+  ✔ FS-18 frames: no client read (77.84507ms)
+  ✔ FS-18 frames: no client delete (61.954959ms)
+  ✔ FS-18 frames: no client metadata update (58.751663ms)
+  ✔ FS-18 quarantine: an existing object cannot be overwritten (create-only) (69.135027ms)
+✖ FS-15..18 quarantine uploads (Storage) (1207.184752ms)
+▶ FS-06 rules side / R8: byte limit at the Storage boundary
+  ✖ upload of exactly maxBytes is allowed (1464.373823ms)
+  ✔ upload of maxBytes + 1 is denied even when the film doc declares it (1384.103354ms)
+✖ FS-06 rules side / R8: byte limit at the Storage boundary (2848.884136ms)
+▶ R7 film document identity is checked
+  ✔ a film doc whose teamId/filmId fields do not match the path is not a live reservation (90.238114ms)
+✔ R7 film document identity is checked (90.408772ms)
+▶ FS-23 rules side of expiry and abandonment
+  ✔ expired or abandoned reservation: upload denied (68.089293ms)
+✔ FS-23 rules side of expiry and abandonment (68.250952ms)
+[2026-10-19T23:03:13.343Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5afe error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L96, false for 'create' @ L216, false for 'update' @ L97, false for 'update' @ L216
+▶ T1 unauthenticated
+  ✔ cannot read or write any collection (207.699626ms)
+✔ T1 unauthenticated (338.179894ms)
+[2026-10-19T23:03:13.431Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b01 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L96, false for 'create' @ L216, false for 'update' @ L97, false for 'update' @ L216
+[2026-10-19T23:03:13.439Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b02 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216
+▶ T2 anonymous
+  ✔ is denied everywhere, even when its token carries beta/verified claims (95.377732ms)
+✔ T2 anonymous (95.783675ms)
+[2026-10-19T23:03:13.511Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b04 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+Property beta is undefined on object. for 'create' @ L96, false for 'create' @ L216, Property beta is undefined on object. for 'update' @ L97, false for 'update' @ L216, Property beta is undefined on object. for 'create' @ L96, false for 'create' @ L216
+▶ T3 signed in but not beta-eligible
+  ✔ denies a verified user without the beta claim (80.402263ms)
+[2026-10-19T23:03:13.609Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b07 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L96, false for 'create' @ L216, false for 'update' @ L97, false for 'update' @ L216
+  ✔ denies a beta user whose email is not verified (97.879222ms)
+✔ T3 signed in but not beta-eligible (178.721023ms)
+▶ T4 owner can work inside their own team
+  ✔ creates, reads, lists and updates own team (136.236304ms)
+[2026-10-19T23:03:13.813Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b0d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L104, false for 'delete' @ L216
+  ✔ cannot delete a team from the client (prevents orphaned-data takeover) (57.846955ms)
+  ✔ creates, reads, lists, updates and deletes own plays (140.07949ms)
+  ✔ creates, reads, lists, updates and deletes own practice plans (140.700142ms)
+✔ T4 owner can work inside their own team (475.617372ms)
+[2026-10-19T23:03:14.176Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b16 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L97:24 for 'update' @ L97, false for 'update' @ L216, false for 'update' @ L97, false for 'update' @ L216
+[2026-10-19T23:03:14.183Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b17 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L104, false for 'delete' @ L216
+▶ T5 cross-tenant access is denied
+  ✔ bob cannot read, list, update or delete alice's team (88.327281ms)
+[2026-10-19T23:03:14.259Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b1a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.267Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b1b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L151:24 for 'delete' @ L151, false for 'delete' @ L216, false for 'delete' @ L151, false for 'delete' @ L216
+[2026-10-19T23:03:14.292Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b1c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L194:24 for 'update' @ L194, false for 'update' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:14.300Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b1d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L201:24 for 'delete' @ L201, false for 'delete' @ L216, false for 'delete' @ L201, false for 'delete' @ L216
+  ✔ bob cannot read, list, update or delete alice's plays and plans (117.168234ms)
+[2026-10-19T23:03:14.358Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b1f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L139:24 for 'create' @ L139, false for 'create' @ L216, evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'create' @ L139, false for 'create' @ L216
+[2026-10-19T23:03:14.369Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b20 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L189:24 for 'create' @ L189, false for 'create' @ L216, evaluation error at L194:24 for 'update' @ L194, false for 'update' @ L216, false for 'create' @ L189, false for 'create' @ L216
+  ✔ bob cannot create content inside alice's team (69.244439ms)
+[2026-10-19T23:03:14.426Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b22 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L97:24 for 'update' @ L97, false for 'update' @ L216, false for 'update' @ L97, false for 'update' @ L216
+  ✔ bob cannot join alice's team by editing membership (56.639949ms)
+✔ T5 cross-tenant access is denied (331.727059ms)
+[2026-10-19T23:03:14.491Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b24 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.501Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b25 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L194:24 for 'update' @ L194, false for 'update' @ L216, false for 'update' @ L194, false for 'update' @ L216
+▶ T6 tenant identifier is immutable
+  ✔ owner cannot move a play or plan into another team (74.531746ms)
+[2026-10-19T23:03:14.565Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b27 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L139:24 for 'create' @ L139, false for 'create' @ L216, evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'create' @ L139, false for 'create' @ L216
+  ✔ owner cannot create into a team id that does not exist (64.294499ms)
+✔ T6 tenant identifier is immutable (139.219643ms)
+[2026-10-19T23:03:14.620Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b29 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.629Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b2a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L194:24 for 'update' @ L194, false for 'update' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:14.637Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b2b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L97:24 for 'update' @ L97, false for 'update' @ L216, false for 'update' @ L97, false for 'update' @ L216
+[2026-10-19T23:03:14.652Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b2c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L97:24 for 'update' @ L97, false for 'update' @ L216, false for 'update' @ L97, false for 'update' @ L216
+▶ T7 ownership fields are immutable / cannot be forged
+  ✔ cannot change createdBy or ownerId (86.826215ms)
+[2026-10-19T23:03:14.714Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b2e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L96, false for 'create' @ L216, evaluation error at L97:24 for 'update' @ L97, false for 'update' @ L216, false for 'create' @ L96, false for 'create' @ L216
+[2026-10-19T23:03:14.724Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b2f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'create' @ L139, false for 'create' @ L216
+  ✔ cannot create a team owned by someone else, or a play attributed to someone else (72.016669ms)
+✔ T7 ownership fields are immutable / cannot be forged (159.167874ms)
+▶ T8 unscoped queries are denied
+  ✔ cannot list plays/plans/teams without a tenant filter (57.291257ms)
+✔ T8 unscoped queries are denied (57.452787ms)
+[2026-10-19T23:03:14.835Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b33 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.842Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b34 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.850Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b35 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.862Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b36 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:14.870Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b37 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:14.879Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b38 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:14.898Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b39 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:14.904Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b3a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L96, false for 'create' @ L216, false for 'update' @ L97, false for 'update' @ L216
+[2026-10-19T23:03:14.913Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b3b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+▶ T11 schema validation
+  ✔ rejects unknown fields, oversized strings, bad enums and wrong types (130.957251ms)
+✔ T11 schema validation (131.197939ms)
+[2026-10-19T23:03:14.974Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b3e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-19T23:03:14.984Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b3f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-19T23:03:14.993Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b40 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-19T23:03:15.001Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b41 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-19T23:03:15.013Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b42 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-19T23:03:15.021Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x35fc5b43 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+▶ T12 server-only collections
+  ✔ no client may read or write them (111.291923ms)
+✔ T12 server-only collections (111.489189ms)
+▶ Playbook plays (account-scoped cloud persistence)
+  ✔ owner saves a main-app play with phase/type/localId at revision 1 (234.680031ms)
+[2026-10-19T23:03:15.676Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67c6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:15.712Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67c7 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:15.739Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67c8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'create' @ L139, false for 'create' @ L216
+  ✔ rejects an unknown phase, an oversized type and a create that starts above revision 1 (165.334915ms)
+  ✔ save/reopen fidelity: what the owner writes is exactly what the owner reads back (92.440638ms)
+✔ Playbook plays (account-scoped cloud persistence) (600.831488ms)
+▶ Concurrent-edit protection (optimistic revision)
+  ✔ accepts exactly revision + 1 (76.991128ms)
+[2026-10-19T23:03:16.005Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67d0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+  ✔ denies a stale second writer (both editors started from revision 1) (95.357802ms)
+[2026-10-19T23:03:16.067Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67d2 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:16.076Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67d3 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:16.085Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67d4 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+  ✔ denies skipping ahead, going backwards, or omitting the revision (79.998995ms)
+[2026-10-19T23:03:16.146Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67d6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+  ✔ legacy documents without a revision can be edited, and can opt in at revision 1 (60.748215ms)
+[2026-10-19T23:03:16.237Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67d9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L194:24 for 'update' @ L194, false for 'update' @ L216, false for 'update' @ L194, false for 'update' @ L216
+  ✔ applies the same protection to practice plans (90.828701ms)
+✔ Concurrent-edit protection (optimistic revision) (404.674427ms)
+▶ Editable AI practice plans
+  ✔ owner saves an AI plan with safety considerations and the gateway request id (56.476936ms)
+  ✔ stores the lossless coach-ai.v1 plan fields (age group, skill, contact level, hydration breaks) (56.119013ms)
+[2026-10-19T23:03:16.412Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67df error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.421Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.429Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.436Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e2 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+  ✔ rejects an unknown age group, skill or contact level and oversized hydration lists (86.623936ms)
+[2026-10-19T23:03:16.486Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e4 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.494Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e5 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.502Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+  ✔ rejects oversized safety lists, bad request ids and unknown source values (65.29095ms)
+✔ Editable AI practice plans (265.063253ms)
+[2026-10-19T23:03:16.559Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.575Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67e9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L189, false for 'create' @ L216, false for 'update' @ L194, false for 'update' @ L216
+▶ Plan bounds equal the gateway output bounds (no truncation on save)
+  ✔ accepts a 200-character plan name and 5000-character notes; rejects 201 and 5001 (72.335388ms)
+[2026-10-19T23:03:16.627Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67eb error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L139, false for 'create' @ L216, false for 'update' @ L144, false for 'update' @ L216
+  ✔ play names stay capped at 120 characters (52.54793ms)
+✔ Plan bounds equal the gateway output bounds (no truncation on save) (125.146236ms)
+▶ Create-only checks: reading a document that does not exist yet (D10 import)
+  ✔ a beta coach may read a play or plan id that does not exist (result: not found) (53.054287ms)
+  ✔ non-beta and signed-out users still cannot read even a missing id (68.551223ms)
+  ✔ an existing play of another team stays unreadable (no change to tenancy) (68.263185ms)
+✔ Create-only checks: reading a document that does not exist yet (D10 import) (190.149053ms)
+[2026-10-19T23:03:16.880Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67f6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'update' @ L144, false for 'update' @ L216
+[2026-10-19T23:03:16.890Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67f7 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L194:24 for 'update' @ L194, false for 'update' @ L216, false for 'update' @ L194, false for 'update' @ L216
+[2026-10-19T23:03:16.900Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x120f67f8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L139:24 for 'create' @ L139, false for 'create' @ L216, evaluation error at L144:24 for 'update' @ L144, false for 'update' @ L216, false for 'create' @ L139, false for 'create' @ L216
+▶ Cross-team denial still holds with the new fields
+  ✔ coach B cannot read, edit (even with the right next revision) or create into team A (82.112619ms)
+✔ Cross-team denial still holds with the new fields (82.280236ms)
+▶ Storage: identity gates
+  ✔ unauthenticated users cannot read or write (18.57713ms)
+  ✔ anonymous users cannot read or write, even with forged claims (22.404013ms)
+  ✔ team owner without the beta claim is denied (27.034708ms)
+✔ Storage: identity gates (368.40596ms)
+▶ Storage: owner access (T4)
+  ✖ owner can upload, read and delete files in their own team (14.264713ms)
+✖ Storage: owner access (T4) (15.125541ms)
+▶ Storage: cross-team denial (T9)
+  ✔ bob cannot read alice's team files (11.368699ms)
+  ✔ bob cannot write or delete in alice's team (33.17744ms)
+  ✔ nobody can use a team id that does not exist (11.257704ms)
+✔ Storage: cross-team denial (T9) (56.298213ms)
+▶ Storage: upload validation (T10)
+  ✔ rejects disallowed content types (39.082144ms)
+  ✔ rejects uploads over 5 MB (73.436857ms)
+  ✔ rejects empty uploads (21.591313ms)
+✔ Storage: upload validation (T10) (134.572009ms)
+▶ Storage: legacy paths are closed
+  ✔ denies read and write on old practice-plan, play-media, team-document and profile paths (33.09882ms)
+✔ Storage: legacy paths are closed (33.294709ms)
+ℹ tests 68
+ℹ suites 26
+ℹ pass 65
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11595.87519
+
+✖ failing tests:
+
+test at film.rules.test.mjs:88:3
+✖ FS-15 creator uploads the exact declared size (189.442812ms)
+  [Error [FirebaseError]: Firebase Storage: User does not have permission to access 'quarantine/team-alice/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4'. (storage/unauthorized)] { code: 'storage/unauthorized', customData: { serverResponse: '' }, status_: 403, _baseMessage: "Firebase Storage: User does not have permission to access 'quarantine/team-alice/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4'. (storage/unauthorized)" }
+
+test at film.rules.test.mjs:136:3
+✖ upload of exactly maxBytes is allowed (1464.373823ms)
+  [Error [FirebaseError]: Firebase Storage: User does not have permission to access 'quarantine/team-alice/7e5c6d8f-9a0b-4c1d-8e2f-3a4b5c6d7e8f/source.mp4'. (storage/unauthorized)] { code: 'storage/unauthorized', customData: { serverResponse: '' }, status_: 403, _baseMessage: "Firebase Storage: User does not have permission to access 'quarantine/team-alice/7e5c6d8f-9a0b-4c1d-8e2f-3a4b5c6d7e8f/source.mp4'. (storage/unauthorized)" }
+
+test at storage.rules.test.mjs:48:3
+✖ owner can upload, read and delete files in their own team (14.264713ms)
+  [Error [FirebaseError]: Firebase Storage: User does not have permission to access 'teams/team-alice/files/diagram.png'. (storage/unauthorized)] { code: 'storage/unauthorized', customData: { serverResponse: '' }, status_: 403, _baseMessage: "Firebase Storage: User does not have permission to access 'teams/team-alice/files/diagram.png'. (storage/unauthorized)" }
+::error title=Rules emulator FAIL: FS-15 creator uploads the exact declared size::Firebase Storage: User does not have permission to access 'quarantine/team-alice/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4'. (storage/unauthorized)
+::error title=Rules emulator FAIL: upload of exactly maxBytes is allowed::Firebase Storage: User does not have permission to access 'quarantine/team-alice/7e5c6d8f-9a0b-4c1d-8e2f-3a4b5c6d7e8f/source.mp4'. (storage/unauthorized)
+::error title=Rules emulator FAIL: owner can upload, read and delete files in their own team::Firebase Storage: User does not have permission to access 'teams/team-alice/files/diagram.png'. (storage/unauthorized)
+::error title=Rules emulator: 65 passed / 3 failed::PASS FS-12 no client create/update/delete of film docs, even by the owner%0APASS FS-13 foreign team film docs unreadable; ledger and operations never readable%0APASS FS-14 owner can get and list own team films; ineligible callers cannot%0AFAIL FS-15 creator uploads the exact declared size -- Firebase Storage: User does not have permission to access 'quarantine/team-alice/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4'. (storage/unauthorized)%0APASS FS-16 wrong size or wrong content type denied%0APASS FS-17 wrong path, other user, ineligible tokens, foreign team denied%0APASS FS-18 quarantine: no client read%0APASS FS-18 quarantine: no client delete%0APASS FS-18 quarantine: no client metadata update%0APASS FS-18 films: no client read%0APASS FS-18 films: no client delete%0APASS FS-18 films: no client metadata update%0APASS FS-18 frames: no client read%0APASS FS-18 frames: no client delete%0APASS FS-18 frames: no client metadata update%0APASS FS-18 quarantine: an existing object cannot be overwritten (create-only)%0AFAIL upload of exactly maxBytes is allowed -- Firebase Storage: User does not have permission to access 'quarantine/team-alice/7e5c6d8f-9a0b-4c1d-8e2f-3a4b5c6d7e8f/source.mp4'. (storage/unauthorized)%0APASS upload of maxBytes + 1 is denied even when the film doc declares it%0APASS a film doc whose teamId/filmId fields do not match the path is not a live reservation%0APASS expired or abandoned reservation: upload denied%0APASS cannot read or write any collection%0APASS is denied everywhere, even when its token carries beta/verified claims%0APASS denies a verified user without the beta claim%0APASS denies a beta user whose email is not verified%0APASS creates, reads, lists and updates own team%0APASS cannot delete a team from the client (prevents orphaned-data takeover)%0APASS creates, reads, lists, updates and deletes own plays%0APASS creates, reads, lists, updates and deletes own practice plans%0APASS bob cannot read, list, update or delete alice's team%0APASS bob cannot read, list, update or delete alice's plays and plans%0APASS bob cannot create content inside alice's team%0APASS bob cannot join alice's team by editing membership%0APASS owner cannot move a play or plan into another team%0APASS owner cannot create into a team id that does not exist%0APASS cannot change createdBy or ownerId%0APASS cannot create a team owned by someone else, or a play attributed to someone else%0APASS cannot list plays/plans/teams without a tenant filter%0APASS rejects unknown fields, oversized strings, bad enums and wrong types%0APASS no client may read or write them%0APASS owner saves a main-app play with phase/type/localId at revision 1%0APASS rejects an unknown phase, an oversized type and a create that starts above revision 1%0APASS save/reopen fidelity: what the owner writes is exactly what the owner reads back%0APASS accepts exactly revision + 1%0APASS denies a stale second writer (both editors started from revision 1)%0APASS denies skipping ahead, going backwards, or omitting the revision%0APASS legacy documents without a revision can be edited, and can opt in at revision 1%0APASS applies the same protection to practice plans%0APASS owner saves an AI plan with safety considerations and the gateway request id%0APASS stores the lossless coach-ai.v1 plan fields (age group, skill, contact level, hydration breaks)%0APASS rejects an unknown age group, skill or contact level and oversized hydration lists%0APASS rejects oversized safety lists, bad request ids and unknown source values%0APASS accepts a 200-character plan name and 5000-character notes; rejects 201 and 5001%0APASS play names stay capped at 120 characters%0APASS a beta coach may read a play or plan id that does not exist (result: not found)%0APASS non-beta and signed-out users still cannot read even a missing id%0APASS an existing play of another team stays unreadable (no change to tenancy)%0APASS coach B cannot read, edit (even with the right next revision) or create into team A%0APASS unauthenticated users cannot read or write%0APASS anonymous users cannot read or write, even with forged claims%0APASS team owner without the beta claim is denied%0AFAIL owner can upload, read and delete files in their own team -- Firebase Storage: User does not have permission to access 'teams/team-alice/files/diagram.png'. (storage/unauthorized)%0APASS bob cannot read alice's team files%0APASS bob cannot write or delete in alice's team%0APASS nobody can use a team id that does not exist%0APASS rejects disallowed content types%0APASS rejects uploads over 5 MB%0APASS rejects empty uploads%0APASS denies read and write on old practice-plan, play-media, team-document and profile paths
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "npm --prefix tests/rules run test:unit && NODE_OPTIONS="--require /workspace/scratch/film-s1-combined/emitted-client-parity.cjs" npm --prefix functions run test:film-emulator" exited with code 1
+exit=1

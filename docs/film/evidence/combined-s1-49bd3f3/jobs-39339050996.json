@@ -1,0 +1,121 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 118355741172,
+      "run_id": 39339050996,
+      "workflow_name": "Film client contract checks",
+      "head_branch": "codex/film-s1-combined-2026-10-19",
+      "run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/runs/39339050996",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOPLcews8AAAAbjo1J9A",
+      "head_sha": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+      "url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/actions/jobs/118355741172",
+      "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39339050996/job/118355741172",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-19T23:02:45Z",
+      "started_at": "2026-10-19T23:02:47Z",
+      "completed_at": "2026-10-19T23:03:33Z",
+      "name": "Film client contract (FS-26)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T23:02:48Z",
+          "completed_at": "2026-10-19T23:02:49Z"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T23:02:49Z",
+          "completed_at": "2026-10-19T23:02:51Z"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T23:02:51Z",
+          "completed_at": "2026-10-19T23:02:52Z"
+        },
+        {
+          "name": "Install web dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T23:02:52Z",
+          "completed_at": "2026-10-19T23:03:12Z"
+        },
+        {
+          "name": "Install functions dependencies (test-only server schema oracle)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T23:03:12Z",
+          "completed_at": "2026-10-19T23:03:17Z"
+        },
+        {
+          "name": "FS-26 client contract parity (actual process exit retained)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T23:03:17Z",
+          "completed_at": "2026-10-19T23:03:20Z"
+        },
+        {
+          "name": "TypeScript (explicit exit retained)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T23:03:20Z",
+          "completed_at": "2026-10-19T23:03:25Z"
+        },
+        {
+          "name": "Retain focused evidence (no credentials or live data)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T23:03:25Z",
+          "completed_at": "2026-10-19T23:03:26Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T23:03:26Z",
+          "completed_at": "2026-10-19T23:03:30Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T23:03:30Z",
+          "completed_at": "2026-10-19T23:03:31Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T23:03:31Z",
+          "completed_at": "2026-10-19T23:03:31Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DigitalBlueprint239/coach-core-ai/check-runs/118355741172",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000002940,
+      "runner_name": "GitHub Actions 1000002940",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

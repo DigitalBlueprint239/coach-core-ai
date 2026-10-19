@@ -1,0 +1,22 @@
+{
+  "candidate": "49bd3f3f1153d9d5d2637a39897b7c91be08b9fc",
+  "backend_base": "9912f85992b9623a6e7fd95fa42289fae7f53bf8",
+  "client": "29dfce93f29b698cb6d199d38e62f47626f57ffc",
+  "checks": {
+    "9912f85:functions": "identical",
+    "9912f85:firebase.json": "identical",
+    "9912f85:firestore.rules": "identical",
+    "9912f85:storage.rules": "identical",
+    "9912f85:tests/fixtures": "identical",
+    "9912f85:tests/rules": "identical",
+    "9912f85:.github/workflows/security-rules.yml": "identical",
+    "29dfce9:src/features/film-analyzer": "identical",
+    "29dfce9:.github/workflows/film-client-contract.yml": "identical",
+    "515dc1d:e2e": "identical",
+    "515dc1d:.github/workflows/e2e-emulator.yml": "identical",
+    "515dc1d:src/App.tsx": "identical",
+    "515dc1d:src/features/legacy-import": "identical",
+    "515dc1d:package.json": "identical",
+    "515dc1d:package-lock.json": "identical"
+  }
+}

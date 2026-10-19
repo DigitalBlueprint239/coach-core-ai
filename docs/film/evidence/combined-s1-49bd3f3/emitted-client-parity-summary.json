@@ -1,0 +1,23 @@
+{
+  "checks": 150,
+  "types": {
+    "response": 134,
+    "finalized-state": 16
+  },
+  "states": {
+    "error-response": 26,
+    "reserved": 98,
+    "abandoned": 16,
+    "rejected": 4,
+    "validating": 5,
+    "expired": 1
+  },
+  "actions": {
+    "reserveFilmUpload": 120,
+    "abandonFilmUpload": 14,
+    "finalize": 16
+  },
+  "passed": 150,
+  "failed": 0,
+  "limitation": "Verification-only preload; does not install a client adapter or UI. Real backend logic/dependencies run unchanged; TS client compiled with TypeScript solely for parser invocation."
+}

@@ -1,0 +1,82 @@
+i  emulators: Starting emulators: firestore, storage
+i  emulators: Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: NODE_OPTIONS="--require /workspace/scratch/film-s1-combined/emitted-client-parity.cjs" npm --prefix functions run test:film-emulator
+
+> test:film-emulator
+> ANNOTATE_LABEL='Film emulator' node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout test/emulator/film-s1.emulator.test.js
+
+(node:12644) MetadataLookupWarning: received unexpected error = All promises were rejected code = ECONNRESET, 403
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ FS-01..05 eligibility
+  ✔ FS-01 anonymous -> permission-denied/anonymous-not-allowed, nothing written (100.988054ms)
+  ✔ FS-01b signed out -> unauthenticated/sign-in-required, nothing written (58.226609ms)
+  ✔ FS-02 unverified -> permission-denied/email-not-verified, nothing written (50.004807ms)
+  ✔ FS-03 non-beta -> permission-denied/beta-access-required, nothing written (57.635143ms)
+  ✔ FS-04 disabled -> unauthenticated/account-disabled, nothing written (50.047265ms)
+  ✔ FS-05 non-owner denied; owner succeeds (positive anchor) (112.727371ms)
+✔ FS-01..05 eligibility (2534.228732ms)
+▶ FS-06..09 limits and rights
+  ✔ FS-06 bytes at limit accepted, limit+1 rejected (80.542461ms)
+  ✔ FS-07 wrong content type (55.2057ms)
+  ✔ FS-08 rights not acknowledged / missing (45.500458ms)
+  ✔ FS-09 unknown wording version (59.202019ms)
+✔ FS-06..09 limits and rights (240.944513ms)
+▶ FS-10 team cap
+  ✔ N succeed, N+1 refused, abandon frees a slot (494.766776ms)
+  ✔ concurrent reservations never exceed N (7612.089062ms)
+✔ FS-10 team cap (8107.155525ms)
+▶ FS-11 idempotency
+  ✔ same operationId replays verbatim; different payload conflicts (193.793101ms)
+  ✔ concurrent duplicates create one film (3473.167064ms)
+  ✔ errors are not stored: cap refusal retried after a slot frees (344.604411ms)
+✔ FS-11 idempotency (4011.957888ms)
+▶ C3 retry horizon, receipts and file names
+  ✔ replay is a receipt snapshot, not current permission (270.93347ms)
+  ✔ after the replay window the same operation is refused, never re-run (78.37082ms)
+  ✔ file name stored canonical; equivalent spellings are one operation (55.974168ms)
+✔ C3 retry horizon, receipts and file names (405.612853ms)
+▶ FS-19..22 finalize and abandon
+  ✔ FS-19 size mismatch and spoofed signature -> rejected, deleted (106.690273ms)
+  ✔ FS-19b content type mismatch -> rejected (67.507294ms)
+  ✔ FS-20 valid header -> validating, generation recorded, never ready (78.765263ms)
+  ✔ FS-21 abandon from reserved and validating; repeat is stable (168.941161ms)
+  ✔ FS-21b abandon edge cases (149.090591ms)
+  ✔ FS-22 abandon then late finalize -> deleted, stays abandoned (87.40976ms)
+  ✔ unreserved quarantine object is deleted; other prefixes ignored (60.709773ms)
+✔ FS-19..22 finalize and abandon (719.643667ms)
+▶ R1-R5 backend repairs
+  ✔ R1 switch off: callables throw sanitized internal, nothing written (27.917596ms)
+  ✔ R2 abandon from reserved never deletes an unprocessed object; its late event deletes that exact generation (62.809604ms)
+  ✔ R2 stale cleanup leaves a newer generation alone (GCS semantics) (82.697953ms)
+  ✔ emulator limitation recorded: Storage emulator ignores generations (42.175119ms)
+  ✔ R3 transient head-read error: throws, film stays reserved, object kept (82.240593ms)
+  ✔ R3 generation gone before the event: reservation untouched (62.891703ms)
+  ✔ R4 ftyp box with 16 compatible brands (80 bytes) is accepted (53.856171ms)
+  ✔ R5 orphan lapsed ledger slot is dropped; reserve still succeeds (55.502715ms)
+✔ R1-R5 backend repairs (470.635727ms)
+▶ FS-23 expiry
+  ✔ late finalize after expiry -> expired, deleted, slot released (62.913873ms)
+  ✔ lazy expiry on the next reserve frees the slot (56.278472ms)
+✔ FS-23 expiry (119.482798ms)
+▶ stored document == returned FilmState
+  ✔ doc fields match FilmState with Timestamps (44.093419ms)
+✔ stored document == returned FilmState (44.357943ms)
+ℹ tests 36
+ℹ suites 9
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17328.169775
+::notice title=Film emulator: 36 passed / 0 failed::PASS FS-01 anonymous -> permission-denied/anonymous-not-allowed, nothing written%0APASS FS-01b signed out -> unauthenticated/sign-in-required, nothing written%0APASS FS-02 unverified -> permission-denied/email-not-verified, nothing written%0APASS FS-03 non-beta -> permission-denied/beta-access-required, nothing written%0APASS FS-04 disabled -> unauthenticated/account-disabled, nothing written%0APASS FS-05 non-owner denied; owner succeeds (positive anchor)%0APASS FS-06 bytes at limit accepted, limit+1 rejected%0APASS FS-07 wrong content type%0APASS FS-08 rights not acknowledged / missing%0APASS FS-09 unknown wording version%0APASS N succeed, N+1 refused, abandon frees a slot%0APASS concurrent reservations never exceed N%0APASS same operationId replays verbatim; different payload conflicts%0APASS concurrent duplicates create one film%0APASS errors are not stored: cap refusal retried after a slot frees%0APASS replay is a receipt snapshot, not current permission%0APASS after the replay window the same operation is refused, never re-run%0APASS file name stored canonical; equivalent spellings are one operation%0APASS FS-19 size mismatch and spoofed signature -> rejected, deleted%0APASS FS-19b content type mismatch -> rejected%0APASS FS-20 valid header -> validating, generation recorded, never ready%0APASS FS-21 abandon from reserved and validating; repeat is stable%0APASS FS-21b abandon edge cases%0APASS FS-22 abandon then late finalize -> deleted, stays abandoned%0APASS unreserved quarantine object is deleted; other prefixes ignored%0APASS R1 switch off: callables throw sanitized internal, nothing written%0APASS R2 abandon from reserved never deletes an unprocessed object; its late event deletes that exact generation%0APASS R2 stale cleanup leaves a newer generation alone (GCS semantics)%0APASS emulator limitation recorded: Storage emulator ignores generations%0APASS R3 transient head-read error: throws, film stays reserved, object kept%0APASS R3 generation gone before the event: reservation untouched%0APASS R4 ftyp box with 16 compatible brands (80 bytes) is accepted%0APASS R5 orphan lapsed ledger slot is dropped; reserve still succeeds%0APASS late finalize after expiry -> expired, deleted, slot released%0APASS lazy expiry on the next reserve frees the slot%0APASS doc fields match FilmState with Timestamps
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+exit=0

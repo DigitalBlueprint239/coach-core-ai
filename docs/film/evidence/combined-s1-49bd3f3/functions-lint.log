@@ -1,0 +1,4 @@
+
+> lint
+> eslint index.js src test scripts
+
