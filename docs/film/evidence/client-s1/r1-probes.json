@@ -1,0 +1,38 @@
+{
+  "pin": "f641d3d143ea9bfb8a792960519e157ed331ffe6",
+  "zod": "4.6.7",
+  "probes": [
+    {
+      "name": "reserve top-level filmId differs from film.filmId",
+      "accepted": true
+    },
+    {
+      "name": "reserve uploadPath is foreign",
+      "accepted": true
+    },
+    {
+      "name": "reserve expiresAt differs from reservation",
+      "accepted": true
+    },
+    {
+      "name": "reserved has abandonedAt",
+      "accepted": true
+    },
+    {
+      "name": "rejected has null rejectionReason",
+      "accepted": true
+    },
+    {
+      "name": "abandoned has null abandonedAt",
+      "accepted": true
+    },
+    {
+      "name": "validating lacks generation",
+      "accepted": true
+    },
+    {
+      "name": "reserved has backwards timestamps",
+      "accepted": true
+    }
+  ]
+}
