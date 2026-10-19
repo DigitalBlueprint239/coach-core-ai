@@ -1,0 +1,22 @@
+{
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "ci_node_major": 22,
+  "gate_selfchecks": {
+    "tests": 14,
+    "passed": 14,
+    "skipped": 0
+  },
+  "reporter_selfchecks": {
+    "tests": 10,
+    "passed": 10,
+    "skipped": 0
+  },
+  "evidence_selfchecks": {
+    "tests": 19,
+    "passed": 19,
+    "skipped": 0
+  },
+  "actual_rerun_verified": false,
+  "actual_trusted_event_eligible_verified": false
+}

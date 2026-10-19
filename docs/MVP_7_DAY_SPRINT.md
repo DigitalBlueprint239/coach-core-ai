@@ -151,3 +151,8 @@ in `docs/evidence/b11-b15-integration-2026-10-17/`.
 This is NOT independent combined-candidate acceptance. Bounded combined CI/ZIP review,
 PR72/default-off import configuration and recovery integration remain separate.
 No full matrix, merge, deployment, protection change or AI activation; MVP NO-GO.
+
+
+## Independent aggregate-gate PR #77 review — 2026-10-19 / Codex
+
+Reviewed dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4 againstefc9116: FAIL. Submitted gate14/14, reporter10/10, evidence19/19 pass; independent probes produce false ELIGIBLE results (errored membership/zero acceptance full CLI exit0, incomplete/escaping inventory, duplicate/foreign/unexecuted identities, absent/malformed last-run). All13 dispatch39079754536 ZIPs verified; exact19 R1/R5 INELIGIBLE reasons/12 rows recomputed. Cancel39079741112:13 cancelled jobs. No actual trusted-event ELIGIBLE/rerun evidence; skipped required jobs are not equivalent to merge blocking. Recovery target3992d8d remains unprotected/rulesets[]. Required-check enforcement is separate. PR78 accepted4f6b901 L1/L2/L3 unchanged; exact release artifact execution/deployment unverified. Workflow and e2e/package.json integration overlaps identified, no branches combined. Detailed review [PR77_INDEPENDENT_REVIEW_DBF7A9A.md](PR77_INDEPENDENT_REVIEW_DBF7A9A.md). No matrix/merge/deploy/protection/AI action; MVP NO-GO.

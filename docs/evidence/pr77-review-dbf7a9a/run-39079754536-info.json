@@ -1,0 +1,14 @@
+{
+  "id": 39079754536,
+  "name": "E2E (emulator, real browsers)",
+  "head_sha": "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4",
+  "head_branch": "claude/ci-merge-eligibility-gate",
+  "event": "workflow_dispatch",
+  "status": "completed",
+  "conclusion": "failure",
+  "html_url": "https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39079754536",
+  "created_at": "2026-10-17T23:37:43Z",
+  "updated_at": "2026-10-17T23:44:06Z",
+  "run_started_at": "2026-10-17T23:37:43Z",
+  "run_attempt": 1
+}

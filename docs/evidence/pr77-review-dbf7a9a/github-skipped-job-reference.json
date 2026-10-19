@@ -1,0 +1,5 @@
+{
+  "retrieved_utc": "2026-10-19T00:08:45Z",
+  "url": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-jobs-with-conditions",
+  "quote": "A job that is skipped will report its status as \"Success\". It will not prevent a pull request from merging, even if it is a required check."
+}

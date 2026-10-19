@@ -1,0 +1,28 @@
+{
+  "base": "efc9116cf93c5d235b0b2edeb4d7be03a4e73cdc",
+  "head": "dbf7a9ae7dd51092f9ec2ac86f3c19a0d67b23f4",
+  "accepted_pr78": "4f6b901b6c4141f88f5d884af0d67d62b28f40c1",
+  "changed": [
+    ".github/workflows/e2e-emulator.yml",
+    "docs/security/MERGE_ELIGIBILITY_GATE_2026-10-17.md",
+    "e2e/package.json",
+    "e2e/scripts/merge-eligibility.mjs",
+    "e2e/scripts/merge-eligibility.test.mjs"
+  ],
+  "pr78_overlap": [
+    ".github/workflows/e2e-emulator.yml",
+    "e2e/package.json"
+  ],
+  "unchanged": {
+    "src": true,
+    "e2e/tests": true,
+    "e2e/playwright.config.ts": true,
+    "e2e/reporters": true,
+    "e2e/scripts/evidence.sh": true,
+    "e2e/scripts/evidence.test.mjs": true,
+    "e2e/scripts/build-app.sh": true,
+    "package.json": true,
+    "package-lock.json": true,
+    "e2e/package-lock.json": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "observed_utc": "2026-10-19T00:10:22Z",
+  "target": "recovery/coach-core-mvp-2026",
+  "target_sha": "3992d8d58ae0bb28490cfdfc48ed66e86b4ffd53",
+  "protected": false,
+  "rulesets_including_parents": [],
+  "mutations_performed": false
+}

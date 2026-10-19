@@ -1,0 +1,22 @@
+✔ complete successful acceptance (pull_request): ELIGIBLE; diagnostic/obsolete failures visible, not blocking; phone empties legitimately empty (7.406545ms)
+✔ merge_group is a trusted event too; workflow_dispatch and push are NOT (bounded/manual runs cannot satisfy the gate) (11.017364ms)
+✔ one failed required job (acceptance firefox) -> INELIGIBLE, named (3.04196ms)
+✔ failing acceptance TESTS with a (hypothetically) green job are still caught from results.json (R6) (1.170836ms)
+✔ cancelled required job -> INELIGIBLE; cancelled NON-required job also blocks (coverage unproven) (2.084736ms)
+✔ skipped job -> INELIGIBLE; in-progress (not completed) job -> INELIGIBLE (1.999797ms)
+✔ missing required job, duplicate job, and missing artifact -> INELIGIBLE (2.25352ms)
+✔ finalize not successful (no UPLOAD_OK) or inventory mismatch in ANY job -> INELIGIBLE (1.538402ms)
+✔ narrowed dispatch selection: grep recorded in run.context AND identities != membership -> INELIGIBLE (even with all-green results) (2.08134ms)
+✔ legitimate empty selection: membership 0 + results 0 -> OK; membership > 0 with zero executions -> INELIGIBLE (zero never masquerades as passing) (3.274551ms)
+✔ results belonging to a different sha / run / attempt / head -> INELIGIBLE (5.52111ms)
+✔ repeat mismatch and run-level errors -> INELIGIBLE; non-expected test status in acceptance -> INELIGIBLE (4.055169ms)
+✔ readArtifactDir: real on-disk artifact layout (ci-evidence + test-results, inventory paths prefixed e2e/) -> UPLOAD_OK, verified digests, parsed context/results (3.367812ms)
+✔ workflow contract: aggregate job exists with the exact check name, needs the matrix, never runs on a cancelled run, downloads only this sha's artifacts, triggers cover pull_request (incl. ready_for_review) and merge_group, and every e2e job writes run.context (0.411601ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59.331304
