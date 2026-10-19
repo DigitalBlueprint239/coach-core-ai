@@ -28,6 +28,40 @@
       "note": "second abandon of the same film under a NEW operationId; film unchanged"
     },
     {
+      "file": "client-failure.network.network.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "no HTTP response; retry-eligible, never automatic, same operationId"
+    },
+    {
+      "file": "client-failure.protocol.response-invalid.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "resolved value failed the response schema; non-retryable client protocol error"
+    },
+    {
+      "file": "client-failure.sdk.deadline-exceeded.json",
+      "kind": "client-failure",
+      "valid": true
+    },
+    {
+      "file": "client-failure.sdk.internal.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "unknown server failure; do not guess a server reason"
+    },
+    {
+      "file": "client-failure.sdk.permission-denied.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "thrown access/config failure keeps its sanitized category"
+    },
+    {
+      "file": "client-failure.sdk.unavailable.json",
+      "kind": "client-failure",
+      "valid": true
+    },
+    {
       "file": "error.conflict.operation-id-reused.json",
       "kind": "response",
       "action": "*",
@@ -43,6 +77,13 @@
     },
     {
       "file": "error.failed-precondition.invalid-state.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "error.failed-precondition.operation-expired.json",
       "kind": "response",
       "action": "*",
       "valid": true,
@@ -147,15 +188,6 @@
       "serverEmits": true
     },
     {
-      "file": "error.unavailable.transport.json",
-      "kind": "response",
-      "action": "*",
-      "valid": true,
-      "serverEmits": false,
-      "clientOnly": true,
-      "note": "client mirror synthesizes this for network/HttpsError/non-envelope failures; the server never returns it"
-    },
-    {
       "file": "film-state.abandonedFromReserved.json",
       "kind": "film-state",
       "valid": true
@@ -184,6 +216,185 @@
       "file": "film-state.validating.json",
       "kind": "film-state",
       "valid": true
+    },
+    {
+      "file": "invalid.client-failure.internal-retry-eligible.json",
+      "kind": "client-failure",
+      "valid": false,
+      "note": "internal is never retry-eligible"
+    },
+    {
+      "file": "invalid.client-failure.protocol-retry-eligible.json",
+      "kind": "client-failure",
+      "valid": false
+    },
+    {
+      "file": "invalid.client-failure.unknown-category.json",
+      "kind": "client-failure",
+      "valid": false
+    },
+    {
+      "file": "invalid.mutation.M1-reserve-film-id-mismatch.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M1",
+      "rule": "R1"
+    },
+    {
+      "file": "invalid.mutation.M2-reserve-upload-path-foreign.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M2",
+      "rule": "R2"
+    },
+    {
+      "file": "invalid.mutation.M3-reserve-expires-at-mismatch.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M3",
+      "rule": "R3"
+    },
+    {
+      "file": "invalid.mutation.M4-reserved-has-abandoned-at.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M4",
+      "rule": "S1"
+    },
+    {
+      "file": "invalid.mutation.M5-rejected-null-reason.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "M5",
+      "rule": "S2"
+    },
+    {
+      "file": "invalid.mutation.M6-abandon-null-abandoned-at.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": false,
+      "mutation": "M6",
+      "rule": "S1"
+    },
+    {
+      "file": "invalid.mutation.M7-validating-null-generation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "M7",
+      "rule": "G2"
+    },
+    {
+      "file": "invalid.mutation.M8-expiry-before-creation.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M8",
+      "rule": "T2"
+    },
+    {
+      "file": "invalid.mutation.X1-expired-before-expiry.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X1",
+      "rule": "T5"
+    },
+    {
+      "file": "invalid.mutation.X10-validating-after-expiry.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X10",
+      "rule": "T6"
+    },
+    {
+      "file": "invalid.mutation.X11-receipt-not-reserved.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "X11",
+      "rule": "R4"
+    },
+    {
+      "file": "invalid.mutation.X12-abandon-from-validating-no-generation.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": false,
+      "mutation": "X12",
+      "rule": "A4"
+    },
+    {
+      "file": "invalid.mutation.X13-abandon-from-reserved-has-generation.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": false,
+      "mutation": "X13",
+      "rule": "A3"
+    },
+    {
+      "file": "invalid.mutation.X2-reserved-has-generation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X2",
+      "rule": "G1"
+    },
+    {
+      "file": "invalid.mutation.X3-rejected-null-generation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X3",
+      "rule": "G2"
+    },
+    {
+      "file": "invalid.mutation.X4-reserved-status-changed.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X4",
+      "rule": "T4"
+    },
+    {
+      "file": "invalid.mutation.X5-abandoned-at-not-status-changed.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X5",
+      "rule": "T7"
+    },
+    {
+      "file": "invalid.mutation.X6-status-changed-before-created.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X6",
+      "rule": "T3"
+    },
+    {
+      "file": "invalid.mutation.X7-rights-after-creation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X7",
+      "rule": "T1"
+    },
+    {
+      "file": "invalid.mutation.X8-upload-path-template.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X8",
+      "rule": "P1"
+    },
+    {
+      "file": "invalid.mutation.X9-file-name-not-canonical.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X9",
+      "rule": "file name not canonical"
+    },
+    {
+      "file": "invalid.response.client-transport-as-server.json",
+      "kind": "response",
+      "action": "*",
+      "valid": false,
+      "note": "client-only conditions must not parse as server-emitted responses"
     },
     {
       "file": "invalid.response.extra-key.json",
@@ -231,6 +442,25 @@
       "valid": true,
       "placeholder": "PENDING_D3",
       "note": "exactly LIMITS.maxBytes; accepted"
+    },
+    {
+      "file": "reserve.request.file-name-canonicalized.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "canonicalFileName": "Café drive.mp4",
+      "note": "NFC then trim; the server stores, hashes and returns the canonical form"
+    },
+    {
+      "file": "reserve.request.file-name-control-char.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      }
     },
     {
       "file": "reserve.request.file-name-too-long.json",

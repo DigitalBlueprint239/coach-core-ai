@@ -31,6 +31,11 @@ const LIMITS = Object.freeze({
   acceptedRightsWordingVersions: Object.freeze(["rights-v1"]),
   // DELEGATED. Reservation lifetime before the upload must start.
   reservationLifetimeMs: 60 * 60 * 1000,
+  // DELEGATED. Same-operation replay window. After it, the same
+  // (uid, operationId) gets failed-precondition/operation-expired; the
+  // operation record itself is retained as a tombstone (never pruned in
+  // FILM-S1), so an old retry can never create a second reservation.
+  operationReplayWindowMs: 24 * 60 * 60 * 1000,
   // DELEGATED. Contract field bounds.
   maxFileNameLength: 120,
 });
@@ -44,6 +49,7 @@ const PENDING = Object.freeze({
   allowedContentTypes: "PENDING_D3",
   acceptedRightsWordingVersions: "PENDING_D7",
   reservationLifetimeMs: "DELEGATED",
+  operationReplayWindowMs: "DELEGATED",
   maxFileNameLength: "DELEGATED",
 });
 

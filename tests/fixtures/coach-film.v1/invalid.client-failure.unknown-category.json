@@ -1,0 +1,7 @@
+{
+  "clientFailure": {
+    "kind": "sdk",
+    "category": "transport",
+    "retryEligible": true
+  }
+}

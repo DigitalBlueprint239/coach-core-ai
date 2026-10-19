@@ -102,19 +102,16 @@
       "failed-precondition": [
         "rights-wording-outdated",
         "film-not-found",
-        "invalid-state"
+        "invalid-state",
+        "operation-expired"
       ],
       "conflict": [
         "operation-id-reused"
       ],
       "unavailable": [
-        "backend-unavailable",
-        "transport"
+        "backend-unavailable"
       ]
     },
-    "clientOnlyReasons": [
-      "transport"
-    ],
     "uploadPathTemplate": "quarantine/{teamId}/{filmId}/source.mp4",
     "limits": {
       "maxBytes": 100000000,
@@ -129,6 +126,7 @@
         "rights-v1"
       ],
       "reservationLifetimeMs": 3600000,
+      "operationReplayWindowMs": 86400000,
       "maxFileNameLength": 120
     },
     "limitsStatus": {
@@ -140,6 +138,7 @@
       "allowedContentTypes": "PENDING_D3",
       "acceptedRightsWordingVersions": "PENDING_D7",
       "reservationLifetimeMs": "DELEGATED",
+      "operationReplayWindowMs": "DELEGATED",
       "maxFileNameLength": "DELEGATED"
     },
     "placeholderStatus": "TEST_PLACEHOLDER_NOT_APPROVED"
@@ -577,7 +576,14 @@
             },
             "status": {
               "type": "string",
-              "const": "abandoned"
+              "enum": [
+                "reserved",
+                "validating",
+                "ready",
+                "rejected",
+                "abandoned",
+                "expired"
+              ]
             },
             "createdAt": {
               "type": "string",
