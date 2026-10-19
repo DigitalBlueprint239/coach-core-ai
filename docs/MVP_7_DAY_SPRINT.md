@@ -165,3 +165,7 @@ TypeScript0, reporter10/evidence19. PR75's24 new ZIPs independently verified.
 Exact-head bounded Actions results/ZIP verification belong in the issue39 final
 handoff. New configuration and combined runtime require independent acceptance.
 No aggregate enforcement implementation, merge/deployment or activation; MVP NO-GO.
+
+## 2026-10-19 — isolated combined closure candidate starts
+
+Codex combines accepted PR76 61448f0 +PR78 4f6b901 +PR77 bb157ba on a dedicated branch, preserving originals. Exact integration starting base4f6b901; isolated PR review target frozenefc9116; workflow/package unions retained, only additional PR target/static assertion. Candidate creation/validation protocol, owners, enforcement/release gaps and Kev audit boundary: docs/COMBINED_CLOSURE_CANDIDATE_2026-10-19.md. Full exact-candidate PR-event acceptance/evidence and independent review pending. No merge/deploy/production/protection/recovery/AI changes; MVP NO-GO.

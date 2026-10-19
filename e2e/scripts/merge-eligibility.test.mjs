@@ -480,7 +480,7 @@ test('workflow contract: aggregate job exists with the exact check name, needs t
   assert.match(wf, /node e2e\/scripts\/merge-eligibility\.mjs \\\n\s+--sha "\$GITHUB_SHA" --head-sha "\$CANDIDATE_HEAD_SHA" --event "\$GITHUB_EVENT_NAME"/);
   assert.match(wf, /--run-id "\$GITHUB_RUN_ID" --attempt "\$GITHUB_RUN_ATTEMPT"/);
   assert.match(wf, /node e2e\/scripts\/merge-eligibility\.test\.mjs/);
-  assert.match(wf, /pull_request:\n\s+branches: \[recovery\/coach-core-mvp-2026\]\n(?:\s+#.*\n)*\s+types: \[opened, synchronize, reopened, ready_for_review\]/);
+  assert.match(wf, /pull_request:\n\s+branches: \[recovery\/coach-core-mvp-2026, review\/coach-core-combined-2026-10-19\]\n(?:\s+#.*\n)*\s+types: \[opened, synchronize, reopened, ready_for_review\]/);
   assert.match(wf, /merge_group:\n\s+types: \[checks_requested\]/);
   assert.match(wf, /> e2e\/ci-evidence\/run\.context/);
   assert.match(wf, /CANDIDATE_HEAD_SHA: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.event\.merge_group\.head_sha \|\| github\.sha \}\}/);

@@ -8,7 +8,7 @@ name: E2E (emulator, real browsers)
 
 on:
   pull_request:
-    branches: [recovery/coach-core-mvp-2026]
+    branches: [recovery/coach-core-mvp-2026, review/coach-core-combined-2026-10-19]
     # ready_for_review added (merge-eligibility gate, 2026-10-17) so a draft promoted to
     # ready re-validates on its current head; the other three are GitHub's defaults.
     types: [opened, synchronize, reopened, ready_for_review]
