@@ -213,16 +213,13 @@ jobs:
       CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
     steps:
       - name: Fail closed when the run was cancelled or the matrix did not complete
-        if: ${{ always() }}
+        # Status functions are only valid in `if:`; this step runs exactly in the fail-closed cases.
+        if: ${{ cancelled() || needs.e2e.result == 'cancelled' || needs.e2e.result == 'skipped' }}
         env:
-          RUN_CANCELLED: ${{ cancelled() }}
           MATRIX_RESULT: ${{ needs.e2e.result }}
         run: |
-          echo "matrix result: ${MATRIX_RESULT}; run cancelled: ${RUN_CANCELLED}"
-          if [ "$RUN_CANCELLED" = "true" ] || [ "$MATRIX_RESULT" = "cancelled" ] || [ "$MATRIX_RESULT" = "skipped" ]; then
-            echo "::error title=Coach Core merge eligibility::INELIGIBLE — run cancelled or matrix ${MATRIX_RESULT}; no eligibility can be established for ${GITHUB_SHA} (fail closed)"
-            exit 1
-          fi
+          echo "::error title=Coach Core merge eligibility::INELIGIBLE — run cancelled or matrix ${MATRIX_RESULT}; no eligibility can be established for ${GITHUB_SHA} (fail closed)"
+          exit 1
       - uses: actions/checkout@v5
         if: ${{ always() }}
       - uses: actions/setup-node@v5
