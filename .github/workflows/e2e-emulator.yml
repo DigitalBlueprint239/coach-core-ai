@@ -196,10 +196,14 @@ jobs:
   merge-eligibility:
     name: Coach Core merge eligibility
     needs: e2e
-    # Runs after the matrix regardless of per-job results (diagnostic/obsolete failures are
-    # expected to stay visible), but NEVER on a cancelled run: a cancelled run leaves no verdict,
-    # so concurrency cancel-in-progress cannot strand a stale success on the commit.
-    if: ${{ always() && !cancelled() }}
+    # N2 repair (review of b139d18): NO conditional-skip path. A skipped job reports "Success" to
+    # required-check rules, so the job-level condition is plain always(): it is scheduled after the matrix
+    # whatever the matrix did — failed, cancelled, timed out or never produced artifacts — and its only
+    # successful outcome is a successful eligibility evaluation. Every step also runs under always() so a
+    # cancelled/failed prerequisite cannot turn into "all steps skipped"; the first step fails the job
+    # outright when the run was cancelled. A hard platform cancellation/termination of THIS job yields
+    # "cancelled" (never success); how required-check rules treat that state is documented, not assumed.
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -208,22 +212,41 @@ jobs:
     env:
       CANDIDATE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
     steps:
+      - name: Fail closed when the run was cancelled or the matrix did not complete
+        if: ${{ always() }}
+        env:
+          RUN_CANCELLED: ${{ cancelled() }}
+          MATRIX_RESULT: ${{ needs.e2e.result }}
+        run: |
+          echo "matrix result: ${MATRIX_RESULT}; run cancelled: ${RUN_CANCELLED}"
+          if [ "$RUN_CANCELLED" = "true" ] || [ "$MATRIX_RESULT" = "cancelled" ] || [ "$MATRIX_RESULT" = "skipped" ]; then
+            echo "::error title=Coach Core merge eligibility::INELIGIBLE — run cancelled or matrix ${MATRIX_RESULT}; no eligibility can be established for ${GITHUB_SHA} (fail closed)"
+            exit 1
+          fi
       - uses: actions/checkout@v5
+        if: ${{ always() }}
       - uses: actions/setup-node@v5
+        if: ${{ always() }}
         with:
           node-version: '22'
           cache: npm
           cache-dependency-path: e2e/package-lock.json
       - name: Install e2e (for source-derived --list membership; no browsers)
+        if: ${{ always() }}
         run: npm ci --prefix e2e --no-audit --no-fund
-      - name: Gate self-checks (fixtures for success / failed / cancelled / skipped / missing / narrowed / empty / wrong sha)
+      - name: Gate self-checks (fixtures for success / failed / cancelled / skipped / missing / narrowed / empty / wrong sha / containment)
+        if: ${{ always() }}
         run: node e2e/scripts/merge-eligibility.test.mjs
       - uses: actions/download-artifact@v4
+        if: ${{ always() }}
+        # A missing/unavailable artifact must not skip the evaluation: the evaluator names it (R3) and fails.
+        continue-on-error: true
         with:
           pattern: e2e-results-*-${{ github.sha }}
           path: gate/artifacts
           merge-multiple: false
       - name: Evaluate merge eligibility
+        if: ${{ always() }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
