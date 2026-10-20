@@ -17,4 +17,3 @@ assert.ok(!/continue-on-error|--retry|--passWithNoTests/.test(test.run));
 for(const file of ['src/features/film-analyzer/contracts-v2.ts','src/features/film-analyzer/__tests__/contracts-v2.test.ts','functions/src/film/contract-v2.js','functions/src/film/legacy-r3.js','functions/src/film/limits.js','tests/fixtures/coach-film.v2/**','docs/film/COACH_FILM_V2_CONTRACT.md']) assert.ok(after.on.pull_request.paths.includes(file));
 assert.deepEqual(after.on.pull_request.paths.filter(x=>!before.on.pull_request.paths.includes(x)).length,7);
 console.log('PASS: YAML parses; seven additive path filters; both suites run; exits preserved; permissions/concurrency/runner/timeout/install/typecheck/artifact settings unchanged.');
-
