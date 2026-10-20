@@ -156,10 +156,23 @@ describe("unchanged v1 reserve/intake -> worker (Firestore emulator)", () => {
             eventId: "a"}),
           w.mk().processFilm({teamId: w.team, filmId: f.filmId,
             eventId: "b"})]);
-        assert.deepEqual([a.outcome, b.outcome].sort(),
-            ["ready", "skip-contention"]);
+        // Invariants: exactly one admission, one upload, one promotion. The
+        // loser is either refused as contention, or (if its transaction
+        // retried after the winner committed) sees the film no longer
+        // validating; both are safe and neither processes.
+        const outcomes = [a.outcome, b.outcome];
+        const loser = outcomes.filter((o) => o !== "ready");
+        assert.equal(outcomes.filter((o) => o === "ready").length, 1,
+            JSON.stringify(outcomes));
+        assert.ok(["skip-contention", "not-validating"].includes(loser[0]),
+            JSON.stringify(outcomes));
         assert.equal(w.objects.calls.filter((c) => c[0] === "createOnly")
             .length, 1);
+        const job = (await db.doc(`teams/${w.team}/films/${f.filmId}/` +
+          `workerJobs/${f.jobId}`).get()).data();
+        assert.equal(job.admitted, 1, JSON.stringify(outcomes));
+        assert.deepEqual(Object.values(await slots(w)).map((x) => x.status),
+            ["ready"]);
       });
 });
 

@@ -355,8 +355,10 @@ describe("fencing, stale workers, lease race", () => {
           w.mk().processFilm({teamId: TEAM, filmId: f.filmId, eventId: "x"}),
           w.mk().processFilm({teamId: TEAM, filmId: f.filmId, eventId: "y"}),
         ]);
-        const outcomes = [x.outcome, y.outcome].sort();
-        assert.deepEqual(outcomes, ["ready", "skip-contention"]);
+        const outcomes = [x.outcome, y.outcome];
+        assert.equal(outcomes.filter((o) => o === "ready").length, 1);
+        assert.ok(outcomes.some((o) => ["skip-contention",
+          "not-validating"].includes(o)), JSON.stringify(outcomes));
         assert.equal(w.objects.calls.filter((c) => c[0] === "createOnly")
             .length, 1);
         assert.equal(job(w, f).admitted, 1);
