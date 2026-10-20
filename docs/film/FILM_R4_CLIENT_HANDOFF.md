@@ -1,5 +1,24 @@
 # FILM-S2b r4 client contract delivery — 2026-10-20
 
+## PR84 review P1 repair — current candidate
+
+This section supersedes the earlier delivery's missing CI coverage and replay optionality. Original evidence below remains historical.
+Claude's [bounded FAIL review6292704028](https://github.com/DigitalBlueprint239/coach-core-ai/pull/84#issuecomment-6292704028) reproduced the omission bug atcb2903a. Coach Drew authorized the client repair and existing-workflow extension; [file claim6292810418](https://github.com/DigitalBlueprint239/coach-core-ai/issues/39#issuecomment-6292810418).
+
+**Tested source/workflow commit:16e9dac0f989dfb82c019329ea963ed31fd33da1**, on the same isolated branch and server6764af9 base. Later commits add evidence only.
+
+- `ReplayQuery.stored` is now required, and parsing requires the **own property**. Missing lookup result returns `invalid-input` for v1 and v2. Explicit `stored:null` and `stored:undefined` retain the agreed server semantics; no claim that undefined is JSON-wire data. `liveFilmStatus` remains optional. Accepted v1 contract behavior is unchanged.
+- Reviewer N1: admission/exhaustion ceilings refer to `WORKER_ATTEMPT_POLICY.maxAdmittedAttempts`, still3; no retry engine or budget change.
+- Added missing-key regressions for both versions, explicit null/undefined anchors, omission over every replay fixture, optional live-state and inherited-field guard tests. Pre-fix with new tests: **252PASS/36FAIL/0SKIP** (v2 only), retained. Final **434PASS/0FAIL/0SKIP** across both suites (146 unchanged v1 +288 v2), including all211 golden fixtures. TypeScript exit0/no diagnostics. Initial test-only TS2339 annotation failure is retained; fixed using an explicit Record<string,unknown> on the mutation fixture, without weakening assertions.
+- Applied Claude's proposed workflow extension: seven extra PR path filters (v2 client/test/server schemas/legacy/limits/fixtures/doc) and both v1/v2 suites in the existing test command. YAML inspection verifies unchanged contents:read permissions, concurrency, ubuntu-latest runner,15-minute timeout, installation/typecheck/artifact steps,14-day retention and actual PIPESTATUS exit propagation. No secrets, emulators, provider calls, deployments or paid calls. No duplicate CI or manual dispatch. An initial inspection-script error on unnamed YAML steps is retained; fixed with optional name access.
+- Client CI now runs automatically through PR84 synchronization. The **exact-head run ID, job exit, counts and artifact reference are reported on Issue39/PR84 after completion**, not inferred here. Local434 is distinct from CI. No repeated core/emulator matrix or production build; previous build evidence below is historical.
+
+Commands: `CI=true node ../main-film-s1-client-final/node_modules/react-scripts/scripts/test.js --watchAll=false --runInBand --runTestsByPath src/features/film-analyzer/__tests__/contracts.test.ts src/features/film-analyzer/__tests__/contracts-v2.test.ts`; `node ../main-film-s1-client-final/node_modules/typescript/bin/tsc --noEmit`; `node docs/evidence/film-r4-client-p1-2026-10-20/inspect-workflow.cjs`. Node22.23.1, existing unchanged-lockfile dependencies reused; no install or dependency updates locally.
+
+Raw original/final logs and executable workflow inspection: `docs/evidence/film-r4-client-p1-2026-10-20/`, source-LF SHA256SUMS manifest. Diff against6764af9 is empty for server/shared fixtures/v1 client/v1 tests; no handler or worker change. Claude non-author re-review requested for P1, workflow and exact-head CI. Reviewer/owner worker gates remain pending; MVP NO-GO.
+
+---
+
 Contract-only implementation; **not worker/backend acceptance**. MVP NO-GO.
 Owner authorization: Issue39, agreed A1 scope [6291585020](https://github.com/DigitalBlueprint239/coach-core-ai/issues/39#issuecomment-6291585020), explicitly authorized by Coach Drew in the subsequent task and recorded [6291612849](https://github.com/DigitalBlueprint239/coach-core-ai/issues/39#issuecomment-6291612849).
 

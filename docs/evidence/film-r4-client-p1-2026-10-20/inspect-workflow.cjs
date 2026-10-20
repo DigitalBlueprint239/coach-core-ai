@@ -1,0 +1,20 @@
+const fs=require('fs'),cp=require('child_process'),assert=require('assert/strict'),YAML=require('yaml');
+const file='.github/workflows/film-client-contract.yml';
+const before=YAML.parse(cp.execFileSync('git',['show','cb2903a:'+file],{encoding:'utf8'}));
+const after=YAML.parse(fs.readFileSync(file,'utf8'));
+const oldJob=before.jobs['film-client-contract'],newJob=after.jobs['film-client-contract'];
+assert.deepEqual(after.permissions,{contents:'read'});
+assert.deepEqual(after.permissions,before.permissions);
+for(const key of ['concurrency']) assert.deepEqual(after[key],before[key]);
+for(const key of ['push','workflow_dispatch']) assert.deepEqual(after.on[key],before.on[key]);
+for(const key of ['runs-on','timeout-minutes']) assert.deepEqual(newJob[key],oldJob[key]);
+for(let i=0;i<newJob.steps.length;i++) if(i!==4) assert.deepEqual(newJob.steps[i],oldJob.steps[i]);
+const test=newJob.steps.find(x=>x.name?.includes('parity'));
+assert.ok(test.run.includes('src/features/film-analyzer/__tests__/contracts.test.ts'));
+assert.ok(test.run.includes('src/features/film-analyzer/__tests__/contracts-v2.test.ts'));
+assert.ok(test.run.includes('st=${PIPESTATUS[0]}') && test.run.includes('exit "$st"'));
+assert.ok(!/continue-on-error|--retry|--passWithNoTests/.test(test.run));
+for(const file of ['src/features/film-analyzer/contracts-v2.ts','src/features/film-analyzer/__tests__/contracts-v2.test.ts','functions/src/film/contract-v2.js','functions/src/film/legacy-r3.js','functions/src/film/limits.js','tests/fixtures/coach-film.v2/**','docs/film/COACH_FILM_V2_CONTRACT.md']) assert.ok(after.on.pull_request.paths.includes(file));
+assert.deepEqual(after.on.pull_request.paths.filter(x=>!before.on.pull_request.paths.includes(x)).length,7);
+console.log('PASS: YAML parses; seven additive path filters; both suites run; exits preserved; permissions/concurrency/runner/timeout/install/typecheck/artifact settings unchanged.');
+

@@ -1,0 +1,1 @@
+src/features/film-analyzer/__tests__/contracts-v2.test.ts(91,69): error TS2339: Property 'stored' does not exist on type '{ requestSchemaVersion: string; }'.
