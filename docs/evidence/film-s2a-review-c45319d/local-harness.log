@@ -1,0 +1,76 @@
+▶ H0 harness mechanics (independent of the decoder)
+  ✔ passes arguments literally: no shell, no expansion, no injection (10.632224ms)
+  ✔ gives the child an EMPTY environment by default (no credentials, proxies or tokens) (3.506691ms)
+  ✔ only the variables listed in `env` reach the child (2.83064ms)
+  ✔ stdin is closed for the child (2.803878ms)
+  ✔ runs in a private temp cwd that is removed afterwards (3.083752ms)
+  ✔ enforces the wall-time limit: SIGTERM then SIGKILL, elapsed close to the limit (1002.611873ms)
+  ✔ kills a child that ignores SIGTERM (SIGKILL after grace) (1201.37965ms)
+  ✔ terminates a child that floods captured output (4.518331ms)
+  ✔ rejects non-absolute binaries and non-string args (0.895174ms)
+  ✔ resource limits: prlimit prefix is applied when available (recorded either way) (41.836254ms)
+  ℹ prlimit available: true; prefix: ["prlimit","--cpu=120","--as=2147483648","--fsize=536870912","--nofile=64","--core=0","--"]
+  ℹ fsize limit: code=null signal=SIGXFSZ size=1048576
+✔ H0 harness mechanics (independent of the decoder) (2275.506439ms)
+▶ H1 binary identity and build facts
+  ✔ records versions and digests (15.484783ms)
+  ℹ ffmpeg: ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers sha256=1314ab3b558c48ce7ed4aa6efba5a68fefe30362f796e59ef017b17424436ff1
+  ℹ ffprobe sha256=fd43ef9be4bb7d7fc821e1b25950efc6eb0aac586cabacd34a38fd52299f48e6
+  ✔ pinned build: version is 9.0.2 (3.787034ms)
+  ✔ pinned build: -buildconf has the LGPL-only flag set and no GPL/nonfree/version3 (3.119018ms)
+  ✔ pinned build: -L prints the LGPL notice, not GPL (3.59768ms)
+  ✔ pinned build: the ONLY protocol is file (no network protocols compiled in) (4.45503ms)
+  ✔ pinned build: component lists match the configure intent (14.240011ms)
+  ℹ decoders: h264,aac
+  ℹ encoders: mjpeg,wrapped_avframe,pcm_s16le
+  ℹ demuxers: mov,mp4,m4a,3gp,3g2,mj2
+  ℹ muxers: image2,mov,mp4,null
+  ℹ filters: aformat,anull,aresample,atrim,crop,format,hflip,null,rotate,scale,transpose,trim,vflip,abuffer,buffer,abuffersink,buffersink
+  ✔ pinned build: an http:// input is refused (protocol not compiled in) (3.222507ms)
+✔ H1 binary identity and build facts (48.465115ms)
+▶ H2 fixtures: probe facts and decode outcomes
+  ✔ s1-30fps-counter.mp4 (27.462551ms)
+  ℹ decode elapsed 21ms exit 0
+  ✔ s2-60fps.mp4 (29.895972ms)
+  ℹ decode elapsed 25ms exit 0
+  ✔ s3-vfr.mp4 (20.394549ms)
+  ℹ decode elapsed 16ms exit 0
+  ✔ s4-hevc.mp4 (3.40304ms)
+  ✔ s5-truncated.mp4 (20.381474ms)
+  ℹ decode elapsed 16ms exit 183
+  ✔ s5-spoofed.mp4 (5.080234ms)
+  ✔ s5-empty.mp4 (5.238946ms)
+  ✔ s6-duration-at-limit-300000ms.mp4 (47.011967ms)
+  ℹ decode elapsed 43ms exit 0
+  ✔ s6-duration-over-limit-300500ms.mp4 (50.644723ms)
+  ℹ decode elapsed 47ms exit 0
+  ✔ s6-res-at-limit-1920x1080.mp4 (37.421478ms)
+  ℹ decode elapsed 29ms exit 0
+  ✔ s6-res-over-limit-1922x1080.mp4 (38.544557ms)
+  ℹ decode elapsed 29ms exit 0
+  ✔ s6-metadata-tags.mp4 (15.997931ms)
+  ℹ decode elapsed 12ms exit 0
+  ✔ s7-excess-streams.mp4 (27.29388ms)
+  ℹ decode elapsed 14ms exit 0
+  ✔ s8-audio-only.mp4 (10.800749ms)
+  ℹ decode elapsed 6ms exit 0
+  ✔ s9-wrong-container.webm (2.744611ms)
+  ✔ s10-known-good.mp4 (16.551882ms)
+  ℹ decode elapsed 12ms exit 0
+✔ H2 fixtures: probe facts and decode outcomes (359.837799ms)
+▶ H3 normalizing remux: metadata stripped, output deterministic, independently verified
+  ✔ strips GPS/device/creation metadata and chapters; the output is inspected with ffprobe, not inferred from the command (9.156417ms)
+  ✔ produces a byte-identical output across two runs (bitexact) (11.658694ms)
+  ✔ refuses to normalize truncated input (-xerror) and leaves no usable output (6.224757ms)
+  ✔ a pathological long-running decode is stopped by the wall-time limit (1508.206005ms)
+  ✔ writes a harness result record (13.181353ms)
+  ℹ harness result: /workspace/scratch/pr83-review/local-result.json
+✔ H3 normalizing remux: metadata stripped, output deterministic, independently verified (1549.081753ms)
+ℹ tests 38
+ℹ suites 4
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4313.89691

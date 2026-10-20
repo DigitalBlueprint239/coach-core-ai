@@ -1,0 +1,44 @@
+{
+  "vfr": {
+    "frames": 100,
+    "deltas": {
+      "0.03333": 99
+    },
+    "actuallyVariable": false
+  },
+  "buildJson": {
+    "valid": false,
+    "error": "Expecting value: line 4 column 21 (char 79)"
+  },
+  "flagsSerialization": {
+    "exit": 9,
+    "stderr": "node: bad option: --disable-everything"
+  },
+  "fixtures": {
+    "s4-hevc.mp4": {
+      "probeExit": 0,
+      "decodeExit": 234,
+      "decodeError": "[vist#0:0/hevc @ 0x3056ab00] Decoding requested, but no decoder found for: hevc\nError opening output file -.\nError opening output files: Invalid argument\n"
+    },
+    "s5-truncated.mp4": {
+      "probeExit": 0,
+      "decodeExit": 183,
+      "decodeError": "[h264 @ 0x401f180] Invalid NAL unit size (371 > 19).\n[h264 @ 0x401f180] missing picture in access unit with size 23\n[in#0/mov,mp4,m4a,3gp,3g2,mj2 @ 0x3f88c40] corrupt input packet in stream 0\n[in#0/mov,mp4,m4a,3gp,3g2,mj2 @ 0x3f88c40] Task finished with error code: -1094995529 (Invalid data found when processing input)\n[in#0/mov,mp4,m4a,3gp,3g2,mj2 @ 0x3f88c40] Terminating thread with return code -1094995529 (Invalid data found when processing input)\n"
+    },
+    "s5-spoofed.mp4": {
+      "probeExit": 1,
+      "decodeExit": 183,
+      "decodeError": "[in#0 @ 0x1ad24f40] moov atom not found\n[in#0 @ 0x1ad24c40] Error opening input: Invalid data found when processing input\nError opening input file /workspace/coach-core-pr83-review/tools/ffmpeg/fixtures/frozen/s5-spoofed.mp4.\nError opening input files: Invalid data found when processing input\n"
+    },
+    "s5-empty.mp4": {
+      "probeExit": 1,
+      "decodeExit": 183,
+      "decodeError": "[in#0 @ 0xb13ff40] moov atom not found\n[in#0 @ 0xb13fc40] Error opening input: Invalid data found when processing input\nError opening input file /workspace/coach-core-pr83-review/tools/ffmpeg/fixtures/frozen/s5-empty.mp4.\nError opening input files: Invalid data found when processing input\n"
+    },
+    "s9-wrong-container.webm": {
+      "probeExit": 1,
+      "decodeExit": 183,
+      "decodeError": "[in#0 @ 0x1e0a7c40] Error opening input: Invalid data found when processing input\nError opening input file /workspace/coach-core-pr83-review/tools/ffmpeg/fixtures/frozen/s9-wrong-container.webm.\nError opening input files: Invalid data found when processing input\n"
+    }
+  }
+}

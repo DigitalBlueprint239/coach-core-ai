@@ -1,0 +1,15 @@
+{
+  "ffmpeg": "/workspace/scratch/pr83-review/artifact/out/bin/ffmpeg",
+  "ffmpegSha256": "1314ab3b558c48ce7ed4aa6efba5a68fefe30362f796e59ef017b17424436ff1",
+  "ffprobeSha256": "fd43ef9be4bb7d7fc821e1b25950efc6eb0aac586cabacd34a38fd52299f48e6",
+  "pinned": true,
+  "prlimit": true,
+  "limits": {
+    "cpuSeconds": 120,
+    "addressSpaceBytes": 2147483648,
+    "fileSizeBytes": 536870912,
+    "openFiles": 64,
+    "coreBytes": 0
+  },
+  "at": "2026-10-20T11:42:05.208Z"
+}
