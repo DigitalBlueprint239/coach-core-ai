@@ -118,7 +118,7 @@ jobs:
           else
             echo "::warning title=No committed fixture SHA256SUMS yet::first run; commit tools/ffmpeg/fixtures/SHA256SUMS.txt + TOOLCHAIN.txt from this run's artifact"
           fi
-          sed 's/^/::notice title=Fixture digest::/' "$RUNNER_TEMP/fx1/SHA256SUMS.txt"
+          echo "::notice title=Fixture SHA256SUMS ($(wc -l < "$RUNNER_TEMP/fx1/SHA256SUMS.txt") files; generator $(ffmpeg -hide_banner -version | head -1 | cut -d' ' -f3))::$(tr '\n' ' ' < "$RUNNER_TEMP/fx1/SHA256SUMS.txt")"
       - name: Isolation harness against the pinned build (HARNESS_PINNED=1)
         env:
           FFMPEG_BIN: ${{ runner.temp }}/a/out/bin/ffmpeg
@@ -133,6 +133,11 @@ jobs:
           t=$(grep -E '^ℹ tests ' "$RUNNER_TEMP/harness.log" | awk '{print $3}'); p=$(grep -E '^ℹ pass ' "$RUNNER_TEMP/harness.log" | awk '{print $3}')
           f=$(grep -E '^ℹ fail ' "$RUNNER_TEMP/harness.log" | awk '{print $3}'); k=$(grep -E '^ℹ skipped ' "$RUNNER_TEMP/harness.log" | awk '{print $3}')
           echo "::notice title=Isolation harness (pinned build)::tests=$t pass=$p fail=$f skipped=$k exit=$st (skipped tests are NOT passes)"
+          if [ "$st" != "0" ]; then
+            # Surface the failing tests and their first assertion lines as annotations (logs are not always reachable).
+            grep -E '^\s*✖ ' "$RUNNER_TEMP/harness.log" | sed 's/^\s*//' | sort -u | head -8 | while IFS= read -r l; do echo "::error title=harness failure::${l:0:300}"; done
+            grep -E 'AssertionError|actual:|expected:|Error:' "$RUNNER_TEMP/harness.log" | head -12 | tr '\n' ' ' | cut -c1-900 | sed 's/^/::error title=harness assertion detail::/'; echo
+          fi
           exit "$st"
       - name: Assemble the retained artifact (binary + provenance + harness + fixture digests; nothing published)
         if: always()

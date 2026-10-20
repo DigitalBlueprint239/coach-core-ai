@@ -145,8 +145,14 @@ describe("H1 binary identity and build facts", () => {
     assert.deepEqual((await list("encoders")).sort(), ["mjpeg"]);
     assert.deepEqual((await list("demuxers")).sort(), ["mov,mp4,m4a,3gp,3g2,mj2"]);
     const muxers = await list("muxers");
-    assert.ok(muxers.includes("mp4") && muxers.includes("image2"), muxers.join(","));
-    assert.ok(!muxers.some((m) => /^(rtp|rtsp|hls|dash|tee|segment)$/.test(m)), muxers.join(","));
+    assert.deepEqual(muxers.sort(), ["image2", "mp4", "null"], muxers.join(","));
+    // Filters: the three requested plus the eleven configure auto-selects for the ffmpeg tool
+    // (configure n9.0.2 line 4378 `ffmpeg_select`). Nothing from LICENSE.md's GPL filter list.
+    const fr = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-filters"], captureStdout: true});
+    const filters = fr.stdout.split("\n").map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 3 && /^[A-Z.]{3}$/.test(p[0])).map((p) => p[1]);
+    assert.deepEqual(filters.sort(), ["aformat", "anull", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"], filters.join(","));
+    const gplFilters = ["blackframe", "boxblur", "colormatrix", "cover_rect", "cropdetect", "delogo", "eq", "find_rect", "fspp", "histeq", "hqdn3d", "kerndeint", "lensfun", "mcdeint", "mpdecimate", "nnedi", "owdenoise", "perspective", "phase", "pp7", "pullup", "repeatfields", "sab", "signature", "smartblur", "spp", "stereo3d", "super2xsai", "tinterlace", "uspp", "vaguedenoiser", "mptestsrc"];
+    assert.ok(!filters.some((f) => gplFilters.includes(f)), "a GPL filter is compiled in");
   });
   it("pinned build: an http:// input is refused (protocol not compiled in)", pinnedOnly, async () => {
     const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-v", "error", "-i", "http://127.0.0.1:9/x.mp4", "-f", "null", "-"], timeoutMs: 10000});
