@@ -33,7 +33,8 @@ v -f lavfi -i "testsrc=size=320x180:rate=60:duration=4" "${X264[@]}" -an "${MP4[
 v -f lavfi -i "testsrc=size=320x180:rate=30:duration=4" -vf "select='not(mod(n\,3))*not(mod(n\,2))+mod(n\,5)',setpts=N/30/TB" -vsync vfr \
   "${X264[@]}" -an "${MP4[@]}" "$OUT/s3-vfr.mp4"
 # S4: HEVC in MP4 (must be REJECTED by the validator: video codec not allowed).
-if "$GEN" -hide_banner -encoders 2>/dev/null | grep -q libx265; then
+ENCODERS="$("$GEN" -hide_banner -encoders 2>/dev/null || true)"
+if printf '%s' "$ENCODERS" | grep -q libx265; then
   v -f lavfi -i "testsrc=size=320x180:rate=30:duration=2" -c:v libx265 -preset ultrafast -x265-params "log-level=error:pools=1" -pix_fmt yuv420p -an "${MP4[@]}" "$OUT/s4-hevc.mp4"
 else
   echo "libx265 not available in generator; s4-hevc.mp4 NOT generated" > "$OUT/s4-hevc.MISSING"

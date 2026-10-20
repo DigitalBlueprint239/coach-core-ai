@@ -101,29 +101,26 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg util-linux
           ffmpeg -hide_banner -version | head -3
-      - name: Generate synthetic fixtures twice (determinism) and compare with the committed digests
+      - name: Frozen fixtures (committed, digest-verified) + fresh generation for within-run determinism
         run: |
           set -euo pipefail
+          # 1. The FROZEN set under tools/ffmpeg/fixtures/frozen is what the harness and later S2b consume.
+          (cd tools/ffmpeg/fixtures/frozen && sha256sum -c SHA256SUMS.txt --quiet)
+          n=$(ls tools/ffmpeg/fixtures/frozen/*.mp4 tools/ffmpeg/fixtures/frozen/*.webm | wc -l)
+          echo "::notice title=Frozen fixtures verified::$n files match tools/ffmpeg/fixtures/frozen/SHA256SUMS.txt; generator: $(head -1 tools/ffmpeg/fixtures/frozen/TOOLCHAIN.txt)"
+          # 2. Fresh generation on this runner, twice: proves generate.sh is deterministic on one machine.
+          #    Digests are NOT expected to equal the frozen set across machines (encoder CPU paths differ); that
+          #    is why the set is frozen in git rather than regenerated per run.
           bash tools/ffmpeg/fixtures/generate.sh "$RUNNER_TEMP/fx1"
           bash tools/ffmpeg/fixtures/generate.sh "$RUNNER_TEMP/fx2"
-          diff <(cd "$RUNNER_TEMP/fx1" && sha256sum *.mp4 *.webm 2>/dev/null | sort -k2) <(cd "$RUNNER_TEMP/fx2" && sha256sum *.mp4 *.webm 2>/dev/null | sort -k2)
-          echo "fixtures deterministic within this runner"
-          cat "$RUNNER_TEMP/fx1/TOOLCHAIN.txt"
-          if [ -f tools/ffmpeg/fixtures/SHA256SUMS.txt ]; then
-            if diff -u tools/ffmpeg/fixtures/SHA256SUMS.txt "$RUNNER_TEMP/fx1/SHA256SUMS.txt"; then
-              echo "::notice title=Fixtures match committed SHA256SUMS::$(wc -l < "$RUNNER_TEMP/fx1/SHA256SUMS.txt") files"
-            else
-              echo "::error title=Fixture digests differ from the committed SHA256SUMS::regenerate with the recorded generator version or review the change"; exit 1
-            fi
-          else
-            echo "::warning title=No committed fixture SHA256SUMS yet::first run; commit tools/ffmpeg/fixtures/SHA256SUMS.txt + TOOLCHAIN.txt from this run's artifact"
-          fi
-          echo "::notice title=Fixture SHA256SUMS ($(wc -l < "$RUNNER_TEMP/fx1/SHA256SUMS.txt") files; generator $(ffmpeg -hide_banner -version | head -1 | cut -d' ' -f3))::$(tr '\n' ' ' < "$RUNNER_TEMP/fx1/SHA256SUMS.txt")"
+          diff <(cd "$RUNNER_TEMP/fx1" && sha256sum *.mp4 *.webm | sort -k2) <(cd "$RUNNER_TEMP/fx2" && sha256sum *.mp4 *.webm | sort -k2)
+          same=$(comm -12 <(sort tools/ffmpeg/fixtures/frozen/SHA256SUMS.txt) <(sort "$RUNNER_TEMP/fx1/SHA256SUMS.txt") | wc -l)
+          echo "::notice title=Fresh generation deterministic on this runner::$(wc -l < "$RUNNER_TEMP/fx1/SHA256SUMS.txt") files; identical to frozen: $same (cross-machine equality not required); runner generator: $(head -1 "$RUNNER_TEMP/fx1/TOOLCHAIN.txt")"
       - name: Isolation harness against the pinned build (HARNESS_PINNED=1)
         env:
           FFMPEG_BIN: ${{ runner.temp }}/a/out/bin/ffmpeg
           FFPROBE_BIN: ${{ runner.temp }}/a/out/bin/ffprobe
-          FIXTURES_DIR: ${{ runner.temp }}/fx1
+          FIXTURES_DIR: ${{ github.workspace }}/tools/ffmpeg/fixtures/frozen
           HARNESS_PINNED: '1'
           HARNESS_RESULT: ${{ runner.temp }}/harness-result.json
         run: |
@@ -150,7 +147,8 @@ jobs:
           D="$RUNNER_TEMP/film-decoder"; mkdir -p "$D/fixtures"
           cp -r "$RUNNER_TEMP/a/out" "$RUNNER_TEMP/a/provenance" "$D/" 2>/dev/null || true
           cp "$RUNNER_TEMP/b/provenance/BINARY_SHA256SUMS.txt" "$D/provenance/BINARY_SHA256SUMS.build-b.txt" 2>/dev/null || true
-          cp "$RUNNER_TEMP/fx1/SHA256SUMS.txt" "$RUNNER_TEMP/fx1/TOOLCHAIN.txt" "$D/fixtures/" 2>/dev/null || true
+          cp tools/ffmpeg/fixtures/frozen/SHA256SUMS.txt tools/ffmpeg/fixtures/frozen/TOOLCHAIN.txt "$D/fixtures/" 2>/dev/null || true
+          cp "$RUNNER_TEMP/fx1/SHA256SUMS.txt" "$D/fixtures/SHA256SUMS.runner-generated.txt" 2>/dev/null || true
           cp "$RUNNER_TEMP/harness.log" "$RUNNER_TEMP/harness-result.json" "$D/" 2>/dev/null || true
           printf 'candidate=%s\nrun_id=%s\nrun_attempt=%s\nevent=%s\nrunner=%s/%s\n' "${{ github.sha }}" "${{ github.run_id }}" "${{ github.run_attempt }}" "${{ github.event_name }}" "${ImageOS:-}" "${ImageVersion:-}" > "$D/RUN.txt"
           (cd "$D" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/ARTIFACT_SHA256SUMS.txt"
