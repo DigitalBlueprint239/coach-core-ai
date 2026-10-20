@@ -137,25 +137,31 @@ describe("H1 binary identity and build facts", () => {
     const set = new Set(names);
     assert.deepEqual([...set].sort(), ["file"], `protocols compiled in: ${[...set].join(",")}`);
   });
-  it("pinned build: component lists match the configure intent", pinnedOnly, async () => {
-    const list = async (kind) => {
-      const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", `-${kind}`], captureStdout: true});
-      // Rows look like " V....D h264  H.264 ..." / " E mp4 ..."; legend rows like " V..... = Video" are dropped by the name pattern.
-      return r.stdout.split("\n").slice(1).map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 2 && /^[A-Z.]+$/.test(p[0]) && /^[a-z0-9_,.+-]+$/.test(p[1])).map((p) => p[1]);
-    };
-    assert.deepEqual((await list("decoders")).sort(), ["aac", "h264"]);
-    assert.deepEqual((await list("encoders")).sort(), ["mjpeg", "pcm_s16le", "wrapped_avframe"]);
-    assert.deepEqual((await list("demuxers")).sort(), ["mov,mp4,m4a,3gp,3g2,mj2"]);
-    const muxers = await list("muxers");
+  it("pinned build: component lists match the configure intent", pinnedOnly, async (t) => {
+    const raw = async (kind) => (await runDecoder({bin: FFMPEG, args: ["-hide_banner", `-${kind}`], captureStdout: true})).stdout;
+    // Rows look like " V....D h264  H.264 ..." / " E mp4 ..."; legend rows (" V..... = Video") are dropped by the name pattern.
+    const list = (out) => out.split("\n").map((l) => l.trim().split(/\s+/))
+        .filter((p) => p.length >= 2 && /^[A-Z.]+$/.test(p[0]) && /^[a-z0-9_,.+-]+$/.test(p[1])).map((p) => p[1]);
+    const lists = {};
+    for (const kind of ["decoders", "encoders", "demuxers", "muxers", "filters"]) {
+      const out = await raw(kind);
+      lists[kind] = kind === "filters" ?
+        // filter rows carry an I/O column such as "V->V", "A->A", "N->V" (distinctive; legend rows have none)
+        out.split("\n").map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 3 && /^[A-Z.]+$/.test(p[0]) && /^[a-z0-9_]+$/.test(p[1]) && /^[AVN|]+->[AVN|]+$/.test(p[2])).map((p) => p[1]) :
+        list(out);
+      t.diagnostic(`${kind}: ${lists[kind].join(",")}`);
+      if (lists[kind].length === 0) t.diagnostic(`${kind} raw head: ${JSON.stringify(out.slice(0, 400))}`);
+    }
+    assert.deepEqual(lists.decoders.sort(), ["aac", "h264"]);
+    assert.deepEqual(lists.encoders.sort(), ["mjpeg", "pcm_s16le", "wrapped_avframe"]);
+    assert.deepEqual(lists.demuxers.sort(), ["mov,mp4,m4a,3gp,3g2,mj2"]);
     // mp4 selects the mov muxer (same movenc.c); null is the full-decode sink.
-    assert.deepEqual(muxers.sort(), ["image2", "mov", "mp4", "null"], muxers.join(","));
+    assert.deepEqual(lists.muxers.sort(), ["image2", "mov", "mp4", "null"]);
     // Filters: the four requested (scale, crop, format, aresample) plus the eleven configure auto-selects for the ffmpeg tool
     // (configure n9.0.2 line 4378 `ffmpeg_select`). Nothing from LICENSE.md's GPL filter list.
-    const fr = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-filters"], captureStdout: true});
-    const filters = fr.stdout.split("\n").map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 3 && /^[A-Z.]{3}$/.test(p[0]) && /^[a-z0-9_]+$/.test(p[1])).map((p) => p[1]);
-    assert.deepEqual(filters.sort(), ["aformat", "anull", "aresample", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"], filters.join(","));
+    assert.deepEqual(lists.filters.sort(), ["aformat", "anull", "aresample", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"]);
     const gplFilters = ["blackframe", "boxblur", "colormatrix", "cover_rect", "cropdetect", "delogo", "eq", "find_rect", "fspp", "histeq", "hqdn3d", "kerndeint", "lensfun", "mcdeint", "mpdecimate", "nnedi", "owdenoise", "perspective", "phase", "pp7", "pullup", "repeatfields", "sab", "signature", "smartblur", "spp", "stereo3d", "super2xsai", "tinterlace", "uspp", "vaguedenoiser", "mptestsrc"];
-    assert.ok(!filters.some((f) => gplFilters.includes(f)), "a GPL filter is compiled in");
+    assert.ok(!lists.filters.some((f) => gplFilters.includes(f)), "a GPL filter is compiled in");
   });
   it("pinned build: an http:// input is refused (protocol not compiled in)", pinnedOnly, async () => {
     const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-v", "error", "-i", "http://127.0.0.1:9/x.mp4", "-f", "null", "-"], timeoutMs: 10000});

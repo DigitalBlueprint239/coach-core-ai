@@ -140,6 +140,7 @@ jobs:
             head -c 1200 "$RUNNER_TEMP/harness.log" | tr '\n' ' ' | sed 's/^/::error title=harness log head::/'; echo
             grep -E '^\s*✖ ' "$RUNNER_TEMP/harness.log" | sed 's/^\s*//' | sort -u | head -6 | while IFS= read -r l; do echo "::error title=harness failure::${l:0:300}"; done
             grep -E 'AssertionError|actual:|expected:|Error:' "$RUNNER_TEMP/harness.log" | head -10 | tr '\n' ' ' | cut -c1-900 | sed 's/^/::error title=harness assertion detail::/'; echo
+            grep -E '^\s*ℹ (decoders|encoders|demuxers|muxers|filters)' "$RUNNER_TEMP/harness.log" | head -8 | tr '\n' ' ' | cut -c1-1500 | sed 's/^/::error title=harness component lists::/'; echo
           fi
           exit "$st"
       - name: Assemble the retained artifact (binary + provenance + harness + fixture digests; nothing published)
