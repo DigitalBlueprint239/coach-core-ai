@@ -105,11 +105,28 @@ Admission calls `c2.admissionDecision` over the stored job, inside one transacti
 
 ## 6. Limits (`TEST_MEASURED`)
 
-- **Method:** `film-worker-calibrate.js` runs the exact `ARGS` for every step over every structurally valid frozen and S2b fixture, three times each, on the pinned decoder in CI. It also bisects each command's minimum working address space.
-- **Derivation:** maximum observed × 3, with floors (wall 10 s, CPU 5 s, address space 512 MiB, normalize file size 1.1 × `PENDING_D3` `maxBytes`, probe capture 8 MiB).
-- **Recording:** the derived values and the run are recorded in `limits.js`. Preflight refuses to run the decoder while the limits are uncalibrated.
-- **Lease:** the TTL exceeds the longest step plus grace plus a 30 s margin, and is renewed at every step boundary.
-- These are **not** deploy values, and process limits are **not** a sandbox. Runtime containment is a deploy gate.
+**Method:** `film-worker-calibrate.js` runs each step's exact `ARGS` three times on the pinned decoder in CI, over the frozen and S2b fixtures that **reach that step in the worker**. For example, `decode-input` is measured only after probe and placeholder policy, exactly as the worker gates it. It also bisects each command's minimum working address space over a fixed ladder. Any command that doesn't fit the ladder, or any step with no measurements, fails the calibration.
+
+**Derivation:** maximum observed × 3, with floors: wall 10 s, CPU 5 s (hard limit = soft + 2 s, so SIGXCPU comes first), address space 512 MiB, probe capture 8 MiB, normalize file size 1.1 × `PENDING_D3` `maxBytes`, and 1 MiB for steps that write nothing.
+
+**Committed values** (`limits.js`, `status: MEASURED`), from pinned run [39452043759](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39452043759) at `95e777e`:
+
+| Step | Commands measured | Observed max: min. address space / CPU / wall | Committed: address space / CPU soft / wall |
+|---|---|---|---|
+| probe-input | 32 | 32 MiB / 16 ms / 16 ms | 512 MiB / 5 s / 10 s |
+| decode-input | 7 | 192 MiB / 71 ms / 39 ms | 576 MiB / 5 s / 10 s |
+| normalize | 7 | 32 MiB / 9 ms / 9 ms | 512 MiB / 5 s / 10 s |
+| probe-output | 14 | 32 MiB / 8 ms / 8 ms | 512 MiB / 5 s / 10 s |
+| decode-output | 7 | 192 MiB / 72 ms / 40 ms | 576 MiB / 5 s / 10 s |
+
+- Peak resident memory was 29 MiB or less.
+- Lease TTL is 42 s. That exceeds the longest step (10 s) plus grace (2 s) plus a 30 s margin, and the lease is renewed at every step boundary.
+
+**Decoder environment:** decoder processes receive exactly `GLIBC_TUNABLES=glibc.malloc.arena_max=1`, and nothing else. In the static 9.0.2 binary, per-thread malloc arenas reserve address space without using it. The calibration diagnostic shows the worst command (s7, 13 streams; it never reaches decode in the worker) needing 3072 MiB without the setting and 768 MiB with it (run 39452043759).
+
+**Re-measured on every run:** every later CI run re-measures and **fails if any command needs more than the committed limits** (`CHECK_COMMITTED=1`).
+
+These are **not** deploy values. The floors dominate because the synthetic fixtures are small; real footage at the placeholder limits would need its own calibration in a deploy slice. Process limits are **not** a sandbox: runtime containment is a deploy gate.
 
 ## 7. Evidence map (package §5)
 

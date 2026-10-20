@@ -37,6 +37,8 @@ const DIRS = process.env.CAL_DIRS ? process.env.CAL_DIRS.split(":") :
   [path.join(ROOT, "tools", "ffmpeg", "fixtures", "frozen"),
     path.join(ROOT, "functions", "test", "fixtures", "s2b-media")];
 const REPS = 3;
+const PRLIMIT = spawnSync("sh", ["-c", "command -v prlimit"],
+    {encoding: "utf8"}).stdout.trim();
 const MiB = 1024 * 1024;
 const LADDER = [32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024, 1536,
   2048, 3072].map((m) => m * MiB);
@@ -175,6 +177,21 @@ function run(step, fixture, bin, args, opts = {}) {
   const diagnostic = {step: worst.step, fixture: worst.fixture,
     cmd: worst.cmd, minAsWithEnv: worst.minAsBytes,
     minAsWithoutEnv: minAs(worst.bin, worstArgs, plainRef, {})};
+
+  // Diagnostic: how the pinned decoder fails when the address-space limit
+  // is BELOW its measured need (classification evidence for
+  // allocation-failure). Run directly under prlimit with the worker env.
+  const allocProbe = [];
+  const big = rows.filter((r) => r.step === "decode-input")
+      .sort((a, b) => b.minAsBytes - a.minAsBytes)[0];
+  for (const mib of [24, 48, 96, Math.max(32, big.minAsBytes / MiB / 2)]) {
+    const r = spawnSync(PRLIMIT, [`--as=${mib * MiB}`, "--", bins.ffmpeg,
+      ...big.args], {encoding: "utf8", env: DECODER_ENV,
+      maxBuffer: 16 * MiB});
+    allocProbe.push({mib, fixture: big.fixture, exit: r.status,
+      signal: r.signal, stderrTail: String(r.stderr || "").slice(-600)});
+  }
+  console.error(JSON.stringify({allocProbe}));
 
   const steps = {};
   for (const step of ["probe-input", "decode-input", "normalize",

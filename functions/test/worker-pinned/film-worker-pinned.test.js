@@ -266,7 +266,7 @@ describe("resource limits stop synthetic offenders (classified)", () => {
     const r = await d.run("decode-input", "ffmpeg",
         ARGS.decode(fixture("s6-res-at-limit-1920x1080.mp4")));
     assert.deepEqual([r.status, r.kill], ["limit-kill", "allocation-failure"],
-        `code=${r.code} signal=${r.signal} ${r.stderrTail.slice(-300)}`);
+        `code=${r.code} signal=${r.signal} ${r.stderrTail.slice(-1200)}`);
   });
   it("process-group kill reaches grandchildren", async () => {
     const d = await offender(offenders.tree, small());
