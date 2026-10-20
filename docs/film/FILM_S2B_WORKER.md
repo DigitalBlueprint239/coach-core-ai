@@ -105,13 +105,20 @@ Admission calls `c2.admissionDecision` over the stored job, inside one transacti
    - **Delete:** generation-matched. A 404 is recorded as `absent`. A 412 is recorded as `mismatch` and **preserves** the object.
 7. **Abandonment during work** (the S1 transaction is unchanged, only observed): the next fenced checkpoint fails and the worker stops. Output this job **proves** it owns is deleted under a recorded intent; unknown ownership is recorded as evidence only.
 8. **Reconciliation pass** (`reconcileFilm`): decoder-free; it never probes, decodes or remuxes, and never admits an attempt.
-   - **Still allowed** after the budget or horizon is exhausted.
+   - **Still allowed** after the budget or horizon is exhausted, and after a recovery mark (PR85 R1). A verified promotion moves the recovery record to `resolvedRecovery` with its evidence intact.
    - **Adopts** only output proven against a complete validated record with **the current decoder digests and policy revision**.
-   - **Also:** it runs pending cleanup, and evaluates exhaustion when it is due.
+   - **Also:** it resumes pending quarantine **and output** cleanup (R4: a failed generation-matched delete is retried, and the film is never reopened), and evaluates exhaustion when it is due.
+9. **Strict durable records (R2):** `validated`, `intent` and `output` have strict schemas (hex digests, r4 `media`, decimal generations). A schema-invalid job is an `anomaly`: preserved, logged, never promoted.
+   - **Binding check:** before any ownership probe and again inside the ready commit, the records must agree with each other, with the job key, with the film's declared bytes, with the **current** policy revision and with the `PENDING_D3` placeholders.
+   - **Prospective state:** the exact resulting document must parse as an r4 `FilmState` before anything is written. Any failure holds the film for recovery with the problem as evidence; the records are left untouched.
+10. **OFF everywhere (R3):** `onFilmWritten`, `processFilm`, `redrive` and `reconcileFilm` each return `disabled` before any Firestore, Storage or decoder call when the switch is off.
 
 ## 6. Limits (`TEST_MEASURED`)
 
-**Method:** `film-worker-calibrate.js` runs each step's exact `ARGS` three times on the pinned decoder in CI, over the frozen and S2b fixtures that **reach that step in the worker**. For example, `decode-input` is measured only after probe and placeholder policy, exactly as the worker gates it. It also bisects each command's minimum working address space over a fixed ladder. Any command that doesn't fit the ladder, or any step with no measurements, fails the calibration.
+**Method:** `film-worker-calibrate.js` runs each step's exact `ARGS` three times on the pinned decoder in CI, over the frozen and S2b fixtures that **reach that step in the worker**. `decode-input` runs only after probe and placeholder policy, and `normalize` only after a successful strict input decode, exactly as the worker gates them.
+- **Fresh outputs:** every measured invocation (repeats and every address-space probe) runs in its **own fresh work directory**, so each normalization writes a **fresh output path** (corrected after the PR85 review: earlier rounds reused one path with `-n`).
+- **Same result:** every invocation must reproduce the reference exactly: exit, signal, stdout digest, stderr digest with pointer values masked, and output digest.
+- **Intended operation:** the reference must do what the worker needs. Probes exit 0 with output; normalize and decode-output succeed strictly. `decode-input` either succeeds or fails with **positive** media evidence (s16); anything else fails the calibration. It also bisects each command's minimum working address space over a fixed ladder. Any command that doesn't fit the ladder, or any step with no measurements, fails the calibration.
 
 **Derivation:** maximum observed × 3, with floors: wall 10 s, CPU 5 s (hard limit = soft + 2 s, so SIGXCPU comes first), address space 512 MiB, probe capture 8 MiB, normalize file size 1.1 × `PENDING_D3` `maxBytes`, and 1 MiB for steps that write nothing.
 

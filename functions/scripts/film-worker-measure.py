@@ -7,7 +7,9 @@ exit, signal, stdoutBytes, stderrBytes, cwdBytes. With <as-bytes> > 0 the
 child runs under prlimit --as=<as-bytes> (used to find the minimum address
 space). Node cannot read a child's rusage, hence this helper. Test-only.
 """
+import hashlib
 import json
+import re
 import os
 import resource
 import shutil
@@ -50,6 +52,11 @@ def main():
         "exit": p.returncode if p.returncode >= 0 else None,
         "signal": -p.returncode if p.returncode < 0 else None,
         "stdoutBytes": len(p.stdout), "stderrBytes": len(p.stderr),
+        "stdoutSha256": hashlib.sha256(p.stdout).hexdigest(),
+        # pointer values differ per run (ASLR); compare stderr without them
+        "stderrNormSha256": hashlib.sha256(
+            re.sub(rb"0x[0-9a-f]+", b"0x", p.stderr)).hexdigest(),
+        "stderrTail": p.stderr[-600:].decode("utf-8", "replace"),
         "cwdBytes": tree_bytes(cwd),
     }))
 

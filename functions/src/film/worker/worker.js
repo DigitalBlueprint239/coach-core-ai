@@ -68,6 +68,22 @@ const POLICY_REVISION = sha256(JSON.stringify({
 }));
 
 const ms = z.number().int().min(0).max(Number.MAX_SAFE_INTEGER);
+const hex64 = z.string().regex(/^[0-9a-f]{64}$/);
+const gen = z.string().regex(/^[1-9][0-9]{0,19}$/);
+/** Durable record of a completed validation (written once, fenced). */
+const validatedSchema = z.object({
+  attemptN: z.number().int().min(1).max(MAX), fence: z.number().int().min(1),
+  inputSha256: hex64, inputBytes: z.number().int().min(1),
+  outputSha256: hex64, outputBytes: z.number().int().min(1),
+  media: c2.schemas.media,
+  artifact: z.object({ffmpeg: hex64, ffprobe: hex64}).strict(),
+  policyRevision: hex64, atMs: ms,
+}).strict();
+/** Output intent recorded before the create-only upload. */
+const intentSchema = z.object({
+  fence: z.number().int().min(1), key: z.string().min(1),
+  outputSha256: hex64, outputBytes: z.number().int().min(1), atMs: ms,
+}).strict();
 const cleanupEntry = z.object({
   object: z.string(), generation: z.string(), fence: z.number().int(),
   result: z.enum(["pending", "deleted", "absent", "mismatch"]),
@@ -89,15 +105,19 @@ const jobSchema = z.object({
   counters: z.object({duplicateDeliveries: z.number().int(),
     contentionSkips: z.number().int(), configurationStalls: z.number().int()}),
   stalled: z.object({reason: z.string(), atMs: ms}).nullable(),
-  validated: z.any().nullable(),
-  intent: z.any().nullable(),
-  output: z.object({generation: z.string(), sha256: z.string(),
-    bytes: z.number().int(), key: z.string(),
-    provenBy: z.enum(["ack", "adopted"])}).nullable(),
+  validated: validatedSchema.nullable(),
+  intent: intentSchema.nullable(),
+  output: z.object({generation: gen, sha256: hex64,
+    bytes: z.number().int().min(1), key: z.string().min(1),
+    provenBy: z.enum(["ack", "adopted"])}).strict().nullable(),
   terminal: z.object({outcome: z.enum(["ready", "rejected"]),
     reason: z.string().nullable(), atMs: ms}).nullable(),
   recovery: z.object({reason: z.string(), evidence: z.any(), atMs: ms})
       .nullable(),
+  // a recovery record later resolved by verified decoder-free promotion
+  resolvedRecovery: z.object({reason: z.string(), evidence: z.any(),
+    atMs: ms, resolvedAtMs: ms, by: z.literal("reconciliation")})
+      .nullable().optional(),
   exhaustion: z.object({outcome: z.string(), reason: z.string().nullable(),
     atMs: ms}).nullable(),
   cleanup: z.object({quarantine: cleanupEntry, output: cleanupEntry}),
@@ -486,6 +506,44 @@ function createFilmWorker(deps) {
   }
 
   /**
+   * Cross-field binding of the durable records a promotion relies on: the
+   * validated record, the intent and (when recorded) the output must agree
+   * with each other, with this job/film and with the CURRENT policy
+   * revision, and the media facts must respect the PENDING_D3 placeholders.
+   * @param {object} ctx
+   * @param {object} job schema-valid job
+   * @return {?string} problem, or null
+   */
+  function bindingProblem(ctx, job) {
+    const v = job.validated;
+    const i = job.intent;
+    const o = job.output;
+    if (!v || !i) return "validation-record-missing";
+    if (v.media.sha256 !== v.outputSha256 || v.media.bytes !== v.outputBytes) {
+      return "media-output-mismatch";
+    }
+    if (ctx.film && v.inputBytes !== ctx.film.declaredBytes) {
+      return "input-bytes-mismatch";
+    }
+    if (v.policyRevision !== POLICY_REVISION) return "policy-revision-changed";
+    if (v.media.bytes > LIMITS.maxBytes ||
+        v.media.durationMs > LIMITS.maxDurationMs ||
+        v.media.width > LIMITS.maxWidth || v.media.height > LIMITS.maxHeight) {
+      return "media-over-placeholder-limits";
+    }
+    if (i.key !== outputKey(job.teamId, job.filmId, job.jobId) ||
+        i.outputSha256 !== v.outputSha256 || i.outputBytes !== v.outputBytes ||
+        i.fence !== v.fence) {
+      return "intent-mismatch";
+    }
+    if (o && (o.key !== i.key || o.sha256 !== v.outputSha256 ||
+        o.bytes !== v.outputBytes)) {
+      return "output-binding-mismatch";
+    }
+    return null;
+  }
+
+  /**
    * Ready commit: film + existing ledger slot together, under the fence.
    * @param {object} h holder
    * @return {Promise<object>}
@@ -495,18 +553,42 @@ function createFilmWorker(deps) {
         job.output.sha256 !== job.validated.outputSha256) {
       throw new Stop({why: "ready-precondition-failed"});
     }
+    const bad = bindingProblem(ctx, job);
+    if (bad) {
+      if (holdForRecovery(ctx, job, "validation-record-invalid", at)) {
+        job.recovery.evidence = {...job.recovery.evidence, problem: bad};
+        return {held: true};
+      }
+      throw new Stop({why: "validation-record-invalid"});
+    }
     if (!transitionable(ctx) || ctx.generation !== job.inputGeneration) {
       if (holdForRecovery(ctx, job, "ready-precondition-failed", at)) {
         return {held: true};
       }
       throw new Stop({why: "film-changed"});
     }
-    tx.update(filmRef(ctx.teamId, ctx.filmId), {
+    const readyFields = {
       status: "ready", statusChangedAt: ts(at), readyAt: ts(at),
       media: job.validated.media,
       normalizedGeneration: job.output.generation,
       retentionExpiresAt: null,
-    });
+    };
+    // The exact resulting document must be a valid r4 FilmState (R5-R9,
+    // T6') before anything is written; otherwise preserve and hold.
+    const prospect = {};
+    for (const [k, val] of Object.entries({...ctx.raw, ...readyFields})) {
+      prospect[k] = c2.FILM_TIMESTAMP_FIELDS.includes(k) ?
+        v1.toWireTimestamp(val) : val;
+    }
+    if (!c2.schemas.filmState.safeParse(prospect).success) {
+      if (holdForRecovery(ctx, job, "validation-record-invalid", at)) {
+        job.recovery.evidence = {...job.recovery.evidence,
+          problem: "ready-state-invalid"};
+        return {held: true};
+      }
+      throw new Stop({why: "validation-record-invalid"});
+    }
+    tx.update(filmRef(ctx.teamId, ctx.filmId), readyFields);
     tx.set(ledgerRef(ctx.teamId), {slots: {...ctx.slots,
       [ctx.filmId]: {...ctx.slot, status: "ready"}}, updatedAt: ts(at)});
     const a = job.attempts[job.attempts.length - 1];
@@ -515,6 +597,12 @@ function createFilmWorker(deps) {
       a.endedAtMs = at.getTime();
     }
     job.terminal = {outcome: "ready", reason: null, atMs: at.getTime()};
+    if (job.recovery) {
+      // resolved only by this verified promotion; the evidence is kept
+      job.resolvedRecovery = {...job.recovery, resolvedAtMs: at.getTime(),
+        by: "reconciliation"};
+      job.recovery = null;
+    }
     job.lease = null;
     job.cleanup = {...job.cleanup, quarantine: {object: ctx.film.uploadPath,
       generation: ctx.generation, fence: job.fence, result: "pending"}};
@@ -558,7 +646,10 @@ function createFilmWorker(deps) {
         tx.set(jSnap.ref, j);
         return false;
       }
-      if (!output || j.cleanup.output) return false;
+      // An existing output cleanup is RESUMED while pending (e.g. a failed
+      // generation-matched delete); a finished one is never redone.
+      if (j.cleanup.output) return j.cleanup.output.result === "pending";
+      if (!output) return false;
       j.fence += 1;
       j.lease = null;
       j.cleanup = {...j.cleanup, output: {object: j.intent.key,
@@ -577,6 +668,7 @@ function createFilmWorker(deps) {
    * @return {Promise<object>} {outcome, ...}
    */
   async function processFilm(a) {
+    if (!isEnabled()) return {outcome: "disabled"};
     const holder = newId();
     const pf = await decoder.preflight();
     const adm = await admit({...a, holder, configurationOk: pf.ok,
@@ -813,10 +905,15 @@ function createFilmWorker(deps) {
    * @return {Promise<object>}
    */
   async function reconcileFilm(a) {
+    if (!isEnabled()) return {reconcile: "disabled"};
     const holder = newId();
     const pre = await db.runTransaction(async (tx) => {
       const at = now();
       const ctx = await load(tx, a.teamId, a.filmId);
+      if (ctx.film && ctx.jobInvalid) {
+        // malformed durable state: preserved as evidence, never promoted
+        return {action: "anomaly", reason: "job-invalid"};
+      }
       if (!ctx.film || !ctx.job) return {action: "none"};
       const job = ctx.job;
       if (job.lease && job.lease.untilMs > at.getTime()) {
@@ -826,11 +923,28 @@ function createFilmWorker(deps) {
           "pending") {
         return {action: "cleanup-quarantine", jobId: job.jobId};
       }
+      if (job.cleanup.output && job.cleanup.output.result === "pending") {
+        return {action: "cleanup-output", jobId: job.jobId};
+      }
       if (ctx.film.status !== "validating") {
         return {action: job.intent ? "changed" : "none", jobId: job.jobId};
       }
-      if (job.terminal || job.recovery) return {action: "none"};
+      if (job.terminal) return {action: "none"};
+      // Decoder-free recovery of a proven validated output stays available
+      // after exhaustion, the horizon or a recovery mark: it admits no
+      // attempt, and promotion re-verifies binding, artifact, policy,
+      // ownership (bytes AND intent), fence and film/ledger preconditions.
       if (job.validated && job.intent) {
+        const bad = bindingProblem(ctx, job);
+        if (bad) {
+          // checked BEFORE any ownership probe: bad bindings are held with
+          // evidence and the durable records are preserved untouched
+          if (holdForRecovery(ctx, job, "validation-record-invalid", at)) {
+            job.recovery.evidence = {...job.recovery.evidence, problem: bad};
+            tx.set(ctx.jRef, job);
+          }
+          return {action: "held", reason: bad};
+        }
         job.fence += 1;
         job.lease = {holder, untilMs: at.getTime() + ttl(), fence: job.fence,
           kind: "reconcile"};
@@ -843,12 +957,23 @@ function createFilmWorker(deps) {
     });
     const where = {teamId: a.teamId, filmId: a.filmId, jobId: pre.jobId ||
       (pre.job && pre.job.jobId)};
+    if (pre.action === "anomaly") {
+      logger.warn("film.worker.reconcile_anomaly", {reason: pre.reason});
+      return {reconcile: "anomaly", reason: pre.reason};
+    }
     if (pre.action === "cleanup-quarantine") {
       return {reconcile: "cleanup",
         result: await runCleanup(where, "quarantine")};
     }
+    if (pre.action === "cleanup-output") {
+      return {reconcile: "cleanup",
+        result: await runCleanup(where, "output")};
+    }
     if (pre.action === "changed") {
       return {reconcile: await stopForChangedFilm(where)};
+    }
+    if (pre.action === "held") {
+      return {reconcile: "recovery-needed", reason: pre.reason};
     }
     if (pre.action !== "promote") {
       return {reconcile: pre.action, exhaustion: pre.exhaustion || null};

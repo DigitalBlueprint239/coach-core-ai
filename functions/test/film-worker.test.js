@@ -515,6 +515,155 @@ describe("inconsistent state mid-run is held for recovery, never forced",
       });
     });
 
+describe("PR85 review R1-R4 (#39 c-6297820037): focused regressions", () => {
+  /** Lost acknowledgement after a validated upload; lease then expired. */
+  const lostAck = async (w, f) => {
+    w.objects.fault("createOnly", "ack-lost");
+    const stat = w.objects.stat.bind(w.objects);
+    w.objects.stat = async () => {
+      throw new Error("instance lost before reconciling the upload");
+    };
+    await assert.rejects(w.worker.processFilm({teamId: TEAM,
+      filmId: f.filmId}));
+    w.objects.stat = stat;
+    w.clock.t = new Date(w.clock.t.getTime() + TTL + 1);
+  };
+  const jobPath = (f) => `${filmPath(f.filmId)}/workerJobs/${f.jobId}`;
+  // Each mutation keeps the job SCHEMA-valid but breaks a binding: the
+  // binding check (not the schema) must hold it for recovery.
+  const mutations = {
+    "media sha differs from the validated output": (j) => {
+      j.validated.media.sha256 = "0".repeat(64);
+    },
+    "media bytes differ from the validated output": (j) => {
+      j.validated.media.bytes += 1;
+    },
+    "intent key points elsewhere": (j) => {
+      j.intent.key = "films/other/x/jobs/y/normalized.mp4";
+    },
+    "media over the placeholder width": (j) => {
+      j.validated.media.width = 1922;
+    },
+    "input bytes differ from the declared bytes": (j) => {
+      j.validated.inputBytes += 1;
+    },
+  };
+  for (const [name, mutate] of Object.entries(mutations)) {
+    it(`R2: ${name} -> held, never ready; record preserved`, async () => {
+      const w = world();
+      const f = await validatingFilm(w);
+      await lostAck(w, f);
+      const j = job(w, f);
+      mutate(j);
+      w.db.write(jobPath(f), j);
+      const r = await w.worker.reconcileFilm({teamId: TEAM,
+        filmId: f.filmId});
+      assert.notEqual(r.reconcile, "ready", JSON.stringify(r));
+      assert.equal(w.db.read(filmPath(f.filmId)).status, "validating");
+      assert.equal(ledger(w)[f.filmId].status, "validating");
+      const after = job(w, f);
+      assert.deepEqual(after.validated, j.validated, "record preserved");
+      assert.equal(after.recovery.reason, "validation-record-invalid");
+      assert.ok(after.recovery.evidence.problem);
+    });
+  }
+  it("R2: schema-invalid durable record -> anomaly, untouched", async () => {
+    const w = world();
+    const f = await validatingFilm(w);
+    await lostAck(w, f);
+    const j = job(w, f);
+    j.validated.media.width = 0;
+    w.db.write(jobPath(f), j);
+    const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});
+    assert.deepEqual(r, {reconcile: "anomaly", reason: "job-invalid"});
+    assert.deepEqual(job(w, f), j);
+  });
+  it("R1: after exhaustion an UNPROVEN object stays held; no attempt 4",
+      async () => {
+        const w = world({script: ["infrastructure", "infrastructure"]});
+        const f = await validatingFilm(w);
+        await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+        await w.worker.redrive({teamId: TEAM, filmId: f.filmId});
+        await lostAck(w, f);
+        const key = `films/${TEAM}/${f.filmId}/jobs/${f.jobId}/normalized.mp4`;
+        const own = w.objects.objects.get(key);
+        own.bytes = Buffer.from("tampered after upload");
+        assert.equal((await w.worker.redrive({teamId: TEAM,
+          filmId: f.filmId})).outcome, "refused-exhausted");
+        const r = await w.worker.reconcileFilm({teamId: TEAM,
+          filmId: f.filmId});
+        assert.equal(r.reconcile, "recovery-needed");
+        assert.equal(w.db.read(filmPath(f.filmId)).status, "validating");
+        assert.equal(job(w, f).admitted, 3);
+        assert.equal(w.pipeline.calls.length, 3);
+        assert.equal(w.objects.objects.has(key), true, "never deleted");
+      });
+  it("R1: a resolved recovery keeps its evidence", async () => {
+    const w = world({script: ["infrastructure", "infrastructure"]});
+    const f = await validatingFilm(w);
+    await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+    await w.worker.redrive({teamId: TEAM, filmId: f.filmId});
+    await lostAck(w, f);
+    await w.worker.redrive({teamId: TEAM, filmId: f.filmId});
+    assert.equal(job(w, f).recovery.reason, "attempts-exhausted");
+    const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});
+    assert.equal(r.reconcile, "ready");
+    const j = job(w, f);
+    assert.equal(j.recovery, null);
+    assert.equal(j.resolvedRecovery.reason, "attempts-exhausted");
+    assert.equal(j.resolvedRecovery.by, "reconciliation");
+  });
+  it("R3: OFF gates processFilm, redrive, reconcileFilm and the trigger " +
+      "before any I/O", async () => {
+    const w = world();
+    const f = await validatingFilm(w);
+    const off = w.mk({isEnabled: () => false});
+    const commits = w.db.commits;
+    const calls = w.objects.calls.length;
+    const a = {teamId: TEAM, filmId: f.filmId};
+    assert.deepEqual(await off.processFilm(a), {outcome: "disabled"});
+    assert.deepEqual(await off.redrive(a), {outcome: "disabled"});
+    assert.deepEqual(await off.reconcileFilm(a), {reconcile: "disabled"});
+    assert.deepEqual(await off.onFilmWritten({id: "e", params: a,
+      data: {after: {data: () => ({status: "validating"})}}}),
+    {outcome: "disabled"});
+    assert.equal(w.db.commits, commits);
+    assert.equal(w.objects.calls.length, calls);
+    assert.equal(w.decoder.state.preflights, 0);
+    assert.equal(w.pipeline.calls.length, 0);
+  });
+  it("R4: a pending output cleanup is resumed by the cancellation path " +
+      "too, without reopening the film", async () => {
+    const w = world();
+    const f = await validatingFilm(w);
+    const create = w.objects.createOnly.bind(w.objects);
+    w.objects.createOnly = async (t) => {
+      const out = await create(t);
+      await w.s1.abandonFilmUpload({auth, data: {
+        schemaVersion: v1.CONTRACT_VERSION, operationId: crypto.randomUUID(),
+        action: "abandonFilmUpload", payload: {teamId: TEAM,
+          filmId: f.filmId}}});
+      return out;
+    };
+    const del = w.objects.deleteGeneration.bind(w.objects);
+    w.objects.deleteGeneration = async () => {
+      throw new Error("cleanup outage");
+    };
+    await assert.rejects(w.worker.processFilm({teamId: TEAM,
+      filmId: f.filmId}));
+    assert.equal(job(w, f).cleanup.output.result, "pending");
+    w.objects.deleteGeneration = del;
+    const film = w.db.read(filmPath(f.filmId));
+    // a new processing delivery takes the changed-film path and resumes
+    const r = await w.worker.redrive({teamId: TEAM, filmId: f.filmId});
+    assert.equal(r.outcome, "not-validating");
+    assert.equal(job(w, f).cleanup.output.result, "deleted");
+    assert.deepEqual(w.db.read(filmPath(f.filmId)), film, "film untouched");
+    assert.equal(job(w, f).terminal, null);
+    assert.equal(w.pipeline.calls.length, 1);
+  });
+});
+
 describe("decoder-free reconciliation and malformed state", () => {
   it("after exhaustion, reconciliation adopts proven validated output " +
       "and promotes without any decoder or pipeline run", async () => {

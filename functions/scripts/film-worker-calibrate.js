@@ -25,7 +25,7 @@ const path = require("path");
 const {spawnSync} = require("child_process");
 const {ARGS, probeFacts, policyReason, structural} =
   require("../src/film/worker/media");
-const {pinnedDigests, fileSha256, DECODER_ENV} =
+const {pinnedDigests, fileSha256, DECODER_ENV, classify} =
   require("../src/film/worker/decoder");
 const {LIMITS} = require("../src/film/limits");
 
@@ -58,37 +58,81 @@ if (pinned) {
 }
 
 /**
+ * One measured invocation in its OWN fresh working directory. `build`
+ * receives that directory, so every invocation that writes (normalize)
+ * writes a fresh output path; the output's digest is recorded before the
+ * directory is removed.
  * @param {string} bin "ffmpeg" | "ffprobe"
- * @param {string[]} args
+ * @param {function(string): string[]} build argv for a given work dir
  * @param {number} [asBytes] address-space limit (0 = none)
  * @param {object} [env] child environment (default: the worker's)
  * @return {object} one measured run
  */
-function measure(bin, args, asBytes = 0, env = DECODER_ENV) {
+function measure(bin, build, asBytes = 0, env = DECODER_ENV) {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "cal-"));
+  const out = path.join(cwd, "normalized.mp4");
   const r = spawnSync("python3", [MEASURE, cwd, String(asBytes),
-    JSON.stringify(env), bins[bin], ...args],
+    JSON.stringify(env), bins[bin], ...build(cwd)],
   {encoding: "utf8", maxBuffer: 64 * MiB});
+  const m = r.status === 0 ? JSON.parse(r.stdout) : null;
+  if (m) {
+    m.outputSha256 = fs.existsSync(out) ? fileSha256(out) : null;
+    m.outputBytes = fs.existsSync(out) ? fs.statSync(out).size : 0;
+  }
   fs.rmSync(cwd, {recursive: true, force: true});
-  if (r.status !== 0) throw new Error(`measure failed: ${r.stderr}`);
-  return JSON.parse(r.stdout);
+  if (!m) throw new Error(`measure failed: ${r.stderr}`);
+  return m;
 }
 
 /**
- * Smallest ladder AS whose run ends like the unlimited run (bisection;
- * success is monotonic in the address-space limit).
+ * Two runs performed the SAME operation with the SAME result.
+ * @param {object} a
+ * @param {object} b
+ * @return {boolean}
+ */
+function same(a, b) {
+  return a.exit === b.exit && a.signal === b.signal &&
+    a.stdoutSha256 === b.stdoutSha256 &&
+    a.stderrNormSha256 === b.stderrNormSha256 &&
+    a.outputSha256 === b.outputSha256;
+}
+
+/**
+ * The reference run did what the worker needs from this step.
+ * @param {string} step
+ * @param {object} m
+ * @return {?string} outcome ("ok" | "media-error"), or null when the
+ *   operation did not succeed as intended
+ */
+function intended(step, m) {
+  const quiet = m.exit === 0 && m.signal === null && m.stderrBytes === 0;
+  if (step === "probe-input" || step === "probe-output") {
+    return m.exit === 0 && m.signal === null && m.stdoutBytes > 0 ?
+      "ok" : null;
+  }
+  if (step === "normalize") {
+    return quiet && m.outputSha256 && m.outputBytes > 0 ? "ok" : null;
+  }
+  if (quiet) return "ok";
+  // decode-input may legitimately end in a media verdict (s16), but only
+  // with POSITIVE media evidence; anything ambiguous fails calibration.
+  const c = classify({code: m.exit, signal: m.signal, timedOut: false,
+    killedForOutput: false, spawnError: null, stderrTail: m.stderrTail}, true);
+  return step === "decode-input" && c.status === "error" ? "media-error" :
+    null;
+}
+
+/**
+ * Smallest ladder AS whose run is the same operation with the same result
+ * as the unlimited reference (bisection; monotonic in the limit).
  * @param {string} bin
- * @param {string[]} args
+ * @param {function(string): string[]} build
  * @param {object} ref the unlimited run
  * @param {object} [env]
  * @return {?number} bytes
  */
-function minAs(bin, args, ref, env = DECODER_ENV) {
-  const ok = (as) => {
-    const m = measure(bin, args, as, env);
-    return m.exit === ref.exit && m.signal === ref.signal &&
-      m.stdoutBytes === ref.stdoutBytes;
-  };
+function minAs(bin, build, ref, env = DECODER_ENV) {
+  const ok = (as) => same(measure(bin, build, as, env), ref);
   if (!ok(LADDER[LADDER.length - 1])) return null;
   let lo = -1;
   let hi = LADDER.length - 1; // LADDER[hi] passes
@@ -102,28 +146,41 @@ function minAs(bin, args, ref, env = DECODER_ENV) {
 
 const rows = [];
 /**
- * Measure a command REPS times; record the maxima.
+ * Measure a command REPS times (each in a fresh work dir); every repeat
+ * must reproduce the reference exactly, and the reference must have done
+ * the intended operation. Records the maxima.
  * @param {string} step
  * @param {string} fixture
  * @param {string} bin
- * @param {string[]} args
+ * @param {function(string): string[]} build
  * @param {object} [opts]
- * @return {{row: object, ref: object}}
+ * @return {{row: object, ref: object, outcome: string}}
  */
-function run(step, fixture, bin, args, opts = {}) {
+function run(step, fixture, bin, build, opts = {}) {
   const ms = [];
-  for (let i = 0; i < REPS; i++) ms.push(measure(bin, args));
+  for (let i = 0; i < REPS; i++) ms.push(measure(bin, build));
   const ref = ms[0];
-  const row = {step, fixture, bin, cmd: opts.cmd || bin, args,
-    exit: ref.exit, signal: ref.signal,
+  const outcome = intended(step, ref);
+  if (!outcome) {
+    throw new Error(`calibration reference did not perform the intended ` +
+      `${step} on ${fixture}: ${JSON.stringify({exit: ref.exit,
+        signal: ref.signal, stderr: ref.stderrTail.slice(-200)})}`);
+  }
+  if (!ms.every((m) => same(m, ref))) {
+    throw new Error(`non-reproducible ${step} on ${fixture}`);
+  }
+  const row = {step, fixture, bin, cmd: opts.cmd || bin, outcome,
+    args: build("<work>"),
     wallMs: Math.max(...ms.map((m) => m.wallMs)),
     cpuMs: Math.max(...ms.map((m) => m.cpuMs)),
     maxRssKb: Math.max(...ms.map((m) => m.maxRssKb)),
     stdoutBytes: Math.max(...ms.map((m) => m.stdoutBytes)),
     stderrBytes: Math.max(...ms.map((m) => m.stderrBytes)),
-    minAsBytes: minAs(bin, args, ref)};
+    outputBytes: ref.outputBytes, outputSha256: ref.outputSha256,
+    minAsBytes: minAs(bin, build, ref)};
+  row.build = build;
   rows.push(row);
-  return {row, ref};
+  return {row, ref, outcome};
 }
 
 (async () => {
@@ -133,8 +190,11 @@ function run(step, fixture, bin, args, opts = {}) {
         .sort()) {
       const file = path.join(dir, f);
       if (await structural(fs.readFileSync(file))) continue;
-      run("probe-input", f, "ffprobe", ARGS.probe(file), {cmd: "probe"});
-      run("probe-input", f, "ffprobe", ARGS.packets(file), {cmd: "packets"});
+      const fixed = (args) => () => args;
+      run("probe-input", f, "ffprobe", fixed(ARGS.probe(file)),
+          {cmd: "probe"});
+      run("probe-input", f, "ffprobe", fixed(ARGS.packets(file)),
+          {cmd: "packets"});
       const p = spawnSync(bins.ffprobe, ARGS.probe(file), {encoding: "utf8",
         maxBuffer: 64 * MiB});
       const k = spawnSync(bins.ffprobe, ARGS.packets(file),
@@ -146,20 +206,26 @@ function run(step, fixture, bin, args, opts = {}) {
         facts = null;
       }
       // Each later step is measured on exactly the inputs that reach it in
-      // the worker (decode-input only after probe + placeholder policy).
+      // the worker: decode-input after probe + placeholder policy;
+      // normalize only after a successful strict input decode.
       if (!facts || policyReason(facts)) continue;
-      run("decode-input", f, "ffmpeg", ARGS.decode(file));
+      const d = run("decode-input", f, "ffmpeg", fixed(ARGS.decode(file)));
+      if (d.outcome !== "ok") continue;
+      const n = run("normalize", f, "ffmpeg", (cwd) => ARGS.normalize(file,
+          path.join(cwd, "normalized.mp4"), !!facts.audioCodec));
+      // The canonical output, once more in its own fresh path: it must be
+      // byte-identical to every measured normalization (bitexact).
       const out = path.join(work, `${f}.normalized.mp4`);
-      run("normalize", f, "ffmpeg",
-          ARGS.normalize(file, out, !!facts.audioCodec));
-      // normalize ran REPS times with -n: produce the output once here.
-      fs.rmSync(out, {force: true});
-      spawnSync(bins.ffmpeg, ARGS.normalize(file, out, !!facts.audioCodec));
-      const outBytes = fs.statSync(out).size;
-      rows[rows.length - 1].outputBytes = outBytes;
-      run("probe-output", f, "ffprobe", ARGS.probe(out), {cmd: "probe"});
-      run("probe-output", f, "ffprobe", ARGS.packets(out), {cmd: "packets"});
-      run("decode-output", f, "ffmpeg", ARGS.decode(out));
+      spawnSync(bins.ffmpeg, ARGS.normalize(file, out, !!facts.audioCodec),
+          {env: DECODER_ENV});
+      if (!fs.existsSync(out) || fileSha256(out) !== n.ref.outputSha256) {
+        throw new Error(`normalization not reproducible for ${f}`);
+      }
+      run("probe-output", f, "ffprobe", fixed(ARGS.probe(out)),
+          {cmd: "probe"});
+      run("probe-output", f, "ffprobe", fixed(ARGS.packets(out)),
+          {cmd: "packets"});
+      run("decode-output", f, "ffmpeg", fixed(ARGS.decode(out)));
     }
   }
   fs.rmSync(work, {recursive: true, force: true});
@@ -172,11 +238,10 @@ function run(step, fixture, bin, args, opts = {}) {
   // Diagnostic only: the worst address-space row again WITHOUT the
   // single-arena environment (shows what the tunable changes).
   const worst = rows.slice().sort((a, b) => b.minAsBytes - a.minAsBytes)[0];
-  const worstArgs = worst.args;
-  const plainRef = measure(worst.bin, worstArgs, 0, {});
+  const plainRef = measure(worst.bin, worst.build, 0, {});
   const diagnostic = {step: worst.step, fixture: worst.fixture,
     cmd: worst.cmd, minAsWithEnv: worst.minAsBytes,
-    minAsWithoutEnv: minAs(worst.bin, worstArgs, plainRef, {})};
+    minAsWithoutEnv: minAs(worst.bin, worst.build, plainRef, {})};
 
   // Diagnostic: how the pinned decoder fails when the address-space limit
   // is BELOW its measured need (classification evidence for
