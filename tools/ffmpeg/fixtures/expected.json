@@ -1,0 +1,267 @@
+{
+ "note": "Expected probe facts for the synthetic fixtures produced by generate.sh. Durations in ms, dimensions in px. 'decodeWithXerror' is the exit expectation of `ffmpeg -xerror -i <file> -f null -`: 0 = clean full decode, 'nonzero' = the decoder must report an error (truncated/invalid data). Limits referenced here are PENDING_D3 test placeholders (300000 ms, 1920x1080), not approved values. 'structural' is the verdict of the independent box-size check (harness/mp4-boxes.mjs). 'pinnedDecode' is asserted only against the pinned build (HARNESS_PINNED=1). In pinned mode every fixture listed here is REQUIRED (no optional skips).",
+ "fixtures": {
+  "s1-30fps-counter.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 320,
+    "height": 180,
+    "fps": "30/1"
+   },
+   "audio": {
+    "codec": "aac"
+   },
+   "durationMs": 4000,
+   "streams": 2,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s2-60fps.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 320,
+    "height": 180,
+    "fps": "60/1"
+   },
+   "audio": null,
+   "durationMs": 4000,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s3-vfr.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 320,
+    "height": 180
+   },
+   "audio": null,
+   "durationMsApprox": 6733,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "vfr": {
+    "frames": 120,
+    "intervalsMs": {
+     "33": 48,
+     "67": 60,
+     "100": 11
+    },
+    "minDistinctIntervals": 3
+   },
+   "note": "GENUINE variable frame rate: presentation times (N+floor(N/2)+floor(N/5))/30 s give consecutive intervals of 33, 67 and 100 ms (rounded). Asserted from per-frame best_effort_timestamp_time read by the pinned ffprobe (JSON output). Replaces the CFR file mislabelled VFR at c45319d (Codex PR83 review, blocker 1). S2b VFR policy is NOT decided by this fixture.",
+   "structural": "ok"
+  },
+  "s4-hevc.mp4": {
+   "probeOk": true,
+   "optional": true,
+   "video": {
+    "codec": "hevc"
+   },
+   "note": "Generated only when the generator has libx265 (it does for the frozen set). In pinned mode the fixture is REQUIRED and the harness runs `ffmpeg -xerror -i <file> -f null -` and asserts a non-zero exit caused by the missing HEVC decoder (not a timeout, signal or spawn error). Codex PR83 review, blocker 4.",
+   "pinnedDecode": {
+    "exit": "nonzero",
+    "stderrPattern": "no decoder found for: hevc|Decoder \\(codec hevc\\) not found"
+   },
+   "structural": "ok"
+  },
+  "s5-empty.mp4": {
+   "probeOk": false,
+   "decodeWithXerror": "nonzero",
+   "structural": "reject"
+  },
+  "s5-spoofed.mp4": {
+   "probeOk": false,
+   "decodeWithXerror": "nonzero",
+   "structural": "reject"
+  },
+  "s5-truncated.mp4": {
+   "probeOk": true,
+   "decodeWithXerror": "nonzero",
+   "note": "faststart moov is intact so ffprobe succeeds; the truncation is only detected by decoding with -xerror",
+   "structural": "reject"
+  },
+  "s6-duration-at-limit-300000ms.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 64,
+    "height": 64,
+    "fps": "2/1"
+   },
+   "durationMs": 300000,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s6-duration-over-limit-300500ms.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 64,
+    "height": 64,
+    "fps": "2/1"
+   },
+   "durationMs": 300500,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "note": "+1 frame at 2 fps = +500 ms; finer granularity is not meaningful for a container-level duration limit",
+   "structural": "ok"
+  },
+  "s6-metadata-tags.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 320,
+    "height": 180
+   },
+   "durationMs": 2000,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "mustContainTags": [
+    "location",
+    "creation_time",
+    "make",
+    "model",
+    "artist",
+    "comment"
+   ],
+   "note": "the normalizing remux must remove every one of these",
+   "structural": "ok"
+  },
+  "s6-res-at-limit-1920x1080.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080
+   },
+   "durationMs": 1000,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s6-res-over-limit-1922x1080.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 1922,
+    "height": 1080
+   },
+   "durationMs": 1000,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "note": "H.264 needs even dimensions, so the smallest over-limit width is 1922",
+   "structural": "ok"
+  },
+  "s7-excess-streams.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 160,
+    "height": 90
+   },
+   "durationMs": 1000,
+   "streams": 13,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s8-audio-only.mp4": {
+   "probeOk": true,
+   "video": null,
+   "audio": {
+    "codec": "aac"
+   },
+   "durationMs": 2000,
+   "streams": 1,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s9-wrong-container.webm": {
+   "probeOkPinned": false,
+   "optional": true,
+   "note": "Required in pinned mode. The pinned build has only the mov demuxer, so it cannot open WebM (probe fails, decode with -xerror exits non-zero); a full generator build can.",
+   "pinnedDecode": {
+    "exit": "nonzero",
+    "stderrPattern": "Invalid data found when processing input"
+   },
+   "structural": "reject"
+  },
+  "s10-known-good.mp4": {
+   "probeOk": true,
+   "video": {
+    "codec": "h264",
+    "width": 160,
+    "height": 90,
+    "fps": "10/1"
+   },
+   "audio": {
+    "codec": "aac"
+   },
+   "durationMs": 2000,
+   "streams": 2,
+   "decodeWithXerror": 0,
+   "structural": "ok"
+  },
+  "s11a-oversized-moov-size.mp4": {
+   "structural": "reject",
+   "structuralReason": "oversized-box@32:moov",
+   "oversizedHeader": true,
+   "decoderMayAccept": true,
+   "note": "Oversized/malformed box-size header (authorization checklist item 7; Codex PR83 review, blocker 3). Derived from s10 by fixtures/oversize.mjs. Asserted: (1) the pinned probe and -xerror decode terminate inside the harness limits with no timeout, signal or spawn error, and their exits are recorded; (2) the independent structural check (harness/mp4-boxes.mjs) rejects the file; (3) the harness verdict (structure ok AND probe ok AND decode ok) is never success. Measured with the development FFmpeg 6.1.1: probe exit 0 and decode exit 0 — the decoder TOLERATES a moov that declares ~2 GiB, so only the structural check rejects it. S2b must not rely on decoder exit codes for this class."
+  },
+  "s11b-oversized-largesize-header-only.mp4": {
+   "structural": "reject",
+   "structuralReason": "oversized-box@32:moov",
+   "oversizedHeader": true,
+   "pinnedDecode": {
+    "exit": "nonzero"
+   },
+   "note": "Oversized/malformed box-size header (authorization checklist item 7; Codex PR83 review, blocker 3). Derived from s10 by fixtures/oversize.mjs. Asserted: (1) the pinned probe and -xerror decode terminate inside the harness limits with no timeout, signal or spawn error, and their exits are recorded; (2) the independent structural check (harness/mp4-boxes.mjs) rejects the file; (3) the harness verdict (structure ok AND probe ok AND decode ok) is never success. Measured with the development FFmpeg 6.1.1: probe exit 0 with ZERO streams; decode exit non-zero (no streams)."
+  },
+  "s11c-oversized-ftyp-size.mp4": {
+   "structural": "reject",
+   "structuralReason": "oversized-box@0:ftyp",
+   "oversizedHeader": true,
+   "probeOk": false,
+   "pinnedDecode": {
+    "exit": "nonzero"
+   },
+   "note": "Oversized/malformed box-size header (authorization checklist item 7; Codex PR83 review, blocker 3). Derived from s10 by fixtures/oversize.mjs. Asserted: (1) the pinned probe and -xerror decode terminate inside the harness limits with no timeout, signal or spawn error, and their exits are recorded; (2) the independent structural check (harness/mp4-boxes.mjs) rejects the file; (3) the harness verdict (structure ok AND probe ok AND decode ok) is never success. Measured with the development FFmpeg 6.1.1: probe exit 1 ('moov atom not found'), decode exit non-zero."
+  }
+ },
+ "normalizeArgs": [
+  "-map_metadata",
+  "-1",
+  "-map_metadata:s",
+  "-1",
+  "-map_chapters",
+  "-1",
+  "-c",
+  "copy",
+  "-movflags",
+  "+faststart",
+  "-fflags",
+  "+bitexact",
+  "-flags",
+  "+bitexact",
+  "-f",
+  "mp4"
+ ],
+ "forbiddenTagKeys": [
+  "location",
+  "location-eng",
+  "com.apple.quicktime.location.ISO6709",
+  "creation_time",
+  "make",
+  "model",
+  "artist",
+  "comment",
+  "encoder",
+  "com.apple.quicktime.make",
+  "com.apple.quicktime.model",
+  "com.apple.quicktime.software"
+ ]
+}

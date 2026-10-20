@@ -1,0 +1,38 @@
+# FFmpeg 9.0.2 configure flags for the Coach Core film validator (FILM-S2a).
+# One flag per line; '#' starts a comment. Mirrors the LGPL-only minimal recipe
+# in docs/security/FOUNDER_DECISION_PACKET.md §5, plus three additions marked
+# [S2a]: --disable-debug and strip (smaller, reproducible), --extra-ldflags=-static
+# (self-contained binary), -ffile-prefix-map (reproducible paths), and the
+# `null` muxer (libavformat/nullenc.c, LGPL) with its default pass-through
+# encoders wrapped_avframe + pcm_s16le (LGPL, no compression) so the validator
+# can run a full decode check with `-f null -` without writing any output file;
+# the aresample filter (libswresample, LGPL) is required to feed decoded AAC
+# (planar float) to that pass-through audio encoder. The mp4 muxer also
+# selects the mov muxer (same movenc.c).
+# configure itself auto-selects these LGPL core filters for the ffmpeg tool:
+# aformat anull atrim crop format hflip null rotate transpose trim vflip.
+# Deliberately ABSENT: --enable-gpl, --enable-version3, --enable-nonfree, any
+# external library (libx264/libx265/...). Adding any of these changes the
+# licence of the result and must go through review.
+--disable-everything
+--disable-autodetect
+--disable-network
+--disable-doc
+--disable-ffplay
+--enable-ffmpeg
+--enable-ffprobe
+--enable-protocol=file
+--enable-demuxer=mov
+--enable-muxer=mp4,image2,null
+--enable-decoder=h264,aac
+--enable-encoder=mjpeg,wrapped_avframe,pcm_s16le
+--enable-parser=h264,aac
+--enable-bsf=h264_mp4toannexb
+--enable-swscale
+--enable-filter=scale,crop,format,aresample
+--enable-static
+--disable-shared
+--enable-small
+--disable-debug
+--extra-ldflags=-static
+--pkg-config-flags=--static
