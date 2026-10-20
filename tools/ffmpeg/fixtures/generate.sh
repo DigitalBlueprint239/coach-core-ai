@@ -29,8 +29,12 @@ v -f lavfi -i "testsrc=size=320x180:rate=30:duration=4" -f lavfi -i "sine=freque
   "${X264[@]}" "${AAC[@]}" -shortest "${MP4[@]}" "$OUT/s1-30fps-counter.mp4"
 # S2: same at 60 fps.
 v -f lavfi -i "testsrc=size=320x180:rate=60:duration=4" "${X264[@]}" -an "${MP4[@]}" "$OUT/s2-60fps.mp4"
-# S3: variable frame rate (drop frames by a selection expression).
-v -f lavfi -i "testsrc=size=320x180:rate=30:duration=4" -vf "select='not(mod(n\,3))*not(mod(n\,2))+mod(n\,5)',setpts=N/30/TB" -vsync vfr \
+# S3: GENUINELY variable frame rate. 120 source frames get presentation times
+# (N + floor(N/2) + floor(N/5)) / 30 s, so consecutive intervals are 1/30, 2/30
+# and 3/30 s (33/67/100 ms), and -fps_mode passthrough keeps them. (The previous
+# recipe reset timestamps with setpts=N/30/TB and produced a CFR file; replaced
+# after Codex's PR83 review, 2026-10-20.)
+v -f lavfi -i "testsrc=size=320x180:rate=30:duration=4" -vf "setpts='(N+floor(N/2)+floor(N/5))/(30*TB)'" -fps_mode passthrough \
   "${X264[@]}" -an "${MP4[@]}" "$OUT/s3-vfr.mp4"
 # S4: HEVC in MP4 (must be REJECTED by the validator: video codec not allowed).
 ENCODERS="$("$GEN" -hide_banner -encoders 2>/dev/null || true)"
@@ -69,6 +73,10 @@ v -f lavfi -i "testsrc=size=160x90:rate=10:duration=1" "${DETOUT[@]}" -c:v libvp
 # S10: known-good small clip for determinism/remux checks (H.264 + AAC, 2 s).
 v -f lavfi -i "testsrc=size=160x90:rate=10:duration=2" -f lavfi -i "sine=frequency=440:sample_rate=48000:duration=2" \
   "${X264[@]}" "${AAC[@]}" -shortest "${MP4[@]}" "$OUT/s10-known-good.mp4"
+# S11: oversized / malformed box-size headers, derived from S10 by rewriting
+# size fields only (fixtures/oversize.mjs): moov declaring ~2 GiB, a header-only
+# moov with 64-bit largesize 2^62, and ftyp declaring 4 GiB.
+node "$(dirname "${BASH_SOURCE[0]}")/oversize.mjs" "$OUT/s10-known-good.mp4" "$OUT"
 
 {
   echo "generator: $("$GEN" -hide_banner -version | head -1)"

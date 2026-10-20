@@ -2,17 +2,26 @@
   "component": "FFmpeg",
   "version": "9.0.2",
   "releaseName": "Lei",
+  "releaseDate": "2026-09-18",
+  "releaseDateSource": "https://ffmpeg.org/download.html: \"9.0.2 was released on 2026-09-18.\" (confirmed by the independent reviewer on 2026-10-20, #39 c-6290077471)",
   "tarball": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
   "signature": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz.asc",
   "signingKey": {
     "url": "https://ffmpeg.org/ffmpeg-devel.asc",
     "pinnedFingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8",
-    "note": "FFmpeg release signing key as published on https://ffmpeg.org/download.html. The reviewer must cross-check this fingerprint against that page; verify-source.sh refuses any key whose fingerprint differs."
+    "note": "FFmpeg release signing key as published on https://ffmpeg.org/download.html. Cross-checked 2026-10-20 by the independent reviewer (rendered page, #39 c-6290077471) and by Codex (official website source FFmpeg/web@0e960d6 and the downloaded key, PR83 review 5584543124). verify-source.sh refuses any key whose fingerprint differs."
   },
   "tarballSha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
   "tarballSha256Note": "Recorded from the first signature-verified CI download (run 39348016177, 2026-10-20) and reproduced by every build since (runs 39348453561, 39348796862, 39349144271, 39349445007, 39349763926, 39350044354, 39350436723: two independent downloads each). A changed value fails verify-source.sh and is a review event.",
   "licence": {
     "expected": "LGPL-2.1-or-later",
     "sourceOfTruth": "LICENSE.md in the tarball (also https://raw.githubusercontent.com/FFmpeg/FFmpeg/n9.0.2/LICENSE.md)"
-  }
+  },
+  "sourceDateEpoch": 1789689600,
+  "sourceDateEpochNote": "SOURCE_DATE_EPOCH = 2026-09-18T00:00:00Z (the release date), fixed. At c45319d build.sh used the downloaded tarball file mtime, i.e. the download time, which differed per job; the binaries were identical regardless, so FFmpeg does not embed it, but the recorded value was misleading (independent review F2).",
+  "expectedBinarySha256": {
+    "ffmpeg": "1314ab3b558c48ce7ed4aa6efba5a68fefe30362f796e59ef017b17424436ff1",
+    "ffprobe": "fd43ef9be4bb7d7fc821e1b25950efc6eb0aac586cabacd34a38fd52299f48e6"
+  },
+  "expectedBinarySha256Note": "Reproduced by 12 independent builds (runs 39349445007..39351040405) with the final configure.flags on ubuntu-24.04 image 20261012.334.1. provenance.mjs validate fails the build if a binary differs: a changed digest is a review event (toolchain/image or recipe drift), never silently accepted."
 }

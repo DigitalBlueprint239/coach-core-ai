@@ -6,8 +6,11 @@
 //     (default: none), so no credentials, tokens or proxy settings leak in;
 //   - private working directory, stdin closed;
 //   - wall-time limit: SIGTERM at `timeoutMs`, SIGKILL `graceMs` later;
-//   - resource limits via prlimit(1) when available: CPU seconds, address
-//     space, output file size, no core dumps, bounded open files;
+//   - resource limits via prlimit(1): CPU seconds, address space, output
+//     file size, no core dumps, bounded open files. FAIL-CLOSED: when
+//     prlimit(1) is unavailable the run is REFUSED (spawnError
+//     "limits-unavailable") unless the caller passes allowNoLimits: true,
+//     which is for development only and is recorded in the result;
 //   - bounded stderr capture (tail only), stdout either captured (bounded) or
 //     discarded; a run is also terminated when captured output exceeds
 //     `maxCaptureBytes`.
@@ -28,6 +31,12 @@ export const DEFAULT_LIMITS = Object.freeze({
 });
 
 let prlimitAvailable = null;
+/**
+ * Test hook: force prlimit availability (true/false) or reset detection (null).
+ * @param {?boolean} value
+ */
+export function setPrlimitAvailableForTest(value) { prlimitAvailable = value; }
+
 /** @return {boolean} whether util-linux prlimit(1) is usable on this host */
 export function hasPrlimit() {
   if (prlimitAvailable === null) {
@@ -68,6 +77,8 @@ export function limitPrefix(limits) {
  * @param {boolean} [opts.captureStdout=false]
  * @param {number} [opts.maxCaptureBytes=1048576] cap on captured bytes per stream
  * @param {number} [opts.stderrTailBytes=8192] bytes of stderr kept in the result
+ * @param {boolean} [opts.allowNoLimits=false] DEVELOPMENT ONLY: run without
+ *   prlimit when it is unavailable (otherwise the run is refused)
  * @return {Promise<object>} {code, signal, timedOut, killedForOutput, elapsedMs,
  *   stdout, stderrTail, argv, limitsApplied, cwd}
  */
@@ -75,7 +86,7 @@ export function runDecoder(opts) {
   const {
     bin, args, timeoutMs = 60_000, graceMs = 2_000, env = {},
     captureStdout = false, maxCaptureBytes = 1024 * 1024,
-    stderrTailBytes = 8192,
+    stderrTailBytes = 8192, allowNoLimits = false,
   } = opts;
   if (typeof bin !== "string" || !bin.startsWith("/")) {
     throw new TypeError("bin must be an absolute path");
@@ -85,6 +96,14 @@ export function runDecoder(opts) {
   }
   const limits = {...DEFAULT_LIMITS, ...(opts.limits || {})};
   const prefix = limitPrefix(limits);
+  if (prefix.length === 0 && !allowNoLimits) {
+    // Fail closed: never run the decoder without CPU/memory/file-size limits.
+    return Promise.resolve({
+      code: null, signal: null, timedOut: false, killedForOutput: false,
+      spawnError: "limits-unavailable", elapsedMs: 0, stdout: null, stderrTail: "",
+      argv: [bin, ...args], limitsApplied: null, unlimitedByRequest: false, cwd: null,
+    });
+  }
   const argv = [...prefix, bin, ...args];
   const ownCwd = !opts.cwd;
   const cwd = opts.cwd || mkdtempSync(join(tmpdir(), "film-decoder-"));
@@ -129,7 +148,8 @@ export function runDecoder(opts) {
         elapsedMs: Date.now() - started,
         stdout: captureStdout ? Buffer.concat(outChunks).toString("utf8") : null,
         stderrTail: errBuf.toString("utf8"),
-        argv, limitsApplied: prefix.length > 0 ? limits : null, cwd: ownCwd ? null : cwd,
+        argv, limitsApplied: prefix.length > 0 ? limits : null,
+        unlimitedByRequest: prefix.length === 0 && allowNoLimits, cwd: ownCwd ? null : cwd,
       });
     };
     child.on("error", (e) => finish(null, null, e));

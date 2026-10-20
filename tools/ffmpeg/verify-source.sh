@@ -12,7 +12,7 @@ WORK="${1:?work dir}"
 SRC="$WORK/src"; PROV="$WORK/provenance"
 mkdir -p "$SRC" "$PROV"
 
-j() { node -e "const s=require('$HERE/SOURCE.json'); console.log(eval('s.'+process.argv[1]))" "$1"; }
+j() { node -e "const s=require('$HERE/SOURCE.json'); console.log(eval('s.'+process.argv[1]))" -- "$1"; }
 VERSION="$(j version)"; TARBALL_URL="$(j tarball)"; SIG_URL="$(j signature)"
 KEY_URL="$(j signingKey.url)"; PIN_FPR="$(j signingKey.pinnedFingerprint)"; PIN_SHA="$(j tarballSha256)"
 TARBALL="$SRC/ffmpeg-$VERSION.tar.xz"; SIG="$TARBALL.asc"; KEY="$SRC/ffmpeg-devel.asc"
@@ -45,19 +45,18 @@ SHA="$(sha256sum "$TARBALL" | cut -d' ' -f1)"
 if [ "$PIN_SHA" != "PENDING_FIRST_VERIFIED_BUILD" ] && [ "$SHA" != "$PIN_SHA" ]; then
   echo "::error title=FFmpeg tarball digest changed::sha256 $SHA != pinned $PIN_SHA. Review required." >&2; exit 5
 fi
-cat > "$PROV/source.json" <<JSON
-{
-  "version": "$VERSION",
-  "tarball": "$TARBALL_URL",
-  "tarballSha256": "$SHA",
-  "tarballBytes": $(stat -c %s "$TARBALL"),
-  "signature": "$SIG_URL",
-  "signatureValid": true,
-  "signingKeyPrimaryFingerprint": "$SIG_PRIMARY",
-  "pinnedFingerprint": "$PIN_FPR",
-  "pinnedTarballSha256": "$PIN_SHA",
-  "verifiedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-  "gpg": "$(gpg --version | head -1)"
-}
-JSON
+# Structured record (JSON.stringify via provenance.mjs), not a heredoc.
+node -e '
+const [, out, ...kv] = process.argv;
+const o = {};
+for (let i = 0; i < kv.length; i += 2) o[kv[i]] = kv[i + 1];
+o.tarballBytes = Number(o.tarballBytes); o.signatureValid = o.signatureValid === "true";
+require("fs").writeFileSync(out, JSON.stringify(o, null, 2) + "\n");
+' -- "$PROV/source-fields.json" \
+  version "$VERSION" tarball "$TARBALL_URL" tarballSha256 "$SHA" tarballBytes "$(stat -c %s "$TARBALL")" \
+  signature "$SIG_URL" signatureValid true signingKeyPrimaryFingerprint "$SIG_PRIMARY" \
+  pinnedFingerprint "$PIN_FPR" pinnedTarballSha256 "$PIN_SHA" \
+  verifiedAt "$(date -u +%Y-%m-%dT%H:%M:%SZ)" gpg "$(gpg --version | head -1)"
+node "$HERE/provenance.mjs" write-source "$WORK" "$PROV/source-fields.json"
+rm -f "$PROV/source-fields.json"
 echo "[verify-source] OK sha256=$SHA signed-by=$SIG_PRIMARY"

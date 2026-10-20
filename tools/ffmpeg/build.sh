@@ -12,8 +12,10 @@ TARBALL="$SRC/ffmpeg-$VERSION.tar.xz"
 [ -f "$PROV/source.json" ] || { echo "run verify-source.sh first" >&2; exit 1; }
 rm -rf "$BUILD" "$OUT"; mkdir -p "$BUILD" "$OUT" "$PROV"
 
-# Reproducibility: fixed timestamp (tarball mtime), no build host paths, C locale.
-export SOURCE_DATE_EPOCH="$(stat -c %Y "$TARBALL")"
+# Reproducibility: fixed timestamp (the release date from SOURCE.json, NOT the
+# downloaded file's mtime), no build host paths, C locale.
+export SOURCE_DATE_EPOCH="$(node -e "console.log(require('$HERE/SOURCE.json').sourceDateEpoch)")"
+[[ "$SOURCE_DATE_EPOCH" =~ ^[0-9]+$ ]] || { echo "bad sourceDateEpoch in SOURCE.json" >&2; exit 1; }
 export LC_ALL=C TZ=UTC
 tar -C "$BUILD" -xJf "$TARBALL"
 SRCDIR="$BUILD/ffmpeg-$VERSION"
@@ -46,23 +48,13 @@ done
 "$P" -hide_banner -version > "$PROV/ffprobe-version.txt" 2>&1
 ( cd "$OUT/bin" && sha256sum ffmpeg ffprobe ) > "$PROV/BINARY_SHA256SUMS.txt"
 ldd "$B" > "$PROV/ffmpeg-ldd.txt" 2>&1 || true   # "not a dynamic executable" expected
-cat > "$PROV/build.json" <<JSON
-{
-  "version": "$VERSION",
-  "sourceDateEpoch": "$SOURCE_DATE_EPOCH",
-  "configureFlags": $(node -e "console.log(JSON.stringify(process.argv.slice(1)))" "${FLAGS[@]}"),
-  "extraCflags": "$PREFIX_MAP -O2",
-  "toolchain": {
-    "gcc": "$(gcc --version | head -1)",
-    "make": "$(make --version | head -1)",
-    "nasm": "$(nasm -v 2>/dev/null || echo none)",
-    "binutils": "$(ld --version | head -1)",
-    "os": "$(. /etc/os-release && echo "$PRETTY_NAME")",
-    "kernel": "$(uname -srm)",
-    "runnerImage": "${ImageOS:-unknown}/${ImageVersion:-unknown}"
-  },
-  "binaries": $(node -e "const fs=require('fs');const o={};for(const l of fs.readFileSync(process.argv[1],'utf8').trim().split('\n')){const [h,n]=l.split(/\s+/);o[n]={sha256:h,bytes:fs.statSync(process.argv[2]+'/'+n).size}};console.log(JSON.stringify(o))" "$PROV/BINARY_SHA256SUMS.txt" "$OUT/bin"),
-  "builtAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-}
-JSON
+# Structured provenance (JSON.stringify, never string substitution), then
+# re-read and validated: an invalid or inconsistent record fails the build.
+export TC_EXTRA_CFLAGS="$PREFIX_MAP -O2"
+export TC_GCC="$(gcc --version | head -1)" TC_MAKE="$(make --version | head -1)"
+export TC_NASM="$(nasm -v 2>/dev/null || echo none)" TC_BINUTILS="$(ld --version | head -1)"
+export TC_OS="$(. /etc/os-release && echo "$PRETTY_NAME")" TC_KERNEL="$(uname -srm)"
+export TC_RUNNER_IMAGE="${ImageOS:-unknown}/${ImageVersion:-unknown}"
+node "$HERE/provenance.mjs" write-build "$WORK"
+node "$HERE/provenance.mjs" validate "$WORK"
 echo "[build] done: $(cat "$PROV/BINARY_SHA256SUMS.txt" | tr '\n' ' ')"

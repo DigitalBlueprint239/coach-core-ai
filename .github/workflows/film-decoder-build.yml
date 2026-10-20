@@ -35,7 +35,10 @@ env:
 jobs:
   build:
     name: Build ${{ matrix.id }} (independent, from verified source)
-    runs-on: ubuntu-latest
+    # Pinned image (independent review F6): reproducibility is proven within one
+    # image; ubuntu-latest is migrating to Ubuntu 26. SOURCE.json pins the
+    # expected binary digests, so an image change fails loudly instead of drifting.
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     strategy:
       fail-fast: false
@@ -50,7 +53,7 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq nasm
       - name: Verify source (PGP signature against the pinned FFmpeg release key, sha256)
         run: bash tools/ffmpeg/verify-source.sh "$RUNNER_TEMP/ffwork"
-      - name: Build (LGPL-only minimal configure, static, stripped, reproducible flags)
+      - name: Build (LGPL-only minimal configure, static, stripped, reproducible flags; provenance validated before upload)
         run: bash tools/ffmpeg/build.sh "$RUNNER_TEMP/ffwork"
       - name: Record build ${{ matrix.id }}
         run: |
@@ -67,7 +70,10 @@ jobs:
   verify:
     name: Reproducibility, isolation harness, synthetic fixtures
     needs: build
-    runs-on: ubuntu-latest
+    # Pinned image (independent review F6): reproducibility is proven within one
+    # image; ubuntu-latest is migrating to Ubuntu 26. SOURCE.json pins the
+    # expected binary digests, so an image change fails loudly instead of drifting.
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
@@ -82,6 +88,13 @@ jobs:
         with:
           name: decoder-build-b-${{ github.run_id }}
           path: ${{ runner.temp }}/b
+      - name: Provenance unit tests (writer/validator; regression for the c45319d build.json defect)
+        run: node --test --test-reporter=spec tools/ffmpeg/provenance.test.mjs
+      - name: Validate retained provenance of both builds (parse + assert before any further use)
+        run: |
+          set -euo pipefail
+          node tools/ffmpeg/provenance.mjs validate "$RUNNER_TEMP/a"
+          node tools/ffmpeg/provenance.mjs validate "$RUNNER_TEMP/b"
       - name: Reproducibility (two independent builds must be byte-identical)
         run: |
           set -euo pipefail
@@ -132,6 +145,9 @@ jobs:
           t=$(grep -E '^ℹ tests ' "$RUNNER_TEMP/harness.log" | awk '{print $3}'); p=$(grep -E '^ℹ pass ' "$RUNNER_TEMP/harness.log" | awk '{print $3}')
           f=$(grep -E '^ℹ fail ' "$RUNNER_TEMP/harness.log" | awk '{print $3}'); k=$(grep -E '^ℹ skipped ' "$RUNNER_TEMP/harness.log" | awk '{print $3}')
           echo "::notice title=Isolation harness (pinned build)::tests=${t:-?} pass=${p:-?} fail=${f:-?} skipped=${k:-?} exit=$st (skipped tests are NOT passes)"
+          # Key pinned-build facts as annotations (reviewers without artifact access can read them).
+          grep -E 'prlimit available|frame intervals|pinned decode refused|s11[abc]-.*: probe exit|DECODER ACCEPTED' "$RUNNER_TEMP/harness.log" \
+            | sed -E 's/^[[:space:]]*ℹ[[:space:]]*//' | head -12 | tr '\n' ' ' | cut -c1-1800 | sed 's/^/::notice title=Harness key facts (pinned build)::/'; echo
           if [ "$st" != "0" ]; then
             # Surface failures as annotations (job logs are not reachable from every reviewer context).
             head -c 1200 "$RUNNER_TEMP/harness.log" | tr '\n' ' ' | sed 's/^/::error title=harness log head::/'; echo
@@ -145,18 +161,40 @@ jobs:
         run: |
           set -euo pipefail
           D="$RUNNER_TEMP/film-decoder"; mkdir -p "$D/fixtures"
-          cp -r "$RUNNER_TEMP/a/out" "$RUNNER_TEMP/a/provenance" "$D/" 2>/dev/null || true
-          cp "$RUNNER_TEMP/b/provenance/BINARY_SHA256SUMS.txt" "$D/provenance/BINARY_SHA256SUMS.build-b.txt" 2>/dev/null || true
-          cp tools/ffmpeg/fixtures/frozen/SHA256SUMS.txt tools/ffmpeg/fixtures/frozen/TOOLCHAIN.txt "$D/fixtures/" 2>/dev/null || true
-          cp "$RUNNER_TEMP/fx1/SHA256SUMS.txt" "$D/fixtures/SHA256SUMS.runner-generated.txt" 2>/dev/null || true
-          cp "$RUNNER_TEMP/harness.log" "$RUNNER_TEMP/harness-result.json" "$D/" 2>/dev/null || true
-          printf 'candidate=%s\nrun_id=%s\nrun_attempt=%s\nevent=%s\nrunner=%s/%s\n' "${{ github.sha }}" "${{ github.run_id }}" "${{ github.run_attempt }}" "${{ github.event_name }}" "${ImageOS:-}" "${ImageVersion:-}" > "$D/RUN.txt"
+          STRICT="${{ job.status == 'success' }}"
+          # On the success path every file is required; on the failure path keep whatever exists as evidence.
+          c() { if [ "$STRICT" = "true" ]; then cp -r "$@"; else cp -r "$@" 2>/dev/null || true; fi; }
+          c "$RUNNER_TEMP/a/out" "$RUNNER_TEMP/a/provenance" "$D/"
+          c "$RUNNER_TEMP/b/provenance/BINARY_SHA256SUMS.txt" "$D/provenance/BINARY_SHA256SUMS.build-b.txt"
+          c "$RUNNER_TEMP/b/provenance/build.json" "$D/provenance/build.build-b.json"
+          c tools/ffmpeg/fixtures/frozen/SHA256SUMS.txt tools/ffmpeg/fixtures/frozen/TOOLCHAIN.txt "$D/fixtures/"
+          c "$RUNNER_TEMP/fx1/SHA256SUMS.txt" "$D/fixtures/SHA256SUMS.runner-generated.txt"
+          c "$RUNNER_TEMP/harness.log" "$RUNNER_TEMP/harness-result.json" "$D/"
+          printf 'candidate=%s\nrun_id=%s\nrun_attempt=%s\nevent=%s\nrunner=%s/%s\njob_status=%s\n' "${{ github.sha }}" "${{ github.run_id }}" "${{ github.run_attempt }}" "${{ github.event_name }}" "${ImageOS:-}" "${ImageVersion:-}" "${{ job.status }}" > "$D/RUN.txt"
           (cd "$D" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/ARTIFACT_SHA256SUMS.txt"
           mv "$RUNNER_TEMP/ARTIFACT_SHA256SUMS.txt" "$D/"
+          if [ "$STRICT" = "true" ]; then
+            # Validate the assembled artifact itself before upload: provenance parses and is
+            # consistent, and the inventory covers every payload file.
+            node tools/ffmpeg/provenance.mjs validate "$D"
+            node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' -- "$D/provenance/build.build-b.json"
+            (cd "$D" && sha256sum -c ARTIFACT_SHA256SUMS.txt --quiet)
+            n=$(cd "$D" && find . -type f ! -name ARTIFACT_SHA256SUMS.txt | wc -l); m=$(wc -l < "$D/ARTIFACT_SHA256SUMS.txt")
+            [ "$n" = "$m" ] || { echo "::error title=Artifact inventory incomplete::$n payload files, $m inventory lines"; exit 1; }
+            echo "::notice title=Retained artifact validated (${{ github.sha }})::$n payload files, inventory complete and verified; provenance valid"
+          fi
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: success()
         with:
           name: film-decoder-${{ env.FFMPEG_VERSION }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/film-decoder/
           if-no-files-found: error
+          retention-days: 14
+      # Failure evidence is kept too, but never under the name of a validated decoder artifact.
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: film-decoder-FAILED-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/film-decoder/
+          if-no-files-found: warn
           retention-days: 14

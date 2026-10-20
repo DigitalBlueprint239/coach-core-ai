@@ -16,7 +16,8 @@ import {createHash} from "node:crypto";
 import {tmpdir} from "node:os";
 import {join, resolve, dirname} from "node:path";
 import {fileURLToPath} from "node:url";
-import {runDecoder, probeJson, hasPrlimit, limitPrefix, DEFAULT_LIMITS} from "./run-decoder.mjs";
+import {runDecoder, probeJson, hasPrlimit, limitPrefix, DEFAULT_LIMITS, setPrlimitAvailableForTest} from "./run-decoder.mjs";
+import {checkBoxes} from "./mp4-boxes.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FFMPEG = process.env.FFMPEG_BIN && resolve(process.env.FFMPEG_BIN);
@@ -84,7 +85,9 @@ describe("H0 harness mechanics (independent of the decoder)", () => {
     const prefix = limitPrefix(DEFAULT_LIMITS);
     t.diagnostic(`prlimit available: ${hasPrlimit()}; prefix: ${JSON.stringify(prefix)}`);
     if (!hasPrlimit()) {
-      t.diagnostic("prlimit(1) unavailable on this host: CPU/AS/FSIZE limits NOT applied here; wall-time and output caps still are");
+      // Pinned runs are evidence for the retained artifact: limits are REQUIRED there.
+      assert.ok(!PINNED, "pinned run requires prlimit(1): resource limits could not be applied");
+      t.diagnostic("prlimit(1) unavailable on this host: decoder runs are REFUSED (fail-closed) unless allowNoLimits is passed");
       return;
     }
     // Prove the file-size limit: writing more than the cap must be stopped (SIGXFSZ / short write).
@@ -99,6 +102,20 @@ describe("H0 harness mechanics (independent of the decoder)", () => {
     const m = await runDecoder({bin: "/usr/bin/python3", args: ["-c", "b=bytearray(1024*1024*1024); print(len(b))"],
       limits: {addressSpaceBytes: 256 * 1024 * 1024}, captureStdout: true, timeoutMs: 20000});
     assert.notEqual(m.code, 0, "allocation beyond RLIMIT_AS must fail");
+  });
+  it("fails closed: refuses to run when resource limits cannot be applied", async () => {
+    setPrlimitAvailableForTest(false);
+    try {
+      const r = await runDecoder({bin: "/bin/true", args: []});
+      assert.equal(r.spawnError, "limits-unavailable");
+      assert.equal(r.code, null);
+      assert.equal(r.limitsApplied, null);
+      const dev = await runDecoder({bin: "/bin/true", args: [], allowNoLimits: true});
+      assert.equal(dev.code, 0);
+      assert.equal(dev.unlimitedByRequest, true, "an explicit development opt-out must be recorded");
+    } finally {
+      setPrlimitAvailableForTest(null);
+    }
   });
 });
 
@@ -171,16 +188,80 @@ describe("H1 binary identity and build facts", () => {
   });
 });
 
+/** A harness run must end on its own: no limits refusal, spawn error, timeout or signal. */
+function assertBounded(r, what) {
+  assert.equal(r.spawnError, null, `${what}: spawn error ${r.spawnError}`);
+  assert.equal(r.timedOut, false, `${what}: hit the wall-time limit`);
+  assert.equal(r.killedForOutput, false, `${what}: killed for output volume`);
+  assert.equal(r.signal, null, `${what}: terminated by signal ${r.signal}`);
+  assert.ok(Number.isInteger(r.code), `${what}: no exit code`);
+}
+
+const decodeArgs = (file) => ["-hide_banner", "-v", "error", "-xerror", "-i", file, "-f", "null", "-"];
+
+/** Pinned build: a full decode must be REFUSED with a non-zero exit that is a decoder error, not a crash/timeout. */
+async function assertDecoderRefusal(t, file, spec) {
+  const d = await runDecoder({bin: FFMPEG, args: decodeArgs(file), timeoutMs: 60000});
+  assertBounded(d, "pinned decode");
+  assert.notEqual(d.code, 0, `pinned decode must fail: ${d.stderrTail}`);
+  if (spec.stderrPattern) assert.match(d.stderrTail, new RegExp(spec.stderrPattern, "i"));
+  t.diagnostic(`pinned decode refused: exit ${d.code} in ${d.elapsedMs}ms: ${d.stderrTail.trim().split("\n").pop()}`);
+}
+
+/** Per-frame presentation timestamps (seconds) from the binary under test (JSON, not CSV). */
+async function frameTimestamps(file) {
+  const r = await runDecoder({bin: FFPROBE, captureStdout: true, timeoutMs: 60000,
+    args: ["-v", "error", "-select_streams", "v:0", "-show_entries", "frame=best_effort_timestamp_time", "-of", "json", "-i", file]});
+  assertBounded(r, "frame timestamps");
+  assert.equal(r.code, 0, r.stderrTail);
+  return JSON.parse(r.stdout).frames.map((f) => Number(f.best_effort_timestamp_time));
+}
+
+/**
+ * Oversized/malformed box-size header: the decoder must terminate inside the limits (exits recorded),
+ * the structural check must reject, and the harness verdict must never be success.
+ */
+async function oversizedHeaderCase(t, name, file, exp, st) {
+  const {result, probe} = await probeJson(FFPROBE, file);
+  assertBounded(result, "probe");
+  const streams = probe && Array.isArray(probe.streams) ? probe.streams.length : 0;
+  const d = await runDecoder({bin: FFMPEG, args: decodeArgs(file), timeoutMs: 60000});
+  assertBounded(d, "decode");
+  t.diagnostic(`${name}: probe exit ${result.code} streams ${streams}; decode exit ${d.code} (${d.elapsedMs}ms)` +
+    `${d.code !== 0 ? ": " + d.stderrTail.trim().split("\n").pop() : ""}`);
+  const probeOk = result.code === 0 && probe !== null && streams > 0;
+  if (exp.probeOk === false) assert.equal(probeOk, false, "probe must not succeed");
+  if (PINNED && exp.pinnedDecode) assert.notEqual(d.code, 0, "pinned decode must fail");
+  if (!exp.decoderMayAccept) assert.ok(!(probeOk && d.code === 0), "decoder must not accept this input");
+  if (probeOk && d.code === 0) t.diagnostic(`${name}: DECODER ACCEPTED an oversized header; only the structural check rejects it`);
+  const verdict = st.ok && probeOk && d.code === 0;
+  assert.equal(verdict, false, "harness verdict must never be success for an oversized header");
+}
+
 describe("H2 fixtures: probe facts and decode outcomes", () => {
   for (const [name, exp] of Object.entries(expected.fixtures)) {
     it(`${name}`, async (t) => {
       const file = fx(name);
       if (!existsSync(file)) {
-        assert.ok(exp.optional, `required fixture missing: ${name}`);
+        // The frozen set is authoritative: in pinned mode nothing may be skipped.
+        assert.ok(exp.optional && !PINNED, `required fixture missing: ${name}`);
         t.skip(`optional fixture not generated (generator lacks the encoder): ${name}`);
         return;
       }
+      // Independent structural check (no decoder): declared box sizes must fit the bytes present.
+      const st = checkBoxes(readFileSync(file));
+      t.diagnostic(`structural: ${st.ok ? "ok" : "reject " + st.reason}`);
+      if (exp.structural) assert.equal(st.ok ? "ok" : "reject", exp.structural, `structural verdict for ${name}: ${st.reason}`);
+      if (exp.structuralReason) assert.ok(st.reason && st.reason.startsWith(exp.structuralReason), `structural reason ${st.reason}`);
+      if (exp.oversizedHeader) {
+        await oversizedHeaderCase(t, name, file, exp, st);
+        return;
+      }
+      if (PINNED && exp.pinnedDecode) {
+        await assertDecoderRefusal(t, file, exp.pinnedDecode);
+      }
       const {result, probe} = await probeJson(FFPROBE, file);
+      assertBounded(result, "probe");
       const probeOk = result.code === 0 && probe !== null;
       if (exp.probeOkPinned === false && PINNED) {
         assert.equal(probeOk, false, "pinned build must not be able to open this container");
@@ -216,12 +297,24 @@ describe("H2 fixtures: probe facts and decode outcomes", () => {
       const durationMs = Math.round(parseFloat(probe.format.duration) * 1000);
       if (exp.durationMs !== undefined) assert.equal(durationMs, exp.durationMs);
       if (exp.durationMsApprox !== undefined) assert.ok(Math.abs(durationMs - exp.durationMsApprox) <= 50, `duration ${durationMs}`);
+      if (exp.vfr) {
+        const ts = await frameTimestamps(file);
+        assert.equal(ts.length, exp.vfr.frames, `frame count ${ts.length}`);
+        const deltas = ts.slice(1).map((x, i) => x - ts[i]);
+        assert.ok(deltas.every((d) => d > 0), "presentation timestamps must strictly increase");
+        const hist = {};
+        for (const d of deltas) { const k = String(Math.round(d * 1000)); hist[k] = (hist[k] || 0) + 1; }
+        t.diagnostic(`frame intervals (ms -> count): ${JSON.stringify(hist)}`);
+        assert.ok(Object.keys(hist).length >= exp.vfr.minDistinctIntervals, `only ${Object.keys(hist).length} distinct intervals: not variable`);
+        assert.deepEqual(hist, exp.vfr.intervalsMs);
+      }
       if (exp.mustContainTags) {
         const tags = Object.keys(probe.format.tags || {}).map((k) => k.toLowerCase());
         for (const k of exp.mustContainTags) assert.ok(tags.includes(k), `fixture must carry tag ${k}; has ${tags.join(",")}`);
       }
       if (exp.decodeWithXerror !== undefined) {
         const d = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-v", "error", "-xerror", "-i", file, "-f", "null", "-"], timeoutMs: 120000});
+        assertBounded(d, "decode");
         if (exp.decodeWithXerror === 0 && !(PINNED && exp.video && exp.video.codec === "hevc")) {
           assert.equal(d.code, 0, `decode failed: ${d.stderrTail}`);
         } else {
@@ -275,5 +368,41 @@ describe("H3 normalizing remux: metadata stripped, output deterministic, indepen
     const p = process.env.HARNESS_RESULT || join(out, "harness-result.json");
     writeFileSync(p, JSON.stringify(rec, null, 2));
     t.diagnostic(`harness result: ${p}`);
+  });
+});
+
+describe("H4 structural box-size check (independent of the decoder)", () => {
+  const box = (type, payload, size) => {
+    const b = Buffer.alloc(8 + payload.length);
+    b.writeUInt32BE(size === undefined ? 8 + payload.length : size, 0);
+    b.write(type, 4, "latin1"); payload.copy(b, 8); return b;
+  };
+  const ftyp = box("ftyp", Buffer.from("isom\0\0\x02\0isomiso2", "latin1"));
+  const moov = box("moov", box("mvhd", Buffer.alloc(100)));
+  it("accepts a minimal well-formed ftyp+moov+mdat file", () => {
+    const r = checkBoxes(Buffer.concat([ftyp, moov, box("mdat", Buffer.alloc(16))]));
+    assert.equal(r.ok, true, r.reason);
+  });
+  it("rejects a moov that declares more bytes than the file holds (32-bit size)", () => {
+    const r = checkBoxes(Buffer.concat([ftyp, box("moov", Buffer.alloc(8), 0x7FFFFFF0)]));
+    assert.equal(r.ok, false); assert.match(r.reason, /^oversized-box@\d+:moov/);
+  });
+  it("rejects a 64-bit largesize beyond the file and beyond 2^53", () => {
+    const h = Buffer.alloc(16); h.writeUInt32BE(1, 0); h.write("moov", 4, "latin1"); h.writeBigUInt64BE(1n << 62n, 8);
+    assert.equal(checkBoxes(Buffer.concat([ftyp, h])).ok, false);
+    h.writeBigUInt64BE(64n, 8);
+    assert.match(checkBoxes(Buffer.concat([ftyp, h])).reason, /^oversized-box/);
+  });
+  it("rejects undersized, nested size-0, non-ASCII types, missing ftyp, duplicate moov and trailing bytes", () => {
+    assert.match(checkBoxes(Buffer.concat([ftyp, box("moov", Buffer.alloc(0), 4)])).reason, /^undersized-box/);
+    assert.match(checkBoxes(Buffer.concat([ftyp, box("moov", box("trak", Buffer.alloc(4), 0))])).reason, /^size-zero-nested/);
+    assert.match(checkBoxes(Buffer.concat([ftyp, box("m\x00ov", Buffer.alloc(4))])).reason, /^invalid-type/);
+    assert.equal(checkBoxes(Buffer.concat([moov, ftyp])).reason, "first-box-not-ftyp");
+    assert.equal(checkBoxes(Buffer.concat([ftyp, moov, moov])).reason, "moov-count-not-1");
+    assert.match(checkBoxes(Buffer.concat([ftyp, moov, Buffer.alloc(3)])).reason, /^trailing-bytes/);
+    assert.equal(checkBoxes(Buffer.alloc(4)).reason, "too-small");
+  });
+  it("allows size 0 (to end of file) only for the last top-level box", () => {
+    assert.equal(checkBoxes(Buffer.concat([ftyp, moov, box("mdat", Buffer.alloc(32), 0)])).ok, true);
   });
 });
