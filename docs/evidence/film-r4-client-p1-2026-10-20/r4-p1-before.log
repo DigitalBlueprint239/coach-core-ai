@@ -1,0 +1,1325 @@
+FAIL src/features/film-analyzer/__tests__/contracts-v2.test.ts
+  FS-26 r4 complete shared fixture parity
+    √ exact revision, all 211 v2 files and all 86 v1 fixtures preserved (273 ms)
+    √ v2-abandon.request.valid.json parity and expected outcome (7 ms)
+    √ v2-abandon.response.ok-from-reserved.json parity and expected outcome (8 ms)
+    √ v2-abandon.response.ok-from-validating.json parity and expected outcome (1 ms)
+    √ v2-abandon.response.ok-repeat-new-operation.json parity and expected outcome (1 ms)
+    √ v2-attempt-admit-first.json parity and expected outcome (3 ms)
+    √ v2-attempt-admit-third.json parity and expected outcome (1 ms)
+    √ v2-attempt-configuration-preflight.json parity and expected outcome (1 ms)
+    √ v2-attempt-contention.json parity and expected outcome (1 ms)
+    √ v2-attempt-duplicate.json parity and expected outcome (1 ms)
+    √ v2-attempt-horizon-at.json parity and expected outcome (2 ms)
+    √ v2-attempt-horizon-just-before.json parity and expected outcome
+    √ v2-attempt-invalid-admitted-over-ceiling.json parity and expected outcome (2 ms)
+    √ v2-attempt-invalid-config-flag.json parity and expected outcome (1 ms)
+    √ v2-attempt-invalid-fractional-admitted.json parity and expected outcome (1 ms)
+    √ v2-attempt-invalid-missing-now.json parity and expected outcome (1 ms)
+    √ v2-attempt-invalid-negative-admitted.json parity and expected outcome (1 ms)
+    √ v2-attempt-invalid-now-before-created.json parity and expected outcome (1 ms)
+    √ v2-attempt-invalid-null-times.json parity and expected outcome
+    √ v2-attempt-invalid-string-admitted.json parity and expected outcome
+    √ v2-attempt-invalid-unknown-delivery.json parity and expected outcome (1 ms)
+    √ v2-attempt-invalid-unknown-field.json parity and expected outcome (2 ms)
+    √ v2-attempt-refuse-fourth.json parity and expected outcome (1 ms)
+    √ v2-client-failure.network.network.json parity and expected outcome (2 ms)
+    √ v2-client-failure.protocol.response-invalid.json parity and expected outcome (1 ms)
+    √ v2-client-failure.sdk.deadline-exceeded.json parity and expected outcome (1 ms)
+    √ v2-client-failure.sdk.internal.json parity and expected outcome (2 ms)
+    √ v2-client-failure.sdk.permission-denied.json parity and expected outcome (1 ms)
+    √ v2-client-failure.sdk.unavailable.json parity and expected outcome
+    √ v2-doc-legacy-r3-abandoned.json parity and expected outcome (2 ms)
+    √ v2-doc-legacy-r3-expired.json parity and expected outcome (1 ms)
+    √ v2-doc-legacy-r3-rejected.json parity and expected outcome (1 ms)
+    √ v2-doc-legacy-r3-reserved.json parity and expected outcome (2 ms)
+    √ v2-doc-legacy-r3-validating.json parity and expected outcome (2 ms)
+    √ v2-doc-legacy-ready-without-keys.json parity and expected outcome (2 ms)
+    √ v2-doc-present-but-invalid-media.json parity and expected outcome (1 ms)
+    √ v2-doc-v2-ready.json parity and expected outcome (4 ms)
+    √ v2-error.conflict.operation-id-reused.json parity and expected outcome (2 ms)
+    √ v2-error.failed-precondition.film-not-found.json parity and expected outcome (1 ms)
+    √ v2-error.failed-precondition.invalid-state.json parity and expected outcome (1 ms)
+    √ v2-error.failed-precondition.legacy-record-invalid.json parity and expected outcome (1 ms)
+    √ v2-error.failed-precondition.operation-expired.json parity and expected outcome (1 ms)
+    √ v2-error.failed-precondition.rights-wording-outdated.json parity and expected outcome (1 ms)
+    √ v2-error.invalid-argument.action-mismatch.json parity and expected outcome (1 ms)
+    √ v2-error.invalid-argument.rights-acknowledgement-required.json parity and expected outcome (1 ms)
+    √ v2-error.invalid-argument.schema-invalid.json parity and expected outcome (1 ms)
+    √ v2-error.invalid-argument.unsupported-version.json parity and expected outcome (1 ms)
+    √ v2-error.limit-exceeded.bytes-over-limit.json parity and expected outcome (1 ms)
+    √ v2-error.limit-exceeded.format-not-allowed.json parity and expected outcome (1 ms)
+    √ v2-error.permission-denied.anonymous-not-allowed.json parity and expected outcome
+    √ v2-error.permission-denied.beta-access-required.json parity and expected outcome (1 ms)
+    √ v2-error.permission-denied.email-not-verified.json parity and expected outcome (1 ms)
+    √ v2-error.permission-denied.not-team-owner.json parity and expected outcome
+    √ v2-error.team-cap-reached.team-film-cap.json parity and expected outcome (1 ms)
+    √ v2-error.unauthenticated.account-disabled.json parity and expected outcome (1 ms)
+    √ v2-error.unauthenticated.sign-in-required.json parity and expected outcome (1 ms)
+    √ v2-error.unavailable.backend-unavailable.json parity and expected outcome (1 ms)
+    √ v2-exhaust-classified-kills-different-steps.json parity and expected outcome (3 ms)
+    √ v2-exhaust-classified-kills-same-step.json parity and expected outcome (2 ms)
+    √ v2-exhaust-completed-second.json parity and expected outcome (2 ms)
+    √ v2-exhaust-final-infrastructure.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-empty.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-four-attempts.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-kill-unknown-step.json parity and expected outcome (2 ms)
+    √ v2-exhaust-invalid-kills-missing-step.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-made-up-reason.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-missing-reason.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-policy-reason-as-verdict.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-s1-reason.json parity and expected outcome
+    √ v2-exhaust-invalid-unknown-end.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-unknown-field.json parity and expected outcome (1 ms)
+    √ v2-exhaust-invalid-unknown-kill.json parity and expected outcome (2 ms)
+    √ v2-exhaust-invalid-verdict-not-last.json parity and expected outcome (1 ms)
+    √ v2-exhaust-media-verdict-first.json parity and expected outcome (1 ms)
+    √ v2-exhaust-three-ambiguous.json parity and expected outcome (1 ms)
+    √ v2-exhaust-undifferentiated-sigkill.json parity and expected outcome (1 ms)
+    √ v2-film-state.abandonedFromReserved.json parity and expected outcome (1 ms)
+    √ v2-film-state.abandonedFromValidating.json parity and expected outcome (3 ms)
+    √ v2-film-state.expired.json parity and expected outcome (2 ms)
+    √ v2-film-state.file-name-120-ascii.json parity and expected outcome (1 ms)
+    √ v2-film-state.file-name-60-emoji-120-units.json parity and expected outcome (1 ms)
+    √ v2-film-state.rejected.json parity and expected outcome (1 ms)
+    √ v2-film-state.reserved.json parity and expected outcome (1 ms)
+    √ v2-film-state.validating.json parity and expected outcome (1 ms)
+    √ v2-invalid.client-failure.internal-retry-eligible.json parity and expected outcome (1 ms)
+    √ v2-invalid.client-failure.protocol-retry-eligible.json parity and expected outcome
+    √ v2-invalid.client-failure.unknown-category.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.M1-reserve-film-id-mismatch.json parity and expected outcome (3 ms)
+    √ v2-invalid.mutation.M2-reserve-upload-path-foreign.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.M3-reserve-expires-at-mismatch.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.M4-reserved-has-abandoned-at.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.M5-rejected-null-reason.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.M6-abandon-null-abandoned-at.json parity and expected outcome (2 ms)
+    √ v2-invalid.mutation.M7-validating-null-generation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.M8-expiry-before-creation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X1-expired-before-expiry.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X10-validating-after-expiry.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X11-receipt-not-reserved.json parity and expected outcome (2 ms)
+    √ v2-invalid.mutation.X12-abandon-from-validating-no-generation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X13-abandon-from-reserved-has-generation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X14-stored-file-name-61-emoji.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X15-stored-file-name-121-ascii.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X2-reserved-has-generation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X3-rejected-null-generation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X4-reserved-status-changed.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X5-abandoned-at-not-status-changed.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X6-status-changed-before-created.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X7-rights-after-creation.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X8-upload-path-template.json parity and expected outcome (1 ms)
+    √ v2-invalid.mutation.X9-file-name-not-canonical.json parity and expected outcome (2 ms)
+    √ v2-invalid.response.client-transport-as-server.json parity and expected outcome (1 ms)
+    √ v2-invalid.response.extra-key.json parity and expected outcome (1 ms)
+    √ v2-invalid.response.reason-not-for-code.json parity and expected outcome (1 ms)
+    √ v2-invalid.response.retryable-mismatch.json parity and expected outcome
+    √ v2-invalid.response.timestamp-no-millis.json parity and expected outcome (1 ms)
+    √ v2-mut-media-bad-framerate-mode.json parity and expected outcome (1 ms)
+    √ v2-mut-media-bad-sha256.json parity and expected outcome (1 ms)
+    √ v2-mut-media-extra-key.json parity and expected outcome (1 ms)
+    √ v2-mut-media-hevc.json parity and expected outcome (1 ms)
+    √ v2-mut-R5-ready-without-media.json parity and expected outcome (2 ms)
+    √ v2-mut-R5-ready-without-normalizedGeneration.json parity and expected outcome (1 ms)
+    √ v2-mut-R5-ready-without-readyAt.json parity and expected outcome (1 ms)
+    √ v2-mut-R5-reserved-with-normalizedGeneration.json parity and expected outcome (1 ms)
+    √ v2-mut-R5-validating-with-media.json parity and expected outcome (2 ms)
+    √ v2-mut-R6-readyAt-not-statusChangedAt.json parity and expected outcome (1 ms)
+    √ v2-mut-R7-ready-retentionExpiresAt-set.json parity and expected outcome (2 ms)
+    √ v2-mut-R7-retentionExpiresAt-set.json parity and expected outcome (1 ms)
+    √ v2-mut-R8-ready-without-objectGeneration.json parity and expected outcome (1 ms)
+    √ v2-mut-R9-bytes-over-limit.json parity and expected outcome (1 ms)
+    √ v2-mut-R9-duration-over-limit.json parity and expected outcome (1 ms)
+    √ v2-mut-R9-height-over-limit.json parity and expected outcome (1 ms)
+    √ v2-mut-R9-width-over-limit.json parity and expected outcome (1 ms)
+    √ v2-mut-S2-unknown-reason.json parity and expected outcome (1 ms)
+    √ v2-mut-T3-late-worker-rejected-before-created.json parity and expected outcome (1 ms)
+    √ v2-mut-T6p-late-s1-rejected.json parity and expected outcome (1 ms)
+    √ v2-mut-T6p-validating-after-expiry.json parity and expected outcome (2 ms)
+    √ v2-mut-wire-missing-retentionExpiresAt.json parity and expected outcome (1 ms)
+    √ v2-replay-invalid-query-missing-now.json parity and expected outcome (3 ms)
+    √ v2-replay-invalid-query-unknown-action.json parity and expected outcome (1 ms)
+    √ v2-replay-legacy-corrupt-json.json parity and expected outcome (3 ms)
+    √ v2-replay-legacy-error-receipt.json parity and expected outcome (3 ms)
+    √ v2-replay-legacy-impossible-ready.json parity and expected outcome (7 ms)
+    √ v2-replay-legacy-unknown-field.json parity and expected outcome (2 ms)
+    √ v2-replay-new-v1-operation.json parity and expected outcome (1 ms)
+    √ v2-replay-new-v2-operation.json parity and expected outcome (2 ms)
+    √ v2-replay-r3-abandon-from-reserved-receipt.json parity and expected outcome (4 ms)
+    √ v2-replay-r3-abandon-from-validating-receipt.json parity and expected outcome (3 ms)
+    √ v2-replay-r3-at-expiry.json parity and expected outcome (1 ms)
+    √ v2-replay-r3-changed-payload.json parity and expected outcome (1 ms)
+    √ v2-replay-r3-just-before-expiry.json parity and expected outcome (3 ms)
+    √ v2-replay-r3-live-film-now-ready.json parity and expected outcome (2 ms)
+    √ v2-replay-r3-other-action.json parity and expected outcome (1 ms)
+    √ v2-replay-r3-reserve-receipt.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-explicit-v1-version.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-fractional-expiry.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-missing-expiry.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-null-expiry.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-string-expiry.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-unknown-record-field.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-unknown-version.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-v2-corrupt-v1-request.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-v2-corrupt.json parity and expected outcome
+    √ v2-replay-stored-v2-receipt-v1-request.json parity and expected outcome (1 ms)
+    √ v2-replay-stored-v2-receipt.json parity and expected outcome (1 ms)
+    √ v2-replay-unknown-version.json parity and expected outcome
+    √ v2-replay-v1-at-expiry.json parity and expected outcome (1 ms)
+    √ v2-replay-v1-corrupt-json.json parity and expected outcome (1 ms)
+    √ v2-replay-v1-error-receipt.json parity and expected outcome (1 ms)
+    √ v2-replay-v1-impossible-ready.json parity and expected outcome (1 ms)
+    √ v2-replay-v1-receipt-wrong-action.json parity and expected outcome (2 ms)
+    √ v2-replay-v1-same-operation-verbatim.json parity and expected outcome (2 ms)
+    √ v2-replay-v1-unknown-field.json parity and expected outcome (2 ms)
+    √ v2-replay.expected.abandon-from-reserved-projection.json parity and expected outcome (1 ms)
+    √ v2-replay.expected.abandon-from-validating-projection.json parity and expected outcome (1 ms)
+    √ v2-replay.expected.reserve-projection.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.action-mismatch.json parity and expected outcome (2 ms)
+    √ v2-reserve.request.at-byte-limit.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-120-ascii-padded.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-120-ascii.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-60-emoji-120-units.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-61-emoji-122-units.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-canonicalized.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-control-char.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.file-name-too-long.json parity and expected outcome
+    √ v2-reserve.request.format-not-allowed.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.operation-id-not-uuid-v4.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.operation-id-reused.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.over-byte-limit.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.rights-not-acknowledged.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.rights-wording-outdated.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.unknown-field.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.v1-envelope-at-v2-parser.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.valid.json parity and expected outcome (1 ms)
+    √ v2-reserve.request.wrong-schema-version.json parity and expected outcome
+    √ v2-reserve.response.ok.json parity and expected outcome
+    √ v2-state-late-ready.json parity and expected outcome (1 ms)
+    √ v2-state-late-worker-rejected.json parity and expected outcome (1 ms)
+    √ v2-state-ready-at-limits.json parity and expected outcome (1 ms)
+    √ v2-state-ready-h264-aac.json parity and expected outcome (1 ms)
+    √ v2-state-ready-h264-noaudio.json parity and expected outcome (1 ms)
+    √ v2-state-ready-vfr.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-audio-codec-not-allowed.json parity and expected outcome
+    √ v2-state-rejected-container-invalid.json parity and expected outcome
+    √ v2-state-rejected-duration-over-limit.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-media-corrupt.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-metadata-invalid.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-output-invalid.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-processing-limit-exceeded.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-resolution-over-limit.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-stream-count-exceeded.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-video-codec-not-allowed.json parity and expected outcome (1 ms)
+    √ v2-state-rejected-video-stream-missing.json parity and expected outcome (1 ms)
+    √ all exported state, error and retry tables agree (4 ms)
+  FS-26 r4 non-JSON and runtime boundary parity
+    × review P1: omitted lookup result at coach-film.v1 is invalid-input (8 ms)
+    × review P1: omitted lookup result at coach-film.v2 is invalid-input (2 ms)
+    √ review P1: explicit null lookup result at coach-film.v1 preserves server behavior (2 ms)
+    √ review P1: explicit undefined lookup result at coach-film.v1 preserves server behavior (1 ms)
+    √ review P1: explicit null lookup result at coach-film.v2 preserves server behavior (1 ms)
+    √ review P1: explicit undefined lookup result at coach-film.v2 preserves server behavior (1 ms)
+    √ review P1: deleting stored from v2-replay-invalid-query-missing-now.json cannot mean new operation (1 ms)
+    √ review P1: deleting stored from v2-replay-invalid-query-unknown-action.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-legacy-corrupt-json.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-legacy-error-receipt.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-legacy-impossible-ready.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-legacy-unknown-field.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-new-v1-operation.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-new-v2-operation.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-r3-abandon-from-reserved-receipt.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-r3-abandon-from-validating-receipt.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-r3-at-expiry.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-r3-changed-payload.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-r3-just-before-expiry.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-r3-live-film-now-ready.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-r3-other-action.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-r3-reserve-receipt.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-explicit-v1-version.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-fractional-expiry.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-missing-expiry.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-null-expiry.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-string-expiry.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-stored-unknown-record-field.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-unknown-version.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-v2-corrupt-v1-request.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-v2-corrupt.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-stored-v2-receipt-v1-request.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-stored-v2-receipt.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-unknown-version.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-v1-at-expiry.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-v1-corrupt-json.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-v1-error-receipt.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-v1-impossible-ready.json cannot mean new operation (1 ms)
+    × review P1: deleting stored from v2-replay-v1-receipt-wrong-action.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-v1-same-operation-verbatim.json cannot mean new operation (2 ms)
+    × review P1: deleting stored from v2-replay-v1-unknown-field.json cannot mean new operation (2 ms)
+    × review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup (2 ms)
+    √ invalid helper input 0 fails closed (1 ms)
+    √ invalid helper input 1 fails closed (1 ms)
+    √ invalid helper input 2 fails closed (1 ms)
+    √ invalid helper input 3 fails closed (1 ms)
+    √ invalid helper input 4 fails closed
+    √ invalid helper input 5 fails closed (1 ms)
+    √ invalid helper input 6 fails closed
+    √ invalid helper input 7 fails closed
+    √ invalid helper input 8 fails closed (1 ms)
+    √ invalid helper input 9 fails closed (1 ms)
+    √ invalid helper input 10 fails closed (1 ms)
+    √ invalid helper input 11 fails closed
+    √ invalid helper input 12 fails closed (1 ms)
+    √ invalid helper input 13 fails closed (1 ms)
+    √ invalid helper input 14 fails closed
+    √ invalid counter/time NaN (1 ms)
+    √ invalid counter/time Infinity (1 ms)
+    √ invalid counter/time -Infinity (1 ms)
+    √ invalid counter/time -1 (1 ms)
+    √ invalid counter/time 1.5 (1 ms)
+    √ invalid counter/time 9007199254740992 (4 ms)
+    √ invalid counter/time 1 (1 ms)
+    √ all six retained findings and finite expiry cases (3 ms)
+    √ classified versus unknown kill at probe-input (2 ms)
+    √ classified versus unknown kill at decode-input (2 ms)
+    √ classified versus unknown kill at normalize (2 ms)
+    √ classified versus unknown kill at probe-output (2 ms)
+    √ classified versus unknown kill at decode-output (2 ms)
+    √ strict stored/query/helper inputs match server schemas (2 ms)
+    √ legacy projection never mutates originals or renews expiry (22 ms)
+    √ unknown nested keys and malformed resolutions stay protocol failures (15 ms)
+    √ unknown keys are refused at every new helper boundary (1 ms)
+    √ safe timestamp, numeric and request mutations match authoritative schema (14 ms)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: omitted lookup result at coach-film.v1 is invalid-input
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      91 |     const query = {...original, requestSchemaVersion}; delete query.stored;
+      92 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 93 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+         |                                        ^
+      94 |     expect(() => client.parseReplayQuery(query)).toThrow(client.FilmContractValidationError);
+      95 |   });
+      96 |   test.each(['coach-film.v1', 'coach-film.v2'].flatMap(requestSchemaVersion => [null, undefined].map(stored => ({requestSchemaVersion, stored}))))('review P1: explicit $stored lookup result at $requestSchemaVersion preserves server behavior', ({requestSchemaVersion, stored}) => {
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:93:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: omitted lookup result at coach-film.v2 is invalid-input
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      91 |     const query = {...original, requestSchemaVersion}; delete query.stored;
+      92 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 93 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+         |                                        ^
+      94 |     expect(() => client.parseReplayQuery(query)).toThrow(client.FilmContractValidationError);
+      95 |   });
+      96 |   test.each(['coach-film.v1', 'coach-film.v2'].flatMap(requestSchemaVersion => [null, undefined].map(stored => ({requestSchemaVersion, stored}))))('review P1: explicit $stored lookup result at $requestSchemaVersion preserves server behavior', ({requestSchemaVersion, stored}) => {
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:93:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-legacy-corrupt-json.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-legacy-error-receipt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-legacy-impossible-ready.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-legacy-unknown-field.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-new-v1-operation.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-new-v2-operation.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-abandon-from-reserved-receipt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-abandon-from-validating-receipt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-at-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-changed-payload.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-just-before-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-live-film-now-ready.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-other-action.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-r3-reserve-receipt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-explicit-v1-version.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-fractional-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-missing-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-null-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-string-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-unknown-record-field.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-unknown-version.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-v2-corrupt-v1-request.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-v2-corrupt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-v2-receipt-v1-request.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-stored-v2-receipt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "new-operation",
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-unknown-version.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "schema-invalid",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-at-expiry.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-corrupt-json.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-error-receipt.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-impossible-ready.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-receipt-wrong-action.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-same-operation-verbatim.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: deleting stored from v2-replay-v1-unknown-field.json cannot mean new operation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+      Object {
+    -   "kind": "invalid-input",
+    +   "kind": "error",
+    +   "response": Object {
+    +     "error": Object {
+    +       "code": "invalid-argument",
+    +       "reason": "unsupported-version",
+    +       "retryable": false,
+    +     },
+    +     "ok": false,
+    +   },
+      }
+
+      108 |     delete query.stored;
+      109 |     expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    > 110 |     expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+          |                                        ^
+      111 |   });
+      112 |   test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+      113 |     const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+
+      at src/features/film-analyzer/__tests__/contracts-v2.test.ts:110:40
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● FS-26 r4 non-JSON and runtime boundary parity › review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup
+
+    expect(received).toThrow(expected)
+
+    Expected constructor: FilmContractValidationError
+
+    Received function did not throw
+
+      116 |     const {stored, ...withoutLookup} = query;
+      117 |     const inherited = Object.assign(Object.create({stored}), withoutLookup);
+    > 118 |     expect(() => client.parseReplayQuery(inherited)).toThrow(client.FilmContractValidationError);
+          |                                                      ^
+      119 |     // Own-property validation is intentionally explicit for caller-built input.
+      120 |   });
+      121 |   const garbage: unknown[] = [undefined, null, NaN, Infinity, -Infinity, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, '', true, [], {}, [null], () => 1, Object.create(null)];
+
+      at Object.<anonymous> (src/features/film-analyzer/__tests__/contracts-v2.test.ts:118:54)
+      at TestScheduler.scheduleTests (../main-n2-team-creation/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../main-n2-team-creation/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../main-n2-team-creation/node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       36 failed, 252 passed, 288 total
+Snapshots:   0 total
+Time:        5.507 s
+Ran all test suites within paths "src/features/film-analyzer/__tests__/contracts-v2.test.ts".

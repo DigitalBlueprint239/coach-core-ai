@@ -1,0 +1,8 @@
+PASS src/features/film-analyzer/__tests__/contracts.test.ts (21.669 s)
+PASS src/features/film-analyzer/__tests__/contracts-v2.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       390 passed, 390 total
+Snapshots:   0 total
+Time:        54.057 s
+Ran all test suites within paths "src/features/film-analyzer/__tests__/contracts.test.ts", "src/features/film-analyzer/__tests__/contracts-v2.test.ts".
