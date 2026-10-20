@@ -111,6 +111,12 @@ Admission calls `c2.admissionDecision` over the stored job, inside one transacti
 9. **Strict durable records (R2):** `validated`, `intent` and `output` have strict schemas (hex digests, r4 `media`, decimal generations). A schema-invalid job is an `anomaly`: preserved, logged, never promoted.
    - **Binding check:** before any ownership probe and again inside the ready commit, the records must agree with each other, with the job key, with the film's declared bytes, with the **current** policy revision and with the `PENDING_D3` placeholders.
    - **Prospective state:** the exact resulting document must parse as an r4 `FilmState` before anything is written. Any failure holds the film for recovery with the problem as evidence; the records are left untouched.
+9a. **Validation provenance (PR85 re-review R2b, c-6298450957):** before any ownership I/O and again inside the ready commit, the validated record must belong to a **durable admission of this job**:
+   - `attemptN` ≤ `admitted`, one attempt row per admission, and the row numbered `attemptN` exists (`validation-attempt-not-admitted`);
+   - the record's fence is **that attempt's admission fence**, every admission fence is distinct, and none exceeds the job's current fence (`validation-fence-not-admitted`); the intent fence must match it;
+   - `atMs` lies inside that attempt's window (`validation-outside-attempt`), and the attempt did not end in a media verdict or other non-success end (`validation-attempt-ended-before-validation`).
+   - The historical fence is **never** compared with the reconciliation's own, newer fence, so legitimate older output (an earlier attempt's, or one whose first reconciliation died mid-proof) stays recoverable.
+   - Invalid records are held for recovery with `evidence.problem` and preserved byte-for-byte.
 10. **OFF everywhere (R3):** `onFilmWritten`, `processFilm`, `redrive` and `reconcileFilm` each return `disabled` before any Firestore, Storage or decoder call when the switch is off.
 
 ## 6. Limits (`TEST_MEASURED`)

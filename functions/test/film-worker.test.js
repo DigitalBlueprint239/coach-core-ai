@@ -664,12 +664,121 @@ describe("PR85 review R1-R4 (#39 c-6297820037): focused regressions", () => {
   });
 });
 
+describe("PR85 re-review R2b (c-6298450957): validation provenance", () => {
+  const jobPath = (f) => `${filmPath(f.filmId)}/workerJobs/${f.jobId}`;
+  /** Validated + uploaded, ack lost; returns after the lease expired. */
+  const lostAck = async (w, f, run = (a) => w.worker.processFilm(a)) => {
+    w.objects.fault("createOnly", "ack-lost");
+    const stat = w.objects.stat.bind(w.objects);
+    w.objects.stat = async () => {
+      throw new Error("instance lost");
+    };
+    await assert.rejects(run({teamId: TEAM, filmId: f.filmId}));
+    w.objects.stat = stat;
+    w.clock.t = new Date(w.clock.t.getTime() + TTL + 1);
+  };
+  it("legitimate OLDER validation stays recoverable: attempt 2 validated; " +
+      "attempt 3 later crashed before validating", async () => {
+    const w = world({script: ["infrastructure", "ok", {before: async () => {
+      throw new Error("instance lost after admission");
+    }, then: "ok"}]});
+    const f = await validatingFilm(w);
+    await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+    await lostAck(w, f, (a) => w.worker.redrive(a));
+    await assert.rejects(w.worker.redrive({teamId: TEAM, filmId: f.filmId}));
+    w.clock.t = new Date(w.clock.t.getTime() + TTL + 1);
+    const j = job(w, f);
+    assert.deepEqual([j.admitted, j.validated.attemptN, j.validated.fence,
+      j.fence], [3, 2, 2, 3]);
+    const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});
+    assert.equal(r.reconcile, "ready");
+    assert.equal(w.pipeline.calls.length, 3);
+  });
+  it("legitimate validation is NOT required to equal the newer " +
+      "reconciliation fence", async () => {
+    const w = world();
+    const f = await validatingFilm(w);
+    await lostAck(w, f);
+    // a first reconciliation takes a newer fence and dies mid-proof
+    const read = w.objects.readGeneration.bind(w.objects);
+    w.objects.readGeneration = async () => {
+      throw new Error("instance lost mid-proof");
+    };
+    await assert.rejects(w.worker.reconcileFilm({teamId: TEAM,
+      filmId: f.filmId}));
+    w.objects.readGeneration = read;
+    w.clock.t = new Date(w.clock.t.getTime() + TTL + 1);
+    const before = job(w, f);
+    assert.ok(before.fence > before.validated.fence);
+    const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});
+    assert.equal(r.reconcile, "ready");
+    assert.ok(job(w, f).fence > job(w, f).validated.fence);
+  });
+  const forged = {
+    "attempt number never admitted (attemptN 3, admitted 1)": [(j) => {
+      j.validated.attemptN = 3;
+    }, "validation-attempt-not-admitted"],
+    "fabricated fence on validation AND intent (99)": [(j) => {
+      j.validated.fence = 99;
+      j.intent.fence = 99;
+    }, "validation-fence-not-admitted"],
+    "validated before its attempt was admitted": [(j) => {
+      j.validated.atMs = j.attempts[0].admittedAtMs - 1;
+    }, "validation-outside-attempt"],
+    "attempt recorded as ending in a media verdict": [(j) => {
+      j.attempts[0].end = {end: "media-verdict", reason: "media-corrupt"};
+      j.attempts[0].endedAtMs = j.validated.atMs;
+    }, "validation-attempt-ended-before-validation"],
+    "admitted counter without a matching attempt row": [(j) => {
+      j.admitted = 2;
+    }, "validation-attempt-not-admitted"],
+  };
+  for (const [name, [mutate, reason]] of Object.entries(forged)) {
+    it(`forged provenance: ${name} -> held before any ownership I/O`,
+        async () => {
+          const w = world();
+          const f = await validatingFilm(w);
+          await lostAck(w, f);
+          const j = job(w, f);
+          mutate(j);
+          w.db.write(jobPath(f), j);
+          const io = w.objects.calls.length;
+          const r = await w.worker.reconcileFilm({teamId: TEAM,
+            filmId: f.filmId});
+          assert.deepEqual(r, {reconcile: "recovery-needed", reason});
+          assert.equal(w.objects.calls.length, io, "no ownership I/O");
+          assert.equal(w.db.read(filmPath(f.filmId)).status, "validating");
+          const after = job(w, f);
+          assert.deepEqual(after.validated, j.validated, "evidence kept");
+          assert.deepEqual(after.intent, j.intent);
+          assert.equal(after.recovery.evidence.problem, reason);
+        });
+  }
+  it("a fabricated attempt row with a real-looking fence is still " +
+      "rejected (fence must belong to THAT attempt)", async () => {
+    const w = world({script: ["infrastructure"]});
+    const f = await validatingFilm(w);
+    await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+    await lostAck(w, f, (a) => w.worker.redrive(a));
+    const j = job(w, f);
+    assert.deepEqual(j.attempts.map((x) => x.fence), [1, 2]);
+    j.validated.attemptN = 1; // attempt 1 exists, but its fence is 1, not 2
+    w.db.write(jobPath(f), j);
+    const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});
+    assert.deepEqual(r, {reconcile: "recovery-needed",
+      reason: "validation-fence-not-admitted"});
+  });
+});
+
 describe("decoder-free reconciliation and malformed state", () => {
   it("after exhaustion, reconciliation adopts proven validated output " +
       "and promotes without any decoder or pipeline run", async () => {
-    const w = world();
+    // three GENUINE admissions: two infrastructure failures, then a third
+    // that validated + uploaded and died before recording the output
+    const w = world({script: ["infrastructure", "infrastructure"]});
     const f = await validatingFilm(w);
-    // validated + uploaded, then the instance died before recording output
+    await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+    await w.worker.redrive({teamId: TEAM, filmId: f.filmId});
     const orig = w.objects.createOnly.bind(w.objects);
     w.objects.createOnly = async (t) => {
       await orig(t);
@@ -679,14 +788,12 @@ describe("decoder-free reconciliation and malformed state", () => {
     w.objects.stat = async () => {
       throw new Error("instance lost");
     };
-    await assert.rejects(w.worker.processFilm({teamId: TEAM,
-      filmId: f.filmId}));
+    await assert.rejects(w.worker.redrive({teamId: TEAM, filmId: f.filmId}));
     w.objects.createOnly = orig;
     w.objects.stat = stat;
     const j = job(w, f);
     assert.ok(j.validated && j.intent && !j.output);
-    w.db.write(`${filmPath(f.filmId)}/workerJobs/${f.jobId}`,
-        {...j, admitted: 3}); // budget exhausted
+    assert.equal(j.admitted, 3);
     w.clock.t = new Date(T0.getTime() + TTL + 1);
     const calls = w.pipeline.calls.length;
     const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});

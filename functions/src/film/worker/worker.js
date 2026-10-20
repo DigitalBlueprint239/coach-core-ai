@@ -519,6 +519,30 @@ function createFilmWorker(deps) {
     const i = job.intent;
     const o = job.output;
     if (!v || !i) return "validation-record-missing";
+    // Provenance (PR85 R2b): the validation must belong to an ACTUAL
+    // durable admission of this job, matched by its attempt number AND that
+    // attempt's admission fence. This is the historical fence, never the
+    // current one: a reconciliation fence is newer, and a legitimate older
+    // validation must stay recoverable.
+    const a = job.attempts[v.attemptN - 1];
+    if (v.attemptN > job.admitted || job.attempts.length !== job.admitted ||
+        !a || a.n !== v.attemptN) {
+      return "validation-attempt-not-admitted";
+    }
+    if (a.fence !== v.fence || v.fence > job.fence ||
+        new Set(job.attempts.map((x) => x.fence)).size !==
+          job.attempts.length) {
+      return "validation-fence-not-admitted";
+    }
+    if (v.atMs < a.admittedAtMs ||
+        (a.endedAtMs !== null && v.atMs > a.endedAtMs)) {
+      return "validation-outside-attempt";
+    }
+    // a validating attempt cannot have ended in a pre-validation outcome
+    if (a.end && !["completed", "unknown", "infrastructure"]
+        .includes(a.end.end)) {
+      return "validation-attempt-ended-before-validation";
+    }
     if (v.media.sha256 !== v.outputSha256 || v.media.bytes !== v.outputBytes) {
       return "media-output-mismatch";
     }

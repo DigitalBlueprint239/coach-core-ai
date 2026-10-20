@@ -1,5 +1,11 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-20 / FILM-S2b PR85 R2b repair (Claude, implementer): Codex re-review c-6298450957 (reproductions #39 c-6298453552) repaired.
+> - R2b: a validated record must match a durable admission of the job (attempt number, that attempt's historical fence, attempt window and end) before any ownership I/O or promotion. Forged records are held for recovery and preserved as evidence. Older legitimate output stays recoverable under a newer reconciliation fence.
+> - Codex's re-review probes retained verbatim (1/2 → 3/3); R1–R4 probes still 5/5; focused regressions added; one test that fabricated `admitted: 3` now reaches exhaustion through three real admissions.
+> - **Release gate (S1, separate, not S2b):** the frozen S1 abandon path swallows quarantine-deletion failures and replay does not retry, so the source object can remain. Needs an S1-owner repair proposal before real-footage activation.
+> - Changed: worker, tests, docs only. Frozen paths unchanged. Exact SHA: PR85/#39 handoff. Next owners: Codex and the independent reviewer. MVP NO-GO.
+
 > 2026-10-20 / FILM-S2b PR85 repair (Claude, implementer): Codex bounded FAIL c-6297820037 (R1–R4, reproductions #39 c-6297822889) repaired.
 > - R1: decoder-free recovery of proven output after exhaustion. R2: strict durable records, binding check and prospective FilmState validation before ready. R3: OFF on every worker path. R4: pending output cleanup resumed without reopening the film.
 > - Calibration now measures fresh outputs and verifies the intended operation. The corrected pinned record (run 39474927341) leaves the limits unchanged; normalize truly needs 48 MiB, not the 32 MiB recorded before.
