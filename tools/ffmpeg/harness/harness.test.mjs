@@ -159,7 +159,8 @@ describe("H1 binary identity and build facts", () => {
     assert.deepEqual(lists.muxers.sort(), ["image2", "mov", "mp4", "null"]);
     // Filters: the four requested (scale, crop, format, aresample) plus the eleven configure auto-selects for the ffmpeg tool
     // (configure n9.0.2 line 4378 `ffmpeg_select`). Nothing from LICENSE.md's GPL filter list.
-    assert.deepEqual(lists.filters.sort(), ["aformat", "anull", "aresample", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"]);
+    // abuffer/buffer/abuffersink/buffersink are libavfilter's unconditional graph endpoints (buffersrc.c/buffersink.c, LGPL).
+    assert.deepEqual(lists.filters.sort(), ["abuffer", "abuffersink", "aformat", "anull", "aresample", "atrim", "buffer", "buffersink", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"]);
     const gplFilters = ["blackframe", "boxblur", "colormatrix", "cover_rect", "cropdetect", "delogo", "eq", "find_rect", "fspp", "histeq", "hqdn3d", "kerndeint", "lensfun", "mcdeint", "mpdecimate", "nnedi", "owdenoise", "perspective", "phase", "pp7", "pullup", "repeatfields", "sab", "signature", "smartblur", "spp", "stereo3d", "super2xsai", "tinterlace", "uspp", "vaguedenoiser", "mptestsrc"];
     assert.ok(!lists.filters.some((f) => gplFilters.includes(f)), "a GPL filter is compiled in");
   });

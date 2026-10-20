@@ -36,13 +36,14 @@ Licence lines read from the file headers at `https://raw.githubusercontent.com/F
 | parsers `h264`, `aac` | `libavcodec/h264_parser.c`, `libavcodec/aac_parser.c` | LGPL-2.1-or-later |
 | bsf `h264_mp4toannexb` | `libavcodec/bsf/h264_mp4toannexb.c` | LGPL-2.1-or-later |
 | filters `scale`, `crop`, `format` | `libavfilter/vf_scale.c`, `vf_crop.c`, `vf_format.c` | LGPL-2.1-or-later |
+| graph endpoints always compiled into libavfilter: `buffer`, `buffersink`, `abuffer`, `abuffersink` | `libavfilter/buffersrc.c`, `buffersink.c` | LGPL-2.1-or-later |
 | filters auto-selected by `configure` for the `ffmpeg` tool (`ffmpeg_select`, configure line 4378): `aformat anull atrim crop format hflip null rotate transpose trim vflip` | `libavfilter/af_aformat.c`, `af_anull.c`, `trim.c`, `vf_crop.c`, `vf_format.c`, `vf_hflip.c`, `vf_null.c`, `vf_rotate.c`, `vf_transpose.c`, `vf_vflip.c` | LGPL-2.1-or-later (libavfilter core; none is in LICENSE.md's GPL list) |
 | filter `aresample` + `libswresample` (decoded AAC → the null sink; no output ever written) | `libavfilter/af_aresample.c`, `libswresample/*` | LGPL-2.1-or-later |
 | `libswscale` | `libswscale/swscale.c` | LGPL-2.1-or-later |
 | `libavutil` (always) | `libavutil/*` | LGPL-2.1-or-later |
 | libjpeg-derived DCT used by `mjpeg` | `libavcodec/jfdctfst.c`, `jfdctint_template.c` | IJG (libjpeg) licence — **documentation credit to the IJG required if executables are distributed** (LICENSE.md "other licensing terms") |
 
-Project statement (`LICENSE.md` in the tarball): "Most files in FFmpeg are under the GNU Lesser General Public License version 2.1 or later … In combination the LGPL v2.1+ applies to FFmpeg. Some optional parts … are licensed under the GNU General Public License … None of these parts are used by default, you have to explicitly pass `--enable-gpl`." None of the GPL-listed files (x86 `idct_mmx.c`/`flac_dsp_gpl.asm`/`vf_removegrain.asm`, the GPL filters) is enabled by this configuration; the harness verifies the filter list is exactly the requested four plus the eleven `configure` auto-selects, and nothing from the GPL list.
+Project statement (`LICENSE.md` in the tarball): "Most files in FFmpeg are under the GNU Lesser General Public License version 2.1 or later … In combination the LGPL v2.1+ applies to FFmpeg. Some optional parts … are licensed under the GNU General Public License … None of these parts are used by default, you have to explicitly pass `--enable-gpl`." None of the GPL-listed files (x86 `idct_mmx.c`/`flac_dsp_gpl.asm`/`vf_removegrain.asm`, the GPL filters) is enabled by this configuration; the harness verifies the filter list is exactly the requested four, the eleven `configure` auto-selects and the four unconditional graph endpoints, and nothing from the GPL list.
 
 **Resulting binary licence (engineering reading):** LGPL-2.1-or-later for the FFmpeg parts, with the IJG credit obligation attached to the mjpeg encoder, statically linked against the runner's glibc (LGPL-2.1-or-later, system library). `COPYING.LGPLv2.1` and `LICENSE.md` are copied next to the binary in the artifact.
 
