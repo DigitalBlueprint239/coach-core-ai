@@ -86,6 +86,38 @@ describe('FS-26 r4 complete shared fixture parity', () => {
 });
 
 describe('FS-26 r4 non-JSON and runtime boundary parity', () => {
+  test.each(['coach-film.v1', 'coach-film.v2'])('review P1: omitted lookup result at %s is invalid-input', requestSchemaVersion => {
+    const original = (load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request;
+    const query: Record<string, unknown> = {...original, requestSchemaVersion}; delete query.stored;
+    expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+    expect(() => client.parseReplayQuery(query)).toThrow(client.FilmContractValidationError);
+  });
+  test.each(['coach-film.v1', 'coach-film.v2'].flatMap(requestSchemaVersion => [null, undefined].map(stored => ({requestSchemaVersion, stored}))))('review P1: explicit $stored lookup result at $requestSchemaVersion preserves server behavior', ({requestSchemaVersion, stored}) => {
+    const original = (load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request;
+    const query = {...original, requestSchemaVersion, stored};
+    expect(Object.prototype.hasOwnProperty.call(query, 'stored')).toBe(true);
+    expect(legacy.schemas.replayQuery.safeParse(query).success).toBe(true);
+    expect(client.parseReplayQuery(query)).toEqual(query);
+    expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+    expect(client.decideReplay(query)).toEqual(requestSchemaVersion === 'coach-film.v2'
+      ? {kind: 'new-operation'} : {kind: 'error', response: client.errorResponseFor('invalid-argument', 'unsupported-version')});
+  });
+  test.each(manifest.fixtures.filter(f => f.kind === 'replay-case'))('review P1: deleting stored from $file cannot mean new operation', f => {
+    const query = {...(load(f.file) as {request: Record<string, unknown>}).request};
+    delete query.stored;
+    expect(legacy.decideReplay(query)).toEqual({kind: 'invalid-input'});
+    expect(client.decideReplay(query)).toEqual(legacy.decideReplay(query));
+  });
+  test('review P1: liveFilmStatus stays optional; inherited stored is not a completed lookup', () => {
+    const query = {...(load('v2-replay-r3-reserve-receipt.json') as {request: Record<string, unknown>}).request};
+    delete query.liveFilmStatus;
+    expect(client.parseReplayQuery(query)).toEqual(query);
+    const {stored, ...withoutLookup} = query;
+    const inherited = Object.assign(Object.create({stored}), withoutLookup);
+    expect(() => client.parseReplayQuery(inherited)).toThrow(client.FilmContractValidationError);
+    // Own-property validation is intentionally explicit for caller-built input.
+  });
   const garbage: unknown[] = [undefined, null, NaN, Infinity, -Infinity, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, '', true, [], {}, [null], () => 1, Object.create(null)];
   test.each(garbage.map((value, index) => ({value, index})))('invalid helper input $index fails closed', ({value}) => {
     expect(client.admissionDecision(value)).toEqual(server.admissionDecision(value));

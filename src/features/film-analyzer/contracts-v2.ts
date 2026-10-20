@@ -266,7 +266,7 @@ function safeMs(value: unknown): asserts value is number { check(typeof value ==
 export function parseAdmissionInput(value: unknown): AdmissionInput {
   const v = strict(value, ['delivery', 'configurationOk', 'admitted', 'jobCreatedAtMs', 'nowMs']);
   member(v.delivery, ['process', 'duplicate', 'contention']); check(typeof v.configurationOk === 'boolean');
-  safeMs(v.admitted); check(v.admitted <= 3); safeMs(v.jobCreatedAtMs); safeMs(v.nowMs); check(v.nowMs >= v.jobCreatedAtMs);
+  safeMs(v.admitted); check(v.admitted <= WORKER_ATTEMPT_POLICY.maxAdmittedAttempts); safeMs(v.jobCreatedAtMs); safeMs(v.nowMs); check(v.nowMs >= v.jobCreatedAtMs);
   return {...v} as unknown as AdmissionInput;
 }
 export function parseAttemptRecord(value: unknown): AttemptRecord {
@@ -277,7 +277,7 @@ export function parseAttemptRecord(value: unknown): AttemptRecord {
   return {...v} as AttemptRecord;
 }
 export function parseExhaustionInput(value: unknown): AttemptRecord[] {
-  check(Array.isArray(value) && value.length >= 1 && value.length <= 3);
+  check(Array.isArray(value) && value.length >= 1 && value.length <= WORKER_ATTEMPT_POLICY.maxAdmittedAttempts);
   const a = value.map(parseAttemptRecord);
   check(a.slice(0, -1).every(x => x.end !== 'media-verdict' && x.end !== 'completed')); return a;
 }
@@ -289,7 +289,7 @@ export function admissionDecision(value: unknown): AdmissionDecision {
   const no = (outcome: AdmissionDecision['outcome']): AdmissionDecision => ({admit: false, consumes: false, outcome});
   if (d.delivery !== 'process') return no(d.delivery === 'duplicate' ? 'skip-duplicate' : 'skip-contention');
   if (!d.configurationOk) return no('stalled-configuration');
-  if (d.admitted >= 3) return no('refused-exhausted');
+  if (d.admitted >= WORKER_ATTEMPT_POLICY.maxAdmittedAttempts) return no('refused-exhausted');
   if (d.nowMs >= d.jobCreatedAtMs + WORKER_ATTEMPT_POLICY.admissionHorizonMs) return no('refused-horizon');
   return {admit: true, consumes: true, outcome: 'admitted'};
 }
@@ -322,10 +322,11 @@ export function projectR3SuccessToV2(action: FilmAction, stored: unknown): Proje
   } catch { return {ok: false, error: legacyInvalid()}; }
 }
 export interface StoredOperation {schemaVersion?: typeof CONTRACT_VERSION; action: FilmAction; payloadHash: string; responseJson: string; replayableUntilMs: number}
-export interface ReplayQuery {requestSchemaVersion: string; action: FilmAction; payloadHash: string; nowMs: number; stored?: unknown; liveFilmStatus?: FilmStatus}
+export interface ReplayQuery {requestSchemaVersion: string; action: FilmAction; payloadHash: string; nowMs: number; stored: unknown; liveFilmStatus?: FilmStatus}
 export function parseReplayQuery(value: unknown): ReplayQuery {
-  const v = object(value); const keys = ['requestSchemaVersion', 'action', 'payloadHash', 'nowMs'];
-  check(Object.keys(v).every(k => [...keys, 'stored', 'liveFilmStatus'].includes(k)) && keys.every(k => Object.prototype.hasOwnProperty.call(v, k)));
+  const v = object(value); const keys = ['requestSchemaVersion', 'action', 'payloadHash', 'nowMs', 'stored'];
+  // A completed lookup is mandatory. Omission is not an explicit no-record result.
+  check(Object.keys(v).every(k => [...keys, 'liveFilmStatus'].includes(k)) && keys.every(k => Object.prototype.hasOwnProperty.call(v, k)));
   check(typeof v.requestSchemaVersion === 'string'); member(v.action, ACTION_NAMES); check(typeof v.payloadHash === 'string' && Array.from(v.payloadHash).length >= 1); safeMs(v.nowMs);
   if (v.liveFilmStatus !== undefined) member(v.liveFilmStatus, FILM_STATUSES);
   return {...v} as unknown as ReplayQuery;
