@@ -85,16 +85,37 @@ function measure(bin, build, asBytes = 0, env = DECODER_ENV) {
 }
 
 /**
- * Two runs performed the SAME operation with the SAME result.
+ * Outcome class of one run: "quiet" (exit 0, nothing at error level) or
+ * the strict decoder classification (e.g. "error" = positive media
+ * evidence, "limit-kill:allocation-failure", "ambiguous").
+ * @param {object} m
+ * @return {string}
+ */
+function outcomeClass(m) {
+  if (m.exit === 0 && m.signal === null && m.stderrBytes === 0) {
+    return "quiet";
+  }
+  const c = classify({code: m.exit, signal: m.signal, timedOut: false,
+    killedForOutput: false, spawnError: null, stderrTail: m.stderrTail}, true);
+  return c.kill ? `${c.status}:${c.kill}` : c.status;
+}
+
+/**
+ * Two runs performed the SAME operation with the SAME result: identical
+ * exit, signal, stdout and output digests and outcome class. A quiet run
+ * must also be byte-identical on stderr; a failing run's error lines may
+ * interleave differently across decoder threads, so its class (not the
+ * log order) is compared.
  * @param {object} a
  * @param {object} b
  * @return {boolean}
  */
 function same(a, b) {
+  const ca = outcomeClass(a);
   return a.exit === b.exit && a.signal === b.signal &&
-    a.stdoutSha256 === b.stdoutSha256 &&
-    a.stderrNormSha256 === b.stderrNormSha256 &&
-    a.outputSha256 === b.outputSha256;
+    a.stdoutSha256 === b.stdoutSha256 && a.outputSha256 === b.outputSha256 &&
+    ca === outcomeClass(b) &&
+    (ca !== "quiet" || a.stderrNormSha256 === b.stderrNormSha256);
 }
 
 /**
@@ -167,7 +188,9 @@ function run(step, fixture, bin, build, opts = {}) {
         signal: ref.signal, stderr: ref.stderrTail.slice(-200)})}`);
   }
   if (!ms.every((m) => same(m, ref))) {
-    throw new Error(`non-reproducible ${step} on ${fixture}`);
+    throw new Error(`non-reproducible ${step} on ${fixture}: ` +
+      JSON.stringify(ms.map((m) => [m.exit, m.signal, outcomeClass(m),
+        m.stdoutSha256.slice(0, 8), (m.outputSha256 || "").slice(0, 8)])));
   }
   const row = {step, fixture, bin, cmd: opts.cmd || bin, outcome,
     args: build("<work>"),

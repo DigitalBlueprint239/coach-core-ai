@@ -101,7 +101,8 @@ jobs:
           set -euo pipefail
           mkdir -p s2b-evidence
           node functions/scripts/film-worker-calibrate.js s2b-evidence/calibration.json \
-            2> s2b-evidence/calibration.stderr | tee s2b-evidence/calibration.compact.json
+            2> s2b-evidence/calibration.stderr | tee s2b-evidence/calibration.compact.json \
+            || { echo "::error title=Calibration failed (${{ github.sha }})::$(tail -c 1800 s2b-evidence/calibration.stderr | tr '\n' ' ')"; exit 1; }
           echo "::notice title=Worker calibration (pinned ${{ github.sha }})::$(cat s2b-evidence/calibration.compact.json)"
           echo "::notice title=Calibration diagnostic + committed-limit check::$(tr '\n' ' ' < s2b-evidence/calibration.stderr)"
           # every measured row (step|fixture|cmd|minAsMiB|cpuMs|wallMs|rssMiB), chunked
