@@ -133,7 +133,6 @@ function run(step, fixture, bin, args, opts = {}) {
       if (await structural(fs.readFileSync(file))) continue;
       run("probe-input", f, "ffprobe", ARGS.probe(file), {cmd: "probe"});
       run("probe-input", f, "ffprobe", ARGS.packets(file), {cmd: "packets"});
-      run("decode-input", f, "ffmpeg", ARGS.decode(file));
       const p = spawnSync(bins.ffprobe, ARGS.probe(file), {encoding: "utf8",
         maxBuffer: 64 * MiB});
       const k = spawnSync(bins.ffprobe, ARGS.packets(file),
@@ -144,7 +143,10 @@ function run(step, fixture, bin, args, opts = {}) {
       } catch (_) {
         facts = null;
       }
+      // Each later step is measured on exactly the inputs that reach it in
+      // the worker (decode-input only after probe + placeholder policy).
       if (!facts || policyReason(facts)) continue;
+      run("decode-input", f, "ffmpeg", ARGS.decode(file));
       const out = path.join(work, `${f}.normalized.mp4`);
       run("normalize", f, "ffmpeg",
           ARGS.normalize(file, out, !!facts.audioCodec));
@@ -211,6 +213,29 @@ function run(step, fixture, bin, args, opts = {}) {
       "step|fixture|cmd|minAsMiB|cpuMs|wallMs|rssMiB\n" +
       table.join("\n") + "\n");
   console.error(JSON.stringify({diagnostic}));
+  // CHECK_COMMITTED=1: every command must still fit the COMMITTED limits.
+  if (process.env.CHECK_COMMITTED === "1") {
+    const {WORKER_LIMITS} = require("../src/film/worker/limits");
+    const over = [];
+    for (const r of rows) {
+      const c = WORKER_LIMITS.steps[r.step];
+      const why = (k) => over.push([r.step, r.fixture, k]);
+      if (r.minAsBytes > c.addressSpaceBytes) why("as");
+      if (r.cpuMs > c.cpuSoftSeconds * 1000) why("cpu");
+      if (r.wallMs > c.wallMs) over.push([r.step, r.fixture, "wall"]);
+      if (r.stdoutBytes > c.maxCaptureBytes) {
+        over.push([r.step, r.fixture, "capture"]);
+      }
+      if ((r.outputBytes || 0) > c.fileSizeBytes) {
+        over.push([r.step, r.fixture, "fsize"]);
+      }
+    }
+    if (over.length) {
+      throw new Error("measured need exceeds committed limits: " +
+        JSON.stringify(over));
+    }
+    console.error(JSON.stringify({committedLimitsHold: rows.length}));
+  }
   const compact = Object.fromEntries(Object.entries(steps).map(([k, v]) =>
     [k, {...v.limits, obs: {wall: v.observed.wallMs, cpu: v.observed.cpuMs,
       as: v.observed.minAsBytes, out: v.observed.stdoutBytes,

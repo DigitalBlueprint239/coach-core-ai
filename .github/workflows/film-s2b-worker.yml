@@ -91,9 +91,10 @@ jobs:
           chmod +x "$RUNNER_TEMP/bin/ffmpeg" "$RUNNER_TEMP/bin/ffprobe"
           sha256sum "$RUNNER_TEMP/bin/ffmpeg" "$RUNNER_TEMP/bin/ffprobe"
           prlimit --version
-      - name: Calibration (exact worker argv, 3 runs per command, pinned)
+      - name: Calibration (exact worker argv, 3 runs per command, pinned; committed limits must still hold)
         env:
           PINNED: '1'
+          CHECK_COMMITTED: '1'
           FFMPEG_BIN: ${{ runner.temp }}/bin/ffmpeg
           FFPROBE_BIN: ${{ runner.temp }}/bin/ffprobe
         run: |
@@ -102,7 +103,7 @@ jobs:
           node functions/scripts/film-worker-calibrate.js s2b-evidence/calibration.json \
             2> s2b-evidence/calibration.stderr | tee s2b-evidence/calibration.compact.json
           echo "::notice title=Worker calibration (pinned ${{ github.sha }})::$(cat s2b-evidence/calibration.compact.json)"
-          echo "::notice title=Calibration diagnostic (single-arena env vs none)::$(tail -1 s2b-evidence/calibration.stderr)"
+          echo "::notice title=Calibration diagnostic + committed-limit check::$(tr '\n' ' ' < s2b-evidence/calibration.stderr)"
           # every measured row (step|fixture|cmd|minAsMiB|cpuMs|wallMs|rssMiB), chunked
           split -l 45 s2b-evidence/calibration.rows.txt s2b-evidence/rows-
           for f in s2b-evidence/rows-*; do
