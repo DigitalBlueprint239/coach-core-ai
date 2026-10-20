@@ -30,9 +30,15 @@ Two independent jobs (`build a`, `build b`; separate runners, separate downloads
 | Run | Candidate | Result |
 |---|---|---|
 | [39348016177](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39348016177) | `711702c` | builds a/b reproducible: `ffmpeg` sha256 `47ca0cd624c64139d776e1731a9fa612e10ede79267b0d56eb4636794e55c4b2`, `ffprobe` `76821950404431fb00e33dde895a4178b3a70eeec3152f345b43fe9ab1d0557a`; harness FAILED (no `null` muxer in the recipe → `-f null -` decode checks impossible) — fixed in `5879ff1` |
-| final | see §6 | filled from the handoff run |
+| [39348453561](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39348453561) `5879ff1` | + `null` muxer | reproducible (`3f8563be…`, `e8645b52…`); harness step aborted before reporting (bash -e) — fixed |
+| [39348796862](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39348796862) `bb286ba` | same flags | reproducible; harness 23/15: missing pass-through encoders for `-f null`, quoted `-buildconf` values, wrapped `-L` text |
+| [39349144271](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39349144271) `1b7e96e` | + `wrapped_avframe,pcm_s16le` | reproducible (`34fea15f…`, `0408d71d…`); harness 32/6: `aresample` needed for AAC; `mov` muxer selected by `mp4` |
+| [39349445007](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39349445007) `ee3f8b4` | + `aresample` (**final flag set**) | reproducible: `ffmpeg` **`1314ab3b558c48ce7ed4aa6efba5a68fefe30362f796e59ef017b17424436ff1`**, `ffprobe` **`fd43ef9be4bb7d7fc821e1b25950efc6eb0aac586cabacd34a38fd52299f48e6`**; harness 37/1 (graph-endpoint filters not in the expected list) |
+| [39349763926](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39349763926) `5cbaf72` | same | same digests; harness 37/1 (list parser) |
+| [39350044354](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39350044354) `2e573ba` | same | same digests; **harness 38/38, 0 skipped** |
+| [39350436723](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39350436723) `3aba793` | same; frozen fixtures | same digests; harness 38/38 on the frozen set; frozen digests verified |
 
-Binary digests change whenever `configure.flags` changes (the `null` muxer was added after run 1); the handoff SHA's digests are authoritative.
+With the final flag set, **eight independent builds across four runs** produced the identical `ffmpeg`/`ffprobe` bytes; the tarball digest `8c385028…002e` was reproduced by sixteen independent downloads, each signature-verified against the pinned key.
 
 ## 4. Isolation harness (`tools/ffmpeg/harness/`)
 
@@ -50,7 +56,7 @@ Observed with the development FFmpeg: a truncated faststart MP4 **probes success
 
 ## 6. Handoff run (final SHA)
 
-Filled by the implementer at handoff: candidate SHA, run id, build a/b digests, tarball digest, fixture file count and `SHA256SUMS` digest, harness counts (tests/pass/fail/skipped), artifact name. The reviewer re-reads these from the run's check-run annotations and the artifact.
+The handoff comment on issue #39 names the exact candidate SHA and its run id; the reviewer re-reads the digests and counts from that run's check-run annotations (`Decoder reproducible`, `Isolation harness (pinned build)`, `Frozen fixtures verified`) and the retained artifact `film-decoder-9.0.2-<sha>-<run>-<attempt>` (binary, `provenance/`, `harness.log`, `harness-result.json`, `fixtures/SHA256SUMS.txt`, `ARTIFACT_SHA256SUMS.txt`, `RUN.txt`). Expected on the handoff SHA: `ffmpeg` `1314ab3b…41e8`, `ffprobe` `fd43ef9b…48e6`, tarball `8c385028…002e`, harness 38/38/0 skipped, 16 frozen fixtures.
 
 ## 7. Known limitations
 

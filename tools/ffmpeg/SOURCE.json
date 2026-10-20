@@ -9,8 +9,8 @@
     "pinnedFingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8",
     "note": "FFmpeg release signing key as published on https://ffmpeg.org/download.html. The reviewer must cross-check this fingerprint against that page; verify-source.sh refuses any key whose fingerprint differs."
   },
-  "tarballSha256": "PENDING_FIRST_VERIFIED_BUILD",
-  "tarballSha256Note": "Filled from the first CI build whose PGP signature verified; every later build must reproduce it. A changed value is a review event, never a silent update.",
+  "tarballSha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+  "tarballSha256Note": "Recorded from the first signature-verified CI download (run 39348016177, 2026-10-20) and reproduced by every build since (runs 39348453561, 39348796862, 39349144271, 39349445007, 39349763926, 39350044354, 39350436723: two independent downloads each). A changed value fails verify-source.sh and is a review event.",
   "licence": {
     "expected": "LGPL-2.1-or-later",
     "sourceOfTruth": "LICENSE.md in the tarball (also https://raw.githubusercontent.com/FFmpeg/FFmpeg/n9.0.2/LICENSE.md)"
