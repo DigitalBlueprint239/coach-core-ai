@@ -85,6 +85,8 @@ const VERDICTS = {
   "s12-height-over-1920x1082.mp4": {reason: "resolution-over-limit"},
   "s13-audio-codec-alac.mp4": {reason: "audio-codec-not-allowed"},
   "s14-two-video-streams.mp4": {reason: "stream-count-exceeded"},
+  "s16-corrupt-bitstream.mp4": {reason: "media-corrupt",
+    step: "decode-input"},
 };
 
 before(async () => {
@@ -107,6 +109,7 @@ describe(`pipeline verdicts (${PINNED ? "PINNED 9.0.2" : "DEV decoder"})`,
           if (want.reason) {
             assert.equal(r.outcome, "verdict", JSON.stringify(r));
             assert.equal(r.reason, want.reason, JSON.stringify(r));
+            if (want.step) assert.equal(r.step, want.step);
             return;
           }
           assert.equal(r.outcome, "ok", JSON.stringify(r));

@@ -39,7 +39,13 @@ node "$HERE/dref.mjs" "$OUT/.s15-base.mp4" "$OUT/s15-dref-external.mp4" \
   s15-dref-canary
 rm -f "$OUT/.s15-base.mp4"
 
-(cd "$OUT" && sha256sum s1[2-5]-*.mp4 > SHA256SUMS.txt)
+# s16: structurally valid MP4 whose H.264/AAC payload is corrupted
+# (corrupt.mjs, derived from the frozen S2a s10): only a full strict decode
+# can detect it -> media-corrupt.
+node "$HERE/corrupt.mjs" "$HERE/../../../../tools/ffmpeg/fixtures/frozen/s10-known-good.mp4" \
+  "$OUT/s16-corrupt-bitstream.mp4"
+
+(cd "$OUT" && sha256sum s1[2-6]-*.mp4 > SHA256SUMS.txt)
 {
   echo "generator: $("$GEN" -hide_banner -version | head -1)"
   echo "generator: $("$GEN" -hide_banner -version | sed -n 2p)"

@@ -633,9 +633,12 @@ function createFilmWorker(deps) {
         return await finishVerdict(h, where, out.reason, out.step);
       }
       if (out.outcome !== "ok") {
+        // "unknown": a decoder failure without positive media evidence
+        // (never a verdict); crash and infrastructure as reported.
         const record = out.outcome === "limit-kill" ?
           {end: "limit-kill", kill: out.kill, step: out.step} :
-          {end: out.outcome === "crash" ? "crash" : "infrastructure"};
+          {end: ["crash", "unknown"].includes(out.outcome) ? out.outcome :
+            "infrastructure"};
         const r = await endAttempt(h, record);
         if (!r.ok) return {outcome: "fence-lost"};
         return {outcome: "attempt-ended", end: record.end,

@@ -127,10 +127,20 @@ describe("decoder result classification (r4 LIMIT_KILL_SIGNALS)", () => {
     [{signal: "SIGXFSZ"}, "limit-kill", "SIGXFSZ"],
     [{code: 1, stderrTail: "Error: Cannot allocate memory"}, "limit-kill",
       "allocation-failure"],
+    // pinned 9.0.2 under RLIMIT_AS (run 39453385545), verbatim
+    [{code: 245, stderrTail: "[vost#0:0/wrapped_avframe @ 0x31d01f00] " +
+      "pthread_create() failed: Resource temporarily unavailable\n"},
+    "limit-kill", "allocation-failure"],
+    // the cascade without the root cause is NOT media evidence
+    [{code: 245, stderrTail: "[enc:pcm_s16le @ 0x1] Could not open encoder " +
+      "before EOF\nTask finished with error code: -22 (Invalid argument)\n"},
+    "ambiguous", undefined],
     [{killedForOutput: true, signal: "SIGKILL"}, "limit-kill", "SIGKILL"],
     [{signal: "SIGKILL"}, "limit-kill", "SIGKILL"],
     [{signal: "SIGSEGV"}, "crash", undefined],
-    [{code: 1, stderrTail: "Invalid data found"}, "error", undefined],
+    [{code: 1, stderrTail: "Error submitting packet to decoder: Invalid " +
+      "data found when processing input"}, "error", undefined],
+    [{code: 1, stderrTail: "unexplained failure"}, "ambiguous", undefined],
     [{code: 0}, "ok", undefined],
     [{spawnError: "ENOENT"}, "infrastructure", undefined],
     [{spawnError: "limits-unavailable"}, "configuration", undefined],
@@ -143,6 +153,16 @@ describe("decoder result classification (r4 LIMIT_KILL_SIGNALS)", () => {
       if (kill) assert.ok(c2.LIMIT_KILL_SIGNALS.includes(kill));
     });
   }
+  it("strict steps: exit 0 with error-level output is a failure", () => {
+    const noisy = {...base, code: 0, stderrTail: "[vist#0:0/h264 @ 0x1] " +
+      "corrupt decoded frame\n"};
+    assert.equal(classify(noisy, true).status, "error");
+    assert.equal(classify(noisy, false).status, "ok");
+    assert.equal(classify({...base, code: 0, stderrTail: "odd\n"}, true)
+        .status, "ambiguous");
+    assert.equal(classify({...base, code: 0, stderrTail: ""}, true).status,
+        "ok");
+  });
   it("only the four own-limit kills are classified", () => {
     assert.deepEqual([...c2.CLASSIFIED_LIMIT_KILLS].sort(),
         ["SIGXCPU", "SIGXFSZ", "allocation-failure", "wall-time"]);

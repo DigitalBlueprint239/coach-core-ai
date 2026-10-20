@@ -2,3 +2,4 @@
 bb0e8e72117f107b1038c90052f18fc296de9de6efc6e804cf8f21f3298d9fb5  s13-audio-codec-alac.mp4
 7a82d1b234b7fe198282c6d84cd58dbe4b7c3226fd8a05c03f0f90198d9866f2  s14-two-video-streams.mp4
 6c5725d9cb3ae7ea552a2509f12a52e39ecc7d54cb15f26b355bb48f71c753f8  s15-dref-external.mp4
+5b90dca85f74db2d19bf3cdaf8d5f29af40bd5a2ff23e711b844888bc7733637  s16-corrupt-bitstream.mp4

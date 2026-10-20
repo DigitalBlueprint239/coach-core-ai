@@ -325,7 +325,7 @@ function scriptedPipeline(script, outputBytes) {
     if (entry && entry.verdict) {
       return {outcome: "verdict", reason: entry.verdict, step: "probe-input"};
     }
-    if (entry === "crash" || entry === "infrastructure") {
+    if (["crash", "infrastructure", "unknown"].includes(entry)) {
       return {outcome: entry, step: "decode-input"};
     }
     const out = `${workDir}/normalized.mp4`;

@@ -19,7 +19,7 @@
 | `functions/scripts/film-terms-guard.js` | **One additive hook**: predeploy exits 1 if `functions/index.js` references the worker while `TEST_ONLY`, also with `--check` and regardless of `terms.js` (package §2.2) |
 | `functions/scripts/film-worker-calibrate.js`, `film-worker-measure.py` | Calibration on the pinned decoder |
 | `functions/test/film-worker*.js`, `test/worker-pinned/**`, `test/emulator/film-s2b.emulator.test.js` | Tests (§5) |
-| `functions/test/fixtures/s2b-media/**` | s12–s15 synthetic fixtures, generator, digests, toolchain |
+| `functions/test/fixtures/s2b-media/**` | s12–s16 synthetic fixtures, generator, digests, toolchain |
 | `tests/rules/film-worker.rules.test.mjs` | Additive deny tests (the rules files are unchanged) |
 | `.github/workflows/film-s2b-worker.yml` | The one S2b workflow |
 
@@ -79,8 +79,14 @@ Admission calls `c2.admissionDecision` over the stored job, inside one transacti
 - `SIGXCPU`: CPU is set as soft:hard, so it fires before SIGKILL.
 - `wall-time`: the harness timer.
 - `SIGXFSZ`.
-- `allocation-failure`: an allocation failure reported by the decoder.
+- `allocation-failure`: a decoder-reported allocation failure. Pinned evidence (run 39453385545): under `RLIMIT_AS`, FFmpeg 9.0.2 reports `pthread_create() failed: Resource temporarily unavailable` and exits 245. It never prints "Cannot allocate memory".
 - Output flood, or any other SIGKILL: an **unclassified** `SIGKILL`.
+
+**A failure is a media verdict only with positive evidence.**
+- **Strict steps** (`decode-input`, `normalize`, `decode-output`) pass only on exit 0 **and** silent error-level output. A decoder that exits 0 on a corrupt stream (observed with the distro ffmpeg on s16) therefore fails.
+- **Becoming a verdict:** a failed step becomes `media-corrupt`, `output-invalid` or `metadata-invalid` only when its stderr carries a recognized FFmpeg media-error message (e.g. "Invalid data found when processing input", "corrupt decoded frame").
+- **Everything else is `ambiguous`.** That includes the "Could not open encoder" / "Invalid argument" cascade seen under memory pressure. An ambiguous failure is recorded as attempt end `unknown`, which can only lead to recovery-needed, **never** a rejection.
+- **Fixture:** s16 (structurally valid, payload corrupted from s10) proves the verdict path at `decode-input`.
 
 **Known property:** stream copy preserves the H.264 bitstream, including in-band encoder SEI text (`x264 - core …`). That is codec payload, not container metadata; removing it would need transcoding, which is out of scope.
 
@@ -134,7 +140,7 @@ These are **not** deploy values. The floors dominate because the synthetic fixtu
 |---|---|
 | B3 OFF ⇒ zero I/O; B4 unexported + guard; B5 config stall | `film-worker.test.js`, `film-worker-wiring.test.js` (Functions CI) |
 | C6–C12 limits, offenders, grandchildren, no-prlimit, deadline < TTL, dref | `worker-pinned` (pinned CI) and calibration notice |
-| D13–D17 verdicts for all 19 frozen + 4 S2b fixtures, at-limit, VFR, tags, determinism | `worker-pinned` |
+| D13–D17 verdicts for all 19 frozen + 5 S2b fixtures (incl. s16 corrupt bitstream), at-limit, VFR, tags, determinism; policy units +1 ms / +1 px | `worker-pinned`, `film-worker-media.test.js` |
 | E18–E23 lease race, stale worker, lost ack, accounting, cleanup, cancellation, ownership change | `film-worker.test.js` (through the S1 handlers) and `film-s2b.emulator.test.js` (Firestore emulator) |
 | E24 rules | `tests/rules/film-worker.rules.test.mjs` |
 | F25–F28 S1/r4 unchanged; one handoff; no self-acceptance | Frozen-path diff, unchanged Security-gates suites, handoff on #39 |

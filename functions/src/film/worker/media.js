@@ -21,6 +21,8 @@
  *   {outcome: "verdict", reason, step}        permanent media verdict
  *   {outcome: "limit-kill", kill, step}       r4 attempt record material
  *   {outcome: "crash"|"infrastructure"|"configuration", step}
+ *   {outcome: "unknown", step}   a failure WITHOUT positive media evidence
+ *                                (never a verdict; recovery path)
  *   {outcome: "aborted", step}                checkpoint refused
  */
 const crypto = require("crypto");
@@ -235,6 +237,9 @@ async function runPipeline(o) {
     const r = await decoder.run(name, bin, args, {cwd: workDir, ...opts});
     if (r.status === "ok") return {r};
     if (r.status === "error") return {r, error: true};
+    if (r.status === "ambiguous") {
+      return {done: {outcome: "unknown", step: name}};
+    }
     if (r.status === "limit-kill") {
       return {done: {outcome: "limit-kill", kill: r.kill, step: name}};
     }
@@ -287,14 +292,16 @@ async function runPipeline(o) {
   if (pol) return verdict(pol, "probe-input");
 
   // 4. full strict decode of the input
-  const di = await step("decode-input", "ffmpeg", ARGS.decode(inputPath));
+  const STRICT = {strict: true};
+  const di = await step("decode-input", "ffmpeg", ARGS.decode(inputPath),
+      STRICT);
   if (di.done) return di.done;
   if (di.error) return verdict("media-corrupt", "decode-input");
 
   // 5. normalize: stream copy, metadata stripped, bitexact, faststart
   const outPath = path.join(workDir, "normalized.mp4");
   const nz = await step("normalize", "ffmpeg",
-      ARGS.normalize(inputPath, outPath, !!inFacts.audioCodec));
+      ARGS.normalize(inputPath, outPath, !!inFacts.audioCodec), STRICT);
   if (nz.done) return nz.done;
   if (nz.error || !fs.existsSync(outPath)) {
     return verdict("output-invalid", "normalize");
@@ -340,7 +347,8 @@ async function runPipeline(o) {
       return verdict("output-invalid", "forbidden-tags-bytes");
     }
   }
-  const dout = await step("decode-output", "ffmpeg", ARGS.decode(outPath));
+  const dout = await step("decode-output", "ffmpeg", ARGS.decode(outPath),
+      STRICT);
   if (dout.done) return dout.done;
   if (dout.error) return verdict("output-invalid", "decode-output");
 

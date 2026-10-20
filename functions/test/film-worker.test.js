@@ -258,6 +258,8 @@ describe("attempt policy via the r4 helpers (3 total, 6 h, retry OFF)", () => {
       [{kill: "SIGKILL", step: "decode-input"}, {kill: "SIGKILL",
         step: "decode-input"}, {kill: "SIGKILL", step: "decode-input"}],
       ["crash", "infrastructure", "crash"],
+      // decoder failures without positive media evidence: never a verdict
+      ["unknown", "unknown", "unknown"],
     ];
     for (const script of scripts) {
       const w = world({script});

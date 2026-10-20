@@ -13,11 +13,17 @@
  *   signal SIGXCPU                   -> limit-kill "SIGXCPU"     (classified)
  *   signal SIGXFSZ                   -> limit-kill "SIGXFSZ"     (classified)
  *   allocation failure reported      -> limit-kill "allocation-failure"
+ *     (pinned 9.0.2 evidence, run 39453385545: under RLIMIT_AS the decoder
+ *     reports "pthread_create() failed: Resource temporarily unavailable"
+ *     and exits 245; it never prints "Cannot allocate memory")
  *   output-capture kill, other SIGKILL -> limit-kill "SIGKILL" (NOT
  *                                       classified: never a media verdict)
  *   any other signal                 -> crash
  *   spawn error                      -> infrastructure
- *   exit != 0                        -> error (the step decides its verdict)
+ *   failed (exit != 0, or any error-level output from a STRICT step):
+ *     with positive media-error evidence -> error (the step's verdict)
+ *     otherwise                          -> ambiguous (NEVER a verdict;
+ *                                           recovery path)
  */
 const crypto = require("crypto");
 const fs = require("fs");
@@ -30,7 +36,22 @@ const HARNESS = path.resolve(__dirname, "..", "..", "..", "..", "tools",
 const SOURCE_JSON = path.resolve(__dirname, "..", "..", "..", "..", "tools",
     "ffmpeg", "SOURCE.json");
 const ALLOCATION_RE = new RegExp(["Cannot allocate memory", "out of memory",
-  "ENOMEM", "std::bad_alloc", "Memory allocation failed"].join("|"), "i");
+  "ENOMEM", "std::bad_alloc", "Memory allocation failed",
+  "pthread_create\\(\\) failed", "Resource temporarily unavailable"]
+    .join("|"), "i");
+/**
+ * Positive evidence that the INPUT is bad (FFmpeg demuxer/decoder messages
+ * for invalid or corrupt data). Generic errors such as "Invalid argument"
+ * or "Could not open encoder" are deliberately NOT evidence.
+ */
+const MEDIA_ERROR_RE = new RegExp(["Invalid data found when processing input",
+  "corrupt decoded frame", "error while decoding MB", "Invalid NAL unit",
+  "decode_slice_header error", "no frame!", "concealing \\d+ DC",
+  "non-existing PPS", "missing picture in access unit",
+  "Input buffer exhausted", "Reserved bit set", "Packet corrupt",
+  "corrupt input packet", "moov atom not found", "error reading header",
+  "Error splitting the input into NAL units", "Invalid frame dimensions",
+  "number of reference frames .* exceeds max"].join("|"), "i");
 
 /**
  * The ONLY environment a decoder process receives. One malloc arena keeps
@@ -65,9 +86,10 @@ function fileSha256(file) {
 /**
  * Classify one harness result.
  * @param {object} r runDecoder result
+ * @param {boolean} [strict] any error-level output fails the step
  * @return {{status: string, kill: (string|undefined)}}
  */
-function classify(r) {
+function classify(r, strict = false) {
   if (r.spawnError) {
     return {status: r.spawnError === "limits-unavailable" ?
       "configuration" : "infrastructure"};
@@ -76,15 +98,17 @@ function classify(r) {
   if (r.signal === "SIGXCPU") return {status: "limit-kill", kill: "SIGXCPU"};
   if (r.signal === "SIGXFSZ") return {status: "limit-kill", kill: "SIGXFSZ"};
   if (r.killedForOutput) return {status: "limit-kill", kill: "SIGKILL"};
-  const alloc = ALLOCATION_RE.test(r.stderrTail || "");
+  const tail = r.stderrTail || "";
+  const alloc = ALLOCATION_RE.test(tail);
   if (r.signal === "SIGKILL") return {status: "limit-kill", kill: "SIGKILL"};
   if (r.signal) {
     return alloc ? {status: "limit-kill", kill: "allocation-failure"} :
       {status: "crash"};
   }
-  if (r.code !== 0) {
-    return alloc ? {status: "limit-kill", kill: "allocation-failure"} :
-      {status: "error"};
+  if (r.code !== 0 || (strict && tail.trim() !== "")) {
+    if (alloc) return {status: "limit-kill", kill: "allocation-failure"};
+    return MEDIA_ERROR_RE.test(tail) ? {status: "error"} :
+      {status: "ambiguous"};
   }
   return {status: "ok"};
 }
@@ -136,7 +160,7 @@ function createDecoder(cfg) {
    * @param {string} step one of PIPELINE_STEPS
    * @param {"ffmpeg"|"ffprobe"} bin
    * @param {string[]} args
-   * @param {object} [o] {captureStdout, cwd}
+   * @param {object} [o] {captureStdout, cwd, strict}
    * @return {Promise<object>} {status, kill?, code, signal, stdout,
    *   stderrTail, elapsedMs}
    */
@@ -156,7 +180,7 @@ function createDecoder(cfg) {
       env: {...DECODER_ENV}, cwd: o.cwd, captureStdout: !!o.captureStdout,
       maxCaptureBytes: s.maxCaptureBytes,
     });
-    return {...classify(r), code: r.code, signal: r.signal,
+    return {...classify(r, !!o.strict), code: r.code, signal: r.signal,
       stdout: r.stdout, stderrTail: r.stderrTail, elapsedMs: r.elapsedMs};
   }
 
@@ -164,4 +188,4 @@ function createDecoder(cfg) {
 }
 
 module.exports = {createDecoder, classify, pinnedDigests, fileSha256,
-  HARNESS, ALLOCATION_RE, DECODER_ENV};
+  HARNESS, ALLOCATION_RE, MEDIA_ERROR_RE, DECODER_ENV};
