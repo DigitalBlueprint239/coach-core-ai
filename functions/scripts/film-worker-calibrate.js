@@ -1,0 +1,191 @@
+#!/usr/bin/env node
+"use strict";
+/**
+ * FILM-S2b limit calibration (package §4.2; statement r2 "Limits").
+ *
+ * Runs the EXACT worker argv (media.ARGS) for every pipeline step over every
+ * structurally valid frozen S2a fixture and every S2b fixture, three times
+ * each, on the decoder given by FFMPEG_BIN / FFPROBE_BIN, and finds each
+ * command's minimum working address space (prlimit ladder). Then derives:
+ *   wallMs          = max(ceil(maxWall x 3), 10 s)
+ *   cpuSoftSeconds  = max(ceil(maxCpu x 3), 5 s)   (hard = soft + margin)
+ *   addressSpace    = max(minWorkingAS x 3, 512 MiB)
+ *   fileSize        = normalize: max(maxOut x 3, 1.1 x PENDING_D3 maxBytes)
+ *                     other steps: 1 MiB (they write nothing)
+ *   maxCapture      = max(maxStdout x 3, 8 MiB) for probes, 1 MiB otherwise
+ * Values are TEST_MEASURED for synthetic media; they approve nothing.
+ *
+ * Usage: FFMPEG_BIN=... FFPROBE_BIN=... \
+ *   node film-worker-calibrate.js <out.json>
+ * PINNED=1 additionally requires the binaries to match SOURCE.json.
+ */
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+const {spawnSync} = require("child_process");
+const {ARGS, probeFacts, policyReason, structural} =
+  require("../src/film/worker/media");
+const {pinnedDigests, fileSha256} = require("../src/film/worker/decoder");
+const {LIMITS} = require("../src/film/limits");
+
+const MEASURE = path.join(__dirname, "film-worker-measure.py");
+const ROOT = path.join(__dirname, "..", "..");
+const DIRS = [path.join(ROOT, "tools", "ffmpeg", "fixtures", "frozen"),
+  path.join(ROOT, "functions", "test", "fixtures", "s2b-media")];
+const REPS = 3;
+const MiB = 1024 * 1024;
+const LADDER = [32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024, 1536,
+  2048, 3072].map((m) => m * MiB);
+
+const bins = {ffmpeg: process.env.FFMPEG_BIN, ffprobe: process.env.FFPROBE_BIN};
+for (const [k, v] of Object.entries(bins)) {
+  if (!v || !path.isAbsolute(v)) throw new Error(`${k} path required`);
+}
+const pinned = process.env.PINNED === "1";
+const digests = {ffmpeg: fileSha256(bins.ffmpeg),
+  ffprobe: fileSha256(bins.ffprobe)};
+if (pinned) {
+  const want = pinnedDigests();
+  if (digests.ffmpeg !== want.ffmpeg || digests.ffprobe !== want.ffprobe) {
+    throw new Error("decoder digests differ from SOURCE.json");
+  }
+}
+
+/**
+ * @param {string} bin "ffmpeg" | "ffprobe"
+ * @param {string[]} args
+ * @param {number} [asBytes] address-space limit (0 = none)
+ * @return {object} one measured run
+ */
+function measure(bin, args, asBytes = 0) {
+  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "cal-"));
+  const r = spawnSync("python3", [MEASURE, cwd, String(asBytes), bins[bin],
+    ...args], {encoding: "utf8", maxBuffer: 64 * MiB});
+  fs.rmSync(cwd, {recursive: true, force: true});
+  if (r.status !== 0) throw new Error(`measure failed: ${r.stderr}`);
+  return JSON.parse(r.stdout);
+}
+
+/**
+ * Smallest ladder AS whose run ends like the unlimited run (bisection;
+ * success is monotonic in the address-space limit).
+ * @param {string} bin
+ * @param {string[]} args
+ * @param {object} ref the unlimited run
+ * @return {?number} bytes
+ */
+function minAs(bin, args, ref) {
+  const ok = (as) => {
+    const m = measure(bin, args, as);
+    return m.exit === ref.exit && m.signal === ref.signal &&
+      m.stdoutBytes === ref.stdoutBytes;
+  };
+  if (!ok(LADDER[LADDER.length - 1])) return null;
+  let lo = -1;
+  let hi = LADDER.length - 1; // LADDER[hi] passes
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (ok(LADDER[mid])) hi = mid;
+    else lo = mid;
+  }
+  return LADDER[hi];
+}
+
+const rows = [];
+/**
+ * Measure a command REPS times; record the maxima.
+ * @param {string} step
+ * @param {string} fixture
+ * @param {string} bin
+ * @param {string[]} args
+ * @param {object} [opts]
+ * @return {{row: object, ref: object}}
+ */
+function run(step, fixture, bin, args, opts = {}) {
+  const ms = [];
+  for (let i = 0; i < REPS; i++) ms.push(measure(bin, args));
+  const ref = ms[0];
+  const row = {step, fixture, bin, cmd: opts.cmd || bin,
+    exit: ref.exit, signal: ref.signal,
+    wallMs: Math.max(...ms.map((m) => m.wallMs)),
+    cpuMs: Math.max(...ms.map((m) => m.cpuMs)),
+    maxRssKb: Math.max(...ms.map((m) => m.maxRssKb)),
+    stdoutBytes: Math.max(...ms.map((m) => m.stdoutBytes)),
+    stderrBytes: Math.max(...ms.map((m) => m.stderrBytes)),
+    minAsBytes: minAs(bin, args, ref)};
+  rows.push(row);
+  return {row, ref};
+}
+
+(async () => {
+  const work = fs.mkdtempSync(path.join(os.tmpdir(), "cal-work-"));
+  for (const dir of DIRS) {
+    for (const f of fs.readdirSync(dir).filter((x) => /\.(mp4|webm)$/.test(x))
+        .sort()) {
+      const file = path.join(dir, f);
+      if (await structural(fs.readFileSync(file))) continue;
+      run("probe-input", f, "ffprobe", ARGS.probe(file), {cmd: "probe"});
+      run("probe-input", f, "ffprobe", ARGS.packets(file), {cmd: "packets"});
+      run("decode-input", f, "ffmpeg", ARGS.decode(file));
+      const p = spawnSync(bins.ffprobe, ARGS.probe(file), {encoding: "utf8",
+        maxBuffer: 64 * MiB});
+      const k = spawnSync(bins.ffprobe, ARGS.packets(file),
+          {encoding: "utf8", maxBuffer: 64 * MiB});
+      let facts = null;
+      try {
+        facts = probeFacts(JSON.parse(p.stdout), JSON.parse(k.stdout)).facts;
+      } catch (_) {
+        facts = null;
+      }
+      if (!facts || policyReason(facts)) continue;
+      const out = path.join(work, `${f}.normalized.mp4`);
+      run("normalize", f, "ffmpeg",
+          ARGS.normalize(file, out, !!facts.audioCodec));
+      // normalize ran REPS times with -n: produce the output once here.
+      fs.rmSync(out, {force: true});
+      spawnSync(bins.ffmpeg, ARGS.normalize(file, out, !!facts.audioCodec));
+      const outBytes = fs.statSync(out).size;
+      rows[rows.length - 1].outputBytes = outBytes;
+      run("probe-output", f, "ffprobe", ARGS.probe(out), {cmd: "probe"});
+      run("probe-output", f, "ffprobe", ARGS.packets(out), {cmd: "packets"});
+      run("decode-output", f, "ffmpeg", ARGS.decode(out));
+    }
+  }
+  fs.rmSync(work, {recursive: true, force: true});
+
+  const steps = {};
+  for (const step of ["probe-input", "decode-input", "normalize",
+    "probe-output", "decode-output"]) {
+    const rs = rows.filter((r) => r.step === step);
+    const max = (k) => Math.max(0, ...rs.map((r) => r[k] || 0));
+    const probe = step.startsWith("probe");
+    const observed = {runs: rs.length * REPS, wallMs: max("wallMs"),
+      cpuMs: max("cpuMs"), maxRssKb: max("maxRssKb"),
+      minAsBytes: max("minAsBytes"), stdoutBytes: max("stdoutBytes"),
+      outputBytes: max("outputBytes"),
+      worstFixture: rs.slice().sort((a, b) => b.wallMs - a.wallMs)[0]
+          .fixture};
+    steps[step] = {observed, limits: {
+      wallMs: Math.max(Math.ceil(observed.wallMs * 3), 10000),
+      cpuSoftSeconds: Math.max(Math.ceil(observed.cpuMs * 3 / 1000), 5),
+      addressSpaceBytes: Math.max(observed.minAsBytes * 3, 512 * MiB),
+      fileSizeBytes: step === "normalize" ? Math.max(
+          observed.outputBytes * 3, Math.ceil(LIMITS.maxBytes * 1.1)) : MiB,
+      maxCaptureBytes: probe ? Math.max(observed.stdoutBytes * 3, 8 * MiB) :
+        MiB,
+    }};
+  }
+  const result = {pinned, digests, reps: REPS, rule:
+    "max(observed) x 3 with floors (wall 10 s, cpu 5 s, AS 512 MiB, " +
+    "normalize fsize 1.1 x PENDING_D3 maxBytes, probe capture 8 MiB)",
+  host: `${os.type()} ${os.release()} ${os.cpus().length}cpu`, steps, rows};
+  fs.writeFileSync(process.argv[2], JSON.stringify(result, null, 2) + "\n");
+  const compact = Object.fromEntries(Object.entries(steps).map(([k, v]) =>
+    [k, {...v.limits, obs: {wall: v.observed.wallMs, cpu: v.observed.cpuMs,
+      as: v.observed.minAsBytes, out: v.observed.stdoutBytes,
+      runs: v.observed.runs, worst: v.observed.worstFixture}}]));
+  console.log(JSON.stringify(compact));
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

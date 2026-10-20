@@ -1,0 +1,4 @@
+generator: ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers
+generator: built with gcc 13 (Ubuntu 13.2.0-23ubuntu3)
+host: Ubuntu 24.04.5 LTS
+note: development-only generator; never shipped; never run by the app
