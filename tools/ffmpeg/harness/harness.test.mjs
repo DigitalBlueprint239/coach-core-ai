@@ -147,12 +147,13 @@ describe("H1 binary identity and build facts", () => {
     assert.deepEqual((await list("encoders")).sort(), ["mjpeg", "pcm_s16le", "wrapped_avframe"]);
     assert.deepEqual((await list("demuxers")).sort(), ["mov,mp4,m4a,3gp,3g2,mj2"]);
     const muxers = await list("muxers");
-    assert.deepEqual(muxers.sort(), ["image2", "mp4", "null"], muxers.join(","));
-    // Filters: the three requested plus the eleven configure auto-selects for the ffmpeg tool
+    // mp4 selects the mov muxer (same movenc.c); null is the full-decode sink.
+    assert.deepEqual(muxers.sort(), ["image2", "mov", "mp4", "null"], muxers.join(","));
+    // Filters: the four requested (scale, crop, format, aresample) plus the eleven configure auto-selects for the ffmpeg tool
     // (configure n9.0.2 line 4378 `ffmpeg_select`). Nothing from LICENSE.md's GPL filter list.
     const fr = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-filters"], captureStdout: true});
     const filters = fr.stdout.split("\n").map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 3 && /^[A-Z.]{3}$/.test(p[0]) && /^[a-z0-9_]+$/.test(p[1])).map((p) => p[1]);
-    assert.deepEqual(filters.sort(), ["aformat", "anull", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"], filters.join(","));
+    assert.deepEqual(filters.sort(), ["aformat", "anull", "aresample", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"], filters.join(","));
     const gplFilters = ["blackframe", "boxblur", "colormatrix", "cover_rect", "cropdetect", "delogo", "eq", "find_rect", "fspp", "histeq", "hqdn3d", "kerndeint", "lensfun", "mcdeint", "mpdecimate", "nnedi", "owdenoise", "perspective", "phase", "pp7", "pullup", "repeatfields", "sab", "signature", "smartblur", "spp", "stereo3d", "super2xsai", "tinterlace", "uspp", "vaguedenoiser", "mptestsrc"];
     assert.ok(!filters.some((f) => gplFilters.includes(f)), "a GPL filter is compiled in");
   });
