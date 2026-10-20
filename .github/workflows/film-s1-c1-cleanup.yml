@@ -17,7 +17,7 @@ on:
       - 'functions/src/film/handlers.js'
       - 'functions/index.js'
       - 'functions/scripts/film-terms-guard.js'
-      - 'functions/test/film-s1-cleanup.test.js'
+      - 'functions/test/film-s1-cleanup*'
       - 'functions/test/film-cleanup-doubles.js'
       - 'functions/test/emulator/film-s1*.js'
       - 'tests/rules/film-cleanup.rules.test.mjs'
@@ -85,7 +85,8 @@ jobs:
         run: >-
           node --test --test-reporter=spec --test-reporter-destination=stdout
           --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
-          test/film-s1-cleanup.test.js test/film-s1.test.js
+          test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js
+          test/film-s1.test.js
 
   emulator:
     name: Firestore/Storage emulator (C1 + affected S1) + rules deny

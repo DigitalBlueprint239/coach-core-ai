@@ -590,16 +590,24 @@ describe("T8 every finalize path", () => {
 });
 
 describe("T9 binding and generation", () => {
-  it("finalize for a different bucket: unchanged label, no record, no " +
-      "Storage call", async () => {
+  it("finalize for another bucket, no bucket, or a non-decimal " +
+      "generation: ignored before any read or decision (C1-R1); no record, " +
+      "no Storage call", async () => {
     const w = world();
-    const e = {...w.bucket.put(w.path(crypto.randomUUID()), MP4),
-      bucket: "other-bucket"};
-    assert.equal(await w.h.onQuarantineFinalized(e), "no-reservation");
+    const filmId = await w.reserve();
+    const good = w.bucket.put(w.path(filmId), NOT_MP4);
+    const before = w.film(filmId);
+    for (const [e, label] of [
+      [{...good, bucket: "other-bucket"}, "ignored-bucket"],
+      [{...good, bucket: undefined}, "ignored-bucket"],
+      [{...good, generation: "12a"}, "ignored-generation"],
+      [{...good, generation: undefined}, "ignored-generation"]]) {
+      assert.equal(await w.h.onQuarantineFinalized(e), label);
+    }
+    assert.deepEqual(w.film(filmId), before, "no decision committed");
     assert.deepEqual(w.records(), []);
     assert.equal(w.bucket.deletes(), 0);
-    assert.ok(w.logs.some((l) => l.msg === "film.cleanup.target_refused" &&
-      l.data.problem === "bucket-mismatch"));
+    assert.ok(!w.bucket.calls.some((x) => x[0] === "download"), "no read");
   });
   it("target problems: bucket, non-canonical name, generation form",
       () => {
@@ -660,7 +668,16 @@ describe("T9 binding and generation", () => {
       assert.equal((await w.h.retryPendingFilmCleanups({limit: 5}))
           .results.every((x) => x.admission !== "admitted"), true);
       assert.equal(w.bucket.deletes(), 0);
-      assert.deepEqual(w.record(e), bad);
+      // C1-R2: parked out of the due range; evidence otherwise byte-equal
+      const after = w.record(e);
+      if (typeof bad.sweepDueAtMs === "number") {
+        const {parked, ...rest} = after;
+        assert.deepEqual(rest, {...bad, sweepDueAtMs: null});
+        assert.equal(parked.sweepDueAtMs, bad.sweepDueAtMs);
+        assert.equal(parked.problem, cl.recordProblem(w.id(e), bad, BKT));
+      } else {
+        assert.deepEqual(after, bad);
+      }
       assert.ok(w.logs.some((l) => l.msg === "film.cleanup.record_invalid"));
     });
   }
@@ -673,8 +690,9 @@ describe("T9 binding and generation", () => {
         const fake = "f".repeat(64);
         w.db.write(`filmCleanup/${fake}`, w.record(e));
         assert.deepEqual(await w.api.admitAttempt(fake, "x"),
-            {outcome: "invalid", problem: "id-mismatch"});
+            {outcome: "invalid", problem: "id-mismatch", parked: true});
         assert.equal(w.bucket.deletes(), 0);
+        assert.equal(w.db.read(`filmCleanup/${fake}`).sweepDueAtMs, null);
       });
   it("the injected client has implicit retries disabled (real SDK class)",
       () => {
@@ -1004,4 +1022,198 @@ describe("T12 boundary: TEST_ONLY sweep, unexported, retry OFF", () => {
     assert.equal(ok.status, 0, ok.stderr);
     fs.rmSync(dir, {recursive: true, force: true});
   });
+});
+
+describe("PR86 C1-R1: no cleanup-owing decision commits without its record",
+    () => {
+      const resolvers = {
+        "missing (no dependency)": undefined,
+        "null": () => null,
+        "empty": () => "",
+        "throwing": () => {
+          throw new Error("no default bucket");
+        },
+      };
+      for (const [kind, resolver] of Object.entries(resolvers)) {
+        it(`abandon with a ${kind} bucket-name resolver: retryable ` +
+            "unavailable, nothing committed; restored config + same " +
+            "operation -> obligation, delete", async () => {
+          let broken = false;
+          const w = world({cleanupBucketName: () =>
+            broken ? (resolver ? resolver() : undefined) : BKT});
+          const v = await w.validating();
+          const opId = crypto.randomUUID();
+          const film = w.film(v.filmId);
+          const slots = w.slots();
+          broken = true;
+          const out = await w.abandon(v.filmId, opId);
+          assert.deepEqual(out, c.errorResponseFor("unavailable",
+              "backend-unavailable"));
+          assert.deepEqual(w.film(v.filmId), film, "film untouched");
+          assert.deepEqual(w.slots(), slots, "slot still held");
+          assert.equal(w.op(opId), null, "no receipt stored");
+          assert.deepEqual(w.records(), []);
+          assert.equal(w.bucket.deletes(), 0);
+          broken = false;
+          const again = await w.abandon(v.filmId, opId);
+          assert.equal(again.ok, true);
+          assert.equal(again.data.previousStatus, "validating");
+          assert.equal(w.records().length, 1);
+          assert.equal(w.record(v.e).state, "deleted");
+          assert.deepEqual(await w.abandon(v.filmId, opId), again);
+        });
+      }
+      it("abandon of a reserved film (nothing owed) is unaffected by a " +
+          "missing bucket name", async () => {
+        const w = world({cleanupBucketName: () => null});
+        const filmId = await w.reserve();
+        const out = await w.abandon(filmId);
+        assert.equal(out.ok, true);
+        assert.deepEqual(w.records(), []);
+      });
+      it("abandon whose recorded generation is not decimal fails closed " +
+          "(no decision, no record)", async () => {
+        const w = world();
+        const v = await w.validating();
+        w.db.write(`teams/${TEAM}/films/${v.filmId}`,
+            {...w.film(v.filmId), objectGeneration: "12a"});
+        const out = await w.abandon(v.filmId);
+        assert.equal(out.ok, false);
+        assert.equal(w.film(v.filmId).status, "validating");
+        assert.deepEqual(w.records(), []);
+      });
+      const owing = {
+        "rejected-signature-invalid": async (w) => {
+          const filmId = await w.reserve();
+          return {filmId, e: w.bucket.put(w.path(filmId), NOT_MP4)};
+        },
+        "no-reservation": async (w) => ({
+          e: w.bucket.put(w.path(crypto.randomUUID()), MP4)}),
+        "stale-abandoned": async (w) => {
+          const filmId = await w.reserve();
+          await w.abandon(filmId);
+          return {filmId, e: w.bucket.put(w.path(filmId), MP4)};
+        },
+        "expired": async (w) => {
+          const filmId = await w.reserve();
+          w.advance(LIMITS.reservationLifetimeMs);
+          return {filmId, e: w.bucket.put(w.path(filmId), MP4)};
+        },
+      };
+      for (const [label, setup] of Object.entries(owing)) {
+        for (const [kind, resolver] of Object.entries(resolvers)) {
+          it(`finalize ${label}, ${kind} resolver: throws before the head ` +
+              "read, nothing committed; a restored redelivery decides " +
+              "with its obligation", async () => {
+            let broken = false;
+            const w = world({cleanupBucketName: () =>
+              broken ? (resolver ? resolver() : undefined) : BKT});
+            const {filmId, e} = await setup(w);
+            const film = filmId ? w.film(filmId) : null;
+            const slots = w.slots();
+            const reads = w.bucket.calls.length;
+            broken = true;
+            await assert.rejects(w.h.onQuarantineFinalized(e));
+            assert.equal(w.bucket.calls.length, reads, "no read, no delete");
+            if (filmId) assert.deepEqual(w.film(filmId), film);
+            assert.deepEqual(w.slots(), slots);
+            assert.deepEqual(w.records(), []);
+            broken = false;
+            assert.equal(await w.h.onQuarantineFinalized(e), label);
+            assert.equal(w.records().length, 1);
+            assert.equal(w.record(e).state, "deleted");
+          });
+        }
+      }
+      it("refusal inside the transaction (origin not in r3's set) aborts " +
+          "the decision", async () => {
+        const w = world();
+        const filmId = await w.reserve();
+        w.db.write(`teams/${TEAM}/films/${filmId}`,
+            {...w.film(filmId), status: "mystery"});
+        const e = w.bucket.put(w.path(filmId), MP4);
+        await assert.rejects(w.h.onQuarantineFinalized(e),
+            (err) => err.name === "CleanupRefused" &&
+              err.problem === "origin-invalid");
+        assert.deepEqual(w.records(), []);
+        assert.equal(w.bucket.objects.has(e.name), true);
+      });
+      it("KNOWN GAP pinned (pre-existing S1 class, out of r3 scope): a " +
+          "finalize lost to a configuration outage (no platform retry) " +
+          "leaves the film reserved; lazy expiry frees the slot and the " +
+          "source stays with no record", async () => {
+        let broken = false;
+        const w = world({cleanupBucketName: () => broken ? null : BKT});
+        const filmId = await w.reserve();
+        const e = w.bucket.put(w.path(filmId), MP4);
+        broken = true;
+        await assert.rejects(w.h.onQuarantineFinalized(e)); // event lost
+        broken = false;
+        w.advance(LIMITS.reservationLifetimeMs);
+        await w.reserve(); // lazy expiry of the first reservation
+        assert.equal(w.film(filmId).status, "expired");
+        assert.equal(w.slots()[filmId], undefined);
+        assert.equal(w.bucket.objects.has(e.name), true, "source retained");
+        assert.deepEqual(w.records(), [], "no obligation: C1-D1 orphan class");
+      });
+    });
+
+describe("PR86 C1-R2: invalid records cannot starve the sweep", () => {
+  it(">= sweepBatchMax invalid due records are parked; a valid due " +
+      "record behind them is reached on the next sweep", async () => {
+    const w = world();
+    const ids = [];
+    for (let i = 0; i < L.sweepBatchMax + 3; i++) {
+      const e = w.bucket.put(w.path(crypto.randomUUID()), MP4);
+      w.crashAtTx(2);
+      await w.h.onQuarantineFinalized(e);
+      const bad = {...w.record(e), bucket: "old-bucket.appspot.com",
+        sweepDueAtMs: T0.getTime() - 7200e3 + i};
+      w.db.write(`filmCleanup/${w.id(e)}`, bad);
+      ids.push(w.id(e));
+    }
+    const g = w.bucket.put(w.path(crypto.randomUUID()), MP4);
+    w.crashAtTx(2);
+    await w.h.onQuarantineFinalized(g);
+    let reached = false;
+    for (let k = 0; k < 3 && !reached; k++) {
+      const s = await w.h.retryPendingFilmCleanups({limit: L.sweepBatchMax});
+      reached = s.results.some((x) => x.id === w.id(g));
+    }
+    assert.ok(reached, "valid record reached");
+    assert.equal(w.record(g).state, "deleted");
+    for (const id of ids) {
+      const r = w.db.read(`filmCleanup/${id}`);
+      assert.equal(r.sweepDueAtMs, null);
+      assert.equal(r.parked.problem, "bucket-mismatch");
+      assert.equal(r.bucket, "old-bucket.appspot.com", "evidence kept");
+    }
+    assert.equal(w.bucket.deletes(), 1, "no delete for any invalid record");
+  });
+  it("a transient full configuration outage parks nothing and recovers",
+      async () => {
+        let broken = false;
+        const w = world({cleanupBucketName: () => broken ? null : BKT});
+        const es = [];
+        for (let i = 0; i < 3; i++) {
+          const e = w.bucket.put(w.path(crypto.randomUUID()), MP4);
+          w.crashAtTx(2);
+          await w.h.onQuarantineFinalized(e);
+          es.push(e);
+        }
+        const before = es.map((e) => w.record(e));
+        broken = true;
+        const s = await w.h.retryPendingFilmCleanups({limit: 5});
+        assert.deepEqual(s, {queried: 0, results: [],
+          stoppedForBudget: false, configMissing: true});
+        assert.equal(w.db.queries.length, 0);
+        // immediate/replay path during the outage: invalid, never parked
+        assert.equal((await w.api.attemptOnce(w.id(es[0]))).admission,
+            "invalid");
+        assert.deepEqual(es.map((e) => w.record(e)), before);
+        broken = false;
+        const s2 = await w.h.retryPendingFilmCleanups({limit: 5});
+        assert.deepEqual(s2.results.map((x) => x.result),
+            ["deleted", "deleted", "deleted"]);
+      });
 });

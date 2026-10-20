@@ -1,5 +1,11 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-20 / FILM-S1-C1 PR86 review repair (Claude, implementer): Codex FAIL c-6301421976 and independent-reviewer FAIL c-6301621806 repaired under C1-A.
+> - **C1-R1:** every target refusal now aborts the deciding transaction, so no cleanup-owing decision commits without its record. Abandon returns retryable unavailable; finalize throws before reading, and events for another bucket are ignored.
+> - **C1-R2:** invalid records are parked out of the due range with their evidence kept; a configuration outage parks nothing.
+> - **Known gap → C1-D1 release gate:** a finalize event lost to a configuration outage is orphaned by lazy expiry. It is pre-existing, out of r3 scope, and pinned by a test.
+> - Next: Codex and independent-reviewer verdicts. MVP NO-GO.
+
 > 2026-10-20 / FILM-S1-C1 cleanup repair (Claude, implementer `session_018Dkini…`; C1-A c-6300236512; r3 c-6299776477 + T7-0 c-6299971919): TEST_ONLY on `claude/film-s1-cleanup-repair` from `6764af9`.
 > - Every owed quarantine delete (abandon and every finalize branch) is now a durable `filmCleanup` record created inside the deciding transaction, bound to bucket/name/generation; attempts are fenced, counted before I/O, capped at 8 (TEST placeholder) and resumed by abandon replay or a bounded, unexported, default-OFF sweep. 404 and 412 stay distinct.
 > - Changed: `functions/src/film/{cleanup.js (new), handlers.js}`, `functions/index.js` (injection only), predeploy guard (additive), new tests, S1 emulator harness wiring, rules deny tests, new workflow, `docs/film/FILM_S1_C1_CLEANUP.md`. Frozen surfaces unchanged vs `6764af9` (CI-proven). Evidence and exact SHA: draft PR / #39 handoff.

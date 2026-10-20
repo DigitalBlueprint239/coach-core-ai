@@ -152,6 +152,42 @@ describe("T11b batch reachability (Firestore emulator semantics)", () => {
   });
 });
 
+describe("PR86 C1-R2 on the emulator: invalid due records are parked", () => {
+  it(">= SWEEP_BATCH_MAX invalid due records (old bucket binding) cannot " +
+      "starve a valid due record; parked records leave the due range with " +
+      "their evidence intact", async () => {
+    const invalid = [];
+    for (let i = 0; i < L.sweepBatchMax + 2; i++) {
+      const r = build.initial(NOW - 7200e3 + i);
+      invalid.push({...r, data: {...r.data, bucket: "old-bucket.appspot.com"}});
+    }
+    for (const r of invalid) {
+      await db.collection(cl.CLEANUP_COLLECTION).doc(r.id).set(r.data);
+    }
+    const good = build.initial(NOW - 1000);
+    await seed([good]);
+    const bucket = new FakeBucket(BKT);
+    bucket.put(good.data.name, MP4, "video/mp4", good.data.generation);
+    const api = cl.createCleanup({db, bucketName: () => BKT,
+      getBucket: () => bucket, now: () => T0, logger});
+    const first = await api.retryPendingFilmCleanups({limit: L.sweepBatchMax});
+    assert.equal(first.queried, L.sweepBatchMax);
+    assert.ok(first.results.every((x) => x.admission === "invalid"));
+    const second = await api.retryPendingFilmCleanups(
+        {limit: L.sweepBatchMax});
+    assert.ok(second.results.some((x) => x.id === good.id &&
+      x.result === "deleted"), JSON.stringify(second));
+    for (const r of invalid) {
+      const d = (await db.doc(`filmCleanup/${r.id}`).get()).data();
+      const {parked, ...rest} = d;
+      assert.deepEqual(rest, {...r.data, sweepDueAtMs: null});
+      assert.deepEqual([parked.problem, parked.sweepDueAtMs],
+          ["bucket-mismatch", r.data.sweepDueAtMs]);
+    }
+    assert.equal((await sweepQuery(L.sweepBatchMax)).size, 0);
+  });
+});
+
 /** S1 handlers on the emulator, with a crash switch on transactions. */
 function handlers() {
   const bucket = new FakeBucket(BKT);

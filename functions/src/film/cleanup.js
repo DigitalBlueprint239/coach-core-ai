@@ -91,6 +91,23 @@ const recordSchema = z.object({
 const sha256 = (s) => crypto.createHash("sha256").update(s).digest("hex");
 
 /**
+ * Thrown by `obligate` (PR86 C1-R1): a cleanup-owing decision must never
+ * commit without its durable, valid record, so ANY target refusal aborts the
+ * deciding transaction before it writes. Code "unavailable": nothing was
+ * committed and the same operation can be retried once configuration is
+ * back (the S1 callable maps it to unavailable/backend-unavailable).
+ */
+class CleanupRefused extends Error {
+  /** @param {string} problem */
+  constructor(problem) {
+    super(`cleanup obligation refused: ${problem}`);
+    this.name = "CleanupRefused";
+    this.problem = problem;
+    this.code = "unavailable";
+  }
+}
+
+/**
  * Record id: sha256(bucket \n name \n generation).
  * @param {string} bucket
  * @param {string} name
@@ -282,15 +299,17 @@ function createCleanup(deps) {
    * @param {{bucket: string, name: string, generation: string}} target
    * @param {string} origin
    * @param {Date} at the transaction's single time
-   * @return {Promise<?{id: string, created: boolean}>} null = no record
-   *   (target invalid; nothing is ever attempted)
+   * @return {Promise<{id: string, created: boolean}>}
+   * @throws {CleanupRefused} on ANY target refusal (C1-R1): the caller's
+   *   transaction aborts before it writes, so no cleanup-owing decision is
+   *   ever committed without its record
    */
   async function obligate(tx, target, origin, at) {
     const problem = targetProblem(target, bucketName()) ||
       (ORIGINS.includes(origin) ? null : "origin-invalid");
     if (problem) {
-      logger.warn("film.cleanup.target_refused", {origin, problem});
-      return null;
+      logger.error("film.cleanup.target_refused", {origin, problem});
+      throw new CleanupRefused(problem);
     }
     const id = cleanupIdFor(target.bucket, target.name, target.generation);
     const snap = await tx.get(ref(id));
@@ -320,7 +339,20 @@ function createCleanup(deps) {
       if (!snap.exists) return {outcome: "missing"};
       const r = snap.data();
       const problem = recordProblem(id, r, b, limits);
-      if (problem) return invalid("admit", id, problem);
+      if (problem) {
+        // C1-R2: a record-intrinsic problem parks the record out of the due
+        // range (it can no longer crowd valid records out of the bounded
+        // sweep). Only sweepDueAtMs changes, to null; the original value is
+        // kept in `parked`; every other field stays byte-unchanged. A
+        // missing configuration never parks (recoverable once restored).
+        if (problem !== "bucket-unset" && r && typeof r === "object" &&
+            typeof r.sweepDueAtMs === "number") {
+          tx.update(ref(id), {sweepDueAtMs: null, parked: {problem,
+            sweepDueAtMs: r.sweepDueAtMs, atMs: nowMs()}});
+          return {...invalid("admit", id, problem), parked: true};
+        }
+        return invalid("admit", id, problem);
+      }
       const t = nowMs();
       if (r.state !== "pending") return {outcome: "no-op", state: r.state};
       if (r.lease && r.lease.untilMs > t) return {outcome: "skip-contention"};
@@ -444,6 +476,12 @@ function createCleanup(deps) {
       throw new RangeError("limit must be an integer in 1..sweepBatchMax");
     }
     const start = mono();
+    if (!bucketName()) {
+      // configuration outage: touch nothing, park nothing (C1-R2)
+      logger.error("film.cleanup.sweep_config_missing", {});
+      return {queried: 0, results: [], stoppedForBudget: false,
+        configMissing: true};
+    }
     const snap = await db.collection(CLEANUP_COLLECTION)
         .where("sweepDueAtMs", "<=", nowMs())
         .orderBy("sweepDueAtMs").limit(limit).get();
@@ -496,7 +534,7 @@ function testOnlyExportProblem(loaded) {
   return null;
 }
 
-module.exports = {CLEANUP_LIMITS, CLEANUP_SWEEP_DESIGNATION,
+module.exports = {CleanupRefused, CLEANUP_LIMITS, CLEANUP_SWEEP_DESIGNATION,
   SWEEP_SCHEDULE_PLACEHOLDER, CLEANUP_COLLECTION, GENERATION_RE,
   QUARANTINE_RE, ORIGINS, recordSchema, cleanupIdFor, backoffMs,
   targetProblem, recordProblem, deleteExactGeneration, noRetryBucketFor,

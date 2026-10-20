@@ -19,7 +19,7 @@ const crypto = require("crypto");
 const {HttpsError} = require("firebase-functions/v2/https");
 const c = require("./contract");
 const {LIMITS} = require("./limits");
-const {createCleanup, cleanupIdFor} = require("./cleanup");
+const {createCleanup, cleanupIdFor, GENERATION_RE} = require("./cleanup");
 
 // R4: bounded first-box read (ftyp with up to 252 compatible brands).
 const HEAD_READ_BYTES = 1024;
@@ -161,9 +161,15 @@ function createFilmHandlers(deps) {
   // inside the deciding transaction; attempts go through ONE fenced,
   // counted admission shared with replay and the sweep.
   const cleanupBucketName = () => {
-    const name = deps.cleanupBucketName ? deps.cleanupBucketName() : null;
+    let name = null;
+    try {
+      name = deps.cleanupBucketName ? deps.cleanupBucketName() : null;
+    } catch (_) {
+      name = null;
+    }
     if (typeof name !== "string" || !name) {
       logger.error("film.cleanup.config_missing", {what: "bucket"});
+      return null;
     }
     return name;
   };
@@ -470,6 +476,25 @@ function createFilmHandlers(deps) {
     const generation = String(object.generation);
     const size = Number(object.size);
     const at = now();
+
+    // PR86 C1-R1: a cleanup-owing decision never commits without its durable
+    // record. Without a resolvable configured bucket nothing is decided
+    // (thrown before the head read: no state change, like the R3 transient
+    // read). An event for another bucket, or with no bucket or a
+    // non-decimal generation, is not ours: no read, no decision, no record.
+    const configured = cleanupBucketName();
+    if (!configured) {
+      throw Object.assign(new Error("film cleanup bucket not configured"),
+          {code: "failed-precondition"});
+    }
+    if (object.bucket !== configured) {
+      logger.warn("film.finalize", {outcome: "ignored-bucket"});
+      return "ignored-bucket";
+    }
+    if (!GENERATION_RE.test(generation)) {
+      logger.warn("film.finalize", {outcome: "ignored-generation"});
+      return "ignored-generation";
+    }
 
     // R3: a transient read error throws (no state change, nothing deleted);
     // a vanished generation leaves the reservation untouched. Only a head
