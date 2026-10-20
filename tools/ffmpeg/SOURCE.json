@@ -1,0 +1,18 @@
+{
+  "component": "FFmpeg",
+  "version": "9.0.2",
+  "releaseName": "Lei",
+  "tarball": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+  "signature": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz.asc",
+  "signingKey": {
+    "url": "https://ffmpeg.org/ffmpeg-devel.asc",
+    "pinnedFingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8",
+    "note": "FFmpeg release signing key as published on https://ffmpeg.org/download.html. The reviewer must cross-check this fingerprint against that page; verify-source.sh refuses any key whose fingerprint differs."
+  },
+  "tarballSha256": "PENDING_FIRST_VERIFIED_BUILD",
+  "tarballSha256Note": "Filled from the first CI build whose PGP signature verified; every later build must reproduce it. A changed value is a review event, never a silent update.",
+  "licence": {
+    "expected": "LGPL-2.1-or-later",
+    "sourceOfTruth": "LICENSE.md in the tarball (also https://raw.githubusercontent.com/FFmpeg/FFmpeg/n9.0.2/LICENSE.md)"
+  }
+}

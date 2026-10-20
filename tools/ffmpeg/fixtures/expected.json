@@ -1,0 +1,23 @@
+{
+  "note": "Expected probe facts for the synthetic fixtures produced by generate.sh. Durations in ms, dimensions in px. 'decodeWithXerror' is the exit expectation of `ffmpeg -xerror -i <file> -f null -`: 0 = clean full decode, 'nonzero' = the decoder must report an error (truncated/invalid data). Limits referenced here are PENDING_D3 test placeholders (300000 ms, 1920x1080), not approved values.",
+  "fixtures": {
+    "s1-30fps-counter.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 320, "height": 180, "fps": "30/1"}, "audio": {"codec": "aac"}, "durationMs": 4000, "streams": 2, "decodeWithXerror": 0},
+    "s2-60fps.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 320, "height": 180, "fps": "60/1"}, "audio": null, "durationMs": 4000, "streams": 1, "decodeWithXerror": 0},
+    "s3-vfr.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 320, "height": 180}, "audio": null, "durationMsApprox": 3333, "streams": 1, "decodeWithXerror": 0, "note": "variable frame rate; duration shorter than 4 s because frames were dropped"},
+    "s4-hevc.mp4": {"probeOk": true, "optional": true, "video": {"codec": "hevc"}, "note": "generated only when the generator has libx265; the pinned LGPL build has no HEVC decoder, so decodeWithXerror is nonzero there and the validator must reject with video-codec-not-allowed"},
+    "s5-truncated.mp4": {"probeOk": true, "decodeWithXerror": "nonzero", "note": "faststart moov is intact so ffprobe succeeds; the truncation is only detected by decoding with -xerror"},
+    "s5-spoofed.mp4": {"probeOk": false, "decodeWithXerror": "nonzero"},
+    "s5-empty.mp4": {"probeOk": false, "decodeWithXerror": "nonzero"},
+    "s6-duration-at-limit-300000ms.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 64, "height": 64, "fps": "2/1"}, "durationMs": 300000, "streams": 1, "decodeWithXerror": 0},
+    "s6-duration-over-limit-300500ms.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 64, "height": 64, "fps": "2/1"}, "durationMs": 300500, "streams": 1, "decodeWithXerror": 0, "note": "+1 frame at 2 fps = +500 ms; finer granularity is not meaningful for a container-level duration limit"},
+    "s6-res-at-limit-1920x1080.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 1920, "height": 1080}, "durationMs": 1000, "streams": 1, "decodeWithXerror": 0},
+    "s6-res-over-limit-1922x1080.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 1922, "height": 1080}, "durationMs": 1000, "streams": 1, "decodeWithXerror": 0, "note": "H.264 needs even dimensions, so the smallest over-limit width is 1922"},
+    "s6-metadata-tags.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 320, "height": 180}, "durationMs": 2000, "streams": 1, "decodeWithXerror": 0, "mustContainTags": ["location", "creation_time", "make", "model", "artist", "comment"], "note": "the normalizing remux must remove every one of these"},
+    "s7-excess-streams.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 160, "height": 90}, "durationMs": 1000, "streams": 13, "decodeWithXerror": 0},
+    "s8-audio-only.mp4": {"probeOk": true, "video": null, "audio": {"codec": "aac"}, "durationMs": 2000, "streams": 1, "decodeWithXerror": 0},
+    "s9-wrong-container.webm": {"probeOkPinned": false, "optional": true, "note": "the pinned build has only the mov demuxer, so it cannot open WebM (probe fails); a full generator build can"},
+    "s10-known-good.mp4": {"probeOk": true, "video": {"codec": "h264", "width": 160, "height": 90, "fps": "10/1"}, "audio": {"codec": "aac"}, "durationMs": 2000, "streams": 2, "decodeWithXerror": 0}
+  },
+  "normalizeArgs": ["-map_metadata", "-1", "-map_metadata:s", "-1", "-map_chapters", "-1", "-c", "copy", "-movflags", "+faststart", "-fflags", "+bitexact", "-flags", "+bitexact", "-f", "mp4"],
+  "forbiddenTagKeys": ["location", "location-eng", "com.apple.quicktime.location.ISO6709", "creation_time", "make", "model", "artist", "comment", "encoder", "com.apple.quicktime.make", "com.apple.quicktime.model", "com.apple.quicktime.software"]
+}
