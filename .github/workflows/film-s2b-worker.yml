@@ -99,8 +99,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p s2b-evidence
-          node functions/scripts/film-worker-calibrate.js s2b-evidence/calibration.json | tee s2b-evidence/calibration.compact.json
+          node functions/scripts/film-worker-calibrate.js s2b-evidence/calibration.json \
+            2> s2b-evidence/calibration.stderr | tee s2b-evidence/calibration.compact.json
           echo "::notice title=Worker calibration (pinned ${{ github.sha }})::$(cat s2b-evidence/calibration.compact.json)"
+          echo "::notice title=Calibration diagnostic (single-arena env vs none)::$(tail -1 s2b-evidence/calibration.stderr)"
+          # every measured row (step|fixture|cmd|minAsMiB|cpuMs|wallMs|rssMiB), chunked
+          split -l 45 s2b-evidence/calibration.rows.txt s2b-evidence/rows-
+          for f in s2b-evidence/rows-*; do
+            echo "::notice title=Calibration rows ($(basename "$f"))::$(tr '\n' ';' < "$f")"
+          done
       - name: Pinned pipeline / limits / offender suite (exit retained)
         env:
           PINNED: '1'

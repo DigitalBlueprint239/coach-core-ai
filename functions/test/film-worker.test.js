@@ -468,6 +468,49 @@ describe("cancellation and cleanup (S1 abandon observed, not changed)", () => {
   });
 });
 
+describe("inconsistent state mid-run is held for recovery, never forced",
+    () => {
+      it("ledger slot missing at the ready commit: recovery-needed with " +
+          "evidence; film validating; no new slot", async () => {
+        const w = world({script: [{before: async () => {
+          env.slotsCleared = true;
+        }, then: "ok"}]});
+        const f = await validatingFilm(w);
+        env = {};
+        const orig = w.objects.createOnly.bind(w.objects);
+        w.objects.createOnly = async (t) => {
+          const r = await orig(t);
+          w.db.write(`teams/${TEAM}/filmLedger/cap`, {slots: {}});
+          return r;
+        };
+        const r = await w.worker.processFilm({teamId: TEAM,
+          filmId: f.filmId});
+        assert.equal(r.outcome, "recovery-needed", JSON.stringify(r));
+        assert.equal(w.db.read(filmPath(f.filmId)).status, "validating");
+        assert.deepEqual(ledger(w), {});
+        const j = job(w, f);
+        assert.equal(j.recovery.reason, "ready-precondition-failed");
+        assert.equal(j.recovery.evidence.slot, null);
+        assert.equal(j.lease, null);
+        assert.equal(j.terminal, null);
+      });
+      it("owner changed mid-run: the checkpoint holds for recovery and no " +
+          "further decoder step or upload runs", async () => {
+        const w = world({script: [{before: async () => {
+          w.db.write(`teams/${TEAM}`, {ownerId: "someone-else"});
+        }, then: "ok"}]});
+        const f = await validatingFilm(w);
+        const r = await w.worker.processFilm({teamId: TEAM,
+          filmId: f.filmId});
+        assert.equal(r.outcome, "aborted");
+        assert.equal(job(w, f).recovery.reason,
+            "precondition-changed-mid-run");
+        assert.equal(w.objects.calls.filter((c) => c[0] === "createOnly")
+            .length, 0);
+        assert.equal(w.db.read(filmPath(f.filmId)).status, "validating");
+      });
+    });
+
 describe("decoder-free reconciliation and malformed state", () => {
   it("after exhaustion, reconciliation adopts proven validated output " +
       "and promotes without any decoder or pipeline run", async () => {

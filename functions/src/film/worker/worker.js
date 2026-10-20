@@ -229,6 +229,32 @@ function createFilmWorker(deps) {
   }
 
   /**
+   * A fenced commit found the film still validating (same generation) but
+   * the owner or the ledger slot inconsistent: record bounded evidence on
+   * the job, release the lease, never force a film transition.
+   * @param {object} ctx
+   * @param {object} job mutated
+   * @param {string} reason
+   * @param {Date} at
+   * @return {boolean} true when recorded
+   */
+  function holdForRecovery(ctx, job, reason, at) {
+    if (!ctx.film || ctx.film.status !== "validating" ||
+        ctx.generation !== job.inputGeneration) {
+      return false;
+    }
+    job.recovery = {reason, evidence: {ownerOk: !!ctx.ownerOk,
+      slot: ctx.slot ? ctx.slot.status : null}, atMs: at.getTime()};
+    const last = job.attempts[job.attempts.length - 1];
+    if (last && !last.end) {
+      last.end = {end: "unknown"};
+      last.endedAtMs = at.getTime();
+    }
+    job.lease = null;
+    return true;
+  }
+
+  /**
    * Preconditions every film-changing decision needs.
    * @param {object} ctx
    * @return {boolean}
@@ -385,6 +411,9 @@ function createFilmWorker(deps) {
    */
   const renew = (h) => fenced(h, (tx, ctx, job, at) => {
     if (!transitionable(ctx) || ctx.generation !== job.inputGeneration) {
+      if (holdForRecovery(ctx, job, "precondition-changed-mid-run", at)) {
+        return {held: true};
+      }
       throw new Stop({why: "film-changed"});
     }
     job.lease = {...job.lease, untilMs: at.getTime() + ttl()};
@@ -462,10 +491,15 @@ function createFilmWorker(deps) {
    * @return {Promise<object>}
    */
   const commitReady = (h) => fenced(h, (tx, ctx, job, at) => {
-    if (!transitionable(ctx) || ctx.generation !== job.inputGeneration ||
-        !job.validated || !job.output ||
+    if (!job.validated || !job.output ||
         job.output.sha256 !== job.validated.outputSha256) {
       throw new Stop({why: "ready-precondition-failed"});
+    }
+    if (!transitionable(ctx) || ctx.generation !== job.inputGeneration) {
+      if (holdForRecovery(ctx, job, "ready-precondition-failed", at)) {
+        return {held: true};
+      }
+      throw new Stop({why: "film-changed"});
     }
     tx.update(filmRef(ctx.teamId, ctx.filmId), {
       status: "ready", statusChangedAt: ts(at), readyAt: ts(at),
@@ -585,7 +619,10 @@ function createFilmWorker(deps) {
         return await finishVerdict(h, where, "container-invalid");
       }
       // 2-6. pipeline, lease renewed before every decoder step
-      const checkpoint = async () => (await renew(h)).ok;
+      const checkpoint = async () => {
+        const r = await renew(h);
+        return r.ok && !r.held;
+      };
       const out = await runPipeline({inputPath: input, workDir: work,
         decoder, checkpoint});
       if (out.outcome === "aborted") {
@@ -622,7 +659,10 @@ function createFilmWorker(deps) {
   async function finishVerdict(h, where, reason, step) {
     const r = await fenced(h, (tx, ctx, job, at) => {
       if (!transitionable(ctx) || ctx.generation !== job.inputGeneration) {
-        throw new Stop({why: "reject-precondition-failed"});
+        if (holdForRecovery(ctx, job, "reject-precondition-failed", at)) {
+          return {held: true};
+        }
+        throw new Stop({why: "film-changed"});
       }
       const a = job.attempts[job.attempts.length - 1];
       a.end = {end: "media-verdict", reason};
@@ -632,6 +672,10 @@ function createFilmWorker(deps) {
     if (!r.ok) {
       if (r.why !== "fence-lost") await stopForChangedFilm(where);
       return {outcome: r.why};
+    }
+    if (r.held) {
+      return {outcome: "recovery-needed",
+        reason: "reject-precondition-failed"};
     }
     await runCleanup(where, "quarantine");
     return {outcome: "rejected", reason, step: step || null};
@@ -647,7 +691,12 @@ function createFilmWorker(deps) {
   async function promote(h, where, out) {
     const artifact = decoder.digests ? decoder.digests() : null;
     const rec = await fenced(h, (tx, ctx, job, at) => {
-      if (!transitionable(ctx)) throw new Stop({why: "film-changed"});
+      if (!transitionable(ctx)) {
+        if (holdForRecovery(ctx, job, "precondition-changed-mid-run", at)) {
+          return {held: true};
+        }
+        throw new Stop({why: "film-changed"});
+      }
       job.validated = {attemptN: job.attempts.length, fence: job.fence,
         inputSha256: out.input.sha256, inputBytes: out.input.bytes,
         outputSha256: out.output.sha256, outputBytes: out.output.bytes,
@@ -661,6 +710,10 @@ function createFilmWorker(deps) {
     if (!rec.ok) {
       if (rec.why === "film-changed") await stopForChangedFilm(where);
       return {outcome: rec.why};
+    }
+    if (rec.held) {
+      return {outcome: "recovery-needed",
+        reason: "precondition-changed-mid-run"};
     }
     const job = rec.ctx.job; // pre-write snapshot; intent recomputed below
     const key = outputKey(where.teamId, where.filmId, where.jobId);
@@ -684,7 +737,10 @@ function createFilmWorker(deps) {
       if (proof.state === "proven") {
         generation = proof.generation;
         provenBy = "adopted";
-      } else if (proof.state === "absent" && (await renew(h)).ok) {
+      } else if (proof.state === "absent" && await (async () => {
+        const r = await renew(h);
+        return r.ok && !r.held;
+      })()) {
         try {
           const up = await objects.createOnly({name: key,
             file: out.output.path, contentType: "video/mp4",
@@ -713,19 +769,34 @@ function createFilmWorker(deps) {
           reason: "output-ownership-unproven"};
       }
     }
-    const up = await fenced(h, (tx, ctx, j) => {
-      if (!transitionable(ctx)) throw new Stop({why: "film-changed"});
+    const up = await fenced(h, (tx, ctx, j, at) => {
+      // When held, the proven output is recorded with the recovery record
+      // so reconciliation sees exactly this object. When the film changed
+      // (Stop), nothing is written; cleanup re-proves ownership from the
+      // recorded intent (bytes AND identity) before any delete.
       j.output = {generation, sha256: out.output.sha256,
         bytes: out.output.bytes, key, provenBy};
+      if (!transitionable(ctx)) {
+        if (holdForRecovery(ctx, j, "ready-precondition-failed", at)) {
+          return {held: true};
+        }
+        throw new Stop({why: "film-changed"});
+      }
     });
     if (!up.ok) {
       if (up.why === "film-changed") await stopForChangedFilm(where);
       return {outcome: up.why};
     }
+    if (up.held) {
+      return {outcome: "recovery-needed", reason: "ready-precondition-failed"};
+    }
     const c = await commitReady(h);
     if (!c.ok) {
       if (c.why !== "fence-lost") await stopForChangedFilm(where);
       return {outcome: c.why};
+    }
+    if (c.held) {
+      return {outcome: "recovery-needed", reason: "ready-precondition-failed"};
     }
     await runCleanup(where, "quarantine");
     return {outcome: "ready", generation, media: out.media};
@@ -822,6 +893,7 @@ function createFilmWorker(deps) {
     }
     const c = await commitReady(h);
     if (!c.ok) return {reconcile: c.why};
+    if (c.held) return {reconcile: "recovery-needed"};
     await runCleanup(where, "quarantine");
     return {reconcile: "ready"};
   }

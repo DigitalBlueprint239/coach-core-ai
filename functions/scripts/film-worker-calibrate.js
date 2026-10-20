@@ -25,13 +25,17 @@ const path = require("path");
 const {spawnSync} = require("child_process");
 const {ARGS, probeFacts, policyReason, structural} =
   require("../src/film/worker/media");
-const {pinnedDigests, fileSha256} = require("../src/film/worker/decoder");
+const {pinnedDigests, fileSha256, DECODER_ENV} =
+  require("../src/film/worker/decoder");
 const {LIMITS} = require("../src/film/limits");
 
 const MEASURE = path.join(__dirname, "film-worker-measure.py");
 const ROOT = path.join(__dirname, "..", "..");
-const DIRS = [path.join(ROOT, "tools", "ffmpeg", "fixtures", "frozen"),
-  path.join(ROOT, "functions", "test", "fixtures", "s2b-media")];
+// CAL_DIRS (":"-separated) narrows the set for local development only; CI
+// always calibrates the full frozen + S2b set.
+const DIRS = process.env.CAL_DIRS ? process.env.CAL_DIRS.split(":") :
+  [path.join(ROOT, "tools", "ffmpeg", "fixtures", "frozen"),
+    path.join(ROOT, "functions", "test", "fixtures", "s2b-media")];
 const REPS = 3;
 const MiB = 1024 * 1024;
 const LADDER = [32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024, 1536,
@@ -55,12 +59,14 @@ if (pinned) {
  * @param {string} bin "ffmpeg" | "ffprobe"
  * @param {string[]} args
  * @param {number} [asBytes] address-space limit (0 = none)
+ * @param {object} [env] child environment (default: the worker's)
  * @return {object} one measured run
  */
-function measure(bin, args, asBytes = 0) {
+function measure(bin, args, asBytes = 0, env = DECODER_ENV) {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "cal-"));
-  const r = spawnSync("python3", [MEASURE, cwd, String(asBytes), bins[bin],
-    ...args], {encoding: "utf8", maxBuffer: 64 * MiB});
+  const r = spawnSync("python3", [MEASURE, cwd, String(asBytes),
+    JSON.stringify(env), bins[bin], ...args],
+  {encoding: "utf8", maxBuffer: 64 * MiB});
   fs.rmSync(cwd, {recursive: true, force: true});
   if (r.status !== 0) throw new Error(`measure failed: ${r.stderr}`);
   return JSON.parse(r.stdout);
@@ -72,11 +78,12 @@ function measure(bin, args, asBytes = 0) {
  * @param {string} bin
  * @param {string[]} args
  * @param {object} ref the unlimited run
+ * @param {object} [env]
  * @return {?number} bytes
  */
-function minAs(bin, args, ref) {
+function minAs(bin, args, ref, env = DECODER_ENV) {
   const ok = (as) => {
-    const m = measure(bin, args, as);
+    const m = measure(bin, args, as, env);
     return m.exit === ref.exit && m.signal === ref.signal &&
       m.stdoutBytes === ref.stdoutBytes;
   };
@@ -105,7 +112,7 @@ function run(step, fixture, bin, args, opts = {}) {
   const ms = [];
   for (let i = 0; i < REPS; i++) ms.push(measure(bin, args));
   const ref = ms[0];
-  const row = {step, fixture, bin, cmd: opts.cmd || bin,
+  const row = {step, fixture, bin, cmd: opts.cmd || bin, args,
     exit: ref.exit, signal: ref.signal,
     wallMs: Math.max(...ms.map((m) => m.wallMs)),
     cpuMs: Math.max(...ms.map((m) => m.cpuMs)),
@@ -153,10 +160,25 @@ function run(step, fixture, bin, args, opts = {}) {
   }
   fs.rmSync(work, {recursive: true, force: true});
 
+  const unfit = rows.filter((r) => r.minAsBytes === null);
+  if (unfit.length) {
+    throw new Error("commands did not fit the address-space ladder: " +
+      JSON.stringify(unfit.map((r) => [r.step, r.fixture, r.cmd])));
+  }
+  // Diagnostic only: the worst address-space row again WITHOUT the
+  // single-arena environment (shows what the tunable changes).
+  const worst = rows.slice().sort((a, b) => b.minAsBytes - a.minAsBytes)[0];
+  const worstArgs = worst.args;
+  const plainRef = measure(worst.bin, worstArgs, 0, {});
+  const diagnostic = {step: worst.step, fixture: worst.fixture,
+    cmd: worst.cmd, minAsWithEnv: worst.minAsBytes,
+    minAsWithoutEnv: minAs(worst.bin, worstArgs, plainRef, {})};
+
   const steps = {};
   for (const step of ["probe-input", "decode-input", "normalize",
     "probe-output", "decode-output"]) {
     const rs = rows.filter((r) => r.step === step);
+    if (rs.length === 0) throw new Error(`no measurements for ${step}`);
     const max = (k) => Math.max(0, ...rs.map((r) => r[k] || 0));
     const probe = step.startsWith("probe");
     const observed = {runs: rs.length * REPS, wallMs: max("wallMs"),
@@ -175,11 +197,20 @@ function run(step, fixture, bin, args, opts = {}) {
         MiB,
     }};
   }
-  const result = {pinned, digests, reps: REPS, rule:
+  const result = {pinned, digests, reps: REPS, env: DECODER_ENV,
+    diagnostic, rule:
     "max(observed) x 3 with floors (wall 10 s, cpu 5 s, AS 512 MiB, " +
     "normalize fsize 1.1 x PENDING_D3 maxBytes, probe capture 8 MiB)",
-  host: `${os.type()} ${os.release()} ${os.cpus().length}cpu`, steps, rows};
+    host: `${os.type()} ${os.release()} ${os.cpus().length}cpu`, steps, rows};
   fs.writeFileSync(process.argv[2], JSON.stringify(result, null, 2) + "\n");
+  // Every row, compact (reviewers without artifact access read annotations).
+  const table = rows.map((r) => [r.step, r.fixture.replace(/\.(mp4|webm)$/,
+      ""), r.cmd, Math.round(r.minAsBytes / MiB), Math.round(r.cpuMs),
+  Math.round(r.wallMs), Math.round(r.maxRssKb / 1024)].join("|"));
+  fs.writeFileSync(process.argv[2].replace(/\.json$/, ".rows.txt"),
+      "step|fixture|cmd|minAsMiB|cpuMs|wallMs|rssMiB\n" +
+      table.join("\n") + "\n");
+  console.error(JSON.stringify({diagnostic}));
   const compact = Object.fromEntries(Object.entries(steps).map(([k, v]) =>
     [k, {...v.limits, obs: {wall: v.observed.wallMs, cpu: v.observed.cpuMs,
       as: v.observed.minAsBytes, out: v.observed.stdoutBytes,

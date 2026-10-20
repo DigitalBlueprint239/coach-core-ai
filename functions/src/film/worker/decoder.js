@@ -32,6 +32,14 @@ const SOURCE_JSON = path.resolve(__dirname, "..", "..", "..", "..", "tools",
 const ALLOCATION_RE = new RegExp(["Cannot allocate memory", "out of memory",
   "ENOMEM", "std::bad_alloc", "Memory allocation failed"].join("|"), "i");
 
+/**
+ * The ONLY environment a decoder process receives. One malloc arena keeps
+ * the static binary's per-thread arena reservations (64 MiB of address
+ * space each) from inflating RLIMIT_AS; calibration measures with exactly
+ * this environment. No credentials, proxy or locale variables are passed.
+ */
+const DECODER_ENV = Object.freeze({GLIBC_TUNABLES: "glibc.malloc.arena_max=1"});
+
 let harnessPromise = null;
 /** @return {Promise<object>} the S2a harness module */
 function loadHarness() {
@@ -145,7 +153,7 @@ function createDecoder(cfg) {
         limits.cpuHardMarginSeconds}`, addressSpaceBytes: s.addressSpaceBytes,
       fileSizeBytes: s.fileSizeBytes, openFiles: limits.openFiles,
       coreBytes: 0},
-      env: {}, cwd: o.cwd, captureStdout: !!o.captureStdout,
+      env: {...DECODER_ENV}, cwd: o.cwd, captureStdout: !!o.captureStdout,
       maxCaptureBytes: s.maxCaptureBytes,
     });
     return {...classify(r), code: r.code, signal: r.signal,
@@ -156,4 +164,4 @@ function createDecoder(cfg) {
 }
 
 module.exports = {createDecoder, classify, pinnedDigests, fileSha256,
-  HARNESS, ALLOCATION_RE};
+  HARNESS, ALLOCATION_RE, DECODER_ENV};
