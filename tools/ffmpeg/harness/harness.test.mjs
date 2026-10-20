@@ -116,7 +116,8 @@ describe("H1 binary identity and build facts", () => {
   it("pinned build: -buildconf has the LGPL-only flag set and no GPL/nonfree/version3", pinnedOnly, async () => {
     const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-buildconf"], captureStdout: true});
     assert.equal(r.code, 0);
-    const conf = r.stdout;
+    // configure quotes values with shell-special characters (e.g. --enable-muxer='mp4,image2,null'); compare unquoted.
+    const conf = r.stdout.replace(/'/g, "");
     for (const bad of ["--enable-gpl", "--enable-nonfree", "--enable-version3", "--enable-libx264", "--enable-libx265"]) {
       assert.ok(!conf.includes(bad), `forbidden flag present: ${bad}`);
     }
@@ -126,8 +127,8 @@ describe("H1 binary identity and build facts", () => {
   });
   it("pinned build: -L prints the LGPL notice, not GPL", pinnedOnly, async () => {
     const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-L"], captureStdout: true});
-    assert.match(r.stdout, /GNU Lesser General Public License/);
-    assert.ok(!/is free software; you can redistribute it and\/or modify\s+it under the terms of the GNU General Public License/.test(r.stdout), "GPL notice must not appear");
+    assert.match(r.stdout.replace(/\s+/g, " "), /GNU Lesser General Public License/);
+    assert.ok(!/under the terms of the GNU General Public License/.test(r.stdout.replace(/\s+/g, " ")), "GPL notice must not appear");
   });
   it("pinned build: the ONLY protocol is file (no network protocols compiled in)", pinnedOnly, async () => {
     const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-protocols"], captureStdout: true});
@@ -143,7 +144,7 @@ describe("H1 binary identity and build facts", () => {
       return r.stdout.split("\n").slice(1).map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 2 && /^[A-Z.]+$/.test(p[0]) && /^[a-z0-9_,.+-]+$/.test(p[1])).map((p) => p[1]);
     };
     assert.deepEqual((await list("decoders")).sort(), ["aac", "h264"]);
-    assert.deepEqual((await list("encoders")).sort(), ["mjpeg"]);
+    assert.deepEqual((await list("encoders")).sort(), ["mjpeg", "pcm_s16le", "wrapped_avframe"]);
     assert.deepEqual((await list("demuxers")).sort(), ["mov,mp4,m4a,3gp,3g2,mj2"]);
     const muxers = await list("muxers");
     assert.deepEqual(muxers.sort(), ["image2", "mp4", "null"], muxers.join(","));

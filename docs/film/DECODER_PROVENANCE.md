@@ -17,7 +17,7 @@ Status: **engineering record for independent review; not deployed, not published
 
 | Item | Value |
 |---|---|
-| Script | `tools/ffmpeg/build.sh` with `tools/ffmpeg/configure.flags` (LGPL-only minimal recipe from the founder packet §5, plus `--disable-debug`, static link, `-ffile-prefix-map`, and the `null` muxer) |
+| Script | `tools/ffmpeg/build.sh` with `tools/ffmpeg/configure.flags` (LGPL-only minimal recipe from the founder packet §5, plus `--disable-debug`, static link, `-ffile-prefix-map`, and the `null` muxer with its pass-through encoders) |
 | Reproducibility controls | `SOURCE_DATE_EPOCH` = tarball mtime; `LC_ALL=C`, `TZ=UTC`; `-ffile-prefix-map` for source and build dirs; `strip --strip-all`; single toolchain image |
 | Fail-closed | `build.sh` exits 6 if `ffbuild/config.mak` has `CONFIG_GPL`, `CONFIG_VERSION3` or `CONFIG_NONFREE` = yes |
 | Toolchain | GitHub `ubuntu-latest` runner image (recorded per run in `provenance/build.json`: gcc, make, nasm, binutils, OS, kernel, `ImageOS/ImageVersion`); `nasm` installed from Ubuntu for x86 asm |
@@ -38,7 +38,7 @@ Binary digests change whenever `configure.flags` changes (the `null` muxer was a
 
 `run-decoder.mjs` policy, each point tested in `harness.test.mjs` (H0): argv array only (no shell; injection strings pass literally); **empty environment** unless explicitly listed; private temp cwd removed afterwards; stdin closed; wall-time limit with SIGTERM→SIGKILL on the **process group**; captured-output caps; `prlimit(1)` CPU / address-space / file-size / open-files / core limits when available (measured: `RLIMIT_FSIZE` stops a writer with `SIGXFSZ`, `RLIMIT_AS` fails a 1 GiB allocation under a 256 MiB cap).
 
-Against the pinned build (H1, `HARNESS_PINNED=1`): version 9.0.2; `-buildconf` contains every flag in `configure.flags` and none of `--enable-gpl/--enable-nonfree/--enable-version3/libx264/libx265`; `-L` prints the LGPL notice; **protocols = {file}** only; decoders = {aac, h264}; encoders = {mjpeg}; demuxer = {mov,…}; muxers = {image2, mp4, null}; filters = the 3 requested + 11 `configure` auto-selects, none from the GPL list; an `http://` input is refused.
+Against the pinned build (H1, `HARNESS_PINNED=1`): version 9.0.2; `-buildconf` contains every flag in `configure.flags` and none of `--enable-gpl/--enable-nonfree/--enable-version3/libx264/libx265`; `-L` prints the LGPL notice; **protocols = {file}** only; decoders = {aac, h264}; encoders = {mjpeg, pcm_s16le, wrapped_avframe}; demuxer = {mov,…}; muxers = {image2, mp4, null}; filters = the 3 requested + 11 `configure` auto-selects, none from the GPL list; an `http://` input is refused.
 
 Not provided by the harness (stated plainly): a kernel sandbox, seccomp or network namespace. "No network" is a property of the **build** (`--disable-network`, protocol=file only), asserted on the binary, not an OS-level guarantee around it. Cloud Functions egress controls remain a deploy-time concern (not authorized).
 

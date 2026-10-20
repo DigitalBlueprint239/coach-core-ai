@@ -9,7 +9,7 @@ FFmpeg **9.0.2** ("Lei"), official tarball, PGP-verified against the FFmpeg rele
 ```
 --disable-everything --disable-autodetect --disable-network --disable-doc --disable-ffplay
 --enable-ffmpeg --enable-ffprobe --enable-protocol=file --enable-demuxer=mov
---enable-muxer=mp4,image2,null --enable-decoder=h264,aac --enable-encoder=mjpeg
+--enable-muxer=mp4,image2,null --enable-decoder=h264,aac --enable-encoder=mjpeg,wrapped_avframe,pcm_s16le
 --enable-parser=h264,aac --enable-bsf=h264_mp4toannexb --enable-swscale
 --enable-filter=scale,crop,format --enable-static --disable-shared --enable-small
 --disable-debug --extra-ldflags=-static --pkg-config-flags=--static
@@ -29,6 +29,7 @@ Licence lines read from the file headers at `https://raw.githubusercontent.com/F
 | muxer `mp4` | `libavformat/movenc.c` | LGPL-2.1-or-later |
 | muxer `image2` | `libavformat/img2enc.c` | LGPL-2.1-or-later |
 | muxer `null` (full-decode check, no output file) | `libavformat/nullenc.c` | LGPL-2.1-or-later |
+| encoders `wrapped_avframe`, `pcm_s16le` (the `null` muxer's pass-through defaults; no compression) | `libavcodec/wrapped_avframe.c`, `libavcodec/pcm.c` | LGPL-2.1-or-later |
 | decoder `h264` | `libavcodec/h264dec.c` (+ `h264_*.c`) | LGPL-2.1-or-later |
 | decoder `aac` | `libavcodec/aac/aacdec.c` | LGPL-2.1-or-later |
 | encoder `mjpeg` | `libavcodec/mjpegenc.c` | LGPL-2.1-or-later; uses the libjpeg-derived DCT files below |
