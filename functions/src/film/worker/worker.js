@@ -529,9 +529,16 @@ function createFilmWorker(deps) {
         !a || a.n !== v.attemptN) {
       return "validation-attempt-not-admitted";
     }
-    if (a.fence !== v.fence || v.fence > job.fence ||
-        new Set(job.attempts.map((x) => x.fence)).size !==
-          job.attempts.length) {
+    // All-history invariant (PR85 re-review c-6298813169): EVERY durable
+    // admission fence is a positive safe integer, distinct, and no greater
+    // than the durable job fence (each admission took a fence <= the one
+    // the job now holds). The newer reconciliation fence is never required
+    // to equal any of them.
+    const fences = job.attempts.map((x) => x.fence);
+    if (a.fence !== v.fence || !Number.isSafeInteger(job.fence) ||
+        !fences.every((x) => Number.isSafeInteger(x) && x > 0 &&
+          x <= job.fence) ||
+        new Set(fences).size !== fences.length) {
       return "validation-fence-not-admitted";
     }
     if (v.atMs < a.admittedAtMs ||

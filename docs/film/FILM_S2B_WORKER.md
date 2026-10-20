@@ -113,7 +113,7 @@ Admission calls `c2.admissionDecision` over the stored job, inside one transacti
    - **Prospective state:** the exact resulting document must parse as an r4 `FilmState` before anything is written. Any failure holds the film for recovery with the problem as evidence; the records are left untouched.
 9a. **Validation provenance (PR85 re-review R2b, c-6298450957):** before any ownership I/O and again inside the ready commit, the validated record must belong to a **durable admission of this job**:
    - `attemptN` ≤ `admitted`, one attempt row per admission, and the row numbered `attemptN` exists (`validation-attempt-not-admitted`);
-   - the record's fence is **that attempt's admission fence**, every admission fence is distinct, and none exceeds the job's current fence (`validation-fence-not-admitted`); the intent fence must match it;
+   - the record's fence is **that attempt's admission fence**, and across the **whole history** every admission fence is a positive safe integer, distinct, and no greater than the durable job fence (`validation-fence-not-admitted`; re-review c-6298813169). A non-integer fence already fails the strict job schema (`anomaly`, preserved). The intent fence must match;
    - `atMs` lies inside that attempt's window (`validation-outside-attempt`), and the attempt did not end in a media verdict or other non-success end (`validation-attempt-ended-before-validation`).
    - The historical fence is **never** compared with the reconciliation's own, newer fence, so legitimate older output (an earlier attempt's, or one whose first reconciliation died mid-proof) stays recoverable.
    - Invalid records are held for recovery with `evidence.problem` and preserved byte-for-byte.

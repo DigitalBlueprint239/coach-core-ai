@@ -754,6 +754,67 @@ describe("PR85 re-review R2b (c-6298450957): validation provenance", () => {
           assert.equal(after.recovery.evidence.problem, reason);
         });
   }
+  // PR85 re-review c-6298813169: the bound holds for EVERY admission fence,
+  // not only the one the validation selects. Attempt 1 ends infrastructure;
+  // attempt 2 validates and loses its ACK; only attempts[0].fence changes.
+  const held = {reconcile: "recovery-needed",
+    reason: "validation-fence-not-admitted"};
+  const history = {
+    "above the durable job fence (99)": [99, held],
+    "zero": [0, held],
+    "negative": [-1, held],
+    "duplicate of attempt 2's fence": [2, held],
+    // a non-integer already fails the strict job schema: anomaly, preserved
+    "non-integer": [1.5, {reconcile: "anomaly", reason: "job-invalid"}],
+  };
+  for (const [name, [bad, want]] of Object.entries(history)) {
+    it(`all-history fence bound: another attempt's fence ${name} -> ` +
+        "held before any ownership I/O, evidence kept", async () => {
+      const w = world({script: ["infrastructure", "ok"]});
+      const f = await validatingFilm(w);
+      await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+      await lostAck(w, f, (a) => w.worker.redrive(a));
+      const j = job(w, f);
+      assert.deepEqual([j.admitted, j.validated.attemptN], [2, 2]);
+      j.attempts[0].fence = bad;
+      w.db.write(jobPath(f), j);
+      const io = w.objects.calls.length;
+      const r = await w.worker.reconcileFilm({teamId: TEAM,
+        filmId: f.filmId});
+      assert.deepEqual(r, want);
+      assert.equal(w.objects.calls.length, io, "no ownership I/O");
+      assert.equal(w.db.read(filmPath(f.filmId)).status, "validating");
+      const after = job(w, f);
+      if (want.reconcile === "anomaly") {
+        assert.deepEqual(after, j, "anomalous job preserved untouched");
+        return;
+      }
+      // the forged history is kept verbatim; the only change is the
+      // pre-existing close-out of the expired attempt 2 as "unknown"
+      const strip = (xs) => xs.map(({end, endedAtMs, ...x}) => x);
+      assert.deepEqual(strip(after.attempts), strip(j.attempts),
+          "history kept");
+      assert.deepEqual(after.attempts[0], j.attempts[0]);
+      assert.equal(after.attempts[1].end.end, "unknown");
+      assert.deepEqual(after.validated, j.validated);
+      assert.deepEqual(after.intent, j.intent);
+      assert.equal(after.recovery.evidence.problem,
+          "validation-fence-not-admitted");
+    });
+  }
+  it("all-history bound is not 'equal to the reconcile fence': the same " +
+      "two-attempt history with valid fences [1, 2] promotes", async () => {
+    const w = world({script: ["infrastructure", "ok"]});
+    const f = await validatingFilm(w);
+    await w.worker.processFilm({teamId: TEAM, filmId: f.filmId});
+    await lostAck(w, f, (a) => w.worker.redrive(a));
+    assert.deepEqual(job(w, f).attempts.map((x) => x.fence), [1, 2]);
+    const r = await w.worker.reconcileFilm({teamId: TEAM, filmId: f.filmId});
+    assert.equal(r.reconcile, "ready");
+    const after = job(w, f);
+    assert.ok(after.fence > 2, "reconcile took a newer fence");
+    assert.deepEqual(after.attempts.map((x) => x.fence), [1, 2]);
+  });
   it("a fabricated attempt row with a real-looking fence is still " +
       "rejected (fence must belong to THAT attempt)", async () => {
     const w = world({script: ["infrastructure"]});

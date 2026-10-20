@@ -1,5 +1,7 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-20 / FILM-S2b PR85 all-history fence repair (Claude, implementer): Codex re-review c-6298813169 (reproduction #39 c-6298813793) repaired. Every durable admission fence must be positive, distinct and no greater than the durable job fence before ownership I/O or promotion; invalid history is held for recovery and preserved. Older-output recovery under a newer reconcile fence unchanged. Codex history probe retained verbatim (3/1 → 4/4). Worker, tests and docs only; no S1, contract or shared-fixture change. S1 abandon-deletion release gate still open (separate). Next owners: Codex and the independent reviewer. MVP NO-GO.
+
 > 2026-10-20 / FILM-S2b PR85 R2b repair (Claude, implementer): Codex re-review c-6298450957 (reproductions #39 c-6298453552) repaired.
 > - R2b: a validated record must match a durable admission of the job (attempt number, that attempt's historical fence, attempt window and end) before any ownership I/O or promotion. Forged records are held for recovery and preserved as evidence. Older legitimate output stays recoverable under a newer reconciliation fence.
 > - Codex's re-review probes retained verbatim (1/2 → 3/3); R1–R4 probes still 5/5; focused regressions added; one test that fabricated `admitted: 3` now reaches exhaustion through three real admissions.
