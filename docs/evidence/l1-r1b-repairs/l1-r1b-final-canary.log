@@ -1,0 +1,13 @@
+PASS no active source reads AI secret env variables
+PASS prebuild guard blocks secret-like REACT_APP_* variables (value not printed)
+PASS prebuild guard also blocks secret-like keys in CRA .env files
+PASS no secret canaries in bundle
+PASS no OpenAI endpoint in bundle
+PASS no Gemini endpoint in bundle
+PASS no Anthropic endpoint in bundle
+PASS no Gemini SDK in bundle
+PASS no provider key-shaped strings in bundle
+PASS no emulator test hooks in a non-emulator bundle
+PASS no emulator endpoints in a non-emulator bundle
+PASS bundle calls the coachAI gateway
+::notice title=Bundle credential scan: 12 passed / 0 failed::Scanned 3 JS files. Source / prebuild guard / canary bundle checks all passed.

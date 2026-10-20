@@ -1,0 +1,254 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\drewl\\AppData\\Local\\hermes\\node\\node.exe",
+      "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/coaching-ui/legacy-repairs/playwright.config.ts",
+      "--grep",
+      "L1 disabled"
+    ],
+    "configFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs\\tests\\coaching-ui\\legacy-repairs\\playwright.config.ts",
+    "rootDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-l1-r1b-repairs",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/l1-r1b-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-l1-r1b-repairs",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/tests/legacy-import.spec.ts",
+          "tests/coaching-ui/legacy-repairs/legacy-migration.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/l1-r1b-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/drewl/Documents/Codex/2026-10-13/coach-core-ai-mvp-recovery-functional/work/main-l1-r1b-repairs",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/tests/legacy-import.spec.ts",
+          "tests/coaching-ui/legacy-repairs/legacy-migration.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\l1-r1b-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/tests/legacy-import.spec.ts",
+          "tests/coaching-ui/legacy-repairs/legacy-migration.spec.ts"
+        ],
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\l1-r1b-browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs",
+        "snapshotDir": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/tests/legacy-import.spec.ts",
+          "tests/coaching-ui/legacy-repairs/legacy-migration.spec.ts"
+        ],
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\l1-r1b-browser-results\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node scripts/serve.mjs .app-build 3000",
+      "cwd": "C:\\Users\\drewl\\Documents\\Codex\\2026-10-13\\coach-core-ai-mvp-recovery-functional\\work\\main-l1-r1b-repairs\\e2e",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "tests\\coaching-ui\\legacy-repairs\\legacy-migration.spec.ts",
+      "file": "tests/coaching-ui/legacy-repairs/legacy-migration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "L1 disabled migration preserves legacy originals and quarantine after dashboard/planner reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23354,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T20:18:06.244Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23507,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T20:18:35.248Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "104e747c503f88bf73b2-ed1612e7cfc2af04453e",
+          "file": "tests/coaching-ui/legacy-repairs/legacy-migration.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-14T20:18:04.416Z",
+    "duration": 59544.467000000004,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
