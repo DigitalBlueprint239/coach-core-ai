@@ -184,12 +184,16 @@ function run(step, fixture, bin, args, opts = {}) {
   const allocProbe = [];
   const big = rows.filter((r) => r.step === "decode-input")
       .sort((a, b) => b.minAsBytes - a.minAsBytes)[0];
-  for (const mib of [24, 48, 96, Math.max(32, big.minAsBytes / MiB / 2)]) {
-    const r = spawnSync(PRLIMIT, [`--as=${mib * MiB}`, "--", bins.ffmpeg,
-      ...big.args], {encoding: "utf8", env: DECODER_ENV,
-      maxBuffer: 16 * MiB});
-    allocProbe.push({mib, fixture: big.fixture, exit: r.status,
-      signal: r.signal, stderrTail: String(r.stderr || "").slice(-600)});
+  const verbose = big.args.map((x, i, all) =>
+    (all[i - 1] === "-v" ? "warning" : x));
+  for (const [level, args] of [["error", big.args], ["warning", verbose]]) {
+    for (const mib of [24, 48, 96, Math.max(32, big.minAsBytes / MiB / 2)]) {
+      const r = spawnSync(PRLIMIT, [`--as=${mib * MiB}`, "--", bins.ffmpeg,
+        ...args], {encoding: "utf8", env: DECODER_ENV,
+        maxBuffer: 16 * MiB});
+      allocProbe.push({level, mib, fixture: big.fixture, exit: r.status,
+        signal: r.signal, stderrTail: String(r.stderr || "").slice(-500)});
+    }
   }
   console.error(JSON.stringify({allocProbe}));
 
