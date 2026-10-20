@@ -1,0 +1,7 @@
+{
+  "clientFailure": {
+    "kind": "network",
+    "category": "network",
+    "retryEligible": true
+  }
+}

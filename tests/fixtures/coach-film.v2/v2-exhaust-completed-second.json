@@ -1,0 +1,14 @@
+{
+  "attempts": [
+    {
+      "end": "crash"
+    },
+    {
+      "end": "completed"
+    }
+  ],
+  "expect": {
+    "outcome": "completed",
+    "reason": null
+  }
+}

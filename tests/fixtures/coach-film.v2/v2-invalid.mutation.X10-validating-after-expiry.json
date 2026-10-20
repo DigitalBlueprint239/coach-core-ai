@@ -1,0 +1,22 @@
+{
+  "filmId": "3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b",
+  "teamId": "team_fixture_a",
+  "createdBy": "uid-fixture-owner",
+  "status": "validating",
+  "createdAt": "2026-10-19T21:00:00.000Z",
+  "statusChangedAt": "2026-10-19T22:00:00.000Z",
+  "reservationExpiresAt": "2026-10-19T22:00:00.000Z",
+  "declaredBytes": 48211954,
+  "declaredContentType": "video/mp4",
+  "fileName": "vs-eagles-q2-drive.mp4",
+  "rightsWordingVersion": "rights-v1",
+  "rightsAcknowledgedAt": "2026-10-19T21:00:00.000Z",
+  "uploadPath": "quarantine/team_fixture_a/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4",
+  "objectGeneration": "1",
+  "rejectionReason": null,
+  "abandonedAt": null,
+  "readyAt": null,
+  "normalizedGeneration": null,
+  "media": null,
+  "retentionExpiresAt": null
+}

@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "error": {
+    "code": "invalid-argument",
+    "retryable": false,
+    "reason": "unsupported-version"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "attempts": [
+    {
+      "end": "media-verdict",
+      "reason": "container-invalid"
+    }
+  ],
+  "expect": {
+    "outcome": "rejected",
+    "reason": "container-invalid"
+  }
+}

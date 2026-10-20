@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "error": {
+    "code": "permission-denied",
+    "retryable": false,
+    "reason": "beta-access-required"
+  }
+}

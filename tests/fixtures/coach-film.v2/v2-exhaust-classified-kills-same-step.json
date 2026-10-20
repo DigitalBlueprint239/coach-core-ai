@@ -1,0 +1,21 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "wall-time",
+      "step": "decode-input"
+    },
+    {
+      "end": "infrastructure"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "wall-time",
+      "step": "decode-input"
+    }
+  ],
+  "expect": {
+    "outcome": "rejected",
+    "reason": "processing-limit-exceeded"
+  }
+}

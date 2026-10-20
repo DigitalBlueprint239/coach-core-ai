@@ -1,0 +1,21 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "SIGXFSZ",
+      "step": "normalize"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGXFSZ",
+      "step": "normalize"
+    },
+    {
+      "end": "infrastructure"
+    }
+  ],
+  "expect": {
+    "outcome": "recovery-needed",
+    "reason": null
+  }
+}

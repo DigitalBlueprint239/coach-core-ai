@@ -1,0 +1,19 @@
+{
+  "request": {
+    "requestSchemaVersion": "coach-film.v2",
+    "action": "reserveFilmUpload",
+    "payloadHash": "phash-O",
+    "nowMs": 1792447200000,
+    "stored": {
+      "action": "reserveFilmUpload",
+      "payloadHash": "phash-O",
+      "responseJson": "{\n  \"ok\": true,\n  \"data\": {\n    \"filmId\": \"3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b\",\n    \"uploadPath\": \"quarantine/team_fixture_a/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4\",\n    \"expiresAt\": \"2026-10-19T22:00:00.000Z\",\n    \"film\": {\n      \"filmId\": \"3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b\",\n      \"teamId\": \"team_fixture_a\",\n      \"createdBy\": \"uid-fixture-owner\",\n      \"status\": \"ready\",\n      \"createdAt\": \"2026-10-19T21:00:00.000Z\",\n      \"statusChangedAt\": \"2026-10-19T21:00:00.000Z\",\n      \"reservationExpiresAt\": \"2026-10-19T22:00:00.000Z\",\n      \"declaredBytes\": 48211954,\n      \"declaredContentType\": \"video/mp4\",\n      \"fileName\": \"vs-eagles-q2-drive.mp4\",\n      \"rightsWordingVersion\": \"rights-v1\",\n      \"rightsAcknowledgedAt\": \"2026-10-19T21:00:00.000Z\",\n      \"uploadPath\": \"quarantine/team_fixture_a/3f1e2d4c-5b6a-4e7f-8a9b-0c1d2e3f4a5b/source.mp4\",\n      \"objectGeneration\": null,\n      \"rejectionReason\": null,\n      \"abandonedAt\": null\n    }\n  }\n}\n",
+      "replayableUntilMs": 1792530000000
+    }
+  },
+  "expect": {
+    "kind": "error",
+    "code": "failed-precondition",
+    "reason": "legacy-record-invalid"
+  }
+}

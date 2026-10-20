@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "coach-film.v2",
+  "operationId": "5ac1e36f-7c8d-4f0a-9b1c-2d3e4f5a6b7c",
+  "action": "reserveFilmUpload",
+  "payload": {
+    "teamId": "team_fixture_a",
+    "declaredBytes": 48211954,
+    "declaredContentType": "video/quicktime",
+    "fileName": "IMG_0412.MOV",
+    "rightsAcknowledged": true,
+    "rightsWordingVersion": "rights-v1"
+  }
+}

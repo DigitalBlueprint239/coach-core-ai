@@ -1,0 +1,14 @@
+{
+  "input": {
+    "delivery": "process",
+    "configurationOk": true,
+    "admitted": 3,
+    "jobCreatedAtMs": 1792443600000,
+    "nowMs": 1792443601000
+  },
+  "expect": {
+    "admit": false,
+    "consumes": false,
+    "outcome": "refused-exhausted"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "input": {
+    "delivery": "contention",
+    "configurationOk": true,
+    "admitted": 1,
+    "jobCreatedAtMs": 1792443600000,
+    "nowMs": 1792443600000
+  },
+  "expect": {
+    "admit": false,
+    "consumes": false,
+    "outcome": "skip-contention"
+  }
+}

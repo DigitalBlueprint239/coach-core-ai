@@ -1,0 +1,14 @@
+{
+  "request": {
+    "requestSchemaVersion": "coach-film.v1",
+    "action": "reserveFilmUpload",
+    "payloadHash": "phash-O",
+    "nowMs": 1792447200000,
+    "stored": null
+  },
+  "expect": {
+    "kind": "error",
+    "code": "invalid-argument",
+    "reason": "unsupported-version"
+  }
+}

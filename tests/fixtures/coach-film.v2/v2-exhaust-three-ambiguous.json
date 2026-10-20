@@ -1,0 +1,17 @@
+{
+  "attempts": [
+    {
+      "end": "crash"
+    },
+    {
+      "end": "infrastructure"
+    },
+    {
+      "end": "unknown"
+    }
+  ],
+  "expect": {
+    "outcome": "recovery-needed",
+    "reason": null
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "error": {
+    "code": "team-cap-reached",
+    "retryable": false,
+    "reason": "team-film-cap"
+  }
+}

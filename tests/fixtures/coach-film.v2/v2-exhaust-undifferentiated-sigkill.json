@@ -1,0 +1,23 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "SIGKILL",
+      "step": "decode-input"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGKILL",
+      "step": "decode-input"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGKILL",
+      "step": "decode-input"
+    }
+  ],
+  "expect": {
+    "outcome": "recovery-needed",
+    "reason": null
+  }
+}

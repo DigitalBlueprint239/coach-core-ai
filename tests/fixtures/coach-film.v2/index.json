@@ -1,0 +1,1227 @@
+{
+  "contract": "coach-film.v2",
+  "revision": "r4",
+  "status": "CONTRACT AUTHORING ONLY; Codex AGREE r4 @ exact SHA pending",
+  "fixtures": [
+    {
+      "file": "v2-abandon.request.valid.json",
+      "kind": "request",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/abandon.request.valid.json"
+    },
+    {
+      "file": "v2-abandon.response.ok-from-reserved.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "respondsTo": "abandon.request.valid.json",
+      "reEmittedFrom": "coach-film.v1/abandon.response.ok-from-reserved.json"
+    },
+    {
+      "file": "v2-abandon.response.ok-from-validating.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/abandon.response.ok-from-validating.json"
+    },
+    {
+      "file": "v2-abandon.response.ok-repeat-new-operation.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "note": "second abandon of the same film under a NEW operationId; film unchanged",
+      "reEmittedFrom": "coach-film.v1/abandon.response.ok-repeat-new-operation.json"
+    },
+    {
+      "file": "v2-attempt-admit-first.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-admit-third.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-configuration-preflight.json",
+      "kind": "attempt-admission",
+      "valid": true,
+      "note": "wrong decoder digest / limits unavailable: stall, consume nothing, never a media verdict"
+    },
+    {
+      "file": "v2-attempt-contention.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-duplicate.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-horizon-at.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-horizon-just-before.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-refuse-fourth.json",
+      "kind": "attempt-admission",
+      "valid": true,
+      "note": "three admitted attempts INCLUDING the first; no fourth decoder run or upload"
+    },
+    {
+      "file": "v2-client-failure.network.network.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "no HTTP response; retry-eligible, never automatic, same operationId",
+      "reEmittedFrom": "coach-film.v1/client-failure.network.network.json"
+    },
+    {
+      "file": "v2-client-failure.protocol.response-invalid.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "resolved value failed the response schema; non-retryable client protocol error",
+      "reEmittedFrom": "coach-film.v1/client-failure.protocol.response-invalid.json"
+    },
+    {
+      "file": "v2-client-failure.sdk.deadline-exceeded.json",
+      "kind": "client-failure",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/client-failure.sdk.deadline-exceeded.json"
+    },
+    {
+      "file": "v2-client-failure.sdk.internal.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "unknown server failure; do not guess a server reason",
+      "reEmittedFrom": "coach-film.v1/client-failure.sdk.internal.json"
+    },
+    {
+      "file": "v2-client-failure.sdk.permission-denied.json",
+      "kind": "client-failure",
+      "valid": true,
+      "note": "thrown access/config failure keeps its sanitized category",
+      "reEmittedFrom": "coach-film.v1/client-failure.sdk.permission-denied.json"
+    },
+    {
+      "file": "v2-client-failure.sdk.unavailable.json",
+      "kind": "client-failure",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/client-failure.sdk.unavailable.json"
+    },
+    {
+      "file": "v2-doc-legacy-r3-abandoned.json",
+      "kind": "film-document",
+      "valid": true
+    },
+    {
+      "file": "v2-doc-legacy-r3-expired.json",
+      "kind": "film-document",
+      "valid": true
+    },
+    {
+      "file": "v2-doc-legacy-r3-rejected.json",
+      "kind": "film-document",
+      "valid": true
+    },
+    {
+      "file": "v2-doc-legacy-r3-reserved.json",
+      "kind": "film-document",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.reserved.json (unchanged bytes)"
+    },
+    {
+      "file": "v2-doc-legacy-r3-validating.json",
+      "kind": "film-document",
+      "valid": true
+    },
+    {
+      "file": "v2-doc-legacy-ready-without-keys.json",
+      "kind": "film-document",
+      "valid": false,
+      "rule": "readyAt",
+      "note": "an impossible legacy ready document: no media is invented"
+    },
+    {
+      "file": "v2-doc-present-but-invalid-media.json",
+      "kind": "film-document",
+      "valid": false,
+      "rule": "media"
+    },
+    {
+      "file": "v2-doc-v2-ready.json",
+      "kind": "film-document",
+      "valid": true
+    },
+    {
+      "file": "v2-error.conflict.operation-id-reused.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.failed-precondition.film-not-found.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.failed-precondition.invalid-state.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.failed-precondition.legacy-record-invalid.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true,
+      "newInV2": true
+    },
+    {
+      "file": "v2-error.failed-precondition.operation-expired.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.failed-precondition.rights-wording-outdated.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.invalid-argument.action-mismatch.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.invalid-argument.rights-acknowledgement-required.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.invalid-argument.schema-invalid.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.invalid-argument.unsupported-version.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true,
+      "newInV2": true
+    },
+    {
+      "file": "v2-error.limit-exceeded.bytes-over-limit.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.limit-exceeded.format-not-allowed.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.permission-denied.anonymous-not-allowed.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.permission-denied.beta-access-required.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.permission-denied.email-not-verified.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.permission-denied.not-team-owner.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.team-cap-reached.team-film-cap.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.unauthenticated.account-disabled.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.unauthenticated.sign-in-required.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-error.unavailable.backend-unavailable.json",
+      "kind": "response",
+      "action": "*",
+      "valid": true,
+      "serverEmits": true
+    },
+    {
+      "file": "v2-exhaust-classified-kills-different-steps.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-classified-kills-same-step.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-completed-second.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-final-infrastructure.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "the FINAL attempt must itself be a classified kill"
+    },
+    {
+      "file": "v2-exhaust-media-verdict-first.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "a deterministic media verdict rejects on the first proven failure (s11a: structural, despite pinned probe 0 / decode 0)"
+    },
+    {
+      "file": "v2-exhaust-three-ambiguous.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-undifferentiated-sigkill.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "a SIGKILL we did not send is not a classified limit kill"
+    },
+    {
+      "file": "v2-film-state.abandonedFromReserved.json",
+      "kind": "film-state",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.abandonedFromReserved.json"
+    },
+    {
+      "file": "v2-film-state.abandonedFromValidating.json",
+      "kind": "film-state",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.abandonedFromValidating.json"
+    },
+    {
+      "file": "v2-film-state.expired.json",
+      "kind": "film-state",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.expired.json"
+    },
+    {
+      "file": "v2-film-state.file-name-120-ascii.json",
+      "kind": "film-state",
+      "valid": true,
+      "utf16Units": 120,
+      "reEmittedFrom": "coach-film.v1/film-state.file-name-120-ascii.json"
+    },
+    {
+      "file": "v2-film-state.file-name-60-emoji-120-units.json",
+      "kind": "film-state",
+      "valid": true,
+      "utf16Units": 120,
+      "reEmittedFrom": "coach-film.v1/film-state.file-name-60-emoji-120-units.json"
+    },
+    {
+      "file": "v2-film-state.rejected.json",
+      "kind": "film-state",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.rejected.json"
+    },
+    {
+      "file": "v2-film-state.reserved.json",
+      "kind": "film-state",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.reserved.json"
+    },
+    {
+      "file": "v2-film-state.validating.json",
+      "kind": "film-state",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/film-state.validating.json"
+    },
+    {
+      "file": "v2-invalid.client-failure.internal-retry-eligible.json",
+      "kind": "client-failure",
+      "valid": false,
+      "note": "internal is never retry-eligible",
+      "reEmittedFrom": "coach-film.v1/invalid.client-failure.internal-retry-eligible.json"
+    },
+    {
+      "file": "v2-invalid.client-failure.protocol-retry-eligible.json",
+      "kind": "client-failure",
+      "valid": false,
+      "reEmittedFrom": "coach-film.v1/invalid.client-failure.protocol-retry-eligible.json"
+    },
+    {
+      "file": "v2-invalid.client-failure.unknown-category.json",
+      "kind": "client-failure",
+      "valid": false,
+      "reEmittedFrom": "coach-film.v1/invalid.client-failure.unknown-category.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M1-reserve-film-id-mismatch.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M1",
+      "rule": "R1",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M1-reserve-film-id-mismatch.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M2-reserve-upload-path-foreign.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M2",
+      "rule": "R2",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M2-reserve-upload-path-foreign.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M3-reserve-expires-at-mismatch.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M3",
+      "rule": "R3",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M3-reserve-expires-at-mismatch.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M4-reserved-has-abandoned-at.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M4",
+      "rule": "S1",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M4-reserved-has-abandoned-at.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M5-rejected-null-reason.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "M5",
+      "rule": "S2",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M5-rejected-null-reason.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M6-abandon-null-abandoned-at.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": false,
+      "mutation": "M6",
+      "rule": "S1",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M6-abandon-null-abandoned-at.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M7-validating-null-generation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "M7",
+      "rule": "G2",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M7-validating-null-generation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.M8-expiry-before-creation.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "M8",
+      "rule": "T2",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.M8-expiry-before-creation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X1-expired-before-expiry.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X1",
+      "rule": "T5",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X1-expired-before-expiry.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X10-validating-after-expiry.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X10",
+      "rule": "T6'",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X10-validating-after-expiry.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X11-receipt-not-reserved.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "mutation": "X11",
+      "rule": "R4",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X11-receipt-not-reserved.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X12-abandon-from-validating-no-generation.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": false,
+      "mutation": "X12",
+      "rule": "A4",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X12-abandon-from-validating-no-generation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X13-abandon-from-reserved-has-generation.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": false,
+      "mutation": "X13",
+      "rule": "A3",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X13-abandon-from-reserved-has-generation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X14-stored-file-name-61-emoji.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X14",
+      "rule": "file name length",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X14-stored-file-name-61-emoji.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X15-stored-file-name-121-ascii.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X15",
+      "rule": "file name length",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X15-stored-file-name-121-ascii.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X2-reserved-has-generation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X2",
+      "rule": "G1",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X2-reserved-has-generation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X3-rejected-null-generation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X3",
+      "rule": "G2",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X3-rejected-null-generation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X4-reserved-status-changed.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X4",
+      "rule": "T4",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X4-reserved-status-changed.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X5-abandoned-at-not-status-changed.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X5",
+      "rule": "T7",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X5-abandoned-at-not-status-changed.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X6-status-changed-before-created.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X6",
+      "rule": "T3",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X6-status-changed-before-created.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X7-rights-after-creation.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X7",
+      "rule": "T1",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X7-rights-after-creation.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X8-upload-path-template.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X8",
+      "rule": "P1",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X8-upload-path-template.json"
+    },
+    {
+      "file": "v2-invalid.mutation.X9-file-name-not-canonical.json",
+      "kind": "film-state",
+      "valid": false,
+      "mutation": "X9",
+      "rule": "file name not canonical",
+      "reEmittedFrom": "coach-film.v1/invalid.mutation.X9-file-name-not-canonical.json"
+    },
+    {
+      "file": "v2-invalid.response.client-transport-as-server.json",
+      "kind": "response",
+      "action": "*",
+      "valid": false,
+      "note": "client-only conditions must not parse as server-emitted responses",
+      "reEmittedFrom": "coach-film.v1/invalid.response.client-transport-as-server.json"
+    },
+    {
+      "file": "v2-invalid.response.extra-key.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "note": "strict: no unknown keys",
+      "reEmittedFrom": "coach-film.v1/invalid.response.extra-key.json"
+    },
+    {
+      "file": "v2-invalid.response.reason-not-for-code.json",
+      "kind": "response",
+      "action": "*",
+      "valid": false,
+      "reEmittedFrom": "coach-film.v1/invalid.response.reason-not-for-code.json"
+    },
+    {
+      "file": "v2-invalid.response.retryable-mismatch.json",
+      "kind": "response",
+      "action": "*",
+      "valid": false,
+      "note": "retryable must equal RETRYABLE[code]",
+      "reEmittedFrom": "coach-film.v1/invalid.response.retryable-mismatch.json"
+    },
+    {
+      "file": "v2-invalid.response.timestamp-no-millis.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "note": "timestamps need exactly 3 fractional digits",
+      "reEmittedFrom": "coach-film.v1/invalid.response.timestamp-no-millis.json"
+    },
+    {
+      "file": "v2-mut-media-bad-framerate-mode.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "frameRateMode"
+    },
+    {
+      "file": "v2-mut-media-bad-sha256.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "sha256"
+    },
+    {
+      "file": "v2-mut-media-extra-key.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "media",
+      "note": "media is strict"
+    },
+    {
+      "file": "v2-mut-media-hevc.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "videoCodec"
+    },
+    {
+      "file": "v2-mut-R5-ready-without-media.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R5 media"
+    },
+    {
+      "file": "v2-mut-R5-ready-without-normalizedGeneration.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R5 normalizedGeneration"
+    },
+    {
+      "file": "v2-mut-R5-ready-without-readyAt.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R5 readyAt"
+    },
+    {
+      "file": "v2-mut-R5-reserved-with-normalizedGeneration.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R5 normalizedGeneration"
+    },
+    {
+      "file": "v2-mut-R5-validating-with-media.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R5 media"
+    },
+    {
+      "file": "v2-mut-R6-readyAt-not-statusChangedAt.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R6"
+    },
+    {
+      "file": "v2-mut-R7-ready-retentionExpiresAt-set.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R7"
+    },
+    {
+      "file": "v2-mut-R7-retentionExpiresAt-set.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R7"
+    },
+    {
+      "file": "v2-mut-R8-ready-without-objectGeneration.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R8"
+    },
+    {
+      "file": "v2-mut-R9-bytes-over-limit.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R9 media.bytes",
+      "note": "placeholder maxBytes + 1 (PENDING_D3)"
+    },
+    {
+      "file": "v2-mut-R9-duration-over-limit.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R9 media.durationMs",
+      "note": "+1 ms (PENDING_D3)"
+    },
+    {
+      "file": "v2-mut-R9-height-over-limit.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R9 media.height",
+      "note": "+1 px height only"
+    },
+    {
+      "file": "v2-mut-R9-width-over-limit.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "R9 media.width",
+      "note": "+1 px width only"
+    },
+    {
+      "file": "v2-mut-S2-unknown-reason.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "rejectionReason",
+      "note": "closed reason set"
+    },
+    {
+      "file": "v2-mut-T3-late-worker-rejected-before-created.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "T3"
+    },
+    {
+      "file": "v2-mut-T6p-late-s1-rejected.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "T6'",
+      "note": "S1 intake reasons must still precede the reservation expiry"
+    },
+    {
+      "file": "v2-mut-T6p-validating-after-expiry.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "T6'"
+    },
+    {
+      "file": "v2-mut-wire-missing-retentionExpiresAt.json",
+      "kind": "film-state",
+      "valid": false,
+      "rule": "retentionExpiresAt",
+      "note": "the WIRE FilmState requires all four keys; only the stored-document reader tolerates absence"
+    },
+    {
+      "file": "v2-replay-legacy-corrupt-json.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-legacy-error-receipt.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "only success receipts are ever stored"
+    },
+    {
+      "file": "v2-replay-legacy-impossible-ready.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "no media metadata is invented"
+    },
+    {
+      "file": "v2-replay-legacy-unknown-field.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "no silently dropped fields"
+    },
+    {
+      "file": "v2-replay-new-v1-operation.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "FUTURE cutover only; accepted v1 handlers are unchanged in this slice"
+    },
+    {
+      "file": "v2-replay-new-v2-operation.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-r3-abandon-from-reserved-receipt.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-r3-abandon-from-validating-receipt.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-r3-at-expiry.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "at the ORIGINAL replayableUntil; the version does not renew the window"
+    },
+    {
+      "file": "v2-replay-r3-changed-payload.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-r3-just-before-expiry.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-r3-live-film-now-ready.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "the live film has since become ready: replay still returns the historical reserved snapshot, never current state or upload permission"
+    },
+    {
+      "file": "v2-replay-r3-other-action.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "action isolation"
+    },
+    {
+      "file": "v2-replay-r3-reserve-receipt.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "identical v2 operation +1 h: historical receipt projected; four null keys; original reservation expiry; no new film/slot; stored bytes unchanged"
+    },
+    {
+      "file": "v2-replay-stored-v2-receipt-v1-request.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "no v1 representation is invented for a v2 receipt"
+    },
+    {
+      "file": "v2-replay-stored-v2-receipt.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "a receipt stored under v2 replays as stored"
+    },
+    {
+      "file": "v2-replay-unknown-version.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-v1-at-expiry.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-v1-same-operation-verbatim.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "v1 replay returns the original v1 receipt byte-for-byte"
+    },
+    {
+      "file": "v2-replay.expected.abandon-from-reserved-projection.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "projectionOf": "coach-film.v1/abandon.response.ok-from-reserved.json"
+    },
+    {
+      "file": "v2-replay.expected.abandon-from-validating-projection.json",
+      "kind": "response",
+      "action": "abandonFilmUpload",
+      "valid": true,
+      "projectionOf": "coach-film.v1/abandon.response.ok-from-validating.json"
+    },
+    {
+      "file": "v2-replay.expected.reserve-projection.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "projectionOf": "coach-film.v1/reserve.response.ok.json"
+    },
+    {
+      "file": "v2-reserve.request.action-mismatch.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "action-mismatch"
+      },
+      "note": "valid abandon envelope sent to the reserveFilmUpload callable",
+      "reEmittedFrom": "coach-film.v1/reserve.request.action-mismatch.json"
+    },
+    {
+      "file": "v2-reserve.request.at-byte-limit.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "placeholder": "PENDING_D3",
+      "note": "exactly LIMITS.maxBytes; accepted",
+      "reEmittedFrom": "coach-film.v1/reserve.request.at-byte-limit.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-120-ascii-padded.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "utf16Units": 120,
+      "canonicalFileName": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.mp4",
+      "note": "length is measured after canonicalization",
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-120-ascii-padded.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-120-ascii.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "utf16Units": 120,
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-120-ascii.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-60-emoji-120-units.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "utf16Units": 120,
+      "note": "60 astral code points = 120 UTF-16 units: accepted",
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-60-emoji-120-units.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-61-emoji-122-units.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "61 astral code points = 122 UTF-16 units: rejected",
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-61-emoji-122-units.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-canonicalized.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "canonicalFileName": "Café drive.mp4",
+      "note": "NFC then trim; the server stores, hashes and returns the canonical form",
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-canonicalized.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-control-char.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-control-char.json"
+    },
+    {
+      "file": "v2-reserve.request.file-name-too-long.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "121 characters",
+      "reEmittedFrom": "coach-film.v1/reserve.request.file-name-too-long.json"
+    },
+    {
+      "file": "v2-reserve.request.format-not-allowed.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "limit-exceeded",
+        "reason": "format-not-allowed"
+      },
+      "placeholder": "PENDING_D3",
+      "reEmittedFrom": "coach-film.v1/reserve.request.format-not-allowed.json"
+    },
+    {
+      "file": "v2-reserve.request.operation-id-not-uuid-v4.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "reEmittedFrom": "coach-film.v1/reserve.request.operation-id-not-uuid-v4.json"
+    },
+    {
+      "file": "v2-reserve.request.operation-id-reused.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "conflict",
+        "reason": "operation-id-reused"
+      },
+      "note": "same caller + operationId as reserve.request.valid.json, different payload",
+      "reEmittedFrom": "coach-film.v1/reserve.request.operation-id-reused.json"
+    },
+    {
+      "file": "v2-reserve.request.over-byte-limit.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "limit-exceeded",
+        "reason": "bytes-over-limit"
+      },
+      "note": "LIMITS.maxBytes + 1",
+      "placeholder": "PENDING_D3",
+      "reEmittedFrom": "coach-film.v1/reserve.request.over-byte-limit.json"
+    },
+    {
+      "file": "v2-reserve.request.rights-not-acknowledged.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "rights-acknowledgement-required"
+      },
+      "reEmittedFrom": "coach-film.v1/reserve.request.rights-not-acknowledged.json"
+    },
+    {
+      "file": "v2-reserve.request.rights-wording-outdated.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": true,
+      "expect": {
+        "code": "failed-precondition",
+        "reason": "rights-wording-outdated"
+      },
+      "placeholder": "PENDING_D7",
+      "reEmittedFrom": "coach-film.v1/reserve.request.rights-wording-outdated.json"
+    },
+    {
+      "file": "v2-reserve.request.unknown-field.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "client-chosen status must be rejected, not ignored",
+      "reEmittedFrom": "coach-film.v1/reserve.request.unknown-field.json"
+    },
+    {
+      "file": "v2-reserve.request.v1-envelope-at-v2-parser.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "note": "a v1 envelope does not parse at the v2 envelope parser; a NEW v1 operation under the future cutover gets unsupported-version from the replay table"
+    },
+    {
+      "file": "v2-reserve.request.valid.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "reEmittedFrom": "coach-film.v1/reserve.request.valid.json"
+    },
+    {
+      "file": "v2-reserve.request.wrong-schema-version.json",
+      "kind": "request",
+      "action": "reserveFilmUpload",
+      "valid": false,
+      "schemaValid": false,
+      "expect": {
+        "code": "invalid-argument",
+        "reason": "schema-invalid"
+      },
+      "reEmittedFrom": "coach-film.v1/reserve.request.wrong-schema-version.json"
+    },
+    {
+      "file": "v2-reserve.response.ok.json",
+      "kind": "response",
+      "action": "reserveFilmUpload",
+      "valid": true,
+      "respondsTo": "reserve.request.valid.json",
+      "reEmittedFrom": "coach-film.v1/reserve.response.ok.json"
+    },
+    {
+      "file": "v2-state-late-ready.json",
+      "kind": "film-state",
+      "valid": true,
+      "rule": "T6'",
+      "note": "ready after the reservation expiry is allowed (asynchronous processing)"
+    },
+    {
+      "file": "v2-state-late-worker-rejected.json",
+      "kind": "film-state",
+      "valid": true,
+      "rule": "T6'",
+      "note": "worker rejection after the reservation expiry is allowed"
+    },
+    {
+      "file": "v2-state-ready-at-limits.json",
+      "kind": "film-state",
+      "valid": true,
+      "placeholder": "PENDING_D3",
+      "note": "exactly at every placeholder limit: accepted"
+    },
+    {
+      "file": "v2-state-ready-h264-aac.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-ready-h264-noaudio.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-ready-vfr.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-audio-codec-not-allowed.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-container-invalid.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-duration-over-limit.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-media-corrupt.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-metadata-invalid.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-output-invalid.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-processing-limit-exceeded.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-resolution-over-limit.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-stream-count-exceeded.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-video-codec-not-allowed.json",
+      "kind": "film-state",
+      "valid": true
+    },
+    {
+      "file": "v2-state-rejected-video-stream-missing.json",
+      "kind": "film-state",
+      "valid": true
+    }
+  ]
+}

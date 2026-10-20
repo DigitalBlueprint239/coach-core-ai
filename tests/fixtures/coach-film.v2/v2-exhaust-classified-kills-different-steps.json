@@ -1,0 +1,23 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "SIGXCPU",
+      "step": "decode-input"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGXCPU",
+      "step": "normalize"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGXCPU",
+      "step": "decode-output"
+    }
+  ],
+  "expect": {
+    "outcome": "recovery-needed",
+    "reason": null
+  }
+}

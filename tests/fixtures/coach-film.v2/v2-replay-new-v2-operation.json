@@ -1,0 +1,12 @@
+{
+  "request": {
+    "requestSchemaVersion": "coach-film.v2",
+    "action": "reserveFilmUpload",
+    "payloadHash": "phash-O",
+    "nowMs": 1792447200000,
+    "stored": null
+  },
+  "expect": {
+    "kind": "new-operation"
+  }
+}
