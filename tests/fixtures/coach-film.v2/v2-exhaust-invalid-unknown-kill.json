@@ -1,0 +1,18 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "SIGTERM",
+      "step": "decode-input"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGTERM",
+      "step": "decode-input"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

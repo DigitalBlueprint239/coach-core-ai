@@ -1,0 +1,15 @@
+{
+  "attempts": [
+    {
+      "end": "media-verdict",
+      "reason": "media-corrupt"
+    },
+    {
+      "end": "crash"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

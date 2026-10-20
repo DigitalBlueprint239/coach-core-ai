@@ -1,0 +1,14 @@
+{
+  "input": {
+    "delivery": "process",
+    "configurationOk": true,
+    "admitted": null,
+    "jobCreatedAtMs": null,
+    "nowMs": null
+  },
+  "expect": {
+    "admit": false,
+    "consumes": false,
+    "outcome": "invalid-input"
+  }
+}

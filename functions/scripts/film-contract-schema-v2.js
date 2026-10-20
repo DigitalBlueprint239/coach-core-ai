@@ -47,6 +47,12 @@ function buildSchema() {
       retentionExpiresAt: "always null in r4 (D4 pending)",
       workerAttemptPolicy: c.WORKER_ATTEMPT_POLICY,
       classifiedLimitKills: c.CLASSIFIED_LIMIT_KILLS,
+      limitKillSignals: c.LIMIT_KILL_SIGNALS,
+      pipelineSteps: c.PIPELINE_STEPS,
+      mediaVerdictReasons: c.MEDIA_VERDICT_REASONS,
+      helperInvalidInput: "admissionDecision -> outcome invalid-input " +
+        "(never admits/consumes); exhaustionOutcome -> invalid-input " +
+        "(never rejects); decideReplay -> kind invalid-input",
     },
     "$defs": {
       FilmState: z.toJSONSchema(s.filmState, {io: "input"}),
@@ -56,6 +62,10 @@ function buildSchema() {
       ReserveData: z.toJSONSchema(s.reserveData, {io: "input"}),
       AbandonData: z.toJSONSchema(s.abandonData, {io: "input"}),
       ErrorResponse: z.toJSONSchema(s.errorResponse, {io: "input"}),
+      AttemptAdmissionInput: z.toJSONSchema(s.admissionInput,
+          {io: "input"}),
+      AttemptExhaustionInput: z.toJSONSchema(s.exhaustionInput,
+          {io: "input"}),
     },
   };
   return JSON.stringify(doc, null, 2) + "\n";

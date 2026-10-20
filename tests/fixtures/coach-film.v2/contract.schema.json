@@ -142,7 +142,34 @@
       "wall-time",
       "SIGXFSZ",
       "allocation-failure"
-    ]
+    ],
+    "limitKillSignals": [
+      "SIGXCPU",
+      "wall-time",
+      "SIGXFSZ",
+      "allocation-failure",
+      "SIGKILL"
+    ],
+    "pipelineSteps": [
+      "probe-input",
+      "decode-input",
+      "normalize",
+      "probe-output",
+      "decode-output"
+    ],
+    "mediaVerdictReasons": [
+      "container-invalid",
+      "metadata-invalid",
+      "video-stream-missing",
+      "video-codec-not-allowed",
+      "audio-codec-not-allowed",
+      "stream-count-exceeded",
+      "duration-over-limit",
+      "resolution-over-limit",
+      "media-corrupt",
+      "output-invalid"
+    ],
+    "helperInvalidInput": "admissionDecision -> outcome invalid-input (never admits/consumes); exhaustionOutcome -> invalid-input (never rejects); decideReplay -> kind invalid-input"
   },
   "$defs": {
     "FilmState": {
@@ -1145,6 +1172,172 @@
         "error"
       ],
       "additionalProperties": false
+    },
+    "AttemptAdmissionInput": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "delivery": {
+          "type": "string",
+          "enum": [
+            "process",
+            "duplicate",
+            "contention"
+          ]
+        },
+        "configurationOk": {
+          "type": "boolean"
+        },
+        "admitted": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "jobCreatedAtMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nowMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "delivery",
+        "configurationOk",
+        "admitted",
+        "jobCreatedAtMs",
+        "nowMs"
+      ],
+      "additionalProperties": false
+    },
+    "AttemptExhaustionInput": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "minItems": 1,
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "end": {
+                "type": "string",
+                "const": "media-verdict"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "container-invalid",
+                  "metadata-invalid",
+                  "video-stream-missing",
+                  "video-codec-not-allowed",
+                  "audio-codec-not-allowed",
+                  "stream-count-exceeded",
+                  "duration-over-limit",
+                  "resolution-over-limit",
+                  "media-corrupt",
+                  "output-invalid"
+                ]
+              }
+            },
+            "required": [
+              "end",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "end": {
+                "type": "string",
+                "const": "limit-kill"
+              },
+              "kill": {
+                "type": "string",
+                "enum": [
+                  "SIGXCPU",
+                  "wall-time",
+                  "SIGXFSZ",
+                  "allocation-failure",
+                  "SIGKILL"
+                ]
+              },
+              "step": {
+                "type": "string",
+                "enum": [
+                  "probe-input",
+                  "decode-input",
+                  "normalize",
+                  "probe-output",
+                  "decode-output"
+                ]
+              }
+            },
+            "required": [
+              "end",
+              "kill",
+              "step"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "end": {
+                "type": "string",
+                "const": "infrastructure"
+              }
+            },
+            "required": [
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "end": {
+                "type": "string",
+                "const": "unknown"
+              }
+            },
+            "required": [
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "end": {
+                "type": "string",
+                "const": "crash"
+              }
+            },
+            "required": [
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "end": {
+                "type": "string",
+                "const": "completed"
+              }
+            },
+            "required": [
+              "end"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
     }
   }
 }

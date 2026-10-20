@@ -64,20 +64,22 @@
 
 **Identity.** The (uid, operationId) lookup is done by the caller. The record is compared by **action** and **canonical payload hash**; the envelope version is excluded.
 
-`decideReplay` (pure) gives:
+`decideReplay` (pure and total; it never throws) validates in this order: query (`replayQuery`) → request version → stored record (`storedOperation`) → action/payload → expiry → receipt content → version path. Both schemas are exported from `legacy-r3.js` as `schemas`. It gives:
 
 | Request | Stored operation | Result |
 |---|---|---|
 | v2, same action and payload | r3 success receipt, unexpired | **Projection** (below) |
-| v1, same action and payload | r3 success receipt, unexpired | The **original v1 receipt, verbatim** (byte-equal string) |
+| v1, same action and payload | **valid** r3 success receipt, unexpired | The **original v1 receipt, verbatim** (byte-equal string) |
 | v2 | v2 receipt (`schemaVersion: "coach-film.v2"` on the stored record) | The stored v2 receipt |
-| v1 | v2 receipt | `invalid-argument / unsupported-version`. No v1 shape is invented for a v2 receipt |
+| v1 | valid v2 receipt | `invalid-argument / unsupported-version`. No v1 shape is invented for a v2 receipt |
 | either version, changed payload or action | any | `conflict / operation-id-reused` |
 | either version, `now ≥` the **original** `replayableUntil` | any | `failed-precondition / operation-expired`. The version never renews the window |
 | v1, no stored operation | — | `invalid-argument / unsupported-version` (**future cutover only**) |
 | v2, no stored operation | — | new operation (normal handling) |
 | unknown version | — | `invalid-argument / schema-invalid` |
-| v2 | unparseable by the **pinned v1 schema**, unknown fields, an error receipt, or an impossible legacy `ready` | `failed-precondition / legacy-record-invalid` |
+| either version | stored **record** invalid: `replayableUntilMs` missing, `null`, non-integer, negative, non-finite or unsafe; `schemaVersion` other than **absent** (r3) or exactly `"coach-film.v2"` (so `"coach-film.v999"` and an explicit `"coach-film.v1"` are invalid); unknown record fields | `failed-precondition / legacy-record-invalid` |
+| either version | stored **receipt** invalid for its version: unparseable by the pinned v1 schema (r3) or the v2 schema, unknown fields, an error receipt, a state other than the action's supported one, or an impossible legacy `ready` | `failed-precondition / legacy-record-invalid`. This is checked **before either replay path**, so a v1 request never receives corrupt bytes verbatim |
+| — | malformed **caller-built query** (`action` outside the two actions, empty `payloadHash`, `nowMs` missing or not a safe non-negative integer, unknown fields) | `{kind: "invalid-input"}`: never a replay and never a new operation (caller bug, no wire response) |
 
 **Projection** (`projectR3SuccessToV2`):
 1. Parse the stored string with the strict v1 schema.
@@ -105,23 +107,35 @@ Every other value, ID and timestamp is kept, including `data.expiresAt` (the res
 
 `WORKER_ATTEMPT_POLICY = {status: "TEST_ONLY", maxAdmittedAttempts: 3, admissionHorizonMs: 21600000, platformRetry: false}`
 
-**`admissionDecision`:**
+**Validated inputs (r4 repair, Codex C2).** Both helpers are pure and **total** (they never throw). Each validates its input with an exported schema (`schemas.admissionInput`, `schemas.attemptRecord`, `schemas.exhaustionInput`) before deciding. Malformed input yields **`invalid-input`**: it never admits, never consumes, and never rejects media.
+
+**`admissionDecision`** (input: `delivery` ∈ {process, duplicate, contention}; `configurationOk` boolean; `admitted` an integer 0…3; `jobCreatedAtMs` and `nowMs` safe non-negative integers with `nowMs ≥ jobCreatedAtMs`; no other fields):
+- **Invalid input** (NaN, ±Infinity, fractional, negative, string, missing, an impossible counter above 3, an unknown delivery or field) → `{admit: false, consumes: false, outcome: "invalid-input"}`.
 - **Admission:** one cumulative ceiling of **3 admitted attempts, including the first**. An attempt is consumed when it is admitted, so a crash after admission still consumes it.
 - **Not counted:** duplicate deliveries and lease contention never admit and never consume.
 - **Configuration preflight failure** (decoder digest, limits) → `stalled-configuration`, with nothing consumed.
 - **Six-hour horizon:** no admission at or after job creation + 6 h.
 - **Platform retry is OFF.** Further attempts come only from an explicit synthetic redrive.
 
-**`exhaustionOutcome`:**
-- A media verdict rejects at once with its reason.
-- **`processing-limit-exceeded`** applies only when the **final** attempt **and** at least one earlier attempt ended in a classified own-limit kill on the **same** pipeline step. Classified kills are `SIGXCPU`, `wall-time`, `SIGXFSZ` and `allocation-failure`.
+**`exhaustionOutcome`** (input: 1…3 attempt records in order, strict and closed per `end`):
+
+| `end` | Required fields |
+|---|---|
+| `media-verdict` | `reason` ∈ `MEDIA_VERDICT_REASONS` = the 11 worker reasons **minus** `processing-limit-exceeded` (S1 intake reasons and made-up values are invalid) |
+| `limit-kill` | `kill` ∈ `LIMIT_KILL_SIGNALS` = `SIGXCPU`, `wall-time`, `SIGXFSZ`, `allocation-failure` (classified) or `SIGKILL` (never classified); **`step` required** ∈ `PIPELINE_STEPS` = `probe-input`, `decode-input`, `normalize`, `probe-output`, `decode-output` (the bounded decoder subprocesses of package §4.6 steps 3, 5–7) |
+| `infrastructure`, `unknown`, `crash`, `completed` | none |
+
+A terminal end (`media-verdict`, `completed`) may only be the **last** attempt.
+- **Invalid input** → `{outcome: "invalid-input", reason: null}`. The film stays `validating` and slot-holding, exactly as for recovery-needed; it is **never** rejected.
+- A media verdict rejects with its recognized reason.
+- **`processing-limit-exceeded`** applies only when the **final** attempt **and** at least one earlier attempt ended in a classified own-limit kill on the **same, recognized** pipeline step. A missing step is invalid input, never "the same step".
 - Everything else — infrastructure failure, unknown, an undifferentiated `SIGKILL`, or a crash — is **recovery-needed**: the film stays `validating` and slot-holding, and is never rejected as bad media.
 
 No admission engine, lease, retry or trigger exists in this slice.
 
 ## 7. Fixtures
 
-`tests/fixtures/coach-film.v2/` contains 173 fixtures plus `index.json`, `contract.schema.json` and `SHA256SUMS.txt`, generated by `functions/scripts/film-fixtures-v2.js` (which reads v1 read-only) and `film-contract-schema-v2.js`.
+`tests/fixtures/coach-film.v2/` contains 211 fixtures (173 at `1e8c699` plus 38 negatives from the C1/C2 repair) plus `index.json`, `contract.schema.json` and `SHA256SUMS.txt`, generated by `functions/scripts/film-fixtures-v2.js` (which reads v1 read-only) and `film-contract-schema-v2.js`.
 
 | Group | What it holds |
 |---|---|
@@ -131,8 +145,8 @@ No admission engine, lease, retry or trigger exists in this slice.
 | Worker rejections | One per worker reason, plus a late worker rejection |
 | Negative mutations | Named R5–R9, T6′, T3, reason set, `media` strictness and wire-missing-key cases. Includes +1 ms, +1 px width and +1 px height |
 | Stored documents | Legacy r3 documents (valid) and impossible legacy `ready` (invalid) |
-| Replay table | 19 cases |
-| Attempt policy | 8 admission and 7 exhaustion cases |
+| Replay table | 35 cases (19 + 16 fail-closed: record, version, timing, v1-path content, query) |
+| Attempt policy | 18 admission (8 + 10 invalid-input) and 19 exhaustion (7 + 12 invalid-input) cases. NaN and ±Infinity, which JSON cannot carry, are in `film-r4-review-regressions.test.js` |
 
 Expected projections are built in the generator **independently** of `legacy-r3.js`.
 
@@ -140,6 +154,6 @@ Expected projections are built in the generator **independently** of `legacy-r3.
 
 ## 8. Ownership (A1 R4)
 
-- **Claude** owns this document, `contract-v2.js`, `legacy-r3.js`, the two v2 generators, `tests/fixtures/coach-film.v2/**`, and the two v2 tests.
+- **Claude** owns this document, `contract-v2.js`, `legacy-r3.js`, the two v2 generators, `tests/fixtures/coach-film.v2/**`, the two v2 tests and `film-r4-review-regressions.test.js`.
 - **Codex** owns the client mirror `src/features/film-analyzer/contracts-v2.ts` and its parity tests, stacked on the exact SHA of this contract.
 - **Frozen:** the v1 contract and fixtures, S1 handlers, `index.js`, rules, `contracts.ts`, `tools/ffmpeg/**`.

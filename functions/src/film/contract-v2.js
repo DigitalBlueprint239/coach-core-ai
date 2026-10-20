@@ -330,60 +330,126 @@ const CLASSIFIED_LIMIT_KILLS = Object.freeze([
 ]);
 
 /**
- * Admission decision for one invocation (pure). Duplicate deliveries and
- * contention are not admissions; configuration preflight failures stall
- * without consuming an attempt.
- * @param {object} s
- * @param {"process"|"duplicate"|"contention"} s.delivery
- * @param {boolean} s.configurationOk preflight (decoder digest, limits)
- * @param {number} s.admitted attempts already admitted for this job
- * @param {number} s.jobCreatedAtMs
- * @param {number} s.nowMs
- * @param {boolean} [s.exhaustedOutcomeRecorded]
+ * Every kill value an attempt record may carry: the classified own-limit
+ * kills plus an undifferentiated SIGKILL (never classified). Closed set.
+ */
+const LIMIT_KILL_SIGNALS = Object.freeze([...CLASSIFIED_LIMIT_KILLS,
+  "SIGKILL"]);
+
+/**
+ * Bounded decoder subprocess steps (S2b package §4.6 steps 3, 5, 6, 7) that
+ * run under resource limits and so can end in a limit kill. Closed set.
+ */
+const PIPELINE_STEPS = Object.freeze([
+  "probe-input", "decode-input", "normalize", "probe-output", "decode-output",
+]);
+
+/**
+ * Reasons an attempt's own media verdict may carry. processing-limit-exceeded
+ * is excluded: only exhaustionOutcome derives it, never an attempt.
+ */
+const MEDIA_VERDICT_REASONS = Object.freeze(WORKER_REJECTION_REASONS
+    .filter((r) => r !== "processing-limit-exceeded"));
+
+const safeMs = z.number().int().min(0).max(Number.MAX_SAFE_INTEGER);
+
+/**
+ * Validated input of admissionDecision (exported; invoked by the helper).
+ * Counts are safe integers within the ceiling; times are finite, safe,
+ * non-negative integers with nowMs >= jobCreatedAtMs.
+ */
+const admissionInput = z.strictObject({
+  delivery: z.enum(["process", "duplicate", "contention"]),
+  configurationOk: z.boolean(),
+  admitted: z.number().int().min(0)
+      .max(WORKER_ATTEMPT_POLICY.maxAdmittedAttempts),
+  jobCreatedAtMs: safeMs,
+  nowMs: safeMs,
+}).refine((s) => s.nowMs >= s.jobCreatedAtMs,
+    {message: "nowMs precedes jobCreatedAtMs", path: ["nowMs"]});
+
+/** One admitted attempt's end (exported; strict, closed per variant). */
+const attemptRecord = z.discriminatedUnion("end", [
+  z.strictObject({end: z.literal("media-verdict"),
+    reason: z.enum(MEDIA_VERDICT_REASONS)}),
+  z.strictObject({end: z.literal("limit-kill"),
+    kill: z.enum(LIMIT_KILL_SIGNALS), step: z.enum(PIPELINE_STEPS)}),
+  z.strictObject({end: z.literal("infrastructure")}),
+  z.strictObject({end: z.literal("unknown")}),
+  z.strictObject({end: z.literal("crash")}),
+  z.strictObject({end: z.literal("completed")}),
+]);
+
+const TERMINAL_ENDS = ["media-verdict", "completed"];
+
+/**
+ * Validated input of exhaustionOutcome: 1..3 admitted attempts in order; a
+ * terminal end (media verdict, completed) may only be the last attempt.
+ */
+const exhaustionInput = z.array(attemptRecord).min(1)
+    .max(WORKER_ATTEMPT_POLICY.maxAdmittedAttempts)
+    .refine((a) => a.slice(0, -1).every((x) => !TERMINAL_ENDS.includes(x.end)),
+        {message: "terminal attempt end before the last attempt"});
+
+/**
+ * Admission decision for one invocation (pure and total: never throws).
+ * Input failing `admissionInput` (missing, NaN, infinite, fractional,
+ * negative or out-of-range counts/times, unknown fields or deliveries) is
+ * refused as `invalid-input`: never admitted, never consumed.
+ * Duplicate deliveries and contention are not admissions; configuration
+ * preflight failures stall without consuming an attempt.
+ * @param {object} s see admissionInput
  * @return {{admit: boolean, consumes: boolean, outcome: string}}
  */
 function admissionDecision(s) {
   const p = WORKER_ATTEMPT_POLICY;
-  if (s.delivery === "duplicate" || s.delivery === "contention") {
-    return {admit: false, consumes: false, outcome: `skip-${s.delivery}`};
+  const v = admissionInput.safeParse(s);
+  if (!v.success) {
+    return {admit: false, consumes: false, outcome: "invalid-input"};
   }
-  if (!s.configurationOk) {
+  const d = v.data;
+  if (d.delivery === "duplicate" || d.delivery === "contention") {
+    return {admit: false, consumes: false, outcome: `skip-${d.delivery}`};
+  }
+  if (!d.configurationOk) {
     return {admit: false, consumes: false, outcome: "stalled-configuration"};
   }
-  if (s.admitted >= p.maxAdmittedAttempts) {
+  if (d.admitted >= p.maxAdmittedAttempts) {
     return {admit: false, consumes: false, outcome: "refused-exhausted"};
   }
-  if (s.nowMs >= s.jobCreatedAtMs + p.admissionHorizonMs) {
+  if (d.nowMs >= d.jobCreatedAtMs + p.admissionHorizonMs) {
     return {admit: false, consumes: false, outcome: "refused-horizon"};
   }
   return {admit: true, consumes: true, outcome: "admitted"};
 }
 
 /**
- * Outcome once no further attempt may be admitted (pure).
- * `attempts` lists the end of every admitted attempt in order:
- * {end: "media-verdict"|"limit-kill"|"infrastructure"|"unknown"|"crash"|
- *  "completed", kill?: one of CLASSIFIED_LIMIT_KILLS, step?: string,
- *  reason?: a worker rejection reason}.
- * - A media verdict rejects at once with its reason (never retried).
+ * Outcome once no further attempt may be admitted (pure and total).
+ * `attempts` must satisfy `exhaustionInput`; otherwise the result is
+ * `invalid-input` — never a rejection: the film stays validating and
+ * slot-holding exactly as for recovery-needed.
+ * - A media verdict (last attempt; recognized reason) rejects with it.
  * - processing-limit-exceeded only when the FINAL attempt and at least one
- *   earlier attempt ended in a classified own-limit kill on the SAME step.
+ *   earlier attempt ended in a classified own-limit kill on the SAME
+ *   (required, recognized) pipeline step.
  * - Everything else: recovery-needed (film stays validating, slot-holding;
  *   never a media rejection).
- * @param {object[]} attempts
+ * @param {object[]} attempts see exhaustionInput
  * @return {{outcome: string, reason: ?string}}
  */
 function exhaustionOutcome(attempts) {
-  const verdict = attempts.find((a) => a.end === "media-verdict");
-  if (verdict) return {outcome: "rejected", reason: verdict.reason};
-  if (attempts.some((a) => a.end === "completed")) {
-    return {outcome: "completed", reason: null};
+  const v = exhaustionInput.safeParse(attempts);
+  if (!v.success) return {outcome: "invalid-input", reason: null};
+  const a = v.data;
+  const last = a[a.length - 1];
+  if (last.end === "media-verdict") {
+    return {outcome: "rejected", reason: last.reason};
   }
-  const isKill = (a) => a && a.end === "limit-kill" &&
-    CLASSIFIED_LIMIT_KILLS.includes(a.kill);
-  const last = attempts[attempts.length - 1];
-  if (isKill(last) && attempts.slice(0, -1)
-      .some((a) => isKill(a) && a.step === last.step)) {
+  if (last.end === "completed") return {outcome: "completed", reason: null};
+  const isKill = (x) => x.end === "limit-kill" &&
+    CLASSIFIED_LIMIT_KILLS.includes(x.kill);
+  if (isKill(last) && a.slice(0, -1)
+      .some((x) => isKill(x) && x.step === last.step)) {
     return {outcome: "rejected", reason: "processing-limit-exceeded"};
   }
   return {outcome: "recovery-needed", reason: null};
@@ -407,9 +473,13 @@ module.exports = {
   }),
   WORKER_ATTEMPT_POLICY,
   CLASSIFIED_LIMIT_KILLS,
+  LIMIT_KILL_SIGNALS,
+  PIPELINE_STEPS,
+  MEDIA_VERDICT_REASONS,
   schemas: {
     media, filmState, filmDocument, requestEnvelope, reserveRequest,
     abandonRequest, reserveData, abandonData, errorObject, errorResponse,
+    admissionInput, attemptRecord, exhaustionInput,
   },
   PAYLOAD_SCHEMAS,
   RESPONSE_SCHEMAS,

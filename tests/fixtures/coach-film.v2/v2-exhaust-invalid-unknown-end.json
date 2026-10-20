@@ -1,0 +1,11 @@
+{
+  "attempts": [
+    {
+      "end": "timeout"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

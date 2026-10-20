@@ -1,0 +1,12 @@
+{
+  "attempts": [
+    {
+      "end": "crash",
+      "reason": "media-corrupt"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

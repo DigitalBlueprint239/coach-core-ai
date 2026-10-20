@@ -1,0 +1,12 @@
+{
+  "attempts": [
+    {
+      "end": "media-verdict",
+      "reason": "made-up"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

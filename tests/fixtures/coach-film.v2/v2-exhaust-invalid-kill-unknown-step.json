@@ -1,0 +1,18 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "wall-time",
+      "step": "upload"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "wall-time",
+      "step": "upload"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

@@ -197,6 +197,36 @@ rc("v2-replay-stored-v2-receipt.json", q({stored: {...stored("reserve.response.o
 rc("v2-replay-stored-v2-receipt-v1-request.json", q({requestSchemaVersion: V1_ID, stored: {...stored("reserve.response.ok.json"), schemaVersion: V2_ID, responseJson: JSON.stringify(expectedProjection("reserve.response.ok.json"))}}),
     {kind: "error", code: "invalid-argument", reason: "unsupported-version"}, "no v1 representation is invented for a v2 receipt");
 
+// r4 repair (Codex C1, #39 c-6292024186): the stored record, its version, its
+// timing and the receipt content are validated before EITHER replay path.
+const LI = {kind: "error", code: "failed-precondition", reason: "legacy-record-invalid"};
+const omit = (o, k) => Object.fromEntries(Object.entries(o).filter(([x]) => x !== k));
+const okRaw = v1Raw("reserve.response.ok.json");
+rc("v2-replay-stored-missing-expiry.json", q({stored: omit(stored("reserve.response.ok.json"), "replayableUntilMs")}), LI,
+    "C1 repro: a missing expiry never permits replay");
+rc("v2-replay-stored-null-expiry.json", q({stored: stored("reserve.response.ok.json", {replayableUntilMs: null})}), LI,
+    "non-finite expiry (NaN/Infinity are exercised in tests; JSON cannot carry them)");
+rc("v2-replay-stored-string-expiry.json", q({stored: stored("reserve.response.ok.json", {replayableUntilMs: String(OP_TIME + WINDOW)})}), LI);
+rc("v2-replay-stored-fractional-expiry.json", q({stored: stored("reserve.response.ok.json", {replayableUntilMs: OP_TIME + WINDOW + 0.5})}), LI);
+rc("v2-replay-stored-unknown-version.json", q({stored: stored("reserve.response.ok.json", {schemaVersion: "coach-film.v999"})}), LI,
+    "C1 repro: an unknown stored version is never treated as r3");
+rc("v2-replay-stored-explicit-v1-version.json", q({stored: stored("reserve.response.ok.json", {schemaVersion: V1_ID})}), LI,
+    "r3 records carry NO schemaVersion; only absent or coach-film.v2 is valid");
+rc("v2-replay-stored-unknown-record-field.json", q({stored: stored("reserve.response.ok.json", {uploadUrl: "https://example.invalid"})}), LI);
+rc("v2-replay-v1-corrupt-json.json", q({requestSchemaVersion: V1_ID, stored: stored("reserve.response.ok.json", {responseJson: "{bad"})}), LI,
+    "C1 repro: corrupt bytes are never returned verbatim; only VALID historical v1 bytes are");
+rc("v2-replay-v1-error-receipt.json", q({requestSchemaVersion: V1_ID, stored: stored("reserve.response.ok.json", {responseJson: v1Raw("error.conflict.operation-id-reused.json")})}), LI);
+rc("v2-replay-v1-unknown-field.json", q({requestSchemaVersion: V1_ID, stored: stored("reserve.response.ok.json", {responseJson: okRaw.replace("\"ok\": true,", "\"ok\": true, \"signedUrl\": \"https://example.invalid\",")})}), LI);
+rc("v2-replay-v1-impossible-ready.json", q({requestSchemaVersion: V1_ID, stored: stored("reserve.response.ok.json", {responseJson: okRaw.replace("\"status\": \"reserved\"", "\"status\": \"ready\"")})}), LI);
+rc("v2-replay-v1-receipt-wrong-action.json", q({requestSchemaVersion: V1_ID, action: "abandonFilmUpload", stored: stored("reserve.response.ok.json", {action: "abandonFilmUpload"})}), LI,
+    "a reserve receipt stored under the abandon action is not a supported abandon receipt");
+rc("v2-replay-stored-v2-corrupt.json", q({stored: {...stored("reserve.response.ok.json"), schemaVersion: V2_ID, responseJson: "{bad"}}), LI);
+rc("v2-replay-stored-v2-corrupt-v1-request.json", q({requestSchemaVersion: V1_ID, stored: {...stored("reserve.response.ok.json"), schemaVersion: V2_ID, responseJson: "{bad"}}), LI,
+    "content is validated before the version-mismatch answer");
+rc("v2-replay-invalid-query-missing-now.json", omit(q({stored: stored("reserve.response.ok.json")}), "nowMs"), {kind: "invalid-input"},
+    "a malformed caller-built query is neither a replay nor a new operation");
+rc("v2-replay-invalid-query-unknown-action.json", q({action: "deleteFilm", stored: stored("reserve.response.ok.json")}), {kind: "invalid-input"});
+
 // ---------------------------------------------------------------- 8. attempt policy (A1 R1), pure cases
 const H = 6 * 60 * 60 * 1000; const C0 = OP_TIME;
 const ad = (file, input, expect, note) => put(file, {input, expect}, {kind: "attempt-admission", valid: true, ...(note ? {note} : {})});
@@ -210,6 +240,20 @@ ad("v2-attempt-configuration-preflight.json", {delivery: "process", configuratio
     "wrong decoder digest / limits unavailable: stall, consume nothing, never a media verdict");
 ad("v2-attempt-horizon-just-before.json", {delivery: "process", configurationOk: true, admitted: 1, jobCreatedAtMs: C0, nowMs: C0 + H - 1}, {admit: true, consumes: true, outcome: "admitted"});
 ad("v2-attempt-horizon-at.json", {delivery: "process", configurationOk: true, admitted: 1, jobCreatedAtMs: C0, nowMs: C0 + H}, {admit: false, consumes: false, outcome: "refused-horizon"});
+// r4 repair (Codex C2): malformed input never admits or consumes.
+const AI = {admit: false, consumes: false, outcome: "invalid-input"};
+const okIn = {delivery: "process", configurationOk: true, admitted: 0, jobCreatedAtMs: C0, nowMs: C0 + 1000};
+ad("v2-attempt-invalid-null-times.json", {...okIn, admitted: null, jobCreatedAtMs: null, nowMs: null}, AI,
+    "C2 repro (JSON form of NaN; NaN/Infinity exercised in tests)");
+ad("v2-attempt-invalid-negative-admitted.json", {...okIn, admitted: -1}, AI);
+ad("v2-attempt-invalid-fractional-admitted.json", {...okIn, admitted: 1.5}, AI);
+ad("v2-attempt-invalid-admitted-over-ceiling.json", {...okIn, admitted: 4}, AI, "an impossible counter is corrupt input, not a fourth attempt");
+ad("v2-attempt-invalid-string-admitted.json", {...okIn, admitted: "0"}, AI);
+ad("v2-attempt-invalid-missing-now.json", omit(okIn, "nowMs"), AI);
+ad("v2-attempt-invalid-now-before-created.json", {...okIn, nowMs: C0 - 1}, AI);
+ad("v2-attempt-invalid-unknown-delivery.json", {...okIn, delivery: "retry"}, AI, "platform retry is OFF; there is no retry delivery");
+ad("v2-attempt-invalid-unknown-field.json", {...okIn, platformRetry: true}, AI);
+ad("v2-attempt-invalid-config-flag.json", {...okIn, configurationOk: "true"}, AI);
 const ex = (file, attempts, expect, note) => put(file, {attempts, expect}, {kind: "attempt-exhaustion", valid: true, ...(note ? {note} : {})});
 ex("v2-exhaust-media-verdict-first.json", [{end: "media-verdict", reason: "container-invalid"}], {outcome: "rejected", reason: "container-invalid"},
     "a deterministic media verdict rejects on the first proven failure (s11a: structural, despite pinned probe 0 / decode 0)");
@@ -223,6 +267,23 @@ ex("v2-exhaust-undifferentiated-sigkill.json", [{end: "limit-kill", kill: "SIGKI
 ex("v2-exhaust-final-infrastructure.json", [{end: "limit-kill", kill: "SIGXFSZ", step: "normalize"}, {end: "limit-kill", kill: "SIGXFSZ", step: "normalize"}, {end: "infrastructure"}],
     {outcome: "recovery-needed", reason: null}, "the FINAL attempt must itself be a classified kill");
 ex("v2-exhaust-completed-second.json", [{end: "crash"}, {end: "completed"}], {outcome: "completed", reason: null});
+// r4 repair (Codex C2): no media rejection without recognized reasons and
+// valid pipeline-step identities.
+const EI = {outcome: "invalid-input", reason: null};
+ex("v2-exhaust-invalid-kills-missing-step.json", [{end: "limit-kill", kill: "SIGXCPU"}, {end: "limit-kill", kill: "SIGXCPU"}], EI,
+    "C2 repro: undefined == undefined is never the same step");
+ex("v2-exhaust-invalid-kill-unknown-step.json", [{end: "limit-kill", kill: "wall-time", step: "upload"}, {end: "limit-kill", kill: "wall-time", step: "upload"}], EI);
+ex("v2-exhaust-invalid-unknown-kill.json", [{end: "limit-kill", kill: "SIGTERM", step: "decode-input"}, {end: "limit-kill", kill: "SIGTERM", step: "decode-input"}], EI);
+ex("v2-exhaust-invalid-made-up-reason.json", [{end: "media-verdict", reason: "made-up"}], EI, "C2 repro: no fabricated rejection reason");
+ex("v2-exhaust-invalid-s1-reason.json", [{end: "media-verdict", reason: "size-mismatch"}], EI, "S1 intake reasons are not worker verdicts");
+ex("v2-exhaust-invalid-policy-reason-as-verdict.json", [{end: "media-verdict", reason: "processing-limit-exceeded"}], EI,
+    "processing-limit-exceeded is derived only by the policy, never asserted by an attempt");
+ex("v2-exhaust-invalid-missing-reason.json", [{end: "media-verdict"}], EI);
+ex("v2-exhaust-invalid-unknown-end.json", [{end: "timeout"}], EI);
+ex("v2-exhaust-invalid-empty.json", [], EI);
+ex("v2-exhaust-invalid-four-attempts.json", [{end: "crash"}, {end: "crash"}, {end: "crash"}, {end: "crash"}], EI);
+ex("v2-exhaust-invalid-verdict-not-last.json", [{end: "media-verdict", reason: "media-corrupt"}, {end: "crash"}], EI);
+ex("v2-exhaust-invalid-unknown-field.json", [{end: "crash", reason: "media-corrupt"}], EI);
 
 fs.writeFileSync(path.join(OUT, "index.json"), JSON.stringify({
   contract: V2_ID,

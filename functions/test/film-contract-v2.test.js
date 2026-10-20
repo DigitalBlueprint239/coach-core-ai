@@ -110,6 +110,9 @@ describe("coach-film.v2 fixtures", () => {
           const out = decideReplay(input);
           assert.equal(JSON.stringify(input), before, "input not mutated");
           assert.equal(out.kind, v.expect.kind);
+          if (v.expect.kind === "invalid-input") {
+            assert.deepEqual(out, {kind: "invalid-input"});
+          }
           if (v.expect.responseFile) {
             const want = load(v.expect.responseFile);
             assert.deepEqual(out.response, want);

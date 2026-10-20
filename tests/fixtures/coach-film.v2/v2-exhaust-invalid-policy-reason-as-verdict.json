@@ -1,0 +1,12 @@
+{
+  "attempts": [
+    {
+      "end": "media-verdict",
+      "reason": "processing-limit-exceeded"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "requestSchemaVersion": "coach-film.v2",
+    "action": "reserveFilmUpload",
+    "payloadHash": "phash-O",
+    "nowMs": 1792447200000,
+    "stored": {
+      "action": "reserveFilmUpload",
+      "payloadHash": "phash-O",
+      "responseJson": "{bad",
+      "replayableUntilMs": 1792530000000,
+      "schemaVersion": "coach-film.v2"
+    }
+  },
+  "expect": {
+    "kind": "error",
+    "code": "failed-precondition",
+    "reason": "legacy-record-invalid"
+  }
+}

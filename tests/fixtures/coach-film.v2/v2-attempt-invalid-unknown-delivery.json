@@ -1,0 +1,14 @@
+{
+  "input": {
+    "delivery": "retry",
+    "configurationOk": true,
+    "admitted": 0,
+    "jobCreatedAtMs": 1792443600000,
+    "nowMs": 1792443601000
+  },
+  "expect": {
+    "admit": false,
+    "consumes": false,
+    "outcome": "invalid-input"
+  }
+}

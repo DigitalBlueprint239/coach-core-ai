@@ -70,6 +70,59 @@
       "valid": true
     },
     {
+      "file": "v2-attempt-invalid-admitted-over-ceiling.json",
+      "kind": "attempt-admission",
+      "valid": true,
+      "note": "an impossible counter is corrupt input, not a fourth attempt"
+    },
+    {
+      "file": "v2-attempt-invalid-config-flag.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-invalid-fractional-admitted.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-invalid-missing-now.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-invalid-negative-admitted.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-invalid-now-before-created.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-invalid-null-times.json",
+      "kind": "attempt-admission",
+      "valid": true,
+      "note": "C2 repro (JSON form of NaN; NaN/Infinity exercised in tests)"
+    },
+    {
+      "file": "v2-attempt-invalid-string-admitted.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
+      "file": "v2-attempt-invalid-unknown-delivery.json",
+      "kind": "attempt-admission",
+      "valid": true,
+      "note": "platform retry is OFF; there is no retry delivery"
+    },
+    {
+      "file": "v2-attempt-invalid-unknown-field.json",
+      "kind": "attempt-admission",
+      "valid": true
+    },
+    {
       "file": "v2-attempt-refuse-fourth.json",
       "kind": "attempt-admission",
       "valid": true,
@@ -321,6 +374,70 @@
       "kind": "attempt-exhaustion",
       "valid": true,
       "note": "the FINAL attempt must itself be a classified kill"
+    },
+    {
+      "file": "v2-exhaust-invalid-empty.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-four-attempts.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-kill-unknown-step.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-kills-missing-step.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "C2 repro: undefined == undefined is never the same step"
+    },
+    {
+      "file": "v2-exhaust-invalid-made-up-reason.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "C2 repro: no fabricated rejection reason"
+    },
+    {
+      "file": "v2-exhaust-invalid-missing-reason.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-policy-reason-as-verdict.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "processing-limit-exceeded is derived only by the policy, never asserted by an attempt"
+    },
+    {
+      "file": "v2-exhaust-invalid-s1-reason.json",
+      "kind": "attempt-exhaustion",
+      "valid": true,
+      "note": "S1 intake reasons are not worker verdicts"
+    },
+    {
+      "file": "v2-exhaust-invalid-unknown-end.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-unknown-field.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-unknown-kill.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
+    },
+    {
+      "file": "v2-exhaust-invalid-verdict-not-last.json",
+      "kind": "attempt-exhaustion",
+      "valid": true
     },
     {
       "file": "v2-exhaust-media-verdict-first.json",
@@ -781,6 +898,17 @@
       "note": "the WIRE FilmState requires all four keys; only the stored-document reader tolerates absence"
     },
     {
+      "file": "v2-replay-invalid-query-missing-now.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "a malformed caller-built query is neither a replay nor a new operation"
+    },
+    {
+      "file": "v2-replay-invalid-query-unknown-action.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
       "file": "v2-replay-legacy-corrupt-json.json",
       "kind": "replay-case",
       "valid": true
@@ -859,6 +987,56 @@
       "note": "identical v2 operation +1 h: historical receipt projected; four null keys; original reservation expiry; no new film/slot; stored bytes unchanged"
     },
     {
+      "file": "v2-replay-stored-explicit-v1-version.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "r3 records carry NO schemaVersion; only absent or coach-film.v2 is valid"
+    },
+    {
+      "file": "v2-replay-stored-fractional-expiry.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-stored-missing-expiry.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "C1 repro: a missing expiry never permits replay"
+    },
+    {
+      "file": "v2-replay-stored-null-expiry.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "non-finite expiry (NaN/Infinity are exercised in tests; JSON cannot carry them)"
+    },
+    {
+      "file": "v2-replay-stored-string-expiry.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-stored-unknown-record-field.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-stored-unknown-version.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "C1 repro: an unknown stored version is never treated as r3"
+    },
+    {
+      "file": "v2-replay-stored-v2-corrupt-v1-request.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "content is validated before the version-mismatch answer"
+    },
+    {
+      "file": "v2-replay-stored-v2-corrupt.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
       "file": "v2-replay-stored-v2-receipt-v1-request.json",
       "kind": "replay-case",
       "valid": true,
@@ -881,10 +1059,37 @@
       "valid": true
     },
     {
+      "file": "v2-replay-v1-corrupt-json.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "C1 repro: corrupt bytes are never returned verbatim; only VALID historical v1 bytes are"
+    },
+    {
+      "file": "v2-replay-v1-error-receipt.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-v1-impossible-ready.json",
+      "kind": "replay-case",
+      "valid": true
+    },
+    {
+      "file": "v2-replay-v1-receipt-wrong-action.json",
+      "kind": "replay-case",
+      "valid": true,
+      "note": "a reserve receipt stored under the abandon action is not a supported abandon receipt"
+    },
+    {
       "file": "v2-replay-v1-same-operation-verbatim.json",
       "kind": "replay-case",
       "valid": true,
       "note": "v1 replay returns the original v1 receipt byte-for-byte"
+    },
+    {
+      "file": "v2-replay-v1-unknown-field.json",
+      "kind": "replay-case",
+      "valid": true
     },
     {
       "file": "v2-replay.expected.abandon-from-reserved-projection.json",

@@ -1,0 +1,16 @@
+{
+  "attempts": [
+    {
+      "end": "limit-kill",
+      "kill": "SIGXCPU"
+    },
+    {
+      "end": "limit-kill",
+      "kill": "SIGXCPU"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}

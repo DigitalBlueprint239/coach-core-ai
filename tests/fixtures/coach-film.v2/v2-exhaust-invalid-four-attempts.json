@@ -1,0 +1,20 @@
+{
+  "attempts": [
+    {
+      "end": "crash"
+    },
+    {
+      "end": "crash"
+    },
+    {
+      "end": "crash"
+    },
+    {
+      "end": "crash"
+    }
+  ],
+  "expect": {
+    "outcome": "invalid-input",
+    "reason": null
+  }
+}
