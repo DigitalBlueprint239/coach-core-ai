@@ -22,6 +22,42 @@ const path = require("node:path");
 const {TERMS, pendingTerms} = require(
     path.join(__dirname, "..", "src", "film", "terms.js"));
 
+// FILM-S1-C1: the quarantine cleanup sweep is TEST_ONLY. Deploy is blocked
+// unconditionally (also with --check), independent of terms.js, if
+// functions/index.js references the sweep OR if any LOADED export carries a
+// TEST_ONLY film marker. Failing to load the exports also blocks (fails
+// closed). Only a separate owner authorization (C1-D1) can lift this.
+{
+  const fs = require("node:fs");
+  const {spawnSync} = require("node:child_process");
+  const fnDir = path.join(__dirname, "..");
+  const block = (why) => {
+    process.stderr.write(`\nDEPLOY BLOCKED: film cleanup sweep is TEST_ONLY` +
+      ` (${why}).\n`);
+    process.exit(1);
+  };
+  const src = fs.readFileSync(path.join(fnDir, "index.js"), "utf8");
+  if (/defineCleanupSweepTrigger|retryPendingFilmCleanups/.test(src)) {
+    block("referenced by functions/index.js");
+  }
+  const probe = spawnSync(process.execPath, ["-e",
+    "const {testOnlyExportProblem}=require('./src/film/cleanup');" +
+    "const p=testOnlyExportProblem(require('./index.js'));" +
+    "process.stdout.write('\\n@@'+JSON.stringify({problem:p}));" +
+    "process.exit(0);"], {cwd: fnDir, encoding: "utf8", timeout: 120000,
+    env: {...process.env,
+      GCLOUD_PROJECT: process.env.GCLOUD_PROJECT || "demo-film-guard"}});
+  const out = (probe.stdout || "").split("\n@@").pop();
+  let verdict = null;
+  try {
+    verdict = probe.status === 0 ? JSON.parse(out) : null;
+  } catch (_) {
+    verdict = null;
+  }
+  if (!verdict) block("loaded exports could not be verified");
+  if (verdict.problem) block(`exported: ${verdict.problem}`);
+}
+
 const pending = pendingTerms();
 const checkOnly = process.argv.includes("--check");
 

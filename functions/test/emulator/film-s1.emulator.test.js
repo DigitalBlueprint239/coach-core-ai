@@ -20,6 +20,7 @@ const c = require("../../src/film/contract");
 const {LIMITS} = require("../../src/film/limits");
 const {createFilmHandlers} = require("../../src/film/handlers");
 const {createStorageAdapter} = require("../../src/film/storage-adapter");
+const {noRetryBucketFor} = require("../../src/film/cleanup");
 
 const BUCKET = `${PROJECT}.appspot.com`;
 initializeApp({projectId: PROJECT, storageBucket: BUCKET}, "film-s1");
@@ -52,7 +53,10 @@ const deps = {
     if (!users[uid]) throw new Error("not found");
     return users[uid];
   },
-  deleteObject: (t) => storage.deleteObject(t),
+  // FILM-S1-C1 harness wiring (no assertion changed): owed deletes go through
+  // the durable filmCleanup obligation and a no-retry client of this bucket.
+  cleanupBucketName: () => BUCKET,
+  cleanupBucket: () => noRetryBucketFor(bucket),
   readHead: (t) => storage.readHead(t),
   logger: {info() {}, warn() {}, error() {}},
   now: () => clock,
@@ -105,13 +109,13 @@ const putObject = async (path, buf, contentType = "video/mp4") => {
   const f = bucket.file(path);
   await f.save(buf, {contentType, resumable: false});
   const [m] = await f.getMetadata();
-  return {name: path, size: m.size, contentType: m.contentType,
-    generation: m.generation};
+  return {bucket: BUCKET, name: path, size: m.size,
+    contentType: m.contentType, generation: m.generation};
 };
 const exists = async (path) => (await bucket.file(path).exists())[0];
 
 async function clearAll() {
-  for (const col of ["teams", "filmOperations"]) {
+  for (const col of ["teams", "filmOperations", "filmCleanup"]) {
     const snap = await db.collection(col).get();
     for (const d of snap.docs) await db.recursiveDelete(d.ref);
   }
@@ -440,24 +444,30 @@ describe("R1-R5 backend repairs", () => {
           put(name, bytes) {
             const generation = String(++nextGen);
             objects.set(name, {generation, bytes});
-            return {name, size: bytes.length, contentType: "video/mp4",
-              generation};
+            return {bucket: BUCKET, name, size: bytes.length,
+              contentType: "video/mp4", generation};
           },
           async readHead({name, generation, bytes}) {
             const o = objects.get(name);
             if (!o || o.generation !== generation) return null;
             return o.bytes.subarray(0, bytes);
           },
-          async deleteObject({name, generation}) {
-            const o = objects.get(name);
-            if (!o || o.generation !== generation) return false;
-            objects.delete(name);
-            return true;
-          },
+          // FILM-S1-C1 harness: the same generation semantics behind the
+          // Bucket.file(name).delete({ifGenerationMatch}) shape (404/412).
+          bucket: {name: BUCKET, file: (name) => ({
+            async delete({ifGenerationMatch}) {
+              const o = objects.get(name);
+              if (!o) throw Object.assign(new Error("gone"), {code: 404});
+              if (o.generation !== ifGenerationMatch) {
+                throw Object.assign(new Error("precondition"), {code: 412});
+              }
+              objects.delete(name);
+            },
+          })},
         };
         const hg = createFilmHandlers({...deps,
           readHead: (t) => gcs.readHead(t),
-          deleteObject: (t) => gcs.deleteObject(t)});
+          cleanupBucket: () => gcs.bucket});
         const r = (await hg.reserveFilmUpload({auth: auth(OWNER),
           data: reserveReq()})).data;
         const e1 = gcs.put(r.uploadPath, MP4);
