@@ -127,16 +127,19 @@ jobs:
           HARNESS_PINNED: '1'
           HARNESS_RESULT: ${{ runner.temp }}/harness-result.json
         run: |
+          set +e
           set -o pipefail
-          node --test --test-reporter=spec tools/ffmpeg/harness/harness.test.mjs 2>&1 | tee "$RUNNER_TEMP/harness.log"
-          st=${PIPESTATUS[0]}
+          node --test --test-reporter=spec tools/ffmpeg/harness/harness.test.mjs > "$RUNNER_TEMP/harness.log" 2>&1
+          st=$?
+          cat "$RUNNER_TEMP/harness.log"
           t=$(grep -E '^ℹ tests ' "$RUNNER_TEMP/harness.log" | awk '{print $3}'); p=$(grep -E '^ℹ pass ' "$RUNNER_TEMP/harness.log" | awk '{print $3}')
           f=$(grep -E '^ℹ fail ' "$RUNNER_TEMP/harness.log" | awk '{print $3}'); k=$(grep -E '^ℹ skipped ' "$RUNNER_TEMP/harness.log" | awk '{print $3}')
-          echo "::notice title=Isolation harness (pinned build)::tests=$t pass=$p fail=$f skipped=$k exit=$st (skipped tests are NOT passes)"
+          echo "::notice title=Isolation harness (pinned build)::tests=${t:-?} pass=${p:-?} fail=${f:-?} skipped=${k:-?} exit=$st (skipped tests are NOT passes)"
           if [ "$st" != "0" ]; then
-            # Surface the failing tests and their first assertion lines as annotations (logs are not always reachable).
-            grep -E '^\s*✖ ' "$RUNNER_TEMP/harness.log" | sed 's/^\s*//' | sort -u | head -8 | while IFS= read -r l; do echo "::error title=harness failure::${l:0:300}"; done
-            grep -E 'AssertionError|actual:|expected:|Error:' "$RUNNER_TEMP/harness.log" | head -12 | tr '\n' ' ' | cut -c1-900 | sed 's/^/::error title=harness assertion detail::/'; echo
+            # Surface failures as annotations (job logs are not reachable from every reviewer context).
+            head -c 1200 "$RUNNER_TEMP/harness.log" | tr '\n' ' ' | sed 's/^/::error title=harness log head::/'; echo
+            grep -E '^\s*✖ ' "$RUNNER_TEMP/harness.log" | sed 's/^\s*//' | sort -u | head -6 | while IFS= read -r l; do echo "::error title=harness failure::${l:0:300}"; done
+            grep -E 'AssertionError|actual:|expected:|Error:' "$RUNNER_TEMP/harness.log" | head -10 | tr '\n' ' ' | cut -c1-900 | sed 's/^/::error title=harness assertion detail::/'; echo
           fi
           exit "$st"
       - name: Assemble the retained artifact (binary + provenance + harness + fixture digests; nothing published)

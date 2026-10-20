@@ -139,7 +139,8 @@ describe("H1 binary identity and build facts", () => {
   it("pinned build: component lists match the configure intent", pinnedOnly, async () => {
     const list = async (kind) => {
       const r = await runDecoder({bin: FFMPEG, args: ["-hide_banner", `-${kind}`], captureStdout: true});
-      return r.stdout.split("\n").slice(1).map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 2 && /^[A-Z.]+$/.test(p[0])).map((p) => p[1]);
+      // Rows look like " V....D h264  H.264 ..." / " E mp4 ..."; legend rows like " V..... = Video" are dropped by the name pattern.
+      return r.stdout.split("\n").slice(1).map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 2 && /^[A-Z.]+$/.test(p[0]) && /^[a-z0-9_,.+-]+$/.test(p[1])).map((p) => p[1]);
     };
     assert.deepEqual((await list("decoders")).sort(), ["aac", "h264"]);
     assert.deepEqual((await list("encoders")).sort(), ["mjpeg"]);
@@ -149,7 +150,7 @@ describe("H1 binary identity and build facts", () => {
     // Filters: the three requested plus the eleven configure auto-selects for the ffmpeg tool
     // (configure n9.0.2 line 4378 `ffmpeg_select`). Nothing from LICENSE.md's GPL filter list.
     const fr = await runDecoder({bin: FFMPEG, args: ["-hide_banner", "-filters"], captureStdout: true});
-    const filters = fr.stdout.split("\n").map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 3 && /^[A-Z.]{3}$/.test(p[0])).map((p) => p[1]);
+    const filters = fr.stdout.split("\n").map((l) => l.trim().split(/\s+/)).filter((p) => p.length >= 3 && /^[A-Z.]{3}$/.test(p[0]) && /^[a-z0-9_]+$/.test(p[1])).map((p) => p[1]);
     assert.deepEqual(filters.sort(), ["aformat", "anull", "atrim", "crop", "format", "hflip", "null", "rotate", "scale", "transpose", "trim", "vflip"], filters.join(","));
     const gplFilters = ["blackframe", "boxblur", "colormatrix", "cover_rect", "cropdetect", "delogo", "eq", "find_rect", "fspp", "histeq", "hqdn3d", "kerndeint", "lensfun", "mcdeint", "mpdecimate", "nnedi", "owdenoise", "perspective", "phase", "pp7", "pullup", "repeatfields", "sab", "signature", "smartblur", "spp", "stereo3d", "super2xsai", "tinterlace", "uspp", "vaguedenoiser", "mptestsrc"];
     assert.ok(!filters.some((f) => gplFilters.includes(f)), "a GPL filter is compiled in");
