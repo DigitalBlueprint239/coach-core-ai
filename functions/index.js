@@ -341,6 +341,7 @@ const {Timestamp: FilmTimestamp} = require("firebase-admin/firestore");
 const {getStorage} = require("firebase-admin/storage");
 const {createFilmHandlers} = require("./src/film/handlers");
 const {createStorageAdapter} = require("./src/film/storage-adapter");
+const {noRetryBucketFor} = require("./src/film/cleanup");
 
 // R1: film switch, default OFF. The candidate is also blocked from deploy by
 // the functions.predeploy guard (scripts/film-terms-guard.js) while D3/D7 are
@@ -354,13 +355,21 @@ const FILM_ENABLED = defineBoolean("COACH_CORE_FILM_ENABLED", {
 let filmStorage = null;
 const getFilmStorage = () =>
   filmStorage || (filmStorage = createStorageAdapter(getStorage().bucket()));
+// FILM-S1-C1 (injection only, no new export): exact deletes use a dedicated
+// Cloud Storage client of the same class with implicit retries disabled, so
+// one admitted attempt is one delete request; the configured default bucket
+// name binds every cleanup record.
+let filmCleanupBucket = null;
+const getFilmCleanupBucket = () => filmCleanupBucket ||
+  (filmCleanupBucket = noRetryBucketFor(getStorage().bucket()));
 
 const filmHandlers = createFilmHandlers({
   db,
   Timestamp: FilmTimestamp,
   isEnabled: () => FILM_ENABLED.value() === true,
   getUser: (uid) => getAuth().getUser(uid),
-  deleteObject: (target) => getFilmStorage().deleteObject(target),
+  cleanupBucketName: () => getStorage().bucket().name,
+  cleanupBucket: getFilmCleanupBucket,
   readHead: (target) => getFilmStorage().readHead(target),
   logger,
 });
