@@ -51,21 +51,25 @@ const WORKER_LIMITS = Object.freeze({
   /** Margin kept between the longest step (+ grace) and the lease TTL. */
   leaseMarginMs: 30000,
   /**
-   * Pinned calibration record. Run 39452043759 at 95e777e (2026-10-20),
-   * ubuntu-24.04, FFmpeg 9.0.2 rebuilt by the S2a recipe, env
-   * GLIBC_TUNABLES=glibc.malloc.arena_max=1, 3 runs per command, every
-   * structurally valid frozen S2a + S2b fixture; each step measured on
+   * Pinned calibration record (corrected after the PR85 review). Run
+   * 39474927341 at b8b6113 (2026-10-20), ubuntu-24.04, FFmpeg 9.0.2 rebuilt
+   * by the S2a recipe, env GLIBC_TUNABLES=glibc.malloc.arena_max=1, 3 runs
+   * per command, each in a fresh work dir (normalization writes a fresh
+   * output path every time), each reproducing the reference exactly, every
+   * reference performing the intended operation; each step measured on
    * exactly the inputs that reach it. observedMax per step: [commands,
-   * minimum address space MiB, CPU ms, wall ms]; peak RSS <= 29 MiB.
-   * Diagnostic: the worst address-space command (s7 decode, 13 streams; it
-   * never reaches decode in the worker) needed 768 MiB with the env and
-   * 3072 MiB without it. Every later CI run re-measures and fails if any
-   * command needs more than these committed limits (CHECK_COMMITTED).
+   * minimum address space MiB, CPU ms, wall ms]; peak RSS <= 26 MiB.
+   * The derived limits are unchanged from the first record (run
+   * 39452043759 at 95e777e), whose normalize rows reused one output path
+   * with -n and so under-reported normalization (32 vs 48 MiB).
+   * Diagnostic: s1 decode needs 192 MiB with the env, 768 MiB without.
+   * Every later CI run re-measures and fails if any command needs more
+   * than these committed limits (CHECK_COMMITTED).
    */
   calibration: Object.freeze({
     run: "https://github.com/DigitalBlueprint239/coach-core-ai/actions/" +
-      "runs/39452043759",
-    commit: "95e777ed5a93224f8f701238ec18851886563bfc",
+      "runs/39474927341",
+    commit: "b8b611359fdfc64c034c0d06b0249707766a431b",
     decoder: Object.freeze({
       ffmpeg:
         "1314ab3b558c48ce7ed4aa6efba5a68fefe30362f796e59ef017b17424436ff1",
@@ -73,12 +77,14 @@ const WORKER_LIMITS = Object.freeze({
         "fd43ef9be4bb7d7fc821e1b25950efc6eb0aac586cabacd34a38fd52299f48e6",
     }),
     observedMax: Object.freeze({
-      "probe-input": Object.freeze([32, 32, 16, 16]),
-      "decode-input": Object.freeze([7, 192, 71, 39]),
-      "normalize": Object.freeze([7, 32, 9, 9]),
-      "probe-output": Object.freeze([14, 32, 8, 8]),
-      "decode-output": Object.freeze([7, 192, 72, 40]),
+      "probe-input": Object.freeze([34, 32, 14, 14]),
+      "decode-input": Object.freeze([8, 192, 68, 38]),
+      "normalize": Object.freeze([7, 48, 7, 7]),
+      "probe-output": Object.freeze([14, 32, 7, 7]),
+      "decode-output": Object.freeze([7, 192, 66, 38]),
     }),
+    superseded: "https://github.com/DigitalBlueprint239/coach-core-ai/" +
+      "actions/runs/39452043759",
   }),
 });
 

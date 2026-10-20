@@ -122,17 +122,17 @@ Admission calls `c2.admissionDecision` over the stored job, inside one transacti
 
 **Derivation:** maximum observed × 3, with floors: wall 10 s, CPU 5 s (hard limit = soft + 2 s, so SIGXCPU comes first), address space 512 MiB, probe capture 8 MiB, normalize file size 1.1 × `PENDING_D3` `maxBytes`, and 1 MiB for steps that write nothing.
 
-**Committed values** (`limits.js`, `status: MEASURED`), from pinned run [39452043759](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39452043759) at `95e777e`:
+**Committed values** (`limits.js`, `status: MEASURED`). The calibration record is the corrected pinned run [39474927341](https://github.com/DigitalBlueprint239/coach-core-ai/actions/runs/39474927341) at `b8b6113`. It superseded run 39452043759, whose normalize rows were not valid measurements (shared output path with `-n`). The limits themselves are unchanged.
 
 | Step | Commands measured | Observed max: min. address space / CPU / wall | Committed: address space / CPU soft / wall |
 |---|---|---|---|
-| probe-input | 32 | 32 MiB / 16 ms / 16 ms | 512 MiB / 5 s / 10 s |
-| decode-input | 7 | 192 MiB / 71 ms / 39 ms | 576 MiB / 5 s / 10 s |
-| normalize | 7 | 32 MiB / 9 ms / 9 ms | 512 MiB / 5 s / 10 s |
-| probe-output | 14 | 32 MiB / 8 ms / 8 ms | 512 MiB / 5 s / 10 s |
-| decode-output | 7 | 192 MiB / 72 ms / 40 ms | 576 MiB / 5 s / 10 s |
+| probe-input | 34 | 32 MiB / 14 ms / 14 ms | 512 MiB / 5 s / 10 s |
+| decode-input | 8 (incl. s16 media-error) | 192 MiB / 68 ms / 38 ms | 576 MiB / 5 s / 10 s |
+| normalize | 7 | **48 MiB** / 7 ms / 7 ms | 512 MiB / 5 s / 10 s |
+| probe-output | 14 | 32 MiB / 7 ms / 7 ms | 512 MiB / 5 s / 10 s |
+| decode-output | 7 | 192 MiB / 66 ms / 38 ms | 576 MiB / 5 s / 10 s |
 
-- Peak resident memory was 29 MiB or less.
+- Peak resident memory was 26 MiB or less.
 - Lease TTL is 42 s. That exceeds the longest step (10 s) plus grace (2 s) plus a 30 s margin, and the lease is renewed at every step boundary.
 
 **Decoder environment:** decoder processes receive exactly `GLIBC_TUNABLES=glibc.malloc.arena_max=1`, and nothing else. In the static 9.0.2 binary, per-thread malloc arenas reserve address space without using it. The calibration diagnostic shows the worst command (s7, 13 streams; it never reaches decode in the worker) needing 3072 MiB without the setting and 768 MiB with it (run 39452043759).
