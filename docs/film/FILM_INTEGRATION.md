@@ -141,6 +141,8 @@ Every assertion and test name is unchanged. The expected `duplicate-event: 2`, n
   - The emulator listing adds a non-exhaustion mark and a resolved control.
   - **Proof:** the new listing tests fail 6 of 10 on C's classifier. The reviewer's `s2bclass-probe.cjs` (sha256 `55c2787b…`), unchanged, now lists all 7 reported states.
 
+**Re-review at `9912f74`:** Codex FAIL c-6327070348 (residual R88-2: the class-helper compared object names only; Codex's injected source-byte mutation passed 37/0). R88-1 and F-1 were confirmed closed. **Repair:** the helper now compares every object's generation, content sha256 and metadata, and records every `deleteGeneration` invocation, failed ones included; it asserts zero. **Proof:** an injected source-byte mutation (name and generation kept) and a stray failed delete attempt each fail all four I-9 class tests (a)–(d).
+
 ## 6. Test realism and limits
 - The worker runs by **direct invocation** (`processFilm`/`redrive`) with an injected enabled switch. No trigger delivery is claimed.
 - Generations, preconditions and listing come from doubles: the Storage emulator ignores generations, and no real-GCS semantics are established.

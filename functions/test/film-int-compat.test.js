@@ -366,9 +366,22 @@ describe("CT-4.1/4.2 end-to-end flows (one store, direct worker invocation)",
 // evidence, and the job record is byte-unchanged.
 // ---------------------------------------------------------------------------
 describe("CT-4.4 (I-9) same-generation sources owned by the S2b job", () => {
+  /** Every object's name, generation, content digest and metadata. */
+  const objectState = (w) => JSON.stringify([...w.objects.objects.entries()]
+      .sort(([a], [b]) => utf8(a, b)).map(([n, o]) => [n, o.generation,
+        crypto.createHash("sha256").update(o.bytes).digest("hex"),
+        o.metadata]));
   const passLeavesJob = async (w, f) => {
     const job = JSON.stringify(w.job(f));
-    const objectsBefore = [...w.objects.objects.keys()].sort();
+    // residual R88-2 (c-6326994194): compare object CONTENTS, generations
+    // and metadata, and observe EVERY delete invocation (failed ones too)
+    const objectsBefore = objectState(w);
+    const deletes = [];
+    const del = w.objects.deleteGeneration;
+    w.objects.deleteGeneration = (t) => {
+      deletes.push([t.name, String(t.generation)]);
+      return del(t);
+    };
     w.advance(16 * MIN);
     const out = await w.reconcile();
     assert.deepEqual(out.outcomes, {"duplicate-event": 1},
@@ -376,7 +389,9 @@ describe("CT-4.4 (I-9) same-generation sources owned by the S2b job", () => {
     assert.deepEqual(w.records(), []);
     assert.deepEqual(w.evidence(), []);
     assert.equal(JSON.stringify(w.job(f)), job, "job byte-unchanged");
-    assert.deepEqual([...w.objects.objects.keys()].sort(), objectsBefore);
+    assert.deepEqual(deletes, [], "no delete attempted");
+    assert.equal(objectState(w), objectsBefore,
+        "objects byte-unchanged (contents, generations, metadata)");
   };
   it("(a) validating whose job is recovery-needed", async () => {
     const w = world({script: ["crash", "infrastructure", "crash"]});
