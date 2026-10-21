@@ -1,0 +1,12 @@
+2026-10-21T11:00:38.0282258Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +638631b939d60f22030291897d517f607404442d:refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T11:00:38.7199618Z  * [new ref]         638631b939d60f22030291897d517f607404442d -> origin/claude/film-lfs-reconcile
+2026-10-21T11:00:38.8886098Z 638631b939d60f22030291897d517f607404442d
+2026-10-21T11:01:36.9937271Z ▶ Firestore transport bound, production branch (TLS + bounded token auth)
+2026-10-21T11:01:39.5499081Z   ✔ N-2 regression (run 39581464447 saw 14/15 server-side): a slow first TLS connection leaves attempts that expire before a connection is picked (never sent); the CLIENT still makes exactly 15, all DEADLINE_EXCEEDED; every sent attempt is server-observed and cut (48756.963514ms)
+2026-10-21T11:01:39.5526589Z ✔ Firestore transport bound, production branch (TLS + bounded token auth) (48764.658887ms)
+2026-10-21T11:02:40.2549860Z ▶ Firestore transport bound, emulator branch
+2026-10-21T11:02:40.2563324Z ✔ Firestore transport bound, emulator branch (108851.981005ms)
+2026-10-21T11:02:40.3040502Z ℹ tests 745
+2026-10-21T11:02:40.3041232Z ℹ pass 745
+2026-10-21T11:02:40.3041584Z ℹ fail 0
+2026-10-21T11:02:40.3042332Z ℹ skipped 0

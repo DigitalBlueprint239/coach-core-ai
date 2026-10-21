@@ -1,0 +1,4 @@
+{"emptyPagesBeforeObject":1,"objectReachedWithin6Runs":true,"runs":["END","END","END","END","END","END"]}
+{"emptyPagesBeforeObject":2,"objectReachedWithin6Runs":true,"runs":["list-limit","END","list-limit","END","list-limit","END"]}
+{"emptyPagesBeforeObject":3,"objectReachedWithin6Runs":false,"runs":["list-limit","list:no-progress","list-limit","list:no-progress","list-limit","list:no-progress"]}
+{"emptyPagesBeforeObject":5,"objectReachedWithin6Runs":false,"runs":["list-limit","list:no-progress","list-limit","list:no-progress","list-limit","list:no-progress"]}

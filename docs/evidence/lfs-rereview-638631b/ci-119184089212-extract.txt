@@ -1,0 +1,6 @@
+2026-10-21T11:00:38.8252440Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +638631b939d60f22030291897d517f607404442d:refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T11:00:39.8235113Z  * [new ref]         638631b939d60f22030291897d517f607404442d -> origin/claude/film-lfs-reconcile
+2026-10-21T11:00:39.9656725Z 638631b939d60f22030291897d517f607404442d
+2026-10-21T11:01:00.0033733Z Tests:       24 passed, 24 total
+2026-10-21T11:01:00.0895347Z ##[notice]Tests:       24 passed, 24 total
+2026-10-21T11:01:22.3404010Z ##[notice]Scanned 2 JS files. Source / prebuild guard / canary bundle checks all passed.

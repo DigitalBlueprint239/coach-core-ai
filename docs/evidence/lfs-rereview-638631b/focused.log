@@ -1,0 +1,139 @@
+▶ Firestore transport bound, production branch (TLS + bounded token auth)
+  ✔ TLS default-roots channel with bounded-token call credentials: the server sees the facade token; a transaction completes (310.672976ms)
+  ✔ hung read: 5 x 3 attempts, each cut at the deadline; within the envelope (45535.205699ms)
+  ✔ N-2 regression (run 39581464447 saw 14/15 server-side): a slow first TLS connection leaves attempts that expire before a connection is picked (never sent); the CLIENT still makes exactly 15, all DEADLINE_EXCEEDED; every sent attempt is server-observed and cut (49299.498335ms)
+  ✔ hung metadata server: every token request is aborted by the facade at the token deadline (server-observed); no RPC reaches Firestore; the read fails within the envelope (44551.585311ms)
+✔ Firestore transport bound, production branch (TLS + bounded token auth) (49305.667155ms)
+(node:4614) MetadataLookupWarning: received unexpected error = All promises were rejected code = ECONNRESET, 403
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ Firestore transport bound, emulator branch
+  ✔ hung server-streaming read (doc get): exactly 5 x 3 attempts, each cut at the deadline; total within the envelope (48191.375416ms)
+  ✔ hung RunQuery: exactly 15 attempts, each cut; within the envelope (49989.349947ms)
+  ✔ transaction, reads answer, Commit hangs, maxAttempts 1: Commit called once (DEADLINE not retryable for commit), cut; background Rollback bounded and cut; within the envelope (21291.317376ms)
+  ✔ Commit failing UNAVAILABLE (retryable): at most 5 calls (the Firestore._retry layer); within the unary envelope (1460.441467ms)
+  ✔ transaction whose read hangs, maxAttempts 2: reads <= 2 x 15, each cut; within 2 attempts + backoff (111600.342514ms)
+  ✔ configured deadline and no gax retry codes on every RPC (0.819299ms)
+✔ Firestore transport bound, emulator branch (111609.224481ms)
+▶ L1 lost finalize -> reconcile (new positive tests)
+  ✔ configuration outage loses the finalize; reservation still live -> re-driven intake: validating, slot kept, no cleanup record (14.642795ms)
+  ✔ after lazy expiry -> stale-expired obligation -> immediate attempt fails -> C1 sweep -> deleted (6.349063ms)
+✔ L1 lost finalize -> reconcile (new positive tests) (22.981146ms)
+▶ L2 lost finalize for missing / expired / abandoned films
+  ✔ missing film -> no-reservation obligation -> deleted (1.366063ms)
+  ✔ expired but not lazily expired -> expired: film expired, slot released once, obligation, deleted (1.716708ms)
+  ✔ late event lost after abandon -> stale-abandoned -> deleted (2.209138ms)
+✔ L2 lost finalize for missing / expired / abandoned films (5.572871ms)
+▶ L3 O-5 ignored-bucket window
+  ✔ event ignored during a wrong bucket name is re-driven after restoration with the configured bucket (2.277678ms)
+  ✔ only the configured bucket's facade is ever listed (0.533151ms)
+✔ L3 O-5 ignored-bucket window (3.021878ms)
+▶ L4 no false deletion or decision
+  ✔ young object: skipped without evidence, re-seen next pass (1.33349ms)
+  ✔ film-ambiguous (unknown status): evidence, no re-drive, no record (3.478232ms)
+  ✔ film-ambiguous (malformed expiry): evidence, no re-drive, no record (0.847808ms)
+  ✔ film-ambiguous (malformed objectGeneration): evidence, no re-drive, no record (0.600791ms)
+  ✔ film-ambiguous (identity mismatch): evidence, no re-drive, no record (0.603183ms)
+  ✔ same-generation validating and ready -> duplicate-event, no record (1.242936ms)
+✔ L4 no false deletion or decision (8.393695ms)
+▶ L5 generation safety
+  ✔ 20-digit generation stays a string end to end (0.915547ms)
+  ✔ overwritten or deleted between list and head read -> frozen object-gone: no decision, no record (0.990672ms)
+  ✔ deleted between head read and C1 delete -> absent; newer generation before the C1 delete -> mismatch, newer object intact (1.524116ms)
+✔ L5 generation safety (3.563665ms)
+▶ L6 existing records in any state stay byte-unchanged
+  ✔ pending: re-drive admits nothing and changes nothing (1.24521ms)
+  ✔ stuck: re-drive admits nothing and changes nothing (1.358409ms)
+  ✔ mismatch: re-drive admits nothing and changes nothing (0.981448ms)
+  ✔ parked: re-drive admits nothing and changes nothing (0.952656ms)
+✔ L6 existing records in any state stay byte-unchanged (4.71652ms)
+▶ L7 progress, passes and binding
+  ✔ a page larger than one invocation's allowance: per-object checkpoint; next invocation continues; then pass end (1.656008ms)
+  ✔ budget stop before an object it cannot afford; no progress lost (1.22964ms)
+  ✔ crash at every checkpoint position: the next invocation re-presents at most the one object, idempotently (13.00166ms)
+  ✔ a throwing object is recorded and passed (no starvation); repeat failure updates the same evidence (1.328841ms)
+  ✔ young -> old and live -> expired transitions across passes; insertion behind the cursor is covered next pass (1.425997ms)
+  ✔ bucket or policy change -> previous kept, new pass; configuration missing -> no list, no writes (1.570405ms)
+  ✔ invalid limit refused before any I/O (0.435429ms)
+✔ L7 progress, passes and binding (20.955343ms)
+▶ L8 races (no duplicate effects; sequential transitions allowed)
+  ✔ re-drive and a genuine finalize for the same generation: one decision, one slot transition, no record (0.7449ms)
+  ✔ re-drive during a live abandon: abandon wins the race, the re-drive becomes stale-abandoned with ONE obligation (0.800259ms)
+  ✔ legitimate sequence: intake by re-drive, then an explicit abandon owes its own obligation (0.84795ms)
+  ✔ stale holder completes a re-drive after takeover: at most the frozen single decision, no second record, cursor unmoved by it (0.735563ms)
+✔ L8 races (no duplicate effects; sequential transitions allowed) (3.290419ms)
+▶ L10/L14 fencing and takeover positions
+  ✔ concurrent reconcilers: one holder; the other skips (0.520154ms)
+  ✔ takeover during listing: the first verify fails; nothing is re-driven by the old holder (0.951928ms)
+  ✔ takeover between objects: the old holder stops before the next one (0.771144ms)
+  ✔ stale state writes (checkpoint, evidence, error) are no-ops (0.53692ms)
+✔ L10/L14 fencing and takeover positions (3.004584ms)
+▶ bounded failure of reconciliation state transactions
+  ✔ acquire transaction fails (contention/deadline): bounded result, no list, no state (0.233395ms)
+  ✔ verify transaction fails: stops before the re-drive; lease released; the object is presented next time (0.69505ms)
+✔ bounded failure of reconciliation state transactions (1.036337ms)
+▶ L16/L17 db facade: attempt counting and transaction-read validation
+  ✔ counts logical transactions and callback attempts separately; caps attempts at the facade setting (0.426896ms)
+  ✔ a film doc malformed between the pre-read and the decision transaction is refused at the transaction read (no decision) (1.054313ms)
+  ✔ malformed between transaction attempt 1 and attempt 2 -> refused on the retry read (0.884653ms)
+✔ L16/L17 db facade: attempt counting and transaction-read validation (2.550262ms)
+▶ L18 listing metadata fails closed
+  ✔ generation number: evidence, no re-drive, no record (0.958115ms)
+  ✔ generation non-decimal: evidence, no re-drive, no record (0.427706ms)
+  ✔ size missing: evidence, no re-drive, no record (0.372306ms)
+  ✔ size non-integer: evidence, no re-drive, no record (0.616991ms)
+  ✔ size over max: evidence, no re-drive, no record (0.567573ms)
+  ✔ contentType missing: evidence, no re-drive, no record (0.712774ms)
+  ✔ contentType unsupported: evidence, no re-drive, no record (0.538244ms)
+  ✔ timeCreated invalid: evidence, no re-drive, no record (0.711577ms)
+  ✔ timeCreated future: evidence, no re-drive, no record (0.511353ms)
+  ✔ name noncanonical: evidence, no re-drive, no record (0.584915ms)
+  ✔ evidence identity is bound to project/bucket/policy: a target change never merges evidence (0.259992ms)
+✔ L18 listing metadata fails closed (6.611866ms)
+▶ L19 coverage with budget for exactly one object per invocation
+  ✔ N quiescent objects -> N progress-making invocations plus the pass-end listing (3.126235ms)
+✔ L19 coverage with budget for exactly one object per invocation (3.194706ms)
+▶ boundary: limits are TEST placeholders derived from the envelope
+  ✔ lease outlives one object's whole transport envelope (0.101103ms)
+✔ boundary: limits are TEST placeholders derived from the envelope (0.211871ms)
+▶ PR87 F1: pagination is authoritative (short pages, tokens)
+  ✔ short pages WITH a continuation token never end the pass; every stable object is presented (Codex reproducer shape) (3.75834ms)
+  ✔ an empty or overlap-only page with a token advances by the token (no indefinite prefix replay) (1.078423ms)
+  ✔ a persisted token resumes the SAME query in the next invocation and covers the rest even after earlier objects were deleted (1.204079ms)
+  ✔ a page token is persisted across invocations; an invalid/expired token (400) is cleared with evidence and the next run restarts from the name cursor (2.219343ms)
+✔ PR87 F1: pagination is authoritative (short pages, tokens) (8.540104ms)
+▶ PR87 F2: discovery/transport target binding
+  ✔ facade bucket differs from the configured bucket: fail closed before any list or state write (0.235379ms)
+  ✔ configuration changes mid-invocation: the run stops before the next object; records stay bound to the pinned (facade) bucket (0.634869ms)
+✔ PR87 F2: discovery/transport target binding (1.047026ms)
+▶ PR87 F3: admission reserves the derived envelope
+  ✔ defaults: object budget = derived envelope; invocation covers it; lease covers envelope + background tail; trigger timeout covers the invocation (1.200683ms)
+  ✔ insufficient remaining budget: no head read, no decision, no state progress for that object (0.613573ms)
+✔ PR87 F3: admission reserves the derived envelope (1.915196ms)
+▶ PR87 F4: ambiguous acquire (committed remotely, error locally)
+  ✔ release-if-mine clears the orphaned lease; the next run proceeds (1.324918ms)
+✔ PR87 F4: ambiguous acquire (committed remotely, error locally) (1.394806ms)
+▶ PR87 c-6312514310: cursor uses the service UTF-8 order
+  ✔ short pages with tokens: both noncanonical names get evidence on every pass (failed on ff7ec57: B never) (3.710611ms)
+  ✔ partial budgets (limit 1, and the invocation budget) resume in UTF-8 order and reach B (1.189441ms)
+✔ PR87 c-6312514310: cursor uses the service UTF-8 order (5.007829ms)
+▶ PR87 R-1 (c-6312585072): a non-advancing continuation is detected, recorded durably and resumed by name
+  ✔ reviewer double (b), token ignored and repeated: the stalling invocation records list-no-progress; the third object is reached (failed on ff7ec57: [2,0,0,0], lastError null) (1.964438ms)
+  ✔ a FRESH token each time, always empty (N-1): indistinguishable from a long legitimate empty run, so it is FOLLOWED, never falls back; from listStallMax each page records list-stalled durably (1.010883ms)
+  ✔ a CYCLING token (t1, t2, t1, ...) is evidence of non-advance: list-no-progress, fallback to the name cursor (0.762741ms)
+  ✔ 3 legitimate empty pages with ADVANCING tokens before the object (N-1; reviewer empty-run.cjs shape): the object is reached within bounded runs; never a fallback (failed on e7fdff3) (0.725881ms)
+  ✔ 5 legitimate empty pages with ADVANCING tokens before the object (N-1; reviewer empty-run.cjs shape): the object is reached within bounded runs; never a fallback (failed on e7fdff3) (0.697125ms)
+  ✔ a legitimate empty page with an advancing token is followed with no error (0.663108ms)
+✔ PR87 R-1 (c-6312585072): a non-advancing continuation is detected, recorded durably and resumed by name (6.050381ms)
+▶ PR87 R-2: a lease that may outlive the invocation is reported
+  ✔ failing transactions [3,4]: releaseError reported, lease left until expiry (1.184933ms)
+  ✔ failing transactions [3]: releaseError absent (0.166444ms)
+  ✔ failing transactions []: releaseError absent (0.127381ms)
+✔ PR87 R-2: a lease that may outlive the invocation is reported (1.566082ms)
+ℹ tests 83
+ℹ suites 23
+ℹ pass 83
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111988.365631

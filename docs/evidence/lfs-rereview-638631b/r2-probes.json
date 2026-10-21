@@ -1,0 +1,94 @@
+{
+ "unicodeLimit1": {
+  "runs": [
+   [
+    1,
+    false
+   ],
+   [
+    1,
+    true
+   ],
+   [
+    1,
+    false
+   ],
+   [
+    1,
+    true
+   ]
+  ],
+  "evidence": [
+   [
+    "e000",
+    "name-noncanonical",
+    2
+   ],
+   [
+    "10000",
+    "name-noncanonical",
+    2
+   ]
+  ],
+  "downloads": 0,
+  "deletes": 0,
+  "cleanupRecords": 0
+ },
+ "unicodeBudgetStop": {
+  "first": [
+   1,
+   "budget"
+  ],
+  "second": [
+   1,
+   true
+  ],
+  "evidence": [
+   "e000",
+   "10000"
+  ],
+  "downloads": 0,
+  "deletes": 0
+ },
+ "noProgressDurable": {
+  "run1": "list:no-progress",
+  "stateAfterRun1": {
+   "lastError": "list-no-progress",
+   "consecutiveFailures": 1,
+   "listQuery": null,
+   "listStalls": 0,
+   "lease": null
+  },
+  "run2": [
+   1,
+   true
+  ],
+  "run2FirstListStartOffsetIsName2": true,
+  "stateAfterRun2": {
+   "lastError": null,
+   "consecutiveFailures": 0
+  }
+ },
+ "emptyPages2": {
+  "runs": [
+   [
+    1,
+    true,
+    null
+   ]
+  ],
+  "itemEvidenced": true,
+  "everRecordedError": null
+ },
+ "emptyPages3": {
+  "runs": [
+   [
+    1,
+    true,
+    null
+   ]
+  ],
+  "itemEvidenced": true,
+  "everRecordedError": null
+ }
+}
