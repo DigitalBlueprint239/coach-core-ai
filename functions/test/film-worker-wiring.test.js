@@ -6,7 +6,6 @@
 const {describe, it, before} = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
-const os = require("os");
 const path = require("path");
 const {spawnSync} = require("child_process");
 const c2 = require("../src/film/contract-v2");
@@ -52,7 +51,11 @@ describe("FILM-S2b worker is TEST_ONLY and unexported", () => {
   });
   it("predeploy guard exits 1 if index.js exports the worker, regardless " +
       "of terms (and with --check)", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "guard-"));
+    // INT-A: the composed guard also runs the C1/LFS loaded-exports probe,
+    // which must resolve src/film/** and the package's node_modules
+    const dir = fs.mkdtempSync(path.join(ROOT, ".guard-"));
+    fs.cpSync(path.join(ROOT, "src/film"), path.join(dir, "src/film"),
+        {recursive: true});
     const copy = (rel) => {
       fs.mkdirSync(path.dirname(path.join(dir, rel)), {recursive: true});
       fs.copyFileSync(path.join(ROOT, rel), path.join(dir, rel));
