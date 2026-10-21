@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: missing replay expiry fails closed
+ok 1 - missing replay expiry fails closed
+  ---
+  duration_ms: 4.4301
+  type: 'test'
+  ...
+# Subtest: unknown stored version fails closed
+ok 2 - unknown stored version fails closed
+  ---
+  duration_ms: 0.3742
+  type: 'test'
+  ...
+# Subtest: corrupt v1 receipt fails closed
+ok 3 - corrupt v1 receipt fails closed
+  ---
+  duration_ms: 0.3232
+  type: 'test'
+  ...
+# Subtest: nonfinite attempt admission fails closed
+ok 4 - nonfinite attempt admission fails closed
+  ---
+  duration_ms: 0.8219
+  type: 'test'
+  ...
+# Subtest: missing pipeline steps do not establish repeated same-step kills
+ok 5 - missing pipeline steps do not establish repeated same-step kills
+  ---
+  duration_ms: 1.2831
+  type: 'test'
+  ...
+# Subtest: unknown media reason cannot become a closed-set rejection
+ok 6 - unknown media reason cannot become a closed-set rejection
+  ---
+  duration_ms: 0.4009
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 248.2862

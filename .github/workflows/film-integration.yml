@@ -1,0 +1,306 @@
+name: Film integration INT-A (test-only)
+
+# FILM-INT-A (#39 r3 c-6317821255 + r3.1 c-6317861326 + r3.2 c-6319524354 /
+# c-6321423884 + r3.3 c-6325085644; owner c-6319267600, c-6321403255,
+# c-6325123431). TEST_ONLY composition of the accepted A5 (S2b worker) and
+# A4 (r4 client) onto A7 (LFS, containing S1/S2a/r4/C1). Literal-push runs on
+# the integration branch only (a PR-merge run is separate evidence):
+#   1. owner map / frozen check + ancestry (CT-1, CT-7),
+#   2. pinned decoder: S2a artifact 12263740069 (expires 2026-11-03) or, if
+#      unavailable, the S2a recipe rebuild; digests must equal SOURCE.json,
+#   3. enumerated unit suites + lint + guard (CT-2, CT-3, CT-4/5/6 doubles),
+#   4. client parity: FS-26 v1/v2 (A4) and the D8 compatibility test,
+#   5. pinned: S2a isolation harness + S2b pinned suite,
+#   6. Firestore emulator suites (LFS, C1, S1, S2b, INT) and film rules
+#      deny tests (CT-8).
+# Never deploys, never reads secrets, never touches a real project or bucket,
+# never exports/schedules/activates anything, never real footage, never AI.
+
+on:
+  push:
+    branches: [claude/film-integration]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: film-integration-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  S2A_ARTIFACT_ID: '12263740069'
+  S2A_RUN_ID: '39420561329'
+  S2A_ARTIFACT_NAME: film-decoder-9.0.2-dcf26be84d126bd4495206260d74052ef72fabbf-39420561329-1
+
+jobs:
+  frozen:
+    name: Owner map / frozen check + ancestry (CT-1, CT-7)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Owner map (every path byte-equal to its accepted SHA unless allowlisted)
+        run: |
+          set -o pipefail
+          node functions/scripts/film-int-frozen-check.js | tee owner-map.json
+          echo "::notice title=INT-A owner map (${{ github.sha }})::$(node -e 'const o=require("./owner-map.json");console.log(JSON.stringify({counts:o.counts,problems:o.problems.length,changedAllowlisted:o.changedAllowlisted.length}))')"
+
+  decoder:
+    name: Pinned decoder (S2a artifact or S2a recipe; digest-enforced)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: S2a artifact 12263740069 (accepted S2a run at dcf26be)
+        id: art
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.S2A_ARTIFACT_NAME }}
+          run-id: ${{ env.S2A_RUN_ID }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/s2a
+      - name: Locate artifact binaries
+        id: loc
+        run: |
+          set -euo pipefail
+          ff=$(find "$RUNNER_TEMP/s2a" -type f -name ffmpeg 2>/dev/null | head -1 || true)
+          fp=$(find "$RUNNER_TEMP/s2a" -type f -name ffprobe 2>/dev/null | head -1 || true)
+          if [ -n "$ff" ] && [ -n "$fp" ]; then
+            mkdir -p "$RUNNER_TEMP/out/bin"; cp "$ff" "$fp" "$RUNNER_TEMP/out/bin/"
+            echo "source=artifact-${S2A_ARTIFACT_ID}" >> "$GITHUB_OUTPUT"
+          else
+            echo "source=rebuild" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Fallback - rebuild with the reviewed S2a recipe
+        if: steps.loc.outputs.source == 'rebuild'
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq nasm
+          bash tools/ffmpeg/verify-source.sh "$RUNNER_TEMP/ffwork"
+          bash tools/ffmpeg/build.sh "$RUNNER_TEMP/ffwork"
+          node tools/ffmpeg/provenance.mjs validate "$RUNNER_TEMP/ffwork"
+          mkdir -p "$RUNNER_TEMP/out/bin"
+          cp "$RUNNER_TEMP/ffwork/out/bin/ffmpeg" "$RUNNER_TEMP/ffwork/out/bin/ffprobe" "$RUNNER_TEMP/out/bin/"
+      - name: Enforce SOURCE.json digests (any mismatch is a STOP)
+        run: |
+          set -euo pipefail
+          want_ff=$(node -e "console.log(require('./tools/ffmpeg/SOURCE.json').expectedBinarySha256.ffmpeg)")
+          want_fp=$(node -e "console.log(require('./tools/ffmpeg/SOURCE.json').expectedBinarySha256.ffprobe)")
+          got_ff=$(sha256sum "$RUNNER_TEMP/out/bin/ffmpeg" | cut -d' ' -f1)
+          got_fp=$(sha256sum "$RUNNER_TEMP/out/bin/ffprobe" | cut -d' ' -f1)
+          [ "$want_ff" = "$got_ff" ] && [ "$want_fp" = "$got_fp" ] || { echo "::error title=STOP: pinned decoder digest mismatch::ffmpeg $got_ff ffprobe $got_fp"; exit 1; }
+          echo "::notice title=Pinned decoder (${{ steps.loc.outputs.source }}, ${{ github.sha }})::ffmpeg $got_ff ffprobe $got_fp"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: int-decoder-${{ github.run_id }}
+          path: ${{ runner.temp }}/out/bin/
+          if-no-files-found: error
+          retention-days: 3
+
+  focused:
+    name: Enumerated unit suites + lint + guard (CT-2..CT-6)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GCLOUD_PROJECT: demo-coach-core-beta
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+      - run: npm ci --prefix functions --no-audit --no-fund
+      - run: npm --prefix functions run lint
+      - name: Predeploy guard (--check) on the composed tree
+        working-directory: functions
+        run: node scripts/film-terms-guard.js --check
+      - name: INT-A suites (CT-3..CT-6, D5 unit)
+        env:
+          ANNOTATE_LABEL: 'INT focused'
+        working-directory: functions
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          test/film-int-compat.test.js test/film-int-guard.test.js test/film-int-listing.test.js
+      - name: S1 + C1 + contracts (A7)
+        env:
+          ANNOTATE_LABEL: 'S1/C1/contracts'
+        working-directory: functions
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          test/film-s1.test.js test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js
+          test/film-contract.test.js test/film-contract-v2.test.js test/film-legacy-r3.test.js
+          test/film-r4-review-regressions.test.js test/index-wiring.test.js
+      - name: S2b worker (A5; D3 wiring)
+        env:
+          ANNOTATE_LABEL: 'S2b unit'
+        working-directory: functions
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          test/film-worker.test.js test/film-worker-media.test.js test/film-worker-wiring.test.js
+          test/film-worker-review-r1r4.test.js test/film-worker-review-r2b.test.js
+          test/film-worker-review-history.test.js
+      - name: LFS (A7; D4 + r3.3) incl. transport gates
+        env:
+          ANNOTATE_LABEL: 'LFS unit'
+        working-directory: functions
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          test/lfs-reconcile.test.js test/lfs-reconcile-loopback.test.js test/lfs-boundary.test.js
+          test/lfs-gate-storage.test.js test/lfs-gate-storage-https.test.js
+          test/lfs-gate-firestore.test.js test/lfs-gate-firestore-prod.test.js
+      - name: Whole Functions unit suite (total count)
+        env:
+          ANNOTATE_LABEL: 'Functions all'
+        working-directory: functions
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          test/*.test.js
+
+  client:
+    name: Client parity FS-26 v1/v2 (A4) + D8 + TypeScript
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+      - run: npm ci --legacy-peer-deps --no-audit --no-fund
+      - run: npm ci --prefix functions --no-audit --no-fund
+      - name: FS-26 v1 + v2 and the D8 compatibility test (if present)
+        run: |
+          set -o pipefail
+          files="src/features/film-analyzer/__tests__/contracts.test.ts src/features/film-analyzer/__tests__/contracts-v2.test.ts"
+          d8=src/features/film-analyzer/__tests__/film-int-compat.test.ts
+          if [ -f "$d8" ]; then files="$files $d8"; else echo "::warning title=D8 absent::$d8 not in this SHA (server-only S; not a final candidate)"; fi
+          CI=true npx react-scripts test --watchAll=false --runInBand --runTestsByPath $files 2>&1 | tee client.log
+          st=${PIPESTATUS[0]}
+          echo "::notice title=Client parity (${{ github.sha }})::$(grep -E '^Tests:' client.log | tail -1) exit=$st"
+          exit "$st"
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+  pinned:
+    name: S2a isolation harness + S2b pinned suite (pinned decoder)
+    needs: decoder
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: int-decoder-${{ github.run_id }}
+          path: ${{ runner.temp }}/bin
+      - run: |
+          chmod +x "$RUNNER_TEMP/bin/ffmpeg" "$RUNNER_TEMP/bin/ffprobe"
+          npm ci --prefix functions --no-audit --no-fund
+      - name: S2a isolation harness (HARNESS_PINNED=1; accepted 47/0/0)
+        env:
+          FFMPEG_BIN: ${{ runner.temp }}/bin/ffmpeg
+          FFPROBE_BIN: ${{ runner.temp }}/bin/ffprobe
+          FIXTURES_DIR: ${{ github.workspace }}/tools/ffmpeg/fixtures/frozen
+          HARNESS_PINNED: '1'
+          HARNESS_RESULT: ${{ runner.temp }}/harness-result.json
+          ANNOTATE_LABEL: 'S2a harness'
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          tools/ffmpeg/harness/harness.test.mjs
+      - name: S2b pinned pipeline / limits / offender suite (D3 wiring)
+        env:
+          PINNED: '1'
+          FFMPEG_BIN: ${{ runner.temp }}/bin/ffmpeg
+          FFPROBE_BIN: ${{ runner.temp }}/bin/ffprobe
+          ANNOTATE_LABEL: 'S2b pinned'
+        run: >-
+          node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          functions/test/worker-pinned/film-worker-pinned.test.js
+
+  emulator:
+    name: Firestore emulator suites + film rules deny (CT-8)
+    needs: decoder
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            functions/package-lock.json
+            tests/rules/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: int-decoder-${{ github.run_id }}
+          path: ${{ runner.temp }}/bin
+      - name: Install dependencies
+        run: |
+          chmod +x "$RUNNER_TEMP/bin/ffmpeg" "$RUNNER_TEMP/bin/ffprobe"
+          npm ci --prefix functions --no-audit --no-fund
+          npm ci --prefix tests/rules --no-audit --no-fund
+      - name: LFS + C1 + S1 + INT emulator suites
+        env:
+          ANNOTATE_LABEL: 'Emulator LFS/C1/S1/INT'
+        run: >-
+          npx --prefix tests/rules firebase emulators:exec
+          --project demo-coach-core-beta --only firestore,storage
+          "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          functions/test/emulator/lfs-reconcile.emulator.test.js
+          functions/test/emulator/film-s1-cleanup.emulator.test.js
+          functions/test/emulator/film-s1.emulator.test.js
+          functions/test/emulator/film-int.emulator.test.js"
+      - name: S2b emulator suite (pinned decoder; D3 wiring)
+        env:
+          PINNED: '1'
+          FFMPEG_BIN: ${{ runner.temp }}/bin/ffmpeg
+          FFPROBE_BIN: ${{ runner.temp }}/bin/ffprobe
+          ANNOTATE_LABEL: 'Emulator S2b'
+        run: >-
+          npx --prefix tests/rules firebase emulators:exec
+          --project demo-coach-core-beta --only firestore
+          "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          functions/test/emulator/film-s2b.emulator.test.js"
+      - name: Film rules deny tests (rules unchanged; CT-8)
+        env:
+          ANNOTATE_LABEL: 'Film rules'
+        run: >-
+          npx --prefix tests/rules firebase emulators:exec
+          --project demo-coach-core-beta --only firestore,storage
+          "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          tests/rules/film.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs
+          tests/rules/film-reconcile.rules.test.mjs tests/rules/film-worker.rules.test.mjs"

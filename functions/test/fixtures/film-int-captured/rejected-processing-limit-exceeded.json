@@ -1,0 +1,28 @@
+{
+  "schema": "film-int-capture.v1",
+  "kind": "stored-film-document",
+  "source": "worker limit exhaustion",
+  "projection": "contract-v2 FILM_TIMESTAMP_FIELDS -> toWireTimestamp",
+  "document": {
+    "abandonedAt": null,
+    "createdAt": "2026-10-21T16:00:00.000Z",
+    "createdBy": "uid-owner",
+    "declaredBytes": 32,
+    "declaredContentType": "video/mp4",
+    "fileName": "clip.mp4",
+    "filmId": "00000000-0000-4000-8000-000000000001",
+    "media": null,
+    "normalizedGeneration": null,
+    "objectGeneration": "1001",
+    "readyAt": null,
+    "rejectionReason": "processing-limit-exceeded",
+    "reservationExpiresAt": "2026-10-21T17:00:00.000Z",
+    "retentionExpiresAt": null,
+    "rightsAcknowledgedAt": "2026-10-21T16:00:00.000Z",
+    "rightsWordingVersion": "rights-v1",
+    "status": "rejected",
+    "statusChangedAt": "2026-10-21T16:00:00.000Z",
+    "teamId": "team-int-a",
+    "uploadPath": "quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4"
+  }
+}

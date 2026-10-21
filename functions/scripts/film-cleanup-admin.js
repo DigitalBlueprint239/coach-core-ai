@@ -10,6 +10,8 @@
  * Commands (bounded output, ids and paths only):
  *   list-parked | list-stuck | list-evidence  [--limit N]
  *   unpark --id <id> --expect-parked-at <atMs> --reason "<=120 printable"
+ *   list-s2b-recovery [--teams N] [--films M] [--after-team T
+ *     [--after-film F]]   (FILM-INT-A D5 / I-9; READ-ONLY, see below)
  *
  * Unpark is ONE transaction: re-read the record, CAS on parked.atMs, refuse
  * unless pending with no live lease and the audit history is not full,
@@ -21,6 +23,10 @@
  */
 const path = require("node:path");
 const cl = require(path.join(__dirname, "..", "src", "film", "cleanup.js"));
+const c2 = require(path.join(__dirname, "..", "src", "film",
+    "contract-v2.js"));
+const {jobIdFor} = require(path.join(__dirname, "..", "src", "film",
+    "worker", "worker.js"));
 
 const PARK_AUDIT_MAX = 8;
 const LIST_MAX = 100;
@@ -114,6 +120,143 @@ async function unpark(db, o) {
   });
 }
 
+const S2B_LIST_MAX = 50;
+const S2B_STATUSES = ["validating", "ready", "rejected"];
+
+/**
+ * FILM-INT-A D5 (I-9): S2b-owned same-generation quarantine sources an
+ * operator should know about. READ-ONLY (never writes) and bounded:
+ * - teams ordered by document id, at most N per invocation;
+ * - per team, `films where status in [validating, ready, rejected]` ordered
+ *   by document id, sharing ONE film budget M across the invocation (each
+ *   query asks for remaining+1 to detect truncation without slicing an
+ *   unbounded scan);
+ * - per film, ONE direct read of the job for the film's recorded generation
+ *   (`jobIdFor`); no collection-group query.
+ * Max reads per invocation <= (N+1) + (M+N) + M, reported with the output.
+ * The cursor {team, film} resumes INSIDE a truncated team before advancing,
+ * so repeated invocations visit every eligible film once (quiescent data).
+ * Classes (actual A5 job semantics; there is no terminal-error state):
+ *   a  validating, job carries ANY active recovery mark `job.recovery`
+ *      (the durable mark A5 admission refuses on; every A5 reason:
+ *      attempts-exhausted, rejection-precondition-failed,
+ *      reject-precondition-failed, ready-precondition-failed,
+ *      precondition-changed-mid-run, validation-record-invalid,
+ *      validation-record-stale, output-ownership-unproven,
+ *      team-ownership-changed); the reason is reported. A resolved mark
+ *      (`resolvedRecovery` with `recovery` cleared) is not active
+ *      (PR88 F-1, #39 c-6326638892); OR an exhausted job with
+ *      `exhaustion.outcome === "recovery-needed"` but NO recovery mark
+ *      (A5 marks attempts-exhausted only while team ownership holds;
+ *      reported "exhaustion: recovery-needed (unmarked)"; PR88 F-1b,
+ *      c-6327104671).
+ *   b  ready / worker-reason rejected, quarantine cleanup `mismatch` (412)
+ *   c  ready / worker-reason rejected, quarantine cleanup `pending`
+ *      ("unresolved (not proven failed)")
+ *   d  ready / worker-reason rejected, no quarantine cleanup intent
+ * Output-object cleanup stays with I-2. Owner: the S2b worker job, by its
+ * own durable cleanup intent and status checks; nothing is granted here.
+ * @param {object} db admin Firestore (emulator)
+ * @param {object} o {teams, films, after: {team, film}|null, documentId}
+ * @return {Promise<object>} {items, next, truncated, reads, maxReads}
+ */
+async function listS2bRecovery(db, o = {}) {
+  const bound = (v, d) => Math.min(Math.max(1, Number(v) || d),
+      S2B_LIST_MAX);
+  const N = bound(o.teams, 10);
+  const M = bound(o.films, S2B_LIST_MAX);
+  const docId = o.documentId;
+  const after = o.after && o.after.team ? o.after : null;
+  const out = {items: [], next: null, truncated: {teams: false,
+    films: false}, reads: 0, maxReads: (N + 1) + (M + N) + M};
+  let tq = db.collection("teams").orderBy(docId);
+  if (after) tq = tq.startAt(after.team);
+  const teams = (await tq.limit(N + 1).get()).docs;
+  out.reads += teams.length;
+  let budget = M;
+  for (let t = 0; t < Math.min(teams.length, N); t++) {
+    const team = teams[t].id;
+    let fq = db.collection("teams").doc(team).collection("films")
+        .where("status", "in", S2B_STATUSES).orderBy(docId);
+    if (after && after.team === team && after.film) {
+      fq = fq.startAfter(after.film);
+    }
+    const films = (await fq.limit(budget + 1).get()).docs;
+    out.reads += films.length;
+    const take = Math.min(films.length, budget);
+    for (let i = 0; i < take; i++) {
+      const d = films[i].data() || {};
+      const g = d.objectGeneration;
+      if (typeof g !== "string" || !cl.GENERATION_RE.test(g)) continue;
+      const jobId = jobIdFor(team, films[i].id, g);
+      const js = await db.collection("teams").doc(team).collection("films")
+          .doc(films[i].id).collection("workerJobs").doc(jobId).get();
+      out.reads += 1;
+      const j = js.exists ? js.data() : null;
+      const cls = s2bClass(d, j, g);
+      if (cls) {
+        out.items.push({team, film: films[i].id, status: d.status,
+          generation: g, jobId, ...cls});
+      }
+    }
+    budget -= take;
+    if (films.length > take) { // more eligible films in THIS team
+      out.next = {team, film: films[take - 1] ? films[take - 1].id :
+        (after && after.team === team ? after.film : null)};
+      out.truncated.films = true;
+      return out;
+    }
+    if (budget === 0 && t + 1 < teams.length) {
+      out.next = {team: teams[t + 1].id, film: null};
+      out.truncated.films = true;
+      return out;
+    }
+  }
+  if (teams.length > N) {
+    out.next = {team: teams[N].id, film: null};
+    out.truncated.teams = true;
+  }
+  return out;
+}
+
+/**
+ * @param {object} d film document
+ * @param {?object} j job record for the film's recorded generation
+ * @param {string} g recorded generation
+ * @return {?object} {class, classification}
+ */
+function s2bClass(d, j, g) {
+  if (d.status === "validating") {
+    const exhausted = !!(j && j.exhaustion &&
+      j.exhaustion.outcome === "recovery-needed");
+    if (!j || (!j.recovery && !exhausted)) return null; // running/resolved
+    const exhaustion = j.exhaustion && j.exhaustion.outcome ?
+      String(j.exhaustion.outcome).slice(0, 32) : null;
+    if (!j.recovery) {
+      return {class: "a", classification:
+        "exhaustion: recovery-needed (unmarked)", recoveryReason: null,
+      exhaustion};
+    }
+    const reason = String(j.recovery.reason || "unspecified").slice(0, 64);
+    return {class: "a", classification: `recovery: ${reason}`,
+      recoveryReason: reason, exhaustion};
+  }
+  if (d.status === "rejected" &&
+      !c2.WORKER_REJECTION_REASONS.includes(d.rejectionReason)) {
+    return null; // S1 intake rejection: S1/C1-owned, not S2b
+  }
+  const q = j && j.cleanup ? j.cleanup.quarantine : null;
+  if (!q) return {class: "d", classification: "no intent"};
+  if (q.generation !== g) return null;
+  if (q.result === "mismatch") {
+    return {class: "b", classification: "precondition mismatch"};
+  }
+  if (q.result === "pending") {
+    return {class: "c", classification: "unresolved (not proven failed)"};
+  }
+  return null; // deleted / absent: resolved
+}
+
 /**
  * @param {string[]} argv
  * @return {object}
@@ -146,6 +289,12 @@ async function main() {
   let res;
   if (["list-parked", "list-stuck", "list-evidence"].includes(cmd)) {
     res = await list(db, cmd.slice(5), a.limit);
+  } else if (cmd === "list-s2b-recovery") {
+    const {FieldPath} = require("firebase-admin/firestore");
+    res = await listS2bRecovery(db, {teams: a.teams, films: a.films,
+      after: a["after-team"] ? {team: a["after-team"],
+        film: a["after-film"] || null} : null,
+      documentId: FieldPath.documentId()});
   } else if (cmd === "unpark") {
     if (!a.bucket) {
       process.stderr.write("film-cleanup-admin: --bucket required\n");
@@ -156,7 +305,7 @@ async function main() {
     nowMs: Date.now()});
   } else {
     process.stderr.write("usage: film-cleanup-admin <list-parked|" +
-      "list-stuck|list-evidence|unpark> ...\n");
+      "list-stuck|list-evidence|unpark|list-s2b-recovery> ...\n");
     process.exit(2);
   }
   process.stdout.write(`${JSON.stringify(res)}\n`);
@@ -171,4 +320,4 @@ if (require.main === module) {
 }
 
 module.exports = {PARK_AUDIT_MAX, environmentProblem, list, unpark,
-  parseArgs};
+  parseArgs, listS2bRecovery, s2bClass, S2B_LIST_MAX};

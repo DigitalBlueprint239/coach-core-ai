@@ -1,0 +1,2535 @@
+TAP version 13
+# Subtest: coach-film.v2 fixtures
+    # Subtest: manifest lists exactly the fixture files on disk
+    ok 1 - manifest lists exactly the fixture files on disk
+      ---
+      duration_ms: 7.1558
+      type: 'test'
+      ...
+    # Subtest: v2-abandon.request.valid.json (request, valid=true)
+    ok 2 - v2-abandon.request.valid.json (request, valid=true)
+      ---
+      duration_ms: 5.1209
+      type: 'test'
+      ...
+    # Subtest: v2-abandon.response.ok-from-reserved.json (response, valid=true)
+    ok 3 - v2-abandon.response.ok-from-reserved.json (response, valid=true)
+      ---
+      duration_ms: 19.0092
+      type: 'test'
+      ...
+    # Subtest: v2-abandon.response.ok-from-validating.json (response, valid=true)
+    ok 4 - v2-abandon.response.ok-from-validating.json (response, valid=true)
+      ---
+      duration_ms: 12.1203
+      type: 'test'
+      ...
+    # Subtest: v2-abandon.response.ok-repeat-new-operation.json (response, valid=true)
+    ok 5 - v2-abandon.response.ok-repeat-new-operation.json (response, valid=true)
+      ---
+      duration_ms: 2.0494
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-admit-first.json (attempt-admission, valid=true)
+    ok 6 - v2-attempt-admit-first.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.3328
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-admit-third.json (attempt-admission, valid=true)
+    ok 7 - v2-attempt-admit-third.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 8.3415
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-configuration-preflight.json (attempt-admission, valid=true)
+    ok 8 - v2-attempt-configuration-preflight.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 1.9913
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-contention.json (attempt-admission, valid=true)
+    ok 9 - v2-attempt-contention.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 1.7778
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-duplicate.json (attempt-admission, valid=true)
+    ok 10 - v2-attempt-duplicate.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 8.6116
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-horizon-at.json (attempt-admission, valid=true)
+    ok 11 - v2-attempt-horizon-at.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 7.7477
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-horizon-just-before.json (attempt-admission, valid=true)
+    ok 12 - v2-attempt-horizon-just-before.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 3.0857
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-admitted-over-ceiling.json (attempt-admission, valid=true)
+    ok 13 - v2-attempt-invalid-admitted-over-ceiling.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.1281
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-config-flag.json (attempt-admission, valid=true)
+    ok 14 - v2-attempt-invalid-config-flag.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 1.854
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-fractional-admitted.json (attempt-admission, valid=true)
+    ok 15 - v2-attempt-invalid-fractional-admitted.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.2064
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-missing-now.json (attempt-admission, valid=true)
+    ok 16 - v2-attempt-invalid-missing-now.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 4.0178
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-negative-admitted.json (attempt-admission, valid=true)
+    ok 17 - v2-attempt-invalid-negative-admitted.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.6156
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-now-before-created.json (attempt-admission, valid=true)
+    ok 18 - v2-attempt-invalid-now-before-created.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.899
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-null-times.json (attempt-admission, valid=true)
+    ok 19 - v2-attempt-invalid-null-times.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 3.4363
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-string-admitted.json (attempt-admission, valid=true)
+    ok 20 - v2-attempt-invalid-string-admitted.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.0787
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-unknown-delivery.json (attempt-admission, valid=true)
+    ok 21 - v2-attempt-invalid-unknown-delivery.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 1.848
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-invalid-unknown-field.json (attempt-admission, valid=true)
+    ok 22 - v2-attempt-invalid-unknown-field.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 2.0075
+      type: 'test'
+      ...
+    # Subtest: v2-attempt-refuse-fourth.json (attempt-admission, valid=true)
+    ok 23 - v2-attempt-refuse-fourth.json (attempt-admission, valid=true)
+      ---
+      duration_ms: 12.1379
+      type: 'test'
+      ...
+    # Subtest: v2-client-failure.network.network.json (client-failure, valid=true)
+    ok 24 - v2-client-failure.network.network.json (client-failure, valid=true)
+      ---
+      duration_ms: 2.6287
+      type: 'test'
+      ...
+    # Subtest: v2-client-failure.protocol.response-invalid.json (client-failure, valid=true)
+    ok 25 - v2-client-failure.protocol.response-invalid.json (client-failure, valid=true)
+      ---
+      duration_ms: 1.7437
+      type: 'test'
+      ...
+    # Subtest: v2-client-failure.sdk.deadline-exceeded.json (client-failure, valid=true)
+    ok 26 - v2-client-failure.sdk.deadline-exceeded.json (client-failure, valid=true)
+      ---
+      duration_ms: 1.5843
+      type: 'test'
+      ...
+    # Subtest: v2-client-failure.sdk.internal.json (client-failure, valid=true)
+    ok 27 - v2-client-failure.sdk.internal.json (client-failure, valid=true)
+      ---
+      duration_ms: 1.2431
+      type: 'test'
+      ...
+    # Subtest: v2-client-failure.sdk.permission-denied.json (client-failure, valid=true)
+    ok 28 - v2-client-failure.sdk.permission-denied.json (client-failure, valid=true)
+      ---
+      duration_ms: 1.5465
+      type: 'test'
+      ...
+    # Subtest: v2-client-failure.sdk.unavailable.json (client-failure, valid=true)
+    ok 29 - v2-client-failure.sdk.unavailable.json (client-failure, valid=true)
+      ---
+      duration_ms: 1.3339
+      type: 'test'
+      ...
+    # Subtest: v2-doc-legacy-r3-abandoned.json (film-document, valid=true)
+    ok 30 - v2-doc-legacy-r3-abandoned.json (film-document, valid=true)
+      ---
+      duration_ms: 1.373
+      type: 'test'
+      ...
+    # Subtest: v2-doc-legacy-r3-expired.json (film-document, valid=true)
+    ok 31 - v2-doc-legacy-r3-expired.json (film-document, valid=true)
+      ---
+      duration_ms: 8.7542
+      type: 'test'
+      ...
+    # Subtest: v2-doc-legacy-r3-rejected.json (film-document, valid=true)
+    ok 32 - v2-doc-legacy-r3-rejected.json (film-document, valid=true)
+      ---
+      duration_ms: 2.6847
+      type: 'test'
+      ...
+    # Subtest: v2-doc-legacy-r3-reserved.json (film-document, valid=true)
+    ok 33 - v2-doc-legacy-r3-reserved.json (film-document, valid=true)
+      ---
+      duration_ms: 2.421
+      type: 'test'
+      ...
+    # Subtest: v2-doc-legacy-r3-validating.json (film-document, valid=true)
+    ok 34 - v2-doc-legacy-r3-validating.json (film-document, valid=true)
+      ---
+      duration_ms: 8.5475
+      type: 'test'
+      ...
+    # Subtest: v2-doc-legacy-ready-without-keys.json (film-document, valid=false)
+    ok 35 - v2-doc-legacy-ready-without-keys.json (film-document, valid=false)
+      ---
+      duration_ms: 2.131
+      type: 'test'
+      ...
+    # Subtest: v2-doc-present-but-invalid-media.json (film-document, valid=false)
+    ok 36 - v2-doc-present-but-invalid-media.json (film-document, valid=false)
+      ---
+      duration_ms: 1.9635
+      type: 'test'
+      ...
+    # Subtest: v2-doc-v2-ready.json (film-document, valid=true)
+    ok 37 - v2-doc-v2-ready.json (film-document, valid=true)
+      ---
+      duration_ms: 2.2903
+      type: 'test'
+      ...
+    # Subtest: v2-error.conflict.operation-id-reused.json (response, valid=true)
+    ok 38 - v2-error.conflict.operation-id-reused.json (response, valid=true)
+      ---
+      duration_ms: 1.4544
+      type: 'test'
+      ...
+    # Subtest: v2-error.failed-precondition.film-not-found.json (response, valid=true)
+    ok 39 - v2-error.failed-precondition.film-not-found.json (response, valid=true)
+      ---
+      duration_ms: 1.0314
+      type: 'test'
+      ...
+    # Subtest: v2-error.failed-precondition.invalid-state.json (response, valid=true)
+    ok 40 - v2-error.failed-precondition.invalid-state.json (response, valid=true)
+      ---
+      duration_ms: 0.9267
+      type: 'test'
+      ...
+    # Subtest: v2-error.failed-precondition.legacy-record-invalid.json (response, valid=true)
+    ok 41 - v2-error.failed-precondition.legacy-record-invalid.json (response, valid=true)
+      ---
+      duration_ms: 9.6508
+      type: 'test'
+      ...
+    # Subtest: v2-error.failed-precondition.operation-expired.json (response, valid=true)
+    ok 42 - v2-error.failed-precondition.operation-expired.json (response, valid=true)
+      ---
+      duration_ms: 1.5494
+      type: 'test'
+      ...
+    # Subtest: v2-error.failed-precondition.rights-wording-outdated.json (response, valid=true)
+    ok 43 - v2-error.failed-precondition.rights-wording-outdated.json (response, valid=true)
+      ---
+      duration_ms: 1.1442
+      type: 'test'
+      ...
+    # Subtest: v2-error.invalid-argument.action-mismatch.json (response, valid=true)
+    ok 44 - v2-error.invalid-argument.action-mismatch.json (response, valid=true)
+      ---
+      duration_ms: 1.1615
+      type: 'test'
+      ...
+    # Subtest: v2-error.invalid-argument.rights-acknowledgement-required.json (response, valid=true)
+    ok 45 - v2-error.invalid-argument.rights-acknowledgement-required.json (response, valid=true)
+      ---
+      duration_ms: 1.3996
+      type: 'test'
+      ...
+    # Subtest: v2-error.invalid-argument.schema-invalid.json (response, valid=true)
+    ok 46 - v2-error.invalid-argument.schema-invalid.json (response, valid=true)
+      ---
+      duration_ms: 1.2363
+      type: 'test'
+      ...
+    # Subtest: v2-error.invalid-argument.unsupported-version.json (response, valid=true)
+    ok 47 - v2-error.invalid-argument.unsupported-version.json (response, valid=true)
+      ---
+      duration_ms: 1.3085
+      type: 'test'
+      ...
+    # Subtest: v2-error.limit-exceeded.bytes-over-limit.json (response, valid=true)
+    ok 48 - v2-error.limit-exceeded.bytes-over-limit.json (response, valid=true)
+      ---
+      duration_ms: 1.3873
+      type: 'test'
+      ...
+    # Subtest: v2-error.limit-exceeded.format-not-allowed.json (response, valid=true)
+    ok 49 - v2-error.limit-exceeded.format-not-allowed.json (response, valid=true)
+      ---
+      duration_ms: 1.7347
+      type: 'test'
+      ...
+    # Subtest: v2-error.permission-denied.anonymous-not-allowed.json (response, valid=true)
+    ok 50 - v2-error.permission-denied.anonymous-not-allowed.json (response, valid=true)
+      ---
+      duration_ms: 2.2785
+      type: 'test'
+      ...
+    # Subtest: v2-error.permission-denied.beta-access-required.json (response, valid=true)
+    ok 51 - v2-error.permission-denied.beta-access-required.json (response, valid=true)
+      ---
+      duration_ms: 2.0408
+      type: 'test'
+      ...
+    # Subtest: v2-error.permission-denied.email-not-verified.json (response, valid=true)
+    ok 52 - v2-error.permission-denied.email-not-verified.json (response, valid=true)
+      ---
+      duration_ms: 1.5258
+      type: 'test'
+      ...
+    # Subtest: v2-error.permission-denied.not-team-owner.json (response, valid=true)
+    ok 53 - v2-error.permission-denied.not-team-owner.json (response, valid=true)
+      ---
+      duration_ms: 2.374
+      type: 'test'
+      ...
+    # Subtest: v2-error.team-cap-reached.team-film-cap.json (response, valid=true)
+    ok 54 - v2-error.team-cap-reached.team-film-cap.json (response, valid=true)
+      ---
+      duration_ms: 2.246
+      type: 'test'
+      ...
+    # Subtest: v2-error.unauthenticated.account-disabled.json (response, valid=true)
+    ok 55 - v2-error.unauthenticated.account-disabled.json (response, valid=true)
+      ---
+      duration_ms: 2.2736
+      type: 'test'
+      ...
+    # Subtest: v2-error.unauthenticated.sign-in-required.json (response, valid=true)
+    ok 56 - v2-error.unauthenticated.sign-in-required.json (response, valid=true)
+      ---
+      duration_ms: 2.9191
+      type: 'test'
+      ...
+    # Subtest: v2-error.unavailable.backend-unavailable.json (response, valid=true)
+    ok 57 - v2-error.unavailable.backend-unavailable.json (response, valid=true)
+      ---
+      duration_ms: 2.7236
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-classified-kills-different-steps.json (attempt-exhaustion, valid=true)
+    ok 58 - v2-exhaust-classified-kills-different-steps.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 2.7618
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-classified-kills-same-step.json (attempt-exhaustion, valid=true)
+    ok 59 - v2-exhaust-classified-kills-same-step.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 17.1328
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-completed-second.json (attempt-exhaustion, valid=true)
+    ok 60 - v2-exhaust-completed-second.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 17.6415
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-final-infrastructure.json (attempt-exhaustion, valid=true)
+    ok 61 - v2-exhaust-final-infrastructure.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 12.4844
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-empty.json (attempt-exhaustion, valid=true)
+    ok 62 - v2-exhaust-invalid-empty.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 2.0276
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-four-attempts.json (attempt-exhaustion, valid=true)
+    ok 63 - v2-exhaust-invalid-four-attempts.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.7443
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-kill-unknown-step.json (attempt-exhaustion, valid=true)
+    ok 64 - v2-exhaust-invalid-kill-unknown-step.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 14.3893
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-kills-missing-step.json (attempt-exhaustion, valid=true)
+    ok 65 - v2-exhaust-invalid-kills-missing-step.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 2.0889
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-made-up-reason.json (attempt-exhaustion, valid=true)
+    ok 66 - v2-exhaust-invalid-made-up-reason.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 2.2049
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-missing-reason.json (attempt-exhaustion, valid=true)
+    ok 67 - v2-exhaust-invalid-missing-reason.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.9849
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-policy-reason-as-verdict.json (attempt-exhaustion, valid=true)
+    ok 68 - v2-exhaust-invalid-policy-reason-as-verdict.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 2.2165
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-s1-reason.json (attempt-exhaustion, valid=true)
+    ok 69 - v2-exhaust-invalid-s1-reason.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.7477
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-unknown-end.json (attempt-exhaustion, valid=true)
+    ok 70 - v2-exhaust-invalid-unknown-end.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.7119
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-unknown-field.json (attempt-exhaustion, valid=true)
+    ok 71 - v2-exhaust-invalid-unknown-field.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.6556
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-unknown-kill.json (attempt-exhaustion, valid=true)
+    ok 72 - v2-exhaust-invalid-unknown-kill.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 2.073
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-invalid-verdict-not-last.json (attempt-exhaustion, valid=true)
+    ok 73 - v2-exhaust-invalid-verdict-not-last.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.9645
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-media-verdict-first.json (attempt-exhaustion, valid=true)
+    ok 74 - v2-exhaust-media-verdict-first.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.8518
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-three-ambiguous.json (attempt-exhaustion, valid=true)
+    ok 75 - v2-exhaust-three-ambiguous.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.8946
+      type: 'test'
+      ...
+    # Subtest: v2-exhaust-undifferentiated-sigkill.json (attempt-exhaustion, valid=true)
+    ok 76 - v2-exhaust-undifferentiated-sigkill.json (attempt-exhaustion, valid=true)
+      ---
+      duration_ms: 1.5723
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.abandonedFromReserved.json (film-state, valid=true)
+    ok 77 - v2-film-state.abandonedFromReserved.json (film-state, valid=true)
+      ---
+      duration_ms: 10.2819
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.abandonedFromValidating.json (film-state, valid=true)
+    ok 78 - v2-film-state.abandonedFromValidating.json (film-state, valid=true)
+      ---
+      duration_ms: 12.2874
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.expired.json (film-state, valid=true)
+    ok 79 - v2-film-state.expired.json (film-state, valid=true)
+      ---
+      duration_ms: 1.6484
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.file-name-120-ascii.json (film-state, valid=true)
+    ok 80 - v2-film-state.file-name-120-ascii.json (film-state, valid=true)
+      ---
+      duration_ms: 1.4018
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.file-name-60-emoji-120-units.json (film-state, valid=true)
+    ok 81 - v2-film-state.file-name-60-emoji-120-units.json (film-state, valid=true)
+      ---
+      duration_ms: 1.6471
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.rejected.json (film-state, valid=true)
+    ok 82 - v2-film-state.rejected.json (film-state, valid=true)
+      ---
+      duration_ms: 1.8839
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.reserved.json (film-state, valid=true)
+    ok 83 - v2-film-state.reserved.json (film-state, valid=true)
+      ---
+      duration_ms: 1.56
+      type: 'test'
+      ...
+    # Subtest: v2-film-state.validating.json (film-state, valid=true)
+    ok 84 - v2-film-state.validating.json (film-state, valid=true)
+      ---
+      duration_ms: 1.4093
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.client-failure.internal-retry-eligible.json (client-failure, valid=false)
+    ok 85 - v2-invalid.client-failure.internal-retry-eligible.json (client-failure, valid=false)
+      ---
+      duration_ms: 1.4685
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.client-failure.protocol-retry-eligible.json (client-failure, valid=false)
+    ok 86 - v2-invalid.client-failure.protocol-retry-eligible.json (client-failure, valid=false)
+      ---
+      duration_ms: 1.5591
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.client-failure.unknown-category.json (client-failure, valid=false)
+    ok 87 - v2-invalid.client-failure.unknown-category.json (client-failure, valid=false)
+      ---
+      duration_ms: 1.4119
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M1-reserve-film-id-mismatch.json (response, valid=false)
+    ok 88 - v2-invalid.mutation.M1-reserve-film-id-mismatch.json (response, valid=false)
+      ---
+      duration_ms: 2.8953
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M2-reserve-upload-path-foreign.json (response, valid=false)
+    ok 89 - v2-invalid.mutation.M2-reserve-upload-path-foreign.json (response, valid=false)
+      ---
+      duration_ms: 10.0078
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M3-reserve-expires-at-mismatch.json (response, valid=false)
+    ok 90 - v2-invalid.mutation.M3-reserve-expires-at-mismatch.json (response, valid=false)
+      ---
+      duration_ms: 1.3009
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M4-reserved-has-abandoned-at.json (response, valid=false)
+    ok 91 - v2-invalid.mutation.M4-reserved-has-abandoned-at.json (response, valid=false)
+      ---
+      duration_ms: 1.3396
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M5-rejected-null-reason.json (film-state, valid=false)
+    ok 92 - v2-invalid.mutation.M5-rejected-null-reason.json (film-state, valid=false)
+      ---
+      duration_ms: 6.9528
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M6-abandon-null-abandoned-at.json (response, valid=false)
+    ok 93 - v2-invalid.mutation.M6-abandon-null-abandoned-at.json (response, valid=false)
+      ---
+      duration_ms: 13.0007
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M7-validating-null-generation.json (film-state, valid=false)
+    ok 94 - v2-invalid.mutation.M7-validating-null-generation.json (film-state, valid=false)
+      ---
+      duration_ms: 2.0377
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.M8-expiry-before-creation.json (response, valid=false)
+    ok 95 - v2-invalid.mutation.M8-expiry-before-creation.json (response, valid=false)
+      ---
+      duration_ms: 1.8264
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X1-expired-before-expiry.json (film-state, valid=false)
+    ok 96 - v2-invalid.mutation.X1-expired-before-expiry.json (film-state, valid=false)
+      ---
+      duration_ms: 2.3915
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X10-validating-after-expiry.json (film-state, valid=false)
+    ok 97 - v2-invalid.mutation.X10-validating-after-expiry.json (film-state, valid=false)
+      ---
+      duration_ms: 2.4331
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X11-receipt-not-reserved.json (response, valid=false)
+    ok 98 - v2-invalid.mutation.X11-receipt-not-reserved.json (response, valid=false)
+      ---
+      duration_ms: 1.3987
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X12-abandon-from-validating-no-generation.json (response, valid=false)
+    ok 99 - v2-invalid.mutation.X12-abandon-from-validating-no-generation.json (response, valid=false)
+      ---
+      duration_ms: 1.3177
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X13-abandon-from-reserved-has-generation.json (response, valid=false)
+    ok 100 - v2-invalid.mutation.X13-abandon-from-reserved-has-generation.json (response, valid=false)
+      ---
+      duration_ms: 1.8428
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X14-stored-file-name-61-emoji.json (film-state, valid=false)
+    ok 101 - v2-invalid.mutation.X14-stored-file-name-61-emoji.json (film-state, valid=false)
+      ---
+      duration_ms: 2.4504
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X15-stored-file-name-121-ascii.json (film-state, valid=false)
+    ok 102 - v2-invalid.mutation.X15-stored-file-name-121-ascii.json (film-state, valid=false)
+      ---
+      duration_ms: 2.042
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X2-reserved-has-generation.json (film-state, valid=false)
+    ok 103 - v2-invalid.mutation.X2-reserved-has-generation.json (film-state, valid=false)
+      ---
+      duration_ms: 2.9137
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X3-rejected-null-generation.json (film-state, valid=false)
+    ok 104 - v2-invalid.mutation.X3-rejected-null-generation.json (film-state, valid=false)
+      ---
+      duration_ms: 1.638
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X4-reserved-status-changed.json (film-state, valid=false)
+    ok 105 - v2-invalid.mutation.X4-reserved-status-changed.json (film-state, valid=false)
+      ---
+      duration_ms: 1.8913
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X5-abandoned-at-not-status-changed.json (film-state, valid=false)
+    ok 106 - v2-invalid.mutation.X5-abandoned-at-not-status-changed.json (film-state, valid=false)
+      ---
+      duration_ms: 1.1249
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X6-status-changed-before-created.json (film-state, valid=false)
+    ok 107 - v2-invalid.mutation.X6-status-changed-before-created.json (film-state, valid=false)
+      ---
+      duration_ms: 1.0254
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X7-rights-after-creation.json (film-state, valid=false)
+    ok 108 - v2-invalid.mutation.X7-rights-after-creation.json (film-state, valid=false)
+      ---
+      duration_ms: 0.9139
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X8-upload-path-template.json (film-state, valid=false)
+    ok 109 - v2-invalid.mutation.X8-upload-path-template.json (film-state, valid=false)
+      ---
+      duration_ms: 0.886
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.mutation.X9-file-name-not-canonical.json (film-state, valid=false)
+    ok 110 - v2-invalid.mutation.X9-file-name-not-canonical.json (film-state, valid=false)
+      ---
+      duration_ms: 8.472
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.response.client-transport-as-server.json (response, valid=false)
+    ok 111 - v2-invalid.response.client-transport-as-server.json (response, valid=false)
+      ---
+      duration_ms: 1.0988
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.response.extra-key.json (response, valid=false)
+    ok 112 - v2-invalid.response.extra-key.json (response, valid=false)
+      ---
+      duration_ms: 21.3823
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.response.reason-not-for-code.json (response, valid=false)
+    ok 113 - v2-invalid.response.reason-not-for-code.json (response, valid=false)
+      ---
+      duration_ms: 1.4042
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.response.retryable-mismatch.json (response, valid=false)
+    ok 114 - v2-invalid.response.retryable-mismatch.json (response, valid=false)
+      ---
+      duration_ms: 1.0344
+      type: 'test'
+      ...
+    # Subtest: v2-invalid.response.timestamp-no-millis.json (response, valid=false)
+    ok 115 - v2-invalid.response.timestamp-no-millis.json (response, valid=false)
+      ---
+      duration_ms: 3.0246
+      type: 'test'
+      ...
+    # Subtest: v2-mut-media-bad-framerate-mode.json (film-state, valid=false)
+    ok 116 - v2-mut-media-bad-framerate-mode.json (film-state, valid=false)
+      ---
+      duration_ms: 2.7408
+      type: 'test'
+      ...
+    # Subtest: v2-mut-media-bad-sha256.json (film-state, valid=false)
+    ok 117 - v2-mut-media-bad-sha256.json (film-state, valid=false)
+      ---
+      duration_ms: 16.7248
+      type: 'test'
+      ...
+    # Subtest: v2-mut-media-extra-key.json (film-state, valid=false)
+    ok 118 - v2-mut-media-extra-key.json (film-state, valid=false)
+      ---
+      duration_ms: 3.6188
+      type: 'test'
+      ...
+    # Subtest: v2-mut-media-hevc.json (film-state, valid=false)
+    ok 119 - v2-mut-media-hevc.json (film-state, valid=false)
+      ---
+      duration_ms: 2.4058
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R5-ready-without-media.json (film-state, valid=false)
+    ok 120 - v2-mut-R5-ready-without-media.json (film-state, valid=false)
+      ---
+      duration_ms: 2.4908
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R5-ready-without-normalizedGeneration.json (film-state, valid=false)
+    ok 121 - v2-mut-R5-ready-without-normalizedGeneration.json (film-state, valid=false)
+      ---
+      duration_ms: 1.4982
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R5-ready-without-readyAt.json (film-state, valid=false)
+    ok 122 - v2-mut-R5-ready-without-readyAt.json (film-state, valid=false)
+      ---
+      duration_ms: 1.3209
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R5-reserved-with-normalizedGeneration.json (film-state, valid=false)
+    ok 123 - v2-mut-R5-reserved-with-normalizedGeneration.json (film-state, valid=false)
+      ---
+      duration_ms: 10.366
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R5-validating-with-media.json (film-state, valid=false)
+    ok 124 - v2-mut-R5-validating-with-media.json (film-state, valid=false)
+      ---
+      duration_ms: 2.3288
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R6-readyAt-not-statusChangedAt.json (film-state, valid=false)
+    ok 125 - v2-mut-R6-readyAt-not-statusChangedAt.json (film-state, valid=false)
+      ---
+      duration_ms: 16.4162
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R7-ready-retentionExpiresAt-set.json (film-state, valid=false)
+    ok 126 - v2-mut-R7-ready-retentionExpiresAt-set.json (film-state, valid=false)
+      ---
+      duration_ms: 2.5034
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R7-retentionExpiresAt-set.json (film-state, valid=false)
+    ok 127 - v2-mut-R7-retentionExpiresAt-set.json (film-state, valid=false)
+      ---
+      duration_ms: 2.8308
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R8-ready-without-objectGeneration.json (film-state, valid=false)
+    ok 128 - v2-mut-R8-ready-without-objectGeneration.json (film-state, valid=false)
+      ---
+      duration_ms: 2.7608
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R9-bytes-over-limit.json (film-state, valid=false)
+    ok 129 - v2-mut-R9-bytes-over-limit.json (film-state, valid=false)
+      ---
+      duration_ms: 2.2283
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R9-duration-over-limit.json (film-state, valid=false)
+    ok 130 - v2-mut-R9-duration-over-limit.json (film-state, valid=false)
+      ---
+      duration_ms: 1.9013
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R9-height-over-limit.json (film-state, valid=false)
+    ok 131 - v2-mut-R9-height-over-limit.json (film-state, valid=false)
+      ---
+      duration_ms: 14.8631
+      type: 'test'
+      ...
+    # Subtest: v2-mut-R9-width-over-limit.json (film-state, valid=false)
+    ok 132 - v2-mut-R9-width-over-limit.json (film-state, valid=false)
+      ---
+      duration_ms: 2.4047
+      type: 'test'
+      ...
+    # Subtest: v2-mut-S2-unknown-reason.json (film-state, valid=false)
+    ok 133 - v2-mut-S2-unknown-reason.json (film-state, valid=false)
+      ---
+      duration_ms: 2.127
+      type: 'test'
+      ...
+    # Subtest: v2-mut-T3-late-worker-rejected-before-created.json (film-state, valid=false)
+    ok 134 - v2-mut-T3-late-worker-rejected-before-created.json (film-state, valid=false)
+      ---
+      duration_ms: 2.2664
+      type: 'test'
+      ...
+    # Subtest: v2-mut-T6p-late-s1-rejected.json (film-state, valid=false)
+    ok 135 - v2-mut-T6p-late-s1-rejected.json (film-state, valid=false)
+      ---
+      duration_ms: 14.7451
+      type: 'test'
+      ...
+    # Subtest: v2-mut-T6p-validating-after-expiry.json (film-state, valid=false)
+    ok 136 - v2-mut-T6p-validating-after-expiry.json (film-state, valid=false)
+      ---
+      duration_ms: 1.2102
+      type: 'test'
+      ...
+    # Subtest: v2-mut-wire-missing-retentionExpiresAt.json (film-state, valid=false)
+    ok 137 - v2-mut-wire-missing-retentionExpiresAt.json (film-state, valid=false)
+      ---
+      duration_ms: 11.7415
+      type: 'test'
+      ...
+    # Subtest: v2-replay-invalid-query-missing-now.json (replay-case, valid=true)
+    ok 138 - v2-replay-invalid-query-missing-now.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.4716
+      type: 'test'
+      ...
+    # Subtest: v2-replay-invalid-query-unknown-action.json (replay-case, valid=true)
+    ok 139 - v2-replay-invalid-query-unknown-action.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.9099
+      type: 'test'
+      ...
+    # Subtest: v2-replay-legacy-corrupt-json.json (replay-case, valid=true)
+    ok 140 - v2-replay-legacy-corrupt-json.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.8987
+      type: 'test'
+      ...
+    # Subtest: v2-replay-legacy-error-receipt.json (replay-case, valid=true)
+    ok 141 - v2-replay-legacy-error-receipt.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.7974
+      type: 'test'
+      ...
+    # Subtest: v2-replay-legacy-impossible-ready.json (replay-case, valid=true)
+    ok 142 - v2-replay-legacy-impossible-ready.json (replay-case, valid=true)
+      ---
+      duration_ms: 23.884
+      type: 'test'
+      ...
+    # Subtest: v2-replay-legacy-unknown-field.json (replay-case, valid=true)
+    ok 143 - v2-replay-legacy-unknown-field.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.4208
+      type: 'test'
+      ...
+    # Subtest: v2-replay-new-v1-operation.json (replay-case, valid=true)
+    ok 144 - v2-replay-new-v1-operation.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.359
+      type: 'test'
+      ...
+    # Subtest: v2-replay-new-v2-operation.json (replay-case, valid=true)
+    ok 145 - v2-replay-new-v2-operation.json (replay-case, valid=true)
+      ---
+      duration_ms: 15.657
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-abandon-from-reserved-receipt.json (replay-case, valid=true)
+    ok 146 - v2-replay-r3-abandon-from-reserved-receipt.json (replay-case, valid=true)
+      ---
+      duration_ms: 5.5458
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-abandon-from-validating-receipt.json (replay-case, valid=true)
+    ok 147 - v2-replay-r3-abandon-from-validating-receipt.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.7932
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-at-expiry.json (replay-case, valid=true)
+    ok 148 - v2-replay-r3-at-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 0.9447
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-changed-payload.json (replay-case, valid=true)
+    ok 149 - v2-replay-r3-changed-payload.json (replay-case, valid=true)
+      ---
+      duration_ms: 0.9211
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-just-before-expiry.json (replay-case, valid=true)
+    ok 150 - v2-replay-r3-just-before-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 10.8202
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-live-film-now-ready.json (replay-case, valid=true)
+    ok 151 - v2-replay-r3-live-film-now-ready.json (replay-case, valid=true)
+      ---
+      duration_ms: 9.7679
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-other-action.json (replay-case, valid=true)
+    ok 152 - v2-replay-r3-other-action.json (replay-case, valid=true)
+      ---
+      duration_ms: 11.8777
+      type: 'test'
+      ...
+    # Subtest: v2-replay-r3-reserve-receipt.json (replay-case, valid=true)
+    ok 153 - v2-replay-r3-reserve-receipt.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.1177
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-explicit-v1-version.json (replay-case, valid=true)
+    ok 154 - v2-replay-stored-explicit-v1-version.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.0208
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-fractional-expiry.json (replay-case, valid=true)
+    ok 155 - v2-replay-stored-fractional-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.0678
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-missing-expiry.json (replay-case, valid=true)
+    ok 156 - v2-replay-stored-missing-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.8786
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-null-expiry.json (replay-case, valid=true)
+    ok 157 - v2-replay-stored-null-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.7889
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-string-expiry.json (replay-case, valid=true)
+    ok 158 - v2-replay-stored-string-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.5186
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-unknown-record-field.json (replay-case, valid=true)
+    ok 159 - v2-replay-stored-unknown-record-field.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.3736
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-unknown-version.json (replay-case, valid=true)
+    ok 160 - v2-replay-stored-unknown-version.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.3782
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-v2-corrupt-v1-request.json (replay-case, valid=true)
+    ok 161 - v2-replay-stored-v2-corrupt-v1-request.json (replay-case, valid=true)
+      ---
+      duration_ms: 8.1105
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-v2-corrupt.json (replay-case, valid=true)
+    ok 162 - v2-replay-stored-v2-corrupt.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.0328
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-v2-receipt-v1-request.json (replay-case, valid=true)
+    ok 163 - v2-replay-stored-v2-receipt-v1-request.json (replay-case, valid=true)
+      ---
+      duration_ms: 10.1542
+      type: 'test'
+      ...
+    # Subtest: v2-replay-stored-v2-receipt.json (replay-case, valid=true)
+    ok 164 - v2-replay-stored-v2-receipt.json (replay-case, valid=true)
+      ---
+      duration_ms: 2.8996
+      type: 'test'
+      ...
+    # Subtest: v2-replay-unknown-version.json (replay-case, valid=true)
+    ok 165 - v2-replay-unknown-version.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.9713
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-at-expiry.json (replay-case, valid=true)
+    ok 166 - v2-replay-v1-at-expiry.json (replay-case, valid=true)
+      ---
+      duration_ms: 13.4742
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-corrupt-json.json (replay-case, valid=true)
+    ok 167 - v2-replay-v1-corrupt-json.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.1174
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-error-receipt.json (replay-case, valid=true)
+    ok 168 - v2-replay-v1-error-receipt.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.5792
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-impossible-ready.json (replay-case, valid=true)
+    ok 169 - v2-replay-v1-impossible-ready.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.5938
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-receipt-wrong-action.json (replay-case, valid=true)
+    ok 170 - v2-replay-v1-receipt-wrong-action.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.2723
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-same-operation-verbatim.json (replay-case, valid=true)
+    ok 171 - v2-replay-v1-same-operation-verbatim.json (replay-case, valid=true)
+      ---
+      duration_ms: 1.1573
+      type: 'test'
+      ...
+    # Subtest: v2-replay-v1-unknown-field.json (replay-case, valid=true)
+    ok 172 - v2-replay-v1-unknown-field.json (replay-case, valid=true)
+      ---
+      duration_ms: 23.9472
+      type: 'test'
+      ...
+    # Subtest: v2-replay.expected.abandon-from-reserved-projection.json (response, valid=true)
+    ok 173 - v2-replay.expected.abandon-from-reserved-projection.json (response, valid=true)
+      ---
+      duration_ms: 2.3716
+      type: 'test'
+      ...
+    # Subtest: v2-replay.expected.abandon-from-validating-projection.json (response, valid=true)
+    ok 174 - v2-replay.expected.abandon-from-validating-projection.json (response, valid=true)
+      ---
+      duration_ms: 0.5929
+      type: 'test'
+      ...
+    # Subtest: v2-replay.expected.reserve-projection.json (response, valid=true)
+    ok 175 - v2-replay.expected.reserve-projection.json (response, valid=true)
+      ---
+      duration_ms: 0.2182
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.action-mismatch.json (request, valid=false)
+    ok 176 - v2-reserve.request.action-mismatch.json (request, valid=false)
+      ---
+      duration_ms: 16.7025
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.at-byte-limit.json (request, valid=true)
+    ok 177 - v2-reserve.request.at-byte-limit.json (request, valid=true)
+      ---
+      duration_ms: 15.1915
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-120-ascii-padded.json (request, valid=true)
+    ok 178 - v2-reserve.request.file-name-120-ascii-padded.json (request, valid=true)
+      ---
+      duration_ms: 2.6081
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-120-ascii.json (request, valid=true)
+    ok 179 - v2-reserve.request.file-name-120-ascii.json (request, valid=true)
+      ---
+      duration_ms: 14.0723
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-60-emoji-120-units.json (request, valid=true)
+    ok 180 - v2-reserve.request.file-name-60-emoji-120-units.json (request, valid=true)
+      ---
+      duration_ms: 14.6259
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-61-emoji-122-units.json (request, valid=false)
+    ok 181 - v2-reserve.request.file-name-61-emoji-122-units.json (request, valid=false)
+      ---
+      duration_ms: 2.8693
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-canonicalized.json (request, valid=true)
+    ok 182 - v2-reserve.request.file-name-canonicalized.json (request, valid=true)
+      ---
+      duration_ms: 1.6806
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-control-char.json (request, valid=false)
+    ok 183 - v2-reserve.request.file-name-control-char.json (request, valid=false)
+      ---
+      duration_ms: 2.1186
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.file-name-too-long.json (request, valid=false)
+    ok 184 - v2-reserve.request.file-name-too-long.json (request, valid=false)
+      ---
+      duration_ms: 15.9684
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.format-not-allowed.json (request, valid=false)
+    ok 185 - v2-reserve.request.format-not-allowed.json (request, valid=false)
+      ---
+      duration_ms: 1.8729
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.operation-id-not-uuid-v4.json (request, valid=false)
+    ok 186 - v2-reserve.request.operation-id-not-uuid-v4.json (request, valid=false)
+      ---
+      duration_ms: 1.5131
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.operation-id-reused.json (request, valid=false)
+    ok 187 - v2-reserve.request.operation-id-reused.json (request, valid=false)
+      ---
+      duration_ms: 2.6803
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.over-byte-limit.json (request, valid=false)
+    ok 188 - v2-reserve.request.over-byte-limit.json (request, valid=false)
+      ---
+      duration_ms: 2.7598
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.rights-not-acknowledged.json (request, valid=false)
+    ok 189 - v2-reserve.request.rights-not-acknowledged.json (request, valid=false)
+      ---
+      duration_ms: 2.0765
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.rights-wording-outdated.json (request, valid=false)
+    ok 190 - v2-reserve.request.rights-wording-outdated.json (request, valid=false)
+      ---
+      duration_ms: 15.9055
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.unknown-field.json (request, valid=false)
+    ok 191 - v2-reserve.request.unknown-field.json (request, valid=false)
+      ---
+      duration_ms: 15.1505
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.v1-envelope-at-v2-parser.json (request, valid=false)
+    ok 192 - v2-reserve.request.v1-envelope-at-v2-parser.json (request, valid=false)
+      ---
+      duration_ms: 3.072
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.valid.json (request, valid=true)
+    ok 193 - v2-reserve.request.valid.json (request, valid=true)
+      ---
+      duration_ms: 1.5924
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.request.wrong-schema-version.json (request, valid=false)
+    ok 194 - v2-reserve.request.wrong-schema-version.json (request, valid=false)
+      ---
+      duration_ms: 2.1245
+      type: 'test'
+      ...
+    # Subtest: v2-reserve.response.ok.json (response, valid=true)
+    ok 195 - v2-reserve.response.ok.json (response, valid=true)
+      ---
+      duration_ms: 3.2354
+      type: 'test'
+      ...
+    # Subtest: v2-state-late-ready.json (film-state, valid=true)
+    ok 196 - v2-state-late-ready.json (film-state, valid=true)
+      ---
+      duration_ms: 2.4931
+      type: 'test'
+      ...
+    # Subtest: v2-state-late-worker-rejected.json (film-state, valid=true)
+    ok 197 - v2-state-late-worker-rejected.json (film-state, valid=true)
+      ---
+      duration_ms: 2.3837
+      type: 'test'
+      ...
+    # Subtest: v2-state-ready-at-limits.json (film-state, valid=true)
+    ok 198 - v2-state-ready-at-limits.json (film-state, valid=true)
+      ---
+      duration_ms: 2.1078
+      type: 'test'
+      ...
+    # Subtest: v2-state-ready-h264-aac.json (film-state, valid=true)
+    ok 199 - v2-state-ready-h264-aac.json (film-state, valid=true)
+      ---
+      duration_ms: 1.3539
+      type: 'test'
+      ...
+    # Subtest: v2-state-ready-h264-noaudio.json (film-state, valid=true)
+    ok 200 - v2-state-ready-h264-noaudio.json (film-state, valid=true)
+      ---
+      duration_ms: 1.8871
+      type: 'test'
+      ...
+    # Subtest: v2-state-ready-vfr.json (film-state, valid=true)
+    ok 201 - v2-state-ready-vfr.json (film-state, valid=true)
+      ---
+      duration_ms: 2.0454
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-audio-codec-not-allowed.json (film-state, valid=true)
+    ok 202 - v2-state-rejected-audio-codec-not-allowed.json (film-state, valid=true)
+      ---
+      duration_ms: 23.4989
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-container-invalid.json (film-state, valid=true)
+    ok 203 - v2-state-rejected-container-invalid.json (film-state, valid=true)
+      ---
+      duration_ms: 2.4159
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-duration-over-limit.json (film-state, valid=true)
+    ok 204 - v2-state-rejected-duration-over-limit.json (film-state, valid=true)
+      ---
+      duration_ms: 1.8642
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-media-corrupt.json (film-state, valid=true)
+    ok 205 - v2-state-rejected-media-corrupt.json (film-state, valid=true)
+      ---
+      duration_ms: 1.7418
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-metadata-invalid.json (film-state, valid=true)
+    ok 206 - v2-state-rejected-metadata-invalid.json (film-state, valid=true)
+      ---
+      duration_ms: 1.6174
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-output-invalid.json (film-state, valid=true)
+    ok 207 - v2-state-rejected-output-invalid.json (film-state, valid=true)
+      ---
+      duration_ms: 22.4724
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-processing-limit-exceeded.json (film-state, valid=true)
+    ok 208 - v2-state-rejected-processing-limit-exceeded.json (film-state, valid=true)
+      ---
+      duration_ms: 1.649
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-resolution-over-limit.json (film-state, valid=true)
+    ok 209 - v2-state-rejected-resolution-over-limit.json (film-state, valid=true)
+      ---
+      duration_ms: 14.9343
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-stream-count-exceeded.json (film-state, valid=true)
+    ok 210 - v2-state-rejected-stream-count-exceeded.json (film-state, valid=true)
+      ---
+      duration_ms: 2.9653
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-video-codec-not-allowed.json (film-state, valid=true)
+    ok 211 - v2-state-rejected-video-codec-not-allowed.json (film-state, valid=true)
+      ---
+      duration_ms: 2.2629
+      type: 'test'
+      ...
+    # Subtest: v2-state-rejected-video-stream-missing.json (film-state, valid=true)
+    ok 212 - v2-state-rejected-video-stream-missing.json (film-state, valid=true)
+      ---
+      duration_ms: 2.8949
+      type: 'test'
+      ...
+    # Subtest: every v1 fixture except the error table has a v2 re-emission
+    ok 213 - every v1 fixture except the error table has a v2 re-emission
+      ---
+      duration_ms: 0.9828
+      type: 'test'
+      ...
+    # Subtest: every v2 server (code, reason) pair has a fixture
+    ok 214 - every v2 server (code, reason) pair has a fixture
+      ---
+      duration_ms: 0.4966
+      type: 'test'
+      ...
+    # Subtest: published v2 JSON Schema and SHA256SUMS match the source
+    ok 215 - published v2 JSON Schema and SHA256SUMS match the source
+      ---
+      duration_ms: 73.9508
+      type: 'test'
+      ...
+    1..215
+ok 1 - coach-film.v2 fixtures
+  ---
+  duration_ms: 1045.527
+  type: 'suite'
+  ...
+# Subtest: v1 contract and fixtures preserved
+    # Subtest: all 86 v1 fixtures and their checksum file are byte-unchanged
+    ok 1 - all 86 v1 fixtures and their checksum file are byte-unchanged
+      ---
+      duration_ms: 14.1797
+      type: 'test'
+      ...
+    # Subtest: v1 module exports and tables are unchanged
+    ok 2 - v1 module exports and tables are unchanged
+      ---
+      duration_ms: 0.2858
+      type: 'test'
+      ...
+    # Subtest: strict v1 parsers reject v2-only keys and reasons
+    ok 3 - strict v1 parsers reject v2-only keys and reasons
+      ---
+      duration_ms: 2.1136
+      type: 'test'
+      ...
+    1..3
+ok 2 - v1 contract and fixtures preserved
+  ---
+  duration_ms: 16.8499
+  type: 'suite'
+  ...
+# Subtest: coach-film.v2 tables and policy
+    # Subtest: new keys, order and retentionExpiresAt naming
+    ok 1 - new keys, order and retentionExpiresAt naming
+      ---
+      duration_ms: 0.4044
+      type: 'test'
+      ...
+    # Subtest: only unavailable is retryable; new reasons are non-retryable
+    ok 2 - only unavailable is retryable; new reasons are non-retryable
+      ---
+      duration_ms: 0.2056
+      type: 'test'
+      ...
+    # Subtest: worker attempt policy: 3 admitted including the first, 6 h, retry OFF
+    ok 3 - worker attempt policy: 3 admitted including the first, 6 h, retry OFF
+      ---
+      duration_ms: 0.3356
+      type: 'test'
+      ...
+    # Subtest: duplicates and contention never consume an attempt
+    ok 4 - duplicates and contention never consume an attempt
+      ---
+      duration_ms: 0.2624
+      type: 'test'
+      ...
+    # Subtest: placeholder limits are labelled PENDING_D3
+    ok 5 - placeholder limits are labelled PENDING_D3
+      ---
+      duration_ms: 0.1486
+      type: 'test'
+      ...
+    1..5
+ok 3 - coach-film.v2 tables and policy
+  ---
+  duration_ms: 1.618
+  type: 'suite'
+  ...
+# Subtest: coach-film.v1 fixtures
+    # Subtest: manifest lists exactly the fixture files on disk
+    ok 1 - manifest lists exactly the fixture files on disk
+      ---
+      duration_ms: 2.1
+      type: 'test'
+      ...
+    # Subtest: abandon.request.valid.json (request, valid=true)
+    ok 2 - abandon.request.valid.json (request, valid=true)
+      ---
+      duration_ms: 12.1842
+      type: 'test'
+      ...
+    # Subtest: abandon.response.ok-from-reserved.json (response, valid=true)
+    ok 3 - abandon.response.ok-from-reserved.json (response, valid=true)
+      ---
+      duration_ms: 4.8507
+      type: 'test'
+      ...
+    # Subtest: abandon.response.ok-from-validating.json (response, valid=true)
+    ok 4 - abandon.response.ok-from-validating.json (response, valid=true)
+      ---
+      duration_ms: 0.9806
+      type: 'test'
+      ...
+    # Subtest: abandon.response.ok-repeat-new-operation.json (response, valid=true)
+    ok 5 - abandon.response.ok-repeat-new-operation.json (response, valid=true)
+      ---
+      duration_ms: 0.5682
+      type: 'test'
+      ...
+    # Subtest: client-failure.network.network.json (client-failure, valid=true)
+    ok 6 - client-failure.network.network.json (client-failure, valid=true)
+      ---
+      duration_ms: 4.2328
+      type: 'test'
+      ...
+    # Subtest: client-failure.protocol.response-invalid.json (client-failure, valid=true)
+    ok 7 - client-failure.protocol.response-invalid.json (client-failure, valid=true)
+      ---
+      duration_ms: 12.3372
+      type: 'test'
+      ...
+    # Subtest: client-failure.sdk.deadline-exceeded.json (client-failure, valid=true)
+    ok 8 - client-failure.sdk.deadline-exceeded.json (client-failure, valid=true)
+      ---
+      duration_ms: 2.5715
+      type: 'test'
+      ...
+    # Subtest: client-failure.sdk.internal.json (client-failure, valid=true)
+    ok 9 - client-failure.sdk.internal.json (client-failure, valid=true)
+      ---
+      duration_ms: 10.0388
+      type: 'test'
+      ...
+    # Subtest: client-failure.sdk.permission-denied.json (client-failure, valid=true)
+    ok 10 - client-failure.sdk.permission-denied.json (client-failure, valid=true)
+      ---
+      duration_ms: 2.7896
+      type: 'test'
+      ...
+    # Subtest: client-failure.sdk.unavailable.json (client-failure, valid=true)
+    ok 11 - client-failure.sdk.unavailable.json (client-failure, valid=true)
+      ---
+      duration_ms: 1.8845
+      type: 'test'
+      ...
+    # Subtest: error.conflict.operation-id-reused.json (response, valid=true)
+    ok 12 - error.conflict.operation-id-reused.json (response, valid=true)
+      ---
+      duration_ms: 2.4606
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.film-not-found.json (response, valid=true)
+    ok 13 - error.failed-precondition.film-not-found.json (response, valid=true)
+      ---
+      duration_ms: 1.6166
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.invalid-state.json (response, valid=true)
+    ok 14 - error.failed-precondition.invalid-state.json (response, valid=true)
+      ---
+      duration_ms: 12.0187
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.operation-expired.json (response, valid=true)
+    ok 15 - error.failed-precondition.operation-expired.json (response, valid=true)
+      ---
+      duration_ms: 1.627
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.rights-wording-outdated.json (response, valid=true)
+    ok 16 - error.failed-precondition.rights-wording-outdated.json (response, valid=true)
+      ---
+      duration_ms: 1.3651
+      type: 'test'
+      ...
+    # Subtest: error.invalid-argument.action-mismatch.json (response, valid=true)
+    ok 17 - error.invalid-argument.action-mismatch.json (response, valid=true)
+      ---
+      duration_ms: 7.9222
+      type: 'test'
+      ...
+    # Subtest: error.invalid-argument.rights-acknowledgement-required.json (response, valid=true)
+    ok 18 - error.invalid-argument.rights-acknowledgement-required.json (response, valid=true)
+      ---
+      duration_ms: 2.373
+      type: 'test'
+      ...
+    # Subtest: error.invalid-argument.schema-invalid.json (response, valid=true)
+    ok 19 - error.invalid-argument.schema-invalid.json (response, valid=true)
+      ---
+      duration_ms: 8.2626
+      type: 'test'
+      ...
+    # Subtest: error.limit-exceeded.bytes-over-limit.json (response, valid=true)
+    ok 20 - error.limit-exceeded.bytes-over-limit.json (response, valid=true)
+      ---
+      duration_ms: 1.8519
+      type: 'test'
+      ...
+    # Subtest: error.limit-exceeded.format-not-allowed.json (response, valid=true)
+    ok 21 - error.limit-exceeded.format-not-allowed.json (response, valid=true)
+      ---
+      duration_ms: 9.6422
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.anonymous-not-allowed.json (response, valid=true)
+    ok 22 - error.permission-denied.anonymous-not-allowed.json (response, valid=true)
+      ---
+      duration_ms: 7.7067
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.beta-access-required.json (response, valid=true)
+    ok 23 - error.permission-denied.beta-access-required.json (response, valid=true)
+      ---
+      duration_ms: 8.3304
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.email-not-verified.json (response, valid=true)
+    ok 24 - error.permission-denied.email-not-verified.json (response, valid=true)
+      ---
+      duration_ms: 8.5462
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.not-team-owner.json (response, valid=true)
+    ok 25 - error.permission-denied.not-team-owner.json (response, valid=true)
+      ---
+      duration_ms: 1.2889
+      type: 'test'
+      ...
+    # Subtest: error.team-cap-reached.team-film-cap.json (response, valid=true)
+    ok 26 - error.team-cap-reached.team-film-cap.json (response, valid=true)
+      ---
+      duration_ms: 9.3451
+      type: 'test'
+      ...
+    # Subtest: error.unauthenticated.account-disabled.json (response, valid=true)
+    ok 27 - error.unauthenticated.account-disabled.json (response, valid=true)
+      ---
+      duration_ms: 0.5362
+      type: 'test'
+      ...
+    # Subtest: error.unauthenticated.sign-in-required.json (response, valid=true)
+    ok 28 - error.unauthenticated.sign-in-required.json (response, valid=true)
+      ---
+      duration_ms: 1.1339
+      type: 'test'
+      ...
+    # Subtest: error.unavailable.backend-unavailable.json (response, valid=true)
+    ok 29 - error.unavailable.backend-unavailable.json (response, valid=true)
+      ---
+      duration_ms: 1.5356
+      type: 'test'
+      ...
+    # Subtest: film-state.abandonedFromReserved.json (film-state, valid=true)
+    ok 30 - film-state.abandonedFromReserved.json (film-state, valid=true)
+      ---
+      duration_ms: 1.6111
+      type: 'test'
+      ...
+    # Subtest: film-state.abandonedFromValidating.json (film-state, valid=true)
+    ok 31 - film-state.abandonedFromValidating.json (film-state, valid=true)
+      ---
+      duration_ms: 1.8138
+      type: 'test'
+      ...
+    # Subtest: film-state.expired.json (film-state, valid=true)
+    ok 32 - film-state.expired.json (film-state, valid=true)
+      ---
+      duration_ms: 1.0496
+      type: 'test'
+      ...
+    # Subtest: film-state.file-name-120-ascii.json (film-state, valid=true)
+    ok 33 - film-state.file-name-120-ascii.json (film-state, valid=true)
+      ---
+      duration_ms: 1.109
+      type: 'test'
+      ...
+    # Subtest: film-state.file-name-60-emoji-120-units.json (film-state, valid=true)
+    ok 34 - film-state.file-name-60-emoji-120-units.json (film-state, valid=true)
+      ---
+      duration_ms: 1.2054
+      type: 'test'
+      ...
+    # Subtest: film-state.rejected.json (film-state, valid=true)
+    ok 35 - film-state.rejected.json (film-state, valid=true)
+      ---
+      duration_ms: 2.001
+      type: 'test'
+      ...
+    # Subtest: film-state.reserved.json (film-state, valid=true)
+    ok 36 - film-state.reserved.json (film-state, valid=true)
+      ---
+      duration_ms: 1.1731
+      type: 'test'
+      ...
+    # Subtest: film-state.validating.json (film-state, valid=true)
+    ok 37 - film-state.validating.json (film-state, valid=true)
+      ---
+      duration_ms: 1.7304
+      type: 'test'
+      ...
+    # Subtest: invalid.client-failure.internal-retry-eligible.json (client-failure, valid=false)
+    ok 38 - invalid.client-failure.internal-retry-eligible.json (client-failure, valid=false)
+      ---
+      duration_ms: 13.6502
+      type: 'test'
+      ...
+    # Subtest: invalid.client-failure.protocol-retry-eligible.json (client-failure, valid=false)
+    ok 39 - invalid.client-failure.protocol-retry-eligible.json (client-failure, valid=false)
+      ---
+      duration_ms: 2.3517
+      type: 'test'
+      ...
+    # Subtest: invalid.client-failure.unknown-category.json (client-failure, valid=false)
+    ok 40 - invalid.client-failure.unknown-category.json (client-failure, valid=false)
+      ---
+      duration_ms: 15.9241
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M1-reserve-film-id-mismatch.json (response, valid=false)
+    ok 41 - invalid.mutation.M1-reserve-film-id-mismatch.json (response, valid=false)
+      ---
+      duration_ms: 3.3124
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M2-reserve-upload-path-foreign.json (response, valid=false)
+    ok 42 - invalid.mutation.M2-reserve-upload-path-foreign.json (response, valid=false)
+      ---
+      duration_ms: 1.0152
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M3-reserve-expires-at-mismatch.json (response, valid=false)
+    ok 43 - invalid.mutation.M3-reserve-expires-at-mismatch.json (response, valid=false)
+      ---
+      duration_ms: 0.8902
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M4-reserved-has-abandoned-at.json (response, valid=false)
+    ok 44 - invalid.mutation.M4-reserved-has-abandoned-at.json (response, valid=false)
+      ---
+      duration_ms: 0.9433
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M5-rejected-null-reason.json (film-state, valid=false)
+    ok 45 - invalid.mutation.M5-rejected-null-reason.json (film-state, valid=false)
+      ---
+      duration_ms: 17.9811
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M6-abandon-null-abandoned-at.json (response, valid=false)
+    ok 46 - invalid.mutation.M6-abandon-null-abandoned-at.json (response, valid=false)
+      ---
+      duration_ms: 0.4965
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M7-validating-null-generation.json (film-state, valid=false)
+    ok 47 - invalid.mutation.M7-validating-null-generation.json (film-state, valid=false)
+      ---
+      duration_ms: 15.4843
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M8-expiry-before-creation.json (response, valid=false)
+    ok 48 - invalid.mutation.M8-expiry-before-creation.json (response, valid=false)
+      ---
+      duration_ms: 0.7997
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X1-expired-before-expiry.json (film-state, valid=false)
+    ok 49 - invalid.mutation.X1-expired-before-expiry.json (film-state, valid=false)
+      ---
+      duration_ms: 1.89
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X10-validating-after-expiry.json (film-state, valid=false)
+    ok 50 - invalid.mutation.X10-validating-after-expiry.json (film-state, valid=false)
+      ---
+      duration_ms: 3.0837
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X11-receipt-not-reserved.json (response, valid=false)
+    ok 51 - invalid.mutation.X11-receipt-not-reserved.json (response, valid=false)
+      ---
+      duration_ms: 1.0693
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X12-abandon-from-validating-no-generation.json (response, valid=false)
+    ok 52 - invalid.mutation.X12-abandon-from-validating-no-generation.json (response, valid=false)
+      ---
+      duration_ms: 1.1522
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X13-abandon-from-reserved-has-generation.json (response, valid=false)
+    ok 53 - invalid.mutation.X13-abandon-from-reserved-has-generation.json (response, valid=false)
+      ---
+      duration_ms: 1.1818
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X14-stored-file-name-61-emoji.json (film-state, valid=false)
+    ok 54 - invalid.mutation.X14-stored-file-name-61-emoji.json (film-state, valid=false)
+      ---
+      duration_ms: 2.6395
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X15-stored-file-name-121-ascii.json (film-state, valid=false)
+    ok 55 - invalid.mutation.X15-stored-file-name-121-ascii.json (film-state, valid=false)
+      ---
+      duration_ms: 1.9453
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X2-reserved-has-generation.json (film-state, valid=false)
+    ok 56 - invalid.mutation.X2-reserved-has-generation.json (film-state, valid=false)
+      ---
+      duration_ms: 2.3964
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X3-rejected-null-generation.json (film-state, valid=false)
+    ok 57 - invalid.mutation.X3-rejected-null-generation.json (film-state, valid=false)
+      ---
+      duration_ms: 8.5724
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X4-reserved-status-changed.json (film-state, valid=false)
+    ok 58 - invalid.mutation.X4-reserved-status-changed.json (film-state, valid=false)
+      ---
+      duration_ms: 11.3725
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X5-abandoned-at-not-status-changed.json (film-state, valid=false)
+    ok 59 - invalid.mutation.X5-abandoned-at-not-status-changed.json (film-state, valid=false)
+      ---
+      duration_ms: 10.2636
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X6-status-changed-before-created.json (film-state, valid=false)
+    ok 60 - invalid.mutation.X6-status-changed-before-created.json (film-state, valid=false)
+      ---
+      duration_ms: 3.0615
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X7-rights-after-creation.json (film-state, valid=false)
+    ok 61 - invalid.mutation.X7-rights-after-creation.json (film-state, valid=false)
+      ---
+      duration_ms: 2.3871
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X8-upload-path-template.json (film-state, valid=false)
+    ok 62 - invalid.mutation.X8-upload-path-template.json (film-state, valid=false)
+      ---
+      duration_ms: 1.7319
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X9-file-name-not-canonical.json (film-state, valid=false)
+    ok 63 - invalid.mutation.X9-file-name-not-canonical.json (film-state, valid=false)
+      ---
+      duration_ms: 11.1019
+      type: 'test'
+      ...
+    # Subtest: invalid.response.client-transport-as-server.json (response, valid=false)
+    ok 64 - invalid.response.client-transport-as-server.json (response, valid=false)
+      ---
+      duration_ms: 0.5593
+      type: 'test'
+      ...
+    # Subtest: invalid.response.extra-key.json (response, valid=false)
+    ok 65 - invalid.response.extra-key.json (response, valid=false)
+      ---
+      duration_ms: 0.3724
+      type: 'test'
+      ...
+    # Subtest: invalid.response.reason-not-for-code.json (response, valid=false)
+    ok 66 - invalid.response.reason-not-for-code.json (response, valid=false)
+      ---
+      duration_ms: 0.2941
+      type: 'test'
+      ...
+    # Subtest: invalid.response.retryable-mismatch.json (response, valid=false)
+    ok 67 - invalid.response.retryable-mismatch.json (response, valid=false)
+      ---
+      duration_ms: 0.2112
+      type: 'test'
+      ...
+    # Subtest: invalid.response.timestamp-no-millis.json (response, valid=false)
+    ok 68 - invalid.response.timestamp-no-millis.json (response, valid=false)
+      ---
+      duration_ms: 0.4003
+      type: 'test'
+      ...
+    # Subtest: reserve.request.action-mismatch.json (request, valid=false)
+    ok 69 - reserve.request.action-mismatch.json (request, valid=false)
+      ---
+      duration_ms: 6.4728
+      type: 'test'
+      ...
+    # Subtest: reserve.request.at-byte-limit.json (request, valid=true)
+    ok 70 - reserve.request.at-byte-limit.json (request, valid=true)
+      ---
+      duration_ms: 11.6933
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-120-ascii-padded.json (request, valid=true)
+    ok 71 - reserve.request.file-name-120-ascii-padded.json (request, valid=true)
+      ---
+      duration_ms: 1.3232
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-120-ascii.json (request, valid=true)
+    ok 72 - reserve.request.file-name-120-ascii.json (request, valid=true)
+      ---
+      duration_ms: 8.6044
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-60-emoji-120-units.json (request, valid=true)
+    ok 73 - reserve.request.file-name-60-emoji-120-units.json (request, valid=true)
+      ---
+      duration_ms: 1.2422
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-61-emoji-122-units.json (request, valid=false)
+    ok 74 - reserve.request.file-name-61-emoji-122-units.json (request, valid=false)
+      ---
+      duration_ms: 1.1432
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-canonicalized.json (request, valid=true)
+    ok 75 - reserve.request.file-name-canonicalized.json (request, valid=true)
+      ---
+      duration_ms: 1.1305
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-control-char.json (request, valid=false)
+    ok 76 - reserve.request.file-name-control-char.json (request, valid=false)
+      ---
+      duration_ms: 1.6818
+      type: 'test'
+      ...
+    # Subtest: reserve.request.file-name-too-long.json (request, valid=false)
+    ok 77 - reserve.request.file-name-too-long.json (request, valid=false)
+      ---
+      duration_ms: 2.2507
+      type: 'test'
+      ...
+    # Subtest: reserve.request.format-not-allowed.json (request, valid=false)
+    ok 78 - reserve.request.format-not-allowed.json (request, valid=false)
+      ---
+      duration_ms: 13.6081
+      type: 'test'
+      ...
+    # Subtest: reserve.request.operation-id-not-uuid-v4.json (request, valid=false)
+    ok 79 - reserve.request.operation-id-not-uuid-v4.json (request, valid=false)
+      ---
+      duration_ms: 2.3599
+      type: 'test'
+      ...
+    # Subtest: reserve.request.operation-id-reused.json (request, valid=false)
+    ok 80 - reserve.request.operation-id-reused.json (request, valid=false)
+      ---
+      duration_ms: 12.0776
+      type: 'test'
+      ...
+    # Subtest: reserve.request.over-byte-limit.json (request, valid=false)
+    ok 81 - reserve.request.over-byte-limit.json (request, valid=false)
+      ---
+      duration_ms: 1.9668
+      type: 'test'
+      ...
+    # Subtest: reserve.request.rights-not-acknowledged.json (request, valid=false)
+    ok 82 - reserve.request.rights-not-acknowledged.json (request, valid=false)
+      ---
+      duration_ms: 11.2615
+      type: 'test'
+      ...
+    # Subtest: reserve.request.rights-wording-outdated.json (request, valid=false)
+    ok 83 - reserve.request.rights-wording-outdated.json (request, valid=false)
+      ---
+      duration_ms: 12.4407
+      type: 'test'
+      ...
+    # Subtest: reserve.request.unknown-field.json (request, valid=false)
+    ok 84 - reserve.request.unknown-field.json (request, valid=false)
+      ---
+      duration_ms: 2.5728
+      type: 'test'
+      ...
+    # Subtest: reserve.request.valid.json (request, valid=true)
+    ok 85 - reserve.request.valid.json (request, valid=true)
+      ---
+      duration_ms: 2.7869
+      type: 'test'
+      ...
+    # Subtest: reserve.request.wrong-schema-version.json (request, valid=false)
+    ok 86 - reserve.request.wrong-schema-version.json (request, valid=false)
+      ---
+      duration_ms: 2.9697
+      type: 'test'
+      ...
+    # Subtest: reserve.response.ok.json (response, valid=true)
+    ok 87 - reserve.response.ok.json (response, valid=true)
+      ---
+      duration_ms: 1.3961
+      type: 'test'
+      ...
+    # Subtest: all eight reviewer mutations (M1-M8) are present and rejected
+    ok 88 - all eight reviewer mutations (M1-M8) are present and rejected
+      ---
+      duration_ms: 0.8231
+      type: 'test'
+      ...
+    # Subtest: every server (code, reason) pair has a fixture
+    ok 89 - every server (code, reason) pair has a fixture
+      ---
+      duration_ms: 0.3747
+      type: 'test'
+      ...
+    # Subtest: published JSON Schema and SHA256SUMS match the source
+    ok 90 - published JSON Schema and SHA256SUMS match the source
+      ---
+      duration_ms: 51.7924
+      type: 'test'
+      ...
+    1..90
+ok 4 - coach-film.v1 fixtures
+  ---
+  duration_ms: 450.5234
+  type: 'suite'
+  ...
+# Subtest: coach-film.v1 tables
+    # Subtest: only unavailable is retryable; every code has reasons
+    ok 1 - only unavailable is retryable; every code has reasons
+      ---
+      duration_ms: 0.3004
+      type: 'test'
+      ...
+    # Subtest: client failures: only network, sdk unavailable/deadline retry-eligible
+    ok 2 - client failures: only network, sdk unavailable/deadline retry-eligible
+      ---
+      duration_ms: 0.5873
+      type: 'test'
+      ...
+    # Subtest: errorResponseFor refuses foreign reasons
+    ok 3 - errorResponseFor refuses foreign reasons
+      ---
+      duration_ms: 0.1003
+      type: 'test'
+      ...
+    # Subtest: state machine: terminal states have no exits; ready unreachable from reserved
+    ok 4 - state machine: terminal states have no exits; ready unreachable from reserved
+      ---
+      duration_ms: 0.0737
+      type: 'test'
+      ...
+    # Subtest: timestamps: canonical ISO with millis only
+    ok 5 - timestamps: canonical ISO with millis only
+      ---
+      duration_ms: 0.2024
+      type: 'test'
+      ...
+    # Subtest: file name canonicalization: NFC then trim; controls rejected
+    ok 6 - file name canonicalization: NFC then trim; controls rejected
+      ---
+      duration_ms: 0.2065
+      type: 'test'
+      ...
+    # Subtest: C4: file name limit counts UTF-16 units in request AND stored schemas
+    ok 7 - C4: file name limit counts UTF-16 units in request AND stored schemas
+      ---
+      duration_ms: 2.1891
+      type: 'test'
+      ...
+    # Subtest: manifest utf16Units matches the fixture's canonical file name
+    ok 8 - manifest utf16Units matches the fixture's canonical file name
+      ---
+      duration_ms: 0.6065
+      type: 'test'
+      ...
+    # Subtest: every limit is labelled placeholder or delegated
+    ok 9 - every limit is labelled placeholder or delegated
+      ---
+      duration_ms: 0.0937
+      type: 'test'
+      ...
+    1..9
+ok 5 - coach-film.v1 tables
+  ---
+  duration_ms: 4.6116
+  type: 'suite'
+  ...
+# Subtest: projectR3SuccessToV2 over every v1 success receipt
+    # Subtest: there are success receipts for both actions
+    ok 1 - there are success receipts for both actions
+      ---
+      duration_ms: 1.5608
+      type: 'test'
+      ...
+    # Subtest: abandon.response.ok-from-reserved.json: values preserved, four null keys added, v2-valid
+    ok 2 - abandon.response.ok-from-reserved.json: values preserved, four null keys added, v2-valid
+      ---
+      duration_ms: 11.5925
+      type: 'test'
+      ...
+    # Subtest: abandon.response.ok-from-validating.json: values preserved, four null keys added, v2-valid
+    ok 3 - abandon.response.ok-from-validating.json: values preserved, four null keys added, v2-valid
+      ---
+      duration_ms: 1.8424
+      type: 'test'
+      ...
+    # Subtest: abandon.response.ok-repeat-new-operation.json: values preserved, four null keys added, v2-valid
+    ok 4 - abandon.response.ok-repeat-new-operation.json: values preserved, four null keys added, v2-valid
+      ---
+      duration_ms: 1.3545
+      type: 'test'
+      ...
+    # Subtest: reserve.response.ok.json: values preserved, four null keys added, v2-valid
+    ok 5 - reserve.response.ok.json: values preserved, four null keys added, v2-valid
+      ---
+      duration_ms: 4.071
+      type: 'test'
+      ...
+    # Subtest: reserve receipt keeps the reservation expiry in data.expiresAt
+    ok 6 - reserve receipt keeps the reservation expiry in data.expiresAt
+      ---
+      duration_ms: 1.4479
+      type: 'test'
+      ...
+    1..6
+ok 6 - projectR3SuccessToV2 over every v1 success receipt
+  ---
+  duration_ms: 23.4866
+  type: 'suite'
+  ...
+# Subtest: projectR3SuccessToV2 fails closed
+    # Subtest: error.conflict.operation-id-reused.json: not a storable success receipt -> legacy-record-invalid
+    ok 1 - error.conflict.operation-id-reused.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 19.0409
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.film-not-found.json: not a storable success receipt -> legacy-record-invalid
+    ok 2 - error.failed-precondition.film-not-found.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 0.8197
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.invalid-state.json: not a storable success receipt -> legacy-record-invalid
+    ok 3 - error.failed-precondition.invalid-state.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 10.9811
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.operation-expired.json: not a storable success receipt -> legacy-record-invalid
+    ok 4 - error.failed-precondition.operation-expired.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.7065
+      type: 'test'
+      ...
+    # Subtest: error.failed-precondition.rights-wording-outdated.json: not a storable success receipt -> legacy-record-invalid
+    ok 5 - error.failed-precondition.rights-wording-outdated.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.1086
+      type: 'test'
+      ...
+    # Subtest: error.invalid-argument.action-mismatch.json: not a storable success receipt -> legacy-record-invalid
+    ok 6 - error.invalid-argument.action-mismatch.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 7.9309
+      type: 'test'
+      ...
+    # Subtest: error.invalid-argument.rights-acknowledgement-required.json: not a storable success receipt -> legacy-record-invalid
+    ok 7 - error.invalid-argument.rights-acknowledgement-required.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 2.4294
+      type: 'test'
+      ...
+    # Subtest: error.invalid-argument.schema-invalid.json: not a storable success receipt -> legacy-record-invalid
+    ok 8 - error.invalid-argument.schema-invalid.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 8.224
+      type: 'test'
+      ...
+    # Subtest: error.limit-exceeded.bytes-over-limit.json: not a storable success receipt -> legacy-record-invalid
+    ok 9 - error.limit-exceeded.bytes-over-limit.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.7616
+      type: 'test'
+      ...
+    # Subtest: error.limit-exceeded.format-not-allowed.json: not a storable success receipt -> legacy-record-invalid
+    ok 10 - error.limit-exceeded.format-not-allowed.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 9.5848
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.anonymous-not-allowed.json: not a storable success receipt -> legacy-record-invalid
+    ok 11 - error.permission-denied.anonymous-not-allowed.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 7.7607
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.beta-access-required.json: not a storable success receipt -> legacy-record-invalid
+    ok 12 - error.permission-denied.beta-access-required.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 8.3682
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.email-not-verified.json: not a storable success receipt -> legacy-record-invalid
+    ok 13 - error.permission-denied.email-not-verified.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 8.5764
+      type: 'test'
+      ...
+    # Subtest: error.permission-denied.not-team-owner.json: not a storable success receipt -> legacy-record-invalid
+    ok 14 - error.permission-denied.not-team-owner.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.418
+      type: 'test'
+      ...
+    # Subtest: error.team-cap-reached.team-film-cap.json: not a storable success receipt -> legacy-record-invalid
+    ok 15 - error.team-cap-reached.team-film-cap.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 9.1815
+      type: 'test'
+      ...
+    # Subtest: error.unauthenticated.account-disabled.json: not a storable success receipt -> legacy-record-invalid
+    ok 16 - error.unauthenticated.account-disabled.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.7815
+      type: 'test'
+      ...
+    # Subtest: error.unauthenticated.sign-in-required.json: not a storable success receipt -> legacy-record-invalid
+    ok 17 - error.unauthenticated.sign-in-required.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.1017
+      type: 'test'
+      ...
+    # Subtest: error.unavailable.backend-unavailable.json: not a storable success receipt -> legacy-record-invalid
+    ok 18 - error.unavailable.backend-unavailable.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.4868
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M1-reserve-film-id-mismatch.json: not a storable success receipt -> legacy-record-invalid
+    ok 19 - invalid.mutation.M1-reserve-film-id-mismatch.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 2.393
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M2-reserve-upload-path-foreign.json: not a storable success receipt -> legacy-record-invalid
+    ok 20 - invalid.mutation.M2-reserve-upload-path-foreign.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 12.8105
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M3-reserve-expires-at-mismatch.json: not a storable success receipt -> legacy-record-invalid
+    ok 21 - invalid.mutation.M3-reserve-expires-at-mismatch.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 15.9564
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M4-reserved-has-abandoned-at.json: not a storable success receipt -> legacy-record-invalid
+    ok 22 - invalid.mutation.M4-reserved-has-abandoned-at.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 2.1039
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M6-abandon-null-abandoned-at.json: not a storable success receipt -> legacy-record-invalid
+    ok 23 - invalid.mutation.M6-abandon-null-abandoned-at.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 16.2382
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.M8-expiry-before-creation.json: not a storable success receipt -> legacy-record-invalid
+    ok 24 - invalid.mutation.M8-expiry-before-creation.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 18.3158
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X11-receipt-not-reserved.json: not a storable success receipt -> legacy-record-invalid
+    ok 25 - invalid.mutation.X11-receipt-not-reserved.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 6.3422
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X12-abandon-from-validating-no-generation.json: not a storable success receipt -> legacy-record-invalid
+    ok 26 - invalid.mutation.X12-abandon-from-validating-no-generation.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 3.7333
+      type: 'test'
+      ...
+    # Subtest: invalid.mutation.X13-abandon-from-reserved-has-generation.json: not a storable success receipt -> legacy-record-invalid
+    ok 27 - invalid.mutation.X13-abandon-from-reserved-has-generation.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 3.3164
+      type: 'test'
+      ...
+    # Subtest: invalid.response.client-transport-as-server.json: not a storable success receipt -> legacy-record-invalid
+    ok 28 - invalid.response.client-transport-as-server.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 14.6506
+      type: 'test'
+      ...
+    # Subtest: invalid.response.extra-key.json: not a storable success receipt -> legacy-record-invalid
+    ok 29 - invalid.response.extra-key.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 2.4428
+      type: 'test'
+      ...
+    # Subtest: invalid.response.reason-not-for-code.json: not a storable success receipt -> legacy-record-invalid
+    ok 30 - invalid.response.reason-not-for-code.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 2.1336
+      type: 'test'
+      ...
+    # Subtest: invalid.response.retryable-mismatch.json: not a storable success receipt -> legacy-record-invalid
+    ok 31 - invalid.response.retryable-mismatch.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 7.2681
+      type: 'test'
+      ...
+    # Subtest: invalid.response.timestamp-no-millis.json: not a storable success receipt -> legacy-record-invalid
+    ok 32 - invalid.response.timestamp-no-millis.json: not a storable success receipt -> legacy-record-invalid
+      ---
+      duration_ms: 1.5437
+      type: 'test'
+      ...
+    # Subtest: corrupt JSON -> legacy-record-invalid (non-retryable)
+    ok 33 - corrupt JSON -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 0.1874
+      type: 'test'
+      ...
+    # Subtest: unknown top-level field -> legacy-record-invalid (non-retryable)
+    ok 34 - unknown top-level field -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 0.1492
+      type: 'test'
+      ...
+    # Subtest: unknown film field -> legacy-record-invalid (non-retryable)
+    ok 35 - unknown film field -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 0.1336
+      type: 'test'
+      ...
+    # Subtest: impossible ready receipt -> legacy-record-invalid (non-retryable)
+    ok 36 - impossible ready receipt -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 0.1135
+      type: 'test'
+      ...
+    # Subtest: reserve receipt under abandon action -> legacy-record-invalid (non-retryable)
+    ok 37 - reserve receipt under abandon action -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 1.0586
+      type: 'test'
+      ...
+    # Subtest: unknown action -> legacy-record-invalid (non-retryable)
+    ok 38 - unknown action -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 0.1188
+      type: 'test'
+      ...
+    # Subtest: non-string input -> legacy-record-invalid (non-retryable)
+    ok 39 - non-string input -> legacy-record-invalid (non-retryable)
+      ---
+      duration_ms: 0.0498
+      type: 'test'
+      ...
+    1..39
+ok 7 - projectR3SuccessToV2 fails closed
+  ---
+  duration_ms: 216.2169
+  type: 'suite'
+  ...
+# Subtest: decideReplay is pure
+    # Subtest: does not mutate a deep-frozen query
+    ok 1 - does not mutate a deep-frozen query
+      ---
+      duration_ms: 3.5367
+      type: 'test'
+      ...
+    # Subtest: v1 module is not used to emit v2-only reasons
+    ok 2 - v1 module is not used to emit v2-only reasons
+      ---
+      duration_ms: 0.1829
+      type: 'test'
+      ...
+    1..2
+ok 8 - decideReplay is pure
+  ---
+  duration_ms: 3.8743
+  type: 'suite'
+  ...
+# Subtest: Codex C1 reproductions: replay fails closed
+    # Subtest: missingExpiry -> error legacy-record-invalid (was: replay)
+    ok 1 - missingExpiry -> error legacy-record-invalid (was: replay)
+      ---
+      duration_ms: 4.0962
+      type: 'test'
+      ...
+    # Subtest: unknownStoredVersion -> error legacy-record-invalid (was: replay)
+    ok 2 - unknownStoredVersion -> error legacy-record-invalid (was: replay)
+      ---
+      duration_ms: 0.4144
+      type: 'test'
+      ...
+    # Subtest: corruptV1 -> error legacy-record-invalid (was: replay)
+    ok 3 - corruptV1 -> error legacy-record-invalid (was: replay)
+      ---
+      duration_ms: 0.4728
+      type: 'test'
+      ...
+    # Subtest: stored replayableUntilMs NaN -> legacy-record-invalid
+    ok 4 - stored replayableUntilMs NaN -> legacy-record-invalid
+      ---
+      duration_ms: 0.2606
+      type: 'test'
+      ...
+    # Subtest: stored replayableUntilMs Infinity -> legacy-record-invalid
+    ok 5 - stored replayableUntilMs Infinity -> legacy-record-invalid
+      ---
+      duration_ms: 0.226
+      type: 'test'
+      ...
+    # Subtest: stored replayableUntilMs -Infinity -> legacy-record-invalid
+    ok 6 - stored replayableUntilMs -Infinity -> legacy-record-invalid
+      ---
+      duration_ms: 0.1418
+      type: 'test'
+      ...
+    # Subtest: stored replayableUntilMs -1 -> legacy-record-invalid
+    ok 7 - stored replayableUntilMs -1 -> legacy-record-invalid
+      ---
+      duration_ms: 0.5355
+      type: 'test'
+      ...
+    # Subtest: stored replayableUntilMs 9007199254740992 -> legacy-record-invalid
+    ok 8 - stored replayableUntilMs 9007199254740992 -> legacy-record-invalid
+      ---
+      duration_ms: 0.575
+      type: 'test'
+      ...
+    # Subtest: query nowMs NaN -> invalid-input (no replay)
+    ok 9 - query nowMs NaN -> invalid-input (no replay)
+      ---
+      duration_ms: 0.6328
+      type: 'test'
+      ...
+    # Subtest: query nowMs Infinity -> invalid-input (no replay)
+    ok 10 - query nowMs Infinity -> invalid-input (no replay)
+      ---
+      duration_ms: 0.4642
+      type: 'test'
+      ...
+    # Subtest: query nowMs -1 -> invalid-input (no replay)
+    ok 11 - query nowMs -1 -> invalid-input (no replay)
+      ---
+      duration_ms: 0.1715
+      type: 'test'
+      ...
+    # Subtest: query nowMs 1.5 -> invalid-input (no replay)
+    ok 12 - query nowMs 1.5 -> invalid-input (no replay)
+      ---
+      duration_ms: 0.2158
+      type: 'test'
+      ...
+    # Subtest: query nowMs 1 -> invalid-input (no replay)
+    ok 13 - query nowMs 1 -> invalid-input (no replay)
+      ---
+      duration_ms: 0.1861
+      type: 'test'
+      ...
+    # Subtest: the valid v1 receipt is still replayed byte-for-byte
+    ok 14 - the valid v1 receipt is still replayed byte-for-byte
+      ---
+      duration_ms: 6.8606
+      type: 'test'
+      ...
+    1..14
+ok 9 - Codex C1 reproductions: replay fails closed
+  ---
+  duration_ms: 16.7236
+  type: 'suite'
+  ...
+# Subtest: Codex C2 reproductions: attempt helpers fail closed
+    # Subtest: NaN admitted/time values never admit (was: admit true)
+    ok 1 - NaN admitted/time values never admit (was: admit true)
+      ---
+      duration_ms: 0.8399
+      type: 'test'
+      ...
+    # Subtest: two classified kills WITHOUT a step are not same-step (was: processing-limit-exceeded)
+    ok 2 - two classified kills WITHOUT a step are not same-step (was: processing-limit-exceeded)
+      ---
+      duration_ms: 2.4892
+      type: 'test'
+      ...
+    # Subtest: media-verdict reason made-up is refused (was: rejected/made-up)
+    ok 3 - media-verdict reason made-up is refused (was: rejected/made-up)
+      ---
+      duration_ms: 0.5443
+      type: 'test'
+      ...
+    # Subtest: admitted Infinity never admits
+    ok 4 - admitted Infinity never admits
+      ---
+      duration_ms: 0.2092
+      type: 'test'
+      ...
+    # Subtest: admitted NaN never admits
+    ok 5 - admitted NaN never admits
+      ---
+      duration_ms: 0.1166
+      type: 'test'
+      ...
+    # Subtest: jobCreatedAtMs Infinity never admits
+    ok 6 - jobCreatedAtMs Infinity never admits
+      ---
+      duration_ms: 0.0972
+      type: 'test'
+      ...
+    # Subtest: nowMs Infinity never admits
+    ok 7 - nowMs Infinity never admits
+      ---
+      duration_ms: 0.1797
+      type: 'test'
+      ...
+    # Subtest: nowMs NaN never admits
+    ok 8 - nowMs NaN never admits
+      ---
+      duration_ms: 0.0922
+      type: 'test'
+      ...
+    # Subtest: jobCreatedAtMs 9007199254740992 never admits
+    ok 9 - jobCreatedAtMs 9007199254740992 never admits
+      ---
+      duration_ms: 0.4104
+      type: 'test'
+      ...
+    # Subtest: the agreed budget is unchanged: 3 admitted including the first
+    ok 10 - the agreed budget is unchanged: 3 admitted including the first
+      ---
+      duration_ms: 0.3378
+      type: 'test'
+      ...
+    # Subtest: same-step classified kills with a valid step still reject
+    ok 11 - same-step classified kills with a valid step still reject
+      ---
+      duration_ms: 0.3106
+      type: 'test'
+      ...
+    1..11
+ok 10 - Codex C2 reproductions: attempt helpers fail closed
+  ---
+  duration_ms: 6.0205
+  type: 'suite'
+  ...
+# Subtest: helpers are total: garbage never throws, admits or rejects
+    # Subtest: input undefined
+    ok 1 - input undefined
+      ---
+      duration_ms: 0.2632
+      type: 'test'
+      ...
+    # Subtest: input null
+    ok 2 - input null
+      ---
+      duration_ms: 0.0724
+      type: 'test'
+      ...
+    # Subtest: input 0
+    ok 3 - input 0
+      ---
+      duration_ms: 0.1921
+      type: 'test'
+      ...
+    # Subtest: input ""
+    ok 4 - input ""
+      ---
+      duration_ms: 0.1717
+      type: 'test'
+      ...
+    # Subtest: input "x"
+    ok 5 - input "x"
+      ---
+      duration_ms: 0.3068
+      type: 'test'
+      ...
+    # Subtest: input true
+    ok 6 - input true
+      ---
+      duration_ms: 0.2946
+      type: 'test'
+      ...
+    # Subtest: input []
+    ok 7 - input []
+      ---
+      duration_ms: 0.1606
+      type: 'test'
+      ...
+    # Subtest: input {}
+    ok 8 - input {}
+      ---
+      duration_ms: 0.3223
+      type: 'test'
+      ...
+    # Subtest: input [null]
+    ok 9 - input [null]
+      ---
+      duration_ms: 0.2174
+      type: 'test'
+      ...
+    # Subtest: input [{}]
+    ok 10 - input [{}]
+      ---
+      duration_ms: 0.455
+      type: 'test'
+      ...
+    # Subtest: input {"end":"crash"}
+    ok 11 - input {"end":"crash"}
+      ---
+      duration_ms: 0.1959
+      type: 'test'
+      ...
+    # Subtest: input function
+    ok 12 - input function
+      ---
+      duration_ms: 0.1085
+      type: 'test'
+      ...
+    # Subtest: input {}
+    ok 13 - input {}
+      ---
+      duration_ms: 0.1314
+      type: 'test'
+      ...
+    # Subtest: exported validation schemas are the ones the helpers apply
+    ok 14 - exported validation schemas are the ones the helpers apply
+      ---
+      duration_ms: 0.3074
+      type: 'test'
+      ...
+    1..14
+ok 11 - helpers are total: garbage never throws, admits or rejects
+  ---
+  duration_ms: 3.663
+  type: 'suite'
+  ...
+1..11
+# tests 408
+# suites 11
+# pass 408
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1440.984
