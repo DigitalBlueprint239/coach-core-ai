@@ -1,5 +1,10 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-21 / LFS PR87 third repair (Claude implementer): reviewer FAIL c-6313674964 (N-1, N-2) addressed; targets c-6313885917. Codex PASS c-6313557232 at `e7fdff3` stays on record.
+> - **N-1:** runs of empty pages with advancing tokens are followed, with a durable `list-stalled` warning from 3 onwards. Only a repeated token (request token or one within the stall run) falls back to the name cursor.
+> - **N-2:** the 14 vs 15 Firestore gate failure was one attempt timed out before its TLS connection existed (never sent); reproduced under load. Bounds are now asserted on client-side attempts, reconciled with the server log; Commit tests warm the channel.
+> - New code and tests only; frozen surfaces and `lfs-transport.js` unchanged. Next: both verdicts on the new SHA. MVP NO-GO.
+
 > 2026-10-21 / LFS PR87 second repair (Claude implementer): Codex FAIL c-6312514310 and reviewer FAIL c-6312585072 addressed (targets c-6312917818).
 > - **UTF-8 order:** cursor and replay filtering compare names as UTF-8 bytes, as GCS does; the `\uE000`/`\u{10000}` pair now gets evidence for both.
 > - **R-1:** non-advancing continuations are detected (same token, or 3 consecutive stalls), recorded as `list-no-progress` and resumed by name.

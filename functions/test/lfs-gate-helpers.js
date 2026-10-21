@@ -112,5 +112,33 @@ function bgdMissing(call, _cb, req, v1) {
   call.end();
 }
 
+/**
+ * CLIENT-side RPC attempt recorder (PR87 N-2). grpc-js runs the public
+ * `callInvocationTransformer` client option once per call attempt, before
+ * the call is started; gax forwards `grpc.callInvocationTransformer` from
+ * the Firestore settings. The SDK's own retry layers therefore show up here
+ * exactly, including attempts whose deadline expires before any connection
+ * is picked ("Waiting for LB pick"): those never reach a server, so a
+ * server-side count alone under-counts them under load (run 39581464447).
+ * @return {{transformer: function, attempts: object[]}}
+ */
+function attemptRecorder() {
+  const attempts = [];
+  const transformer = (props) => {
+    const rec = {m: props.methodDefinition.path.split("/").pop(),
+      code: null, details: null};
+    attempts.push(rec);
+    props.call.on("status", (st) => {
+      rec.code = st.code;
+      rec.details = String(st.details || "");
+    });
+    return props;
+  };
+  return {transformer, attempts};
+}
+
+/** The attempt ended before a transport was picked: nothing was sent. */
+const unsent = (a) => /Waiting for LB pick/.test(a.details || "");
+
 module.exports = {startHttp, until, startFakeFirestore, bgdMissing,
-  firestoreProtos};
+  firestoreProtos, attemptRecorder, unsent};

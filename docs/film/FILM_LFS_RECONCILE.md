@@ -86,6 +86,12 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 
 ### Gate proofs (loopback; real pinned SDKs; every cut observed by the server)
 
+**Counting Firestore attempts (PR87 N-2).** Retry bounds are asserted on the **client** attempt count. It is recorded with grpc-js's public `callInvocationTransformer` client option, which gax forwards from the settings, and which runs once per attempt. The server log is reconciled against it:
+- every sent attempt is server-observed and cut within deadline + slack;
+- an attempt whose deadline expired before a connection was picked (`DEADLINE_EXCEEDED … Waiting for LB pick`, no `remote_addr`) was never sent, so the server can't see it.
+
+Merge run 39581464447 observed 14 of 15 server-side for exactly this reason. It was reproduced locally under CPU load (client 15, server 14, 4 of 4 runs) and is not an extra or missing retry layer. Commit tests first establish the channel with one answered read, so the precondition read can't time out on connection setup.
+
 | Suite | Count | What it proves |
 |---|---|---|
 | `lfs-gate-storage-https.test.js` | 5 | **Production branch on the default origins**, with no endpoint override: `https://storage.googleapis.com` and `http://metadata.google.internal`, reached through a controlled undici-dispatcher interceptor (a throwaway self-signed `storage.googleapis.com` certificate trusted only by that dispatcher). Origin, auth, range, generation and precondition are asserted. Hung list, head and DELETE are cut and the TLS close is server-observed; a hung metadata server is cut. |
@@ -98,7 +104,7 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 ```
 {project, bucket, prefix, policyRevision, passId, passStartedAtMs,
  afterName, listQuery{startOffset,pageToken}, passObjects, passEvidence,
- listStalls, lease{holder,fence,untilMs}, fence,
+ listStalls, stallTokens[], lease{holder,fence,untilMs}, fence,
  lastError{code,atMs}, consecutiveFailures, previous{…}}
 ```
 - **Binding:** project, bucket and policy (`lfs-r3.2`) are bound to the state. A change moves the old cursor into `previous` and starts a new pass.
@@ -110,7 +116,10 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
   - **the list `nextPageToken` is authoritative (PR87 F1).** A short page is never treated as the end. `listQuery` stores the query of the page holding the next unprocessed object, and is persisted across invocations;
   - a fully processed page that has a token advances `listQuery` by that token, even when the page was empty or held only the overlap entry;
   - an invalid or expired token (400/410) clears `listQuery` with `lastError: page-token-invalid`, and the next run lists from `afterName`;
-  - **non-advancing continuation (PR87 R-1):** a token page that yields no name past `afterName` is a stall, counted in `listStalls` (persisted; reset by any checkpoint or pass end). If the returned token equals the request token, or stalls reach `listStallMax` (3), the run records a fenced `lastError: list-no-progress`, increments `consecutiveFailures`, clears `listQuery` (so the next run lists from `afterName`) and stops with `list:no-progress`. A legitimate empty page with an advancing token is followed;
+  - **continuation pages with no new name (PR87 R-1, N-1):** a token page that yields no name past `afterName` is a stall, counted in `listStalls`. The stall run's token hashes (`sha256(token)[:16]`, the last 16) are kept in `stallTokens`. Both are persisted and are reset by any checkpoint, pass end or fallback.
+    - **Evidence of non-advance:** the returned token equals the request token, or repeats one in `stallTokens`. The run records a fenced `lastError: list-no-progress`, increments `consecutiveFailures`, clears `listQuery` (the next run lists from `afterName`) and stops with `list:no-progress`.
+    - **Advancing tokens:** GCS may return empty pages with advancing tokens, so these are always **followed**. From `listStallMax` (3) consecutive stalls onwards, each further one records a durable warning `lastError: list-stalled` and increments `consecutiveFailures`; the summary reports `listStalled`.
+    - **Limit:** a server issuing ever-fresh tokens that never advance is indistinguishable from a long legitimate empty run. It stays visible (`list-stalled`, a rising `consecutiveFailures`) and never yields false coverage or a pass end; a cycle longer than 16 tokens is detected only as stalls;
   - list size is `min(pageMax, remaining + 1)`; at most 2 lists and ≤ 100 objects per invocation;
   - a **fenced checkpoint per object** (and its evidence) is written in the same transaction.
 - **Pass end:** only when a page has **no** continuation token **and** has been fully processed.
@@ -178,7 +187,7 @@ N is **not** bounded by the 20-film active cap, because orphans accumulate acros
 
 | File | Count | Covers |
 |---|---|---|
-| `lfs-reconcile.test.js` | 70 | L1–L8, L10, L14, L16–L19, plus PR87 F1–F4, UTF-8 order, R-1 and R-2 regressions |
+| `lfs-reconcile.test.js` | 73 | L1–L8, L10, L14, L16–L19, plus PR87 F1–F4, UTF-8 order, R-1/N-1 (repeated, cycling, fresh and 3/5 advancing empty pages) and R-2 regressions |
 | `lfs-reconcile-loopback.test.js` | 7 | L9 and L15 at reconciler level, real-facade pagination, UTF-8 order with tokens and partial budgets |
 | `lfs-boundary.test.js` | 15 | L11, L12 |
 | `lfs-gate-*` | 49 | L9, L15, L16 transport proofs |

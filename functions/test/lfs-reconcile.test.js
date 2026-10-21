@@ -1111,34 +1111,78 @@ describe("PR87 R-1 (c-6312585072): a non-advancing continuation is " +
     assert.deepEqual(p.ev(), ["1", "2", "3"], "third reached");
     assert.ok(r.stateSchema.safeParse(p.st()).success);
   });
-  it("a FRESH token each time that never advances: stalls persist " +
-      "across invocations; at listStallMax the error is recorded and the " +
-      "run resumes by name", async () => {
+  it("a FRESH token each time, always empty (N-1): indistinguishable " +
+      "from a long legitimate empty run, so it is FOLLOWED, never falls " +
+      "back; from listStallMax each page records list-stalled durably",
+  async () => {
     let n = 0;
     const p = probe((q) => {
       if (q.pageToken) return {items: [], nextPageToken: `t${++n}`};
-      const tail = items.filter((x) => !q.startOffset ||
-        x.name > q.startOffset);
-      return {items: tail.slice(0, 1), nextPageToken: tail.length > 1 ?
-        `t${++n}` : null};
+      return {items: items.slice(0, 1), nextPageToken: `t${++n}`};
     });
-    const L = r.RECONCILE_LIMITS;
-    assert.equal(L.listStallMax, 3);
+    assert.equal(r.RECONCILE_LIMITS.listStallMax, 3);
     const runs = [];
     for (let i = 0; i < 3; i++) {
       const out = await p.rc.reconcileQuarantine({limit: 10});
-      runs.push([out.processed, out.stoppedFor, p.st().listStalls,
-        p.st().lastError && p.st().lastError.code]);
+      const st = p.st();
+      runs.push([out.processed, out.stoppedFor, out.listStalled || 0,
+        st.listStalls, st.lastError && st.lastError.code,
+        st.consecutiveFailures]);
     }
     assert.deepEqual(runs, [
-      [1, "list-limit", 1, null], // object 1; one empty continuation
-      [0, "list:no-progress", 0, "list-no-progress"], // stalls 2, 3
-      [1, "list-limit", 1, null], // resumed by name: object 2, progress
+      [1, "list-limit", 0, 1, null, 0], // object 1; one empty continuation
+      [0, "list-limit", 1, 3, "list-stalled", 1], // stalls 2, 3
+      [0, "list-limit", 2, 5, "list-stalled", 3], // stalls 4, 5
     ]);
-    assert.equal(p.calls.length, 6); // two lists per invocation
-    assert.equal(p.calls[4].startOffset, items[0].name);
-    assert.equal(p.calls[4].pageToken, undefined);
+    assert.ok(p.calls.slice(1).every((q) => q.pageToken), "never restarted");
+    assert.equal(p.st().stallTokens.length, 5);
   });
+  it("a CYCLING token (t1, t2, t1, ...) is evidence of non-advance: " +
+      "list-no-progress, fallback to the name cursor", async () => {
+    const p = probe((q) => {
+      if (!q.pageToken) {
+        const tail = items.filter((x) => !q.startOffset ||
+          x.name > q.startOffset);
+        return {items: tail.slice(0, 1), nextPageToken: "t1"};
+      }
+      return {items: [], nextPageToken: q.pageToken === "t1" ? "t2" : "t1"};
+    });
+    let out = await p.rc.reconcileQuarantine({limit: 10}); // t1 -> t2
+    assert.equal(out.stoppedFor, "list-limit");
+    out = await p.rc.reconcileQuarantine({limit: 10}); // t2 -> t1: repeat
+    assert.equal(out.stoppedFor, "list:no-progress");
+    assert.equal(p.st().lastError.code, "list-no-progress");
+    assert.equal(p.st().listQuery, null);
+    assert.deepEqual(p.st().stallTokens, []);
+    out = await p.rc.reconcileQuarantine({limit: 10});
+    assert.equal(p.calls.at(-2).startOffset, items[0].name);
+    assert.equal(out.processed, 1);
+  });
+  for (const k of [3, 5]) {
+    it(`${k} legitimate empty pages with ADVANCING tokens before the ` +
+        "object (N-1; reviewer empty-run.cjs shape): the object is reached " +
+        "within bounded runs; never a fallback (failed on e7fdff3)",
+    async () => {
+      const item = {...items[0], name: c.uploadPathFor("team",
+          "00000000-0000-4000-8000-000000000009"), generation: "9"};
+      const p = probe((q) => {
+        const n = q.pageToken ? Number(q.pageToken.slice(1)) : 0;
+        return n < k ? {items: [], nextPageToken: "t" + (n + 1)} :
+          {items: [item], nextPageToken: null};
+      });
+      const runs = [];
+      for (let i = 0; i < 6 && !runs.includes("END"); i++) {
+        const x = await p.rc.reconcileQuarantine({limit: 10});
+        runs.push(x.passEnded ? "END" : x.stoppedFor);
+      }
+      assert.ok(runs.includes("END"), JSON.stringify(runs));
+      assert.ok(!runs.includes("list:no-progress"), JSON.stringify(runs));
+      assert.ok(runs.length <= Math.ceil((k + 1) / 2), JSON.stringify(runs));
+      assert.deepEqual(p.ev(), ["9"]);
+      assert.equal(p.st().lastError, null, "cleared by the checkpoint");
+      assert.equal(p.st().listStalls, 0);
+    });
+  }
   it("a legitimate empty page with an advancing token is followed with " +
       "no error", async () => {
     let served = false;

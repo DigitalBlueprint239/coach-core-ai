@@ -66,11 +66,15 @@ function deriveLimits(transport = LFS_TRANSPORT_LIMITS, over = {}) {
     objectsMax: 100,
     listsMax: 2,
     /**
-     * Consecutive continuation pages with no name past the cursor before the
-     * listing is declared non-advancing (PR87 R-1). GCS may legitimately
-     * return an empty page with a token; it never repeats one forever.
+     * Consecutive continuation pages with no name past the cursor after
+     * which each further one records a durable `list-stalled` warning while
+     * the token is still followed (PR87 R-1, N-1). GCS may legitimately
+     * return empty pages with advancing tokens; only evidence of
+     * non-advance (a repeated token) falls back to the name cursor.
      */
     listStallMax: 3,
+    /** Token hashes remembered per stall run (repeat detection). */
+    stallTokensMax: 16,
     txMaxAttempts,
     objectEnvelopeMs,
     backgroundTailMs,
@@ -121,6 +125,8 @@ const stateSchema = z.object({
   passEvidence: ms,
   /** Consecutive continuation pages with no new name (PR87 R-1). */
   listStalls: ms,
+  /** sha256(token)[:16] of the current stall run, bounded (PR87 N-1). */
+  stallTokens: z.array(z.string().regex(/^[0-9a-f]{16}$/)).max(64),
   lease: z.object({holder: z.string().min(1).max(128),
     fence: z.number().int().positive(), untilMs: ms}).strict().nullable(),
   fence: ms,
@@ -340,7 +346,7 @@ function createQuarantineReconciler(deps) {
     policyRevision: POLICY_REVISION,
     passId: crypto.randomBytes(16).toString("hex"), passStartedAtMs: at,
     afterName: null, listQuery: null, passObjects: 0, passEvidence: 0,
-    listStalls: 0, lease: null, fence: 0,
+    listStalls: 0, stallTokens: [], lease: null, fence: 0,
     lastError: null, consecutiveFailures: 0, previous: prev});
 
   /**
@@ -474,7 +480,8 @@ function createQuarantineReconciler(deps) {
         tx.set(stateRef(), {...s, fence,
           lease: {holder: ctx.holder, fence, untilMs: t + limits.leaseMs}});
         return {outcome: "acquired", fence, afterName: s.afterName,
-          listQuery: s.listQuery, listStalls: s.listStalls};
+          listQuery: s.listQuery, listStalls: s.listStalls,
+          stallTokens: s.stallTokens};
       });
     } catch (e) {
       // contention or a transport failure: bounded. The acquire may still
@@ -496,6 +503,7 @@ function createQuarantineReconciler(deps) {
     let query = acquired.listQuery ||
       {startOffset: afterName, pageToken: null};
     let stalls = acquired.listStalls;
+    let seen = acquired.stallTokens;
     const out = {processed: 0, outcomes: {}, evidence: 0, young: 0,
       lists: 0, passEnded: false, stoppedFor: null};
     const bump = (k) => {
@@ -591,42 +599,54 @@ function createQuarantineReconciler(deps) {
         const cp = await tryFenced(ctx, (s) => ({...s, afterName: name,
           listQuery: pageQuery, passObjects: s.passObjects + 1,
           passEvidence: s.passEvidence + (evidence ? 1 : 0),
-          listStalls: 0, lastError: null, consecutiveFailures: 0}),
-        evidence);
+          listStalls: 0, stallTokens: [], lastError: null,
+          consecutiveFailures: 0}), evidence);
         if (!cp.ok) {
           out.stoppedFor = stateStop(cp);
           break lists;
         }
         afterName = name;
         stalls = 0;
+        seen = [];
         out.processed += 1;
       }
+      let stalled = false;
       if (token && items.length === 0) {
         // a continuation that yields no name past the cursor (PR87 R-1):
-        // tolerated a bounded number of times; a token that repeats itself
-        // or a run of stalls is a non-advancing listing. Record it durably
-        // and fall back to the name cursor (startOffset = afterName).
+        // only EVIDENCE of non-advance (the request token returned again,
+        // or a token repeated within this stall run) falls back to the
+        // name cursor. A long run of empty pages with advancing tokens is
+        // legitimate (N-1): it is followed, with a durable warning from
+        // listStallMax onwards.
         stalls += 1;
-        if (token === query.pageToken || stalls >= limits.listStallMax) {
+        const h = sha256(token).slice(0, 16);
+        if (token === query.pageToken || seen.includes(h)) {
           const np = await tryFenced(ctx, (s, t) => ({...s, listQuery: null,
-            listStalls: 0, lastError: {code: "list-no-progress", atMs: t},
+            listStalls: 0, stallTokens: [],
+            lastError: {code: "list-no-progress", atMs: t},
             consecutiveFailures: s.consecutiveFailures + 1}));
           out.stoppedFor = np.ok ? "list:no-progress" : stateStop(np);
           break;
         }
+        seen = [...seen, h].slice(-limits.stallTokensMax);
+        stalled = stalls >= limits.listStallMax;
       }
       if (token) {
         // the page is fully processed but the listing continues: advance
         // to the next page by its token (empty/overlap-only pages too)
         const next = {startOffset: query.startOffset, pageToken: token};
         const st = stalls;
-        const adv = await tryFenced(ctx, (s) => ({...s, listQuery: next,
-          listStalls: st}));
+        const sh = seen;
+        const adv = await tryFenced(ctx, (s, t) => ({...s, listQuery: next,
+          listStalls: st, stallTokens: sh, ...(stalled ? {lastError:
+            {code: "list-stalled", atMs: t}, consecutiveFailures:
+            s.consecutiveFailures + 1} : {})}));
         if (!adv.ok) {
           out.stoppedFor = stateStop(adv);
           break;
         }
         query = next;
+        if (stalled) out.listStalled = (out.listStalled || 0) + 1;
         if (out.processed >= limit) break;
         continue;
       }
@@ -634,7 +654,7 @@ function createQuarantineReconciler(deps) {
       const end = await tryFenced(ctx, (s, t) => ({...s, afterName: null,
         listQuery: null, passId: crypto.randomBytes(16).toString("hex"),
         passStartedAtMs: t, passObjects: 0, passEvidence: 0,
-        listStalls: 0}));
+        listStalls: 0, stallTokens: []}));
       if (end.ok) {
         out.passEnded = true;
         afterName = null;
