@@ -807,3 +807,194 @@ describe("boundary: limits are TEST placeholders derived from the envelope",
         assert.equal(r.RECONCILE_DESIGNATION.designation, "TEST_ONLY");
       });
     });
+
+describe("PR87 F1: pagination is authoritative (short pages, tokens)", () => {
+  const stable = async (w, n) => {
+    const es = [];
+    for (let i = 0; i < n; i++) {
+      es.push(await w.lostUpload(`00000000-0000-4000-9000-${String(i)
+          .padStart(12, "0")}`));
+    }
+    return es;
+  };
+  it("short pages WITH a continuation token never end the pass; every " +
+      "stable object is presented (Codex reproducer shape)", async () => {
+    const w = world();
+    const es = await stable(w, 3);
+    w.advance(16 * MIN);
+    w.bucket.pageCap = 2; // GCS may return fewer items than maxResults
+    // transient heads keep every object live (presented, never deleted)
+    w.bucket.downloadFault = async () => {
+      throw Object.assign(new Error("reset"), {code: "ECONNRESET"});
+    };
+    const seen = new Set();
+    let ended = 0;
+    for (let i = 0; i < 4; i++) {
+      const out = await w.run(50);
+      ended += out.passEnded ? 1 : 0;
+      for (const ev of w.evidence()) seen.add(ev.name);
+    }
+    assert.deepEqual([...seen].sort(), es.map((e) => e.name).sort(),
+        "the third object is reached");
+    assert.ok(ended >= 1);
+    assert.ok(w.bucket.lists.some((q) => q.pageToken),
+        "the continuation token was followed");
+  });
+  it("an empty or overlap-only page with a token advances by the token " +
+      "(no indefinite prefix replay)", async () => {
+    const w = world();
+    const es = await stable(w, 2);
+    w.advance(16 * MIN);
+    let first = true;
+    w.bucket.listFault = async (q, items, token) => {
+      if (first) {
+        first = false;
+        // empty page whose token resumes before everything: listing goes on
+        return {items: [], token: `tok:${Buffer.from("quarantine/")
+            .toString("base64url")}`};
+      }
+      return {items, token};
+    };
+    const out = await w.run(50);
+    assert.equal(out.processed, 2);
+    assert.equal(out.passEnded, true);
+    for (const e of es) assert.equal(w.record(e).state, "deleted");
+  });
+  it("a persisted token resumes the SAME query in the next invocation " +
+      "and covers the rest even after earlier objects were deleted",
+  async () => {
+    const w = world({limits: {listsMax: 1}});
+    const es = await stable(w, 3);
+    w.advance(16 * MIN);
+    w.bucket.pageCap = 2;
+    assert.equal((await w.run(50)).processed, 2);
+    const out = await w.run(50);
+    assert.equal(w.bucket.lists[1].pageToken,
+        `tok:${Buffer.from(es[1].name).toString("base64url")}`);
+    assert.equal(out.processed, 1);
+    assert.equal(out.passEnded, true);
+    for (const e of es) assert.equal(w.record(e).state, "deleted");
+  });
+  it("a page token is persisted across invocations; an invalid/expired " +
+      "token (400) is cleared with evidence and the next run restarts " +
+      "from the name cursor", async () => {
+    const w = world({limits: {listsMax: 1}});
+    const es = await stable(w, 3);
+    w.advance(16 * MIN);
+    w.bucket.pageCap = 2;
+    let out = await w.run(50);
+    assert.equal(out.processed, 2);
+    assert.deepEqual(w.state().listQuery, {startOffset: null,
+      pageToken: `tok:${Buffer.from(es[1].name).toString("base64url")}`});
+    w.db.write(r.STATE_PATH, {...w.state(), listQuery: {startOffset: null,
+      pageToken: "garbage"}});
+    out = await w.run(50);
+    assert.equal(out.stoppedFor, "list:page-token-invalid");
+    assert.equal(w.state().listQuery, null);
+    assert.equal(w.state().lastError.code, "page-token-invalid");
+    out = await w.run(50);
+    assert.equal(w.bucket.lists.at(-1).startOffset, es[1].name);
+    assert.equal(w.record(es[2]).state, "deleted");
+  });
+});
+
+describe("PR87 F2: discovery/transport target binding", () => {
+  it("facade bucket differs from the configured bucket: fail closed " +
+      "before any list or state write", async () => {
+    const w = world();
+    await w.lostUpload(crypto.randomUUID());
+    w.advance(16 * MIN);
+    w.cfg.bucket = "demo-other.appspot.com";
+    assert.deepEqual(await w.run(), {targetMismatch: true, processed: 0});
+    assert.equal(w.bucket.lists.length, 0);
+    assert.equal(w.state(), null);
+    assert.deepEqual(w.records(), []);
+    assert.equal(w.bucket.objects.size, 1);
+  });
+  it("configuration changes mid-invocation: the run stops before the " +
+      "next object; records stay bound to the pinned (facade) bucket",
+  async () => {
+    const w = world();
+    const a = await w.lostUpload("00000000-0000-4000-8000-00000000000a");
+    const b = await w.lostUpload("00000000-0000-4000-8000-00000000000b");
+    w.advance(16 * MIN);
+    w.bucket.deleteFault = async () => {
+      w.bucket.deleteFault = null;
+      w.cfg.bucket = "demo-other.appspot.com"; // during object a
+    };
+    const out = await w.run();
+    assert.equal(out.stoppedFor, "config-changed");
+    assert.equal(out.processed, 1);
+    assert.equal(w.record(a).bucket, BKT);
+    assert.equal(w.record(a).state, "deleted");
+    assert.equal(w.record(b), null);
+    assert.ok(w.records().every((x) => x.bucket === BKT));
+  });
+});
+
+describe("PR87 F3: admission reserves the derived envelope", () => {
+  it("defaults: object budget = derived envelope; invocation covers it; " +
+      "lease covers envelope + background tail; trigger timeout covers " +
+      "the invocation", () => {
+    const L = r.RECONCILE_LIMITS;
+    assert.equal(L.objectBudgetMs, L.objectEnvelopeMs);
+    assert.ok(L.invocationBudgetMs >= L.objectBudgetMs);
+    assert.ok(L.leaseMs >= L.objectEnvelopeMs + L.backgroundTailMs);
+    const t = r.defineReconcileTrigger({run: async () => {},
+      isEnabled: () => false});
+    assert.ok(t.__endpoint.timeoutSeconds * 1000 >= L.invocationBudgetMs);
+    assert.throws(() => r.deriveLimits(undefined, {objectBudgetMs: 10,
+      invocationBudgetMs: 5}), RangeError);
+  });
+  it("insufficient remaining budget: no head read, no decision, no " +
+      "state progress for that object", async () => {
+    const w = world({limits: {objectBudgetMs: 10 * MIN,
+      invocationBudgetMs: 10 * MIN}});
+    const filmId = await w.reserve();
+    await w.lostUpload(filmId);
+    w.advance(16 * MIN);
+    w.bucket.listFault = async (q, items, token) => {
+      w.mono.t += 1; // the listing itself used a little budget
+      return {items, token};
+    };
+    const out = await w.run();
+    assert.equal(out.stoppedFor, "budget");
+    assert.equal(out.processed, 0);
+    assert.ok(!w.bucket.calls.some((x) => x[0] === "download"));
+    assert.equal(w.film(filmId).status, "reserved");
+    assert.equal(w.state().afterName, null);
+  });
+});
+
+describe("PR87 F4: ambiguous acquire (committed remotely, error locally)",
+    () => {
+      it("release-if-mine clears the orphaned lease; the next run proceeds",
+          async () => {
+            const w = world();
+            const e = await w.lostUpload(crypto.randomUUID());
+            w.advance(16 * MIN);
+            let ambiguous = true;
+            const inner = w.db;
+            const flaky = new Proxy(inner, {get(target, k) {
+              if (k === "runTransaction") {
+                return async (fn, o) => {
+                  const res = await target.runTransaction(fn, o);
+                  if (ambiguous) {
+                    ambiguous = false; // committed, then the reply is lost
+                    throw Object.assign(new Error("deadline"), {code: 4});
+                  }
+                  return res;
+                };
+              }
+              const v = target[k];
+              return typeof v === "function" ? v.bind(target) : v;
+            }});
+            const rc = w.mk({db: flaky});
+            assert.deepEqual(await rc.reconcileQuarantine({limit: 5}),
+                {acquireError: "4", processed: 0});
+            assert.equal(w.state().lease, null, "orphaned lease released");
+            assert.deepEqual((await w.run()).outcomes,
+                {"no-reservation": 1});
+            assert.equal(w.record(e).state, "deleted");
+          });
+    });

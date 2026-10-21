@@ -1,5 +1,13 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-21 / LFS PR87 repair (Claude implementer): Codex FAIL c-6312029054 addressed.
+> - **F1:** the list token is now authoritative and the page query is persisted; a short page no longer ends a pass.
+> - **F2:** a facade/configured bucket mismatch fails closed before any list or state write, and the bucket is pinned per invocation.
+> - **F3:** each object's admission reserves the whole derived envelope, and the lease also covers the SDK's background rollback.
+> - **F4:** an ambiguous acquire triggers release-if-mine; the emulator test resolves an orphaned lease by its expiry.
+> - **Gate:** an HTTPS default-origin Storage proof was added.
+> - New code and tests only; frozen surfaces unchanged. Next: both verdicts. MVP NO-GO.
+
 > 2026-10-20 / LOST-FINALIZE-SOURCE (LFS-A, #39 c-6303891279; Claude implementer `session_018Dkini…`): TEST_ONLY reconciler on `claude/film-lfs-reconcile` from the PASSed C1 head `7f3b757`.
 > - **Gate #1 passed without frozen changes.** A bounded transport boundary (`lfs-transport.js`) is proven on the pinned real SDKs over loopback. Storage uses facade-owned aborts with the server observing the socket close. Firestore uses gRPC deadlines, with every SDK retry layer counted and the envelope derived from them.
 > - The reconciler re-drives lost finalizes through the unchanged S1 decision, using a fenced, name-keyed cursor, bound evidence, and film validation at every transactional read. The operator tool is emulator-only (CAS unpark plus audit).

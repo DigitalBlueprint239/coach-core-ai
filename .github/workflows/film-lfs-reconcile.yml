@@ -97,7 +97,8 @@ jobs:
           node --test --test-reporter=spec --test-reporter-destination=stdout
           --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
           test/lfs-reconcile.test.js test/lfs-reconcile-loopback.test.js test/lfs-boundary.test.js
-          test/lfs-gate-storage.test.js test/lfs-gate-firestore.test.js
+          test/lfs-gate-storage.test.js test/lfs-gate-storage-https.test.js
+          test/lfs-gate-firestore.test.js
           test/lfs-gate-firestore-prod.test.js
           test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js
           test/film-s1.test.js

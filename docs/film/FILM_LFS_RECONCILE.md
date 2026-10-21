@@ -77,7 +77,10 @@ A dedicated pinned `@google-cloud/firestore` 9.3.1 client over gRPC.
 
 At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, and a 3-read transaction attempt of about 281 s.
 
-**Per object, worst case:** pre-read, verify, head (+ token), decision (3 reads), C1 admission, DELETE, C1 result, checkpoint. `RECONCILE_LIMITS.objectEnvelopeMs` ≈ **904 s**, so the lease is ≈ **964 s**.
+**Per object, worst case:** pre-read, verify, head (+ token), decision (3 reads), C1 admission, DELETE (+ token), C1 result, checkpoint. `RECONCILE_LIMITS.objectEnvelopeMs` ≈ **907 s**.
+- **Admission reservation (PR87 F3):** `objectBudgetMs` defaults to the whole envelope (≈ 907 s). An object starts only if the remaining invocation budget covers it.
+- **Invocation:** `invocationBudgetMs` = 1740 s and must be ≥ `objectBudgetMs` (enforced). The TEST trigger timeout is 1800 s; C1-D1 verifies the platform maximum.
+- **Lease:** the envelope plus the SDK's background-rollback tail (≈ 23 s) plus a 60 s margin, ≈ **990 s**.
 - The admission budget (`objectBudgetMs`) is **not a hard deadline.**
 - **Local transport only:** an aborted DELETE or commit may still have taken effect remotely. That is the accepted C1 ambiguity; no rollback is claimed.
 
@@ -85,6 +88,7 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 
 | Suite | Count | What it proves |
 |---|---|---|
+| `lfs-gate-storage-https.test.js` | 5 | **Production branch on the default origins**, with no endpoint override: `https://storage.googleapis.com` and `http://metadata.google.internal`, reached through a controlled undici-dispatcher interceptor (a throwaway self-signed `storage.googleapis.com` certificate trusted only by that dispatcher). Origin, auth, range, generation and precondition are asserted. Hung list, head and DELETE are cut and the TLS close is server-observed; a hung metadata server is cut. |
 | `lfs-gate-storage.test.js` | 35 | **Both branches:** hung list, head and DELETE are aborted at the deadline (socket close seen) with one request each; trickling and oversized heads are cut; short and slow-OK cases work; 404/412/5xx/429/408 give one request; the 20-digit generation stays a string; the frozen `readHead` / `deleteExactGeneration` work over the facade, and a hung DELETE is cut before the frozen race. **Production branch:** a hung metadata server is cut and no Storage request is sent. |
 | `lfs-gate-firestore.test.js` (emulator branch) | 6 | 15 cut calls for a hung get and a hung query; hung Commit = 1 call, cut, with the background Rollback cut; UNAVAILABLE Commit ≤ 5; a hung transactional read with `maxAttempts` 2 ≤ 30 calls; all within the envelope. |
 | `lfs-gate-firestore-prod.test.js` | 3 | TLS with the default `createSsl()` roots (a throwaway localhost certificate via `GRPC_DEFAULT_SSL_ROOTS_FILE_PATH`) and bounded-token call credentials; a hung read is cut; a hung metadata server is cut and no RPC is sent. |
@@ -93,20 +97,26 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 `filmReconcile/quarantine` (strict `film-reconcile.v1`):
 ```
 {project, bucket, prefix, policyRevision, passId, passStartedAtMs,
- afterName, passObjects, passEvidence, lease{holder,fence,untilMs}, fence,
+ afterName, listQuery{startOffset,pageToken}, passObjects, passEvidence,
+ lease{holder,fence,untilMs}, fence,
  lastError{code,atMs}, consecutiveFailures, previous{…}}
 ```
 - **Binding:** project, bucket and policy (`lfs-r3.2`) are bound to the state. A change moves the old cursor into `previous` and starts a new pass.
 - **Configuration missing:** no list call and no writes.
+- **Target binding (PR87 F2):** if the facade's bucket differs from the configured bucket, the invocation fails closed (`targetMismatch`) **before any list or state write**. The bucket is pinned for the whole invocation, including the dedicated handler instance. A configuration change during a run stops it before the next object (`config-changed`), and records stay bound to the pinned bucket.
 - **Progress:**
-  - progress is keyed by object name (`startOffset`, which is inclusive, so the overlap entry is skipped); there are no page tokens;
+  - progress is keyed by object name: names at or before `afterName` are skipped, which covers the inclusive `startOffset` overlap and any re-fetched page;
+  - **the list `nextPageToken` is authoritative (PR87 F1).** A short page is never treated as the end. `listQuery` stores the query of the page holding the next unprocessed object, and is persisted across invocations;
+  - a fully processed page that has a token advances `listQuery` by that token, even when the page was empty or held only the overlap entry;
+  - an invalid or expired token (400/410) clears `listQuery` with `lastError: page-token-invalid`, and the next run lists from `afterName`;
   - list size is `min(pageMax, remaining + 1)`; at most 2 lists and ≤ 100 objects per invocation;
   - a **fenced checkpoint per object** (and its evidence) is written in the same transaction.
-- **Pass end:** when the listing returns fewer entries than requested.
+- **Pass end:** only when a page has **no** continuation token **and** has been fully processed.
 - **Lease:**
   - acquire, or take over after expiry with a higher fence;
   - a **fresh verify and renew immediately before every re-drive**, including the first;
   - fenced checkpoint, evidence and error writes; release at the end.
+- **Ambiguous acquire (PR87 F4):** an acquire may commit remotely yet return DEADLINE locally. A best-effort release-if-mine (the holder is unique per invocation) then clears the lease. If that also fails, the orphaned lease is bounded by its expiry; the emulator test resolves it by expiry.
 - **Contention:** contention or a transport failure in the acquire, verify, checkpoint or release transaction ends the invocation **bounded and without throwing** (`acquireError` or `stoppedFor: state:<code>`). This was observed on the real emulator, whose pessimistic locks make a contending reconciler hit its 2 s RPC deadline. The object is presented again on the next run.
 - **Authority:** the lease covers discovery, checkpoint, evidence and errors only. An already-started stale re-drive finishes as a duplicate delivery and never writes reconciliation state.
 - **Evidence:** `filmReconcile/quarantine/evidence/{sha256(project\nbucket\npolicy\nname\ngeneration)}`, a fixed field set. A repeat updates `count`, `lastAtMs` and `lastPassId`. There is no per-pass cap, and aggregate cardinality is **not globally bounded** (operator retention is C1-D1).
@@ -115,7 +125,7 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 - **Coverage:** with a finite, quiescent N and at least one completed object per progress-making invocation, a pass needs at most N such invocations plus the pass-end listing. There is no bound under persistent failures, repeated lease loss or unlimited arrivals.
 
 ## 4. Cost (per invocation; constants are TEST placeholders)
-- **List requests:** ≤ 2, each returning ≤ 101 entries (the `startOffset` overlap counts as 1). A late page after the budget is discarded with no progress. Each pass adds one extra (possibly empty) list request at its end.
+- **List requests:** ≤ 2 per invocation, each with `maxResults` ≤ 101 (the `startOffset` overlap counts as 1). GCS may return short or empty pages with a token; each one still costs a request and advances the token. A late page after the budget is discarded with no progress. Each pass ends with one list response that has no token.
 - **Per object:**
   - pre-read: 1 document read;
   - verify: 1 transaction, 1 read and 1 write;
@@ -165,10 +175,10 @@ N is **not** bounded by the 20-film active cap, because orphans accumulate acros
 
 | File | Count | Covers |
 |---|---|---|
-| `lfs-reconcile.test.js` | 51 | L1–L8, L10, L14, L16–L19 |
-| `lfs-reconcile-loopback.test.js` | 2 | L9 and L15 at reconciler level |
+| `lfs-reconcile.test.js` | 62 | L1–L8, L10, L14, L16–L19, plus PR87 F1–F4 regressions |
+| `lfs-reconcile-loopback.test.js` | 3 | L9 and L15 at reconciler level, plus real-facade pagination |
 | `lfs-boundary.test.js` | 15 | L11, L12 |
-| `lfs-gate-*` | 44 | L9, L15, L16 transport proofs |
+| `lfs-gate-*` | 49 | L9, L15, L16 transport proofs |
 | `emulator/lfs-reconcile.emulator.test.js` | 5 | L13: real Firestore emulator with the bounded client; operator CLI |
 | `tests/rules/film-reconcile.rules.test.mjs` | 3 | additive denies |
 

@@ -74,6 +74,52 @@ describe("reconciler over the real bounded Storage facade (loopback)", () => {
     assert.equal(recs[0].generation, GEN);
     assert.equal(recs[0].state, "deleted");
   });
+  it("real pagination: short pages with nextPageToken are followed by " +
+      "token, every object is covered, and the pass ends only without a " +
+      "token", async () => {
+    const names = [1, 2, 3].map((i) => c.uploadPathFor("team-loop",
+        `00000000-0000-4000-8000-00000000000${i}`));
+    const gone = new Set();
+    const {s, db, rc} = await world((req, res) => {
+      const u = new URL(req.url, "http://x");
+      if (req.method === "GET" && u.pathname === `/storage/v1/b/${BKT}/o`) {
+        const live = names.filter((n) => !gone.has(n) &&
+          (!u.searchParams.get("startOffset") ||
+            n >= u.searchParams.get("startOffset")));
+        // like GCS, a token resumes AFTER the last name returned, so it
+        // stays correct when earlier objects are deleted meanwhile
+        const tok = u.searchParams.get("pageToken");
+        const rest = tok ? live.filter((n) => n > Buffer.from(tok,
+            "base64url").toString()) : live;
+        const page = rest.slice(0, 1); // SHORT page: 1 item
+        const more = rest.length > 1;
+        res.writeHead(200, {"content-type": "application/json"});
+        return res.end(JSON.stringify({items: page.map((n) => ({name: n,
+          generation: GEN, size: "32", contentType: "video/mp4",
+          timeCreated: T0.toISOString()})),
+        ...(more ? {nextPageToken: Buffer.from(page[0])
+            .toString("base64url")} : {})}));
+      }
+      if (req.method === "GET") {
+        res.writeHead(206);
+        return res.end(Buffer.alloc(32));
+      }
+      gone.add(decodeURIComponent(u.pathname.split("/o/")[1]));
+      res.writeHead(204);
+      res.end();
+    });
+    let ended = false;
+    for (let i = 0; i < 4 && !ended; i++) {
+      ended = (await rc.reconcileQuarantine({limit: 10})).passEnded;
+    }
+    assert.equal(ended, true);
+    assert.deepEqual([...gone].sort(), names);
+    const lists = s.reqs.filter((x) => x.method === "GET" &&
+      new URL(x.url, "http://x").pathname === `/storage/v1/b/${BKT}/o`);
+    assert.ok(lists.some((x) => new URL(x.url, "http://x").searchParams
+        .get("pageToken")), "token followed on the real facade");
+    assert.equal(db.paths("filmCleanup/").length, 3);
+  });
   it("hung list: aborted at the facade deadline (server-observed); the " +
       "failure is recorded under the lease; no object processed",
   async () => {

@@ -18,6 +18,8 @@ class LfsBucket extends FakeBucket {
     this.listFault = null;
     /** Optional: async ({name, generation}) before a download. */
     this.downloadFault = null;
+    /** Optional: max items per page (GCS may return SHORT pages). */
+    this.pageCap = null;
   }
   /**
    * @param {string} name
@@ -50,7 +52,8 @@ class LfsBucket extends FakeBucket {
     return f;
   }
   /**
-   * @param {{prefix: string, startOffset: string, maxResults: number}} q
+   * @param {{prefix: string, startOffset: string, pageToken: string,
+   *   maxResults: number}} q
    * @return {Promise<{items: object[], nextPageToken: ?string}>}
    */
   async listObjects(q) {
@@ -64,10 +67,25 @@ class LfsBucket extends FakeBucket {
           contentType: (this.meta.get(n) || {}).contentType,
           timeCreated: (this.meta.get(n) || {}).timeCreated,
           metageneration: "1"}));
-    const more = items.length > q.maxResults;
-    items = items.slice(0, q.maxResults);
-    if (this.listFault) items = await this.listFault(q, items);
-    return {items, nextPageToken: more ? "more" : null};
+    // pageToken: like GCS, an opaque resume point AFTER the last name
+    // returned for the SAME query (stays correct across deletions)
+    if (q.pageToken) {
+      const m = /^tok:(.+)$/.exec(q.pageToken);
+      if (!m) throw Object.assign(new Error("invalid token"), {code: 400});
+      const after = Buffer.from(m[1], "base64url").toString();
+      items = items.filter((it) => it.name > after);
+    }
+    const n = Math.min(q.maxResults, this.pageCap || q.maxResults);
+    const more = items.length > n;
+    items = items.slice(0, n);
+    let token = more ? `tok:${Buffer.from(items[n - 1].name)
+        .toString("base64url")}` : null;
+    if (this.listFault) {
+      const r = await this.listFault(q, items, token);
+      if (Array.isArray(r)) items = r;
+      else ({items, token} = r);
+    }
+    return {items, nextPageToken: token};
   }
 }
 

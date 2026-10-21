@@ -241,13 +241,14 @@ function createBoundedStorage(o) {
     /**
      * One bounded list request (no auto-pagination, no retry).
      * @param {{prefix: string, startOffset: (string|undefined),
-     *   maxResults: number}} q
+     *   pageToken: (string|undefined), maxResults: number}} q
      * @return {Promise<{items: object[], nextPageToken: ?string}>}
      */
     async listObjects(q) {
       const p = new URLSearchParams({prefix: q.prefix,
         maxResults: String(q.maxResults)});
       if (q.startOffset) p.set("startOffset", q.startOffset);
+      if (q.pageToken) p.set("pageToken", q.pageToken);
       const r = await boundedExchange({fetchImpl, method: "GET",
         url: `${base}/storage/v1/b/${b}/o?${p}`, headers: await headers(),
         deadlineMs: limits.storageRequestMs,

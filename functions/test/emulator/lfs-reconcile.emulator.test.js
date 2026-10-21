@@ -160,6 +160,14 @@ describe("LFS reconciler on the Firestore emulator (bounded client)", () => {
           JSON.stringify(x));
     }
     assert.ok(w.bucket.deletes() <= 1, "never two deletes");
+    // An ambiguous acquire (committed remotely, DEADLINE locally) can leave
+    // a lease whose holder already returned; release-if-mine is best
+    // effort, so it is resolved by its EXPIRY (injected clock), never by
+    // loosening "exactly one delete" (Codex local 45/1, c-6311860832).
+    const st = await w.state();
+    if (st && st.lease) {
+      w.advance(w.rc.limits.leaseMs + 1);
+    }
     await w.rc.reconcileQuarantine({limit: 5});
     assert.equal(w.bucket.deletes(), 1);
     assert.equal((await w.record(e)).state, "deleted");

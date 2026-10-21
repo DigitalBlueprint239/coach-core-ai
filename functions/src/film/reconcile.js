@@ -47,9 +47,17 @@ function deriveLimits(transport = LFS_TRANSPORT_LIMITS, over = {}) {
   // ledger, cleanup record); C1 admission (1 read) + DELETE + result
   // (1 read); checkpoint (1 read + evidence read).
   const tx = (reads) => txMaxAttempts * env.txAttempt(reads);
-  const objectEnvelopeMs = Math.ceil(env.streamRead + tx(1) +
-    (transport.storageRequestMs + transport.tokenRequestMs) + tx(3) +
-    tx(1) + transport.storageRequestMs + tx(1) + tx(2));
+  const storageCall = transport.storageRequestMs + transport.tokenRequestMs;
+  const objectEnvelopeMs = Math.ceil(env.streamRead + tx(1) + storageCall +
+    tx(3) + tx(1) + storageCall + tx(1) + tx(2));
+  // The SDK may finish a failed transaction's Rollback in the background
+  // after runTransaction rejects: bounded by one unary envelope (PR87 F3).
+  const backgroundTailMs = Math.ceil(env.unary);
+  const objectBudgetMs = over.objectBudgetMs || objectEnvelopeMs;
+  const invocationBudgetMs = over.invocationBudgetMs || 1740 * 1000;
+  if (invocationBudgetMs < objectBudgetMs) {
+    throw new RangeError("invocationBudgetMs must cover one object budget");
+  }
   return Object.freeze({
     status: "TEST_PLACEHOLDER",
     minAgeMs: 15 * 60 * 1000,
@@ -59,11 +67,16 @@ function deriveLimits(transport = LFS_TRANSPORT_LIMITS, over = {}) {
     listsMax: 2,
     txMaxAttempts,
     objectEnvelopeMs,
-    /** Admission budget per object: NOT a hard deadline (r3 §C). */
-    objectBudgetMs: over.objectBudgetMs || 60 * 1000,
-    invocationBudgetMs: over.invocationBudgetMs || 9 * 60 * 1000,
-    /** Lease outlives one object's whole envelope plus a margin. */
-    leaseMs: objectEnvelopeMs + 60 * 1000,
+    backgroundTailMs,
+    /**
+     * Admission reservation per object: by default the whole derived
+     * worst-case envelope (PR87 F3). NOT a hard deadline (r3 §C).
+     */
+    objectBudgetMs,
+    /** Fits inside the TEST trigger timeout (1800 s) with a margin. */
+    invocationBudgetMs,
+    /** Lease outlives one object's envelope, its background tail, margin. */
+    leaseMs: objectEnvelopeMs + backgroundTailMs + 60 * 1000,
     evidenceCodeMax: 64,
     ...over,
   });
@@ -83,6 +96,9 @@ const stateSchema = z.object({
   passId: z.string().regex(/^[0-9a-f]{32}$/),
   passStartedAtMs: ms,
   afterName: z.string().min(1).max(1024).nullable(),
+  /** Query of the page holding the next unprocessed object (PR87 F1). */
+  listQuery: z.object({startOffset: z.string().min(1).max(1024).nullable(),
+    pageToken: z.string().min(1).max(4096)}).strict().nullable(),
   passObjects: ms,
   passEvidence: ms,
   lease: z.object({holder: z.string().min(1).max(128),
@@ -282,12 +298,19 @@ function createQuarantineReconciler(deps) {
       return null;
     }
   };
-  const handlers = createFilmHandlers({db, Timestamp: deps.Timestamp,
+  /**
+   * Dedicated S1 handler instance with the bucket PINNED for one invocation
+   * (PR87 F2): it never re-reads configuration mid-invocation.
+   * @param {string} pinned
+   * @return {object}
+   */
+  const handlersFor = (pinned) => createFilmHandlers({db,
+    Timestamp: deps.Timestamp,
     getUser: async () => {
       throw new Error("reconciler never serves callables");
     },
     readHead: (x) => createStorageAdapter(deps.storage).readHead(x),
-    cleanupBucketName: bucketName, cleanupBucket: () => deps.storage,
+    cleanupBucketName: () => pinned, cleanupBucket: () => deps.storage,
     logger, now: deps.now, cleanupLimits: deps.cleanupLimits});
   const stateRef = () => db.collection("filmReconcile").doc("quarantine");
   const evidenceRef = (id) => stateRef().collection("evidence").doc(id);
@@ -296,7 +319,8 @@ function createQuarantineReconciler(deps) {
     schema: "film-reconcile.v1", project, bucket, prefix: PREFIX,
     policyRevision: POLICY_REVISION,
     passId: crypto.randomBytes(16).toString("hex"), passStartedAtMs: at,
-    afterName: null, passObjects: 0, passEvidence: 0, lease: null, fence: 0,
+    afterName: null, listQuery: null, passObjects: 0, passEvidence: 0,
+    lease: null, fence: 0,
     lastError: null, consecutiveFailures: 0, previous: prev});
 
   /**
@@ -378,8 +402,29 @@ function createQuarantineReconciler(deps) {
       logger.error("film.reconcile.config_missing", {});
       return {configMissing: true, processed: 0};
     }
+    if (!deps.storage || deps.storage.name !== bucket) {
+      // discovery/transport authority differs from the configured bucket:
+      // fail closed before any list or state write (PR87 F2)
+      logger.error("film.reconcile.target_mismatch", {});
+      return {targetMismatch: true, processed: 0};
+    }
     const ctx = {project: deps.project, bucket, holder: newHolder(),
       fence: 0};
+    const handlers = handlersFor(bucket);
+    /** Best-effort release of a lease this holder may own (PR87 F4). */
+    const releaseIfMine = async () => {
+      try {
+        await db.runTransaction(async (tx) => {
+          const snap = await tx.get(stateRef());
+          const s = snap.exists ? snap.data() : null;
+          if (s && s.lease && s.lease.holder === ctx.holder) {
+            tx.set(stateRef(), {...s, lease: null});
+          }
+        });
+      } catch (_) {
+        // bounded by the lease expiry
+      }
+    };
     // acquire (or take over) the lease; bind / rebind the target
     let acquired;
     try {
@@ -405,13 +450,16 @@ function createQuarantineReconciler(deps) {
         const fence = s.fence + 1;
         tx.set(stateRef(), {...s, fence,
           lease: {holder: ctx.holder, fence, untilMs: t + limits.leaseMs}});
-        return {outcome: "acquired", fence, afterName: s.afterName};
+        return {outcome: "acquired", fence, afterName: s.afterName,
+          listQuery: s.listQuery};
       });
     } catch (e) {
-      // contention or a transport failure: bounded, nothing acquired
+      // contention or a transport failure: bounded. The acquire may still
+      // have committed remotely (an ambiguous deadline): release it if ours.
       const code = String(e && e.code !== undefined ? e.code : "error")
           .slice(0, 64);
       logger.warn("film.reconcile.acquire_failed", {code});
+      await releaseIfMine();
       return {acquireError: code, processed: 0};
     }
     if (acquired.outcome !== "acquired") {
@@ -421,32 +469,46 @@ function createQuarantineReconciler(deps) {
     }
     ctx.fence = acquired.fence;
     let afterName = acquired.afterName;
+    // query of the page holding the next unprocessed object (PR87 F1)
+    let query = acquired.listQuery ||
+      {startOffset: afterName, pageToken: null};
     const out = {processed: 0, outcomes: {}, evidence: 0, young: 0,
       lists: 0, passEnded: false, stoppedFor: null};
     const bump = (k) => {
       out.outcomes[k] = (out.outcomes[k] || 0) + 1;
     };
     const remaining = () => limits.invocationBudgetMs - (mono() - start);
+    const stateStop = (r) => r.error ? `state:${r.error}` : "lease-lost";
     lists: while (out.lists < limits.listsMax) {
       const want = Math.min(limits.pageMax, limit - out.processed + 1);
       let page;
       out.lists += 1;
       try {
         page = await deps.storage.listObjects({prefix: PREFIX,
-          startOffset: afterName || undefined, maxResults: want});
+          startOffset: query.startOffset || undefined,
+          pageToken: query.pageToken || undefined, maxResults: want});
       } catch (e) {
         const code = String(e && e.code || "list-error").slice(0, 64);
-        await tryFenced(ctx, (s, t) => ({...s, lastError: {code, atMs: t},
-          consecutiveFailures: s.consecutiveFailures + 1}));
-        out.stoppedFor = `list:${code}`;
+        const badToken = query.pageToken && (e && (e.code === 400 ||
+          e.code === 410));
+        await tryFenced(ctx, (s, t) => ({...s, lastError: {code: badToken ?
+          "page-token-invalid" : code, atMs: t}, consecutiveFailures:
+          s.consecutiveFailures + 1, listQuery: badToken ? null :
+          s.listQuery}));
+        out.stoppedFor = badToken ? "list:page-token-invalid" :
+          `list:${code}`;
         break;
       }
       if (remaining() <= 0) {
         out.stoppedFor = "budget-after-list"; // late page: no progress
         break;
       }
-      const items = page.items.filter((it) => !(afterName &&
-        it && it.name === afterName));
+      const token = typeof page.nextPageToken === "string" &&
+        page.nextPageToken ? page.nextPageToken.slice(0, 4096) : null;
+      // skip the inclusive startOffset overlap and anything a re-fetched
+      // page repeats: names at or before the name cursor
+      const items = page.items.filter((it) => !(afterName && it &&
+        typeof it.name === "string" && it.name <= afterName));
       for (const item of items) {
         if (out.processed >= limit) break lists;
         if (remaining() < limits.objectBudgetMs) {
@@ -459,10 +521,14 @@ function createQuarantineReconciler(deps) {
           out.stoppedFor = "listing-unnamed";
           break lists;
         }
+        if (bucketName() !== bucket) {
+          out.stoppedFor = "config-changed"; // pinned target; stop (F2)
+          break lists;
+        }
         // fresh lease verify immediately before this object (r3 §B)
         const v = await tryFenced(ctx, (s) => s);
         if (!v.ok) {
-          out.stoppedFor = v.error ? `state:${v.error}` : "lease-lost";
+          out.stoppedFor = stateStop(v);
           break lists;
         }
         const cls = classifyListing(item, nowMs(), limits);
@@ -496,31 +562,51 @@ function createQuarantineReconciler(deps) {
               POLICY_REVISION, name, evidence.generation);
           out.evidence += 1;
         }
+        const pageQuery = query.pageToken ? query : null;
         const cp = await tryFenced(ctx, (s) => ({...s, afterName: name,
-          passObjects: s.passObjects + 1,
+          listQuery: pageQuery, passObjects: s.passObjects + 1,
           passEvidence: s.passEvidence + (evidence ? 1 : 0),
           lastError: null, consecutiveFailures: 0}), evidence);
         if (!cp.ok) {
-          out.stoppedFor = cp.error ? `state:${cp.error}` : "lease-lost";
+          out.stoppedFor = stateStop(cp);
           break lists;
         }
         afterName = name;
         out.processed += 1;
       }
-      if (page.items.length < want) {
-        // the listing has nothing beyond afterName: pass end
-        const end = await tryFenced(ctx, (s, t) => ({...s, afterName: null,
-          passId: crypto.randomBytes(16).toString("hex"),
-          passStartedAtMs: t, passObjects: 0, passEvidence: 0}));
-        if (end.ok) {
-          out.passEnded = true;
-          afterName = null;
+      if (token) {
+        // the page is fully processed but the listing continues: advance
+        // to the next page by its token (empty/overlap-only pages too)
+        const next = {startOffset: query.startOffset, pageToken: token};
+        const adv = await tryFenced(ctx, (s) => ({...s, listQuery: next}));
+        if (!adv.ok) {
+          out.stoppedFor = stateStop(adv);
+          break;
         }
-        break;
+        query = next;
+        if (out.processed >= limit) break;
+        continue;
       }
+      // no continuation and the whole page processed: pass end
+      const end = await tryFenced(ctx, (s, t) => ({...s, afterName: null,
+        listQuery: null, passId: crypto.randomBytes(16).toString("hex"),
+        passStartedAtMs: t, passObjects: 0, passEvidence: 0}));
+      if (end.ok) {
+        out.passEnded = true;
+        afterName = null;
+      } else {
+        out.stoppedFor = stateStop(end);
+      }
+      break;
     }
-    // release the lease (fenced; a lost lease is a no-op)
-    await tryFenced(ctx, (s) => ({...s, lease: null}));
+    if (!out.passEnded && !out.stoppedFor &&
+        out.lists >= limits.listsMax) {
+      out.stoppedFor = "list-limit";
+    }
+    // release the lease (fenced; a lost lease is a no-op), then a
+    // best-effort release-if-mine if that transaction failed (PR87 F4)
+    const rel = await tryFenced(ctx, (s) => ({...s, lease: null}));
+    if (rel.error) await releaseIfMine();
     out.counters = {...db.lfsCounters};
     logger.info("film.reconcile.done", {processed: out.processed,
       evidence: out.evidence, young: out.young, lists: out.lists,
@@ -528,7 +614,7 @@ function createQuarantineReconciler(deps) {
     return out;
   }
 
-  return {reconcileQuarantine, handlers, db, limits};
+  return {reconcileQuarantine, handlersFor, db, limits};
 }
 
 /**
@@ -540,7 +626,7 @@ function createQuarantineReconciler(deps) {
 function defineReconcileTrigger({run, isEnabled}) {
   const {onSchedule} = require("firebase-functions/v2/scheduler");
   const fn = onSchedule({schedule: "every 24 hours", retryCount: 0,
-    maxInstances: 1, timeoutSeconds: 540}, async () => {
+    maxInstances: 1, timeoutSeconds: 1800}, async () => {
     if (!isEnabled()) return;
     await run({limit: RECONCILE_LIMITS.objectsMax});
   });
