@@ -125,6 +125,22 @@ Every assertion and test name is unchanged. The expected `duplicate-event: 2`, n
   - Other accepted workflows' frozen jobs compare against their own bases.
   - Those workflow files are frozen; `film-integration.yml` is the authoritative check for this composition. PR-merge runs are separate evidence and are disclosed, never acceptance.
 
+## 5a. PR88 review at C `c413019`: findings and repairs
+**Verdicts at C:** Codex FAIL c-6326608577 (non-D8; D8 author validation PASS) and independent reviewer FAIL c-6326638892 (D8 accepted as non-author). Both are preserved. **No runtime product defect was found; all repairs are in D5/D7 only.** The first push of the R88 repairs, `f515d04`, was superseded before review by the F-1 repair.
+
+- **R88-1 (Codex):** the CT-4.5 `ready`/`rejected` abandon "no write" check snapshotted film and job *after* the call and compared it with itself, so it was vacuous.
+  - **Repair:** snapshot film, job and cleanup records **before** the call; compare after the `invalid-state` result.
+  - **Proof:** Codex's fault injection (`fileName` changed after `invalid-state`) now fails both cases.
+- **R88-2 (Codex):** CT-4.4 lacked the I-9 class (d) composed case.
+  - **Repair:** `ready` and worker-reason `rejected`, with no quarantine intent and the source present, give `duplicate-event` with no S1 record, delete or evidence, and the job and objects byte-unchanged.
+- **F-1 (independent reviewer):** `list-s2b-recovery` class (a) keyed only on `exhaustion.outcome`, so 6 of 7 recovery-held `validating` films were invisible.
+  - **Repair:** class (a) = same-generation `validating` with **any active `job.recovery`**, reporting the reason, with `exhaustion` as detail.
+  - **Seeded tests:** all **nine** A5 reasons (`attempts-exhausted`, `rejection-precondition-failed`, `reject-precondition-failed`, `ready-precondition-failed`, `precondition-changed-mid-run`, `validation-record-invalid`, `validation-record-stale`, `output-ownership-unproven`, `team-ownership-changed`).
+  - **Real-worker tests:** four paths (attempts-exhausted, output-ownership-unproven, team-ownership-changed, ready-precondition-failed).
+  - **Controls:** a running job, resolved-only (`resolvedRecovery`, `recovery` null), a different generation, and a non-validating film.
+  - The emulator listing adds a non-exhaustion mark and a resolved control.
+  - **Proof:** the new listing tests fail 6 of 10 on C's classifier. The reviewer's `s2bclass-probe.cjs` (sha256 `55c2787b…`), unchanged, now lists all 7 reported states.
+
 ## 6. Test realism and limits
 - The worker runs by **direct invocation** (`processFilm`/`redrive`) with an injected enabled switch. No trigger delivery is claimed.
 - Generations, preconditions and listing come from doubles: the Storage emulator ignores generations, and no real-GCS semantics are established.

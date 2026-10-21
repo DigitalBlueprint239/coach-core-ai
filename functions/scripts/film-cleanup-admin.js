@@ -137,7 +137,15 @@ const S2B_STATUSES = ["validating", "ready", "rejected"];
  * The cursor {team, film} resumes INSIDE a truncated team before advancing,
  * so repeated invocations visit every eligible film once (quiescent data).
  * Classes (actual A5 job semantics; there is no terminal-error state):
- *   a  validating, job exhaustion `recovery-needed`
+ *   a  validating, job carries ANY active recovery mark `job.recovery`
+ *      (the durable mark A5 admission refuses on; every A5 reason:
+ *      attempts-exhausted, rejection-precondition-failed,
+ *      reject-precondition-failed, ready-precondition-failed,
+ *      precondition-changed-mid-run, validation-record-invalid,
+ *      validation-record-stale, output-ownership-unproven,
+ *      team-ownership-changed); the reason is reported. A resolved mark
+ *      (`resolvedRecovery` with `recovery` cleared) is not active
+ *      (PR88 F-1, #39 c-6326638892).
  *   b  ready / worker-reason rejected, quarantine cleanup `mismatch` (412)
  *   c  ready / worker-reason rejected, quarantine cleanup `pending`
  *      ("unresolved (not proven failed)")
@@ -215,8 +223,12 @@ async function listS2bRecovery(db, o = {}) {
  */
 function s2bClass(d, j, g) {
   if (d.status === "validating") {
-    return j && j.exhaustion && j.exhaustion.outcome === "recovery-needed" ?
-      {class: "a", classification: "recovery-needed"} : null;
+    if (!j || !j.recovery) return null; // running, idle or resolved
+    const reason = String(j.recovery.reason || "unspecified").slice(0, 64);
+    return {class: "a", classification: `recovery: ${reason}`,
+      recoveryReason: reason,
+      exhaustion: j.exhaustion && j.exhaustion.outcome ?
+        String(j.exhaustion.outcome).slice(0, 32) : null};
   }
   if (d.status === "rejected" &&
       !c2.WORKER_REJECTION_REASONS.includes(d.rejectionReason)) {

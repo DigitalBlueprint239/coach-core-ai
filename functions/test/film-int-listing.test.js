@@ -123,7 +123,8 @@ describe("D5 list-s2b-recovery (read-only, bounded, resumable)", () => {
   it("classes a-d on actual A5 job semantics; negatives excluded", async () => {
     const m = new Map();
     seed(m, "t1", "f-a", {status: "validating"},
-        {exhaustion: {outcome: "recovery-needed"}});
+        {recovery: {reason: "attempts-exhausted"},
+          exhaustion: {outcome: "recovery-needed"}});
     seed(m, "t1", "f-b", {status: "ready"}, q("mismatch"));
     seed(m, "t1", "f-c", {status: "rejected",
       rejectionReason: "container-invalid"}, q("pending"));
@@ -142,7 +143,7 @@ describe("D5 list-s2b-recovery (read-only, bounded, resumable)", () => {
     const out = await list(db, {teams: 5, films: 50});
     assert.deepEqual(out.items.map((i) => [i.film, i.class,
       i.classification]), [
-      ["f-a", "a", "recovery-needed"],
+      ["f-a", "a", "recovery: attempts-exhausted"],
       ["f-b", "b", "precondition mismatch"],
       ["f-c", "c", "unresolved (not proven failed)"],
       ["f-d", "d", "no intent"],
@@ -204,5 +205,174 @@ describe("D5 list-s2b-recovery (read-only, bounded, resumable)", () => {
       assert.equal(r.status, 1);
       assert.match(r.stderr, /refused \((project-not-demo|emulator-host-missing)\)/);
     }
+  });
+});
+
+// PR88 F-1 (#39 c-6326638892): class (a) is ANY active A5 recovery mark
+// (`job.recovery`, the mark admission refuses on), not only exhaustion.
+const RECOVERY_REASONS = [ // every reason A5 worker.js can set
+  ["attempts-exhausted", {outcome: "recovery-needed"}],
+  ["rejection-precondition-failed", {outcome: "rejected"}],
+  ["reject-precondition-failed", null],
+  ["ready-precondition-failed", null],
+  ["precondition-changed-mid-run", null],
+  ["validation-record-invalid", null],
+  ["validation-record-stale", null],
+  ["output-ownership-unproven", null],
+  ["team-ownership-changed", null],
+];
+
+describe("D5 class (a): every A5 recovery reason; controls (F-1)", () => {
+  it("each recovery reason on a same-generation validating film is " +
+      "listed with its reason; running, resolved-only and " +
+      "different-generation jobs are not", async () => {
+    const m = new Map();
+    RECOVERY_REASONS.forEach(([reason, exhaustion], i) => {
+      seed(m, "tr", `r${i}`, {status: "validating"}, {
+        recovery: {reason, evidence: {}, atMs: 1}, exhaustion,
+        resolvedRecovery: null});
+    });
+    // controls
+    seed(m, "tr", "x-running", {status: "validating"}, {recovery: null,
+      exhaustion: null, lease: {holder: "h", fence: 1, untilMs: 9}});
+    seed(m, "tr", "x-resolved", {status: "validating"}, {recovery: null,
+      resolvedRecovery: {reason: "output-ownership-unproven", evidence: {},
+        atMs: 1, resolvedAtMs: 2}, exhaustion: null});
+    // a recovery mark on a DIFFERENT generation's job is not read
+    m.set("teams/tr/films/x-othergen", {status: "validating",
+      objectGeneration: GEN});
+    m.set(`teams/tr/films/x-othergen/workerJobs/${jobIdFor("tr",
+        "x-othergen", "999")}`, {recovery: {reason: "attempts-exhausted"}});
+    // a non-validating film with a recovery mark is not class (a)
+    seed(m, "tr", "x-abandoned", {status: "abandoned"},
+        {recovery: {reason: "precondition-changed-mid-run"}});
+    const db = new QueryFake(m);
+    const out = await list(db, {teams: 5, films: 50});
+    assert.deepEqual(out.items.map((i) => [i.film, i.class, i.recoveryReason,
+      i.classification]), RECOVERY_REASONS.map(([reason], i) =>
+      [`r${i}`, "a", reason, `recovery: ${reason}`]));
+    assert.deepEqual(out.items.map((i) => i.exhaustion),
+        RECOVERY_REASONS.map(([, e]) => (e ? e.outcome : null)));
+    assert.equal(db.writes, 0);
+  });
+});
+
+// Composed world: the REAL A5 worker produces the recovery marks (the
+// techniques of the accepted S2b tests), then the listing reads the store.
+describe("D5 class (a) over real worker-written recovery marks", () => {
+  const {createFilmHandlers} = require("../src/film/handlers");
+  const {createFilmWorker} = require("../src/film/worker/worker");
+  const {WORKER_LIMITS} = require("../src/film/worker/limits");
+  const v1 = require("../src/film/contract");
+  const crypto = require("crypto");
+  const {FakeTimestamp, FakeFirestore, FakeObjects, fakeDecoder,
+    scriptedPipeline} = require("./film-worker-doubles");
+  const TEAM = "team-int-rec";
+  const OWNER = "uid-owner";
+  const HEAD = Buffer.concat([Buffer.from([0, 0, 0, 16]),
+    Buffer.from("ftypisom"), Buffer.from([0, 0, 2, 0])]);
+  const BODY = Buffer.concat([HEAD, Buffer.alloc(16)]);
+  const auth = {uid: OWNER, token: {email_verified: true,
+    firebase: {sign_in_provider: "google.com"}, auth_time: 1760900000}};
+  /**
+   * S1 + worker over one store; a validating film.
+   * @param {Array} script
+   * @return {Promise<object>}
+   */
+  async function film(script = []) {
+    const db = new FakeFirestore();
+    const objects = new FakeObjects();
+    const now = () => new Date("2026-10-21T16:00:00.000Z");
+    const logger = {info() {}, warn() {}, error() {}};
+    db.write(`teams/${TEAM}`, {ownerId: OWNER, name: "R"});
+    const s1 = createFilmHandlers({db, Timestamp: FakeTimestamp,
+      getUser: async () => ({uid: OWNER, disabled: false,
+        customClaims: {beta: true}}), ...objects.s1(), logger, now});
+    const worker = createFilmWorker({db, Timestamp: FakeTimestamp, objects,
+      decoder: fakeDecoder(), runPipeline: scriptedPipeline(script),
+      isEnabled: () => true, now, logger, limits: WORKER_LIMITS});
+    const r = await s1.reserveFilmUpload({auth, data: {
+      schemaVersion: v1.CONTRACT_VERSION, operationId: crypto.randomUUID(),
+      action: "reserveFilmUpload", payload: {teamId: TEAM,
+        declaredBytes: BODY.length, declaredContentType: "video/mp4",
+        fileName: "clip.mp4", rightsAcknowledged: true,
+        rightsWordingVersion: "rights-v1"}}});
+    const filmId = r.data.filmId;
+    const name = v1.uploadPathFor(TEAM, filmId);
+    const generation = objects.put(name, BODY);
+    assert.equal(await s1.onQuarantineFinalized({bucket:
+      "demo-s2b.appspot.com", name, size: BODY.length,
+    contentType: "video/mp4", generation}), "validating");
+    return {db, objects, worker, filmId, generation,
+      jobId: jobIdFor(TEAM, filmId, generation)};
+  }
+  const listOf = async (w) => {
+    const m = new Map();
+    for (const p of w.db.paths("teams/")) m.set(p, w.db.read(p));
+    const db = new QueryFake(m);
+    const out = await list(db, {teams: 5, films: 50});
+    assert.equal(db.writes, 0);
+    return out.items;
+  };
+  const paths = {
+    "attempts-exhausted": async () => {
+      const w = await film(["crash", "infrastructure", "crash"]);
+      for (let i = 0; i < 3; i++) {
+        await w.worker.redrive({teamId: TEAM, filmId: w.filmId});
+      }
+      return w;
+    },
+    "output-ownership-unproven": async () => {
+      const w = await film();
+      w.objects.put(`films/${TEAM}/${w.filmId}/jobs/${w.jobId}/` +
+        "normalized.mp4", Buffer.from("not ours"),
+      {jobId: w.jobId, inputGeneration: w.generation});
+      await w.worker.processFilm({teamId: TEAM, filmId: w.filmId});
+      return w;
+    },
+    "team-ownership-changed": async () => {
+      const w = await film();
+      w.db.write(`teams/${TEAM}`, {ownerId: "someone-else", name: "R"});
+      await w.worker.processFilm({teamId: TEAM, filmId: w.filmId});
+      return w;
+    },
+    "ready-precondition-failed": async () => {
+      const w = await film();
+      const orig = w.objects.createOnly.bind(w.objects);
+      w.objects.createOnly = async (t) => {
+        const r = await orig(t);
+        w.db.write(`teams/${TEAM}/filmLedger/cap`, {slots: {}});
+        return r;
+      };
+      await w.worker.processFilm({teamId: TEAM, filmId: w.filmId});
+      return w;
+    },
+  };
+  for (const [reason, make] of Object.entries(paths)) {
+    it(`real worker path ${reason}: listed as class (a) with that reason`,
+        async () => {
+          const w = await make();
+          const job = w.db.read(`teams/${TEAM}/films/${w.filmId}/` +
+            `workerJobs/${w.jobId}`);
+          assert.equal(job.recovery.reason, reason);
+          const items = await listOf(w);
+          assert.deepEqual(items.map((i) => [i.film, i.class,
+            i.recoveryReason]), [[w.filmId, "a", reason]]);
+        });
+  }
+  it("controls on real worker state: validating with no job, and a " +
+      "worker run interrupted before any recovery mark -> not listed",
+  async () => {
+    const idle = await film();
+    assert.deepEqual(await listOf(idle), []);
+    const run = await film();
+    run.objects.fault("downloadGeneration", "error");
+    await run.worker.processFilm({teamId: TEAM, filmId: run.filmId})
+        .catch(() => {});
+    const job = run.db.read(`teams/${TEAM}/films/${run.filmId}/` +
+      `workerJobs/${run.jobId}`);
+    assert.ok(job, "job exists");
+    assert.equal(job.recovery, null);
+    assert.deepEqual(await listOf(run), []);
   });
 });

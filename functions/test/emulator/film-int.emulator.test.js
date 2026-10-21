@@ -153,7 +153,13 @@ describe("D5 list-s2b-recovery on the emulator (read-only, bounded)", () => {
   before(async () => {
     await wipe();
     await put("t1", "f-a", {status: "validating"},
-        {exhaustion: {outcome: "recovery-needed"}});
+        {recovery: {reason: "attempts-exhausted"},
+          exhaustion: {outcome: "recovery-needed"}});
+    // PR88 F-1: any active recovery mark, not only exhaustion
+    await put("t1", "f-a2", {status: "validating"},
+        {recovery: {reason: "output-ownership-unproven"}, exhaustion: null});
+    await put("t1", "n-resolved", {status: "validating"}, {recovery: null,
+      resolvedRecovery: {reason: "team-ownership-changed", resolvedAtMs: 2}});
     await put("t1", "f-b", {status: "ready"}, q("mismatch"));
     await put("t1", "f-c", {status: "rejected",
       rejectionReason: "container-invalid"}, q("pending"));
@@ -189,7 +195,8 @@ describe("D5 list-s2b-recovery on the emulator (read-only, bounded)", () => {
       runs += 1;
     } while (after && runs < 30);
     assert.equal(after, null);
-    const expected = ["t1/f-a:a", "t1/f-b:b", "t1/f-c:c", "t1/f-d:d"];
+    const expected = ["t1/f-a:a", "t1/f-a2:a", "t1/f-b:b", "t1/f-c:c",
+      "t1/f-d:d"];
     for (const team of ["t2", "t3"]) {
       for (let i = 0; i < 4; i++) expected.push(`${team}/g${i}:c`);
     }
@@ -204,8 +211,9 @@ describe("D5 list-s2b-recovery on the emulator (read-only, bounded)", () => {
       env: {...process.env, GCLOUD_PROJECT: PROJECT}});
     assert.equal(res.status, 0, res.stderr);
     const out = JSON.parse(res.stdout);
-    assert.deepEqual(out.items.map((i) => i.film), ["f-a", "f-b"]);
-    assert.deepEqual(out.next, {team: "t1", film: "f-b"});
+    assert.deepEqual(out.items.map((i) => [i.film, i.recoveryReason]),
+        [["f-a", "attempts-exhausted"], ["f-a2", "output-ownership-unproven"]]);
+    assert.deepEqual(out.next, {team: "t1", film: "f-a2"});
     assert.equal(out.truncated.films, true);
     assert.equal(out.maxReads, (1 + 1) + (2 + 1) + 2);
   });
