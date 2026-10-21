@@ -1,10 +1,18 @@
 "use strict";
 // LFS test doubles, layered on the accepted C1 doubles (unchanged): a bucket
-// that also LISTS like the JSON API (lexicographic by name, inclusive
+// that also LISTS like the JSON API (UTF-8 byte order by name, inclusive
 // startOffset, maxResults) and records object metadata (size string,
 // contentType, timeCreated). Test-only; no network.
 const {FakeBucket, FakeFirestore, FakeTimestamp} =
   require("./film-cleanup-doubles");
+
+/**
+ * Storage service name order: UTF-8 bytes (not UTF-16 code units).
+ * @param {string} a
+ * @param {string} b
+ * @return {number}
+ */
+const utf8 = (a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b));
 
 /** Bucket double with listing. */
 class LfsBucket extends FakeBucket {
@@ -60,8 +68,8 @@ class LfsBucket extends FakeBucket {
     this.lists.push({...q});
     let items = [...this.objects.entries()]
         .filter(([n]) => n.startsWith(q.prefix) &&
-          (!q.startOffset || n >= q.startOffset))
-        .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+          (!q.startOffset || utf8(n, q.startOffset) >= 0))
+        .sort(([a], [b]) => utf8(a, b))
         .map(([n, o]) => ({name: n, generation: o.generation,
           size: String(o.bytes.length),
           contentType: (this.meta.get(n) || {}).contentType,
@@ -73,7 +81,7 @@ class LfsBucket extends FakeBucket {
       const m = /^tok:(.+)$/.exec(q.pageToken);
       if (!m) throw Object.assign(new Error("invalid token"), {code: 400});
       const after = Buffer.from(m[1], "base64url").toString();
-      items = items.filter((it) => it.name > after);
+      items = items.filter((it) => utf8(it.name, after) > 0);
     }
     const n = Math.min(q.maxResults, this.pageCap || q.maxResults);
     const more = items.length > n;
@@ -89,4 +97,4 @@ class LfsBucket extends FakeBucket {
   }
 }
 
-module.exports = {LfsBucket, FakeFirestore, FakeTimestamp};
+module.exports = {LfsBucket, FakeFirestore, FakeTimestamp, utf8};

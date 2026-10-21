@@ -65,6 +65,12 @@ function deriveLimits(transport = LFS_TRANSPORT_LIMITS, over = {}) {
     pageMax: 100,
     objectsMax: 100,
     listsMax: 2,
+    /**
+     * Consecutive continuation pages with no name past the cursor before the
+     * listing is declared non-advancing (PR87 R-1). GCS may legitimately
+     * return an empty page with a token; it never repeats one forever.
+     */
+    listStallMax: 3,
     txMaxAttempts,
     objectEnvelopeMs,
     backgroundTailMs,
@@ -87,6 +93,18 @@ const RECONCILE_DESIGNATION = Object.freeze({designation: "TEST_ONLY",
   marker: "film-lfs-reconciler", authorizationRecord: null});
 
 const ms = z.number().int().nonnegative();
+
+/**
+ * Object-name order of the Storage service: lexicographic over UTF-8 bytes
+ * (listing order, startOffset, resume tokens). NOT JavaScript's UTF-16
+ * code-unit order, which differs above U+FFFF (PR87 c-6312514310).
+ * @param {string} a
+ * @param {string} b
+ * @return {number} <0, 0, >0
+ */
+function compareNames(a, b) {
+  return Buffer.compare(Buffer.from(a, "utf8"), Buffer.from(b, "utf8"));
+}
 const stateSchema = z.object({
   schema: z.literal("film-reconcile.v1"),
   project: z.string().min(1).max(128),
@@ -101,6 +119,8 @@ const stateSchema = z.object({
     pageToken: z.string().min(1).max(4096)}).strict().nullable(),
   passObjects: ms,
   passEvidence: ms,
+  /** Consecutive continuation pages with no new name (PR87 R-1). */
+  listStalls: ms,
   lease: z.object({holder: z.string().min(1).max(128),
     fence: z.number().int().positive(), untilMs: ms}).strict().nullable(),
   fence: ms,
@@ -320,7 +340,7 @@ function createQuarantineReconciler(deps) {
     policyRevision: POLICY_REVISION,
     passId: crypto.randomBytes(16).toString("hex"), passStartedAtMs: at,
     afterName: null, listQuery: null, passObjects: 0, passEvidence: 0,
-    lease: null, fence: 0,
+    listStalls: 0, lease: null, fence: 0,
     lastError: null, consecutiveFailures: 0, previous: prev});
 
   /**
@@ -413,6 +433,7 @@ function createQuarantineReconciler(deps) {
     const handlers = handlersFor(bucket);
     /** Best-effort release of a lease this holder may own (PR87 F4). */
     const releaseIfMine = async () => {
+      let ok = false;
       try {
         await db.runTransaction(async (tx) => {
           const snap = await tx.get(stateRef());
@@ -421,9 +442,11 @@ function createQuarantineReconciler(deps) {
             tx.set(stateRef(), {...s, lease: null});
           }
         });
+        ok = true;
       } catch (_) {
         // bounded by the lease expiry
       }
+      return ok;
     };
     // acquire (or take over) the lease; bind / rebind the target
     let acquired;
@@ -451,7 +474,7 @@ function createQuarantineReconciler(deps) {
         tx.set(stateRef(), {...s, fence,
           lease: {holder: ctx.holder, fence, untilMs: t + limits.leaseMs}});
         return {outcome: "acquired", fence, afterName: s.afterName,
-          listQuery: s.listQuery};
+          listQuery: s.listQuery, listStalls: s.listStalls};
       });
     } catch (e) {
       // contention or a transport failure: bounded. The acquire may still
@@ -472,6 +495,7 @@ function createQuarantineReconciler(deps) {
     // query of the page holding the next unprocessed object (PR87 F1)
     let query = acquired.listQuery ||
       {startOffset: afterName, pageToken: null};
+    let stalls = acquired.listStalls;
     const out = {processed: 0, outcomes: {}, evidence: 0, young: 0,
       lists: 0, passEnded: false, stoppedFor: null};
     const bump = (k) => {
@@ -507,8 +531,9 @@ function createQuarantineReconciler(deps) {
         page.nextPageToken ? page.nextPageToken.slice(0, 4096) : null;
       // skip the inclusive startOffset overlap and anything a re-fetched
       // page repeats: names at or before the name cursor
+      // (service UTF-8 order, never UTF-16: c-6312514310)
       const items = page.items.filter((it) => !(afterName && it &&
-        typeof it.name === "string" && it.name <= afterName));
+        typeof it.name === "string" && compareNames(it.name, afterName) <= 0));
       for (const item of items) {
         if (out.processed >= limit) break lists;
         if (remaining() < limits.objectBudgetMs) {
@@ -566,19 +591,37 @@ function createQuarantineReconciler(deps) {
         const cp = await tryFenced(ctx, (s) => ({...s, afterName: name,
           listQuery: pageQuery, passObjects: s.passObjects + 1,
           passEvidence: s.passEvidence + (evidence ? 1 : 0),
-          lastError: null, consecutiveFailures: 0}), evidence);
+          listStalls: 0, lastError: null, consecutiveFailures: 0}),
+        evidence);
         if (!cp.ok) {
           out.stoppedFor = stateStop(cp);
           break lists;
         }
         afterName = name;
+        stalls = 0;
         out.processed += 1;
+      }
+      if (token && items.length === 0) {
+        // a continuation that yields no name past the cursor (PR87 R-1):
+        // tolerated a bounded number of times; a token that repeats itself
+        // or a run of stalls is a non-advancing listing. Record it durably
+        // and fall back to the name cursor (startOffset = afterName).
+        stalls += 1;
+        if (token === query.pageToken || stalls >= limits.listStallMax) {
+          const np = await tryFenced(ctx, (s, t) => ({...s, listQuery: null,
+            listStalls: 0, lastError: {code: "list-no-progress", atMs: t},
+            consecutiveFailures: s.consecutiveFailures + 1}));
+          out.stoppedFor = np.ok ? "list:no-progress" : stateStop(np);
+          break;
+        }
       }
       if (token) {
         // the page is fully processed but the listing continues: advance
         // to the next page by its token (empty/overlap-only pages too)
         const next = {startOffset: query.startOffset, pageToken: token};
-        const adv = await tryFenced(ctx, (s) => ({...s, listQuery: next}));
+        const st = stalls;
+        const adv = await tryFenced(ctx, (s) => ({...s, listQuery: next,
+          listStalls: st}));
         if (!adv.ok) {
           out.stoppedFor = stateStop(adv);
           break;
@@ -590,7 +633,8 @@ function createQuarantineReconciler(deps) {
       // no continuation and the whole page processed: pass end
       const end = await tryFenced(ctx, (s, t) => ({...s, afterName: null,
         listQuery: null, passId: crypto.randomBytes(16).toString("hex"),
-        passStartedAtMs: t, passObjects: 0, passEvidence: 0}));
+        passStartedAtMs: t, passObjects: 0, passEvidence: 0,
+        listStalls: 0}));
       if (end.ok) {
         out.passEnded = true;
         afterName = null;
@@ -606,7 +650,10 @@ function createQuarantineReconciler(deps) {
     // release the lease (fenced; a lost lease is a no-op), then a
     // best-effort release-if-mine if that transaction failed (PR87 F4)
     const rel = await tryFenced(ctx, (s) => ({...s, lease: null}));
-    if (rel.error) await releaseIfMine();
+    if (rel.error && !(await releaseIfMine())) {
+      // the lease may outlive this invocation until its expiry (PR87 R-2)
+      out.releaseError = rel.error;
+    }
     out.counters = {...db.lfsCounters};
     logger.info("film.reconcile.done", {processed: out.processed,
       evidence: out.evidence, young: out.young, lists: out.lists,
@@ -637,5 +684,5 @@ function defineReconcileTrigger({run, isEnabled}) {
 
 module.exports = {POLICY_REVISION, STATE_PATH, EVIDENCE_COLLECTION, PREFIX,
   RECONCILE_LIMITS, RECONCILE_DESIGNATION, deriveLimits, stateSchema,
-  evidenceIdFor, FilmAmbiguous, filmProblem, createDbFacade,
+  evidenceIdFor, FilmAmbiguous, filmProblem, createDbFacade, compareNames,
   classifyListing, createQuarantineReconciler, defineReconcileTrigger};

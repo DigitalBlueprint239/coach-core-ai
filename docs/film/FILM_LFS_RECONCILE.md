@@ -98,7 +98,7 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 ```
 {project, bucket, prefix, policyRevision, passId, passStartedAtMs,
  afterName, listQuery{startOffset,pageToken}, passObjects, passEvidence,
- lease{holder,fence,untilMs}, fence,
+ listStalls, lease{holder,fence,untilMs}, fence,
  lastError{code,atMs}, consecutiveFailures, previous{…}}
 ```
 - **Binding:** project, bucket and policy (`lfs-r3.2`) are bound to the state. A change moves the old cursor into `previous` and starts a new pass.
@@ -106,9 +106,11 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 - **Target binding (PR87 F2):** if the facade's bucket differs from the configured bucket, the invocation fails closed (`targetMismatch`) **before any list or state write**. The bucket is pinned for the whole invocation, including the dedicated handler instance. A configuration change during a run stops it before the next object (`config-changed`), and records stay bound to the pinned bucket.
 - **Progress:**
   - progress is keyed by object name: names at or before `afterName` are skipped, which covers the inclusive `startOffset` overlap and any re-fetched page;
+  - **names are compared in the service order, UTF-8 bytes (`compareNames`, PR87 c-6312514310)**, the same order GCS uses for listing, `startOffset` and resume tokens. JavaScript's UTF-16 order differs above U+FFFF: with it, `quarantine/\u{10000}/…` sorted before `quarantine/\uE000/…` and was skipped forever. The JSON API returns well-formed UTF-8 names only;
   - **the list `nextPageToken` is authoritative (PR87 F1).** A short page is never treated as the end. `listQuery` stores the query of the page holding the next unprocessed object, and is persisted across invocations;
   - a fully processed page that has a token advances `listQuery` by that token, even when the page was empty or held only the overlap entry;
   - an invalid or expired token (400/410) clears `listQuery` with `lastError: page-token-invalid`, and the next run lists from `afterName`;
+  - **non-advancing continuation (PR87 R-1):** a token page that yields no name past `afterName` is a stall, counted in `listStalls` (persisted; reset by any checkpoint or pass end). If the returned token equals the request token, or stalls reach `listStallMax` (3), the run records a fenced `lastError: list-no-progress`, increments `consecutiveFailures`, clears `listQuery` (so the next run lists from `afterName`) and stops with `list:no-progress`. A legitimate empty page with an advancing token is followed;
   - list size is `min(pageMax, remaining + 1)`; at most 2 lists and ≤ 100 objects per invocation;
   - a **fenced checkpoint per object** (and its evidence) is written in the same transaction.
 - **Pass end:** only when a page has **no** continuation token **and** has been fully processed.
@@ -116,7 +118,8 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
   - acquire, or take over after expiry with a higher fence;
   - a **fresh verify and renew immediately before every re-drive**, including the first;
   - fenced checkpoint, evidence and error writes; release at the end.
-- **Ambiguous acquire (PR87 F4):** an acquire may commit remotely yet return DEADLINE locally. A best-effort release-if-mine (the holder is unique per invocation) then clears the lease. If that also fails, the orphaned lease is bounded by its expiry; the emulator test resolves it by expiry.
+- **Ambiguous acquire (PR87 F4):** an acquire may commit remotely yet return DEADLINE locally. A best-effort release-if-mine (the holder is unique per invocation) then clears the lease. If that also fails, the orphaned lease is bounded by its expiry.
+- **Reported leftovers (PR87 R-2):** a lease can outlive an invocation only after an `acquireError`, a `state:<code>` stop, or a `releaseError` (reported when both the fenced release and release-if-mine fail). The emulator test fails on any other leftover lease and resolves an explained one by expiry.
 - **Contention:** contention or a transport failure in the acquire, verify, checkpoint or release transaction ends the invocation **bounded and without throwing** (`acquireError` or `stoppedFor: state:<code>`). This was observed on the real emulator, whose pessimistic locks make a contending reconciler hit its 2 s RPC deadline. The object is presented again on the next run.
 - **Authority:** the lease covers discovery, checkpoint, evidence and errors only. An already-started stale re-drive finishes as a duplicate delivery and never writes reconciliation state.
 - **Evidence:** `filmReconcile/quarantine/evidence/{sha256(project\nbucket\npolicy\nname\ngeneration)}`, a fixed field set. A repeat updates `count`, `lastAtMs` and `lastPassId`. There is no per-pass cap, and aggregate cardinality is **not globally bounded** (operator retention is C1-D1).
@@ -175,8 +178,8 @@ N is **not** bounded by the 20-film active cap, because orphans accumulate acros
 
 | File | Count | Covers |
 |---|---|---|
-| `lfs-reconcile.test.js` | 62 | L1–L8, L10, L14, L16–L19, plus PR87 F1–F4 regressions |
-| `lfs-reconcile-loopback.test.js` | 3 | L9 and L15 at reconciler level, plus real-facade pagination |
+| `lfs-reconcile.test.js` | 70 | L1–L8, L10, L14, L16–L19, plus PR87 F1–F4, UTF-8 order, R-1 and R-2 regressions |
+| `lfs-reconcile-loopback.test.js` | 7 | L9 and L15 at reconciler level, real-facade pagination, UTF-8 order with tokens and partial budgets |
 | `lfs-boundary.test.js` | 15 | L11, L12 |
 | `lfs-gate-*` | 49 | L9, L15, L16 transport proofs |
 | `emulator/lfs-reconcile.emulator.test.js` | 5 | L13: real Firestore emulator with the bounded client; operator CLI |

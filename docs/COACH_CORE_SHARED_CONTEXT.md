@@ -1,5 +1,11 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-21 / LFS PR87 second repair (Claude implementer): Codex FAIL c-6312514310 and reviewer FAIL c-6312585072 addressed (targets c-6312917818).
+> - **UTF-8 order:** cursor and replay filtering compare names as UTF-8 bytes, as GCS does; the `\uE000`/`\u{10000}` pair now gets evidence for both.
+> - **R-1:** non-advancing continuations are detected (same token, or 3 consecutive stalls), recorded as `list-no-progress` and resumed by name.
+> - **R-2:** emulator L10 asserts each result exactly and fails on an unexplained leftover lease; a new `releaseError` reports a lease that may outlive a run.
+> - New code and tests only; frozen surfaces unchanged. Next: both verdicts on the new SHA. MVP NO-GO.
+
 > 2026-10-21 / LFS PR87 repair (Claude implementer): Codex FAIL c-6312029054 addressed.
 > - **F1:** the list token is now authoritative and the page query is persisted; a short page no longer ends a pass.
 > - **F2:** a facade/configured bucket mismatch fails closed before any list or state write, and the bucket is pinned per invocation.

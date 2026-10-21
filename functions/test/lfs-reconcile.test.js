@@ -998,3 +998,194 @@ describe("PR87 F4: ambiguous acquire (committed remotely, error locally)",
             assert.equal(w.record(e).state, "deleted");
           });
     });
+
+describe("PR87 c-6312514310: cursor uses the service UTF-8 order", () => {
+  const A = "quarantine//source.mp4";
+  const B = "quarantine/\u{10000}/source.mp4";
+  const put = (w) => {
+    for (const n of [A, B]) {
+      w.bucket.put(n, MP4, "video/mp4", undefined,
+          {timeCreated: w.clock.t.toISOString()});
+    }
+    w.advance(16 * MIN);
+    w.bucket.pageCap = 1;
+  };
+  const ev = (w) => Object.fromEntries(w.evidence().map((e) =>
+    [e.name, e.count]));
+  const untouched = (w) => {
+    assert.ok(!w.bucket.calls.some((x) => x[0] === "download"), "no head");
+    assert.equal(w.bucket.deletes(), 0);
+    assert.deepEqual(w.records(), []);
+    assert.equal(w.bucket.objects.size, 2);
+  };
+  it("short pages with tokens: both noncanonical names get evidence on " +
+      "every pass (failed on ff7ec57: B never)", async () => {
+    const w = world();
+    put(w);
+    for (let i = 0; i < 3; i++) {
+      const out = await w.run(10);
+      assert.equal(out.processed, 2, JSON.stringify(out));
+      assert.equal(out.passEnded, true);
+    }
+    assert.deepEqual(ev(w), {[A]: 3, [B]: 3});
+    untouched(w);
+  });
+  it("partial budgets (limit 1, and the invocation budget) resume in " +
+      "UTF-8 order and reach B", async () => {
+    const w = world();
+    put(w);
+    assert.equal((await w.run(1)).processed, 1);
+    assert.deepEqual(ev(w), {[A]: 1});
+    let out = await w.run(1);
+    assert.equal(out.processed, 1);
+    assert.equal(out.passEnded, true);
+    assert.deepEqual(ev(w), {[A]: 1, [B]: 1});
+    const b = world({limits: {objectBudgetMs: 1000,
+      invocationBudgetMs: 1500}});
+    put(b);
+    let charged = false;
+    b.bucket.listFault = async (q, items, token) => {
+      if (q.pageToken && !charged) {
+        charged = true;
+        b.mono.t += 600; // late continuation page in the first invocation
+      }
+      return {items, token};
+    };
+    out = await b.run(10);
+    assert.equal(out.stoppedFor, "budget");
+    assert.deepEqual(ev(b), {[A]: 1});
+    out = await b.run(10);
+    assert.equal(out.passEnded, true);
+    assert.deepEqual(ev(b), {[A]: 1, [B]: 1});
+    untouched(w);
+    untouched(b);
+  });
+});
+
+describe("PR87 R-1 (c-6312585072): a non-advancing continuation is " +
+    "detected, recorded durably and resumed by name", () => {
+  const items = [1, 2, 3].map((n) => ({name: c.uploadPathFor("team",
+      `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`),
+  generation: String(n), size: "32", contentType: "video/mp4",
+  timeCreated: "2026-10-21T00:00:00Z"}));
+  /** Reviewer probe harness (pagination-token.cjs), heads always 503. */
+  const probe = (list) => {
+    const db = new FakeFirestore();
+    const calls = [];
+    const storage = {name: "demo-pages.appspot.com", async listObjects(q) {
+      calls.push({...q});
+      return list(q);
+    }, file() {
+      return {async download() {
+        throw Object.assign(new Error("temporary"), {code: 503});
+      }};
+    }};
+    const rc = r.createQuarantineReconciler({db, Timestamp: FakeTimestamp,
+      storage, bucketName: () => storage.name, project: "demo-pages",
+      now: () => new Date("2026-10-21T00:20:00Z"),
+      logger: {info() {}, warn() {}, error() {}}});
+    const ev = () => db.paths(r.EVIDENCE_COLLECTION + "/")
+        .map((p) => db.read(p).name.split("/")[2].slice(-1)).sort();
+    return {db, calls, rc, ev, st: () => db.read(r.STATE_PATH)};
+  };
+  it("reviewer double (b), token ignored and repeated: the stalling " +
+      "invocation records list-no-progress; the third object is reached " +
+      "(failed on ff7ec57: [2,0,0,0], lastError null)", async () => {
+    const p = probe((q) => {
+      const tail = items.filter((x) => !q.startOffset ||
+        x.name >= q.startOffset);
+      return {items: tail.slice(0, 2), nextPageToken: tail.length > 2 ?
+        "more" : null};
+    });
+    const first = await p.rc.reconcileQuarantine({limit: 10});
+    assert.equal(first.processed, 2);
+    assert.equal(first.stoppedFor, "list:no-progress");
+    assert.equal(p.st().lastError.code, "list-no-progress");
+    assert.equal(p.st().consecutiveFailures, 1);
+    assert.equal(p.st().listQuery, null, "falls back to the name cursor");
+    assert.equal(p.st().afterName, items[1].name);
+    const second = await p.rc.reconcileQuarantine({limit: 10});
+    assert.equal(p.calls.at(-1).startOffset, items[1].name);
+    assert.equal(second.processed, 1);
+    assert.equal(second.passEnded, true);
+    assert.deepEqual(p.ev(), ["1", "2", "3"], "third reached");
+    assert.ok(r.stateSchema.safeParse(p.st()).success);
+  });
+  it("a FRESH token each time that never advances: stalls persist " +
+      "across invocations; at listStallMax the error is recorded and the " +
+      "run resumes by name", async () => {
+    let n = 0;
+    const p = probe((q) => {
+      if (q.pageToken) return {items: [], nextPageToken: `t${++n}`};
+      const tail = items.filter((x) => !q.startOffset ||
+        x.name > q.startOffset);
+      return {items: tail.slice(0, 1), nextPageToken: tail.length > 1 ?
+        `t${++n}` : null};
+    });
+    const L = r.RECONCILE_LIMITS;
+    assert.equal(L.listStallMax, 3);
+    const runs = [];
+    for (let i = 0; i < 3; i++) {
+      const out = await p.rc.reconcileQuarantine({limit: 10});
+      runs.push([out.processed, out.stoppedFor, p.st().listStalls,
+        p.st().lastError && p.st().lastError.code]);
+    }
+    assert.deepEqual(runs, [
+      [1, "list-limit", 1, null], // object 1; one empty continuation
+      [0, "list:no-progress", 0, "list-no-progress"], // stalls 2, 3
+      [1, "list-limit", 1, null], // resumed by name: object 2, progress
+    ]);
+    assert.equal(p.calls.length, 6); // two lists per invocation
+    assert.equal(p.calls[4].startOffset, items[0].name);
+    assert.equal(p.calls[4].pageToken, undefined);
+  });
+  it("a legitimate empty page with an advancing token is followed with " +
+      "no error", async () => {
+    let served = false;
+    const p = probe((q) => {
+      if (!q.pageToken && !served) {
+        served = true;
+        return {items: [], nextPageToken: "advance"};
+      }
+      return {items, nextPageToken: null};
+    });
+    const out = await p.rc.reconcileQuarantine({limit: 10});
+    assert.equal(out.processed, 3);
+    assert.equal(out.passEnded, true);
+    assert.equal(p.st().lastError, null);
+    assert.equal(p.st().listStalls, 0);
+  });
+});
+
+describe("PR87 R-2: a lease that may outlive the invocation is reported",
+    () => {
+      // empty listing: transactions are acquire (1), pass end (2), fenced
+      // release (3) and, only if 3 fails, release-if-mine (4)
+      for (const [fail, leaked] of [[[3, 4], true], [[3], false], [[], false]]) {
+        it(`failing transactions ${JSON.stringify(fail)}: releaseError ` +
+            `${leaked ? "reported, lease left until expiry" : "absent"}`,
+        async () => {
+          const w = world();
+          let n = 0;
+          const flaky = new Proxy(w.db, {get(target, k) {
+            if (k === "runTransaction") {
+              return async (fn, o) => {
+                n += 1;
+                if (fail.includes(n)) {
+                  // committed or not: the reply is a deadline either way
+                  throw Object.assign(new Error("deadline"), {code: 4});
+                }
+                return target.runTransaction(fn, o);
+              };
+            }
+            const v = target[k];
+            return typeof v === "function" ? v.bind(target) : v;
+          }});
+          const out = await w.mk({db: flaky}).reconcileQuarantine({limit: 5});
+          assert.equal(out.passEnded, true);
+          assert.equal(n, fail.length ? 4 : 3);
+          assert.equal(out.releaseError, leaked ? "4" : undefined);
+          assert.equal(w.state().lease !== null, leaked);
+        });
+      }
+    });

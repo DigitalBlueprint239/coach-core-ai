@@ -146,29 +146,39 @@ describe("LFS reconciler on the Firestore emulator (bounded client)", () => {
         names[1], ev[0].data().generation));
   });
   it("L10: concurrent reconcilers on real transactions: both end " +
-      "bounded (no throw); one holder; exactly one decision and one " +
-      "delete; a later run completes the pass", async () => {
+      "bounded (no throw); at most one processes; never two deletes; a " +
+      "leftover lease only when a result explains it; a later run " +
+      "completes with exactly one delete", async () => {
     const w = world();
     const e = w.bucket.put(c.uploadPathFor(TEAM, crypto.randomUUID()), MP4);
     w.advance(16 * MIN);
     const res = await Promise.all([w.rc.reconcileQuarantine({limit: 5}),
       w.rc.reconcileQuarantine({limit: 5})]);
-    // contention on the emulator's pessimistic locks may surface as a
-    // bounded acquire/state failure (deadline) instead of skip-contention
+    // each result is EXACTLY one of: lost the acquire (skip-contention),
+    // a bounded acquire failure (emulator lock contention may surface as a
+    // deadline), or an acquired run summary (PR87 R-2)
     for (const x of res) {
-      assert.ok(x.skipContention || x.acquireError || x.processed >= 0,
-          JSON.stringify(x));
+      const kinds = [x.skipContention === true, typeof x.acquireError ===
+        "string", typeof x.lists === "number"].filter(Boolean).length;
+      assert.equal(kinds, 1, JSON.stringify(x));
     }
+    assert.ok(res.filter((x) => x.processed > 0).length <= 1,
+        JSON.stringify(res));
     assert.ok(w.bucket.deletes() <= 1, "never two deletes");
-    // An ambiguous acquire (committed remotely, DEADLINE locally) can leave
-    // a lease whose holder already returned; release-if-mine is best
-    // effort, so it is resolved by its EXPIRY (injected clock), never by
-    // loosening "exactly one delete" (Codex local 45/1, c-6311860832).
+    // A lease may survive ONLY an ambiguous acquire, a failed state
+    // transaction or a reported release failure (release-if-mine is best
+    // effort); then it is resolved by its expiry (injected clock). Any
+    // other leftover lease is a leak and fails here (R-2 c-6312585072).
+    const explained = res.some((x) => x.acquireError || x.releaseError ||
+      String(x.stoppedFor || "").startsWith("state:"));
     const st = await w.state();
-    if (st && st.lease) {
+    if (!explained) {
+      assert.equal(st.lease, null, `unexplained lease ${JSON.stringify(res)}`);
+    } else if (st.lease) {
       w.advance(w.rc.limits.leaseMs + 1);
     }
     await w.rc.reconcileQuarantine({limit: 5});
+    assert.equal((await w.state()).lease, null);
     assert.equal(w.bucket.deletes(), 1);
     assert.equal((await w.record(e)).state, "deleted");
     const recs = await adminDb.collection("filmCleanup").get();
