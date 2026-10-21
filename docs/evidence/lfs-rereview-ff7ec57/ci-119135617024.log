@@ -1,0 +1,583 @@
+﻿2026-10-21T09:05:19.6268118Z Current runner version: '2.338.0'
+2026-10-21T09:05:19.6294109Z ##[group]Runner Image Provisioner
+2026-10-21T09:05:19.6295080Z Hosted Compute Agent
+2026-10-21T09:05:19.6295741Z Version: 20261012.601
+2026-10-21T09:05:19.6296380Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-21T09:05:19.6297163Z Build Date: 2026-10-12T17:48:21Z
+2026-10-21T09:05:19.6297846Z Worker ID: {9e87f99a-1bd7-4068-9f9f-fa38d43fb40b}
+2026-10-21T09:05:19.6298838Z Region: westus3
+2026-10-21T09:05:19.6299518Z Cloud: Azure
+2026-10-21T09:05:19.6300059Z ##[endgroup]
+2026-10-21T09:05:19.6301598Z ##[group]Operating System
+2026-10-21T09:05:19.6302317Z Ubuntu
+2026-10-21T09:05:19.6302820Z 24.04.5
+2026-10-21T09:05:19.6303425Z LTS
+2026-10-21T09:05:19.6303940Z ##[endgroup]
+2026-10-21T09:05:19.6304527Z ##[group]Runner Image
+2026-10-21T09:05:19.6305144Z Image: ubuntu-24.04
+2026-10-21T09:05:19.6305712Z Version: 20261012.334.1
+2026-10-21T09:05:19.6307038Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T09:05:19.6309334Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-21T09:05:19.6310375Z ##[endgroup]
+2026-10-21T09:05:19.6311592Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T09:05:19.6313588Z Contents: read
+2026-10-21T09:05:19.6314216Z Metadata: read
+2026-10-21T09:05:19.6314870Z ##[endgroup]
+2026-10-21T09:05:19.6316949Z Secret source: Actions
+2026-10-21T09:05:19.6318052Z Cache mode: write
+2026-10-21T09:05:19.6319271Z Prepare workflow directory
+2026-10-21T09:05:19.6727793Z Prepare all required actions
+2026-10-21T09:05:19.6777181Z Getting action download info
+2026-10-21T09:05:20.0165821Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-21T09:05:20.1250652Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-21T09:05:20.3577491Z Complete job name: Focused LFS + affected S1/C1 unit suites (incl. transport gate) + lint
+2026-10-21T09:05:20.4351824Z ##[group]Run actions/checkout@v5
+2026-10-21T09:05:20.4352713Z with:
+2026-10-21T09:05:20.4353218Z   repository: DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:20.4357047Z   token: ***
+2026-10-21T09:05:20.4357482Z   ssh-strict: true
+2026-10-21T09:05:20.4357925Z   ssh-user: git
+2026-10-21T09:05:20.4358664Z   persist-credentials: true
+2026-10-21T09:05:20.4359146Z   clean: true
+2026-10-21T09:05:20.4359596Z   sparse-checkout-cone-mode: true
+2026-10-21T09:05:20.4360121Z   fetch-depth: 1
+2026-10-21T09:05:20.4360558Z   fetch-tags: false
+2026-10-21T09:05:20.4361014Z   show-progress: true
+2026-10-21T09:05:20.4361459Z   lfs: false
+2026-10-21T09:05:20.4361868Z   submodules: false
+2026-10-21T09:05:20.4362311Z   set-safe-directory: true
+2026-10-21T09:05:20.4362816Z   allow-unsafe-pr-checkout: false
+2026-10-21T09:05:20.4363598Z env:
+2026-10-21T09:05:20.4364071Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:20.4364721Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:20.4365405Z   GCLOUD_PROJECT: demo-coach-core-beta
+2026-10-21T09:05:20.4365944Z ##[endgroup]
+2026-10-21T09:05:20.5398878Z Syncing repository: DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:20.5401682Z ##[group]Getting Git version info
+2026-10-21T09:05:20.5402918Z Working directory is '/home/runner/work/coach-core-ai/coach-core-ai'
+2026-10-21T09:05:20.5404691Z [command]/usr/bin/git version
+2026-10-21T09:05:20.5500015Z git version 2.55.0
+2026-10-21T09:05:20.5523557Z ##[endgroup]
+2026-10-21T09:05:20.5539994Z Temporarily overriding HOME='/home/runner/work/_temp/c3e4783a-66ed-440d-a532-7bfcf036db95' before making global git config changes
+2026-10-21T09:05:20.5542445Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T09:05:20.5544452Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-21T09:05:20.5594929Z Deleting the contents of '/home/runner/work/coach-core-ai/coach-core-ai'
+2026-10-21T09:05:20.5600996Z ##[group]Initializing the repository
+2026-10-21T09:05:20.5606153Z [command]/usr/bin/git init /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-21T09:05:20.5716792Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T09:05:20.5718894Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T09:05:20.5720655Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T09:05:20.5721930Z hint: call:
+2026-10-21T09:05:20.5722495Z hint:
+2026-10-21T09:05:20.5723046Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T09:05:20.5723713Z hint:
+2026-10-21T09:05:20.5724336Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T09:05:20.5725354Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T09:05:20.5726169Z hint:
+2026-10-21T09:05:20.5726618Z hint: 	git branch -m <name>
+2026-10-21T09:05:20.5727131Z hint:
+2026-10-21T09:05:20.5727856Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T09:05:20.5729984Z Initialized empty Git repository in /home/runner/work/coach-core-ai/coach-core-ai/.git/
+2026-10-21T09:05:20.5735260Z [command]/usr/bin/git remote add origin https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:20.5785247Z ##[endgroup]
+2026-10-21T09:05:20.5786123Z ##[group]Disabling automatic garbage collection
+2026-10-21T09:05:20.5790827Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T09:05:20.5824755Z ##[endgroup]
+2026-10-21T09:05:20.5825649Z ##[group]Setting up auth
+2026-10-21T09:05:20.5833489Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T09:05:20.5868808Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T09:05:20.6274471Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T09:05:20.6315652Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T09:05:20.6544388Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T09:05:20.6584237Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T09:05:20.6811659Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T09:05:20.6853710Z ##[endgroup]
+2026-10-21T09:05:20.6854916Z ##[group]Fetching the repository
+2026-10-21T09:05:20.6867585Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ff7ec5755e57d5088d4c1d0e2c3e6bd00956a649:refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T09:05:22.2307371Z From https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:22.2310418Z  * [new ref]         ff7ec5755e57d5088d4c1d0e2c3e6bd00956a649 -> origin/claude/film-lfs-reconcile
+2026-10-21T09:05:22.2315689Z ##[endgroup]
+2026-10-21T09:05:22.2317807Z ##[group]Determining the checkout info
+2026-10-21T09:05:22.2320503Z ##[endgroup]
+2026-10-21T09:05:22.2322394Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T09:05:22.2379856Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T09:05:22.2413725Z ##[group]Checking out the ref
+2026-10-21T09:05:22.2419927Z [command]/usr/bin/git checkout --progress --force -B claude/film-lfs-reconcile refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T09:05:22.3907367Z Switched to a new branch 'claude/film-lfs-reconcile'
+2026-10-21T09:05:22.3912518Z branch 'claude/film-lfs-reconcile' set up to track 'origin/claude/film-lfs-reconcile'.
+2026-10-21T09:05:22.3926385Z ##[endgroup]
+2026-10-21T09:05:22.3974496Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T09:05:22.4002758Z ff7ec5755e57d5088d4c1d0e2c3e6bd00956a649
+2026-10-21T09:05:22.4395994Z ##[group]Run actions/setup-node@v5
+2026-10-21T09:05:22.4397275Z with:
+2026-10-21T09:05:22.4398378Z   node-version: 22
+2026-10-21T09:05:22.4399366Z   cache: npm
+2026-10-21T09:05:22.4400511Z   cache-dependency-path: functions/package-lock.json
+2026-10-21T09:05:22.4401976Z   always-auth: false
+2026-10-21T09:05:22.4402987Z   check-latest: false
+2026-10-21T09:05:22.4412992Z   token: ***
+2026-10-21T09:05:22.4413994Z   package-manager-cache: true
+2026-10-21T09:05:22.4415097Z env:
+2026-10-21T09:05:22.4416124Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:22.4417637Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:22.4419207Z   GCLOUD_PROJECT: demo-coach-core-beta
+2026-10-21T09:05:22.4420435Z ##[endgroup]
+2026-10-21T09:05:22.5930288Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-21T09:05:22.5934778Z (node:2312) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T09:05:22.5938486Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T09:05:22.5941052Z ##[group]Environment details
+2026-10-21T09:05:22.9816042Z node: v22.23.3
+2026-10-21T09:05:22.9816437Z npm: 10.9.9
+2026-10-21T09:05:22.9816708Z yarn: 1.22.22
+2026-10-21T09:05:22.9817733Z ##[endgroup]
+2026-10-21T09:05:22.9841391Z [command]/opt/hostedtoolcache/node/22.23.3/x64/bin/npm config get cache
+2026-10-21T09:05:23.0979249Z /home/runner/.npm
+2026-10-21T09:05:23.3208697Z Cache hit for: node-cache-Linux-x64-npm-e856bde2e5a363dc6cdf9b3d63c3c741a1f09a81120f72457b66c6501edc1bae
+2026-10-21T09:05:23.3326931Z (node:2312) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-21T09:05:24.5501857Z Received 15333941 of 19528245 (78.5%), 14.6 MBs/sec
+2026-10-21T09:05:24.5728696Z Received 19528245 of 19528245 (100.0%), 18.2 MBs/sec
+2026-10-21T09:05:24.5824201Z Cache Size: ~19 MB (19528245 B)
+2026-10-21T09:05:24.5887391Z [command]/usr/bin/tar -xf /home/runner/work/_temp/1fe75255-0e2e-43c0-82b1-9602e2aba537/cache.tzst -P -C /home/runner/work/coach-core-ai/coach-core-ai --use-compress-program unzstd
+2026-10-21T09:05:24.6773676Z Cache restored successfully
+2026-10-21T09:05:24.6788431Z Cache restored from key: node-cache-Linux-x64-npm-e856bde2e5a363dc6cdf9b3d63c3c741a1f09a81120f72457b66c6501edc1bae
+2026-10-21T09:05:24.6970791Z ##[group]Run npm ci --prefix functions --no-audit --no-fund
+2026-10-21T09:05:24.6971344Z [36;1mnpm ci --prefix functions --no-audit --no-fund[0m
+2026-10-21T09:05:24.7234454Z shell: /usr/bin/bash -e {0}
+2026-10-21T09:05:24.7234795Z env:
+2026-10-21T09:05:24.7235086Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:24.7235506Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:24.7235917Z   GCLOUD_PROJECT: demo-coach-core-beta
+2026-10-21T09:05:24.7236276Z ##[endgroup]
+2026-10-21T09:05:26.3223893Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-10-21T09:05:26.3721523Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2026-10-21T09:05:26.3751625Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-10-21T09:05:26.4071571Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2026-10-21T09:05:26.4584879Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2026-10-21T09:05:26.7806942Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2026-10-21T09:05:27.0298416Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-21T09:05:27.7360304Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-10-21T09:05:29.3091821Z 
+2026-10-21T09:05:29.3092466Z added 328 packages in 5s
+2026-10-21T09:05:29.3680444Z ##[group]Run npm --prefix functions run lint
+2026-10-21T09:05:29.3681037Z [36;1mnpm --prefix functions run lint[0m
+2026-10-21T09:05:29.3747239Z shell: /usr/bin/bash -e {0}
+2026-10-21T09:05:29.3747507Z env:
+2026-10-21T09:05:29.3747754Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:29.3748302Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:29.3748649Z   GCLOUD_PROJECT: demo-coach-core-beta
+2026-10-21T09:05:29.3748957Z ##[endgroup]
+2026-10-21T09:05:29.4749211Z 
+2026-10-21T09:05:29.4749672Z > lint
+2026-10-21T09:05:29.4750099Z > eslint index.js src test scripts
+2026-10-21T09:05:29.4750359Z 
+2026-10-21T09:05:31.2585882Z ##[group]Run node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout test/lfs-reconcile.test.js test/lfs-reconcile-loopback.test.js test/lfs-boundary.test.js test/lfs-gate-storage.test.js test/lfs-gate-storage-https.test.js test/lfs-gate-firestore.test.js test/lfs-gate-firestore-prod.test.js test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js test/film-s1.test.js
+2026-10-21T09:05:31.2589889Z [36;1mnode --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout test/lfs-reconcile.test.js test/lfs-reconcile-loopback.test.js test/lfs-boundary.test.js test/lfs-gate-storage.test.js test/lfs-gate-storage-https.test.js test/lfs-gate-firestore.test.js test/lfs-gate-firestore-prod.test.js test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js test/film-s1.test.js[0m
+2026-10-21T09:05:31.2654875Z shell: /usr/bin/bash -e {0}
+2026-10-21T09:05:31.2655131Z env:
+2026-10-21T09:05:31.2655380Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:31.2655733Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:31.2656051Z   GCLOUD_PROJECT: demo-coach-core-beta
+2026-10-21T09:05:31.2656336Z   ANNOTATE_LABEL: LFS focused
+2026-10-21T09:05:31.2656583Z ##[endgroup]
+2026-10-21T09:05:31.6174561Z event bucket differs from configured {"outcome":"ignored-bucket","status":"reserved","records":0}
+2026-10-21T09:05:31.6176736Z event bucket field absent {"outcome":"ignored-bucket","status":"reserved","records":0}
+2026-10-21T09:05:31.6383071Z sweeps [{"queried":25,"outcomes":["invalid"],"goodSeen":false},{"queried":1,"outcomes":["admitted"],"goodSeen":true},{"queried":0,"outcomes":[],"goodSeen":false}] good state deleted
+2026-10-21T09:05:31.6450619Z ✔ C1-R1 (generalised): finalize with event bucket differs from configured must not commit a cleanup-owing rejection without an obligation (8.158878ms)
+2026-10-21T09:05:31.6490067Z ✔ C1-R1 (generalised): finalize with event bucket field absent must not commit a cleanup-owing rejection without an obligation (1.586953ms)
+2026-10-21T09:05:31.6549699Z ✔ C1-R2: >= sweepBatchMax invalid due records must not permanently starve a valid due record (19.851718ms)
+2026-10-21T09:05:31.7357894Z ▶ T1 abandon, delete succeeds
+2026-10-21T09:05:31.7390351Z   ✔ record deleted after one attempt; receipt, payloadHash, replayableUntil and op record carry no cleanup state; slot released once (24.321129ms)
+2026-10-21T09:05:31.7392203Z ✔ T1 abandon, delete succeeds (25.615302ms)
+2026-10-21T09:05:31.7419171Z ▶ T2 abandon during a storage outage
+2026-10-21T09:05:31.7449954Z   ✔ attempt counted before I/O; pending; response and error class unchanged; due time honoured; later sweep deletes (4.37239ms)
+2026-10-21T09:05:31.9157240Z   ✔ a timed-out delete is a recorded error; the response is unchanged (42.806937ms)
+2026-10-21T09:05:31.9159243Z ✔ T2 abandon during a storage outage (47.596299ms)
+2026-10-21T09:05:31.9167983Z ▶ T3 404 / T4 412
+2026-10-21T09:05:31.9169365Z   ✔ T3 404 -> absent, terminal; later admissions are no-ops (3.141514ms)
+2026-10-21T09:05:31.9182947Z   ✔ T4 412 -> mismatch with code; every object preserved byte-identical; only generation-matched deletes; no claim about a newer generation (2.191557ms)
+2026-10-21T09:05:31.9202413Z ✔ T3 404 / T4 412 (5.594443ms)
+2026-10-21T09:05:31.9239354Z ▶ T5 outage across all MAX admissions
+2026-10-21T09:05:31.9249779Z   ✔ stuck after the eighth; no ninth delete; record and object kept; sweepDueAtMs null (12.763888ms)
+2026-10-21T09:05:31.9283654Z ✔ T5 outage across all MAX admissions (13.241305ms)
+2026-10-21T09:05:31.9318997Z ▶ T6 abandon replay
+2026-10-21T09:05:31.9320998Z   ✔ not due / leased / cap / terminal -> zero attempts; eligible -> exactly one; response, op record and deadline byte-unchanged; only the exact record touched; no second slot release (20.377774ms)
+2026-10-21T09:05:31.9349538Z ✔ T6 abandon replay (20.685872ms)
+2026-10-21T09:05:31.9379269Z ▶ T7 crash points
+2026-10-21T09:05:31.9400281Z   ✔ T7-0 abandon: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1 (4.735807ms)
+2026-10-21T09:05:31.9407772Z   ✔ T7-0 finalize-no-reservation: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1 (1.48464ms)
+2026-10-21T09:05:31.9430466Z   ✔ T7-0 finalize-expired: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1 (1.654539ms)
+2026-10-21T09:05:31.9460684Z   ✔ T7-0 finalize-rejected-signature-invalid: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1 (3.051499ms)
+2026-10-21T09:05:31.9490578Z   ✔ T7-0 finalize-stale-abandoned: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1 (3.652531ms)
+2026-10-21T09:05:31.9520170Z   ✔ T7-0 abandon replay after the crash: an eligible replay admits attempt 1 / fence 1 through the shared admission; a non-eligible replay admits nothing (4.488442ms)
+2026-10-21T09:05:31.9550008Z   ✔ T7a crash after admission, before I/O: attempt consumed; at lease expiry the entry closes 'unknown'; sweepable at the admission-fixed time (4.513909ms)
+2026-10-21T09:05:31.9579650Z   ✔ T7b crash after delete, before the result write: the next admission gets 404 -> absent; count never reset (1.166081ms)
+2026-10-21T09:05:31.9580932Z ✔ T7 crash points (25.201289ms)
+2026-10-21T09:05:31.9609115Z ▶ T8 every finalize path
+2026-10-21T09:05:31.9618466Z   ✔ no-reservation: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (4.574393ms)
+2026-10-21T09:05:31.9650546Z   ✔ stale-validating: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.450134ms)
+2026-10-21T09:05:31.9654053Z   ✔ stale-ready: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.455625ms)
+2026-10-21T09:05:31.9732083Z   ✔ stale-rejected: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.685156ms)
+2026-10-21T09:05:31.9735666Z   ✔ stale-abandoned: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (3.884908ms)
+2026-10-21T09:05:31.9739788Z   ✔ stale-expired: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.318517ms)
+2026-10-21T09:05:31.9743116Z   ✔ expired: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.354324ms)
+2026-10-21T09:05:31.9746491Z   ✔ rejected-size-mismatch: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.319489ms)
+2026-10-21T09:05:31.9750322Z   ✔ rejected-content-type-mismatch: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.428865ms)
+2026-10-21T09:05:31.9754185Z   ✔ rejected-signature-invalid: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset (1.343604ms)
+2026-10-21T09:05:31.9756620Z   ✔ validating and duplicate-event create no obligation (0.490541ms)
+2026-10-21T09:05:31.9757907Z ✔ T8 every finalize path (20.807769ms)
+2026-10-21T09:05:31.9759232Z ▶ T9 binding and generation
+2026-10-21T09:05:31.9761101Z   ✔ finalize for another bucket, no bucket, or a non-decimal generation: ignored before any read or decision (C1-R1); no record, no Storage call (0.975813ms)
+2026-10-21T09:05:31.9763187Z   ✔ target problems: bucket, non-canonical name, generation form (0.279545ms)
+2026-10-21T09:05:31.9764812Z   ✔ 20-digit generation preserved exactly; exact delete options (3.425164ms)
+2026-10-21T09:05:31.9766440Z   ✔ invalid record (wrong bucket) fails closed before any Storage call; preserved (0.79866ms)
+2026-10-21T09:05:31.9768473Z   ✔ invalid record (team mismatch) fails closed before any Storage call; preserved (0.504718ms)
+2026-10-21T09:05:31.9770360Z   ✔ invalid record (film mismatch) fails closed before any Storage call; preserved (0.527361ms)
+2026-10-21T09:05:31.9772178Z   ✔ invalid record (zero generation) fails closed before any Storage call; preserved (0.787088ms)
+2026-10-21T09:05:31.9774086Z   ✔ invalid record (numeric generation) fails closed before any Storage call; preserved (0.539353ms)
+2026-10-21T09:05:31.9776025Z   ✔ invalid record (unknown field) fails closed before any Storage call; preserved (2.778673ms)
+2026-10-21T09:05:31.9778030Z   ✔ invalid record (attempts/history disagree) fails closed before any Storage call; preserved (0.595178ms)
+2026-10-21T09:05:31.9780381Z   ✔ invalid record (pending without sweepDueAtMs) fails closed before any Storage call; preserved (0.438484ms)
+2026-10-21T09:05:31.9782433Z   ✔ invalid record (terminal with a due time) fails closed before any Storage call; preserved (0.650271ms)
+2026-10-21T09:05:31.9784096Z   ✔ id mismatch (record stored under another id) fails closed (0.477336ms)
+2026-10-21T09:05:31.9785647Z   ✔ the injected client has implicit retries disabled (real SDK class) (45.750595ms)
+2026-10-21T09:05:31.9786987Z ✔ T9 binding and generation (59.13469ms)
+2026-10-21T09:05:31.9787959Z ▶ T10 fencing, takeover and late results
+2026-10-21T09:05:31.9789621Z   ✔ T10a takeover after lease expiry: higher fence; history and count kept (0.813398ms)
+2026-10-21T09:05:31.9791534Z   ✔ T10b late success from the stale holder is refused; successor's outcome intact; successor's delete -> absent (0.767572ms)
+2026-10-21T09:05:31.9793548Z   ✔ T10c late error from the stale holder: no-op; successor's lease not cleared (0.597181ms)
+2026-10-21T09:05:32.3485613Z {"severity":"WARNING","message":"Warning, estimating Firebase Config based on GCLOUD_PROJECT. Initializing firebase-admin may fail"}
+2026-10-21T09:05:33.3877355Z   ✔ T10d concurrent sweepers: one admission per lease; result once (46.292904ms)
+2026-10-21T09:05:33.3899649Z   ✔ T10e terminal record: immediate, replay and sweep are no-ops with no Storage call (1.566402ms)
+2026-10-21T09:05:33.3922641Z   ✔ T10f wrong holder, same fence (control): no-op; lease and history unchanged (0.500811ms)
+2026-10-21T09:05:33.3924370Z   ✔ T10g cleared or replaced lease: the original holder's write is a no-op (0.800173ms)
+2026-10-21T09:05:33.3926615Z   ✔ T10h stale write after the successor's result leaves it byte-unchanged; control: same holder+fence after untilMs with no successor IS accepted (0.87274ms)
+2026-10-21T09:05:33.3929174Z   ✔ T10i result write on a schema- or binding-invalid record: not mutated; no Storage call (0.436981ms)
+2026-10-21T09:05:33.3930730Z ✔ T10 fencing, takeover and late results (53.008359ms)
+2026-10-21T09:05:33.3931739Z ▶ T11a sweep bounds
+2026-10-21T09:05:33.3932699Z   ✔ invalid limit refused before any query (0.709493ms)
+2026-10-21T09:05:33.3934114Z   ✔ exactly one bounded query per invocation; stops on the invocation budget (0.917273ms)
+2026-10-21T09:05:33.3992565Z   ✔ configuration / permission errors are recorded, capped and never loop (3.908201ms)
+2026-10-21T09:05:33.4009211Z ✔ T11a sweep bounds (5.664872ms)
+2026-10-21T09:05:33.4082307Z ▶ T12 boundary: TEST_ONLY sweep, unexported, retry OFF
+2026-10-21T09:05:33.4089436Z   ✔ loaded exports carry no TEST_ONLY marker and no sweep (377.816342ms)
+2026-10-21T09:05:33.4119625Z   ✔ the sweep definition: retryCount 0, placeholder schedule, marked TEST_ONLY, default-OFF before any work (0.733007ms)
+2026-10-21T09:05:33.4220132Z   ✔ predeploy guard: blocks a referenced or a disguised loaded export regardless of terms and with --check; clean index passes the sweep check (1008.905289ms)
+2026-10-21T09:05:33.4291355Z ✔ T12 boundary: TEST_ONLY sweep, unexported, retry OFF (1387.656276ms)
+2026-10-21T09:05:33.4300489Z ▶ PR86 C1-R1: no cleanup-owing decision commits without its record
+2026-10-21T09:05:33.4302856Z   ✔ abandon with a missing (no dependency) bucket-name resolver: retryable unavailable, nothing committed; restored config + same operation -> obligation, delete (1.855556ms)
+2026-10-21T09:05:33.4305695Z   ✔ abandon with a null bucket-name resolver: retryable unavailable, nothing committed; restored config + same operation -> obligation, delete (1.012114ms)
+2026-10-21T09:05:33.4308703Z   ✔ abandon with a empty bucket-name resolver: retryable unavailable, nothing committed; restored config + same operation -> obligation, delete (1.117309ms)
+2026-10-21T09:05:33.4311334Z   ✔ abandon with a throwing bucket-name resolver: retryable unavailable, nothing committed; restored config + same operation -> obligation, delete (1.135423ms)
+2026-10-21T09:05:33.4313407Z   ✔ abandon of a reserved film (nothing owed) is unaffected by a missing bucket name (0.534313ms)
+2026-10-21T09:05:33.4315075Z   ✔ abandon whose recorded generation is not decimal fails closed (no decision, no record) (0.781077ms)
+2026-10-21T09:05:33.4317466Z   ✔ finalize rejected-signature-invalid, missing (no dependency) resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.907645ms)
+2026-10-21T09:05:33.4321573Z   ✔ finalize rejected-signature-invalid, null resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.629663ms)
+2026-10-21T09:05:33.4324249Z   ✔ finalize rejected-signature-invalid, empty resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.557928ms)
+2026-10-21T09:05:33.4326978Z   ✔ finalize rejected-signature-invalid, throwing resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (4.718484ms)
+2026-10-21T09:05:33.4330679Z   ✔ finalize no-reservation, missing (no dependency) resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.508415ms)
+2026-10-21T09:05:33.4333369Z   ✔ finalize no-reservation, null resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.365317ms)
+2026-10-21T09:05:33.4336180Z   ✔ finalize no-reservation, empty resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.409769ms)
+2026-10-21T09:05:33.4339489Z   ✔ finalize no-reservation, throwing resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.368031ms)
+2026-10-21T09:05:33.4341911Z   ✔ finalize stale-abandoned, missing (no dependency) resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.813488ms)
+2026-10-21T09:05:33.4343783Z   ✔ finalize stale-abandoned, null resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.57508ms)
+2026-10-21T09:05:33.4345054Z   ✔ finalize stale-abandoned, empty resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.514235ms)
+2026-10-21T09:05:33.4346314Z   ✔ finalize stale-abandoned, throwing resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.546066ms)
+2026-10-21T09:05:33.4347861Z   ✔ finalize expired, missing (no dependency) resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.574239ms)
+2026-10-21T09:05:33.4349855Z   ✔ finalize expired, null resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.626617ms)
+2026-10-21T09:05:33.4351040Z   ✔ finalize expired, empty resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.674067ms)
+2026-10-21T09:05:33.4352216Z   ✔ finalize expired, throwing resolver: throws before the head read, nothing committed; a restored redelivery decides with its obligation (0.436249ms)
+2026-10-21T09:05:33.4353144Z   ✔ refusal inside the transaction (origin not in r3's set) aborts the decision (0.433224ms)
+2026-10-21T09:05:33.4354459Z   ✔ KNOWN GAP pinned (pre-existing S1 class, out of r3 scope): a finalize lost to a configuration outage (no platform retry) leaves the film reserved; lazy expiry frees the slot and the source stays with no record (0.561274ms)
+2026-10-21T09:05:33.4355668Z ✔ PR86 C1-R1: no cleanup-owing decision commits without its record (21.454666ms)
+2026-10-21T09:05:33.4356242Z ▶ PR86 C1-R2: invalid records cannot starve the sweep
+2026-10-21T09:05:33.4357004Z   ✔ >= sweepBatchMax invalid due records are parked; a valid due record behind them is reached on the next sweep (4.728233ms)
+2026-10-21T09:05:33.4357793Z   ✔ a transient full configuration outage parks nothing and recovers (1.670187ms)
+2026-10-21T09:05:33.4358898Z ✔ PR86 C1-R2: invalid records cannot starve the sweep (6.520929ms)
+2026-10-21T09:05:33.4435846Z {"severity":"WARNING","message":"Warning, estimating Firebase Config based on GCLOUD_PROJECT. Initializing firebase-admin may fail"}
+2026-10-21T09:05:33.4469717Z {"severity":"WARNING","message":"film.reserve.disabled"}
+2026-10-21T09:05:33.4489081Z {"severity":"WARNING","message":"film.abandon.disabled"}
+2026-10-21T09:05:33.4548579Z ▶ FS-24 contract rejection (fixtures, no database access)
+2026-10-21T09:05:33.4579260Z   ✔ has schema-invalid fixtures (1.229522ms)
+2026-10-21T09:05:33.4630228Z   ✔ reserve.request.action-mismatch.json -> invalid-argument/action-mismatch (4.239951ms)
+2026-10-21T09:05:33.4676237Z   ✔ reserve.request.file-name-61-emoji-122-units.json -> invalid-argument/schema-invalid (2.696108ms)
+2026-10-21T09:05:33.4727124Z   ✔ reserve.request.file-name-control-char.json -> invalid-argument/schema-invalid (0.84042ms)
+2026-10-21T09:05:33.4770134Z   ✔ reserve.request.file-name-too-long.json -> invalid-argument/schema-invalid (0.443133ms)
+2026-10-21T09:05:33.4806194Z   ✔ reserve.request.operation-id-not-uuid-v4.json -> invalid-argument/schema-invalid (0.458382ms)
+2026-10-21T09:05:33.4849334Z   ✔ reserve.request.unknown-field.json -> invalid-argument/schema-invalid (0.566095ms)
+2026-10-21T09:05:33.4863699Z   ✔ reserve.request.wrong-schema-version.json -> invalid-argument/schema-invalid (0.46285ms)
+2026-10-21T09:05:33.4866150Z   ✔ non-object data and missing auth (0.841662ms)
+2026-10-21T09:05:33.4867769Z ✔ FS-24 contract rejection (fixtures, no database access) (14.239718ms)
+2026-10-21T09:05:33.4869353Z ▶ identity reason mapping
+2026-10-21T09:05:33.4871182Z   ✔ unknown account -> account-disabled; revoked -> sign-in-required (0.96846ms)
+2026-10-21T09:05:33.4873193Z   ✔ unknown failure -> thrown sanitized internal (not retry-eligible) (1.854767ms)
+2026-10-21T09:05:33.4874881Z   ✔ known transient (10) -> unavailable/backend-unavailable (0.774996ms)
+2026-10-21T09:05:33.4891523Z   ✔ known transient (4) -> unavailable/backend-unavailable (0.446048ms)
+2026-10-21T09:05:33.4948737Z   ✔ known transient (14) -> unavailable/backend-unavailable (0.657967ms)
+2026-10-21T09:05:33.4950897Z   ✔ known transient (aborted) -> unavailable/backend-unavailable (0.60672ms)
+2026-10-21T09:05:33.4960316Z   ✔ known transient (unavailable) -> unavailable/backend-unavailable (0.390985ms)
+2026-10-21T09:05:33.4961743Z   ✔ non-transient (7) -> thrown internal (0.753276ms)
+2026-10-21T09:05:33.4963244Z   ✔ non-transient (8) -> thrown internal (0.451869ms)
+2026-10-21T09:05:33.4964408Z   ✔ non-transient (13) -> thrown internal (0.630966ms)
+2026-10-21T09:05:33.4965727Z   ✔ non-transient (permission-denied) -> thrown internal (0.445106ms)
+2026-10-21T09:05:33.4966921Z   ✔ non-transient (undefined) -> thrown internal (0.392077ms)
+2026-10-21T09:05:33.4968078Z ✔ identity reason mapping (9.224701ms)
+2026-10-21T09:05:33.4969370Z ▶ FS-25 rules literals == limits module
+2026-10-21T09:05:33.4970197Z   ✔ max bytes (1.494028ms)
+2026-10-21T09:05:33.4970936Z   ✔ content types (0.296798ms)
+2026-10-21T09:05:33.4971703Z   ✔ path template (0.190277ms)
+2026-10-21T09:05:33.4972557Z   ✔ film docs are not client-writable (0.408408ms)
+2026-10-21T09:05:33.4973600Z ✔ FS-25 rules literals == limits module (2.669739ms)
+2026-10-21T09:05:33.4974404Z ▶ ftyp first-box check
+2026-10-21T09:05:33.4975206Z   ✔ accepts a plausible ftyp box (0.344507ms)
+2026-10-21T09:05:33.4976493Z   ✔ rejects wrong type, bad size, unprintable brand, short or null (0.439126ms)
+2026-10-21T09:05:33.4977739Z ✔ ftyp first-box check (0.961006ms)
+2026-10-21T09:05:33.4978835Z ▶ R4 ftyp bounds
+2026-10-21T09:05:33.4979800Z   ✔ accepts complete boxes up to the 1 KiB read (0.75563ms)
+2026-10-21T09:05:33.4981074Z   ✔ rejects truncated, misaligned or oversized boxes (0.397487ms)
+2026-10-21T09:05:33.4982116Z ✔ R4 ftyp bounds (1.433514ms)
+2026-10-21T09:05:33.4982991Z ▶ R2/R3 storage adapter (fake bucket)
+2026-10-21T09:05:33.4984214Z   ✔ deletes only the given generation; 404/412 -> false; else throws (0.946189ms)
+2026-10-21T09:05:33.4985631Z   ✔ reads that generation; 404 -> null; transient -> throws (0.960636ms)
+2026-10-21T09:05:33.4986817Z ✔ R2/R3 storage adapter (fake bucket) (2.080491ms)
+2026-10-21T09:05:33.4987682Z ▶ R1 visibly non-deployable
+2026-10-21T09:05:33.4989003Z   ✔ D3 and D7 are PENDING, and the predeploy guard exits 1 (802.74104ms)
+2026-10-21T09:05:33.4990339Z   ✔ firebase.json runs the guard before any functions deploy (0.503045ms)
+2026-10-21T09:05:33.4991777Z   ✔ switch off: handler refuses before identity or data access (0.384953ms)
+2026-10-21T09:05:33.4993253Z   ✔ deployed callables default to off (COACH_CORE_FILM_ENABLED unset) (338.332741ms)
+2026-10-21T09:05:33.4994473Z ✔ R1 visibly non-deployable (1142.249459ms)
+2026-10-21T09:05:34.2270776Z {"severity":"WARNING","message":"Warning, estimating Firebase Config based on GCLOUD_PROJECT. Initializing firebase-admin may fail"}
+2026-10-21T09:05:34.2317705Z ▶ L11 operator tool (emulator-only, CAS unpark)
+2026-10-21T09:05:34.2319418Z   ✔ refuses unless demo-* AND FIRESTORE_EMULATOR_HOST, on every command (375.035031ms)
+2026-10-21T09:05:34.2327472Z   ✔ unpark after the configuration is right: candidate passes recordProblem; audit verbatim; record otherwise byte-equal (6.594438ms)
+2026-10-21T09:05:34.2352973Z   ✔ refuses (still invalid (bucket still differs)) with no write (0.562506ms)
+2026-10-21T09:05:34.2379621Z   ✔ refuses (CAS mismatch) with no write (0.304753ms)
+2026-10-21T09:05:34.2409148Z   ✔ refuses (terminal) with no write (0.324119ms)
+2026-10-21T09:05:34.2437103Z   ✔ refuses (stuck) with no write (0.303871ms)
+2026-10-21T09:05:34.2438096Z   ✔ refuses (live lease) with no write (0.373542ms)
+2026-10-21T09:05:34.2439375Z   ✔ refuses (bad reason) with no write (0.327926ms)
+2026-10-21T09:05:34.2440453Z   ✔ refuses (control char in reason) with no write (0.397487ms)
+2026-10-21T09:05:34.2441674Z   ✔ audit history full: refused, never truncated (0.652395ms)
+2026-10-21T09:05:34.2442888Z   ✔ concurrent unparks: exactly one wins (CAS + transaction) (0.898387ms)
+2026-10-21T09:05:34.2444695Z   ✔ unparked record is admitted and deleted by the accepted C1 machinery; re-invalidation re-parks via admission (no loop) (5.031502ms)
+2026-10-21T09:05:34.2446379Z ✔ L11 operator tool (emulator-only, CAS unpark) (392.466437ms)
+2026-10-21T09:05:34.2447269Z ▶ L12 boundary
+2026-10-21T09:05:34.2448884Z   ✔ loaded exports carry no TEST_ONLY marker; no reconciler/admin export; index.js does not reference them (395.007599ms)
+2026-10-21T09:05:34.2460185Z   ✔ trigger definition: retryCount 0, marked TEST_ONLY, default-OFF before any work (0.603143ms)
+2026-10-21T09:05:34.2462487Z   ✔ predeploy guard blocks a named, a disguised and an unloadable reconciler export, regardless of terms and with --check (1396.720953ms)
+2026-10-21T09:05:34.2464111Z ✔ L12 boundary (1792.609067ms)
+2026-10-21T09:06:22.1011594Z ▶ Firestore transport bound, production branch (TLS + bounded token auth)
+2026-10-21T09:06:22.1014194Z   ✔ TLS default-roots channel with bounded-token call credentials: the server sees the facade token; a transaction completes (433.050555ms)
+2026-10-21T09:06:22.1015464Z   ✔ hung read: 5 x 3 attempts, each cut at the deadline; within the envelope (48389.256385ms)
+2026-10-21T09:06:22.7803303Z   ✔ hung metadata server: every token request is aborted by the facade at the token deadline (server-observed); no RPC reaches Firestore; the read fails within the envelope (49062.689409ms)
+2026-10-21T09:06:22.7813897Z ✔ Firestore transport bound, production branch (TLS + bounded token auth) (49072.152245ms)
+2026-10-21T09:07:21.7734209Z (node:2635) MetadataLookupWarning: received unexpected error = All promises were rejected code = 404, ENOTFOUND
+2026-10-21T09:07:21.7735937Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-21T09:07:21.7745453Z ▶ Firestore transport bound, emulator branch
+2026-10-21T09:07:21.7746487Z   ✔ hung server-streaming read (doc get): exactly 5 x 3 attempts, each cut at the deadline; total within the envelope (48353.089671ms)
+2026-10-21T09:07:21.7747322Z   ✔ hung RunQuery: exactly 15 attempts, each cut; within the envelope (46382.302835ms)
+2026-10-21T09:07:21.7748672Z   ✔ transaction, reads answer, Commit hangs, maxAttempts 1: Commit called once (DEADLINE not retryable for commit), cut; background Rollback bounded and cut; within the envelope (15531.124758ms)
+2026-10-21T09:07:21.7749916Z   ✔ Commit failing UNAVAILABLE (retryable): at most 5 calls (the Firestore._retry layer); within the unary envelope (400.470038ms)
+2026-10-21T09:07:21.7750909Z   ✔ transaction whose read hangs, maxAttempts 2: reads <= 2 x 15, each cut; within 2 attempts + backoff (107901.138959ms)
+2026-10-21T09:07:21.7751620Z   ✔ configured deadline and no gax retry codes on every RPC (0.748867ms)
+2026-10-21T09:07:21.7752209Z ✔ Firestore transport bound, emulator branch (107913.29338ms)
+2026-10-21T09:07:21.7892995Z ▶ Storage facade, production branch on the DEFAULT origin (controlled HTTPS interceptor)
+2026-10-21T09:07:21.7894796Z   ✔ default origin, auth, range, generation and precondition reach storage.googleapis.com; token from metadata.google.internal (43.592099ms)
+2026-10-21T09:07:21.7896865Z   ✔ hung list over HTTPS: aborted by the facade at the deadline; the server observes the TLS connection close; one request (316.67025ms)
+2026-10-21T09:07:21.7898377Z   ✔ hung head over HTTPS: aborted by the facade at the deadline; the server observes the TLS connection close; one request (317.341119ms)
+2026-10-21T09:07:21.7900274Z   ✔ hung delete over HTTPS: aborted by the facade at the deadline; the server observes the TLS connection close; one request (315.966884ms)
+2026-10-21T09:07:21.7901665Z   ✔ hung default metadata server: aborted at the token deadline (server-observed); no storage request (311.870127ms)
+2026-10-21T09:07:21.7903022Z ✔ Storage facade, production branch on the DEFAULT origin (controlled HTTPS interceptor) (1328.233468ms)
+2026-10-21T09:07:21.7903877Z ▶ Storage facade, emulator branch
+2026-10-21T09:07:21.7904683Z   ✔ hung list: aborted by the facade at the deadline; server observes the close; one request (322.296946ms)
+2026-10-21T09:07:21.7905896Z   ✔ hung head: aborted by the facade at the deadline; server observes the close; one request (313.029757ms)
+2026-10-21T09:07:21.7906904Z   ✔ hung delete: aborted by the facade at the deadline; server observes the close; one request (312.991702ms)
+2026-10-21T09:07:21.7907686Z   ✔ trickling head body: aborted at the deadline (not per chunk) (313.97484ms)
+2026-10-21T09:07:21.7909057Z   ✔ oversized head body: aborted at the 1 KiB cap; nothing beyond the cap accepted (14.765592ms)
+2026-10-21T09:07:21.7909813Z   ✔ short head body is returned as is; exact Range and generation (4.961823ms)
+2026-10-21T09:07:21.7910341Z   ✔ slow but within the deadline: succeeds (104.57529ms)
+2026-10-21T09:07:21.7910836Z   ✔ DELETE 404: code 404, exactly one request (no retry) (103.196159ms)
+2026-10-21T09:07:21.7911363Z   ✔ DELETE 412: code 412, exactly one request (no retry) (103.817158ms)
+2026-10-21T09:07:21.7911881Z   ✔ DELETE 503: code 503, exactly one request (no retry) (102.850889ms)
+2026-10-21T09:07:21.7916223Z   ✔ DELETE 500: code 500, exactly one request (no retry) (103.014618ms)
+2026-10-21T09:07:21.7919401Z   ✔ DELETE 429: code 429, exactly one request (no retry) (103.480429ms)
+2026-10-21T09:07:21.7920427Z   ✔ DELETE 408: code 408, exactly one request (no retry) (103.698946ms)
+2026-10-21T09:07:21.7921703Z   ✔ list: exact query; 20-digit generation stays a string; oversized response capped (24.840702ms)
+2026-10-21T09:07:21.7923127Z   ✔ frozen S1 code over the facade: storage-adapter.readHead and cleanup.deleteExactGeneration classify unchanged (3.91197ms)
+2026-10-21T09:07:21.7924609Z   ✔ frozen deleteExactGeneration over a hung DELETE: the facade aborts the underlying request (server-observed) before the frozen race deadline; no completion is claimed remotely (310.296088ms)
+2026-10-21T09:07:21.7925561Z ✔ Storage facade, emulator branch (2348.149684ms)
+2026-10-21T09:07:21.7925969Z ▶ Storage facade, production branch
+2026-10-21T09:07:21.7926587Z   ✔ hung list: aborted by the facade at the deadline; server observes the close; one request (313.857471ms)
+2026-10-21T09:07:21.7927399Z   ✔ hung head: aborted by the facade at the deadline; server observes the close; one request (313.882094ms)
+2026-10-21T09:07:21.7929022Z   ✔ hung delete: aborted by the facade at the deadline; server observes the close; one request (312.114807ms)
+2026-10-21T09:07:21.7930594Z   ✔ trickling head body: aborted at the deadline (not per chunk) (313.414497ms)
+2026-10-21T09:07:21.7931963Z   ✔ oversized head body: aborted at the 1 KiB cap; nothing beyond the cap accepted (13.792704ms)
+2026-10-21T09:07:21.7939432Z   ✔ short head body is returned as is; exact Range and generation (2.913203ms)
+2026-10-21T09:07:21.7940824Z   ✔ slow but within the deadline: succeeds (103.283534ms)
+2026-10-21T09:07:21.7941993Z   ✔ DELETE 404: code 404, exactly one request (no retry) (102.988358ms)
+2026-10-21T09:07:21.7943434Z   ✔ DELETE 412: code 412, exactly one request (no retry) (104.689015ms)
+2026-10-21T09:07:21.7949281Z   ✔ DELETE 503: code 503, exactly one request (no retry) (104.528239ms)
+2026-10-21T09:07:21.7951433Z   ✔ DELETE 500: code 500, exactly one request (no retry) (103.681443ms)
+2026-10-21T09:07:21.7952627Z   ✔ DELETE 429: code 429, exactly one request (no retry) (104.2973ms)
+2026-10-21T09:07:21.7953813Z   ✔ DELETE 408: code 408, exactly one request (no retry) (104.76775ms)
+2026-10-21T09:07:21.7955730Z   ✔ list: exact query; 20-digit generation stays a string; oversized response capped (20.412603ms)
+2026-10-21T09:07:21.7959806Z   ✔ frozen S1 code over the facade: storage-adapter.readHead and cleanup.deleteExactGeneration classify unchanged (3.907652ms)
+2026-10-21T09:07:21.7962538Z   ✔ frozen deleteExactGeneration over a hung DELETE: the facade aborts the underlying request (server-observed) before the frozen race deadline; no completion is claimed remotely (312.22936ms)
+2026-10-21T09:07:21.7967990Z ✔ Storage facade, production branch (2336.368345ms)
+2026-10-21T09:07:21.7969368Z ▶ token provider (production branch auth)
+2026-10-21T09:07:21.7970891Z   ✔ hung metadata server: aborted at the token deadline (server-observed); no storage request is sent (311.42137ms)
+2026-10-21T09:07:21.7972958Z   ✔ single-flight and cached: one metadata request for concurrent and later calls; Metadata-Flavor header sent (5.559807ms)
+2026-10-21T09:07:21.7973997Z   ✔ malformed token responses fail closed (4.529991ms)
+2026-10-21T09:07:21.7974533Z ✔ token provider (production branch auth) (321.808217ms)
+2026-10-21T09:07:21.7975811Z ▶ reconciler over the real bounded Storage facade (loopback)
+2026-10-21T09:07:21.7977070Z   ✔ lost upload, no reservation: exact list, ranged head and generation-matched DELETE; 20-digit generation intact (75.666031ms)
+2026-10-21T09:07:21.7979020Z   ✔ real pagination: short pages with nextPageToken are followed by token, every object is covered, and the pass ends only without a token (31.196574ms)
+2026-10-21T09:07:21.7981231Z   ✔ hung list: aborted at the facade deadline (server-observed); the failure is recorded under the lease; no object processed (314.238886ms)
+2026-10-21T09:07:21.7982877Z ✔ reconciler over the real bounded Storage facade (loopback) (422.409719ms)
+2026-10-21T09:07:21.7983915Z ▶ L1 lost finalize -> reconcile (new positive tests)
+2026-10-21T09:07:21.7985503Z   ✔ configuration outage loses the finalize; reservation still live -> re-driven intake: validating, slot kept, no cleanup record (21.256538ms)
+2026-10-21T09:07:21.7987411Z   ✔ after lazy expiry -> stale-expired obligation -> immediate attempt fails -> C1 sweep -> deleted (10.510979ms)
+2026-10-21T09:07:21.7989155Z ✔ L1 lost finalize -> reconcile (new positive tests) (32.988911ms)
+2026-10-21T09:07:21.7990031Z ▶ L2 lost finalize for missing / expired / abandoned films
+2026-10-21T09:07:21.7990799Z   ✔ missing film -> no-reservation obligation -> deleted (1.951377ms)
+2026-10-21T09:07:21.7991981Z   ✔ expired but not lazily expired -> expired: film expired, slot released once, obligation, deleted (1.956646ms)
+2026-10-21T09:07:21.7992716Z   ✔ late event lost after abandon -> stale-abandoned -> deleted (3.293949ms)
+2026-10-21T09:07:21.7993328Z ✔ L2 lost finalize for missing / expired / abandoned films (7.426003ms)
+2026-10-21T09:07:21.7993814Z ▶ L3 O-5 ignored-bucket window
+2026-10-21T09:07:21.7994451Z   ✔ event ignored during a wrong bucket name is re-driven after restoration with the configured bucket (2.087021ms)
+2026-10-21T09:07:21.7995155Z   ✔ only the configured bucket's facade is ever listed (0.79282ms)
+2026-10-21T09:07:21.7995672Z ✔ L3 O-5 ignored-bucket window (3.128708ms)
+2026-10-21T09:07:21.7996117Z ▶ L4 no false deletion or decision
+2026-10-21T09:07:21.7996582Z   ✔ young object: skipped without evidence, re-seen next pass (2.041386ms)
+2026-10-21T09:07:21.7997201Z   ✔ film-ambiguous (unknown status): evidence, no re-drive, no record (1.872318ms)
+2026-10-21T09:07:21.7997852Z   ✔ film-ambiguous (malformed expiry): evidence, no re-drive, no record (1.592192ms)
+2026-10-21T09:07:21.7998771Z   ✔ film-ambiguous (malformed objectGeneration): evidence, no re-drive, no record (1.329678ms)
+2026-10-21T09:07:21.7999478Z   ✔ film-ambiguous (identity mismatch): evidence, no re-drive, no record (1.151845ms)
+2026-10-21T09:07:21.8000146Z   ✔ same-generation validating and ready -> duplicate-event, no record (3.288759ms)
+2026-10-21T09:07:21.8000697Z ✔ L4 no false deletion or decision (11.667492ms)
+2026-10-21T09:07:21.8001036Z ▶ L5 generation safety
+2026-10-21T09:07:21.8001640Z   ✔ 20-digit generation stays a string end to end (1.693312ms)
+2026-10-21T09:07:21.8002364Z   ✔ overwritten or deleted between list and head read -> frozen object-gone: no decision, no record (1.90002ms)
+2026-10-21T09:07:21.8003999Z   ✔ deleted between head read and C1 delete -> absent; newer generation before the C1 delete -> mismatch, newer object intact (2.447329ms)
+2026-10-21T09:07:21.8005328Z ✔ L5 generation safety (6.204047ms)
+2026-10-21T09:07:21.8031698Z ▶ L6 existing records in any state stay byte-unchanged
+2026-10-21T09:07:21.8032699Z   ✔ pending: re-drive admits nothing and changes nothing (3.766667ms)
+2026-10-21T09:07:21.8033697Z   ✔ stuck: re-drive admits nothing and changes nothing (2.930807ms)
+2026-10-21T09:07:21.8034735Z   ✔ mismatch: re-drive admits nothing and changes nothing (4.759212ms)
+2026-10-21T09:07:21.8035773Z   ✔ parked: re-drive admits nothing and changes nothing (1.38371ms)
+2026-10-21T09:07:21.8036862Z ✔ L6 existing records in any state stay byte-unchanged (13.038848ms)
+2026-10-21T09:07:21.8037749Z ▶ L7 progress, passes and binding
+2026-10-21T09:07:21.8039665Z   ✔ a page larger than one invocation's allowance: per-object checkpoint; next invocation continues; then pass end (2.697919ms)
+2026-10-21T09:07:21.8041255Z   ✔ budget stop before an object it cannot afford; no progress lost (1.35179ms)
+2026-10-21T09:07:21.8054431Z   ✔ crash at every checkpoint position: the next invocation re-presents at most the one object, idempotently (11.691637ms)
+2026-10-21T09:07:21.8069978Z   ✔ a throwing object is recorded and passed (no starvation); repeat failure updates the same evidence (1.445064ms)
+2026-10-21T09:07:21.8071795Z   ✔ young -> old and live -> expired transitions across passes; insertion behind the cursor is covered next pass (1.673925ms)
+2026-10-21T09:07:21.8073069Z   ✔ bucket or policy change -> previous kept, new pass; configuration missing -> no list, no writes (1.683653ms)
+2026-10-21T09:07:21.8073731Z   ✔ invalid limit refused before any I/O (0.469563ms)
+2026-10-21T09:07:21.8074215Z ✔ L7 progress, passes and binding (21.252951ms)
+2026-10-21T09:07:21.8074761Z ▶ L8 races (no duplicate effects; sequential transitions allowed)
+2026-10-21T09:07:21.8075535Z   ✔ re-drive and a genuine finalize for the same generation: one decision, one slot transition, no record (0.765929ms)
+2026-10-21T09:07:21.8076506Z   ✔ re-drive during a live abandon: abandon wins the race, the re-drive becomes stale-abandoned with ONE obligation (0.975853ms)
+2026-10-21T09:07:21.8077401Z   ✔ legitimate sequence: intake by re-drive, then an explicit abandon owes its own obligation (2.778597ms)
+2026-10-21T09:07:21.8078717Z   ✔ stale holder completes a re-drive after takeover: at most the frozen single decision, no second record, cursor unmoved by it (0.875805ms)
+2026-10-21T09:07:21.8079640Z ✔ L8 races (no duplicate effects; sequential transitions allowed) (5.534454ms)
+2026-10-21T09:07:21.8080158Z ▶ L10/L14 fencing and takeover positions
+2026-10-21T09:07:21.8080679Z   ✔ concurrent reconcilers: one holder; the other skips (0.728399ms)
+2026-10-21T09:07:21.8081473Z   ✔ takeover during listing: the first verify fails; nothing is re-driven by the old holder (0.725032ms)
+2026-10-21T09:07:21.8082240Z   ✔ takeover between objects: the old holder stops before the next one (0.970504ms)
+2026-10-21T09:07:21.8082909Z   ✔ stale state writes (checkpoint, evidence, error) are no-ops (0.490632ms)
+2026-10-21T09:07:21.8083500Z ✔ L10/L14 fencing and takeover positions (3.05475ms)
+2026-10-21T09:07:21.8084001Z ▶ bounded failure of reconciliation state transactions
+2026-10-21T09:07:21.8084710Z   ✔ acquire transaction fails (contention/deadline): bounded result, no list, no state (0.301105ms)
+2026-10-21T09:07:21.8085662Z   ✔ verify transaction fails: stops before the re-drive; lease released; the object is presented next time (0.703552ms)
+2026-10-21T09:07:21.8086463Z ✔ bounded failure of reconciliation state transactions (1.099846ms)
+2026-10-21T09:07:21.8087131Z ▶ L16/L17 db facade: attempt counting and transaction-read validation
+2026-10-21T09:07:21.8088371Z   ✔ counts logical transactions and callback attempts separately; caps attempts at the facade setting (0.288942ms)
+2026-10-21T09:07:21.8089477Z   ✔ a film doc malformed between the pre-read and the decision transaction is refused at the transaction read (no decision) (0.69192ms)
+2026-10-21T09:07:21.8090458Z   ✔ malformed between transaction attempt 1 and attempt 2 -> refused on the retry read (0.862831ms)
+2026-10-21T09:07:21.8091275Z ✔ L16/L17 db facade: attempt counting and transaction-read validation (1.941197ms)
+2026-10-21T09:07:21.8091795Z ▶ L18 listing metadata fails closed
+2026-10-21T09:07:21.8092278Z   ✔ generation number: evidence, no re-drive, no record (0.728028ms)
+2026-10-21T09:07:21.8092870Z   ✔ generation non-decimal: evidence, no re-drive, no record (0.461287ms)
+2026-10-21T09:07:21.8093428Z   ✔ size missing: evidence, no re-drive, no record (0.428295ms)
+2026-10-21T09:07:21.8093973Z   ✔ size non-integer: evidence, no re-drive, no record (0.457851ms)
+2026-10-21T09:07:21.8094897Z   ✔ size over max: evidence, no re-drive, no record (0.414729ms)
+2026-10-21T09:07:21.8096267Z   ✔ contentType missing: evidence, no re-drive, no record (0.412395ms)
+2026-10-21T09:07:21.8097398Z   ✔ contentType unsupported: evidence, no re-drive, no record (0.427123ms)
+2026-10-21T09:07:21.8098589Z   ✔ timeCreated invalid: evidence, no re-drive, no record (0.408116ms)
+2026-10-21T09:07:21.8099212Z   ✔ timeCreated future: evidence, no re-drive, no record (0.493948ms)
+2026-10-21T09:07:21.8099758Z   ✔ name noncanonical: evidence, no re-drive, no record (0.421472ms)
+2026-10-21T09:07:21.8100464Z   ✔ evidence identity is bound to project/bucket/policy: a target change never merges evidence (0.122029ms)
+2026-10-21T09:07:21.8101096Z ✔ L18 listing metadata fails closed (5.061339ms)
+2026-10-21T09:07:21.8101609Z ▶ L19 coverage with budget for exactly one object per invocation
+2026-10-21T09:07:21.8102280Z   ✔ N quiescent objects -> N progress-making invocations plus the pass-end listing (1.782519ms)
+2026-10-21T09:07:21.8103043Z ✔ L19 coverage with budget for exactly one object per invocation (1.876065ms)
+2026-10-21T09:07:21.8103681Z ▶ boundary: limits are TEST placeholders derived from the envelope
+2026-10-21T09:07:21.8104238Z   ✔ lease outlives one object's whole transport envelope (0.149241ms)
+2026-10-21T09:07:21.8104876Z ✔ boundary: limits are TEST placeholders derived from the envelope (0.224602ms)
+2026-10-21T09:07:21.8105464Z ▶ PR87 F1: pagination is authoritative (short pages, tokens)
+2026-10-21T09:07:21.8106258Z   ✔ short pages WITH a continuation token never end the pass; every stable object is presented (Codex reproducer shape) (3.57627ms)
+2026-10-21T09:07:21.8107194Z   ✔ an empty or overlap-only page with a token advances by the token (no indefinite prefix replay) (0.986974ms)
+2026-10-21T09:07:21.8108480Z   ✔ a persisted token resumes the SAME query in the next invocation and covers the rest even after earlier objects were deleted (1.333546ms)
+2026-10-21T09:07:21.8109829Z   ✔ a page token is persisted across invocations; an invalid/expired token (400) is cleared with evidence and the next run restarts from the name cursor (1.822434ms)
+2026-10-21T09:07:21.8110774Z ✔ PR87 F1: pagination is authoritative (short pages, tokens) (7.883171ms)
+2026-10-21T09:07:21.8111280Z ▶ PR87 F2: discovery/transport target binding
+2026-10-21T09:07:21.8111925Z   ✔ facade bucket differs from the configured bucket: fail closed before any list or state write (0.178927ms)
+2026-10-21T09:07:21.8112924Z   ✔ configuration changes mid-invocation: the run stops before the next object; records stay bound to the pinned (facade) bucket (0.582344ms)
+2026-10-21T09:07:21.8113702Z ✔ PR87 F2: discovery/transport target binding (0.837634ms)
+2026-10-21T09:07:21.8114170Z ▶ PR87 F3: admission reserves the derived envelope
+2026-10-21T09:07:21.8115055Z   ✔ defaults: object budget = derived envelope; invocation covers it; lease covers envelope + background tail; trigger timeout covers the invocation (1.328746ms)
+2026-10-21T09:07:21.8116306Z   ✔ insufficient remaining budget: no head read, no decision, no state progress for that object (0.442751ms)
+2026-10-21T09:07:21.8117006Z ✔ PR87 F3: admission reserves the derived envelope (1.845848ms)
+2026-10-21T09:07:21.8117544Z ▶ PR87 F4: ambiguous acquire (committed remotely, error locally)
+2026-10-21T09:07:21.8118367Z   ✔ release-if-mine clears the orphaned lease; the next run proceeds (0.801906ms)
+2026-10-21T09:07:21.8119131Z ✔ PR87 F4: ambiguous acquire (committed remotely, error locally) (0.854536ms)
+2026-10-21T09:07:21.8119551Z ℹ tests 248
+2026-10-21T09:07:21.8119800Z ℹ suites 47
+2026-10-21T09:07:21.8120012Z ℹ pass 248
+2026-10-21T09:07:21.8120236Z ℹ fail 0
+2026-10-21T09:07:21.8120450Z ℹ cancelled 0
+2026-10-21T09:07:21.8120666Z ℹ skipped 0
+2026-10-21T09:07:21.8121023Z ℹ todo 0
+2026-10-21T09:07:21.8121277Z ℹ duration_ms 110487.128257
+2026-10-21T09:07:21.8237436Z ##[notice]PASS C1-R1 (generalised): finalize with event bucket differs from configured must not commit a cleanup-owing rejection without an obligation
+PASS C1-R1 (generalised): finalize with event bucket field absent must not commit a cleanup-owing rejection without an obligation
+PASS C1-R2: >= sweepBatchMax invalid due records must not permanently starve a valid due record
+PASS record deleted after one attempt; receipt, payloadHash, replayableUntil and op record carry no cleanup state; slot released once
+PASS attempt counted before I/O; pending; response and error class unchanged; due time honoured; later sweep deletes
+PASS a timed-out delete is a recorded error; the response is unchanged
+PASS T3 404 -> absent, terminal; later admissions are no-ops
+PASS T4 412 -> mismatch with code; every object preserved byte-identical; only generation-matched deletes; no claim about a newer generation
+PASS stuck after the eighth; no ninth delete; record and object kept; sweepDueAtMs null
+PASS not due / leased / cap / terminal -> zero attempts; eligible -> exactly one; response, op record and deadline byte-unchanged; only the exact record touched; no second slot release
+PASS T7-0 abandon: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1
+PASS T7-0 finalize-no-reservation: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1
+PASS T7-0 finalize-expired: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1
+PASS T7-0 finalize-rejected-signature-invalid: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1
+PASS T7-0 finalize-stale-abandoned: crash after obligation commit, before the first admission -> initialized, sweepable; create-or-read preserves it; first admission is attempt 1 / fence 1
+PASS T7-0 abandon replay after the crash: an eligible replay admits attempt 1 / fence 1 through the shared admission; a non-eligible replay admits nothing
+PASS T7a crash after admission, before I/O: attempt consumed; at lease expiry the entry closes 'unknown'; sweepable at the admission-fixed time
+PASS T7b crash after delete, before the result write: the next admission gets 404 -> absent; count never reset
+PASS no-reservation: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS stale-validating: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS stale-ready: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS stale-rejected: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS stale-abandoned: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS stale-expired: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS expired: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS rejected-size-mismatch: obligation in the transaction; label unchanged; outage -> pending; duplicate creates nothing and admits nothing; sweep recovers; a transaction retry does not reset
+PASS rejected-content-type-mismatch: obligation in the transaction; label unchanged; outage -> pending; duplicat
+2026-10-21T09:07:21.8367564Z Post job cleanup.
+2026-10-21T09:07:21.9631015Z (node:2746) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T09:07:21.9631997Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T09:07:21.9635475Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-e856bde2e5a363dc6cdf9b3d63c3c741a1f09a81120f72457b66c6501edc1bae, not saving cache.
+2026-10-21T09:07:21.9792996Z Post job cleanup.
+2026-10-21T09:07:22.0666438Z [command]/usr/bin/git version
+2026-10-21T09:07:22.0712540Z git version 2.55.0
+2026-10-21T09:07:22.0756309Z Temporarily overriding HOME='/home/runner/work/_temp/5a206cc8-d1e3-4ffa-9df5-80064a214e62' before making global git config changes
+2026-10-21T09:07:22.0757902Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T09:07:22.0763554Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-21T09:07:22.0807887Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T09:07:22.0848419Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T09:07:22.1120051Z fatal: No url found for submodule path 'src/components/Coach's Corner/Practice Plan Generator' in .gitmodules
+2026-10-21T09:07:22.1133162Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-10-21T09:07:22.1321522Z Cleaning up orphan processes

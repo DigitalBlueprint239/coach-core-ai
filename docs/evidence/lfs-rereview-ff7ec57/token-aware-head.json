@@ -1,0 +1,40 @@
+{
+  "shortPage": {
+    "passes": [
+      {
+        "processed": 3,
+        "passEnded": true
+      },
+      {
+        "processed": 3,
+        "passEnded": true
+      },
+      {
+        "processed": 3,
+        "passEnded": true
+      },
+      {
+        "processed": 3,
+        "passEnded": true
+      }
+    ],
+    "evidenceNames": [
+      "quarantine/team/00000000-0000-4000-8000-000000000001/source.mp4",
+      "quarantine/team/00000000-0000-4000-8000-000000000002/source.mp4",
+      "quarantine/team/00000000-0000-4000-8000-000000000003/source.mp4"
+    ],
+    "third": "quarantine/team/00000000-0000-4000-8000-000000000003/source.mp4"
+  }
+}
+{
+  "bindingMismatch": {
+    "result": {
+      "targetMismatch": true,
+      "processed": 0
+    },
+    "actualBucket": "demo-actual.appspot.com",
+    "configuredBucket": "demo-other.appspot.com",
+    "actualObjectStillPresent": true,
+    "records": []
+  }
+}

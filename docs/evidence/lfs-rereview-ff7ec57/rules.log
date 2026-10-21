@@ -1,0 +1,94 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node --test --test-concurrency=1 --test-reporter=spec tests/rules/film-reconcile.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs
+▶ FILM-S1-C1 filmCleanup records are server-only
+  ✔ owner, other users and unauthenticated clients cannot read or list (513.609484ms)
+[2026-10-21T09:17:17.906Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a55799b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:17.937Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a55799c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:17.966Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a55799d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:17.990Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a55799e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:18.028Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a55799f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:18.048Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a5579a0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:18.072Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a5579a1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:18.094Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x5a5579a2 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+  ✔ no client can create, update or delete (including the team owner) (279.774394ms)
+  ✔ positive anchor: the owner can still read its team (rules loaded) (118.772013ms)
+✔ FILM-S1-C1 filmCleanup records are server-only (1913.658903ms)
+▶ LFS reconciler and operator records are server-only
+  ✔ no client can read or list them (325.151074ms)
+[2026-10-21T09:17:18.970Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f92 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:18.991Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f93 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.016Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f94 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.039Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f95 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.061Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f96 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.077Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f97 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.097Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f98 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.114Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f99 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.133Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f9a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.160Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f9b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.181Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f9c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.199Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f9d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.222Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f9e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.250Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1f9f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+[2026-10-21T09:17:19.289Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.311Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.335Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa2 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.353Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa3 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.371Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa4 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.402Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa5 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.417Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+[2026-10-21T09:17:19.435Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa7 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L216, false for 'update' @ L216
+[2026-10-21T09:17:19.453Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L216
+[2026-10-21T09:17:19.477Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x6dcf1fa9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L216
+  ✔ no client can create, update or delete them (including the team owner) (574.825624ms)
+  ✔ positive anchor: the owner can still read its team (rules loaded) (64.83043ms)
+✔ LFS reconciler and operator records are server-only (1099.822752ms)
+ℹ tests 6
+ℹ suites 2
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3459.540881
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

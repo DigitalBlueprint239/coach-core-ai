@@ -1,0 +1,543 @@
+﻿2026-10-21T09:05:19.2838578Z Current runner version: '2.338.0'
+2026-10-21T09:05:19.2860162Z ##[group]Runner Image Provisioner
+2026-10-21T09:05:19.2860936Z Hosted Compute Agent
+2026-10-21T09:05:19.2861502Z Version: 20261015.610
+2026-10-21T09:05:19.2862044Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-21T09:05:19.2862714Z Build Date: 2026-10-14T17:06:54Z
+2026-10-21T09:05:19.2863311Z Worker ID: {8d9425f3-c387-4702-8fc9-f804b03a6f19}
+2026-10-21T09:05:19.2863930Z Region: westus3
+2026-10-21T09:05:19.2864433Z Cloud: Azure
+2026-10-21T09:05:19.2864894Z ##[endgroup]
+2026-10-21T09:05:19.2866319Z ##[group]Operating System
+2026-10-21T09:05:19.2866954Z Ubuntu
+2026-10-21T09:05:19.2867462Z 24.04.5
+2026-10-21T09:05:19.2867932Z LTS
+2026-10-21T09:05:19.2868392Z ##[endgroup]
+2026-10-21T09:05:19.2868876Z ##[group]Runner Image
+2026-10-21T09:05:19.2869453Z Image: ubuntu-24.04
+2026-10-21T09:05:19.2869967Z Version: 20261018.339.1
+2026-10-21T09:05:19.2871428Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T09:05:19.2872687Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-21T09:05:19.2873571Z ##[endgroup]
+2026-10-21T09:05:19.2874491Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T09:05:19.2876447Z Contents: read
+2026-10-21T09:05:19.2876955Z Metadata: read
+2026-10-21T09:05:19.2877494Z ##[endgroup]
+2026-10-21T09:05:19.2879316Z Secret source: Actions
+2026-10-21T09:05:19.2880166Z Cache mode: write
+2026-10-21T09:05:19.2880763Z Prepare workflow directory
+2026-10-21T09:05:19.3240256Z Prepare all required actions
+2026-10-21T09:05:19.3280469Z Getting action download info
+2026-10-21T09:05:19.6084275Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-21T09:05:19.7409194Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-21T09:05:19.9268261Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-21T09:05:20.7917137Z Complete job name: Firestore emulator (LFS + affected C1/S1) + rules deny
+2026-10-21T09:05:20.8571152Z ##[group]Run actions/checkout@v5
+2026-10-21T09:05:20.8571858Z with:
+2026-10-21T09:05:20.8572263Z   repository: DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:20.8575835Z   token: ***
+2026-10-21T09:05:20.8576195Z   ssh-strict: true
+2026-10-21T09:05:20.8576559Z   ssh-user: git
+2026-10-21T09:05:20.8576919Z   persist-credentials: true
+2026-10-21T09:05:20.8577311Z   clean: true
+2026-10-21T09:05:20.8577671Z   sparse-checkout-cone-mode: true
+2026-10-21T09:05:20.8578089Z   fetch-depth: 1
+2026-10-21T09:05:20.8578434Z   fetch-tags: false
+2026-10-21T09:05:20.8578789Z   show-progress: true
+2026-10-21T09:05:20.8579140Z   lfs: false
+2026-10-21T09:05:20.8579487Z   submodules: false
+2026-10-21T09:05:20.8579853Z   set-safe-directory: true
+2026-10-21T09:05:20.8580254Z   allow-unsafe-pr-checkout: false
+2026-10-21T09:05:20.8580827Z env:
+2026-10-21T09:05:20.8581217Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:20.8581769Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:20.8582276Z ##[endgroup]
+2026-10-21T09:05:20.9430089Z Syncing repository: DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:20.9432164Z ##[group]Getting Git version info
+2026-10-21T09:05:20.9432802Z Working directory is '/home/runner/work/coach-core-ai/coach-core-ai'
+2026-10-21T09:05:20.9433745Z [command]/usr/bin/git version
+2026-10-21T09:05:20.9470359Z git version 2.55.0
+2026-10-21T09:05:20.9488942Z ##[endgroup]
+2026-10-21T09:05:20.9501782Z Temporarily overriding HOME='/home/runner/work/_temp/509dab6c-e825-4e0c-ab47-76fac23de2d9' before making global git config changes
+2026-10-21T09:05:20.9503702Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T09:05:20.9507566Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-21T09:05:20.9562385Z Deleting the contents of '/home/runner/work/coach-core-ai/coach-core-ai'
+2026-10-21T09:05:20.9565262Z ##[group]Initializing the repository
+2026-10-21T09:05:20.9569082Z [command]/usr/bin/git init /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-21T09:05:20.9645747Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T09:05:20.9647364Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T09:05:20.9648999Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T09:05:20.9650088Z hint: call:
+2026-10-21T09:05:20.9650811Z hint:
+2026-10-21T09:05:20.9651888Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T09:05:20.9652673Z hint:
+2026-10-21T09:05:20.9653417Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T09:05:20.9654546Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T09:05:20.9655631Z hint:
+2026-10-21T09:05:20.9656153Z hint: 	git branch -m <name>
+2026-10-21T09:05:20.9656768Z hint:
+2026-10-21T09:05:20.9657296Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T09:05:20.9658214Z Initialized empty Git repository in /home/runner/work/coach-core-ai/coach-core-ai/.git/
+2026-10-21T09:05:20.9661621Z [command]/usr/bin/git remote add origin https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:20.9709110Z ##[endgroup]
+2026-10-21T09:05:20.9710114Z ##[group]Disabling automatic garbage collection
+2026-10-21T09:05:20.9713051Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T09:05:20.9746984Z ##[endgroup]
+2026-10-21T09:05:20.9747881Z ##[group]Setting up auth
+2026-10-21T09:05:20.9753196Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T09:05:20.9785473Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T09:05:21.0102293Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T09:05:21.0140038Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T09:05:21.0386744Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T09:05:21.0434048Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T09:05:21.0653566Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T09:05:21.0699454Z ##[endgroup]
+2026-10-21T09:05:21.0700186Z ##[group]Fetching the repository
+2026-10-21T09:05:21.0707866Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ff7ec5755e57d5088d4c1d0e2c3e6bd00956a649:refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T09:05:22.1183884Z From https://github.com/DigitalBlueprint239/coach-core-ai
+2026-10-21T09:05:22.1186422Z  * [new ref]         ff7ec5755e57d5088d4c1d0e2c3e6bd00956a649 -> origin/claude/film-lfs-reconcile
+2026-10-21T09:05:22.1190671Z ##[endgroup]
+2026-10-21T09:05:22.1191789Z ##[group]Determining the checkout info
+2026-10-21T09:05:22.1193051Z ##[endgroup]
+2026-10-21T09:05:22.1196268Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T09:05:22.1252123Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T09:05:22.1290611Z ##[group]Checking out the ref
+2026-10-21T09:05:22.1302314Z [command]/usr/bin/git checkout --progress --force -B claude/film-lfs-reconcile refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T09:05:22.2520633Z Switched to a new branch 'claude/film-lfs-reconcile'
+2026-10-21T09:05:22.2527468Z branch 'claude/film-lfs-reconcile' set up to track 'origin/claude/film-lfs-reconcile'.
+2026-10-21T09:05:22.2537244Z ##[endgroup]
+2026-10-21T09:05:22.2583269Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T09:05:22.2615738Z ff7ec5755e57d5088d4c1d0e2c3e6bd00956a649
+2026-10-21T09:05:22.3016894Z ##[group]Run actions/setup-node@v5
+2026-10-21T09:05:22.3017848Z with:
+2026-10-21T09:05:22.3018515Z   node-version: 22
+2026-10-21T09:05:22.3019231Z   cache: npm
+2026-10-21T09:05:22.3020446Z   cache-dependency-path: functions/package-lock.json
+tests/rules/package-lock.json
+
+2026-10-21T09:05:22.3021884Z   always-auth: false
+2026-10-21T09:05:22.3022634Z   check-latest: false
+2026-10-21T09:05:22.3030721Z   token: ***
+2026-10-21T09:05:22.3031454Z   package-manager-cache: true
+2026-10-21T09:05:22.3032270Z env:
+2026-10-21T09:05:22.3033024Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:22.3034126Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:22.3035310Z ##[endgroup]
+2026-10-21T09:05:22.4338185Z (node:2101) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T09:05:22.4340876Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T09:05:22.4356286Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-21T09:05:22.4365699Z ##[group]Environment details
+2026-10-21T09:05:22.7501054Z node: v22.23.3
+2026-10-21T09:05:22.7501585Z npm: 10.9.9
+2026-10-21T09:05:22.7501903Z yarn: 1.22.22
+2026-10-21T09:05:22.7502633Z ##[endgroup]
+2026-10-21T09:05:22.7519560Z [command]/opt/hostedtoolcache/node/22.23.3/x64/bin/npm config get cache
+2026-10-21T09:05:22.8966913Z /home/runner/.npm
+2026-10-21T09:05:23.1519552Z Cache hit for: node-cache-Linux-x64-npm-80b7657f952028d560b4781fa3dc690b7e35558140903042edaf7a45d7005b75
+2026-10-21T09:05:23.1641456Z (node:2101) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-21T09:05:24.3631611Z Received 50331648 of 87262822 (57.7%), 48.0 MBs/sec
+2026-10-21T09:05:24.5475877Z Received 87262822 of 87262822 (100.0%), 70.2 MBs/sec
+2026-10-21T09:05:24.5476578Z Cache Size: ~83 MB (87262822 B)
+2026-10-21T09:05:24.5502023Z [command]/usr/bin/tar -xf /home/runner/work/_temp/3c5ea37c-61a9-4945-8c62-b2cdab428642/cache.tzst -P -C /home/runner/work/coach-core-ai/coach-core-ai --use-compress-program unzstd
+2026-10-21T09:05:24.7472716Z Cache restored successfully
+2026-10-21T09:05:24.7516904Z Cache restored from key: node-cache-Linux-x64-npm-80b7657f952028d560b4781fa3dc690b7e35558140903042edaf7a45d7005b75
+2026-10-21T09:05:24.7822895Z ##[group]Run actions/setup-java@v5
+2026-10-21T09:05:24.7823175Z with:
+2026-10-21T09:05:24.7823363Z   distribution: temurin
+2026-10-21T09:05:24.7823563Z   java-version: 21
+2026-10-21T09:05:24.7823752Z   java-package: jdk
+2026-10-21T09:05:24.7823947Z   check-latest: false
+2026-10-21T09:05:24.7824137Z   set-default: true
+2026-10-21T09:05:24.7824329Z   verify-signature: false
+2026-10-21T09:05:24.7824557Z   server-id: github
+2026-10-21T09:05:24.7824757Z   server-username: GITHUB_ACTOR
+2026-10-21T09:05:24.7825186Z   server-password: GITHUB_TOKEN
+2026-10-21T09:05:24.7825471Z   overwrite-settings: true
+2026-10-21T09:05:24.7825678Z   job-status: success
+2026-10-21T09:05:24.7827750Z   token: ***
+2026-10-21T09:05:24.7827944Z   show-download-progress: false
+2026-10-21T09:05:24.7828177Z env:
+2026-10-21T09:05:24.7828429Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:24.7828713Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:24.7828957Z ##[endgroup]
+2026-10-21T09:05:24.9133477Z ##[group]Installed distributions
+2026-10-21T09:05:25.0460400Z Resolved Java 21.0.12+1 from tool-cache
+2026-10-21T09:05:25.0460840Z Setting Java 21.0.12+1 as the default
+2026-10-21T09:05:25.0468489Z Creating toolchains.xml for JDK version 21 from temurin
+2026-10-21T09:05:25.0533037Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-21T09:05:25.0533354Z 
+2026-10-21T09:05:25.0533536Z Java configuration:
+2026-10-21T09:05:25.0534181Z   Distribution: temurin
+2026-10-21T09:05:25.0534533Z   Version: 21.0.12+1
+2026-10-21T09:05:25.0535219Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:05:25.0535627Z 
+2026-10-21T09:05:25.0537340Z ##[endgroup]
+2026-10-21T09:05:25.0543303Z Creating settings.xml with server-id: github
+2026-10-21T09:05:25.0552079Z Writing to /home/runner/.m2/settings.xml
+2026-10-21T09:05:25.0555921Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-21T09:05:25.0671779Z ##[group]Run npm ci --prefix functions --no-audit --no-fund
+2026-10-21T09:05:25.0672225Z [36;1mnpm ci --prefix functions --no-audit --no-fund[0m
+2026-10-21T09:05:25.0672556Z [36;1mnpm ci --prefix tests/rules --no-audit --no-fund[0m
+2026-10-21T09:05:25.0808392Z shell: /usr/bin/bash -e {0}
+2026-10-21T09:05:25.0808675Z env:
+2026-10-21T09:05:25.0808908Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:25.0809233Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:25.0809573Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:05:25.0809957Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:05:25.0810268Z   MAVEN_ARGS: -ntp
+2026-10-21T09:05:25.0810459Z ##[endgroup]
+2026-10-21T09:05:26.7791416Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-10-21T09:05:26.8160648Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2026-10-21T09:05:26.8197964Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-10-21T09:05:26.8503056Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2026-10-21T09:05:26.8847766Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2026-10-21T09:05:27.0929203Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2026-10-21T09:05:27.2441753Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-21T09:05:27.6966893Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-10-21T09:05:28.6398477Z 
+2026-10-21T09:05:28.6399240Z added 328 packages in 4s
+2026-10-21T09:05:29.0405437Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0406292Z npm warn EBADENGINE   package: '@firebase/ai@3.0.0',
+2026-10-21T09:05:29.0407275Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0430072Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0430655Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0431094Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0431672Z npm warn EBADENGINE   package: '@firebase/app@0.16.3',
+2026-10-21T09:05:29.0432262Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0432907Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0433421Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0433834Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0434453Z npm warn EBADENGINE   package: '@firebase/app-compat@0.5.19',
+2026-10-21T09:05:29.0435242Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0435899Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0436365Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0436795Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0437693Z npm warn EBADENGINE   package: '@firebase/auth@1.13.7',
+2026-10-21T09:05:29.0438280Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0438962Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0439472Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0439947Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0440560Z npm warn EBADENGINE   package: '@firebase/auth-compat@0.6.12',
+2026-10-21T09:05:29.0441191Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0442085Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0442621Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0443051Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0443651Z npm warn EBADENGINE   package: '@firebase/firestore@4.18.0',
+2026-10-21T09:05:29.0444269Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0444918Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0480346Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0480880Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0481557Z npm warn EBADENGINE   package: '@firebase/firestore-compat@0.4.15',
+2026-10-21T09:05:29.0482276Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0482927Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0483444Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0483874Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0484572Z npm warn EBADENGINE   package: '@firebase/rules-unit-testing@6.0.0',
+2026-10-21T09:05:29.0490999Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0491698Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0492207Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0492684Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0493262Z npm warn EBADENGINE   package: '@firebase/storage@0.14.6',
+2026-10-21T09:05:29.0493878Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0494519Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0515435Z npm warn EBADENGINE }
+2026-10-21T09:05:29.0516038Z npm warn EBADENGINE Unsupported engine {
+2026-10-21T09:05:29.0516552Z npm warn EBADENGINE   package: '@firebase/storage-compat@0.4.6',
+2026-10-21T09:05:29.0516980Z npm warn EBADENGINE   required: { node: '>=24.12.0' },
+2026-10-21T09:05:29.0517378Z npm warn EBADENGINE   current: { node: 'v22.23.3', npm: '10.9.9' }
+2026-10-21T09:05:29.0517690Z npm warn EBADENGINE }
+2026-10-21T09:05:31.6747122Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2026-10-21T09:05:31.7779713Z npm warn deprecated json-ptr@3.1.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2026-10-21T09:05:32.0312516Z npm warn deprecated uuid@9.0.1: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+2026-10-21T09:05:32.0894298Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-21T09:05:36.7103570Z 
+2026-10-21T09:05:36.7104169Z added 729 packages in 8s
+2026-10-21T09:05:36.7654152Z ##[group]Run npx --prefix tests/rules firebase emulators:exec --project demo-coach-core-beta --only firestore,storage "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout functions/test/emulator/lfs-reconcile.emulator.test.js functions/test/emulator/film-s1-cleanup.emulator.test.js functions/test/emulator/film-s1.emulator.test.js"
+2026-10-21T09:05:36.7656878Z [36;1mnpx --prefix tests/rules firebase emulators:exec --project demo-coach-core-beta --only firestore,storage "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout functions/test/emulator/lfs-reconcile.emulator.test.js functions/test/emulator/film-s1-cleanup.emulator.test.js functions/test/emulator/film-s1.emulator.test.js"[0m
+2026-10-21T09:05:36.7711241Z shell: /usr/bin/bash -e {0}
+2026-10-21T09:05:36.7711488Z env:
+2026-10-21T09:05:36.7711704Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:05:36.7711989Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:05:36.7712323Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:05:36.7712707Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:05:36.7713006Z   MAVEN_ARGS: -ntp
+2026-10-21T09:05:36.7713205Z   ANNOTATE_LABEL: LFS emulator
+2026-10-21T09:05:36.7713420Z ##[endgroup]
+2026-10-21T09:05:39.3594334Z [36m[1mi  emulators:[22m[39m Starting emulators: firestore, storage
+2026-10-21T09:05:39.3596312Z [36m[1mi  emulators:[22m[39m Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+2026-10-21T09:05:39.3736154Z [33m[1m⚠ [22m[39m It appears you are running in a CI environment. You can avoid downloading the Firestore Emulator repeatedly by caching the /home/runner/.cache/firebase/emulators directory.
+2026-10-21T09:05:39.3737668Z [36m[1mi  firestore:[22m[39m downloading cloud-firestore-emulator-v1.22.0.jar...
+2026-10-21T09:05:39.9270086Z 
+2026-10-21T09:05:41.2420724Z [36m[1mi  firestore:[22m[39m Firestore Emulator logging to [1mfirestore-debug.log[22m
+2026-10-21T09:05:43.2538606Z [32m[1m✔  firestore:[22m[39m Firestore Emulator was started in standard edition.
+2026-10-21T09:05:43.2548778Z [32m[1m✔  firestore:[22m[39m Firestore Emulator UI websocket is running on 9150.
+2026-10-21T09:05:43.2557985Z [33m[1m⚠ [22m[39m It appears you are running in a CI environment. You can avoid downloading the Storage Emulator repeatedly by caching the /home/runner/.cache/firebase/emulators directory.
+2026-10-21T09:05:43.2558983Z [36m[1mi  storage:[22m[39m downloading cloud-storage-rules-runtime-v1.1.3.jar...
+2026-10-21T09:05:43.4924057Z 
+2026-10-21T09:05:44.9069330Z [36m[1mi [22m[39m Running script: [1mnode --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout functions/test/emulator/lfs-reconcile.emulator.test.js functions/test/emulator/film-s1-cleanup.emulator.test.js functions/test/emulator/film-s1.emulator.test.js[22m
+2026-10-21T09:05:45.4710428Z (node:2365) MetadataLookupWarning: received unexpected error = All promises were rejected code = 404, ENOTFOUND
+2026-10-21T09:05:45.4711833Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-21T09:05:47.2857771Z ▶ T11b batch reachability (Firestore emulator semantics)
+2026-10-21T09:05:47.2859395Z   ✔ more than SWEEP_BATCH_MAX terminal null-due records, plus future and live-leased records, never appear or use up the limit; only due pending records return, in due order (1970.674965ms)
+2026-10-21T09:05:47.2861562Z ✔ T11b batch reachability (Firestore emulator semantics) (1971.460243ms)
+2026-10-21T09:05:48.5481516Z ▶ PR86 C1-R2 on the emulator: invalid due records are parked
+2026-10-21T09:05:48.5483550Z   ✔ >= SWEEP_BATCH_MAX invalid due records (old bucket binding) cannot starve a valid due record; parked records leave the due range with their evidence intact (841.699933ms)
+2026-10-21T09:05:48.5484343Z ✔ PR86 C1-R2 on the emulator: invalid due records are parked (841.904401ms)
+2026-10-21T09:05:48.5485198Z ▶ S1 handlers on real transactions (Firestore emulator)
+2026-10-21T09:05:48.5486167Z   ✔ T1: abandon of a validating film deletes the exact generation; op record has no cleanup state; slot released once (317.952108ms)
+2026-10-21T09:05:48.5978304Z   ✔ T2: outage -> pending with the attempt counted; the sweep recovers after the due time (152.633084ms)
+2026-10-21T09:05:48.7186926Z   ✔ T7-0: crash after the obligation commits, before admission -> the initialized record is returned by the real sweep query; first admission is attempt 1 / fence 1 (120.002772ms)
+2026-10-21T09:05:48.7188856Z ✔ S1 handlers on real transactions (Firestore emulator) (591.034599ms)
+2026-10-21T09:05:49.2835777Z (node:2383) MetadataLookupWarning: received unexpected error = All promises were rejected code = 404, ENOTFOUND
+2026-10-21T09:05:49.2836816Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-21T09:05:49.4360996Z ▶ FS-01..05 eligibility
+2026-10-21T09:05:49.4362110Z   ✔ FS-01 anonymous -> permission-denied/anonymous-not-allowed, nothing written (52.210146ms)
+2026-10-21T09:05:49.4817187Z   ✔ FS-01b signed out -> unauthenticated/sign-in-required, nothing written (45.702073ms)
+2026-10-21T09:05:49.5234745Z   ✔ FS-02 unverified -> permission-denied/email-not-verified, nothing written (41.65332ms)
+2026-10-21T09:05:49.5737072Z   ✔ FS-03 non-beta -> permission-denied/beta-access-required, nothing written (48.979601ms)
+2026-10-21T09:05:49.6249116Z   ✔ FS-04 disabled -> unauthenticated/account-disabled, nothing written (52.130967ms)
+2026-10-21T09:05:49.7127465Z   ✔ FS-05 non-owner denied; owner succeeds (positive anchor) (87.62449ms)
+2026-10-21T09:05:49.7128256Z ✔ FS-01..05 eligibility (593.214846ms)
+2026-10-21T09:05:49.7826646Z ▶ FS-06..09 limits and rights
+2026-10-21T09:05:49.7827280Z   ✔ FS-06 bytes at limit accepted, limit+1 rejected (69.317071ms)
+2026-10-21T09:05:49.8354056Z   ✔ FS-07 wrong content type (52.954894ms)
+2026-10-21T09:05:49.8759699Z   ✔ FS-08 rights not acknowledged / missing (40.616522ms)
+2026-10-21T09:05:49.9177057Z   ✔ FS-09 unknown wording version (41.714011ms)
+2026-10-21T09:05:49.9177727Z ✔ FS-06..09 limits and rights (205.030865ms)
+2026-10-21T09:05:50.3460500Z ▶ FS-10 team cap
+2026-10-21T09:05:50.3461175Z   ✔ N succeed, N+1 refused, abandon frees a slot (427.899151ms)
+2026-10-21T09:05:58.0746789Z   ✔ concurrent reservations never exceed N (7728.022969ms)
+2026-10-21T09:05:58.0748668Z ✔ FS-10 team cap (8156.168382ms)
+2026-10-21T09:05:58.3091553Z ▶ FS-11 idempotency
+2026-10-21T09:05:58.3092564Z   ✔ same operationId replays verbatim; different payload conflicts (235.013008ms)
+2026-10-21T09:06:01.5337171Z   ✔ concurrent duplicates create one film (3223.801274ms)
+2026-10-21T09:06:01.9029814Z   ✔ errors are not stored: cap refusal retried after a slot frees (369.827457ms)
+2026-10-21T09:06:01.9030528Z ✔ FS-11 idempotency (3828.93396ms)
+2026-10-21T09:06:02.1799743Z ▶ C3 retry horizon, receipts and file names
+2026-10-21T09:06:02.1800291Z   ✔ replay is a receipt snapshot, not current permission (276.885152ms)
+2026-10-21T09:06:02.2690533Z   ✔ after the replay window the same operation is refused, never re-run (89.073368ms)
+2026-10-21T09:06:02.3247625Z   ✔ file name stored canonical; equivalent spellings are one operation (54.812428ms)
+2026-10-21T09:06:02.3248601Z ✔ C3 retry horizon, receipts and file names (421.005872ms)
+2026-10-21T09:06:02.4813278Z ▶ FS-19..22 finalize and abandon
+2026-10-21T09:06:02.4814060Z   ✔ FS-19 size mismatch and spoofed signature -> rejected, deleted (157.225523ms)
+2026-10-21T09:06:02.5846806Z   ✔ FS-19b content type mismatch -> rejected (101.789695ms)
+2026-10-21T09:06:02.6897644Z   ✔ FS-20 valid header -> validating, generation recorded, never ready (106.448814ms)
+2026-10-21T09:06:02.8986931Z   ✔ FS-21 abandon from reserved and validating; repeat is stable (207.763251ms)
+2026-10-21T09:06:03.0891448Z   ✔ FS-21b abandon edge cases (191.532155ms)
+2026-10-21T09:06:03.1923164Z   ✔ FS-22 abandon then late finalize -> deleted, stays abandoned (103.207597ms)
+2026-10-21T09:06:03.2737990Z   ✔ unreserved quarantine object is deleted; other prefixes ignored (81.087663ms)
+2026-10-21T09:06:03.2739038Z ✔ FS-19..22 finalize and abandon (949.597599ms)
+2026-10-21T09:06:03.3128388Z ▶ R1-R5 backend repairs
+2026-10-21T09:06:03.3128915Z   ✔ R1 switch off: callables throw sanitized internal, nothing written (39.053354ms)
+2026-10-21T09:06:03.4061108Z   ✔ R2 abandon from reserved never deletes an unprocessed object; its late event deletes that exact generation (93.236079ms)
+2026-10-21T09:06:03.5056277Z   ✔ R2 stale cleanup leaves a newer generation alone (GCS semantics) (99.336327ms)
+2026-10-21T09:06:03.5547988Z   ✔ emulator limitation recorded: Storage emulator ignores generations (49.313588ms)
+2026-10-21T09:06:03.6181899Z   ✔ R3 transient head-read error: throws, film stays reserved, object kept (63.408256ms)
+2026-10-21T09:06:03.6765402Z   ✔ R3 generation gone before the event: reservation untouched (57.999253ms)
+2026-10-21T09:06:03.7448095Z   ✔ R4 ftyp box with 16 compatible brands (80 bytes) is accepted (68.237514ms)
+2026-10-21T09:06:03.8192709Z   ✔ R5 orphan lapsed ledger slot is dropped; reserve still succeeds (74.449822ms)
+2026-10-21T09:06:03.8193856Z ✔ R1-R5 backend repairs (545.556261ms)
+2026-10-21T09:06:03.9100306Z ▶ FS-23 expiry
+2026-10-21T09:06:03.9127211Z   ✔ late finalize after expiry -> expired, deleted, slot released (90.599475ms)
+2026-10-21T09:06:03.9852749Z   ✔ lazy expiry on the next reserve frees the slot (74.92524ms)
+2026-10-21T09:06:03.9853909Z ✔ FS-23 expiry (165.738799ms)
+2026-10-21T09:06:04.0632144Z ▶ stored document == returned FilmState
+2026-10-21T09:06:04.0637365Z   ✔ doc fields match FilmState with Timestamps (77.884738ms)
+2026-10-21T09:06:04.0638484Z ✔ stored document == returned FilmState (78.080224ms)
+2026-10-21T09:06:04.5975835Z (node:2426) MetadataLookupWarning: received unexpected error = All promises were rejected code = 404, ENOTFOUND
+2026-10-21T09:06:04.5976661Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-21T09:06:04.7810456Z ▶ LFS reconciler on the Firestore emulator (bounded client)
+2026-10-21T09:06:04.7811660Z   ✔ L1: configuration-lost finalize, live reservation -> recovered intake; lease released; transactions counted (346.235042ms)
+2026-10-21T09:06:04.9254415Z   ✔ L1/L2: after lazy expiry -> stale-expired obligation -> deleted (144.315691ms)
+2026-10-21T09:06:05.0984891Z   ✔ L7/L18: per-object checkpoint across invocations and bound evidence documents on the real emulator (173.230552ms)
+2026-10-21T09:06:07.2311785Z   ✔ L10: concurrent reconcilers on real transactions: both end bounded (no throw); one holder; exactly one decision and one delete; a later run completes the pass (2132.257485ms)
+2026-10-21T09:06:07.2312719Z ✔ LFS reconciler on the Firestore emulator (bounded client) (2797.060505ms)
+2026-10-21T09:06:08.7593540Z ▶ L11 operator CLI on the emulator
+2026-10-21T09:06:08.7595109Z   ✔ list-parked, refused unpark while still invalid, then unpark under the right bucket; audit written (1525.869533ms)
+2026-10-21T09:06:08.7597911Z ✔ L11 operator CLI on the emulator (1526.096747ms)
+2026-10-21T09:06:08.7806368Z ℹ tests 46
+2026-10-21T09:06:08.7807604Z ℹ suites 14
+2026-10-21T09:06:08.7807951Z ℹ pass 46
+2026-10-21T09:06:08.7808470Z ℹ fail 0
+2026-10-21T09:06:08.7808902Z ℹ cancelled 0
+2026-10-21T09:06:08.7809363Z ℹ skipped 0
+2026-10-21T09:06:08.7809643Z ℹ todo 0
+2026-10-21T09:06:08.7809971Z ℹ duration_ms 23843.659852
+2026-10-21T09:06:08.7874200Z ##[notice]PASS more than SWEEP_BATCH_MAX terminal null-due records, plus future and live-leased records, never appear or use up the limit; only due pending records return, in due order
+PASS >= SWEEP_BATCH_MAX invalid due records (old bucket binding) cannot starve a valid due record; parked records leave the due range with their evidence intact
+PASS T1: abandon of a validating film deletes the exact generation; op record has no cleanup state; slot released once
+PASS T2: outage -> pending with the attempt counted; the sweep recovers after the due time
+PASS T7-0: crash after the obligation commits, before admission -> the initialized record is returned by the real sweep query; first admission is attempt 1 / fence 1
+PASS FS-01 anonymous -> permission-denied/anonymous-not-allowed, nothing written
+PASS FS-01b signed out -> unauthenticated/sign-in-required, nothing written
+PASS FS-02 unverified -> permission-denied/email-not-verified, nothing written
+PASS FS-03 non-beta -> permission-denied/beta-access-required, nothing written
+PASS FS-04 disabled -> unauthenticated/account-disabled, nothing written
+PASS FS-05 non-owner denied; owner succeeds (positive anchor)
+PASS FS-06 bytes at limit accepted, limit+1 rejected
+PASS FS-07 wrong content type
+PASS FS-08 rights not acknowledged / missing
+PASS FS-09 unknown wording version
+PASS N succeed, N+1 refused, abandon frees a slot
+PASS concurrent reservations never exceed N
+PASS same operationId replays verbatim; different payload conflicts
+PASS concurrent duplicates create one film
+PASS errors are not stored: cap refusal retried after a slot frees
+PASS replay is a receipt snapshot, not current permission
+PASS after the replay window the same operation is refused, never re-run
+PASS file name stored canonical; equivalent spellings are one operation
+PASS FS-19 size mismatch and spoofed signature -> rejected, deleted
+PASS FS-19b content type mismatch -> rejected
+PASS FS-20 valid header -> validating, generation recorded, never ready
+PASS FS-21 abandon from reserved and validating; repeat is stable
+PASS FS-21b abandon edge cases
+PASS FS-22 abandon then late finalize -> deleted, stays abandoned
+PASS unreserved quarantine object is deleted; other prefixes ignored
+PASS R1 switch off: callables throw sanitized internal, nothing written
+PASS R2 abandon from reserved never deletes an unprocessed object; its late event deletes that exact generation
+PASS R2 stale cleanup leaves a newer generation alone (GCS semantics)
+PASS emulator limitation recorded: Storage emulator ignores generations
+PASS R3 transient head-read error: throws, film stays reserved, object kept
+PASS R3 generation gone before the event: reservation untouched
+PASS R4 ftyp box with 16 compatible brands (80 bytes) is accepted
+PASS R5 orphan lapsed ledger slot is dropped; reserve still succeeds
+PASS late finalize after expiry -> expired, deleted, slot released
+PASS lazy expiry on the next reserve frees the slot
+PASS doc fields match FilmState with Timestamps
+PASS L1: configuration-lost finalize, live reservation -> recovered intake; lease released; transactions counted
+PASS L1/L2: after lazy expiry -> stale-expired obligation -> deleted
+PASS L7/L18: per-object checkpoint across invocations and bound evidence documents on the real emulator
+PASS L10: concurrent reconcilers on real transactions: both end bounded (no throw); one holder; exactly one decision and one delete; a later run completes the pass
+PASS list-parked, refused unpark while still invalid, then unpark under the right bucket; audit written
+2026-10-21T09:06:08.7891794Z [32m[1m✔ [22m[39m Script exited successfully (code 0)
+2026-10-21T09:06:09.2886734Z [36m[1mi  emulators:[22m[39m Shutting down emulators.
+2026-10-21T09:06:09.2889207Z [36m[1mi  firestore:[22m[39m Stopping Firestore Emulator
+2026-10-21T09:06:09.6342995Z [36m[1mi  storage:[22m[39m Stopping Storage Emulator
+2026-10-21T09:06:09.9593609Z [36m[1mi  hub:[22m[39m Stopping emulator hub
+2026-10-21T09:06:09.9595755Z [36m[1mi  logging:[22m[39m Stopping Logging Emulator
+2026-10-21T09:06:10.0295690Z ##[group]Run npx --prefix tests/rules firebase emulators:exec --project demo-coach-core-beta --only firestore "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout tests/rules/film-reconcile.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs"
+2026-10-21T09:06:10.0297663Z [36;1mnpx --prefix tests/rules firebase emulators:exec --project demo-coach-core-beta --only firestore "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout tests/rules/film-reconcile.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs"[0m
+2026-10-21T09:06:10.0345957Z shell: /usr/bin/bash -e {0}
+2026-10-21T09:06:10.0346188Z env:
+2026-10-21T09:06:10.0346400Z   C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+2026-10-21T09:06:10.0346728Z   R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+2026-10-21T09:06:10.0347058Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:06:10.0347433Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-21T09:06:10.0347742Z   MAVEN_ARGS: -ntp
+2026-10-21T09:06:10.0347931Z   ANNOTATE_LABEL: LFS rules deny
+2026-10-21T09:06:10.0348141Z ##[endgroup]
+2026-10-21T09:06:11.2399920Z [36m[1mi  emulators:[22m[39m Starting emulators: firestore
+2026-10-21T09:06:11.2401813Z [36m[1mi  emulators:[22m[39m Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+2026-10-21T09:06:11.2587156Z [36m[1mi  firestore:[22m[39m Firestore Emulator logging to [1mfirestore-debug.log[22m
+2026-10-21T09:06:12.4682151Z [32m[1m✔  firestore:[22m[39m Firestore Emulator was started in standard edition.
+2026-10-21T09:06:12.4683391Z [32m[1m✔  firestore:[22m[39m Firestore Emulator UI websocket is running on 9150.
+2026-10-21T09:06:12.4869153Z [36m[1mi [22m[39m Running script: [1mnode --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout tests/rules/film-reconcile.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs[22m
+2026-10-21T09:06:14.4166810Z ▶ FILM-S1-C1 filmCleanup records are server-only
+2026-10-21T09:06:14.4168088Z   ✔ owner, other users and unauthenticated clients cannot read or list (566.183022ms)
+2026-10-21T09:06:14.5210109Z [2026-10-21T09:06:14.519Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1451353d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.5211375Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:14.5577789Z [2026-10-21T09:06:14.556Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1451353e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.5579091Z false for 'update' @ L216
+2026-10-21T09:06:14.5839661Z [2026-10-21T09:06:14.583Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x1451353f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.5840863Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:14.6114924Z [2026-10-21T09:06:14.610Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x14513540 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.6115970Z false for 'delete' @ L216
+2026-10-21T09:06:14.6379234Z [2026-10-21T09:06:14.636Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x14513541 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.6380736Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:14.6626476Z [2026-10-21T09:06:14.662Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x14513542 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.6627089Z false for 'update' @ L216
+2026-10-21T09:06:14.6892221Z [2026-10-21T09:06:14.688Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x14513543 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.6893479Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:14.7142450Z [2026-10-21T09:06:14.713Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x14513544 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:14.7143184Z false for 'delete' @ L216
+2026-10-21T09:06:14.7157630Z   ✔ no client can create, update or delete (including the team owner) (301.285068ms)
+2026-10-21T09:06:14.8597439Z   ✔ positive anchor: the owner can still read its team (rules loaded) (140.05356ms)
+2026-10-21T09:06:14.8610446Z ✔ FILM-S1-C1 filmCleanup records are server-only (2152.808923ms)
+2026-10-21T09:06:15.5834477Z ▶ LFS reconciler and operator records are server-only
+2026-10-21T09:06:15.5835574Z   ✔ no client can read or list them (339.930276ms)
+2026-10-21T09:06:15.6673277Z [2026-10-21T09:06:15.666Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd36f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.6674465Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:15.6910967Z [2026-10-21T09:06:15.690Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd370 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.6912045Z false for 'update' @ L216
+2026-10-21T09:06:15.7160749Z [2026-10-21T09:06:15.715Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd371 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.7161704Z false for 'delete' @ L216
+2026-10-21T09:06:15.7390545Z [2026-10-21T09:06:15.738Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd372 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.7391983Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:15.7634785Z [2026-10-21T09:06:15.762Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd373 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.7636016Z false for 'update' @ L216
+2026-10-21T09:06:15.7861347Z [2026-10-21T09:06:15.785Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd374 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.7862107Z false for 'delete' @ L216
+2026-10-21T09:06:15.8155637Z [2026-10-21T09:06:15.814Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd375 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.8156997Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:15.8368775Z [2026-10-21T09:06:15.836Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd376 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.8369669Z false for 'update' @ L216
+2026-10-21T09:06:15.8585423Z [2026-10-21T09:06:15.857Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd377 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.8586028Z false for 'delete' @ L216
+2026-10-21T09:06:15.8847214Z [2026-10-21T09:06:15.882Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd378 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.8848289Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:15.9119022Z [2026-10-21T09:06:15.910Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd379 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.9120552Z false for 'update' @ L216
+2026-10-21T09:06:15.9340509Z [2026-10-21T09:06:15.932Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd37a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.9344358Z false for 'delete' @ L216
+2026-10-21T09:06:15.9643831Z [2026-10-21T09:06:15.963Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd37b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.9647832Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:15.9937217Z [2026-10-21T09:06:15.991Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd37c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:15.9938556Z false for 'update' @ L216
+2026-10-21T09:06:16.0203163Z [2026-10-21T09:06:16.019Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd37d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.0207021Z false for 'delete' @ L216
+2026-10-21T09:06:16.0414542Z [2026-10-21T09:06:16.040Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd37e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.0418419Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:16.0661733Z [2026-10-21T09:06:16.065Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd37f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.0665241Z false for 'update' @ L216
+2026-10-21T09:06:16.0834666Z [2026-10-21T09:06:16.082Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd380 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.0838072Z false for 'delete' @ L216
+2026-10-21T09:06:16.1070455Z [2026-10-21T09:06:16.106Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd381 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.1071845Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:16.1295951Z [2026-10-21T09:06:16.129Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd382 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.1296712Z false for 'update' @ L216
+2026-10-21T09:06:16.1482888Z [2026-10-21T09:06:16.147Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd383 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.1483497Z false for 'delete' @ L216
+2026-10-21T09:06:16.1663671Z [2026-10-21T09:06:16.165Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd384 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.1664636Z false for 'create' @ L216, false for 'update' @ L216
+2026-10-21T09:06:16.1859079Z [2026-10-21T09:06:16.185Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd385 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.1860094Z false for 'update' @ L216
+2026-10-21T09:06:16.2028316Z [2026-10-21T09:06:16.202Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x688bd386 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+2026-10-21T09:06:16.2029132Z false for 'delete' @ L216
+2026-10-21T09:06:16.2040109Z   ✔ no client can create, update or delete them (including the team owner) (621.825327ms)
+2026-10-21T09:06:16.2697685Z   ✔ positive anchor: the owner can still read its team (rules loaded) (61.476774ms)
+2026-10-21T09:06:16.2698935Z ✔ LFS reconciler and operator records are server-only (1209.509877ms)
+2026-10-21T09:06:16.2907599Z ℹ tests 6
+2026-10-21T09:06:16.2907908Z ℹ suites 2
+2026-10-21T09:06:16.2908096Z ℹ pass 6
+2026-10-21T09:06:16.2908336Z ℹ fail 0
+2026-10-21T09:06:16.2908547Z ℹ cancelled 0
+2026-10-21T09:06:16.2908756Z ℹ skipped 0
+2026-10-21T09:06:16.2908942Z ℹ todo 0
+2026-10-21T09:06:16.2909177Z ℹ duration_ms 3774.669698
+2026-10-21T09:06:16.2922755Z ##[notice]PASS owner, other users and unauthenticated clients cannot read or list
+PASS no client can create, update or delete (including the team owner)
+PASS positive anchor: the owner can still read its team (rules loaded)
+PASS no client can read or list them
+PASS no client can create, update or delete them (including the team owner)
+PASS positive anchor: the owner can still read its team (rules loaded)
+2026-10-21T09:06:16.2970562Z [32m[1m✔ [22m[39m Script exited successfully (code 0)
+2026-10-21T09:06:16.7985723Z [36m[1mi  emulators:[22m[39m Shutting down emulators.
+2026-10-21T09:06:16.7988881Z [36m[1mi  firestore:[22m[39m Stopping Firestore Emulator
+2026-10-21T09:06:17.1422016Z [36m[1mi  hub:[22m[39m Stopping emulator hub
+2026-10-21T09:06:17.1426206Z [36m[1mi  logging:[22m[39m Stopping Logging Emulator
+2026-10-21T09:06:17.2184721Z Post job cleanup.
+2026-10-21T09:06:17.3386006Z Post job cleanup.
+2026-10-21T09:06:17.4588247Z (node:2601) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T09:06:17.4589344Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T09:06:17.4591278Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-80b7657f952028d560b4781fa3dc690b7e35558140903042edaf7a45d7005b75, not saving cache.
+2026-10-21T09:06:17.4730545Z Post job cleanup.
+2026-10-21T09:06:17.5485684Z [command]/usr/bin/git version
+2026-10-21T09:06:17.5517087Z git version 2.55.0
+2026-10-21T09:06:17.5550963Z Temporarily overriding HOME='/home/runner/work/_temp/4f14ea3f-5bf8-4343-a13a-cd824cf401ad' before making global git config changes
+2026-10-21T09:06:17.5552135Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T09:06:17.5555607Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/coach-core-ai/coach-core-ai
+2026-10-21T09:06:17.5597647Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T09:06:17.5646814Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T09:06:17.5869099Z fatal: No url found for submodule path 'src/components/Coach's Corner/Practice Plan Generator' in .gitmodules
+2026-10-21T09:06:17.5894934Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-10-21T09:06:17.6038877Z Cleaning up orphan processes
