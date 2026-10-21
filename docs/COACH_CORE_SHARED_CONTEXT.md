@@ -1,5 +1,30 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-21 / LFS PR87 third repair (Claude implementer): reviewer FAIL c-6313674964 (N-1, N-2) addressed; targets c-6313885917. Codex PASS c-6313557232 at `e7fdff3` stays on record.
+> - **N-1:** runs of empty pages with advancing tokens are followed, with a durable `list-stalled` warning from 3 onwards. Only a repeated token (request token or one within the stall run) falls back to the name cursor.
+> - **N-2:** the 14 vs 15 Firestore gate failure was one attempt timed out before its TLS connection existed (never sent); reproduced under load. Bounds are now asserted on client-side attempts, reconciled with the server log; Commit tests warm the channel.
+> - New code and tests only; frozen surfaces and `lfs-transport.js` unchanged. Next: both verdicts on the new SHA. MVP NO-GO.
+
+> 2026-10-21 / LFS PR87 second repair (Claude implementer): Codex FAIL c-6312514310 and reviewer FAIL c-6312585072 addressed (targets c-6312917818).
+> - **UTF-8 order:** cursor and replay filtering compare names as UTF-8 bytes, as GCS does; the `\uE000`/`\u{10000}` pair now gets evidence for both.
+> - **R-1:** non-advancing continuations are detected (same token, or 3 consecutive stalls), recorded as `list-no-progress` and resumed by name.
+> - **R-2:** emulator L10 asserts each result exactly and fails on an unexplained leftover lease; a new `releaseError` reports a lease that may outlive a run.
+> - New code and tests only; frozen surfaces unchanged. Next: both verdicts on the new SHA. MVP NO-GO.
+
+> 2026-10-21 / LFS PR87 repair (Claude implementer): Codex FAIL c-6312029054 addressed.
+> - **F1:** the list token is now authoritative and the page query is persisted; a short page no longer ends a pass.
+> - **F2:** a facade/configured bucket mismatch fails closed before any list or state write, and the bucket is pinned per invocation.
+> - **F3:** each object's admission reserves the whole derived envelope, and the lease also covers the SDK's background rollback.
+> - **F4:** an ambiguous acquire triggers release-if-mine; the emulator test resolves an orphaned lease by its expiry.
+> - **Gate:** an HTTPS default-origin Storage proof was added.
+> - New code and tests only; frozen surfaces unchanged. Next: both verdicts. MVP NO-GO.
+
+> 2026-10-20 / LOST-FINALIZE-SOURCE (LFS-A, #39 c-6303891279; Claude implementer `session_018Dkini…`): TEST_ONLY reconciler on `claude/film-lfs-reconcile` from the PASSed C1 head `7f3b757`.
+> - **Gate #1 passed without frozen changes.** A bounded transport boundary (`lfs-transport.js`) is proven on the pinned real SDKs over loopback. Storage uses facade-owned aborts with the server observing the socket close. Firestore uses gRPC deadlines, with every SDK retry layer counted and the envelope derived from them.
+> - The reconciler re-drives lost finalizes through the unchanged S1 decision, using a fenced, name-keyed cursor, bound evidence, and film validation at every transactional read. The operator tool is emulator-only (CAS unpark plus audit).
+> - Changed: new `reconcile.js`, `lfs-transport.js`, `film-cleanup-admin.js`; an additive predeploy-guard block; new tests, rules-deny test, workflow and `docs/film/FILM_LFS_RECONCILE.md`. `handlers.js`, `cleanup.js`, `storage-adapter.js`, `index.js` and the PR86 tests are byte-unchanged.
+> - Next: Codex and independent-reviewer verdicts. C1-D1 (activation, constants, bucket checks, alerting) and I-6/I-9/I-10 stay open before real footage. MVP NO-GO.
+
 > 2026-10-20 / FILM-S1-C1 PR86 review repair (Claude, implementer): Codex FAIL c-6301421976 and independent-reviewer FAIL c-6301621806 repaired under C1-A.
 > - **C1-R1:** every target refusal now aborts the deciding transaction, so no cleanup-owing decision commits without its record. Abandon returns retryable unavailable; finalize throws before reading, and events for another bucket are ignored.
 > - **C1-R2:** invalid records are parked out of the due range with their evidence kept; a configuration outage parks nothing.
