@@ -399,6 +399,26 @@ describe("CT-4.4 (I-9) same-generation sources owned by the S2b job", () => {
     assert.equal(w.objects.objects.get(f.name).generation, f.generation);
     await passLeavesJob(w, f);
   });
+  it("(d) ready and rejected with NO quarantine cleanup intent " +
+      "(anomalous stored state; source present): duplicate-event, nothing " +
+      "written (R88-2 c-6326521054)", async () => {
+    for (const script of [[], [{verdict: "container-invalid"}]]) {
+      const w = world({script});
+      const f = await w.validating();
+      failQuarantineCleanup(w, "error"); // keeps the source present
+      await assert.rejects(w.worker.processFilm({teamId: TEAM,
+        filmId: f.filmId}), (e) => e.code === 503);
+      // the anomalous visibility case: a valid worker document whose job
+      // records no quarantine intent (no worker field or authority added)
+      const jp = `${w.filmPath(f.filmId)}/workerJobs/${f.jobId}`;
+      const j = w.db.read(jp);
+      j.cleanup = {...j.cleanup, quarantine: null};
+      w.db.write(jp, j);
+      assert.ok(["ready", "rejected"].includes(w.film(f.filmId).status));
+      assert.equal(w.objects.objects.get(f.name).generation, f.generation);
+      await passLeavesJob(w, f);
+    }
+  });
   it("(c) ready and rejected whose quarantine cleanup is still pending " +
       "(unresolved, not proven failed)", async () => {
     for (const script of [[], [{verdict: "metadata-invalid"}]]) {
@@ -474,6 +494,9 @@ describe("CT-4.5 frozen v1 handlers over worker-written documents", () => {
       const {w, f} = await make();
       const before = w.film(f.filmId);
       const slotsBefore = w.slots();
+      // R88-1 (c-6326521054): film + job snapshot taken BEFORE the call
+      const snapBefore = snapshot(w, f);
+      const recordsBefore = JSON.stringify(w.records());
       const res = await w.abandon(f.filmId);
       if (status === "validating") {
         assert.equal(res.ok, true, JSON.stringify(res));
@@ -496,10 +519,11 @@ describe("CT-4.5 frozen v1 handlers over worker-written documents", () => {
         assert.equal(again.data.previousStatus, "abandoned");
         assert.deepEqual(w.slots(), {});
       } else {
-        const snap = snapshot(w, f);
         assert.deepEqual(res, {ok: false, error: {code: "failed-precondition",
           retryable: false, reason: "invalid-state"}});
-        assert.equal(snapshot(w, f), snap, "no write");
+        assert.equal(snapshot(w, f), snapBefore, "no write (film + job)");
+        assert.equal(JSON.stringify(w.records()), recordsBefore,
+            "no obligation");
         assert.deepEqual(w.slots(), slotsBefore);
       }
     });
