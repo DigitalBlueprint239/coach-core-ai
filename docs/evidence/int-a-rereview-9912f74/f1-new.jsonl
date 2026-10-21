@@ -1,0 +1,8 @@
+{"case":"exhaustion recovery-needed (attempts-exhausted)","listed":{"class":"a","classification":"recovery: attempts-exhausted","recoveryReason":"attempts-exhausted","exhaustion":"recovery-needed"}}
+{"case":"holdForRecovery: precondition-changed-mid-run","listed":{"class":"a","classification":"recovery: precondition-changed-mid-run","recoveryReason":"precondition-changed-mid-run","exhaustion":null}}
+{"case":"holdForRecovery: validation-record-invalid","listed":{"class":"a","classification":"recovery: validation-record-invalid","recoveryReason":"validation-record-invalid","exhaustion":null}}
+{"case":"output-ownership-unproven","listed":{"class":"a","classification":"recovery: output-ownership-unproven","recoveryReason":"output-ownership-unproven","exhaustion":null}}
+{"case":"team-ownership-changed","listed":{"class":"a","classification":"recovery: team-ownership-changed","recoveryReason":"team-ownership-changed","exhaustion":null}}
+{"case":"validation-record-stale","listed":{"class":"a","classification":"recovery: validation-record-stale","recoveryReason":"validation-record-stale","exhaustion":null}}
+{"case":"rejection-precondition-failed (exhaustion rejected)","listed":{"class":"a","classification":"recovery: rejection-precondition-failed","recoveryReason":"rejection-precondition-failed","exhaustion":"rejected"}}
+{"case":"control: running, no recovery","listed":null}

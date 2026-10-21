@@ -1,0 +1,235 @@
+▶ D5 list-s2b-recovery (read-only, bounded, resumable)
+  ✖ classes a-d on actual A5 job semantics; negatives excluded (3.856631ms)
+  ✔ more than M eligible films across two teams: repeated invocations with the cursor visit every film exactly once, then next=null; every invocation within its read cap (1.529578ms)
+  ✔ hard caps: --teams/--films clamp to 1..50 (0.157934ms)
+  ✔ refuses a non-demo project and a missing emulator host (CLI) (221.907639ms)
+✖ D5 list-s2b-recovery (read-only, bounded, resumable) (228.453974ms)
+▶ D5 class (a): every A5 recovery reason; controls (F-1)
+  ✖ each recovery reason on a same-generation validating film is listed with its reason; running, resolved-only and different-generation jobs are not (1.110306ms)
+✖ D5 class (a): every A5 recovery reason; controls (F-1) (1.31789ms)
+▶ D5 class (a) over real worker-written recovery marks
+  ✖ real worker path attempts-exhausted: listed as class (a) with that reason (22.479685ms)
+  ✖ real worker path output-ownership-unproven: listed as class (a) with that reason (4.951498ms)
+  ✖ real worker path team-ownership-changed: listed as class (a) with that reason (1.222512ms)
+  ✖ real worker path ready-precondition-failed: listed as class (a) with that reason (2.739147ms)
+  ✔ controls on real worker state: validating with no job, and a worker run interrupted before any recovery mark -> not listed (1.624375ms)
+✖ D5 class (a) over real worker-written recovery marks (33.522657ms)
+ℹ tests 10
+ℹ suites 3
+ℹ pass 4
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 529.189802
+
+✖ failing tests:
+
+test at functions/test/film-int-listing.test.js:123:3
+✖ classes a-d on actual A5 job semantics; negatives excluded (3.856631ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      [
+        'f-a',
+        'a',
+  +     'recovery-needed'
+  -     'recovery: attempts-exhausted'
+      ],
+      [
+        'f-b',
+        'b',
+        'precondition mismatch'
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r2-review/functions/test/film-int-listing.test.js:144:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'f-a', 'a', 'recovery-needed' ], [ 'f-b', 'b', 'precondition mismatch' ], [ 'f-c', 'c', 'unresolved (not proven failed)' ], [ 'f-d', 'd', 'no intent' ] ],
+    expected: [ [ 'f-a', 'a', 'recovery: attempts-exhausted' ], [ 'f-b', 'b', 'precondition mismatch' ], [ 'f-c', 'c', 'unresolved (not proven failed)' ], [ 'f-d', 'd', 'no intent' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-listing.test.js:226:3
+✖ each recovery reason on a same-generation validating film is listed with its reason; running, resolved-only and different-generation jobs are not (1.110306ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      [
+        'r0',
+        'a',
+  +     undefined,
+  +     'recovery-needed'
+  -     'attempts-exhausted',
+  -     'recovery: attempts-exhausted'
+      ],
+  -   [
+  -     'r1',
+  -     'a',
+  -     'rejection-precondition-failed',
+  -     'recovery: rejection-precondition-failed'
+  -   ],
+  -   [
+  -     'r2',
+  -     'a',
+  -     'reject-precondition-failed',
+  -     'recovery: reject-precondition-failed'
+  -   ],
+  -   [
+  -     'r3',
+  -     'a',
+  -     'ready-precondition-failed',
+  -     'recovery: ready-precondition-failed'
+  -   ],
+  -   [
+  -     'r4',
+  -     'a',
+  -     'precondition-changed-mid-run',
+  -     'recovery: precondition-changed-mid-run'
+  -   ],
+  -   [
+  -     'r5',
+  -     'a',
+  -     'validation-record-invalid',
+  -     'recovery: validation-record-invalid'
+  -   ],
+  -   [
+  -     'r6',
+  -     'a',
+  -     'validation-record-stale',
+  -     'recovery: validation-record-stale'
+  -   ],
+  -   [
+  -     'r7',
+  -     'a',
+  -     'output-ownership-unproven',
+  -     'recovery: output-ownership-unproven'
+  -   ],
+  -   [
+  -     'r8',
+  -     'a',
+  -     'team-ownership-changed',
+  -     'recovery: team-ownership-changed'
+  -   ]
+    ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r2-review/functions/test/film-int-listing.test.js:251:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'r0', 'a', undefined, 'recovery-needed' ] ],
+    expected: [ [ 'r0', 'a', 'attempts-exhausted', 'recovery: attempts-exhausted' ], [ 'r1', 'a', 'rejection-precondition-failed', 'recovery: rejection-precondition-failed' ], [ 'r2', 'a', 'reject-precondition-failed', 'recovery: reject-precondition-failed' ], [ 'r3', 'a', 'ready-precondition-failed', 'recovery: ready-precondition-failed' ], [ 'r4', 'a', 'precondition-changed-mid-run', 'recovery: precondition-changed-mid-run' ], [ 'r5', 'a', 'validation-record-invalid', 'recovery: validation-record-invalid' ], [ 'r6', 'a', 'validation-record-stale', 'recovery: validation-record-stale' ], [ 'r7', 'a', 'output-ownership-unproven', 'recovery: output-ownership-unproven' ], [ 'r8', 'a', 'team-ownership-changed', 'recovery: team-ownership-changed' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-listing.test.js:352:5
+✖ real worker path attempts-exhausted: listed as class (a) with that reason (22.479685ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      [
+        '7a512b68-0a8d-4203-b2a4-3ae585bf0a9a',
+        'a',
+  +     undefined
+  -     'attempts-exhausted'
+      ]
+    ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r2-review/functions/test/film-int-listing.test.js:359:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ '7a512b68-0a8d-4203-b2a4-3ae585bf0a9a', 'a', undefined ] ],
+    expected: [ [ '7a512b68-0a8d-4203-b2a4-3ae585bf0a9a', 'a', 'attempts-exhausted' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-listing.test.js:352:5
+✖ real worker path output-ownership-unproven: listed as class (a) with that reason (4.951498ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   [
+  -     '6b84fd33-a70b-4539-9b5c-bccb174c4855',
+  -     'a',
+  -     'output-ownership-unproven'
+  -   ]
+  - ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r2-review/functions/test/film-int-listing.test.js:359:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ [ '6b84fd33-a70b-4539-9b5c-bccb174c4855', 'a', 'output-ownership-unproven' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-listing.test.js:352:5
+✖ real worker path team-ownership-changed: listed as class (a) with that reason (1.222512ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   [
+  -     'b7d5f02b-0383-4062-9829-b16715c7216d',
+  -     'a',
+  -     'team-ownership-changed'
+  -   ]
+  - ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r2-review/functions/test/film-int-listing.test.js:359:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ [ 'b7d5f02b-0383-4062-9829-b16715c7216d', 'a', 'team-ownership-changed' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-listing.test.js:352:5
+✖ real worker path ready-precondition-failed: listed as class (a) with that reason (2.739147ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   [
+  -     'a698ecac-a81d-40b5-887d-db43d9920db7',
+  -     'a',
+  -     'ready-precondition-failed'
+  -   ]
+  - ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r2-review/functions/test/film-int-listing.test.js:359:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ [ 'a698ecac-a81d-40b5-887d-db43d9920db7', 'a', 'ready-precondition-failed' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

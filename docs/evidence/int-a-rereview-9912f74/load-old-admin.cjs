@@ -1,0 +1,3 @@
+// Review-only regression control: new tests with C's unchanged old admin module.
+const Module=require('node:module'),cp=require('node:child_process'),path=require('node:path');const load=Module._load;let old;
+Module._load=function(request,parent,isMain){const file=Module._resolveFilename(request,parent);if(/functions\/scripts\/film-cleanup-admin\.js$/.test(file)){if(!old){const m=new Module(file,parent);m.filename=file;m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(cp.execFileSync('git',['show','c413019:functions/scripts/film-cleanup-admin.js'],{encoding:'utf8'}),file);old=m.exports;}return old;}return load.apply(this,arguments);};

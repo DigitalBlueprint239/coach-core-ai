@@ -1,0 +1,59 @@
+REVIEW MUTATION: changed class(d) ready source bytes
+REVIEW MUTATION: changed class(d) rejected source bytes
+▶ CT-4.3 (§4, r3.1): reconciler film validation over worker-written documents
+  ✔ positives: worker `ready`, worker-reason `rejected` and the S1 legacy document (absent r4 keys) are valid; a reconciler pass gives duplicate-event with no evidence and no S1 obligation (34.334791ms)
+  ✔ negative: ready without readyAt -> FilmAmbiguous (evidence, no decision) (4.86818ms)
+  ✔ negative: ready with readyAt null -> FilmAmbiguous (evidence, no decision) (5.204637ms)
+  ✔ negative: ready without normalizedGeneration -> FilmAmbiguous (evidence, no decision) (3.134941ms)
+  ✔ negative: ready with a non-decimal normalizedGeneration -> FilmAmbiguous (evidence, no decision) (7.698043ms)
+  ✔ negative: ready without media -> FilmAmbiguous (evidence, no decision) (3.895536ms)
+  ✔ negative: ready with invalid media (codec) -> FilmAmbiguous (evidence, no decision) (2.426371ms)
+  ✔ negative: ready with invalid media (extra key) -> FilmAmbiguous (evidence, no decision) (2.965454ms)
+  ✔ negative: ready with media over the PENDING_D3 byte limit -> FilmAmbiguous (evidence, no decision) (2.610752ms)
+  ✔ negative: ready with a malformed retentionExpiresAt -> FilmAmbiguous (evidence, no decision) (2.689035ms)
+  ✔ negative: rejected with an invalid worker reason -> FilmAmbiguous (evidence, no decision) (1.649011ms)
+✔ CT-4.3 (§4, r3.1): reconciler film validation over worker-written documents (73.308004ms)
+▶ CT-4.1/4.2 end-to-end flows (one store, direct worker invocation)
+  ✔ CT-4.1 reserve -> upload -> finalize (with bucket) -> worker -> ready: one promotion; quarantine generation removed (generation-matched); slot ready (2.060325ms)
+  ✔ CT-4.2 lost finalize -> reconciler re-drive -> validating -> worker -> ready: one promotion, one job (2.469092ms)
+  ✔ CT-4.6 lost finalize after the reservation expired -> stale-expired C1 obligation -> deleted (4.175396ms)
+✔ CT-4.1/4.2 end-to-end flows (one store, direct worker invocation) (8.894651ms)
+▶ CT-4.4 (I-9) same-generation sources owned by the S2b job
+  ✔ (a) validating whose job is recovery-needed (4.299039ms)
+  ✔ (b) ready whose quarantine cleanup ended mismatch (412): object preserved (2.633131ms)
+  ✔ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (5.229342ms)
+  ✔ (c) ready and rejected whose quarantine cleanup is still pending (unresolved, not proven failed) (4.948141ms)
+✔ CT-4.4 (I-9) same-generation sources owned by the S2b job (17.318828ms)
+▶ CT-4.5 frozen v1 handlers over worker-written documents
+  ✔ validating (job running): abandon (v1) (2.051689ms)
+  ✔ validating (job running): finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (0.770661ms)
+  ✔ validating (job running): finalize of another generation -> stale-validating + obligation for that generation; film unchanged (1.186761ms)
+  ✔ validating (recovery-needed): abandon (v1) (3.856545ms)
+  ✔ validating (recovery-needed): finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (5.821056ms)
+  ✔ validating (recovery-needed): finalize of another generation -> stale-validating + obligation for that generation; film unchanged (5.541968ms)
+  ✔ ready: abandon (v1) (3.729584ms)
+  ✔ ready: finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (6.054689ms)
+  ✔ ready with the source still present (worker cleanup pending): same-generation finalize -> duplicate-event, no write (2.299994ms)
+  ✔ ready: finalize of another generation -> stale-ready + obligation for that generation; film unchanged (2.021171ms)
+  ✔ rejected (worker reason): abandon (v1) (1.533778ms)
+  ✔ rejected (worker reason): finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (1.183591ms)
+  ✔ rejected (worker reason) with the source still present (worker cleanup pending): same-generation finalize -> duplicate-event, no write (1.380579ms)
+  ✔ rejected (worker reason): finalize of another generation -> stale-rejected + obligation for that generation; film unchanged (2.135347ms)
+  ✔ abandoned (after worker cancellation): abandon is idempotent, same-generation finalize is object-gone (source deleted), other generation is stale-abandoned, abandon replay returns the stored receipt (2.252638ms)
+  ✔ validating abandon replay: stored receipt byte-identical; only an eligible cleanup attempt (1.965218ms)
+✔ CT-4.5 frozen v1 handlers over worker-written documents (45.058325ms)
+▶ CT-6 double targeting: one delete, then absent; 404/412 distinct
+  ✔ worker deleted the generation; a C1 attempt on it -> absent (404) (2.187442ms)
+  ✔ C1 on a replaced object -> mismatch (412), newer object preserved; the worker records 412 as mismatch too (2.448812ms)
+✔ CT-6 double targeting: one delete, then absent; 404/412 distinct (4.782237ms)
+▶ CT-5 captured worker-written stored documents (server side)
+  ✔ captures are deterministic, r4-valid stored documents and equal the committed files byte-for-byte (FILM_INT_WRITE_CAPTURES=1 rewrites them) (20.196949ms)
+✔ CT-5 captured worker-written stored documents (server side) (20.276601ms)
+ℹ tests 37
+ℹ suites 6
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 439.770925

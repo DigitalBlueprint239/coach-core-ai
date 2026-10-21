@@ -1,0 +1,6 @@
+2026-10-21T21:19:57.5450535Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9912f74b7ae43a421427afd96012cb3ef00b888e:refs/remotes/origin/claude/film-integration
+2026-10-21T21:19:58.5405188Z  * [new ref]         9912f74b7ae43a421427afd96012cb3ef00b888e -> origin/claude/film-integration
+2026-10-21T21:19:58.6650831Z 9912f74b7ae43a421427afd96012cb3ef00b888e
+2026-10-21T21:20:13.3672675Z [36;1mecho "::notice title=Client parity (9912f74b7ae43a421427afd96012cb3ef00b888e)::$(grep -E '^Tests:' client.log | tail -1) exit=$st"[0m
+2026-10-21T21:20:15.4286896Z Tests:       546 passed, 546 total
+2026-10-21T21:20:15.5555135Z ##[notice]Tests:       546 passed, 546 total exit=0

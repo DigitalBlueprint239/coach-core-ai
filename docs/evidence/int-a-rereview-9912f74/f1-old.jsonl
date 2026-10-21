@@ -1,0 +1,8 @@
+{"case":"exhaustion recovery-needed (attempts-exhausted)","listed":{"class":"a","classification":"recovery-needed"}}
+{"case":"holdForRecovery: precondition-changed-mid-run","listed":null}
+{"case":"holdForRecovery: validation-record-invalid","listed":null}
+{"case":"output-ownership-unproven","listed":null}
+{"case":"team-ownership-changed","listed":null}
+{"case":"validation-record-stale","listed":null}
+{"case":"rejection-precondition-failed (exhaustion rejected)","listed":null}
+{"case":"control: running, no recovery","listed":null}

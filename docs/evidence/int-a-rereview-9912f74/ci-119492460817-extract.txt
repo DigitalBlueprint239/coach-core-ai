@@ -1,0 +1,6 @@
+2026-10-21T21:20:12.7277766Z HEAD is now at c807266 Merge 9912f74b7ae43a421427afd96012cb3ef00b888e into 638631b939d60f22030291897d517f607404442d
+2026-10-21T21:20:12.7789655Z [36;1mtest ! -e functions/src/film/worker[0m
+2026-10-21T21:20:12.8465705Z diff --git a/src/features/film-analyzer/__tests__/contracts-v2.test.ts b/src/features/film-analyzer/__tests__/contracts-v2.test.ts
+2026-10-21T21:20:12.8961752Z diff --git a/src/features/film-analyzer/__tests__/film-int-compat.test.ts b/src/features/film-analyzer/__tests__/film-int-compat.test.ts
+2026-10-21T21:20:12.9237230Z diff --git a/src/features/film-analyzer/contracts-v2.ts b/src/features/film-analyzer/contracts-v2.ts
+2026-10-21T21:20:12.9921225Z ##[error]Process completed with exit code 1.

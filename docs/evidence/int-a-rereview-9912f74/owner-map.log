@@ -1,0 +1,48 @@
+{
+  "authoritative": {
+    "A3": "6764af9edd7ab258f55c4eeb19e80a4649b8c86b",
+    "A4": "19cca9848a2ace52f4f56153f6585259b4a76f90",
+    "A5": "da13f834676d778953a403dfad75a7f1cc955ffc",
+    "A7": "638631b939d60f22030291897d517f607404442d"
+  },
+  "counts": {
+    "A4": 22,
+    "A5": 23,
+    "A7": 1311,
+    "allowlisted": 31
+  },
+  "changedAllowlisted": [
+    ".github/workflows/film-integration.yml (vs A7)",
+    "docs/COACH_CORE_SHARED_CONTEXT.md (vs A5)",
+    "docs/film/FILM_INTEGRATION.md (vs A7)",
+    "docs/film/FILM_LFS_RECONCILE.md (vs A7)",
+    "functions/scripts/film-cleanup-admin.js (vs A7)",
+    "functions/scripts/film-int-frozen-check.js (vs A7)",
+    "functions/scripts/film-terms-guard.js (vs A5)",
+    "functions/src/film/reconcile.js (vs A7)",
+    "functions/test/emulator/film-int.emulator.test.js (vs A7)",
+    "functions/test/emulator/film-s2b.emulator.test.js (vs A5)",
+    "functions/test/film-int-compat.test.js (vs A7)",
+    "functions/test/film-int-guard.test.js (vs A7)",
+    "functions/test/film-int-listing.test.js (vs A7)",
+    "functions/test/film-worker-doubles.js (vs A5)",
+    "functions/test/film-worker-review-history.test.js (vs A5)",
+    "functions/test/film-worker-review-r1r4.test.js (vs A5)",
+    "functions/test/film-worker-review-r2b.test.js (vs A5)",
+    "functions/test/film-worker-wiring.test.js (vs A5)",
+    "functions/test/film-worker.test.js (vs A5)",
+    "functions/test/fixtures/film-int-captured/SHA256SUMS.txt (vs A7)",
+    "functions/test/fixtures/film-int-captured/abandoned.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/ready.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/rejected-container-invalid.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/rejected-duration-over-limit.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/rejected-metadata-invalid.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/rejected-processing-limit-exceeded.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/rejected-video-codec-not-allowed.json (vs A7)",
+    "functions/test/fixtures/film-int-captured/validating.json (vs A7)",
+    "functions/test/lfs-reconcile.test.js (vs A7)",
+    "functions/test/worker-pinned/film-worker-pinned.test.js (vs A5)",
+    "src/features/film-analyzer/__tests__/film-int-compat.test.ts (vs A7)"
+  ],
+  "problems": []
+}
