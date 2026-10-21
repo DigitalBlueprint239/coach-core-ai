@@ -1,0 +1,120 @@
+i  emulators: Starting emulators: firestore, storage
+i  emulators: Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node --test --test-concurrency=1 --test-reporter=spec functions/test/emulator/lfs-reconcile.emulator.test.js functions/test/emulator/film-s1-cleanup.emulator.test.js functions/test/emulator/film-s1.emulator.test.js
+(node:1376) MetadataLookupWarning: received unexpected error = All promises were rejected code = ECONNREFUSED, ETIMEDOUT
+(Use `node --trace-warnings ...` to show where the warning was created)
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+▶ T11b batch reachability (Firestore emulator semantics)
+  ✔ more than SWEEP_BATCH_MAX terminal null-due records, plus future and live-leased records, never appear or use up the limit; only due pending records return, in due order (4735.544022ms)
+✔ T11b batch reachability (Firestore emulator semantics) (4736.464461ms)
+▶ PR86 C1-R2 on the emulator: invalid due records are parked
+  ✔ >= SWEEP_BATCH_MAX invalid due records (old bucket binding) cannot starve a valid due record; parked records leave the due range with their evidence intact (748.774709ms)
+✔ PR86 C1-R2 on the emulator: invalid due records are parked (749.026572ms)
+▶ S1 handlers on real transactions (Firestore emulator)
+  ✔ T1: abandon of a validating film deletes the exact generation; op record has no cleanup state; slot released once (315.891083ms)
+  ✔ T2: outage -> pending with the attempt counted; the sweep recovers after the due time (131.217961ms)
+  ✔ T7-0: crash after the obligation commits, before admission -> the initialized record is returned by the real sweep query; first admission is attempt 1 / fence 1 (92.786305ms)
+✔ S1 handlers on real transactions (Firestore emulator) (540.368436ms)
+(node:1396) MetadataLookupWarning: received unexpected error = All promises were rejected code = ECONNREFUSED, ETIMEDOUT
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ FS-01..05 eligibility
+  ✔ FS-01 anonymous -> permission-denied/anonymous-not-allowed, nothing written (45.435369ms)
+  ✔ FS-01b signed out -> unauthenticated/sign-in-required, nothing written (44.714576ms)
+  ✔ FS-02 unverified -> permission-denied/email-not-verified, nothing written (40.040874ms)
+  ✔ FS-03 non-beta -> permission-denied/beta-access-required, nothing written (42.869888ms)
+  ✔ FS-04 disabled -> unauthenticated/account-disabled, nothing written (35.538444ms)
+  ✔ FS-05 non-owner denied; owner succeeds (positive anchor) (77.759438ms)
+✔ FS-01..05 eligibility (3506.86842ms)
+▶ FS-06..09 limits and rights
+  ✔ FS-06 bytes at limit accepted, limit+1 rejected (79.289039ms)
+  ✔ FS-07 wrong content type (69.154887ms)
+  ✔ FS-08 rights not acknowledged / missing (38.080995ms)
+  ✔ FS-09 unknown wording version (35.712872ms)
+✔ FS-06..09 limits and rights (222.649712ms)
+▶ FS-10 team cap
+  ✔ N succeed, N+1 refused, abandon frees a slot (365.058069ms)
+  ✔ concurrent reservations never exceed N (7948.499589ms)
+✔ FS-10 team cap (8313.828536ms)
+▶ FS-11 idempotency
+  ✔ same operationId replays verbatim; different payload conflicts (180.771973ms)
+  ✔ concurrent duplicates create one film (3192.110777ms)
+  ✔ errors are not stored: cap refusal retried after a slot frees (308.378893ms)
+✔ FS-11 idempotency (3681.609857ms)
+▶ C3 retry horizon, receipts and file names
+  ✔ replay is a receipt snapshot, not current permission (240.717708ms)
+  ✔ after the replay window the same operation is refused, never re-run (72.75ms)
+  ✔ file name stored canonical; equivalent spellings are one operation (48.765959ms)
+✔ C3 retry horizon, receipts and file names (362.503826ms)
+▶ FS-19..22 finalize and abandon
+  ✔ FS-19 size mismatch and spoofed signature -> rejected, deleted (139.033313ms)
+  ✔ FS-19b content type mismatch -> rejected (98.602106ms)
+  ✔ FS-20 valid header -> validating, generation recorded, never ready (83.875018ms)
+  ✔ FS-21 abandon from reserved and validating; repeat is stable (155.153823ms)
+  ✔ FS-21b abandon edge cases (150.434922ms)
+  ✔ FS-22 abandon then late finalize -> deleted, stays abandoned (99.201497ms)
+  ✔ unreserved quarantine object is deleted; other prefixes ignored (75.778268ms)
+✔ FS-19..22 finalize and abandon (802.862079ms)
+▶ R1-R5 backend repairs
+  ✔ R1 switch off: callables throw sanitized internal, nothing written (33.265976ms)
+  ✔ R2 abandon from reserved never deletes an unprocessed object; its late event deletes that exact generation (82.166351ms)
+  ✔ R2 stale cleanup leaves a newer generation alone (GCS semantics) (82.731249ms)
+  ✔ emulator limitation recorded: Storage emulator ignores generations (46.419868ms)
+  ✔ R3 transient head-read error: throws, film stays reserved, object kept (56.931698ms)
+  ✔ R3 generation gone before the event: reservation untouched (46.323705ms)
+  ✔ R4 ftyp box with 16 compatible brands (80 bytes) is accepted (68.271981ms)
+  ✔ R5 orphan lapsed ledger slot is dropped; reserve still succeeds (54.239676ms)
+✔ R1-R5 backend repairs (471.009624ms)
+▶ FS-23 expiry
+  ✔ late finalize after expiry -> expired, deleted, slot released (77.699669ms)
+  ✔ lazy expiry on the next reserve frees the slot (62.966628ms)
+✔ FS-23 expiry (140.899482ms)
+▶ stored document == returned FilmState
+  ✔ doc fields match FilmState with Timestamps (48.064115ms)
+✔ stored document == returned FilmState (48.253838ms)
+▶ LFS reconciler on the Firestore emulator (bounded client)
+  ✔ L1: configuration-lost finalize, live reservation -> recovered intake; lease released; transactions counted (349.199333ms)
+  ✔ L1/L2: after lazy expiry -> stale-expired obligation -> deleted (128.009239ms)
+  ✔ L7/L18: per-object checkpoint across invocations and bound evidence documents on the real emulator (186.742891ms)
+  ✖ L10: concurrent reconcilers on real transactions: both end bounded (no throw); one holder; exactly one decision and one delete; a later run completes the pass (2064.391966ms)
+✖ LFS reconciler on the Firestore emulator (bounded client) (2730.730748ms)
+▶ L11 operator CLI on the emulator
+  ✔ list-parked, refused unpark while still invalid, then unpark under the right bucket; audit written (16380.992848ms)
+✔ L11 operator CLI on the emulator (16381.25349ms)
+ℹ tests 46
+ℹ suites 14
+ℹ pass 45
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43857.087961
+
+✖ failing tests:
+
+test at functions/test/emulator/lfs-reconcile.emulator.test.js:148:3
+✖ L10: concurrent reconcilers on real transactions: both end bounded (no throw); one holder; exactly one decision and one delete; a later run completes the pass (2064.391966ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/coach-core-lfs-review/functions/test/emulator/lfs-reconcile.emulator.test.js:164:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "node --test --test-concurrency=1 --test-reporter=spec functions/test/emulator/lfs-reconcile.emulator.test.js functions/test/emulator/film-s1-cleanup.emulator.test.js functions/test/emulator/film-s1.emulator.test.js" exited with code 1

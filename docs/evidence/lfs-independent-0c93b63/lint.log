@@ -1,0 +1,5 @@
+
+> lint
+> eslint index.js src test scripts
+
+exit=0

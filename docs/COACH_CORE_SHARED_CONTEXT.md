@@ -166,3 +166,16 @@ Isolated codex/n2-team-creation-reliability, draft #71, source bdb06ae6d39ff9ed3
 Baseline453/453,TS0,buildPASS; final477/477,TS0,production/emulator buildsPASS with inherited warnings. Owned pre-repair modal regression5FAIL/5; initial fixture failures retained; corrected listener testsPASS. Real focused emulator browser8/8 (Chromium156.0.8078.4/Firefox157.0, retries0/skips0). Clean install, dependencies unchanged/full graph98 findings. docs/N2_TEAM_CREATION_HANDOFF.md and docs/evidence/n2-team-creation contain commands, failures, results, hashes, limits and rollback. This is implementation evidence, not Claude independent acceptance.
 
 Claude next: independently fault the new REST path and run existing full coaching/identity matrix on a separate candidate; original Write-channel diagnostics alone do not test the new transport. Historical H2/FX02/N3/import residual/R3/R4/touch/missing initial ZIP/PNG preserved; staging/physical/hidden tabs NOT MEASURED. D1–D9 directions settled with exact approval provenance still missing per CC007; no film/AI activation. MVP NO-GO, BDN-AEO-001 queued; no merge/deploy/spend/live changes/deletion.
+
+## 2026-10-21 — independent LFS-A review at0c93b63: FAIL, no activation
+
+Current direct LFS-A authorization and existing6303891279 record recognized;
+builder delivered PR87 before Codex review. Focused233/0/0, rules6/0/0, lint0;
+local affected emulator45/1/0 (L10 expecteddelete1/actual0) retained alongside
+CI46/0. Independent probes reproduce short-page starvation and wrong-bucket
+receipt/delete; admission60s under-reserves derived903s envelope. Supplementary
+controlled HTTPS default-origin proof5/5 closes local mechanism gap, not durable
+CI regression. No frozen code edited. docs/evidence/lfs-independent-0c93b63 has
+source pins, executable probes, failures and final hashes. Builder corrections
+and both independent verdicts required; milestone open, C1-D1/I-9/I-10 separate.
+No merge/deploy/live changes/spending/AI; MVP NO-GO.

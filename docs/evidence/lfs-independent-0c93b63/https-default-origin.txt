@@ -1,0 +1,119 @@
+native-fetch cause undefined
+native-fetch cause undefined
+native-fetch cause undefined
+[
+  {
+    "kind": "list",
+    "code": "deadline",
+    "elapsedMs": 304,
+    "serverCloseMs": 288,
+    "requests": 1,
+    "originalURL": "https://storage.googleapis.com/storage/v1/b/demo-lfs-gate.appspot.com/o?prefix=quarantine%2F&maxResults=5",
+    "host": "storage.googleapis.com",
+    "requestedConnections": [
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      },
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      }
+    ],
+    "TLSAuthorized": true
+  },
+  {
+    "kind": "head",
+    "code": "deadline",
+    "elapsedMs": 301,
+    "serverCloseMs": 295,
+    "requests": 1,
+    "originalURL": "https://storage.googleapis.com/storage/v1/b/demo-lfs-gate.appspot.com/o/quarantine%2Fteam-a%2F00000000-0000-4000-8000-000000000001%2Fsource.mp4?alt=media&generation=17609000000000000001",
+    "host": "storage.googleapis.com",
+    "range": "bytes=0-1023",
+    "requestedConnections": [
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      },
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      }
+    ],
+    "TLSAuthorized": true
+  },
+  {
+    "kind": "delete",
+    "code": "deadline",
+    "elapsedMs": 301,
+    "serverCloseMs": 297,
+    "requests": 1,
+    "originalURL": "https://storage.googleapis.com/storage/v1/b/demo-lfs-gate.appspot.com/o/quarantine%2Fteam-a%2F00000000-0000-4000-8000-000000000001%2Fsource.mp4?ifGenerationMatch=17609000000000000001",
+    "host": "storage.googleapis.com",
+    "requestedConnections": [
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      },
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      }
+    ],
+    "TLSAuthorized": true
+  },
+  {
+    "kind": "trickle",
+    "code": "deadline",
+    "elapsedMs": 308,
+    "serverCloseMs": 304,
+    "requests": 1,
+    "originalURL": "https://storage.googleapis.com/storage/v1/b/demo-lfs-gate.appspot.com/o/quarantine%2Fteam-a%2F00000000-0000-4000-8000-000000000001%2Fsource.mp4?alt=media&generation=17609000000000000001",
+    "host": "storage.googleapis.com",
+    "range": "bytes=0-1023",
+    "requestedConnections": [
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      },
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      }
+    ],
+    "TLSAuthorized": true
+  },
+  {
+    "kind": "oversize",
+    "code": "body-over-cap",
+    "elapsedMs": 8,
+    "serverCloseMs": 4,
+    "requests": 1,
+    "originalURL": "https://storage.googleapis.com/storage/v1/b/demo-lfs-gate.appspot.com/o/quarantine%2Fteam-a%2F00000000-0000-4000-8000-000000000001%2Fsource.mp4?alt=media&generation=17609000000000000001",
+    "host": "storage.googleapis.com",
+    "range": "bytes=0-1023",
+    "requestedConnections": [
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      },
+      {
+        "hostname": "storage.googleapis.com",
+        "port": "",
+        "protocol": "https:"
+      }
+    ],
+    "TLSAuthorized": true
+  }
+]
+PASS 5/5 default-origin native-fetch controlled TLS probes

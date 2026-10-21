@@ -1,0 +1,18 @@
+{
+  "candidate": "0c93b63ca47d9cdcd23e7e712714047193f73557",
+  "base": "7f3b757b1e260105ac85f825bdbbfcbdb4110ae6",
+  "node": "24.19.0",
+  "project": "demo-coach-core-beta",
+  "focused": "node --test --test-reporter=spec test/lfs-reconcile.test.js test/lfs-reconcile-loopback.test.js test/lfs-boundary.test.js test/lfs-gate-storage.test.js test/lfs-gate-firestore.test.js test/lfs-gate-firestore-prod.test.js test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js test/film-s1.test.js",
+  "focusedCwd": "functions",
+  "emulator": "firebase emulators:exec --project demo-coach-core-beta --only firestore,storage \"node --test --test-concurrency=1 --test-reporter=spec functions/test/emulator/lfs-reconcile.emulator.test.js functions/test/emulator/film-s1-cleanup.emulator.test.js functions/test/emulator/film-s1.emulator.test.js\"",
+  "rules": "firebase emulators:exec --project demo-coach-core-beta --only firestore \"node --test --test-concurrency=1 --test-reporter=spec tests/rules/film-reconcile.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs\"",
+  "processProxyRemoval": [
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "http_proxy",
+    "https_proxy",
+    "NO_PROXY",
+    "no_proxy"
+  ]
+}
