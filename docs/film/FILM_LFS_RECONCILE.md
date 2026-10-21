@@ -90,7 +90,7 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
 - every sent attempt is server-observed and cut within deadline + slack;
 - an attempt whose deadline expired before a connection was picked (`DEADLINE_EXCEEDED … Waiting for LB pick`, no `remote_addr`) was never sent, so the server can't see it.
 
-Merge run 39581464447 observed 14 of 15 server-side for exactly this reason. It was reproduced locally under CPU load (client 15, server 14, 4 of 4 runs) and is not an extra or missing retry layer. Commit tests first establish the channel with one answered read, so the precondition read can't time out on connection setup.
+Merge run 39581464447 observed 14 of 15 server-side. The historical log alone does not prove that run's exact cause. A deterministic reproduction (slow first TLS connection; and under CPU load, client 15 / server 14 in 4 of 4 runs) establishes a sufficient mechanism consistent with it: an attempt that expired before a connection was picked was never sent. No count above 15 was ever observed, so this is not evidence of an uncounted retry layer. Commit tests first establish the channel with one answered read, so the precondition read can't time out on connection setup.
 
 | Suite | Count | What it proves |
 |---|---|---|
@@ -133,7 +133,7 @@ Merge run 39581464447 observed 14 of 15 server-side for exactly this reason. It 
 - **Authority:** the lease covers discovery, checkpoint, evidence and errors only. An already-started stale re-drive finishes as a duplicate delivery and never writes reconciliation state.
 - **Evidence:** `filmReconcile/quarantine/evidence/{sha256(project\nbucket\npolicy\nname\ngeneration)}`, a fixed field set. A repeat updates `count`, `lastAtMs` and `lastPassId`. There is no per-pass cap, and aggregate cardinality is **not globally bounded** (operator retention is C1-D1).
 - **Fail closed:** listing metadata is refused with evidence when the name is non-canonical, the generation is not a decimal string, the size is not a decimal in `1..maxBytes`, the content type is missing or unsupported, or `timeCreated` is invalid or too far in the future.
-- **Film validation:** the frozen v1 `FilmState` plus identity, expiry and generation checks. It runs as a pre-read **and** at every transactional read of a film document, retries included (`createDbFacade`). An ambiguous document produces evidence and no decision.
+- **Film validation:** identity, path, upload-path, status, expiry and recorded-generation checks, then the **whole stored document** is validated with the agreed r4 stored-document reader (`contract-v2` `filmDocument`, strict; absent r4 keys only where r4 permits), with the S2b worker's timestamp conversion (FILM-INT-A D4, I-10; baseline in `FILM_INTEGRATION.md`). It runs as a pre-read **and** at every transactional read of a film document, retries included (`createDbFacade`). An ambiguous document produces evidence and no decision.
 - **Coverage:** with a finite, quiescent N and at least one completed object per progress-making invocation, a pass needs at most N such invocations plus the pass-end listing. There is no bound under persistent failures, repeated lease loss or unlimited arrivals.
 
 ## 4. Cost (per invocation; constants are TEST placeholders)
@@ -190,7 +190,7 @@ N is **not** bounded by the 20-film active cap, because orphans accumulate acros
 | `lfs-reconcile.test.js` | 73 | L1–L8, L10, L14, L16–L19, plus PR87 F1–F4, UTF-8 order, R-1/N-1 (repeated, cycling, fresh and 3/5 advancing empty pages) and R-2 regressions |
 | `lfs-reconcile-loopback.test.js` | 7 | L9 and L15 at reconciler level, real-facade pagination, UTF-8 order with tokens and partial budgets |
 | `lfs-boundary.test.js` | 15 | L11, L12 |
-| `lfs-gate-*` | 49 | L9, L15, L16 transport proofs |
+| `lfs-gate-*` | 50 | L9, L15, L16 transport proofs |
 | `emulator/lfs-reconcile.emulator.test.js` | 5 | L13: real Firestore emulator with the bounded client; operator CLI |
 | `tests/rules/film-reconcile.rules.test.mjs` | 3 | additive denies |
 

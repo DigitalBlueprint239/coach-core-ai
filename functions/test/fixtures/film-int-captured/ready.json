@@ -1,0 +1,37 @@
+{
+  "schema": "film-int-capture.v1",
+  "kind": "stored-film-document",
+  "source": "CT-4.1 worker ready",
+  "projection": "contract-v2 FILM_TIMESTAMP_FIELDS -> toWireTimestamp",
+  "document": {
+    "abandonedAt": null,
+    "createdAt": "2026-10-21T16:00:00.000Z",
+    "createdBy": "uid-owner",
+    "declaredBytes": 32,
+    "declaredContentType": "video/mp4",
+    "fileName": "clip.mp4",
+    "filmId": "00000000-0000-4000-8000-000000000001",
+    "media": {
+      "bytes": 23,
+      "durationMs": 2000,
+      "width": 160,
+      "height": 90,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "frameRateMode": "cfr",
+      "sha256": "b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825"
+    },
+    "normalizedGeneration": "1002",
+    "objectGeneration": "1001",
+    "readyAt": "2026-10-21T16:00:00.000Z",
+    "rejectionReason": null,
+    "reservationExpiresAt": "2026-10-21T17:00:00.000Z",
+    "retentionExpiresAt": null,
+    "rightsAcknowledgedAt": "2026-10-21T16:00:00.000Z",
+    "rightsWordingVersion": "rights-v1",
+    "status": "ready",
+    "statusChangedAt": "2026-10-21T16:00:00.000Z",
+    "teamId": "team-int-a",
+    "uploadPath": "quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4"
+  }
+}

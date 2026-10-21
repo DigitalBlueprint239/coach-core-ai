@@ -244,7 +244,14 @@ describe("L4 no false deletion or decision", () => {
         const b = await w.reserve();
         const eb = await w.lostUpload(b);
         assert.equal(await w.s1.onQuarantineFinalized(eb), "validating");
-        w.db.write(w.filmPath(b), {...w.film(b), status: "ready"});
+        // an r4-valid `ready` (R5/R6: readyAt = statusChangedAt, output
+        // generation and media present), as the S2b worker writes it
+        const fb = w.film(b);
+        w.db.write(w.filmPath(b), {...fb, status: "ready",
+          readyAt: fb.statusChangedAt, normalizedGeneration: "7",
+          media: {bytes: 32, durationMs: 2000, width: 160, height: 90,
+            videoCodec: "h264", audioCodec: null, frameRateMode: "cfr",
+            sha256: "a".repeat(64)}, retentionExpiresAt: null});
         w.advance(16 * MIN);
         const out = await w.run();
         assert.deepEqual(out.outcomes, {"duplicate-event": 2});

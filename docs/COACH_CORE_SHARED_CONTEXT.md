@@ -1,5 +1,9 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-21 / FILM-INT-A (Claude builder `session_018Dkini…`; owner c-6319267600, r3.2 c-6321403255, r3.3 c-6325123431): TEST_ONLY composition on `claude/film-integration` of S2b A5 `da13f834` and the r4 client A4 `19cca98` onto LFS A7 `638631b`.
+> - D1 guard union (worker block first); D3 S2b test wiring (8 paths, no assertion change); D4 reconciler validates stored films with the r4 reader (test-first: A7 accepted 9 corrupted `ready` and refused a valid worker `rejected`); r3.3 one r4-valid fixture; D5 read-only `list-s2b-recovery`; CT-1..CT-8 tests; captures; `film-integration.yml`.
+> - Two STOPs and one CT-4.5 table correction disclosed on #39. Worker I-4 stays open. Next: Codex D8 on the server SHA S, then one final candidate C for both verdicts. Details: `docs/film/FILM_INTEGRATION.md`. MVP NO-GO.
+
 > 2026-10-21 / LFS PR87 third repair (Claude implementer): reviewer FAIL c-6313674964 (N-1, N-2) addressed; targets c-6313885917. Codex PASS c-6313557232 at `e7fdff3` stays on record.
 > - **N-1:** runs of empty pages with advancing tokens are followed, with a durable `list-stalled` warning from 3 onwards. Only a repeated token (request token or one within the stall run) falls back to the name cursor.
 > - **N-2:** the 14 vs 15 Firestore gate failure was one attempt timed out before its TLS connection existed (never sent); reproduced under load. Bounds are now asserted on client-side attempts, reconciled with the server log; Commit tests warm the channel.
