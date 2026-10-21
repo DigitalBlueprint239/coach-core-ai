@@ -1,0 +1,145 @@
+name: Film LFS reconciler (test-only)
+
+# LOST-FINALIZE-SOURCE (LFS-A, #39 c-6303891279; scope c-6303623216).
+# Runs ONLY the LFS suites and the affected S1/C1 suites, synthetic only:
+#   1. frozen surfaces: byte-unchanged vs the PASSed C1 head 7f3b757 and the
+#      r4 base 6764af9 (git diff --exit-code),
+#   2. focused unit suites incl. the transport STOP-gate proofs on the pinned
+#      real SDKs over loopback (lfs-gate-*), plus lint,
+#   3. Firestore emulator: reconciler on the bounded client + operator CLI,
+#      the accepted C1 emulator suite, additive rules deny tests.
+# Never deploys, never reads secrets, never touches a real project or bucket,
+# never exports/schedules/activates the sweep or the reconciler, never AI.
+
+on:
+  pull_request:
+    paths:
+      - 'functions/src/film/reconcile.js'
+      - 'functions/src/film/lfs-transport.js'
+      - 'functions/scripts/film-cleanup-admin.js'
+      - 'functions/scripts/film-terms-guard.js'
+      - 'functions/test/lfs-*'
+      - 'functions/test/emulator/lfs-*'
+      - 'tests/rules/film-reconcile.rules.test.mjs'
+      - '.github/workflows/film-lfs-reconcile.yml'
+  push:
+    branches: [claude/film-lfs-reconcile]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: film-lfs-reconcile-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  C1_HEAD: 7f3b757b1e260105ac85f825bdbbfcbdb4110ae6
+  R4_BASE: 6764af9edd7ab258f55c4eeb19e80a4649b8c86b
+
+jobs:
+  frozen:
+    name: Frozen surfaces unchanged (vs 7f3b757 and 6764af9)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: git diff --exit-code
+        run: |
+          set -euo pipefail
+          git cat-file -e "$C1_HEAD^{commit}"; git cat-file -e "$R4_BASE^{commit}"
+          git diff --exit-code "$C1_HEAD" -- \
+            functions/src/film/handlers.js functions/src/film/cleanup.js \
+            functions/src/film/storage-adapter.js functions/index.js \
+            functions/test/film-s1-cleanup.test.js \
+            functions/test/film-s1-cleanup-review-r1r2.test.js \
+            functions/test/film-cleanup-doubles.js \
+            functions/test/emulator/film-s1-cleanup.emulator.test.js \
+            functions/test/emulator/film-s1.emulator.test.js \
+            functions/test/film-s1.test.js \
+            .github/workflows/film-s1-c1-cleanup.yml
+          git diff --exit-code "$R4_BASE" -- \
+            functions/src/film/contract.js functions/src/film/contract-v2.js \
+            functions/src/film/legacy-r3.js functions/src/film/limits.js \
+            functions/src/film/terms.js tests/fixtures/coach-film.v1 \
+            tests/fixtures/coach-film.v2 src/features/film-analyzer \
+            firestore.rules storage.rules firebase.json firestore.indexes.json \
+            tools/ffmpeg package-lock.json functions/package-lock.json \
+            tests/rules/package-lock.json functions/package.json \
+            tests/rules/package.json .github/scripts \
+            .github/workflows/security-rules.yml .github/workflows/e2e-emulator.yml
+          test ! -e functions/src/film/worker
+          changed=$(git diff --name-only "$C1_HEAD" HEAD | tr '\n' ' ')
+          echo "::notice title=LFS frozen check (${{ github.sha }})::frozen paths byte-unchanged; changed since 7f3b757: $changed"
+
+  focused:
+    name: Focused LFS + affected S1/C1 unit suites (incl. transport gate) + lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GCLOUD_PROJECT: demo-coach-core-beta
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+      - run: npm ci --prefix functions --no-audit --no-fund
+      - run: npm --prefix functions run lint
+      - name: LFS + C1 + S1 unit suites
+        env:
+          ANNOTATE_LABEL: 'LFS focused'
+        working-directory: functions
+        run: >-
+          node --test --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=../.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          test/lfs-reconcile.test.js test/lfs-reconcile-loopback.test.js test/lfs-boundary.test.js
+          test/lfs-gate-storage.test.js test/lfs-gate-firestore.test.js
+          test/lfs-gate-firestore-prod.test.js
+          test/film-s1-cleanup.test.js test/film-s1-cleanup-review-r1r2.test.js
+          test/film-s1.test.js
+
+  emulator:
+    name: Firestore emulator (LFS + affected C1/S1) + rules deny
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            functions/package-lock.json
+            tests/rules/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install dependencies
+        run: |
+          npm ci --prefix functions --no-audit --no-fund
+          npm ci --prefix tests/rules --no-audit --no-fund
+      - name: LFS + C1 + S1 emulator suites
+        env:
+          ANNOTATE_LABEL: 'LFS emulator'
+        run: >-
+          npx --prefix tests/rules firebase emulators:exec
+          --project demo-coach-core-beta --only firestore,storage
+          "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          functions/test/emulator/lfs-reconcile.emulator.test.js
+          functions/test/emulator/film-s1-cleanup.emulator.test.js
+          functions/test/emulator/film-s1.emulator.test.js"
+      - name: Additive rules deny tests (rules unchanged)
+        env:
+          ANNOTATE_LABEL: 'LFS rules deny'
+        run: >-
+          npx --prefix tests/rules firebase emulators:exec
+          --project demo-coach-core-beta --only firestore
+          "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
+          tests/rules/film-reconcile.rules.test.mjs tests/rules/film-cleanup.rules.test.mjs"

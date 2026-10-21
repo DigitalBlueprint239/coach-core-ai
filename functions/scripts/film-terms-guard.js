@@ -40,6 +40,13 @@ const {TERMS, pendingTerms} = require(
   if (/defineCleanupSweepTrigger|retryPendingFilmCleanups/.test(src)) {
     block("referenced by functions/index.js");
   }
+  // LFS-A: the quarantine reconciler and the emulator-only operator tool are
+  // TEST_ONLY too (same loaded-exports marker check below).
+  const lfs = new RegExp(["defineReconcileTrigger", "reconcileQuarantine",
+    "createQuarantineReconciler", "film-cleanup-admin"].join("|"));
+  if (lfs.test(src)) {
+    block("LFS reconciler/operator referenced by functions/index.js");
+  }
   const probe = spawnSync(process.execPath, ["-e",
     "const {testOnlyExportProblem}=require('./src/film/cleanup');" +
     "const p=testOnlyExportProblem(require('./index.js'));" +

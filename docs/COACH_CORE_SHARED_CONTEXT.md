@@ -1,5 +1,11 @@
 # Coach Core AI — Shared Recovery Context
 
+> 2026-10-20 / LOST-FINALIZE-SOURCE (LFS-A, #39 c-6303891279; Claude implementer `session_018Dkini…`): TEST_ONLY reconciler on `claude/film-lfs-reconcile` from the PASSed C1 head `7f3b757`.
+> - **Gate #1 passed without frozen changes.** A bounded transport boundary (`lfs-transport.js`) is proven on the pinned real SDKs over loopback. Storage uses facade-owned aborts with the server observing the socket close. Firestore uses gRPC deadlines, with every SDK retry layer counted and the envelope derived from them.
+> - The reconciler re-drives lost finalizes through the unchanged S1 decision, using a fenced, name-keyed cursor, bound evidence, and film validation at every transactional read. The operator tool is emulator-only (CAS unpark plus audit).
+> - Changed: new `reconcile.js`, `lfs-transport.js`, `film-cleanup-admin.js`; an additive predeploy-guard block; new tests, rules-deny test, workflow and `docs/film/FILM_LFS_RECONCILE.md`. `handlers.js`, `cleanup.js`, `storage-adapter.js`, `index.js` and the PR86 tests are byte-unchanged.
+> - Next: Codex and independent-reviewer verdicts. C1-D1 (activation, constants, bucket checks, alerting) and I-6/I-9/I-10 stay open before real footage. MVP NO-GO.
+
 > 2026-10-20 / FILM-S1-C1 PR86 review repair (Claude, implementer): Codex FAIL c-6301421976 and independent-reviewer FAIL c-6301621806 repaired under C1-A.
 > - **C1-R1:** every target refusal now aborts the deciding transaction, so no cleanup-owing decision commits without its record. Abandon returns retryable unavailable; finalize throws before reading, and events for another bucket are ignored.
 > - **C1-R2:** invalid records are parked out of the due range with their evidence kept; a configuration outage parks nothing.
