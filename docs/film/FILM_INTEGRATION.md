@@ -143,6 +143,8 @@ Every assertion and test name is unchanged. The expected `duplicate-event: 2`, n
 
 **Re-review at `9912f74`:** Codex FAIL c-6327070348 (residual R88-2: the class-helper compared object names only; Codex's injected source-byte mutation passed 37/0). R88-1 and F-1 were confirmed closed. **Repair:** the helper now compares every object's generation, content sha256 and metadata, and records every `deleteGeneration` invocation, failed ones included; it asserts zero. **Proof:** an injected source-byte mutation (name and generation kept) and a stray failed delete attempt each fail all four I-9 class tests (a)–(d).
 
+**Independent re-review at `9912f74`:** FAIL c-6327104671, finding **F-1b** (a regression from the F-1 wording). Class (a) dropped a same-generation `validating` job with `exhaustion.outcome === "recovery-needed"` and **no** `recovery` mark. **Reachable in A5:** `endAttempt` → `maybeExhaust` marks `attempts-exhausted` only while `ctx.ownerOk`, so an ownership change after the final step-boundary renewal exhausts the job unmarked. **Repair:** class (a) = any active `job.recovery` **or** exhaustion `recovery-needed`; the unmarked case is reported as `exhaustion: recovery-needed (unmarked)`. **Tests:** seeded, a **real-worker reproduction** (ownership changed after the third pipeline returns), the emulator seed, and a control (exhaustion `rejected` not listed). The F-1b tests fail on `9912f74`'s classifier.
+
 ## 6. Test realism and limits
 - The worker runs by **direct invocation** (`processFilm`/`redrive`) with an injected enabled switch. No trigger delivery is claimed.
 - Generations, preconditions and listing come from doubles: the Storage emulator ignores generations, and no real-GCS semantics are established.

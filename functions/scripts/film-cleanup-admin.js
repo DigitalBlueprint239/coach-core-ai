@@ -145,7 +145,11 @@ const S2B_STATUSES = ["validating", "ready", "rejected"];
  *      validation-record-stale, output-ownership-unproven,
  *      team-ownership-changed); the reason is reported. A resolved mark
  *      (`resolvedRecovery` with `recovery` cleared) is not active
- *      (PR88 F-1, #39 c-6326638892).
+ *      (PR88 F-1, #39 c-6326638892); OR an exhausted job with
+ *      `exhaustion.outcome === "recovery-needed"` but NO recovery mark
+ *      (A5 marks attempts-exhausted only while team ownership holds;
+ *      reported "exhaustion: recovery-needed (unmarked)"; PR88 F-1b,
+ *      c-6327104671).
  *   b  ready / worker-reason rejected, quarantine cleanup `mismatch` (412)
  *   c  ready / worker-reason rejected, quarantine cleanup `pending`
  *      ("unresolved (not proven failed)")
@@ -223,12 +227,19 @@ async function listS2bRecovery(db, o = {}) {
  */
 function s2bClass(d, j, g) {
   if (d.status === "validating") {
-    if (!j || !j.recovery) return null; // running, idle or resolved
+    const exhausted = !!(j && j.exhaustion &&
+      j.exhaustion.outcome === "recovery-needed");
+    if (!j || (!j.recovery && !exhausted)) return null; // running/resolved
+    const exhaustion = j.exhaustion && j.exhaustion.outcome ?
+      String(j.exhaustion.outcome).slice(0, 32) : null;
+    if (!j.recovery) {
+      return {class: "a", classification:
+        "exhaustion: recovery-needed (unmarked)", recoveryReason: null,
+      exhaustion};
+    }
     const reason = String(j.recovery.reason || "unspecified").slice(0, 64);
     return {class: "a", classification: `recovery: ${reason}`,
-      recoveryReason: reason,
-      exhaustion: j.exhaustion && j.exhaustion.outcome ?
-        String(j.exhaustion.outcome).slice(0, 32) : null};
+      recoveryReason: reason, exhaustion};
   }
   if (d.status === "rejected" &&
       !c2.WORKER_REJECTION_REASONS.includes(d.rejectionReason)) {

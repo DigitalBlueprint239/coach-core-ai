@@ -232,6 +232,10 @@ describe("D5 class (a): every A5 recovery reason; controls (F-1)", () => {
         recovery: {reason, evidence: {}, atMs: 1}, exhaustion,
         resolvedRecovery: null});
     });
+    // F-1b (c-6327104671): exhausted recovery-needed WITHOUT a mark
+    seed(m, "tr", "u-unmarked", {status: "validating"}, {recovery: null,
+      exhaustion: {outcome: "recovery-needed", reason: "x", atMs: 1},
+      resolvedRecovery: null});
     // controls
     seed(m, "tr", "x-running", {status: "validating"}, {recovery: null,
       exhaustion: null, lease: {holder: "h", fence: 1, untilMs: 9}});
@@ -246,13 +250,21 @@ describe("D5 class (a): every A5 recovery reason; controls (F-1)", () => {
     // a non-validating film with a recovery mark is not class (a)
     seed(m, "tr", "x-abandoned", {status: "abandoned"},
         {recovery: {reason: "precondition-changed-mid-run"}});
+    // an exhausted job whose outcome is NOT recovery-needed is not (a)
+    seed(m, "tr", "x-exh-rejected", {status: "validating"}, {recovery: null,
+      exhaustion: {outcome: "rejected"}});
     const db = new QueryFake(m);
     const out = await list(db, {teams: 5, films: 50});
-    assert.deepEqual(out.items.map((i) => [i.film, i.class, i.recoveryReason,
+    const marked = out.items.filter((i) => i.film.startsWith("r"));
+    assert.deepEqual(marked.map((i) => [i.film, i.class, i.recoveryReason,
       i.classification]), RECOVERY_REASONS.map(([reason], i) =>
       [`r${i}`, "a", reason, `recovery: ${reason}`]));
-    assert.deepEqual(out.items.map((i) => i.exhaustion),
+    assert.deepEqual(marked.map((i) => i.exhaustion),
         RECOVERY_REASONS.map(([, e]) => (e ? e.outcome : null)));
+    assert.deepEqual(out.items.filter((i) => !i.film.startsWith("r"))
+        .map((i) => [i.film, i.class, i.recoveryReason, i.classification,
+          i.exhaustion]), [["u-unmarked", "a", null,
+      "exhaustion: recovery-needed (unmarked)", "recovery-needed"]]);
     assert.equal(db.writes, 0);
   });
 });
@@ -279,7 +291,7 @@ describe("D5 class (a) over real worker-written recovery marks", () => {
    * @param {Array} script
    * @return {Promise<object>}
    */
-  async function film(script = []) {
+  async function film(script = [], after = null) {
     const db = new FakeFirestore();
     const objects = new FakeObjects();
     const now = () => new Date("2026-10-21T16:00:00.000Z");
@@ -288,8 +300,18 @@ describe("D5 class (a) over real worker-written recovery marks", () => {
     const s1 = createFilmHandlers({db, Timestamp: FakeTimestamp,
       getUser: async () => ({uid: OWNER, disabled: false,
         customClaims: {beta: true}}), ...objects.s1(), logger, now});
+    const base = scriptedPipeline(script);
+    let runs = 0;
+    // optional hook AFTER a pipeline returns (past the last step-boundary
+    // renewal, before the attempt's end/exhaustion transaction)
+    const runPipeline = async (x) => {
+      const r = await base(x);
+      runs += 1;
+      if (after) await after(runs, db);
+      return r;
+    };
     const worker = createFilmWorker({db, Timestamp: FakeTimestamp, objects,
-      decoder: fakeDecoder(), runPipeline: scriptedPipeline(script),
+      decoder: fakeDecoder(), runPipeline,
       isEnabled: () => true, now, logger, limits: WORKER_LIMITS});
     const r = await s1.reserveFilmUpload({auth, data: {
       schemaVersion: v1.CONTRACT_VERSION, operationId: crypto.randomUUID(),
@@ -336,6 +358,23 @@ describe("D5 class (a) over real worker-written recovery marks", () => {
       await w.worker.processFilm({teamId: TEAM, filmId: w.filmId});
       return w;
     },
+    "exhaustion: recovery-needed (unmarked)": async () => {
+      // F-1b: ownership changes during the final attempt, so A5 exhausts
+      // the job without the attempts-exhausted mark (marked only while the
+      // owner check holds); platform retry is off, so nothing re-admits
+      // ownership changes after the third pipeline returns: endAttempt's
+      // maybeExhaust (A5 worker.js) then sees ownerOk false
+      const w = await film(["crash", "infrastructure", "crash"],
+          async (n, db) => {
+            if (n === 3) {
+              db.write(`teams/${TEAM}`, {ownerId: "someone-else", name: "R"});
+            }
+          });
+      for (let i = 0; i < 3; i++) {
+        await w.worker.redrive({teamId: TEAM, filmId: w.filmId});
+      }
+      return w;
+    },
     "ready-precondition-failed": async () => {
       const w = await film();
       const orig = w.objects.createOnly.bind(w.objects);
@@ -354,8 +393,16 @@ describe("D5 class (a) over real worker-written recovery marks", () => {
           const w = await make();
           const job = w.db.read(`teams/${TEAM}/films/${w.filmId}/` +
             `workerJobs/${w.jobId}`);
-          assert.equal(job.recovery.reason, reason);
           const items = await listOf(w);
+          if (reason.startsWith("exhaustion:")) {
+            assert.equal(job.recovery, null, JSON.stringify(job.exhaustion));
+            assert.equal(job.exhaustion.outcome, "recovery-needed");
+            assert.deepEqual(items.map((i) => [i.film, i.class,
+              i.recoveryReason, i.classification]),
+            [[w.filmId, "a", null, reason]]);
+            return;
+          }
+          assert.equal(job.recovery.reason, reason);
           assert.deepEqual(items.map((i) => [i.film, i.class,
             i.recoveryReason]), [[w.filmId, "a", reason]]);
         });
