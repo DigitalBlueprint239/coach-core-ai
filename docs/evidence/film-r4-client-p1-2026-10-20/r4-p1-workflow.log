@@ -1,0 +1,1 @@
+PASS: YAML parses; seven additive path filters; both suites run; exits preserved; permissions/concurrency/runner/timeout/install/typecheck/artifact settings unchanged.
