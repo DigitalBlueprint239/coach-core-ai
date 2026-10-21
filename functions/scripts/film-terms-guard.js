@@ -65,6 +65,21 @@ const {TERMS, pendingTerms} = require(
   if (verdict.problem) block(`exported: ${verdict.problem}`);
 }
 
+// FILM-S2b: the validation worker is a TEST_ONLY component. Exporting it
+// from functions/index.js blocks deploy unconditionally (also with --check),
+// independent of terms.js; only a separate owner authorization that changes
+// functions/src/film/worker/designation.js can lift this.
+const fs = require("node:fs");
+const {workerExportProblem, WORKER_DESIGNATION} = require(
+    path.join(__dirname, "..", "src", "film", "worker", "designation.js"));
+const workerProblem = workerExportProblem(fs.readFileSync(
+    path.join(__dirname, "..", "index.js"), "utf8"));
+if (workerProblem) {
+  process.stderr.write("\nDEPLOY BLOCKED: film worker is " +
+    `${WORKER_DESIGNATION.designation} (${workerProblem}).\n`);
+  process.exit(1);
+}
+
 const pending = pendingTerms();
 const checkOnly = process.argv.includes("--check");
 
