@@ -1,0 +1,7 @@
+2026-10-21T10:01:25.6926463Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e7fdff33b38f4e9bae7a0276ff25fed6a8881040:refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T10:01:26.6517027Z  * [new ref]         e7fdff33b38f4e9bae7a0276ff25fed6a8881040 -> origin/claude/film-lfs-reconcile
+2026-10-21T10:01:26.7888519Z e7fdff33b38f4e9bae7a0276ff25fed6a8881040
+2026-10-21T10:03:22.4294262Z ℹ tests 741
+2026-10-21T10:03:22.4294949Z ℹ pass 741
+2026-10-21T10:03:22.4295339Z ℹ fail 0
+2026-10-21T10:03:22.4296133Z ℹ skipped 0

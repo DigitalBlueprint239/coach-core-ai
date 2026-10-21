@@ -1,0 +1,5 @@
+const root=process.argv[2];const r=require(root+'/functions/src/film/reconcile');const {FakeFirestore,FakeTimestamp}=require(root+'/functions/test/lfs-doubles');
+const names=['quarantine/\uE000/source.mp4','quarantine/\u{10000}/source.mp4'];
+const storage={name:'demo-order.appspot.com',async listObjects(q){return q.pageToken?{items:[{name:names[1],generation:'2'}],nextPageToken:null}:{items:[{name:names[0],generation:'1'}],nextPageToken:'second'};}};
+const db=new FakeFirestore();const rc=r.createQuarantineReconciler({db,Timestamp:FakeTimestamp,storage,bucketName:()=>storage.name,project:'demo-order',now:()=>new Date('2026-10-21T10:00:00Z'),logger:{info(){},warn(){},error(){}}});
+(async()=>{const runs=[];for(let i=0;i<3;i++)runs.push(await rc.reconcileQuarantine({limit:10}));console.log(JSON.stringify({gcsOrder:Buffer.compare(Buffer.from(names[0]),Buffer.from(names[1])),jsLaterNameSkipped:names[1]<=names[0],runs:runs.map(x=>({processed:x.processed,passEnded:x.passEnded})),evidence:db.paths(r.EVIDENCE_COLLECTION+'/').map(p=>db.read(p).name),missing:names[1]},null,2));})();

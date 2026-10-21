@@ -1,0 +1,8 @@
+2026-10-21T10:01:25.3383633Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e7fdff33b38f4e9bae7a0276ff25fed6a8881040:refs/remotes/origin/claude/film-lfs-reconcile
+2026-10-21T10:01:26.2250892Z  * [new ref]         e7fdff33b38f4e9bae7a0276ff25fed6a8881040 -> origin/claude/film-lfs-reconcile
+2026-10-21T10:01:26.4061746Z e7fdff33b38f4e9bae7a0276ff25fed6a8881040
+2026-10-21T10:01:42.9939787Z [36;1msummary=$(grep -E '^Tests:' /tmp/web-tests.log | tail -1)[0m
+2026-10-21T10:01:42.9940693Z [36;1mif [ -z "$summary" ] || grep -qE '^Tests:.*failed|^FAIL ' /tmp/web-tests.log; then[0m
+2026-10-21T10:01:48.6968113Z Tests:       24 passed, 24 total
+2026-10-21T10:01:48.7821696Z ##[notice]Tests:       24 passed, 24 total
+2026-10-21T10:02:12.3347996Z ##[notice]Scanned 2 JS files. Source / prebuild guard / canary bundle checks all passed.
