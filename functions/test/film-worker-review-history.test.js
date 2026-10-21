@@ -29,7 +29,7 @@ async function world(script=[],enabled=true){
  const reserve=await s1.reserveFilmUpload({auth,data:{schemaVersion:'coach-film.v1',operationId:crypto.randomUUID(),action:'reserveFilmUpload',payload:{teamId:TEAM,declaredBytes:BODY.length,declaredContentType:'video/mp4',fileName:'synthetic.mp4',rightsAcknowledged:true,rightsWordingVersion:'rights-v1'}}});
  assert.equal(reserve.ok,true);
  const filmId=reserve.data.filmId,name=v1.uploadPathFor(TEAM,filmId),generation=objects.put(name,BODY);
- assert.equal(await s1.onQuarantineFinalized({name,generation,size:BODY.length,contentType:'video/mp4'}),'validating');
+ assert.equal(await s1.onQuarantineFinalized({bucket:"demo-s2b.appspot.com",name,generation,size:BODY.length,contentType:'video/mp4'}),'validating');
  const filmPath=`teams/${TEAM}/films/${filmId}`,jobId=jobIdFor(TEAM,filmId,generation),jobPath=`${filmPath}/workerJobs/${jobId}`;
  const worker=createFilmWorker({db,Timestamp:FakeTimestamp,objects,decoder,runPipeline:pipeline,isEnabled:()=>enabled,now:()=>clock.t,logger});
  return {db,objects,decoder,pipeline,clock,s1,worker,filmId,filmPath,jobId,jobPath,args:{teamId:TEAM,filmId},job:()=>db.read(jobPath)};

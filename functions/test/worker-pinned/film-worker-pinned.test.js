@@ -346,7 +346,7 @@ describe("end to end through S1 + worker with the real pipeline", () => {
         rightsWordingVersion: "rights-v1"}}});
     const name = v1.uploadPathFor(TEAM, r.data.filmId);
     const generation = objects.put(name, bytes);
-    await s1.onQuarantineFinalized({name, size: bytes.length,
+    await s1.onQuarantineFinalized({bucket: "demo-s2b.appspot.com", name, size: bytes.length,
       contentType: "video/mp4", generation});
     const w = createFilmWorker({db, Timestamp: FakeTimestamp, objects,
       decoder, isEnabled: () => true, now, logger, limits});

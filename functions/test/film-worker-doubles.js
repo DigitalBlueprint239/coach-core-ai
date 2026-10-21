@@ -277,9 +277,23 @@ class FakeObjects {
       },
       deleteObject: async (t) => (await this.deleteGeneration(t)) ===
         "deleted",
+      // INT-A D3 (I-6): accepted C1 dependencies over the same store
+      cleanupBucketName: () => S1_BUCKET,
+      cleanupBucket: () => ({name: S1_BUCKET, file: (name) => ({
+        delete: async ({ifGenerationMatch}) => {
+          const r = await this.deleteGeneration({name,
+            generation: ifGenerationMatch});
+          if (r === "absent") throw Object.assign(new Error("404"), {code: 404});
+          if (r === "mismatch") {
+            throw Object.assign(new Error("412"), {code: 412});
+          }
+        }})}),
     };
   }
 }
+
+/** INT-A D3 (I-6): configured default bucket of the S1 double. */
+const S1_BUCKET = "demo-s2b.appspot.com";
 
 /** Decoder double for orchestration tests (pipeline is scripted). */
 function fakeDecoder(o = {}) {

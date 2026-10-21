@@ -63,7 +63,7 @@ async function validatingFilm(w, bytes = BODY) {
   const filmId = r.data.filmId;
   const name = v1.uploadPathFor(TEAM, filmId);
   const generation = w.objects.put(name, bytes);
-  const out = await w.s1.onQuarantineFinalized({name, size: bytes.length,
+  const out = await w.s1.onQuarantineFinalized({bucket: "demo-s2b.appspot.com", name, size: bytes.length,
     contentType: "video/mp4", generation});
   assert.equal(out, "validating");
   return {filmId, name, generation, receipt: r,
