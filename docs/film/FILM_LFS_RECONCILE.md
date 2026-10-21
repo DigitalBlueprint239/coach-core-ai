@@ -107,6 +107,7 @@ At T = 2 s this gives a stream read of about 86 s, a unary call of about 23 s, a
   - acquire, or take over after expiry with a higher fence;
   - a **fresh verify and renew immediately before every re-drive**, including the first;
   - fenced checkpoint, evidence and error writes; release at the end.
+- **Contention:** contention or a transport failure in the acquire, verify, checkpoint or release transaction ends the invocation **bounded and without throwing** (`acquireError` or `stoppedFor: state:<code>`). This was observed on the real emulator, whose pessimistic locks make a contending reconciler hit its 2 s RPC deadline. The object is presented again on the next run.
 - **Authority:** the lease covers discovery, checkpoint, evidence and errors only. An already-started stale re-drive finishes as a duplicate delivery and never writes reconciliation state.
 - **Evidence:** `filmReconcile/quarantine/evidence/{sha256(project\nbucket\npolicy\nname\ngeneration)}`, a fixed field set. A repeat updates `count`, `lastAtMs` and `lastPassId`. There is no per-pass cap, and aggregate cardinality is **not globally bounded** (operator retention is C1-D1).
 - **Fail closed:** listing metadata is refused with evidence when the name is non-canonical, the generation is not a decimal string, the size is not a decimal in `1..maxBytes`, the content type is missing or unsupported, or `timeCreated` is invalid or too far in the future.

@@ -345,6 +345,25 @@ function createQuarantineReconciler(deps) {
   }
 
   /**
+   * `fenced`, with transport/contention failures (bounded by the transport
+   * boundary) reported instead of thrown: the invocation stops cleanly.
+   * @param {object} ctx
+   * @param {function(object, number): object} mutate
+   * @param {?object} [evidence]
+   * @return {Promise<{ok: boolean, error: ?string}>}
+   */
+  async function tryFenced(ctx, mutate, evidence) {
+    try {
+      return {ok: await fenced(ctx, mutate, evidence), error: null};
+    } catch (e) {
+      const code = String(e && e.code !== undefined ? e.code : "error")
+          .slice(0, 64);
+      logger.warn("film.reconcile.state_tx_failed", {code});
+      return {ok: false, error: code};
+    }
+  }
+
+  /**
    * Bounded reconciliation invocation (r2 §3, r3, r3.1, r3.2).
    * @param {{limit: number}} opts
    * @return {Promise<object>} summary
@@ -362,30 +381,39 @@ function createQuarantineReconciler(deps) {
     const ctx = {project: deps.project, bucket, holder: newHolder(),
       fence: 0};
     // acquire (or take over) the lease; bind / rebind the target
-    const acquired = await db.runTransaction(async (tx) => {
-      const snap = await tx.get(stateRef());
-      const t = nowMs();
-      let s = snap.exists ? snap.data() : null;
-      if (s && !stateSchema.safeParse(s).success) {
-        return {outcome: "state-invalid"};
-      }
-      if (s && s.lease && s.lease.untilMs > t) {
-        return {outcome: "skip-contention"};
-      }
-      if (!s) {
-        s = freshState(ctx.project, ctx.bucket, null, t);
-      } else if (s.project !== ctx.project || s.bucket !== ctx.bucket ||
+    let acquired;
+    try {
+      acquired = await db.runTransaction(async (tx) => {
+        const snap = await tx.get(stateRef());
+        const t = nowMs();
+        let s = snap.exists ? snap.data() : null;
+        if (s && !stateSchema.safeParse(s).success) {
+          return {outcome: "state-invalid"};
+        }
+        if (s && s.lease && s.lease.untilMs > t) {
+          return {outcome: "skip-contention"};
+        }
+        if (!s) {
+          s = freshState(ctx.project, ctx.bucket, null, t);
+        } else if (s.project !== ctx.project || s.bucket !== ctx.bucket ||
           s.policyRevision !== POLICY_REVISION) {
-        s = {...freshState(ctx.project, ctx.bucket, {project: s.project,
-          bucket: s.bucket, policyRevision: s.policyRevision,
-          passId: s.passId, afterName: s.afterName, atMs: t}, t),
-        fence: s.fence};
-      }
-      const fence = s.fence + 1;
-      tx.set(stateRef(), {...s, fence,
-        lease: {holder: ctx.holder, fence, untilMs: t + limits.leaseMs}});
-      return {outcome: "acquired", fence, afterName: s.afterName};
-    });
+          s = {...freshState(ctx.project, ctx.bucket, {project: s.project,
+            bucket: s.bucket, policyRevision: s.policyRevision,
+            passId: s.passId, afterName: s.afterName, atMs: t}, t),
+          fence: s.fence};
+        }
+        const fence = s.fence + 1;
+        tx.set(stateRef(), {...s, fence,
+          lease: {holder: ctx.holder, fence, untilMs: t + limits.leaseMs}});
+        return {outcome: "acquired", fence, afterName: s.afterName};
+      });
+    } catch (e) {
+      // contention or a transport failure: bounded, nothing acquired
+      const code = String(e && e.code !== undefined ? e.code : "error")
+          .slice(0, 64);
+      logger.warn("film.reconcile.acquire_failed", {code});
+      return {acquireError: code, processed: 0};
+    }
     if (acquired.outcome !== "acquired") {
       logger.warn("film.reconcile.not_acquired", {outcome: acquired.outcome});
       return {[acquired.outcome === "skip-contention" ? "skipContention" :
@@ -408,7 +436,7 @@ function createQuarantineReconciler(deps) {
           startOffset: afterName || undefined, maxResults: want});
       } catch (e) {
         const code = String(e && e.code || "list-error").slice(0, 64);
-        await fenced(ctx, (s, t) => ({...s, lastError: {code, atMs: t},
+        await tryFenced(ctx, (s, t) => ({...s, lastError: {code, atMs: t},
           consecutiveFailures: s.consecutiveFailures + 1}));
         out.stoppedFor = `list:${code}`;
         break;
@@ -432,8 +460,9 @@ function createQuarantineReconciler(deps) {
           break lists;
         }
         // fresh lease verify immediately before this object (r3 §B)
-        if (!await fenced(ctx, (s) => s)) {
-          out.stoppedFor = "lease-lost";
+        const v = await tryFenced(ctx, (s) => s);
+        if (!v.ok) {
+          out.stoppedFor = v.error ? `state:${v.error}` : "lease-lost";
           break lists;
         }
         const cls = classifyListing(item, nowMs(), limits);
@@ -467,12 +496,12 @@ function createQuarantineReconciler(deps) {
               POLICY_REVISION, name, evidence.generation);
           out.evidence += 1;
         }
-        const ok = await fenced(ctx, (s) => ({...s, afterName: name,
+        const cp = await tryFenced(ctx, (s) => ({...s, afterName: name,
           passObjects: s.passObjects + 1,
           passEvidence: s.passEvidence + (evidence ? 1 : 0),
           lastError: null, consecutiveFailures: 0}), evidence);
-        if (!ok) {
-          out.stoppedFor = "lease-lost";
+        if (!cp.ok) {
+          out.stoppedFor = cp.error ? `state:${cp.error}` : "lease-lost";
           break lists;
         }
         afterName = name;
@@ -480,10 +509,10 @@ function createQuarantineReconciler(deps) {
       }
       if (page.items.length < want) {
         // the listing has nothing beyond afterName: pass end
-        const ok = await fenced(ctx, (s, t) => ({...s, afterName: null,
+        const end = await tryFenced(ctx, (s, t) => ({...s, afterName: null,
           passId: crypto.randomBytes(16).toString("hex"),
           passStartedAtMs: t, passObjects: 0, passEvidence: 0}));
-        if (ok) {
+        if (end.ok) {
           out.passEnded = true;
           afterName = null;
         }
@@ -491,7 +520,7 @@ function createQuarantineReconciler(deps) {
       }
     }
     // release the lease (fenced; a lost lease is a no-op)
-    await fenced(ctx, (s) => ({...s, lease: null}));
+    await tryFenced(ctx, (s) => ({...s, lease: null}));
     out.counters = {...db.lfsCounters};
     logger.info("film.reconcile.done", {processed: out.processed,
       evidence: out.evidence, young: out.young, lists: out.lists,

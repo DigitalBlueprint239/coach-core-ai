@@ -636,6 +636,41 @@ describe("L10/L14 fencing and takeover positions", () => {
       });
 });
 
+describe("bounded failure of reconciliation state transactions", () => {
+  it("acquire transaction fails (contention/deadline): bounded result, " +
+      "no list, no state", async () => {
+    const w = world();
+    await w.lostUpload(crypto.randomUUID());
+    w.advance(16 * MIN);
+    w.db.beforeTransaction = () => {
+      w.db.beforeTransaction = null;
+      throw Object.assign(new Error("deadline"), {code: 4});
+    };
+    assert.deepEqual(await w.run(), {acquireError: "4", processed: 0});
+    assert.equal(w.bucket.lists.length, 0);
+    assert.equal(w.state(), null);
+  });
+  it("verify transaction fails: stops before the re-drive; lease " +
+      "released; the object is presented next time", async () => {
+    const w = world();
+    const e = await w.lostUpload(crypto.randomUUID());
+    w.advance(16 * MIN);
+    const at = w.db.txCount + 2; // acquire, then verify
+    w.db.beforeTransaction = (n) => {
+      if (n === at) {
+        w.db.beforeTransaction = null;
+        throw Object.assign(new Error("deadline"), {code: 4});
+      }
+    };
+    const out = await w.run();
+    assert.equal(out.stoppedFor, "state:4");
+    assert.equal(out.processed, 0);
+    assert.equal(w.record(e), null, "no re-drive");
+    assert.equal(w.state().lease, null);
+    assert.deepEqual((await w.run()).outcomes, {"no-reservation": 1});
+  });
+});
+
 describe("L16/L17 db facade: attempt counting and transaction-read " +
     "validation", () => {
   it("counts logical transactions and callback attempts separately; caps " +
