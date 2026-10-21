@@ -22,6 +22,7 @@
 const crypto = require("crypto");
 const {z} = require("zod");
 const c = require("./contract");
+const c2 = require("./contract-v2");
 const {LIMITS} = require("./limits");
 const {GENERATION_RE, QUARANTINE_RE} = require("./cleanup");
 const {createFilmHandlers} = require("./handlers");
@@ -193,18 +194,24 @@ function filmProblem(path, d) {
         !GENERATION_RE.test(d.objectGeneration))) {
     return "object-generation";
   }
+  // INT-A D4 (I-10): validate the WHOLE stored document with the agreed r4
+  // stored-document reader (A3 contract-v2 `filmDocument`: strict; absent
+  // r4 keys read as null only where r4 permits), with the same timestamp
+  // conversion as the S2b worker's readFilm. New fields are validated, not
+  // projected away; worker rejection reasons are valid. Retained baseline:
+  // docs/film/FILM_INTEGRATION.md (A7 accepted a corrupted `ready` and
+  // refused a valid worker `rejected`).
   let wire;
   try {
     wire = {};
-    for (const k of Object.keys(c.schemas.filmState.shape)) {
-      const v = d[k] === undefined ? null : d[k];
-      wire[k] = c.FILM_TIMESTAMP_FIELDS.includes(k) ?
+    for (const [k, v] of Object.entries(d)) {
+      wire[k] = c2.FILM_TIMESTAMP_FIELDS.includes(k) ?
         c.toWireTimestamp(v) : v;
     }
   } catch (_) {
     return "timestamp";
   }
-  return c.schemas.filmState.safeParse(wire).success ? null : "schema";
+  return c2.schemas.filmDocument.safeParse(wire).success ? null : "schema";
 }
 
 /**
