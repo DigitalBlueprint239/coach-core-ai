@@ -1,0 +1,9 @@
+{"path":"functions/test/film-worker-doubles.js","base":"da13f834","assertions":0,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/film-worker.test.js","base":"da13f834","assertions":209,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/emulator/film-s2b.emulator.test.js","base":"da13f834","assertions":36,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/worker-pinned/film-worker-pinned.test.js","base":"da13f834","assertions":47,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/film-worker-review-r1r4.test.js","base":"da13f834","assertions":18,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/film-worker-review-r2b.test.js","base":"da13f834","assertions":10,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/film-worker-review-history.test.js","base":"da13f834","assertions":11,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/film-worker-wiring.test.js","base":"da13f834","assertions":14,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}
+{"path":"functions/test/lfs-reconcile.test.js","base":"638631b","assertions":250,"identicalAssertionsAndMembership":true,"allowedNormalization":"only event.bucket on finalize call"}

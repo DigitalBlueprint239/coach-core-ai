@@ -1,0 +1,213 @@
+TAP version 13
+# Subtest: CT-4.3 (§4, r3.1): reconciler film validation over worker-written documents
+    # Subtest: positives: worker `ready`, worker-reason `rejected` and the S1 legacy document (absent r4 keys) are valid; a reconciler pass gives duplicate-event with no evidence and no S1 obligation
+    not ok 1 - positives: worker `ready`, worker-reason `rejected` and the S1 legacy document (absent r4 keys) are valid; a reconciler pass gives duplicate-event with no evidence and no S1 obligation
+      ---
+      duration_ms: 76.986866
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:224:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        rejected
+        
+        'schema' !== null
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: 'schema'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:232:14)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: negative: ready without readyAt -> FilmAmbiguous (evidence, no decision)
+    not ok 2 - negative: ready without readyAt -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 11.875906
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready with readyAt null -> FilmAmbiguous (evidence, no decision)
+    not ok 3 - negative: ready with readyAt null -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 14.500946
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready without normalizedGeneration -> FilmAmbiguous (evidence, no decision)
+    not ok 4 - negative: ready without normalizedGeneration -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 11.243801
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready with a non-decimal normalizedGeneration -> FilmAmbiguous (evidence, no decision)
+    not ok 5 - negative: ready with a non-decimal normalizedGeneration -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 9.495726
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready without media -> FilmAmbiguous (evidence, no decision)
+    not ok 6 - negative: ready without media -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 8.957817
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready with invalid media (codec) -> FilmAmbiguous (evidence, no decision)
+    not ok 7 - negative: ready with invalid media (codec) -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 9.80345
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready with invalid media (extra key) -> FilmAmbiguous (evidence, no decision)
+    not ok 8 - negative: ready with invalid media (extra key) -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 11.75047
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready with media over the PENDING_D3 byte limit -> FilmAmbiguous (evidence, no decision)
+    not ok 9 - negative: ready with media over the PENDING_D3 byte limit -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 12.350988
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: ready with a malformed retentionExpiresAt -> FilmAmbiguous (evidence, no decision)
+    not ok 10 - negative: ready with a malformed retentionExpiresAt -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 5.239549
+      type: 'test'
+      location: '/home/claude/int/functions/test/film-int-compat.test.js:277:5'
+      failureType: 'testCodeFailure'
+      error: 'filmProblem refuses'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/home/claude/int/functions/test/film-int-compat.test.js:286:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: negative: rejected with an invalid worker reason -> FilmAmbiguous (evidence, no decision)
+    ok 11 - negative: rejected with an invalid worker reason -> FilmAmbiguous (evidence, no decision)
+      ---
+      duration_ms: 5.182809
+      type: 'test'
+      ...
+    1..11
+not ok 1 - CT-4.3 (§4, r3.1): reconciler film validation over worker-written documents
+  ---
+  duration_ms: 179.995145
+  type: 'suite'
+  location: '/home/claude/int/functions/test/film-int-compat.test.js:193:1'
+  failureType: 'subtestsFailed'
+  error: '10 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 11
+# suites 1
+# pass 1
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 715.540564

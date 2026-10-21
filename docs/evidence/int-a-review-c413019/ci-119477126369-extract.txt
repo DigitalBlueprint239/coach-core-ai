@@ -1,0 +1,5 @@
+2026-10-21T20:48:27.9342017Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c413019303f5fb7aa2039259ff1cd0b72a273484:refs/remotes/origin/claude/film-integration
+2026-10-21T20:48:29.3566627Z  * [new ref]         c413019303f5fb7aa2039259ff1cd0b72a273484 -> origin/claude/film-integration
+2026-10-21T20:48:29.5024698Z c413019303f5fb7aa2039259ff1cd0b72a273484
+2026-10-21T20:48:31.9576821Z [36;1mecho "::notice title=Pinned decoder (artifact-12263740069, c413019303f5fb7aa2039259ff1cd0b72a273484)::ffmpeg $got_ff ffprobe $got_fp"[0m
+2026-10-21T20:48:32.0303475Z ##[notice]ffmpeg 1314ab3b558c48ce7ed4aa6efba5a68fefe30362f796e59ef017b17424436ff1 ffprobe fd43ef9be4bb7d7fc821e1b25950efc6eb0aac586cabacd34a38fd52299f48e6
