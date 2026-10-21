@@ -164,22 +164,25 @@ describe("LFS reconciler on the Firestore emulator (bounded client)", () => {
     }
     assert.ok(res.filter((x) => x.processed > 0).length <= 1,
         JSON.stringify(res));
-    assert.ok(w.bucket.deletes() <= 1, "never two deletes");
+    assert.ok(w.bucket.deletes() <= 1, `two deletes ${JSON.stringify(res)}`);
     // A lease may survive ONLY an ambiguous acquire, a failed state
     // transaction or a reported release failure (release-if-mine is best
     // effort); then it is resolved by its expiry (injected clock). Any
     // other leftover lease is a leak and fails here (R-2 c-6312585072).
     const explained = res.some((x) => x.acquireError || x.releaseError ||
       String(x.stoppedFor || "").startsWith("state:"));
+    // no state document at all: both acquires failed before any commit
     const st = await w.state();
+    const lease = st ? st.lease : null;
     if (!explained) {
-      assert.equal(st.lease, null, `unexplained lease ${JSON.stringify(res)}`);
-    } else if (st.lease) {
+      assert.equal(lease, null, `unexplained lease ${JSON.stringify(res)}`);
+    } else if (lease) {
       w.advance(w.rc.limits.leaseMs + 1);
     }
-    await w.rc.reconcileQuarantine({limit: 5});
-    assert.equal((await w.state()).lease, null);
-    assert.equal(w.bucket.deletes(), 1);
+    const last = await w.rc.reconcileQuarantine({limit: 5});
+    const info = JSON.stringify({res, last});
+    assert.equal((await w.state()).lease, null, info);
+    assert.equal(w.bucket.deletes(), 1, info);
     assert.equal((await w.record(e)).state, "deleted");
     const recs = await adminDb.collection("filmCleanup").get();
     assert.equal(recs.size, 1);
