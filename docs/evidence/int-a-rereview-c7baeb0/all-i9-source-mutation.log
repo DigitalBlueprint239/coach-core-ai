@@ -1,0 +1,102 @@
+REVIEW MUTATION: changed class(d) validating source bytes
+REVIEW MUTATION: changed class(d) ready source bytes
+REVIEW MUTATION: changed class(d) ready source bytes
+REVIEW MUTATION: changed class(d) ready source bytes
+▶ CT-4.4 (I-9) same-generation sources owned by the S2b job
+  ✖ (a) validating whose job is recovery-needed (31.584045ms)
+  ✖ (b) ready whose quarantine cleanup ended mismatch (412): object preserved (8.335456ms)
+  ✖ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (4.646874ms)
+  ✖ (c) ready and rejected whose quarantine cleanup is still pending (unresolved, not proven failed) (3.75941ms)
+✖ CT-4.4 (I-9) same-generation sources owned by the S2b job (49.228603ms)
+ℹ tests 4
+ℹ suites 1
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 314.281415
+
+✖ failing tests:
+
+test at functions/test/film-int-compat.test.js:396:3
+✖ (a) validating whose job is recovery-needed (31.584045ms)
+  AssertionError [ERR_ASSERTION]: objects byte-unchanged (contents, generations, metadata)
+  + actual - expected
+  
+  + '[["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]'
+  - '[["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]'
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:393:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:404:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '[["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]',
+    expected: '[["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-compat.test.js:406:3
+✖ (b) ready whose quarantine cleanup ended mismatch (412): object preserved (8.335456ms)
+  AssertionError [ERR_ASSERTION]: objects byte-unchanged (contents, generations, metadata)
+  + actual - expected
+  
+  + '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]'
+  - '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]'
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:393:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:415:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]',
+    expected: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-compat.test.js:417:3
+✖ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (4.646874ms)
+  AssertionError [ERR_ASSERTION]: objects byte-unchanged (contents, generations, metadata)
+  + actual - expected
+  
+  + '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]'
+  - '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]'
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:393:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:434:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]',
+    expected: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-compat.test.js:437:3
+✖ (c) ready and rejected whose quarantine cleanup is still pending (unresolved, not proven failed) (3.75941ms)
+  AssertionError [ERR_ASSERTION]: objects byte-unchanged (contents, generations, metadata)
+  + actual - expected
+  
+  + '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]'
+  - '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]'
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:393:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:446:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]',
+    expected: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

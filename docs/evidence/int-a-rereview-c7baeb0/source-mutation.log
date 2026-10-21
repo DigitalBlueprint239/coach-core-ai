@@ -1,0 +1,80 @@
+REVIEW MUTATION: changed class(d) ready source bytes
+▶ CT-4.3 (§4, r3.1): reconciler film validation over worker-written documents
+  ✔ positives: worker `ready`, worker-reason `rejected` and the S1 legacy document (absent r4 keys) are valid; a reconciler pass gives duplicate-event with no evidence and no S1 obligation (37.765685ms)
+  ✔ negative: ready without readyAt -> FilmAmbiguous (evidence, no decision) (4.634911ms)
+  ✔ negative: ready with readyAt null -> FilmAmbiguous (evidence, no decision) (4.174025ms)
+  ✔ negative: ready without normalizedGeneration -> FilmAmbiguous (evidence, no decision) (3.611418ms)
+  ✔ negative: ready with a non-decimal normalizedGeneration -> FilmAmbiguous (evidence, no decision) (6.791735ms)
+  ✔ negative: ready without media -> FilmAmbiguous (evidence, no decision) (3.645504ms)
+  ✔ negative: ready with invalid media (codec) -> FilmAmbiguous (evidence, no decision) (2.789966ms)
+  ✔ negative: ready with invalid media (extra key) -> FilmAmbiguous (evidence, no decision) (3.019336ms)
+  ✔ negative: ready with media over the PENDING_D3 byte limit -> FilmAmbiguous (evidence, no decision) (3.004571ms)
+  ✔ negative: ready with a malformed retentionExpiresAt -> FilmAmbiguous (evidence, no decision) (2.932634ms)
+  ✔ negative: rejected with an invalid worker reason -> FilmAmbiguous (evidence, no decision) (2.437927ms)
+✔ CT-4.3 (§4, r3.1): reconciler film validation over worker-written documents (76.720785ms)
+▶ CT-4.1/4.2 end-to-end flows (one store, direct worker invocation)
+  ✔ CT-4.1 reserve -> upload -> finalize (with bucket) -> worker -> ready: one promotion; quarantine generation removed (generation-matched); slot ready (2.391193ms)
+  ✔ CT-4.2 lost finalize -> reconciler re-drive -> validating -> worker -> ready: one promotion, one job (2.395418ms)
+  ✔ CT-4.6 lost finalize after the reservation expired -> stale-expired C1 obligation -> deleted (4.298249ms)
+✔ CT-4.1/4.2 end-to-end flows (one store, direct worker invocation) (9.256516ms)
+▶ CT-4.4 (I-9) same-generation sources owned by the S2b job
+  ✔ (a) validating whose job is recovery-needed (4.390256ms)
+  ✔ (b) ready whose quarantine cleanup ended mismatch (412): object preserved (2.46649ms)
+  ✖ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (4.065935ms)
+  ✔ (c) ready and rejected whose quarantine cleanup is still pending (unresolved, not proven failed) (6.139793ms)
+✖ CT-4.4 (I-9) same-generation sources owned by the S2b job (17.366568ms)
+▶ CT-4.5 frozen v1 handlers over worker-written documents
+  ✔ validating (job running): abandon (v1) (3.674243ms)
+  ✔ validating (job running): finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (0.953778ms)
+  ✔ validating (job running): finalize of another generation -> stale-validating + obligation for that generation; film unchanged (1.078432ms)
+  ✔ validating (recovery-needed): abandon (v1) (3.412949ms)
+  ✔ validating (recovery-needed): finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (5.536341ms)
+  ✔ validating (recovery-needed): finalize of another generation -> stale-validating + obligation for that generation; film unchanged (6.533783ms)
+  ✔ ready: abandon (v1) (10.869019ms)
+  ✔ ready: finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (1.507495ms)
+  ✔ ready with the source still present (worker cleanup pending): same-generation finalize -> duplicate-event, no write (1.35105ms)
+  ✔ ready: finalize of another generation -> stale-ready + obligation for that generation; film unchanged (2.011234ms)
+  ✔ rejected (worker reason): abandon (v1) (1.190766ms)
+  ✔ rejected (worker reason): finalize of the same generation -> no write (duplicate-event while the source exists; object-gone once the worker removed it: frozen finalize reads the head first) (1.038794ms)
+  ✔ rejected (worker reason) with the source still present (worker cleanup pending): same-generation finalize -> duplicate-event, no write (1.125651ms)
+  ✔ rejected (worker reason): finalize of another generation -> stale-rejected + obligation for that generation; film unchanged (1.38039ms)
+  ✔ abandoned (after worker cancellation): abandon is idempotent, same-generation finalize is object-gone (source deleted), other generation is stale-abandoned, abandon replay returns the stored receipt (2.041819ms)
+  ✔ validating abandon replay: stored receipt byte-identical; only an eligible cleanup attempt (1.582281ms)
+✔ CT-4.5 frozen v1 handlers over worker-written documents (46.174866ms)
+▶ CT-6 double targeting: one delete, then absent; 404/412 distinct
+  ✔ worker deleted the generation; a C1 attempt on it -> absent (404) (2.358644ms)
+  ✔ C1 on a replaced object -> mismatch (412), newer object preserved; the worker records 412 as mismatch too (1.636025ms)
+✔ CT-6 double targeting: one delete, then absent; 404/412 distinct (4.193291ms)
+▶ CT-5 captured worker-written stored documents (server side)
+  ✔ captures are deterministic, r4-valid stored documents and equal the committed files byte-for-byte (FILM_INT_WRITE_CAPTURES=1 rewrites them) (20.041132ms)
+✔ CT-5 captured worker-written stored documents (server side) (20.122002ms)
+ℹ tests 37
+ℹ suites 6
+ℹ pass 36
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 432.124134
+
+✖ failing tests:
+
+test at functions/test/film-int-compat.test.js:417:3
+✖ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (4.065935ms)
+  AssertionError [ERR_ASSERTION]: objects byte-unchanged (contents, generations, metadata)
+  + actual - expected
+  
+  + '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]'
+  - '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]'
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:393:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:434:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","63a53520d3dbce96df0df74ad061a174c05de82a48927eb34c0f37bac9c6b571",{}]]',
+    expected: '[["films/team-int-a/00000000-0000-4000-8000-000000000001/jobs/d249abe039aa5bbe57cf20f453e5e970/normalized.mp4","1002","b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825",{"jobId":"d249abe039aa5bbe57cf20f453e5e970","fence":"1","inputGeneration":"1001","inputSha256":"15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7","outputSha256":"b56e061b4f025da6a025b7eddee788e833618ebd562f925e0a9ff2ec33feb825","policyRevision":"8de993f8c6677730387687a9afa61085603d3e3c5a190772d31a9dea8a309d30"}],["quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4","1001","15a930a6f4af0345b1b704c234430f01565f03d334800796aec1fc13e9c480b7",{}]]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

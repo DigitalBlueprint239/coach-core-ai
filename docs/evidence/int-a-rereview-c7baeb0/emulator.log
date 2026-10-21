@@ -1,0 +1,28 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-coach-core-beta", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node --test --test-concurrency=1 --test-reporter=spec functions/test/emulator/film-int.emulator.test.js
+(node:20928) MetadataLookupWarning: received unexpected error = All promises were rejected code = ECONNRESET, 403
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ CT-4.2 on the emulator: lost finalize -> reconciler -> worker
+  ✔ one re-drive to validating, one job, one promotion to ready (640.550392ms)
+✔ CT-4.2 on the emulator: lost finalize -> reconciler -> worker (2815.718849ms)
+▶ D5 list-s2b-recovery on the emulator (read-only, bounded)
+  ✔ classes a-d on real Firestore queries; negatives excluded; cursor traversal (> M films, 3 teams) without gaps or duplicates; no document written (284.558231ms)
+  ✔ CLI against the emulator: bounded JSON output (1556.429111ms)
+✔ D5 list-s2b-recovery on the emulator (read-only, bounded) (2124.886184ms)
+ℹ tests 3
+ℹ suites 2
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5346.187607
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

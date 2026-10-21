@@ -1,0 +1,122 @@
+REVIEW MUTATION: changed class(d) validating source bytes
+REVIEW MUTATION: changed class(d) ready source bytes
+REVIEW MUTATION: changed class(d) ready source bytes
+REVIEW MUTATION: changed class(d) ready source bytes
+▶ CT-4.4 (I-9) same-generation sources owned by the S2b job
+  ✖ (a) validating whose job is recovery-needed (30.984292ms)
+  ✖ (b) ready whose quarantine cleanup ended mismatch (412): object preserved (8.664144ms)
+  ✖ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (5.514048ms)
+  ✖ (c) ready and rejected whose quarantine cleanup is still pending (unresolved, not proven failed) (4.235896ms)
+✖ CT-4.4 (I-9) same-generation sources owned by the S2b job (50.484779ms)
+ℹ tests 4
+ℹ suites 1
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 305.800605
+
+✖ failing tests:
+
+test at functions/test/film-int-compat.test.js:396:3
+✖ (a) validating whose job is recovery-needed (30.984292ms)
+  AssertionError [ERR_ASSERTION]: no delete attempted
+  + actual - expected
+  
+  + [
+  +   [
+  +     'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4',
+  +     '1001'
+  +   ]
+  + ]
+  - []
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:392:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:404:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4', '1001' ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-compat.test.js:406:3
+✖ (b) ready whose quarantine cleanup ended mismatch (412): object preserved (8.664144ms)
+  AssertionError [ERR_ASSERTION]: no delete attempted
+  + actual - expected
+  
+  + [
+  +   [
+  +     'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4',
+  +     '1001'
+  +   ]
+  + ]
+  - []
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:392:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:415:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4', '1001' ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-compat.test.js:417:3
+✖ (d) ready and rejected with NO quarantine cleanup intent (anomalous stored state; source present): duplicate-event, nothing written (R88-2 c-6326521054) (5.514048ms)
+  AssertionError [ERR_ASSERTION]: no delete attempted
+  + actual - expected
+  
+  + [
+  +   [
+  +     'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4',
+  +     '1001'
+  +   ]
+  + ]
+  - []
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:392:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:434:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4', '1001' ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-compat.test.js:437:3
+✖ (c) ready and rejected whose quarantine cleanup is still pending (unresolved, not proven failed) (4.235896ms)
+  AssertionError [ERR_ASSERTION]: no delete attempted
+  + actual - expected
+  
+  + [
+  +   [
+  +     'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4',
+  +     '1001'
+  +   ]
+  + ]
+  - []
+  
+      at passLeavesJob (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:392:12)
+      at async TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-compat.test.js:446:7)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'quarantine/team-int-a/00000000-0000-4000-8000-000000000001/source.mp4', '1001' ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

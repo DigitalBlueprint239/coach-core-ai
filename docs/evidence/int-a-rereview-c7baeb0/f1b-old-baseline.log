@@ -1,0 +1,82 @@
+▶ D5 list-s2b-recovery (read-only, bounded, resumable)
+  ✔ classes a-d on actual A5 job semantics; negatives excluded (2.406252ms)
+  ✔ more than M eligible films across two teams: repeated invocations with the cursor visit every film exactly once, then next=null; every invocation within its read cap (1.043246ms)
+  ✔ hard caps: --teams/--films clamp to 1..50 (0.289938ms)
+  ✔ refuses a non-demo project and a missing emulator host (CLI) (210.619323ms)
+✔ D5 list-s2b-recovery (read-only, bounded, resumable) (215.370523ms)
+▶ D5 class (a): every A5 recovery reason; controls (F-1)
+  ✖ each recovery reason on a same-generation validating film is listed with its reason; running, resolved-only and different-generation jobs are not (2.577374ms)
+✖ D5 class (a): every A5 recovery reason; controls (F-1) (2.75892ms)
+▶ D5 class (a) over real worker-written recovery marks
+  ✔ real worker path attempts-exhausted: listed as class (a) with that reason (24.784635ms)
+  ✔ real worker path output-ownership-unproven: listed as class (a) with that reason (4.378466ms)
+  ✔ real worker path team-ownership-changed: listed as class (a) with that reason (0.843673ms)
+  ✖ real worker path exhaustion: recovery-needed (unmarked): listed as class (a) with that reason (4.826947ms)
+  ✔ real worker path ready-precondition-failed: listed as class (a) with that reason (2.23623ms)
+  ✔ controls on real worker state: validating with no job, and a worker run interrupted before any recovery mark -> not listed (1.443314ms)
+✖ D5 class (a) over real worker-written recovery marks (38.947939ms)
+ℹ tests 11
+ℹ suites 3
+ℹ pass 9
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 538.746507
+
+✖ failing tests:
+
+test at functions/test/film-int-listing.test.js:226:3
+✖ each recovery reason on a same-generation validating film is listed with its reason; running, resolved-only and different-generation jobs are not (2.577374ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   [
+  -     'u-unmarked',
+  -     'a',
+  -     null,
+  -     'exhaustion: recovery-needed (unmarked)',
+  -     'recovery-needed'
+  -   ]
+  - ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-listing.test.js:264:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1869:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ [ 'u-unmarked', 'a', null, 'exhaustion: recovery-needed (unmarked)', 'recovery-needed' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions/test/film-int-listing.test.js:391:5
+✖ real worker path exhaustion: recovery-needed (unmarked): listed as class (a) with that reason (4.826947ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   [
+  -     '7ee7fe9c-7436-438f-9a89-f3b4a5f83d25',
+  -     'a',
+  -     null,
+  -     'exhaustion: recovery-needed (unmarked)'
+  -   ]
+  - ]
+  
+      at TestContext.<anonymous> (/workspace/coach-core-pr88-r3-review/functions/test/film-int-listing.test.js:400:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ [ '7ee7fe9c-7436-438f-9a89-f3b4a5f83d25', 'a', null, 'exhaustion: recovery-needed (unmarked)' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
