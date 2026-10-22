@@ -48,7 +48,7 @@ async function start(){
  const java=spawnSync('java',['-version'],{encoding:'utf8'});const jtext=(java.stdout||'')+(java.stderr||''),version=/version\s+"?(\d+)/.exec(jtext);
  if(java.error||java.status!==0||!version||Number(version[1])<21)throw new Error('Java21+ is required for the Firestore/Storage emulators. Install Eclipse Temurin21 JDK for Windows from https://adoptium.net/temurin/releases/?version=21 then reopen this console. No app build is needed.');
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'package-manifest.json')));
- if(manifest.applicationSource!=='0dc94c4c6121aa379fb3e612b7d738a140f56ec6')throw new Error('Unexpected app source.');
+ if(manifest.version!=='2026.10.22-r1'||manifest.baselineApplicationSource!=='0dc94c4c6121aa379fb3e612b7d738a140f56ec6'||! /^[a-f0-9]{40}$/.test(manifest.applicationSource))throw new Error('Unexpected app source.');
  for(const item of manifest.files){const data=fs.readFileSync(path.join(root,item.path));if(crypto.createHash('sha256').update(data).digest('hex')!==item.sha256)throw new Error('Package file hash mismatch: '+item.path);}
  for(const port of [3000,9099,8080,9199,5001,4000,4400,4500])await free(port);
  if(!fs.existsSync(cli))await runNpm('emulator-tools');
