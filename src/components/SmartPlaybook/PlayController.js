@@ -7,8 +7,8 @@
 
 // Position constants for better maintainability
 export const PLAYER_POSITIONS = {
-  OFFENSE: ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT'],
-  DEFENSE: ['DE', 'DT', 'NT', 'MLB', 'OLB', 'CB', 'FS', 'SS', 'NB', 'LB']
+  OFFENSE: ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT', 'X', 'Z', 'H', 'Y', 'TB'],
+  DEFENSE: ['DE', 'DT', 'NT', 'MLB', 'OLB', 'CB', 'FS', 'SS', 'NB', 'LB', 'W', 'M', 'S', 'ILB']
 };
 
 // Route types for validation
