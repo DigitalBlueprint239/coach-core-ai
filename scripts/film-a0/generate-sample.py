@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
 import subprocess, hashlib, json
 root=Path(__file__).resolve().parents[2]
-out=root/'public/film-a0'; out.mkdir(parents=True,exist_ok=True)
+out=root/'scripts/film-a0/sample'; out.mkdir(parents=True,exist_ok=True)
 font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',14)
 small=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',11)
 w,h,fps,seconds=640,360,15,8

@@ -25,11 +25,11 @@ config.output.path = output;
 config.output.publicPath = '/';
 config.devtool = false;
 config.plugins = config.plugins.filter(p => !['GenerateSW', 'InjectManifest'].includes(p.constructor.name)).map(p => p.constructor.name === 'HtmlWebpackPlugin' ? new HtmlPlugin({ inject: true, template: path.join(__dirname, 'film-a0/index.html') }) : p);
-const manifest = JSON.parse(fs.readFileSync(path.join(root, 'public/film-a0/sample.json')));
+const manifest = JSON.parse(fs.readFileSync(path.join(root, 'scripts/film-a0/sample/sample.json')));
 if (JSON.stringify(manifest) !== JSON.stringify(JSON.parse(fs.readFileSync(path.join(root, 'src/features/film-analyzer/demo/sample.json'))))) throw new Error('Sample manifests disagree.');
 for (const file of manifest.files) {
   if (!['out-route.mp4', 'out-route.webm'].includes(file.name)) throw new Error('Unexpected sample file.');
-  const bytes = fs.readFileSync(path.join(root, 'public/film-a0', file.name));
+  const bytes = fs.readFileSync(path.join(root, 'scripts/film-a0/sample', file.name));
   if (bytes.length !== file.bytes || crypto.createHash('sha256').update(bytes).digest('hex') !== file.sha256) throw new Error('Synthetic sample digest mismatch.');
 }
 fs.rmSync(output, { recursive: true, force: true });
@@ -45,7 +45,7 @@ webpack(config, (error, stats) => {
   if (/node_modules\/(@firebase|firebase)\/|src\/(ai-brain|firebase\.|App\.|components\/(Auth|PWA)|services\/)/.test(names.replaceAll('\\', '/'))) {
     console.error('A0 unexpectedly contains a Firebase/AI module.'); process.exitCode = 1; return;
   }
-  fs.cpSync(path.join(root, 'public/film-a0'), path.join(output, 'film-a0'), { recursive: true });
+  fs.cpSync(path.join(root, 'scripts/film-a0/sample'), path.join(output, 'film-a0'), { recursive: true });
   fs.writeFileSync(path.join(output, 'a0-build.json'), JSON.stringify({ sourceSha: execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(), trackedDirty: execFileSync('git',['diff','HEAD','--name-only'],{cwd:root,encoding:'utf8'}).trim().length > 0, entry: 'src/features/film-analyzer/demo/index.tsx', firebaseOrAiModules: false, sample: manifest.id, sampleFiles: manifest.files }, null, 2));
   console.log('A0 isolated production build complete. No Firebase/AI modules; sample hashes verified.');
   if (process.argv.includes('--build-only')) return;

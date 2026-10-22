@@ -17,7 +17,7 @@ export default function FilmDemoApp() {
   const [saved, setSaved] = useState(false);
   const [notice, setNotice] = useState('');
   const stopAtEnd = useRef(false);
-  const confirmed = useRef<string | null>(null);
+  const [pendingRecord, setPendingRecord] = useState<Mark | null>(null);
 
   useEffect(() => {
     let alive = true; let objectUrl = '';
@@ -41,37 +41,49 @@ export default function FilmDemoApp() {
     try {
       const raw = window.localStorage.getItem(RECORD_KEY);
       if (raw !== null) {
-        setMark(decode(raw)); confirmed.current = raw; setSaved(true);
-        setStatus('Saved in this browser — reopened and checked against this sample.');
+        setPendingRecord(decode(raw));
+        setStatus('Stored record found — verifying the sample before reopening…');
       }
     } catch {
       setSaved(false); setStatus('Not saved — local storage is unavailable or the record could not be verified. You can still work in this session.');
     }
     const changed = (event: StorageEvent) => {
       if (event.key === RECORD_KEY || event.key === null) {
-        confirmed.current = null; setSaved(false);
+        setPendingRecord(null); setSaved(false);
         setStatus('Not saved — local storage changed in another tab. Your session edits are kept; reload to reopen the stored record.');
       }
     };
     window.addEventListener('storage', changed);
     return () => window.removeEventListener('storage', changed);
   }, []);
+  // Manifest identity alone does not establish that the media actually loaded.
+  // Keep the persisted cue out of the editor until bytes AND duration are verified.
+  useEffect(() => {
+    if (!pendingRecord) return;
+    if (mediaError) {
+      setSaved(false);
+      setStatus('Stored record not verified — it cannot be reopened because the sample failed verification. The stored record is unchanged.');
+    } else if (ready) {
+      setMark(pendingRecord); setPendingRecord(null); setSaved(true);
+      setStatus('Saved in this browser — reopened and checked against this sample.');
+    }
+  }, [pendingRecord, ready, mediaError]);
   function edit(patch: Partial<Mark>) {
-    setMark(current => ({ ...current, ...patch })); setSaved(false); confirmed.current = null;
+    setMark(current => ({ ...current, ...patch })); setSaved(false); setPendingRecord(null);
     setStatus('Not saved — session edits have not been confirmed in local storage.');
   }
   function save() {
-    setSaved(false); confirmed.current = null;
+    setSaved(false); setPendingRecord(null);
     try {
       if (!ready || mediaError) throw new Error('Sample is not ready.');
-      confirmed.current = writeVerified(mark); setSaved(true);
+      writeVerified(mark); setSaved(true);
       setStatus('Saved in this browser — write and readback verified. Not saved to a team or cloud account.');
     } catch {
       setStatus('Not saved — local storage or readback failed. Your interval and note remain in this session.');
     }
   }
   function reset() {
-    setSaved(false); confirmed.current = null;
+    setSaved(false); setPendingRecord(null);
     try {
       clearVerified(); setMark(emptyMark()); stopAtEnd.current = false;
       if (video.current) { video.current.pause(); video.current.currentTime = 0; }
@@ -92,6 +104,10 @@ export default function FilmDemoApp() {
     try { await video.current.play(); } catch { setNotice('Playback did not start. Use Play again after the sample is ready.'); }
   }
   const good = validMark(mark);
+  const verifiedSaved = saved && ready && !mediaError;
+  const visibleStatus = saved && !verifiedSaved
+    ? 'Stored record not verified — the sample is unavailable. No verified reopen is claimed.'
+    : status;
   return <div className="film-a0"><AppShell active="overview" onNavigate={() => setNotice('This isolated A0 demo contains Film only. Core destinations are unchanged in the accepted app.')} email="coach@demo.invalid" teamName="Synthetic Football Lab" standalone samplePreview>
     <div className="film-demo-wrap">
       <p className="film-eyebrow">LOCAL SYNTHETIC DEMO · NO ACCOUNT CONNECTED</p>
@@ -135,7 +151,7 @@ export default function FilmDemoApp() {
           <label>Note<textarea aria-label="Coaching note" maxLength={2000} rows={4} value={mark.note} onChange={e => edit({ note: e.target.value })} placeholder="What should the coach or player notice?" /></label>
           {!good && <p className="film-validation">Use a label and an interval with 0 ≤ start &lt; end ≤ 8 seconds.</p>}
           <div className="film-controls"><button className="film-primary" disabled={!ready || !good || !!mediaError} onClick={save}>Save in this browser</button><button onClick={reset}>Reset local demo</button></div>
-          <p role="status" data-testid="save-status" className={saved ? 'film-saved' : 'film-unsaved'}>{status}</p>
+          <p role="status" data-testid="save-status" className={verifiedSaved ? 'film-saved' : 'film-unsaved'}>{visibleStatus}</p>
         </section>
       </div>
       <footer className="film-footer">A0 only · Original synthetic route diagram · No athlete data · No cloud connection · No cross-device persistence · Beta release not approved</footer>
