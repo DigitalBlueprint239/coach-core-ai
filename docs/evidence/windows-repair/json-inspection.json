@@ -1,0 +1,48 @@
+{
+  "chromium": {
+    "players": 11,
+    "routes": 1,
+    "waypoints": [
+      {
+        "x": 130,
+        "y": 170
+      },
+      {
+        "x": 140,
+        "y": 150
+      },
+      {
+        "x": 180,
+        "y": 120
+      }
+    ],
+    "routeType": "custom",
+    "routeColor": "#ef4444",
+    "playerReferenceValid": true,
+    "reopenedExactlyEqual": true,
+    "savedJsonSha256": "9449ece3f28c01beaa546606847df1209d003803f13ca2400358db85a115323f"
+  },
+  "firefox": {
+    "players": 11,
+    "routes": 1,
+    "waypoints": [
+      {
+        "x": 130,
+        "y": 170
+      },
+      {
+        "x": 140,
+        "y": 150
+      },
+      {
+        "x": 180,
+        "y": 120
+      }
+    ],
+    "routeType": "custom",
+    "routeColor": "#ef4444",
+    "playerReferenceValid": true,
+    "reopenedExactlyEqual": true,
+    "savedJsonSha256": "96159399ee802a2962a7e95bb83c8e587a1e16891b24f1de131426a66c5b050d"
+  }
+}

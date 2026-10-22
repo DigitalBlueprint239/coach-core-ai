@@ -1,0 +1,34 @@
+{
+  "source": "32f46d34821380dc69c8eaf37554bfc26f71fa06",
+  "version": "2026.10.22-r1",
+  "runtime": {
+    "os": "Linux",
+    "node": "24.19.0",
+    "java": "21.0.12.1",
+    "chromium": "156.0.8078.4",
+    "firefox": "157.0"
+  },
+  "commands": {
+    "build": "E2E_IMPORT_OFF=1 E2E_BUILD_PATH=e2e/.app-build bash e2e/scripts/build-app.sh",
+    "repairBrowser": "RUN_ID=latest PLAYWRIGHT_BROWSERS_PATH=/workspace/film-a0-browsers node tools/windows-main-demo/repair-browser.cjs",
+    "acceptance": "PLAYWRIGHT_BROWSERS_PATH=/workspace/film-a0-browsers e2e/node_modules/.bin/playwright test --config tools/windows-main-demo/repair-verify.config.ts"
+  },
+  "browserAcceptance": {
+    "pass": 16,
+    "fail": 0,
+    "skip": 0,
+    "retries": 0
+  },
+  "unit": {
+    "pass": 114,
+    "fail": 0
+  },
+  "repairBrowsers": [
+    "chromium",
+    "firefox"
+  ],
+  "nativeWindows": "BLOCKED not available",
+  "claude": "pending independent review",
+  "appFilesEqualToRunningPackage": 13,
+  "protectedFileByteEqualityBeforeStartup": 9
+}

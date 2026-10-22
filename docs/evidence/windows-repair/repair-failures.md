@@ -1,0 +1,10 @@
+Corrections retained during repair, not final residual failures:
+- Build initially rejected inferred Object[] from the JS createPlayer declaration; explicit PlaybookPlayer cast restored typed build.
+- The first explicit Tailwind compile produced nested responsive rules that CRA's PostCSS mishandled. Flattening via already-pinned postcss-nested restored desktop placement; screenshot inspect.png retains the intermediate stacked layout.
+- New browser harness originally demanded exact integer coordinates from scaled physical mouse input; browser coordinate rounding made waypoints differ by fractions of a pixel. Harness now allows <1.5 canvas pixels for pointer placement and still demands exact saved/reopened JSON. Existing tests were not modified.
+- Harness initially assumed six tutorial steps and that every newly saved practice became the selected heading. Actual app has seven steps and may keep a previous selection; assertions now verify seven-step completion and the new practice's calendar/list entry. Existing tests unchanged.
+- New history regression failed before repair: redo prepended to an append-based undo stack, so undo after redo skipped the immediate previous state. Fixed by appending; new test passes with all 113 original selected tests unchanged.
+- First repaired package startup stopped with Unexpected app source: old operator preflight still pinned the baseline app SHA. Repaired preflight binds repair version, baseline lineage and valid source inventory. Later upgraded-package starts, exports and restarts passed.
+- Independent geometry assertion initially counted literal WR roles, while the attached Shotgun variant names its receivers X/Z/H/Y. The geometry test now checks those four receiver labels; counts, LOS, backfield depth and coordinates are independently asserted.
+
+- The restart harness initially assumed a fresh profile selected the first test team. After creating a second team, the default could differ. It now explicitly switches to Synthetic Training Team before locating its saved play; cross-team hiding is independently verified.

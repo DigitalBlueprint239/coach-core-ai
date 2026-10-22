@@ -1,0 +1,108 @@
+{
+  "name": "",
+  "phase": "offense",
+  "type": "pass",
+  "players": [
+    {
+      "id": "1792710610715-gfygos27s",
+      "x": 260,
+      "y": 190,
+      "position": "LT",
+      "number": 1,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-c8rgg6oeu",
+      "x": 280,
+      "y": 190,
+      "position": "LG",
+      "number": 2,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-srhgm2gy3",
+      "x": 300,
+      "y": 190,
+      "position": "C",
+      "number": 3,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-c599kzbzp",
+      "x": 320,
+      "y": 190,
+      "position": "RG",
+      "number": 4,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-lca5glopb",
+      "x": 340,
+      "y": 190,
+      "position": "RT",
+      "number": 5,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-ethbg465b",
+      "x": 120,
+      "y": 190,
+      "position": "X",
+      "number": 6,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-xlkpcqpw0",
+      "x": 360,
+      "y": 190,
+      "position": "TE",
+      "number": 7,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-m2pgd1wrr",
+      "x": 480,
+      "y": 210,
+      "position": "Z",
+      "number": 8,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-m3arox5c8",
+      "x": 300,
+      "y": 198,
+      "position": "QB",
+      "number": 9,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-kx2op12a5",
+      "x": 300,
+      "y": 230,
+      "position": "FB",
+      "number": 10,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    },
+    {
+      "id": "1792710610715-cqqcg1sim",
+      "x": 300,
+      "y": 260,
+      "position": "TB",
+      "number": 11,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:10.715Z"
+    }
+  ],
+  "routes": [],
+  "formation": "I RIGHT · 21 personnel | TE right | QB under center"
+}
