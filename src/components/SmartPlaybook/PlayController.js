@@ -404,7 +404,7 @@ export function redo(undoStack, redoStack, currentState) {
   }
   
   const next = redoStack[0];
-  const newUndoStack = [currentState, ...undoStack];
+  const newUndoStack = [...undoStack, currentState];
   const newRedoStack = redoStack.slice(1);
   
   return [next, newUndoStack, newRedoStack];
@@ -514,12 +514,6 @@ export function findPlayerAtPosition(players, x, y, threshold = 20) {
     throw new Error('Threshold must be a positive number');
   }
 
-  for (const player of players) {
-    const distance = calculateDistance({ x, y }, { x: player.x, y: player.y });
-    if (distance <= threshold) {
-      return player;
-    }
-  }
-  
-  return null;
+  return players.filter(p=>calculateDistance({x,y},p)<=threshold)
+    .sort((a,b)=>calculateDistance({x,y},a)-calculateDistance({x,y},b))[0] || null;
 }

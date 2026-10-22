@@ -35,6 +35,7 @@ const PlayerControls = memo(({
   const handleSave = () => {
     if (!selectedPlayer) return;
     
+    if(editNumber.trim()===''||!Number.isInteger(Number(editNumber))||Number(editNumber)<0||Number(editNumber)>99){alert('Player number must be a whole number from 0 to 99.');return;}
     const updates = {};
     let hasErrors = false;
     
