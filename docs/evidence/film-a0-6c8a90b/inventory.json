@@ -1,0 +1,137 @@
+{
+  "sourceSha": "6c8a90b16196f8b08115de57d70607016073ecca",
+  "base": "c7baeb006a1fc01a6c9986088e1b1594927f9aba",
+  "kind": "local implementation evidence, not independent acceptance or Actions",
+  "files": [
+    {
+      "path": "browser-traces.zip",
+      "bytes": 13972791,
+      "sha256": "f543c40719fb2a63395cb39a16db3238792b4d340a3cbccf7b8aea5bae65bf42"
+    },
+    {
+      "path": "chromium-phone-status.png",
+      "bytes": 47203,
+      "sha256": "0886f5187cadb4df827e5049a3ea121fa321504cc29bf9c067525bf641fabf7e"
+    },
+    {
+      "path": "chromium-phone.png",
+      "bytes": 117081,
+      "sha256": "a6070cbcec5d92d6e31fcd868ad17b558a2c4a57ef8760f4bac907a3046aa33b"
+    },
+    {
+      "path": "chromium-saved.png",
+      "bytes": 170585,
+      "sha256": "d7e22ebb923f6665c50d23a5e45bbcdd20338af0ced04d471b966c7642565c8c"
+    },
+    {
+      "path": "chromium-version.txt",
+      "bytes": 13,
+      "sha256": "028efa6357adf9368751238630a794f59cc64910153218e894d87c910a5c7f47"
+    },
+    {
+      "path": "demo-build.zip",
+      "bytes": 137789,
+      "sha256": "d8a7c1c79e95ec4e9377fe59add113eeee7697d1c94c0c865859ca4d4590b324"
+    },
+    {
+      "path": "exact-head-browser.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "exact-head-browser.log",
+      "bytes": 2658,
+      "sha256": "43e87b4bfe2b2c52ec949111e0e25a6f70090406f81ae6a2abb2744aa8fd2cd8"
+    },
+    {
+      "path": "exact-head-build-server.log",
+      "bytes": 162,
+      "sha256": "38521875eb72677056904b993e98cea9af1e523501070c94f4de7cba2022300e"
+    },
+    {
+      "path": "exact-head-isolation.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "exact-head-isolation.log",
+      "bytes": 115,
+      "sha256": "4036df03b00ca5f5aa769e51447b0cf6138ec8189fe58cb60daf859138b976d8"
+    },
+    {
+      "path": "exact-head-types.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "exact-head-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exact-head-unit.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "exact-head-unit.log",
+      "bytes": 3057,
+      "sha256": "b2936b92d076c33b1e660ea308e7367e1c339dd1eadac95780a4bcf6c582bd0a"
+    },
+    {
+      "path": "firefox-phone-status.png",
+      "bytes": 59418,
+      "sha256": "2c95bfadd202f1fff632b31be1908ecc4f5ccb1068eaf121f376f5f646779488"
+    },
+    {
+      "path": "firefox-phone.png",
+      "bytes": 149808,
+      "sha256": "11c2f2f5087c615e3c9940fa6353d874e81ac7ce48d5adc02fcf956519fbe657"
+    },
+    {
+      "path": "firefox-saved.png",
+      "bytes": 219303,
+      "sha256": "0ee76b6b196f7f3e22817933a98eddee658e34d76a44e9c3dfc6502fb0c4faaa"
+    },
+    {
+      "path": "firefox-version.txt",
+      "bytes": 6,
+      "sha256": "2fda379c8f0adf160cfa9d3f47f80b07f6537faab45991adabca1ca4a2f99835"
+    },
+    {
+      "path": "initial-contrast-observation.png",
+      "bytes": 161785,
+      "sha256": "8785dafcd26ebea191b65c34063f141cb2311655dcb9d914c06975c87a294eda"
+    },
+    {
+      "path": "preservation.json",
+      "bytes": 999,
+      "sha256": "98e04dfcca20b3430711ac975aab273ada7c707084d6301ec4de22d76906b713"
+    },
+    {
+      "path": "results.json",
+      "bytes": 4471,
+      "sha256": "4096f6e45bb0632fb02c93581cdb026041bfdb692f28518ca85f7ee624768c9e"
+    },
+    {
+      "path": "sample-final-1.json",
+      "bytes": 738,
+      "sha256": "c432ee8881a286553f28c020e3b1942658f44e10a350f062c1a992e23e28faca"
+    },
+    {
+      "path": "sample-final-2.json",
+      "bytes": 738,
+      "sha256": "c432ee8881a286553f28c020e3b1942658f44e10a350f062c1a992e23e28faca"
+    },
+    {
+      "path": "sample-generation.json",
+      "bytes": 738,
+      "sha256": "009d667b930e03e8bdbc265770404c77cc532b56df9ff5ab5af4b3256bbb6611"
+    },
+    {
+      "path": "sample-regeneration.json",
+      "bytes": 738,
+      "sha256": "36f5689cc0d763cd8c3bcdc54dfca0b32a6ff89811c82a346dd085cde3fdc176"
+    }
+  ]
+}

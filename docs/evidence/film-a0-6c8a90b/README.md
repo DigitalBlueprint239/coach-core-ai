@@ -1,0 +1,13 @@
+# A0 exact-source implementation evidence
+
+Source candidate **6c8a90b16196f8b08115de57d70607016073ecca**, base **c7baeb006a1fc01a6c9986088e1b1594927f9aba**. The implementation branch is fixed; this separate evidence branch adds only this directory.
+
+Local production build, no deployment, Actions run, emulator, backend, provider, real footage or AI. `results.json` binds the served fresh build to the candidate with `trackedDirty:false`, entry name and sample digests. Browser versions are retained. Unit23/0/0; browser28/0/0; isolation8 groups PASS; tsc exit0. Actual process exits accompany raw logs. Test definitions/commands are in the candidate's `docs/film/FILM_A0_DEMO.md` and `tests/film-a0/`. Dependencies reused from existing accepted workspace; no clean-install claim. Node24.19.0/npm11.9.0; Playwright1.64.0. React DOM tests retain the inherited act-deprecation warning; no test was skipped or loosened.
+
+`browser-traces.zip` contains all28 Playwright trace ZIPs. Extract one, then use `npm --prefix e2e exec -- playwright show-trace /path/to/trace.zip` locally; the trace viewer is not a deployment. Desktop and390px screenshots are retained; phone-status screenshots verify the message above navigation. Mobile viewport is emulation, not a physical-device/Safari PASS. `demo-build.zip` contains the exact inspected generated output, its build provenance and verified sample. It is not a deploy artifact authorization.
+
+All media/screens/notes are synthetic. No credentials, real identities or network/provider payloads were intentionally collected. All browser contexts assert no external requests or page errors. `inventory.json` hashes the final retained files except itself and this README. Verify hashes before inspection. The ZIPs have no claim of a B15 cloud artifact run; A0 is a separate loopback-only build.
+
+Initial observations remain explicit: `sample-generation.json` vs `sample-regeneration.json` records the non-bitexact WebM hash drift. Final1/2 match after the single-thread/bitexact correction. `initial-contrast-observation.png` shows inherited light text before the demo-scoped correction. Both observations were fixed before the candidate commit; initial functional browser run28/28 remained passing. No historical product/CI failures were relabelled by this work.
+
+Claude non-author review is pending. This evidence is author validation, not acceptance or beta GO. Accepted App/index/AppShell/auth/rules/functions/contracts/assertions/execution settings are unchanged, as the preservation inventory shows. No A1 or production safeguard activation is implied. MVP NO-GO.

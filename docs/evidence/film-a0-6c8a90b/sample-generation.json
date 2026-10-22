@@ -1,0 +1,26 @@
+{
+  "id": "synthetic-out-route-v1",
+  "durationMs": 8000,
+  "width": 640,
+  "height": 360,
+  "fps": 15,
+  "frames": 120,
+  "source": "Original deterministic Pillow diagram; no people, footage, AI, or third-party visual assets.",
+  "generator": "scripts/film-a0/generate-sample.py",
+  "toolchain": {
+    "ffmpeg": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "pillow": "12.3.0"
+  },
+  "files": [
+    {
+      "name": "out-route.mp4",
+      "bytes": 25182,
+      "sha256": "55fa361cb78e38bde40f163f450d3e38917c6730ca17f0030eb9acfb04740c9a"
+    },
+    {
+      "name": "out-route.webm",
+      "bytes": 53422,
+      "sha256": "95046f2f97a97c7e9c4605f74badbbdfa5afb464b7c939f0581ab4d57f5679e6"
+    }
+  ]
+}

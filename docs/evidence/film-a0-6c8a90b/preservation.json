@@ -1,0 +1,28 @@
+{
+  "base": "c7baeb006a1fc01a6c9986088e1b1594927f9aba",
+  "candidate": "6c8a90b16196f8b08115de57d70607016073ecca",
+  "existingChanged": [
+    "M\t.gitignore",
+    "M\tdocs/MVP_7_DAY_SPRINT.md",
+    "M\tpackage.json"
+  ],
+  "newPaths": [
+    "docs/film/FILM_A0_DEMO.md",
+    "public/film-a0/out-route.mp4",
+    "public/film-a0/out-route.webm",
+    "public/film-a0/sample.json",
+    "scripts/film-a0.cjs",
+    "scripts/film-a0/generate-sample.py",
+    "scripts/film-a0/index.html",
+    "src/features/film-analyzer/demo/FilmDemoApp.tsx",
+    "src/features/film-analyzer/demo/film-demo.css",
+    "src/features/film-analyzer/demo/index.tsx",
+    "src/features/film-analyzer/demo/localRecord.test.ts",
+    "src/features/film-analyzer/demo/localRecord.ts",
+    "src/features/film-analyzer/demo/sample.json",
+    "tests/film-a0/browser.cjs",
+    "tests/film-a0/isolation.cjs"
+  ],
+  "unexpectedExistingChanges": [],
+  "acceptedApplicationBackendRulesContractAssertionsAndExecutionSettingsUnchanged": true
+}
