@@ -1,0 +1,186 @@
+{
+  "applicationSource": "0dc94c4c6121aa379fb3e612b7d738a140f56ec6",
+  "kind": "local operator setup and browser verification, not native Windows installation or release approval",
+  "files": [
+    {
+      "path": "CoachCore-Main-Local-Windows.zip",
+      "bytes": 463025,
+      "sha256": "db3e98aced11b8b700b4cf79474d70dc3177367dbecff53c1d8c48b47aeb1d32"
+    },
+    {
+      "path": "build.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "build.log",
+      "bytes": 4509,
+      "sha256": "13745aeba47b884a892daf0d0f76468e2415c1adbc0af3e20bf672621b4418ec"
+    },
+    {
+      "path": "clean-functions-install.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "clean-functions-install.log",
+      "bytes": 1343,
+      "sha256": "78f6c856773237cd23e2b1f247991d5b67d3acf0fa48689661fe08578358baf7"
+    },
+    {
+      "path": "clean-tools-install.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "clean-tools-install.log",
+      "bytes": 742,
+      "sha256": "172bf1d04b25cb826ac58ca95e3ab32cde05a1a46a9d9f1f711cfb3a82114abd"
+    },
+    {
+      "path": "core-browser-no-tests.log",
+      "bytes": 23,
+      "sha256": "bef44b71926303f638fcf3917875642de7e01f8828d85d994561945390fde863"
+    },
+    {
+      "path": "core-browser.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "core-browser.log",
+      "bytes": 1540,
+      "sha256": "335c353f200904bc1f66bfa962c24308c3b6b30f6634bc390180a64bea211b0f"
+    },
+    {
+      "path": "core-results.json",
+      "bytes": 21829,
+      "sha256": "5386079d97775265eb3ae50904377bfde7e1043d98362c1ba311168a0ece53c7"
+    },
+    {
+      "path": "delivery-check.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "delivery-check.log",
+      "bytes": 114,
+      "sha256": "6ba6657d353e99688f657b63572f9a3fa5a6eb5b9ce31df4bbc5b7e22a6ae06f"
+    },
+    {
+      "path": "final-package-check.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "final-package-check.log",
+      "bytes": 114,
+      "sha256": "6ba6657d353e99688f657b63572f9a3fa5a6eb5b9ce31df4bbc5b7e22a6ae06f"
+    },
+    {
+      "path": "guard-check.log",
+      "bytes": 146,
+      "sha256": "9fa30ef464df69c03d14f6c51fb54a7b2492b1ba9dc0ed1e2eaf813af7ee2ba0"
+    },
+    {
+      "path": "main-app.png",
+      "bytes": 166800,
+      "sha256": "f5ff905c2a06bdabc019c8f588f5b30d4e99b82e96d8bb08bd94020af9a35907"
+    },
+    {
+      "path": "playbook.png",
+      "bytes": 170460,
+      "sha256": "e30a224b5d642088f422515b1b017bcc97d353001fe3cb6f0a9d956c23352e23"
+    },
+    {
+      "path": "portal-check.cjs",
+      "bytes": 907,
+      "sha256": "1206271f170c2cd3f5086bdd25d16132209242b200148019b5ebd49ac735cf2b"
+    },
+    {
+      "path": "portal-check.log",
+      "bytes": 73,
+      "sha256": "0ecc4f434cd3753e328dd334dec3faa6a61c4535a4d4163206178409526cf68f"
+    },
+    {
+      "path": "practice.png",
+      "bytes": 189177,
+      "sha256": "df682df7a4a9183963a8e186631463c1159d75207a00705b30f503795dab97d8"
+    },
+    {
+      "path": "restart-check.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "restart-check.log",
+      "bytes": 114,
+      "sha256": "6ba6657d353e99688f657b63572f9a3fa5a6eb5b9ce31df4bbc5b7e22a6ae06f"
+    },
+    {
+      "path": "restart-trace.zip",
+      "bytes": 786917,
+      "sha256": "a9525d1493dea6e2f90e137d5d50f6aea2acfa5d6d349c429b5efde28580de58"
+    },
+    {
+      "path": "runtime-2.log",
+      "bytes": 28067,
+      "sha256": "ace804753517fac7a0c4eb370dd824271b146ff8848fb3c69cadbac4ba8333dd"
+    },
+    {
+      "path": "runtime-3.log",
+      "bytes": 6906,
+      "sha256": "1ce82861482405b72e1153f7ff1d482ab5f8dcc2bce4ea4859becc6994e5c5dc"
+    },
+    {
+      "path": "runtime-delivery.log",
+      "bytes": 4858,
+      "sha256": "8e412aca91354f6d87ab4c9156e330827dee2587fea13ecf3f08e73bf1d31ec2"
+    },
+    {
+      "path": "runtime-final.log",
+      "bytes": 4858,
+      "sha256": "cdca036b6be04c6d5e43698dfa54c8c4875318fa59da4edcbc2837e970123ca4"
+    },
+    {
+      "path": "runtime-restart.log",
+      "bytes": 5974,
+      "sha256": "fde7584141ef5d3ca73f3ddea76c65eb88c78b36792be9fa02f6db1d38eb5689"
+    },
+    {
+      "path": "runtime.log",
+      "bytes": 1337,
+      "sha256": "4d7be6b3e1dcad3a3727a3080170112c88dcacab171fadf7efa32aca23609da0"
+    },
+    {
+      "path": "targeted-browser-traces.zip",
+      "bytes": 7602223,
+      "sha256": "18ef97a02f9e3d1b1f11aa58ffaa9ce7d28b96788953559cf12d79174eaf391a"
+    },
+    {
+      "path": "teams.png",
+      "bytes": 72051,
+      "sha256": "2a3fd51184412e91fed4b79f707a1f26f53c96e307ed619ecb282c8de60d8721"
+    },
+    {
+      "path": "user-flow-trace.zip",
+      "bytes": 1240475,
+      "sha256": "142fbec02ae4b7cf1860fa8f9792e9abed2eb11c791822988eb732b728a54881"
+    },
+    {
+      "path": "user-flow.cjs",
+      "bytes": 3322,
+      "sha256": "6297f6df452bf58017d9ca6424759b4d325431d7364dc3b7696b42ed5630d0ab"
+    },
+    {
+      "path": "user-flow.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "user-flow.log",
+      "bytes": 134,
+      "sha256": "8dbf55d1c90e6aea123102c97dadb4366be38e27477b9ab8292808eff02e23dc"
+    }
+  ]
+}

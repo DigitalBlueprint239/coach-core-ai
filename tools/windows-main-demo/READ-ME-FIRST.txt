@@ -1,0 +1,35 @@
+Coach Core MAIN app - local synthetic account setup
+
+1. EXTRACT ALL this ZIP into a folder. Do not run the starter from inside the ZIP.
+2. Node.js22+ and Java21+ must be installed. Node22 is already confirmed on your PC.
+   If Java is missing, install the free Temurin21 JDK for Windows:
+   https://adoptium.net/temurin/releases/?version=21
+   Or run in PowerShell: winget install --id EclipseAdoptium.Temurin.21.JDK --exact --source winget
+   Reopen the starter after installation. Do not disable firewall/security controls.
+3. Double-click START-COACH-CORE.cmd in the extracted folder.
+   The first run installs the pinned local tools and downloads emulator JARs.
+4. Keep that console open. After startup, it opens your browser automatically.
+
+ONE MAIN-APP ADDRESS: http://localhost:3000/start
+
+The local-only starter opens coach@demo.coachcore.test automatically.
+This is a synthetic account, not your Google account or a real beta grant.
+Create a team, then use Practice Plans and Smart Playbook from the sidebar.
+Use manual creation/save/reopen. AI is OFF. No real footage or personal data.
+If you sign out, open the same /start address to sign in again.
+
+Ctrl+C in the console saves synthetic emulator data to .local-state and stops.
+Keep the extracted folder to retain that data. Reopen START-COACH-CORE.cmd to resume.
+This is not a cloud backup. If export fails, the console reports that.
+Do not run a second copy; occupied ports are reported instead of stopping unknown processes.
+
+Verified in this workspace: actual Teams create/reopen; Practice Plan save/reopen;
+Smart Playbook save/reopen in Chromium and Firefox (6 passed, no skips/retries).
+Native Windows setup still needs to be observed on your computer.
+Known visual defect: some controls are unstyled and success icons are oversized
+because the existing app build is missing utility CSS. Persistence workflows pass.
+Film A0 remains a separate demo; it has not been integrated into this main app.
+
+Application source: 0dc94c4c6121aa379fb3e612b7d738a140f56ec6.
+Local demo project only: demo-coach-core-e2e. No live Firebase login/deployment.
+No application rebuild is performed on your computer.
