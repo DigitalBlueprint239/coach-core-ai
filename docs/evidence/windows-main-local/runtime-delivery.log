@@ -1,0 +1,55 @@
+i  emulators: Starting emulators: auth, functions, firestore, storage
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Importing data from /workspace/coach-core-main-runtime/.local-state/firestore_export/firestore_export.overall_export_metadata
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  auth: Importing config from /workspace/coach-core-main-runtime/.local-state/auth_export/config.json
+i  auth: Importing accounts from /workspace/coach-core-main-runtime/.local-state/auth_export/accounts.json
+⚠  emulators: The Emulator UI is not starting because none of the running emulators have a UI component.
+i  functions: Watching "/workspace/coach-core-main-runtime/functions" for Cloud Functions...
+⚠  functions: Your requested "node" version "22" doesn't match your global version "24". Using node@24 from host.
+i  functions: Loaded environment variables from functions/.env.local
+Serving at port 8454
+
+✔  functions: Loaded functions definitions from source: coachAI, createUserProfile, onTeamMemberAdded, onPracticePlanCreated, onPlayCreated, trackUserActivity, cleanupOldNotifications, healthCheck, reserveFilmUpload, abandonFilmUpload, onFilmQuarantineFinalized.
+✔  functions[us-central1-coachAI]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/coachAI).
+✔  functions[us-central1-createUserProfile]: firestore function initialized.
+✔  functions[us-central1-onTeamMemberAdded]: firestore function initialized.
+✔  functions[us-central1-onPracticePlanCreated]: firestore function initialized.
+✔  functions[us-central1-onPlayCreated]: firestore function initialized.
+✔  functions[us-central1-trackUserActivity]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/trackUserActivity).
+i  functions[us-central1-cleanupOldNotifications]: function ignored because the pubsub emulator does not exist or is not running.
+✔  functions[us-central1-healthCheck]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/healthCheck).
+✔  functions[us-central1-reserveFilmUpload]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/reserveFilmUpload).
+✔  functions[us-central1-abandonFilmUpload]: http function initialized (http://127.0.0.1:5001/demo-coach-core-e2e/us-central1/abandonFilmUpload).
+✔  functions[us-central1-onFilmQuarantineFinalized]: storage function initialized.
+
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┐
+│ Emulator       │ Host:Port      │
+├────────────────┼────────────────┤
+│ Authentication │ 127.0.0.1:9099 │
+├────────────────┼────────────────┤
+│ Functions      │ 127.0.0.1:5001 │
+├────────────────┼────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │
+├────────────────┼────────────────┤
+│ Storage        │ 127.0.0.1:9199 │
+└────────────────┴────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+i  functions: Loaded environment variables from functions/.env.local
+i  functions: Beginning execution of "us-central1-healthCheck"
+i  functions: Finished "us-central1-healthCheck" in 6.104283ms
+
+MAIN COACH CORE READY: http://localhost:3000/start
+Synthetic accounts only. AI and Film backend OFF. Ctrl+C saves local emulator data and stops.
+⚠  canHandleCodeInApp is unsupported in Auth Emulator. All OOB operations will complete via web.
+i  To sign in as coach@demo.coachcore.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=signIn&lang=en&oobCode=<synthetic-code-redacted>&apiKey=fake-api-key&continueUrl=http%3A%2F%2Flocalhost%3A3000%2F

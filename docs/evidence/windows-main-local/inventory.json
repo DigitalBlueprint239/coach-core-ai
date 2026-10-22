@@ -58,6 +58,16 @@
       "sha256": "5386079d97775265eb3ae50904377bfde7e1043d98362c1ba311168a0ece53c7"
     },
     {
+      "path": "delivery-check.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "delivery-check.log",
+      "bytes": 114,
+      "sha256": "6ba6657d353e99688f657b63572f9a3fa5a6eb5b9ce31df4bbc5b7e22a6ae06f"
+    },
+    {
       "path": "final-package-check.exit",
       "bytes": 2,
       "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
@@ -121,6 +131,11 @@
       "path": "runtime-3.log",
       "bytes": 6906,
       "sha256": "1ce82861482405b72e1153f7ff1d482ab5f8dcc2bce4ea4859becc6994e5c5dc"
+    },
+    {
+      "path": "runtime-delivery.log",
+      "bytes": 4858,
+      "sha256": "8e412aca91354f6d87ab4c9156e330827dee2587fea13ecf3f08e73bf1d31ec2"
     },
     {
       "path": "runtime-final.log",
