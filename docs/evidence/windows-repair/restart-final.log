@@ -1,0 +1,1 @@
+PASS: exported emulator state -> restart/import -> fresh browser -> reopened positions and nonempty route JSON exactly equal. Offline play save stays pending/not saved and acknowledges after reconnect. Start Drawing Route selection path works. Find drafts reports positive result.

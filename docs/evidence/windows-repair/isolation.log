@@ -1,0 +1,1 @@
+PASS: same coach, second team has empty play library/practice list and empty play draft; returning restores first-team saved route/play library.
