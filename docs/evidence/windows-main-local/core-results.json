@@ -1,0 +1,605 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/coach-core-windows-main/e2e/node_modules/playwright/cli.js",
+      "test",
+      "-c",
+      "tools/windows-main-demo/verify.config.ts"
+    ],
+    "configFile": "/workspace/coach-core-windows-main/tools/windows-main-demo/verify.config.ts",
+    "rootDir": "/workspace/coach-core-windows-main/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/coach-core-windows-main-evidence/core-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspace/coach-core-windows-main/e2e/tests",
+        "testIgnore": [
+          "**/release-import-off.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspace/coach-core-windows-main-evidence/core-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/workspace/coach-core-windows-main/e2e/tests",
+        "testIgnore": [
+          "**/release-import-off.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/coach-core-windows-main-evidence/core-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/workspace/coach-core-windows-main/e2e/tests",
+        "snapshotDir": "/workspace/coach-core-windows-main/e2e/tests",
+        "testIgnore": [
+          "**/release-import-off.spec.ts"
+        ],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "on",
+          "screenshot": "on",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/coach-core-windows-main-evidence/core-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "firefox",
+        "testDir": "/workspace/coach-core-windows-main/e2e/tests",
+        "snapshotDir": "/workspace/coach-core-windows-main/e2e/tests",
+        "testIgnore": [
+          "**/release-import-off.spec.ts"
+        ],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "serviceWorkers": "block",
+          "trace": "on",
+          "screenshot": "on",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "firefox"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "firefox"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/coach-core-windows-main-evidence/core-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "coaching.spec.ts",
+      "file": "coaching.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3256,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 208
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 84
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 228
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 70
+                    }
+                  ],
+                  "startTime": "2026-10-22T20:33:24.437Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P15-Smart-Play-3a7be-dentical-players-and-routes-chromium/test-finished-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P15-Smart-Play-3a7be-dentical-players-and-routes-chromium/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P15-Smart-Play-3a7be-dentical-players-and-routes-chromium/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-62a8ed095768636ed995",
+          "file": "coaching.spec.ts",
+          "line": 244,
+          "column": 1
+        },
+        {
+          "title": "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2452,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 225
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 81
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 204
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 67
+                    }
+                  ],
+                  "startTime": "2026-10-22T20:33:27.948Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P16-practice-p-23e8d--exactly-in-a-fresh-profile-chromium/test-finished-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P16-practice-p-23e8d--exactly-in-a-fresh-profile-chromium/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P16-practice-p-23e8d--exactly-in-a-fresh-profile-chromium/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-207fe3b7893b55904d52",
+          "file": "coaching.spec.ts",
+          "line": 288,
+          "column": 1
+        },
+        {
+          "title": "CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4803,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 389
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 321
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 202
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 153
+                    }
+                  ],
+                  "startTime": "2026-10-22T20:33:32.694Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P15-Smart-Play-3a7be-dentical-players-and-routes-firefox/test-finished-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P15-Smart-Play-3a7be-dentical-players-and-routes-firefox/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P15-Smart-Play-3a7be-dentical-players-and-routes-firefox/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-5f35dd7ccf3038df04b7",
+          "file": "coaching.spec.ts",
+          "line": 244,
+          "column": 1
+        },
+        {
+          "title": "CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2994,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 186
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 105
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 208
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 124
+                    }
+                  ],
+                  "startTime": "2026-10-22T20:33:38.074Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P16-practice-p-23e8d--exactly-in-a-fresh-profile-firefox/test-finished-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P16-practice-p-23e8d--exactly-in-a-fresh-profile-firefox/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/coaching-CC-P16-practice-p-23e8d--exactly-in-a-fresh-profile-firefox/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e46e8b3c690e0044e78a-868f7cb1214cf28174fb",
+          "file": "coaching.spec.ts",
+          "line": 288,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "teams.spec.ts",
+      "file": "teams.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1600,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 184
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 81
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 195
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 79
+                    }
+                  ],
+                  "startTime": "2026-10-22T20:33:30.552Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/teams-E2E-T01-cloud-save-r-4af1b-d-reopens-on-a-fresh-device-chromium/test-finished-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/teams-E2E-T01-cloud-save-r-4af1b-d-reopens-on-a-fresh-device-chromium/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/teams-E2E-T01-cloud-save-r-4af1b-d-reopens-on-a-fresh-device-chromium/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "108557b632e2e5e30b60-384074fddb8e92b67683",
+          "file": "teams.spec.ts",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "title": "E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2212,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 199
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 108
+                    },
+                    {
+                      "title": "sign-in: open app and wait for sign-in screen",
+                      "duration": 191
+                    },
+                    {
+                      "title": "sign-in: request email link",
+                      "duration": 123
+                    }
+                  ],
+                  "startTime": "2026-10-22T20:33:41.191Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/teams-E2E-T01-cloud-save-r-4af1b-d-reopens-on-a-fresh-device-firefox/test-finished-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/teams-E2E-T01-cloud-save-r-4af1b-d-reopens-on-a-fresh-device-firefox/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/coach-core-windows-main-evidence/core-results/teams-E2E-T01-cloud-save-r-4af1b-d-reopens-on-a-fresh-device-firefox/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "108557b632e2e5e30b60-a2adef7eb97c844a469e",
+          "file": "teams.spec.ts",
+          "line": 17,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-22T20:33:23.940Z",
+    "duration": 19849.123,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

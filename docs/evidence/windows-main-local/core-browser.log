@@ -1,0 +1,15 @@
+
+Running 6 tests using 1 worker
+
+(node:10299) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › e2e/tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes (3.3s)
+  ✓  2 [chromium] › e2e/tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile (2.5s)
+  ✓  3 [chromium] › e2e/tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device (1.6s)
+(node:10545) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [firefox] › e2e/tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes (4.8s)
+  ✓  5 [firefox] › e2e/tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile (3.0s)
+  ✓  6 [firefox] › e2e/tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device (2.2s)
+
+  6 passed (19.8s)

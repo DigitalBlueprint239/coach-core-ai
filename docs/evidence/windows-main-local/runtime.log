@@ -1,0 +1,24 @@
+i  emulators: Starting emulators: auth, functions, firestore, storage
+i  emulators: Detected demo project ID "demo-coach-core-e2e", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+
+MAIN COACH CORE READY: http://localhost:3000/start
+Synthetic accounts only. AI and Film backend OFF. Ctrl+C saves local emulator data and stops.
+i  ui: downloading ui-v1.15.0.zip...
+⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
+i  emulators: Shutting down emulators.
+i  ui: Stopping Emulator UI
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Failed to make request to https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip
+
+LOCAL SETUP STOPPED: Local emulators exited (1). See local-emulators.log.
