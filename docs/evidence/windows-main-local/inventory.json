@@ -4,8 +4,8 @@
   "files": [
     {
       "path": "CoachCore-Main-Local-Windows.zip",
-      "bytes": 462889,
-      "sha256": "13a973e30ea1dab5fb8ece90c2751790bfa185a4345829f5e4e0f423cb32d912"
+      "bytes": 463025,
+      "sha256": "db3e98aced11b8b700b4cf79474d70dc3177367dbecff53c1d8c48b47aeb1d32"
     },
     {
       "path": "build.exit",
@@ -66,6 +66,11 @@
       "path": "final-package-check.log",
       "bytes": 114,
       "sha256": "6ba6657d353e99688f657b63572f9a3fa5a6eb5b9ce31df4bbc5b7e22a6ae06f"
+    },
+    {
+      "path": "guard-check.log",
+      "bytes": 146,
+      "sha256": "9fa30ef464df69c03d14f6c51fb54a7b2492b1ba9dc0ed1e2eaf813af7ee2ba0"
     },
     {
       "path": "main-app.png",

@@ -4,8 +4,8 @@ Existing application source: **0dc94c4c6121aa379fb3e612b7d738a140f56ec6**. No ap
 
 ## User package
 
-`CoachCore-Main-Local-Windows.zip` (462889bytes), SHA256:
-`13a973e30ea1dab5fb8ece90c2751790bfa185a4345829f5e4e0f423cb32d912`.
+`CoachCore-Main-Local-Windows.zip` (463025bytes), SHA256:
+`db3e98aced11b8b700b4cf79474d70dc3177367dbecff53c1d8c48b47aeb1d32`.
 
 Extract All, then double-click `START-COACH-CORE.cmd`. Requires Node22+ (22.23.1 confirmed on Coach Drew's PC) and Java21+ (not yet confirmed on his PC). Missing runtimes produce a specific stop message. Java can be installed from the official Temurin21 Windows distribution or WinGet's `EclipseAdoptium.Temurin.21.JDK`; installer execution and native-Windows startup have not been performed remotely. The connected browser tool returned UNAUTHORIZED/requires reauthentication, and no remote Windows shell is available.
 
@@ -30,3 +30,5 @@ Ctrl+C lets firebase-tools perform --export-on-exit into .local-state before the
 Initial operator setup failures: unnecessary emulator admin-UI download failed; the delivered configuration disables that UI. First shutdown helper attempted an export after the CLI had stopped; the delivered helper instead uses the CLI's own export-on-exit and successful export/import is demonstrated. A first targeted-test filter selected no tests; the operator-only filter was corrected and exactly the requested six tests ran. No accepted assertion was changed. These earlier setup logs remain retained.
 
 An optional official Adoptium API lookup returned HTTP403 in this workspace; no automatic Java downloader or unverified Java binary is bundled. Java presence/access on the PC remains a concrete prerequisite. Other main features, phone/physical devices, native Windows Java/npm installation, Join Team, attachments, external providers and full staging/deployment are not covered by these six tests. A0 remains a separate local Film demo and is not integrated into this main application. MVP remains NO-GO.
+
+The final child environment explicitly forces AI/Film OFF, placeholder-only provider key and loopback emulator hosts even if the parent has conflicting values. The VM guard check exercises those conflicts without network/provider calls and confirms the parent environment stays unchanged. Package guard log and source are retained.
