@@ -1,0 +1,40 @@
+COACH CORE LOCAL WINDOWS REPAIR — 2026.10.22-r1
+
+Keep your existing demo data:
+1. In the OLD Coach Core window press Ctrl+C ONCE. Wait until it says the local
+   data was exported and the server stopped. Do not delete your old folder.
+2. Extract All from this repair ZIP into a NEW folder.
+3. In the NEW folder double-click UPDATE-EXISTING.cmd. Paste the path to your
+   OLD folder (the one containing START-COACH-CORE.cmd), then press Enter.
+   It verifies files, backs up saved emulator data and old app files, and updates
+   only package files. Existing .local-state, installed dependencies, and browser
+   drafts stay in place. A busy server causes a refusal, not a forced stop.
+4. Double-click START-COACH-CORE.cmd in the OLD folder.
+5. Use this one address: http://localhost:3000/start
+
+If this is a fresh install with no existing data, run START-COACH-CORE.cmd in
+this extracted folder. Node 22+ and Java 21+ are needed; first startup downloads
+pinned tools. No Firebase login. Synthetic accounts and local emulators only.
+
+Playbook: View -> click a player to select, drag to move. Add Player -> click
+empty field. Draw Route -> click a player, click each waypoint, then Finish Route.
+You can also select in View and choose Start Drawing Route. Delete -> click a
+player or route segment. Undo reverses the last edit; Redo restores it.
+Help & tutorial is above the tools. Close tutorial is the X in its header.
+Save Play -> confirm Save Play. Refresh/reopen from Load Play. Export draft
+saves JSON containing current players and routes. Planned sidebar features stay
+unavailable. AI and Film backend stay OFF.
+
+Preset variants: Shotgun Doubles (10 personnel, 2x2, RB left); I Right (21,
+TE right, QB under center); 4-3 Over (strength right); 3-4 Base (5-0-5).
+Yellow line = LOS; offense attacks UP. Coordinates are teaching examples, not
+coverage assignments or Coach Drew's approval of a particular scheme.
+
+Press Ctrl+C ONCE when finished; let export complete before closing the window.
+Keep the SAME old folder and localhost:3000 browser origin for future sessions.
+Do not copy an empty .local-state over your existing data. If updating reports
+an error, keep both folders and the repair-backup folder.
+
+See verification/REPORT.md and screenshots in this ZIP for results and limits.
+Native Windows execution and independent Claude acceptance are separately
+identified; Linux browser evidence is not a claim of Windows testing.

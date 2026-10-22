@@ -1,0 +1,11 @@
+{
+  "browser-draft-sentinel.txt": "26488475738160e49f443c08837db421a68a065740676a0534b7be86b2ff96dd",
+  ".local-state/firebase-export-metadata.json": "c86bd7de7533c9f8443643a420fbf0e9d61bfe6086d317feffccc6789ed89696",
+  ".cli-config/preserved.txt": "b65ab035146e0a863b4cc758259edfe6da066fc09ede3d2ea761fd6cf9f8ee42",
+  ".local-state/storage_export/buckets.json": "8e15613cbcd4a57daca38f5976ccbe0ef9d7b9983c372bca84124ce4767cc299",
+  ".local-state/firestore_export/firestore_export.overall_export_metadata": "0a8d02d2367d4c0742cc081612d8b4bfacdba7b6a2540b7ce9fe3ee18fd193ef",
+  ".local-state/auth_export/config.json": "a06ad971dd56d46b5975ab34f3308384ff3231d81c70b82b7099fb9b3d312ca8",
+  ".local-state/auth_export/accounts.json": "9ddf99792d2733bc7dc308bc165d5a4304d30cdbe785a1d96dc47e5c66328abc",
+  ".local-state/firestore_export/all_namespaces/all_kinds/output-0": "aad5b60c6c564af5d554652f5780999b6344f80753e1ef6ec32abdeff77e6c81",
+  ".local-state/firestore_export/all_namespaces/all_kinds/all_namespaces_all_kinds.export_metadata": "13e9bacd54ea544ff8bbda66a29aaa75ecf3e4b987afc1c46f5f3348a486ed62"
+}

@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./utilities.generated.css";
 
 body {
   margin: 0;
@@ -15,3 +13,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } 
+/* Shared native controls also appear outside utility-styled panels. */
+button { cursor:pointer; padding:.45rem .7rem; border:1px solid #cbd5e1; border-radius:.4rem; }
+button:disabled {cursor:not-allowed;opacity:.5}
+input,select,textarea {padding:.5rem;border:1px solid #94a3b8;border-radius:.35rem;max-width:100%;}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {outline:3px solid #2563eb;outline-offset:2px}
+section[aria-label="Device recovery"] {margin:1rem 0}
+
+@media (min-width:1024px) { .playbook-controls {max-height:calc(100vh - 5rem);overflow-y:auto;padding-right:.3rem} .playbook-field {position:sticky;top:1rem;align-self:start} }
+@media (max-width:1023px) { .playbook-field {grid-row:1} .playbook-controls {grid-row:2} }
+
+.playbook-layout {display:grid;grid-template-columns:minmax(0,1fr);gap:1.5rem;align-items:start}
+.playbook-controls,.playbook-field {min-width:0}
+@media (min-width:1024px) { .playbook-layout {grid-template-columns:260px minmax(0,1fr)} .playbook-controls,.playbook-field {grid-column:auto} }
+section[aria-label="Practice plan editor"] fieldset {padding:1rem;margin:1rem 0;border:1px solid #cbd5e1;border-radius:.5rem;background:white;min-width:0}
+section[aria-label="Practice plan editor"] label {display:flex;flex-direction:column;gap:.35rem;margin:.7rem 0;font-weight:500}
+section[aria-label="Practice plan editor"] textarea {width:100%;min-height:4rem}
+section[aria-label="Practice plan editor"] input,section[aria-label="Practice plan editor"] select {width:min(100%,28rem)}
+section[aria-label="Practice plan editor"] button {margin:.2rem .35rem .2rem 0}

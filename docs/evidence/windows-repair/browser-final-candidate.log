@@ -1,0 +1,2 @@
+chromium PASS: preserved old data, all four preset mappings, select, route, add/delete, undo/redo, move, save-refresh-reopen exact JSON, resize, tutorial, clear, zero foreign requests
+firefox PASS: preserved old data, all four preset mappings, select, route, add/delete, undo/redo, move, save-refresh-reopen exact JSON, resize, tutorial, clear, zero foreign requests

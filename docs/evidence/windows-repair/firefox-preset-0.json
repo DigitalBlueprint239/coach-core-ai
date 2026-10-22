@@ -1,0 +1,108 @@
+{
+  "name": "",
+  "phase": "offense",
+  "type": "pass",
+  "players": [
+    {
+      "id": "1792710622616-5dyzz6yxj",
+      "x": 260,
+      "y": 190,
+      "position": "LT",
+      "number": 1,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-d938g0455",
+      "x": 280,
+      "y": 190,
+      "position": "LG",
+      "number": 2,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-zs03sldw9",
+      "x": 300,
+      "y": 190,
+      "position": "C",
+      "number": 3,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-9tcv1fauf",
+      "x": 320,
+      "y": 190,
+      "position": "RG",
+      "number": 4,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-ulblqxttc",
+      "x": 340,
+      "y": 190,
+      "position": "RT",
+      "number": 5,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-grq081h19",
+      "x": 120,
+      "y": 190,
+      "position": "X",
+      "number": 6,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-6gw7493pz",
+      "x": 480,
+      "y": 190,
+      "position": "Z",
+      "number": 7,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-zlozlox1w",
+      "x": 190,
+      "y": 210,
+      "position": "H",
+      "number": 8,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-bzjo95eke",
+      "x": 410,
+      "y": 210,
+      "position": "Y",
+      "number": 9,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-xpy3m7eoi",
+      "x": 300,
+      "y": 240,
+      "position": "QB",
+      "number": 10,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    },
+    {
+      "id": "1792710622616-ckzk8sfqa",
+      "x": 260,
+      "y": 245,
+      "position": "RB",
+      "number": 11,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:22.616Z"
+    }
+  ],
+  "routes": [],
+  "formation": "SHOTGUN DOUBLES · 10 personnel | 2x2 | offset RB left"
+}

@@ -1,0 +1,108 @@
+{
+  "name": "",
+  "phase": "defense",
+  "type": "pass",
+  "players": [
+    {
+      "id": "1792710623379-i6g17lefg",
+      "x": 250,
+      "y": 180,
+      "position": "DE",
+      "number": 1,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-du6n7ta60",
+      "x": 300,
+      "y": 180,
+      "position": "NT",
+      "number": 2,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-xa7eh02un",
+      "x": 350,
+      "y": 180,
+      "position": "DE",
+      "number": 3,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-igtjtj3d4",
+      "x": 220,
+      "y": 170,
+      "position": "OLB",
+      "number": 4,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-g6tydyty5",
+      "x": 380,
+      "y": 170,
+      "position": "OLB",
+      "number": 5,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-qo1bqky65",
+      "x": 280,
+      "y": 140,
+      "position": "ILB",
+      "number": 6,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-izi9u1io8",
+      "x": 320,
+      "y": 140,
+      "position": "ILB",
+      "number": 7,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-o1addju99",
+      "x": 120,
+      "y": 130,
+      "position": "CB",
+      "number": 8,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-b7u6shf5l",
+      "x": 480,
+      "y": 130,
+      "position": "CB",
+      "number": 9,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-bgjiafmna",
+      "x": 230,
+      "y": 70,
+      "position": "FS",
+      "number": 10,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    },
+    {
+      "id": "1792710623379-yau7oj81r",
+      "x": 370,
+      "y": 70,
+      "position": "SS",
+      "number": 11,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.379Z"
+    }
+  ],
+  "routes": [],
+  "formation": "3-4 BASE · Three DL / four LB / four DB | 5-0-5 front"
+}

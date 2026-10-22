@@ -21,9 +21,9 @@ const FIELD_COLORS = {
 };
 
 const PLAYER_SIZES = {
-  selected: 20,
-  default: 16,
-  borderWidth: 3
+  selected: 9,
+  default: 7,
+  borderWidth: 1
 };
 
 const ROUTE_STYLES = {
@@ -60,13 +60,8 @@ const getCanvasCoordinates = (event, canvas) => {
 
 // Utility: Find player at position
 const findPlayerAtPosition = (players, x, y, threshold = 20) => {
-  for (const player of players) {
-    const distance = Math.sqrt((x - player.x) ** 2 + (y - player.y) ** 2);
-    if (distance <= threshold) {
-      return player;
-    }
-  }
-  return null;
+  return players.filter(p=>Math.hypot(p.x-x,p.y-y)<=threshold)
+    .sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y))[0] || null;
 };
 
 // Utility: Find route at position
@@ -130,7 +125,8 @@ const drawPlayers = (ctx, players = []) => {
         return;
       }
 
-      const radius = player.selected ? PLAYER_SIZES.selected : PLAYER_SIZES.default;
+      const tight = (player.position==='C'||player.position==='QB') && players.some(p=>p.id!==player.id&&Math.hypot(p.x-player.x,p.y-player.y)<16);
+      const radius = tight ? 3 : player.selected ? PLAYER_SIZES.selected : PLAYER_SIZES.default;
 
       // Player circle
       ctx.beginPath();
@@ -143,16 +139,17 @@ const drawPlayers = (ctx, players = []) => {
 
       // Player text
       ctx.fillStyle = FIELD_COLORS.playerBorder;
-      ctx.font = 'bold 12px Arial';
+      ctx.font = 'bold 10px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
       if (player.position) {
-        ctx.fillText(player.position, player.x, player.y);
+        if(tight){ctx.textAlign=player.position==='C'?'left':'right';ctx.fillText(player.position,player.x+(player.position==='C'?8:-8),player.y);ctx.textAlign='center';}
+        else ctx.fillText(player.position, player.x, player.y-13);
       }
 
-      if (player.number) {
-        ctx.fillText(String(player.number), player.x, player.y - 24);
+      if (player.number && !tight) {
+        ctx.fillText(String(player.number), player.x, player.y + (tight ? 0 : 1));
       }
     } catch (error) {
       console.error('Error drawing player:', error, player);
@@ -233,6 +230,7 @@ const drawField = (ctx, width, height) => {
   }
 
   try {
+    ctx.textAlign='left';ctx.textBaseline='alphabetic';
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
 
@@ -240,24 +238,12 @@ const drawField = (ctx, width, height) => {
     ctx.fillStyle = FIELD_COLORS.background;
     ctx.fillRect(0, 0, width, height);
 
-    // Yard lines
-    ctx.strokeStyle = FIELD_COLORS.yardLines;
-    ctx.lineWidth = 2;
-    const yardLineSpacing = width / 10;
-
-    for (let x = 0; x <= width; x += yardLineSpacing) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
-    }
-
-    // Endzones
-    ctx.fillStyle = FIELD_COLORS.endzone;
-    ctx.globalAlpha = FIELD_COLORS.endzoneAlpha;
-    ctx.fillRect(0, 0, width * 0.08, height);
-    ctx.fillRect(width * 0.92, 0, width * 0.08, height);
-    ctx.globalAlpha = 1;
+    // Centered half-field teaching view, 10 pixels per yard; upfield is up.
+    ctx.strokeStyle = 'rgba(255,255,255,.35)';ctx.lineWidth=1;
+    for (let y=40;y<height;y+=50) {ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
+    ctx.strokeStyle='#fde047';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,190);ctx.lineTo(width,190);ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='12px sans-serif';ctx.fillText('↑ UPFIELD · offense attacks up',12,18);
+    ctx.fillStyle='#fde047';ctx.fillText('LOS',12,185);
   } catch (error) {
     console.error('Error drawing field:', error);
   }
@@ -335,7 +321,7 @@ const Field = memo(forwardRef(({
 
     // Check if clicking on a route first
     const clickedRoute = findRouteAtPosition(routes, coords.x, coords.y, 10);
-    if (clickedRoute && mode === 'view') {
+    if (clickedRoute && (mode === 'view' || mode === 'delete') && !findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD)) {
       onRouteSelect(clickedRoute.id);
       return;
     }
@@ -344,6 +330,7 @@ const Field = memo(forwardRef(({
     const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
 
     if (clickedPlayer && mode === 'view') {
+      handleCanvasEvent(event);
       // Start dragging
       setIsDragging(true);
       setDraggedPlayerId(clickedPlayer.id);
@@ -365,7 +352,7 @@ const Field = memo(forwardRef(({
 
     // Check if touching a route first
     const touchedRoute = findRouteAtPosition(routes, coords.x, coords.y, 10);
-    if (touchedRoute && mode === 'view') {
+    if (touchedRoute && (mode === 'view' || mode === 'delete') && !findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD)) {
       onRouteSelect(touchedRoute.id);
       return;
     }
@@ -374,6 +361,7 @@ const Field = memo(forwardRef(({
     const touchedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD);
 
     if (touchedPlayer && mode === 'view') {
+      handleCanvasEvent(event);
       // Start dragging
       setIsDragging(true);
       setDraggedPlayerId(touchedPlayer.id);
@@ -515,10 +503,10 @@ const Field = memo(forwardRef(({
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      onDoubleClick={handleDoubleClick}
       onKeyDown={handleCanvasEvent}
       role="img"
       aria-label={`Football field canvas in ${mode} mode`}

@@ -16,6 +16,7 @@ import EarlierDrafts from '../../features/persistence/EarlierDrafts';
 import {routesForView,routesForStorage} from '../../features/persistence/playRoutes';
 import DeviceRecovery from '../../features/persistence/DeviceRecovery';
 import DebugPanel from './DebugPanel';
+import formationReferences from './formationReferences.json';
 import PlayLibrary from './PlayLibrary';
 import CanvasArea from './components/CanvasArea';
 import SavePlayDialog from './components/SavePlayDialog';
@@ -72,6 +73,8 @@ interface PlaybookSnapshot {
   routes: PlaybookRoute[];
   action: string;
   timestamp: number;
+  phase?: string;
+  formation?: string;
 }
 
 interface SavedPlay {
@@ -117,6 +120,7 @@ const SmartPlaybook = () => {
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [mode, setMode] = useState<PlaybookMode>('view');
+  const [formationName,setFormationName]=useState(String(persistence.fields.formation||''));
   const [currentPlayName, setCurrentPlayName] = useState(String(persistence.fields.name || ''));
   const [currentPlayPhase, setCurrentPlayPhase] = useState(persistence.fields.phase === 'special_teams' ? 'special' : String(persistence.fields.phase || 'offense'));
   const [currentPlayType, setCurrentPlayType] = useState(String(persistence.fields.type || 'pass'));
@@ -142,9 +146,11 @@ const SmartPlaybook = () => {
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastTouchRef = useRef<TouchEvent | null>(null);
+  const dragRecorded = useRef(false);
 
   const playFields:Fields = {...persistence.fields,name:currentPlayName,phase:currentPlayPhase==='special'?'special_teams':currentPlayPhase,type:currentPlayType,
     players:JSON.parse(JSON.stringify(players)),routes:routesForStorage(JSON.parse(JSON.stringify(routes)),persistence.fields.routes)};
+  if(formationName)playFields.formation=formationName;else delete playFields.formation;
   if(persistence.fields.phase===undefined&&currentPlayPhase==='offense')delete playFields.phase;
   if(persistence.fields.type===undefined&&currentPlayType==='pass')delete playFields.type;
   const playStatus = persistence.saving ? 'saving' : persistence.error ? 'failed' : persistence.ack && equal(persistence.ack,playFields) ? 'saved' : 'unsaved';
@@ -153,6 +159,7 @@ const SmartPlaybook = () => {
       openedRef.current=persistence.opened;
       setPlayers((persistence.fields.players||[]) as unknown as PlaybookPlayer[]);
       setRoutes(routesForView(persistence.fields.routes) as unknown as PlaybookRoute[]);
+      setFormationName(String(persistence.fields.formation||''));
       setCurrentPlayName(String(persistence.fields.name||''));
       setCurrentPlayPhase(persistence.fields.phase==='special_teams'?'special':String(persistence.fields.phase||'offense'));
       setCurrentPlayType(String(persistence.fields.type||'pass'));setUndoStack([]);setRedoStack([]);
@@ -216,12 +223,13 @@ const SmartPlaybook = () => {
     const currentState = {
       players: [...players],
       routes: [...routes],
+      phase:currentPlayPhase,formation:formationName,
       action,
       timestamp: Date.now()
     };
     setUndoStack(prev => [...prev, currentState]);
     setRedoStack([]); // Clear redo stack when new action is performed
-  }, [players, routes]);
+  }, [players, routes,currentPlayPhase,formationName]);
 
   // Handle undo
   const handleUndo = useCallback(() => {
@@ -230,14 +238,16 @@ const SmartPlaybook = () => {
     const [newState, newUndoStack, newRedoStack] = undo(
       undoStack, 
       redoStack, 
-      { players, routes }
+      { players, routes,phase:currentPlayPhase,formation:formationName }
     );
     
+    setCurrentPlayPhase(newState.phase??currentPlayPhase);setFormationName(newState.formation??formationName);
+    setSelectedPlayerId(null);setSelectedRouteId(null);setIsDrawingRoute(false);setRoutePoints([]);
     setPlayers(newState.players);
     setRoutes(newState.routes);
     setUndoStack(newUndoStack);
     setRedoStack(newRedoStack);
-  }, [undoStack, redoStack, players, routes]);
+  }, [undoStack, redoStack, players, routes,currentPlayPhase,formationName]);
 
   // Handle redo
   const handleRedo = useCallback(() => {
@@ -246,14 +256,16 @@ const SmartPlaybook = () => {
     const [newState, newUndoStack, newRedoStack] = redo(
       undoStack, 
       redoStack, 
-      { players, routes }
+      { players, routes,phase:currentPlayPhase,formation:formationName }
     );
     
+    setCurrentPlayPhase(newState.phase??currentPlayPhase);setFormationName(newState.formation??formationName);
+    setSelectedPlayerId(null);setSelectedRouteId(null);setIsDrawingRoute(false);setRoutePoints([]);
     setPlayers(newState.players);
     setRoutes(newState.routes);
     setUndoStack(newUndoStack);
     setRedoStack(newRedoStack);
-  }, [undoStack, redoStack, players, routes]);
+  }, [undoStack, redoStack, players, routes,currentPlayPhase,formationName]);
 
   // Get canvas coordinates from event
   const getCanvasCoordinates = useCallback((event: React.MouseEvent | React.TouchEvent) => {
@@ -292,11 +304,17 @@ const SmartPlaybook = () => {
     if (!coords) return;
 
     // Handle route drawing
+    if (mode === 'route' && !isDrawingRoute) {
+      const player = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD) as PlaybookPlayer | null;
+      if (player) {setSelectedPlayerId(player.id); setPlayers(prev => selectPlayer(prev, player.id)); setIsDrawingRoute(true); setRoutePoints([{x:player.x,y:player.y}]);}
+      return;
+    }
     if (mode === 'route' && isDrawingRoute) {
       setRoutePoints(prev => [...prev, coords]);
       return;
     }
 
+    dragRecorded.current = false;
     // Handle player selection
     if (mode === 'view' || mode === 'player' || mode === 'delete') {
       const clickedPlayer = findPlayerAtPosition(players, coords.x, coords.y, TOUCH_THRESHOLD) as PlaybookPlayer | null;
@@ -309,6 +327,7 @@ const SmartPlaybook = () => {
           setRoutes(prev => prev.filter(route => route.playerId !== clickedPlayer.id));
           setSelectedPlayerId(null);
         } else {
+          setSelectedRouteId(null);
           // Select player
           setSelectedPlayerId(clickedPlayer.id);
           setPlayers(prev => selectPlayer(prev, clickedPlayer.id));
@@ -334,8 +353,10 @@ const SmartPlaybook = () => {
     const constrainedX = Math.max(20, Math.min(FIELD_DIMENSIONS.width - 20, newX));
     const constrainedY = Math.max(20, Math.min(FIELD_DIMENSIONS.height - 20, newY));
 
+    if (!dragRecorded.current) { saveToUndoStack('move_player'); dragRecorded.current = true; }
     setPlayers(prev => updatePlayerPosition(prev, playerId, constrainedX, constrainedY));
-  }, []);
+    setRoutes(prev=>prev.map(r=>r.playerId===playerId?{...r,points:r.points.map((p,i)=>i===0?{x:constrainedX,y:constrainedY}:p)}:r));
+  }, [saveToUndoStack]);
 
   // Handle player drag end (save to undo stack)
   const handlePlayerDragEnd = useCallback((playerId: string) => {
@@ -356,9 +377,10 @@ const SmartPlaybook = () => {
 
   // Handle route selection
   const handleRouteSelect = useCallback((routeId: string) => {
+    if(mode==='delete'){saveToUndoStack('delete_route');setRoutes(prev=>removeRoute(prev,routeId));setSelectedRouteId(null);return;}
     setSelectedRouteId(routeId);
     setSelectedPlayerId(null); // Deselect player when selecting route
-  }, []);
+  }, [mode,saveToUndoStack]);
 
   // Handle route update
   const handleRouteUpdate = useCallback((routeId: string, updates: Partial<PlaybookRoute>) => {
@@ -433,21 +455,13 @@ const SmartPlaybook = () => {
 
   // Load formation
   const loadFormation = useCallback((formationType: string) => {
-    const centerX = FIELD_DIMENSIONS.width / 2;
-    const centerY = FIELD_DIMENSIONS.height / 2;
-    
-    let newPlayers;
-    switch (formationType) {
-      case 'shotgun':
-        newPlayers = shotgunFormation(centerX, centerY);
-        break;
-      case '4-3':
-        newPlayers = fourThreeFormation(centerX, centerY);
-        break;
-      default:
-        return;
-    }
-
+    const ids:Record<string,string> = {'shotgun':'shotgun-doubles','4-3':'4-3-over','i-formation':'i-right','3-4':'3-4-base'};
+    const preset = formationReferences.formations.find(f=>f.id===ids[formationType]);
+    if (!preset) return;
+    // One yard = ten canvas units; fixed coordinates survive responsive resizing.
+    const newPlayers = preset.players.map((p,i)=>createPlayer(300+p.x_yards*10,190-p.y_yards*10,p.role,i+1) as PlaybookPlayer);
+    setCurrentPlayPhase(preset.side);setFormationName(preset.title+' · '+preset.subtitle);
+    setSelectedRouteId(null);setIsDrawingRoute(false);setRoutePoints([]);setMode('view');
     saveToUndoStack('load_formation');
     setPlayers(newPlayers);
     setRoutes([]);
@@ -526,6 +540,7 @@ const SmartPlaybook = () => {
         <DeviceRecovery scope={{uid:user!.uid,teamId:currentTeam!.id}} kind="plays" writer={persistence.writer} onResume={d=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.resume(d);}}/>
         <button onClick={()=>{if(!persistence.hasWork||window.confirm('Start a new play? Export your current draft first if you need both.'))persistence.create({name:'',phase:'offense',type:'pass',players:[],routes:[]});}}>New play</button>
         <button onClick={()=>download(playFields,'play-draft.json')}>Export draft</button>
+        <button onClick={()=>setShowOnboarding(true)}>Help &amp; tutorial</button>
         <button onClick={()=>{void persistence.reload();}}>Refresh play library</button>
         {persistence.error&&<p role="alert">{persistence.error}</p>}{persistence.listError&&<p role="alert">{persistence.listError}</p>}
         {persistence.conflict&&<Recovery remote={persistence.conflict} fields={playFields} onReload={()=>persistence.open(persistence.conflict!)} onCopy={()=>{persistence.update(playFields);void persistence.save(true);}}/>}
@@ -548,13 +563,13 @@ const SmartPlaybook = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="playbook-layout">
           {/* Left Sidebar - Controls */}
-          <div className="lg:col-span-1 space-y-4">
+          <div className="lg:col-span-1 space-y-4 playbook-controls">
             {/* Toolbar */}
             <Toolbar
               mode={mode}
-              onModeChange={setMode}
+              onModeChange={(next:PlaybookMode)=>{setMode(next);setIsDrawingRoute(false);setRoutePoints([]);}}
               onUndo={handleUndo}
               onRedo={handleRedo}
               canUndo={undoStack.length > 0}
@@ -627,12 +642,14 @@ const SmartPlaybook = () => {
           </div>
 
           {/* Main Canvas Area */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 playbook-field">
+            {formationName&&<p role="status" aria-label="Formation preset" className="mb-3 font-semibold">{formationName}</p>}
             <ErrorBoundary>
               <CanvasArea
                 canvasRef={canvasRef}
                 players={players}
-                routes={routes}
+                routes={isDrawingRoute ? [...routes,{id:'preview',playerId:selectedPlayerId!,points:routePoints,type:routeType,color:routeColor}] : routes}
+                mode={mode} onRouteSelect={handleRouteSelect} selectedRouteId={selectedRouteId}
                 onCanvasEvent={handleCanvasEvent}
                 onPlayerDrag={handlePlayerDrag}
               />
@@ -642,7 +659,7 @@ const SmartPlaybook = () => {
             {isDrawingRoute && routePoints.length > 0 && (
               <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  Drawing route... Click to add points, double-click to finish
+                  Drawing route… Click to add points, then choose Finish Route
                 </p>
                 <div className="mt-2 flex gap-2">
                   <button

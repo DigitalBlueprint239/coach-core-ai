@@ -1,0 +1,83 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/components/SmartPlaybook/__tests__/HistoryRegression.test.js src/components/SmartPlaybook/__tests__/FieldMemo.test.js src/components/SmartPlaybook/__tests__/PlayController.edge.test.js src/components/SmartPlaybook/__tests__/PlayController.test.js src/ui/WeekDashboard.test.tsx
+
+PASS src/ui/WeekDashboard.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+       6 | const today=new Date(2026,9,14,12);
+       7 | test('a new workspace has no invented events or actionable assignments',()=>{
+    >  8 |   const navigate=jest.fn();render(<WeekDashboard today={today} preview={false} onPreviewChange={jest.fn()} onNavigate={navigate}/>);
+         |                                  ^
+       9 |   expect(screen.queryByText('Team practice')).not.toBeInTheDocument();
+      10 |   expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+      11 |   expect(screen.getByText('A clear field ahead')).toBeInTheDocument();
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/ui/WeekDashboard.test.tsx:8:34)
+
+PASS src/components/SmartPlaybook/__tests__/HistoryRegression.test.js
+PASS src/components/SmartPlaybook/__tests__/PlayController.test.js
+  ● Console
+
+    console.warn
+      Player with ID non-existent-id not found
+
+      203 |   
+      204 |   if (filtered.length === players.length) {
+    > 205 |     console.warn(`Player with ID ${playerId} not found`);
+          |             ^
+      206 |   }
+      207 |   
+      208 |   return filtered;
+
+      at removePlayer (src/components/SmartPlaybook/PlayController.js:205:13)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/PlayController.test.js:224:32)
+
+    console.warn
+      Route with ID non-existent not found
+
+      307 |   
+      308 |   if (filtered.length === routes.length) {
+    > 309 |     console.warn(`Route with ID ${routeId} not found`);
+          |             ^
+      310 |   }
+      311 |   
+      312 |   return filtered;
+
+      at removeRoute (src/components/SmartPlaybook/PlayController.js:309:13)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/PlayController.test.js:318:31)
+
+PASS src/components/SmartPlaybook/__tests__/FieldMemo.test.js
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+      40 |
+      41 |   it('renders without crashing', () => {
+    > 42 |     const { container } = render(<Field {...baseProps} />);
+         |                                 ^
+      43 |     expect(container.querySelector('canvas')).toBeTruthy();
+      44 |   });
+      45 |
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/FieldMemo.test.js:42:33)
+
+PASS src/components/SmartPlaybook/__tests__/PlayController.edge.test.js
+
+Test Suites: 5 passed, 5 total
+Tests:       114 passed, 114 total
+Snapshots:   0 total
+Time:        1.56 s, estimated 2 s
+Ran all test suites within paths "src/components/SmartPlaybook/__tests__/HistoryRegression.test.js", "src/components/SmartPlaybook/__tests__/FieldMemo.test.js", "src/components/SmartPlaybook/__tests__/PlayController.edge.test.js", "src/components/SmartPlaybook/__tests__/PlayController.test.js", "src/ui/WeekDashboard.test.tsx".

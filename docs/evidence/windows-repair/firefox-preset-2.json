@@ -1,0 +1,108 @@
+{
+  "name": "",
+  "phase": "defense",
+  "type": "pass",
+  "players": [
+    {
+      "id": "1792710623130-uybyx6sq7",
+      "x": 250,
+      "y": 180,
+      "position": "DE",
+      "number": 1,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-jv6nfobkc",
+      "x": 291,
+      "y": 180,
+      "position": "NT",
+      "number": 2,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-c3dughghm",
+      "x": 330,
+      "y": 180,
+      "position": "DT",
+      "number": 3,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-5g59pxenb",
+      "x": 370,
+      "y": 180,
+      "position": "DE",
+      "number": 4,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-ni5ts2ta0",
+      "x": 260,
+      "y": 140,
+      "position": "W",
+      "number": 5,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-p7bs1nwhf",
+      "x": 300,
+      "y": 140,
+      "position": "M",
+      "number": 6,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-nxsdt43gw",
+      "x": 360,
+      "y": 140,
+      "position": "S",
+      "number": 7,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-duyck8vnt",
+      "x": 120,
+      "y": 130,
+      "position": "CB",
+      "number": 8,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-715uugatu",
+      "x": 480,
+      "y": 130,
+      "position": "CB",
+      "number": 9,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-6kg29w9pj",
+      "x": 230,
+      "y": 70,
+      "position": "FS",
+      "number": 10,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    },
+    {
+      "id": "1792710623130-0rg2qniif",
+      "x": 370,
+      "y": 70,
+      "position": "SS",
+      "number": 11,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:23.130Z"
+    }
+  ],
+  "routes": [],
+  "formation": "4-3 OVER · Four DL / three LB / four DB | strength right"
+}

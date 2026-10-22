@@ -1,0 +1,42 @@
+
+> coach-core-ai@0.1.0 test
+> react-scripts test --watchAll=false --runInBand --runTestsByPath src/components/SmartPlaybook/__tests__/HistoryRegression.test.js
+
+FAIL src/components/SmartPlaybook/__tests__/HistoryRegression.test.js
+  ✕ undo after redo returns to the immediate previous edit, including a pre-existing history (5 ms)
+
+  ● undo after redo returns to the immediate previous edit, including a pre-existing history
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 1
+
+      Object {
+    -   "players": Array [
+    -     Object {
+    -       "id": "b",
+    -     },
+    -   ],
+    +   "players": Array [],
+        "routes": Array [],
+      }
+
+      4 |  const [restored,history,future]=redo([a],[c],b);
+      5 |  expect(restored).toEqual(c);
+    > 6 |  expect(undo(history,future,restored)[0]).toEqual(b);
+        |                                           ^
+      7 | });
+      8 |
+
+      at Object.<anonymous> (src/components/SmartPlaybook/__tests__/HistoryRegression.test.js:6:43)
+      at TestScheduler.scheduleTests (../coach-core-integration/node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (../coach-core-integration/node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (../coach-core-integration/node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (../coach-core-integration/node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        0.858 s
+Ran all test suites within paths "src/components/SmartPlaybook/__tests__/HistoryRegression.test.js".

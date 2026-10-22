@@ -1,0 +1,1 @@
+PASS ZIP integrity, every manifest hash, source/version, emulator flags, no state/dependencies, compiled fixed/size/responsive utilities and no unresolved Tailwind directives.

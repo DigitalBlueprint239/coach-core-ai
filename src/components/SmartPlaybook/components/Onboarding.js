@@ -106,7 +106,7 @@ const Onboarding = memo(({
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
+      <div className="fixed inset-0 bg-black/50 z-40" />
       
       {/* Tooltip */}
       <div className={`
@@ -122,6 +122,7 @@ const Onboarding = memo(({
             <h3 className="font-semibold text-gray-900">{step.title}</h3>
           </div>
           <button
+            aria-label="Close tutorial"
             onClick={handleSkip}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >

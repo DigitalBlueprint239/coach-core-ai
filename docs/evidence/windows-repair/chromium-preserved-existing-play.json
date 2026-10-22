@@ -1,0 +1,107 @@
+{
+  "routes": [],
+  "name": "Local Shotgun",
+  "phase": "offense",
+  "type": "pass",
+  "players": [
+    {
+      "id": "1792701429420-k07qps3nu",
+      "x": 204,
+      "y": 150,
+      "position": "LT",
+      "number": 76,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-vwck08oe1",
+      "x": 252,
+      "y": 150,
+      "position": "LG",
+      "number": 66,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-jvzwe9cs5",
+      "x": 300,
+      "y": 150,
+      "position": "C",
+      "number": 55,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-r9iiqns7d",
+      "x": 348,
+      "y": 150,
+      "position": "RG",
+      "number": 67,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-7f59ym9t4",
+      "x": 396,
+      "y": 150,
+      "position": "RT",
+      "number": 77,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-7c6c6azx3",
+      "x": 300,
+      "y": 206,
+      "position": "QB",
+      "number": 12,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-657415399",
+      "x": 252,
+      "y": 222,
+      "position": "RB",
+      "number": 21,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-zflqvckxd",
+      "x": 108,
+      "y": 150,
+      "position": "WR",
+      "number": 80,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-b474o19i8",
+      "x": 492,
+      "y": 150,
+      "position": "WR",
+      "number": 81,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-s0t7n4tj1",
+      "x": 180,
+      "y": 118,
+      "position": "WR",
+      "number": 11,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    },
+    {
+      "id": "1792701429420-103egsymb",
+      "x": 420,
+      "y": 182,
+      "position": "TE",
+      "number": 88,
+      "selected": false,
+      "createdAt": "2026-10-22T20:37:09.420Z"
+    }
+  ]
+}

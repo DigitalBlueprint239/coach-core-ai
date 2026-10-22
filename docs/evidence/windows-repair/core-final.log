@@ -1,0 +1,25 @@
+
+Running 16 tests using 1 worker
+
+(node:22255) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › e2e/tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key (2.1s)
+  ✓   2 [chromium] › e2e/tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten (3.5s)
+  ✓   3 [chromium] › e2e/tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes (2.6s)
+  ✓   4 [chromium] › e2e/tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile (2.1s)
+  ✓   5 [chromium] › e2e/tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch) (2.6s)
+  ✓   6 [chromium] › e2e/tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device (1.5s)
+  ✓   7 [chromium] › e2e/tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team (2.3s)
+  ✓   8 [chromium] › e2e/tests/teams.spec.ts:63:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it (2.1s)
+(node:22766) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 [firefox] › e2e/tests/coaching.spec.ts:121:1 › CC-P11 team switch while a plan save is held: the copy lands in team A only, team B sees nothing of it, and A's pending draft is kept under A's team key (3.6s)
+  ✓  10 [firefox] › e2e/tests/coaching.spec.ts:187:1 › CC-P14 two tabs, one profile: stale save shows the conflict screen; Export my version downloads it; Reload remote shows the server copy; Keep my version saves a copy; nothing overwritten (4.5s)
+  ✓  11 [firefox] › e2e/tests/coaching.spec.ts:244:1 › CC-P15 Smart Playbook: Shotgun play saved, renamed (revision 2, createdAt unchanged), hard reload, reopened in a fresh profile with identical players and routes (3.7s)
+  ✓  12 [firefox] › e2e/tests/coaching.spec.ts:288:1 › CC-P16 practice plan: 200-char name, 5000-char notes, period focus and reorder save and reopen exactly in a fresh profile (3.2s)
+  ✓  13 [firefox] › e2e/tests/coaching.spec.ts:347:1 › CC-P17 offline save is captured as pending and never reported saved; reconnect acknowledges it; [structural guard] a planted pending envelope of coach A is not uploaded while B is signed in; the legacy global queue is never replayed (request-body watch) (3.6s)
+  ✓  14 [firefox] › e2e/tests/teams.spec.ts:17:1 › E2E-T01 cloud save/reopen: a team created in the UI is in Firestore and reopens on a fresh device (2.4s)
+  ✓  15 [firefox] › e2e/tests/teams.spec.ts:36:1 › E2E-T02 account switching on one browser profile shows each coach only their own team (4.2s)
+  ✓  16 [firefox] › e2e/tests/teams.spec.ts:63:1 › E2E-T03 [SDK-in-browser] coach B is denied coach A's team and cannot write into it (3.1s)
+
+  16 passed (50.8s)

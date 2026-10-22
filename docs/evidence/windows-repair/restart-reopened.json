@@ -1,0 +1,130 @@
+{
+  "name": "Repair Route chromium latest",
+  "phase": "offense",
+  "type": "pass",
+  "players": [
+    {
+      "id": "1792710611215-coj3p5w7l",
+      "x": 260,
+      "y": 190,
+      "position": "LT",
+      "number": 1,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-wakcel8xu",
+      "x": 280,
+      "y": 190,
+      "position": "LG",
+      "number": 2,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-f58khugej",
+      "x": 300,
+      "y": 190,
+      "position": "C",
+      "number": 3,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-9zaugng4m",
+      "x": 320,
+      "y": 190,
+      "position": "RG",
+      "number": 4,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-e1cohmg00",
+      "x": 340,
+      "y": 190,
+      "position": "RT",
+      "number": 5,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-fflssf87t",
+      "x": 130,
+      "y": 170,
+      "position": "X",
+      "number": 6,
+      "selected": true,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-1k2fsts77",
+      "x": 480,
+      "y": 190,
+      "position": "Z",
+      "number": 7,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-bolvc0ns3",
+      "x": 190,
+      "y": 210,
+      "position": "H",
+      "number": 8,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-1wfbhm2tt",
+      "x": 410,
+      "y": 210,
+      "position": "Y",
+      "number": 9,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-e2256zlxw",
+      "x": 300,
+      "y": 240,
+      "position": "QB",
+      "number": 10,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    },
+    {
+      "id": "1792710611215-o5ai7an0r",
+      "x": 260,
+      "y": 245,
+      "position": "RB",
+      "number": 11,
+      "selected": false,
+      "createdAt": "2026-10-22T23:10:11.215Z"
+    }
+  ],
+  "routes": [
+    {
+      "id": "1792710611700-mxi1n2kcy",
+      "playerId": "1792710611215-fflssf87t",
+      "points": [
+        {
+          "x": 130,
+          "y": 170
+        },
+        {
+          "x": 140,
+          "y": 150
+        },
+        {
+          "x": 180,
+          "y": 120
+        }
+      ],
+      "type": "custom",
+      "color": "#ef4444",
+      "createdAt": "2026-10-22T23:10:11.700Z"
+    }
+  ],
+  "formation": "SHOTGUN DOUBLES · 10 personnel | 2x2 | offset RB left"
+}
