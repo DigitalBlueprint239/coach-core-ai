@@ -1,0 +1,196 @@
+{
+  "build": {
+    "sourceSha": "0dc94c4c6121aa379fb3e612b7d738a140f56ec6",
+    "trackedDirty": false,
+    "entry": "src/features/film-analyzer/demo/index.tsx",
+    "firebaseOrAiModules": false,
+    "sample": "synthetic-out-route-v1",
+    "sampleFiles": [
+      {
+        "name": "out-route.mp4",
+        "bytes": 25146,
+        "sha256": "a3b4285499e64d89f99b755cbf4d320ab60b3d142a53c115e4040e83f39404d2"
+      },
+      {
+        "name": "out-route.webm",
+        "bytes": 49584,
+        "sha256": "a74f85cb02aaefb6eb42ed05d143c261e595903e4b5a75a49736e787e88da381"
+      }
+    ]
+  },
+  "totals": {
+    "pass": 28,
+    "fail": 0,
+    "skip": 0
+  },
+  "results": [
+    {
+      "engine": "chromium",
+      "name": "complete-playback-save-reopen-reset",
+      "status": "PASS",
+      "requests": 15
+    },
+    {
+      "engine": "chromium",
+      "name": "storage-access-denied-session-still-works",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "quota-exceeded-never-saved",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "readback-mismatch-never-saved",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "readback-throws-never-saved",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "corrupt-record-preserved-until-reset",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "foreign-sample-cannot-reopen",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "reset-denied-keeps-session-and-never-confirms",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "reset-noop-keeps-session-and-never-confirms",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "another-tab-change-invalidates-saved-status",
+      "status": "PASS",
+      "requests": 10
+    },
+    {
+      "engine": "chromium",
+      "name": "invalid-interval-cannot-save",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "chromium",
+      "name": "tampered-media-fails-closed",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "chromium",
+      "name": "missing-media-fails-clearly",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "chromium",
+      "name": "phone-identity-layout-and-save",
+      "status": "PASS",
+      "requests": 5
+    },
+    {
+      "engine": "firefox",
+      "name": "complete-playback-save-reopen-reset",
+      "status": "PASS",
+      "requests": 12
+    },
+    {
+      "engine": "firefox",
+      "name": "storage-access-denied-session-still-works",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "quota-exceeded-never-saved",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "readback-mismatch-never-saved",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "readback-throws-never-saved",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "corrupt-record-preserved-until-reset",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "foreign-sample-cannot-reopen",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "reset-denied-keeps-session-and-never-confirms",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "reset-noop-keeps-session-and-never-confirms",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "another-tab-change-invalidates-saved-status",
+      "status": "PASS",
+      "requests": 8
+    },
+    {
+      "engine": "firefox",
+      "name": "invalid-interval-cannot-save",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "tampered-media-fails-closed",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "missing-media-fails-clearly",
+      "status": "PASS",
+      "requests": 4
+    },
+    {
+      "engine": "firefox",
+      "name": "phone-identity-layout-and-save",
+      "status": "PASS",
+      "requests": 4
+    }
+  ]
+}

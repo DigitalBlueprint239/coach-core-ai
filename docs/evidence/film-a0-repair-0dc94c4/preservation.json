@@ -1,0 +1,28 @@
+{
+  "base": "c7baeb006a1fc01a6c9986088e1b1594927f9aba",
+  "failedHead": "6c8a90b16196f8b08115de57d70607016073ecca",
+  "candidate": "0dc94c4c6121aa379fb3e612b7d738a140f56ec6",
+  "existingChangedAgainstAcceptedBase": [
+    "M\t.gitignore",
+    "M\tdocs/MVP_7_DAY_SPRINT.md",
+    "M\tpackage.json"
+  ],
+  "repairDelta": [
+    "M\tdocs/MVP_7_DAY_SPRINT.md",
+    "M\tdocs/film/FILM_A0_DEMO.md",
+    "M\tscripts/film-a0.cjs",
+    "M\tscripts/film-a0/generate-sample.py",
+    "R100\tpublic/film-a0/out-route.mp4\tscripts/film-a0/sample/out-route.mp4",
+    "R100\tpublic/film-a0/out-route.webm\tscripts/film-a0/sample/out-route.webm",
+    "R100\tpublic/film-a0/sample.json\tscripts/film-a0/sample/sample.json",
+    "M\tsrc/features/film-analyzer/demo/FilmDemoApp.tsx",
+    "A\ttests/film-a0/normal-build-isolation.cjs",
+    "A\ttests/film-a0/reopen-regressions.cjs"
+  ],
+  "original28BrowserAssertionsStorageTestsIdentityAndExecutionSettingsUnchanged": true,
+  "sampleHashesUnchanged": true,
+  "regressionScripts": {
+    "tests/film-a0/reopen-regressions.cjs": "5019c29a7553959bfd6d4d96318ff983f6b0c84fdd2aa4ca23257ae0bec2951a",
+    "tests/film-a0/normal-build-isolation.cjs": "2800893bc5955fe7c70693097ac58858d8e3703659f9220e18e0800d0892ede5"
+  }
+}

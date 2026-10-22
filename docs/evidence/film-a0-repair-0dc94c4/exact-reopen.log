@@ -1,0 +1,15 @@
+{"engine":"chromium","variant":"tampered","status":"PASS"}
+{"engine":"chromium","variant":"missing","status":"PASS"}
+{"engine":"chromium","variant":"duration","status":"PASS"}
+{"engine":"chromium","variant":"slow","status":"PASS"}
+{"engine":"chromium","variant":"reset-pending","status":"PASS"}
+{"engine":"chromium","variant":"edit-pending","status":"PASS"}
+{"engine":"chromium","variant":"other-tab-pending","status":"PASS"}
+{"engine":"firefox","variant":"tampered","status":"PASS"}
+{"engine":"firefox","variant":"missing","status":"PASS"}
+{"engine":"firefox","variant":"duration","status":"PASS"}
+{"engine":"firefox","variant":"slow","status":"PASS"}
+{"engine":"firefox","variant":"reset-pending","status":"PASS"}
+{"engine":"firefox","variant":"edit-pending","status":"PASS"}
+{"engine":"firefox","variant":"other-tab-pending","status":"PASS"}
+{ pass: 14, fail: 0, skip: 0 }

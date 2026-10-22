@@ -1,0 +1,108 @@
+{
+  "build": {
+    "sourceSha": "6c8a90b16196f8b08115de57d70607016073ecca",
+    "trackedDirty": false,
+    "entry": "src/features/film-analyzer/demo/index.tsx",
+    "firebaseOrAiModules": false,
+    "sample": "synthetic-out-route-v1",
+    "sampleFiles": [
+      {
+        "name": "out-route.mp4",
+        "bytes": 25146,
+        "sha256": "a3b4285499e64d89f99b755cbf4d320ab60b3d142a53c115e4040e83f39404d2"
+      },
+      {
+        "name": "out-route.webm",
+        "bytes": 49584,
+        "sha256": "a74f85cb02aaefb6eb42ed05d143c261e595903e4b5a75a49736e787e88da381"
+      }
+    ]
+  },
+  "totals": {
+    "pass": 4,
+    "fail": 10,
+    "skip": 0
+  },
+  "results": [
+    {
+      "engine": "chromium",
+      "variant": "tampered",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:25:55"
+    },
+    {
+      "engine": "chromium",
+      "variant": "missing",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:25:55"
+    },
+    {
+      "engine": "chromium",
+      "variant": "duration",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:25:55"
+    },
+    {
+      "engine": "chromium",
+      "variant": "slow",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:28:7"
+    },
+    {
+      "engine": "chromium",
+      "variant": "reset-pending",
+      "status": "PASS"
+    },
+    {
+      "engine": "chromium",
+      "variant": "edit-pending",
+      "status": "PASS"
+    },
+    {
+      "engine": "chromium",
+      "variant": "other-tab-pending",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'Out route' !== ''\n\n    at /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:38:314"
+    },
+    {
+      "engine": "firefox",
+      "variant": "tampered",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:25:55"
+    },
+    {
+      "engine": "firefox",
+      "variant": "missing",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:25:55"
+    },
+    {
+      "engine": "firefox",
+      "variant": "duration",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:25:55"
+    },
+    {
+      "engine": "firefox",
+      "variant": "slow",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /^Saved/. Input:\n\n'Saved in this browser — reopened and checked against this sample.'\n\n    at unopened (/workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:9:38)\n    at async /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:28:7"
+    },
+    {
+      "engine": "firefox",
+      "variant": "reset-pending",
+      "status": "PASS"
+    },
+    {
+      "engine": "firefox",
+      "variant": "edit-pending",
+      "status": "PASS"
+    },
+    {
+      "engine": "firefox",
+      "variant": "other-tab-pending",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'Out route' !== ''\n\n    at /workspace/coach-core-film-a0/tests/film-a0/reopen-regressions.cjs:38:314"
+    }
+  ]
+}

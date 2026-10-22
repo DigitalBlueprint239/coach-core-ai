@@ -1,0 +1,48 @@
+PASS src/ui/WeekDashboard.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+       6 | const today=new Date(2026,9,14,12);
+       7 | test('a new workspace has no invented events or actionable assignments',()=>{
+    >  8 |   const navigate=jest.fn();render(<WeekDashboard today={today} preview={false} onPreviewChange={jest.fn()} onNavigate={navigate}/>);
+         |                                  ^
+       9 |   expect(screen.queryByText('Team practice')).not.toBeInTheDocument();
+      10 |   expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+      11 |   expect(screen.getByText('A clear field ahead')).toBeInTheDocument();
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/ui/WeekDashboard.test.tsx:8:34)
+
+PASS src/ui/AppShell.test.tsx
+  ● Console
+
+    console.error
+      `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+       5 | // Identity visibility (2026-10-15): account, active team (or an explicit
+       6 | // no-team state) and the sample-preview distinction are always rendered.
+    >  7 | const shell = (props: Partial<React.ComponentProps<typeof AppShell>> = {}) => render(
+         |                                                                                     ^
+       8 |   <AppShell active="overview" onNavigate={() => {}} email="coach@example.test" onSignOut={() => {}} {...props}>
+       9 |     <p>content</p>
+      10 |   </AppShell>,
+
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (../coach-core-integration/node_modules/react-dom/cjs/react-dom-test-utils.development.js:19:17)
+      at ../coach-core-integration/node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (../coach-core-integration/node_modules/@testing-library/react/dist/pure.js:246:10)
+      at shell (src/ui/AppShell.test.tsx:7:85)
+      at Object.<anonymous> (src/ui/AppShell.test.tsx:15:5)
+
+PASS src/features/film-analyzer/demo/localRecord.test.ts
+
+Test Suites: 3 passed, 3 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        3.857 s
+Ran all test suites within paths "src/features/film-analyzer/demo/localRecord.test.ts", "src/ui/AppShell.test.tsx", "src/ui/WeekDashboard.test.tsx".
