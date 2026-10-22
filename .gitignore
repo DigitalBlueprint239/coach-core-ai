@@ -315,3 +315,6 @@ dmypy.json
 # Backup files from build fixes
 *.bak
 *.v3-backup
+
+# Isolated local Film A0 output
+/film-a0-build/
