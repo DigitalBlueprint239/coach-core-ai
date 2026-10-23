@@ -5,8 +5,8 @@
  * - Skip and complete options
  */
 
-import React, { memo, useState, useEffect } from 'react';
-import { HelpCircle, X, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import React, { memo, useState, useEffect, useRef } from 'react';
+import { X, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 
 const ONBOARDING_STEPS = [
   {
@@ -63,6 +63,8 @@ const Onboarding = memo(({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const dialogRef = useRef(null);
+  const nextRef = useRef(null);
 
   useEffect(() => {
     if (isVisible) {
@@ -70,6 +72,11 @@ const Onboarding = memo(({
       setCurrentStep(0);
     }
   }, [isVisible]);
+
+  // Move focus into the tour when it opens and on each step.
+  useEffect(() => {
+    if (isActive) nextRef.current?.focus();
+  }, [isActive, currentStep]);
 
   const handleNext = () => {
     if (currentStep < ONBOARDING_STEPS.length - 1) {
@@ -103,84 +110,82 @@ const Onboarding = memo(({
   const isFirst = currentStep === 0;
   const isLast = currentStep === ONBOARDING_STEPS.length - 1;
 
+  // Keyboard support: Escape skips the tour and Tab stays inside it.
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      handleSkip();
+      return;
+    }
+    if (event.key !== 'Tab' || !dialogRef.current) return;
+    const focusable = Array.from(dialogRef.current.querySelectorAll('button:not([disabled])'));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
-      
-      {/* Tooltip */}
-      <div className={`
-        fixed z-50 max-w-sm bg-white rounded-lg shadow-xl border border-gray-200
-        transform transition-all duration-300 ease-in-out
-        ${step.position === 'left' ? 'left-4' : step.position === 'right' ? 'right-4' : 'left-1/2 transform -translate-x-1/2'}
-        ${step.position === 'center' ? 'top-1/2 -translate-y-1/2' : 'top-20'}
-      `}>
+      <div className="eb-tour-overlay" aria-hidden="true" />
+
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="sp-tour-title"
+        aria-describedby="sp-tour-body"
+        onKeyDown={handleKeyDown}
+        className={`eb-tour eb-tour-${step.position}`}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <div className="flex items-center gap-2">
-            <HelpCircle className="h-5 w-5 text-blue-600" />
-            <h3 className="font-semibold text-gray-900">{step.title}</h3>
-          </div>
-          <button
-            onClick={handleSkip}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <X className="h-4 w-4" />
+        <div className="eb-tour-head">
+          <span className="eb-tour-step">Smart Playbook tour · Step {currentStep + 1} of {ONBOARDING_STEPS.length}</span>
+          <button onClick={handleSkip} aria-label="Skip tour" className="eb-tour-close">
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-4">
-          <p className="text-gray-700 text-sm leading-relaxed">
-            {step.content}
-          </p>
+        <div className="eb-tour-body">
+          <h3 id="sp-tour-title">{step.title}</h3>
+          <p id="sp-tour-body">{step.content}</p>
+        </div>
+
+        <div className="eb-tour-progress" aria-hidden="true">
+          {ONBOARDING_STEPS.map((item, index) => <span key={item.id ?? index} data-done={index <= currentStep ? 'true' : undefined} />)}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-4 border-t border-gray-200">
-          <div className="text-xs text-gray-500">
+        <div className="eb-tour-foot">
+          <div className="eb-visually-hidden">
             Step {currentStep + 1} of {ONBOARDING_STEPS.length}
           </div>
-          
-          <div className="flex items-center gap-2">
-            {!isFirst && (
-              <button
-                onClick={handlePrevious}
-                className="flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Previous
-              </button>
+          <button onClick={handlePrevious} disabled={isFirst} className="eb-btn">
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            Previous
+          </button>
+          <button ref={nextRef} onClick={handleNext} className="eb-btn eb-btn-primary">
+            {isLast ? (
+              <>
+                <Play className="h-4 w-4" aria-hidden="true" />
+                Get Started
+              </>
+            ) : (
+              <>
+                Next
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              </>
             )}
-            
-            <button
-              onClick={handleNext}
-              className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              {isLast ? (
-                <>
-                  <Play className="h-4 w-4" />
-                  Get Started
-                </>
-              ) : (
-                <>
-                  Next
-                  <ChevronRight className="h-4 w-4" />
-                </>
-              )}
-            </button>
-          </div>
+          </button>
         </div>
-
-        {/* Arrow */}
-        {step.target && (
-          <div className="absolute w-0 h-0 border-8 border-transparent border-t-white" 
-               style={{
-                 left: step.position === 'left' ? '1rem' : step.position === 'right' ? 'calc(100% - 2rem)' : '50%',
-                 top: '100%',
-                 transform: step.position === 'center' ? 'translateX(-50%)' : 'none'
-               }} />
-        )}
       </div>
     </>
   );
