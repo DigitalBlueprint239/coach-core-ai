@@ -1,11 +1,12 @@
 // Minimal static server with SPA fallback for the emulator build.
-// Usage: node e2e/scripts/serve.mjs <dir> <port>
+// Usage: node e2e/scripts/serve.mjs <dir> <port> [bindHost]   (bindHost defaults to 127.0.0.1)
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 
 const root = resolve(process.argv[2] || 'e2e/.app-build');
 const port = Number(process.argv[3] || 3000);
+const host = process.argv[4] || '127.0.0.1';
 const types = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css',
   '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml',
@@ -28,4 +29,4 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end();
   }
-}).listen(port, '127.0.0.1', () => console.log(`serving ${root} on http://localhost:${port}`));
+}).listen(port, host, () => console.log(`serving ${root} on http://${host}:${port}`));

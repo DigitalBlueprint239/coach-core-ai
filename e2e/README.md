@@ -36,6 +36,20 @@ npm --prefix e2e test                    # emulators:exec + Playwright (Chromium
 - Results are uploaded as an artifact.
 - `workflow_dispatch` with `repeat_each=10` gives a stability run.
 
+### Isolated run beside your own emulators
+
+The suite resets Auth and Firestore before each test. To run it while other emulators (for example the local Windows package) stay on 127.0.0.1, put everything on another loopback address:
+
+```bash
+node e2e/scripts/isolated-emulator-config.mjs 127.0.0.2   # writes firebase.isolated.json (git-ignored)
+REACT_APP_FIREBASE_EMULATOR_HOST=127.0.0.2 npm --prefix e2e run build:app
+E2E_EMULATOR_HOST=127.0.0.2 E2E_APP_HOST=127.0.0.2 \
+  npx --prefix e2e firebase emulators:exec --config firebase.isolated.json --project demo-coach-core-e2e \
+  --only auth,firestore,functions "npm --prefix e2e run test:browser"
+```
+
+All three variables must name the same host. Defaults (unset) are unchanged: 127.0.0.1 emulators and http://localhost:3000.
+
 ## What the emulators do NOT test
 
 The Functions emulator runs with the debug features `enableCors` and `skipTokenVerification` (firebase-tools `functionsEmulator.js`). Inside the emulator:
