@@ -4,8 +4,12 @@
 export const PROJECT = process.env.E2E_PROJECT_ID || 'demo-coach-core-e2e';
 if (!PROJECT.startsWith('demo-')) throw new Error('E2E tests only run against a demo-* project');
 
-const AUTH = 'http://127.0.0.1:9099';
-const FIRESTORE = 'http://127.0.0.1:8080';
+// E2E_EMULATOR_HOST lets a run target emulators bound to another loopback address
+// (for example 127.0.0.2) so a developer's own emulators on 127.0.0.1 are never reset.
+export const EMULATOR_HOST = process.env.E2E_EMULATOR_HOST || '127.0.0.1';
+const AUTH = `http://${EMULATOR_HOST}:9099`;
+const FIRESTORE = `http://${EMULATOR_HOST}:8080`;
+const APP_ORIGIN = `http://${process.env.E2E_APP_HOST || 'localhost'}:${process.env.E2E_APP_PORT || '3000'}`;
 const OWNER = { Authorization: 'Bearer owner', 'Content-Type': 'application/json' };
 export const AUTH_ONLY = process.env.E2E_AUTH_ONLY === '1';
 
@@ -31,7 +35,7 @@ export async function latestSignInLink(email: string): Promise<URL> {
   // The emulator link points at its own action page; the real link lands on
   // the continue URL with the same parameters, which is what the app parses.
   const link = new URL(codes[codes.length - 1].oobLink);
-  const target = new URL(link.searchParams.get('continueUrl') || 'http://localhost:3000/');
+  const target = new URL(link.searchParams.get('continueUrl') || `${APP_ORIGIN}/`);
   for (const k of ['mode', 'oobCode', 'apiKey', 'lang']) {
     const v = link.searchParams.get(k);
     if (v) target.searchParams.set(k, v);

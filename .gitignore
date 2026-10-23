@@ -315,3 +315,6 @@ dmypy.json
 # Backup files from build fixes
 *.bak
 *.v3-backup
+
+# Isolated emulator config (e2e/scripts/isolated-emulator-config.mjs)
+firebase.isolated.json

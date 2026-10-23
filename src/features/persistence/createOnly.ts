@@ -14,7 +14,7 @@ export async function createOnly(scope:Scope,kind:Kind,id:string,fields:Fields,t
   const user=auth.currentUser;if(!user||user.isAnonymous||user.uid!==scope.uid)throw new Error('Account changed.');
   const project=auth.app.options.projectId;if(!project)throw new Error('Firebase project is not configured.');
   const database=`projects/${project}/databases/(default)`;
-  const base=process.env.REACT_APP_USE_FIREBASE_EMULATORS==='true'?'http://127.0.0.1:8080':'https://firestore.googleapis.com';
+  const base=process.env.REACT_APP_USE_FIREBASE_EMULATORS==='true'?`http://${process.env.REACT_APP_FIREBASE_EMULATOR_HOST||'127.0.0.1'}:8080`:'https://firestore.googleapis.com';
   if(process.env.REACT_APP_USE_FIREBASE_EMULATORS==='true'&&!project.startsWith('demo-'))throw new Error('Emulator requires demo project.');
   const token=await user.getIdToken();if(auth.currentUser?.uid!==scope.uid)throw new Error('Account changed.');
   const payload={...fields,teamId:scope.teamId,createdBy:scope.uid,revision:1};

@@ -8,6 +8,13 @@ import { defineConfig, devices } from '@playwright/test';
 // delivery, which needs an approved staging project (Day 6).
 const chromiumPath = process.env.E2E_CHROMIUM_PATH; // sandbox only; CI uses Playwright's own build
 
+// App origin for the run. Defaults keep CI unchanged (http://localhost:3000 served on 127.0.0.1).
+// E2E_APP_HOST/E2E_APP_PORT move it (for example to 127.0.0.2) together with E2E_EMULATOR_HOST.
+const APP_HOST = process.env.E2E_APP_HOST || 'localhost';
+const APP_PORT = process.env.E2E_APP_PORT || '3000';
+const APP_BIND = APP_HOST === 'localhost' ? '127.0.0.1' : APP_HOST;
+const BASE_URL = `http://${APP_HOST}:${APP_PORT}`;
+
 // UI workflow tests (no SDK-in-browser shortcuts) re-run at phone width.
 const PHONE_WORKFLOWS = /(?:^|\s)(E2E-A07|E2E-A10|CC-P10|CC-P11|CC-P12|CC-P14|CC-P15|CC-P16|CC-P17|CC-L0|CC-L1|E2E-T01|E2E-T02|D10-01|D10-06e) /;
 
@@ -54,14 +61,14 @@ export default defineConfig({
     ['./reporters/annotate.mjs'],
   ],
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: BASE_URL,
     serviceWorkers: 'block', // the production service worker would cache across tests
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'node scripts/serve.mjs .app-build 3000',
-    url: 'http://localhost:3000',
+    command: `node scripts/serve.mjs .app-build ${APP_PORT} ${APP_BIND}`,
+    url: BASE_URL,
     reuseExistingServer: false,
     timeout: 30_000,
   },

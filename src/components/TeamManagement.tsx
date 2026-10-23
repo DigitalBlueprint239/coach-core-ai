@@ -366,6 +366,8 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
   );
 };
 
+const monogram = (name: string) => name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toUpperCase();
+
 export const TeamManagement: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -388,87 +390,68 @@ export const TeamManagement: React.FC = () => {
     }
   };
 
+  const members = (count: number) => `${count} member${count !== 1 ? 's' : ''}`;
+
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Team Management</h2>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Create Team
-          </button>
-          <button
-            onClick={() => setShowJoinModal(true)}
-            className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            Join Team
-          </button>
+    <div className="eb-teams">
+      <div className="eb-hero">
+        <div>
+          <span className="eb-kicker" aria-hidden="true">Team operations</span>
+          <h2 className="eb-title">Team Management</h2>
+        </div>
+        <div className="eb-actions">
+          <button onClick={() => setShowCreateModal(true)} className="eb-btn eb-btn-primary">Create Team</button>
+          <button onClick={() => setShowJoinModal(true)} className="eb-btn">Join Team</button>
         </div>
       </div>
 
-      {teamCreation.operation && teamCreation.phase !== 'confirmed' && <div role="status">
+      {teamCreation.operation && teamCreation.phase !== 'confirmed' && <div role="status" className="eb-pending">
         <p>Pending team: {teamCreation.operation.name}. {teamCreation.phase === 'saving' ? 'Waiting for server confirmation.' : 'Still saving; confirmation is unavailable.'}</p>
-        <button type="button" onClick={() => setShowCreateModal(true)}>Resume team creation</button>
+        <button type="button" className="eb-btn" onClick={() => setShowCreateModal(true)}>Resume team creation</button>
       </div>}
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Current Team</h3>
+      <div className={`eb-teams-grid${userTeams.length > 1 ? '' : ' eb-teams-single'}`}>
+        <section className="eb-current" aria-labelledby="eb-current-title">
+          <div className="eb-current-top">
+            <h3 id="eb-current-title" className="eb-chip-live">Current Team</h3>
+            {currentTeam && userTeams.length > 1 && (
+              <button onClick={handleLeaveTeam} className="eb-leave">Leave Team</button>
+            )}
+          </div>
           {currentTeam ? (
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium text-gray-900">{currentTeam.name}</h4>
-                  <p className="text-sm text-gray-600">Code: {currentTeam.code}</p>
-                  <p className="text-sm text-gray-600">
-                    {currentTeam.memberIds.length} member{currentTeam.memberIds.length !== 1 ? 's' : ''}
-                  </p>
+            <div className="eb-current-body">
+              <span className="eb-monogram" aria-hidden="true">{monogram(currentTeam.name)}</span>
+              <div>
+                <h4 className="eb-current-name">{currentTeam.name}</h4>
+                <div className="eb-current-meta">
+                  <p>Code: {currentTeam.code}</p>
+                  <p>{members(currentTeam.memberIds.length)}</p>
                 </div>
-                {userTeams.length > 1 && (
-                  <button
-                    onClick={handleLeaveTeam}
-                    className="px-3 py-1 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  >
-                    Leave Team
-                  </button>
-                )}
               </div>
+              <span className="eb-watermark" aria-hidden="true">{monogram(currentTeam.name)}</span>
             </div>
           ) : (
-            <p className="text-gray-500">No team selected</p>
+            <p className="eb-current-empty">No team selected</p>
           )}
-        </div>
+        </section>
 
         {userTeams.length > 1 && (
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Your Teams</h3>
-            <div className="space-y-2">
+          <section className="eb-panel eb-team-list" aria-labelledby="eb-your-teams">
+            <div className="eb-panel-head"><h3 id="eb-your-teams">Your Teams</h3><span className="eb-count" aria-hidden="true">{userTeams.length}</span></div>
+            <div>
               {userTeams.map((team) => (
-                <div
-                  key={team.id}
-                  className={`flex items-center justify-between p-3 rounded-lg border ${
-                    currentTeam?.id === team.id
-                      ? 'border-blue-300 bg-blue-50'
-                      : 'border-gray-200 bg-white'
-                  }`}
-                >
-                  <div>
-                    <h4 className="font-medium text-gray-900">{team.name}</h4>
-                    <p className="text-sm text-gray-600">Code: {team.code}</p>
+                <div key={team.id} className={`eb-team-row${currentTeam?.id === team.id ? ' eb-team-row-current' : ''}`}>
+                  <span className="eb-row-mono" aria-hidden="true">{monogram(team.name)}</span>
+                  <div className="eb-row-text">
+                    <h4>{team.name}</h4>
+                    <p>Code: {team.code} • {members(team.memberIds.length)}</p>
                   </div>
-                  {currentTeam?.id !== team.id && (
-                    <button
-                      onClick={() => switchTeam(team.id)}
-                      className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Switch to
-                    </button>
-                  )}
+                  {currentTeam?.id !== team.id ? (
+                    <button onClick={() => switchTeam(team.id)} className="eb-btn eb-btn-small">Switch to</button>
+                  ) : <span className="eb-tag">Current</span>}
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
       </div>
 

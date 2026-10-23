@@ -10,7 +10,7 @@ import { Users, Shield, Zap } from 'lucide-react';
 const FORMATIONS = [
   {
     id: 'shotgun',
-    name: 'Shotgun',
+    name: 'Shotgun Doubles',
     description: 'Offensive formation with QB in shotgun',
     icon: Users,
     color: 'blue',
@@ -18,7 +18,7 @@ const FORMATIONS = [
   },
   {
     id: '4-3',
-    name: '4-3 Defense',
+    name: '4-3 Over Defense',
     description: 'Defensive formation with 4 linemen, 3 linebackers',
     icon: Shield,
     color: 'red',
@@ -26,7 +26,7 @@ const FORMATIONS = [
   },
   {
     id: 'i-formation',
-    name: 'I-Formation',
+    name: 'I-Formation Right',
     description: 'Traditional offensive formation',
     icon: Users,
     color: 'green',
@@ -34,7 +34,7 @@ const FORMATIONS = [
   },
   {
     id: '3-4',
-    name: '3-4 Defense',
+    name: '3-4 Base Defense',
     description: 'Defensive formation with 3 linemen, 4 linebackers',
     icon: Shield,
     color: 'purple',
