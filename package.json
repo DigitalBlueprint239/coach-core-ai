@@ -22,7 +22,7 @@
     "postcss": "^8.5.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "3.4.19"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^9.0.16",
