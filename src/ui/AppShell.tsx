@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { CalendarDays, Users, ClipboardList, Waypoints, LogOut } from 'lucide-react';
 import './coach-core.css';
+// Elite Broadcast overrides must load after the base shell styles.
+import './elite-broadcast.css';
 
 export type Destination = 'overview' | 'teams' | 'practice' | 'playbook';
 const destinations = [
@@ -41,22 +43,17 @@ export default function AppShell({ active, onNavigate, teamName, email, onSignOu
   </button>);
   return <div className="cc-app" ref={app}>
     <a href="#cc-main" className="cc-skip">Skip to main content</a>
-    <aside className="cc-sidebar">
-      <a className="cc-brand" href="#cc-main" aria-label="Coach Core home" onClick={() => onNavigate('overview')}><span>COACH CORE <b>AI</b></span><span className="cc-brand-compact" aria-hidden="true">CC</span></a>
+    <header className="cc-topbar">
+      <a className="cc-brand" href="#cc-main" aria-label="Coach Core home" onClick={() => onNavigate('overview')}><span className="cc-brand-mark" aria-hidden="true">CC</span><span className="cc-brand-name">COACH CORE <b>AI</b></span></a>
       <nav className="cc-desktop-nav" aria-label="Main navigation">{links()}</nav>
-      <details className="cc-roadmap"><summary>Planned features</summary><p>Film review · unavailable</p><p>Roster & attendance · unavailable</p><p>Player development · unavailable</p></details>
-      <span className="cc-sidebar-foot">Private beta</span>
-    </aside>
-    <div className="cc-workspace">
-      <header className="cc-topbar"><div className="cc-mobile-brand">COACH CORE <b>AI</b></div>
-        {/* Identity is shown at every width (shared devices): active team or an explicit no-team state, and a
-            badge whenever sample data, not saved team data, is on screen. */}
-        <div className="cc-team-context"><Users size={16} aria-hidden="true" /><span><span className="cc-visually-hidden">Active team: </span>{teamName || 'No team selected'}</span>
-          {samplePreview && <span className="cc-mode-badge">Sample preview · not saved</span>}</div>
-        <div className="cc-account"><span className="cc-welcome" title={email}>Welcome, {email}</span>{onSignOut && <button type="button" className="cc-signout" onClick={onSignOut}><LogOut size={16} aria-hidden="true" /><span>Sign out</span></button>}{standalone && <span className="cc-badge">Local preview</span>}</div>
-      </header>
-      <main id="cc-main" className="cc-main" ref={main} tabIndex={-1}>{children}</main>
-    </div>
+      {/* Identity is shown at every width (shared devices): active team or an explicit no-team state, and a
+          badge whenever sample data, not saved team data, is on screen. */}
+      <div className="cc-team-context"><span className="cc-team-dot" aria-hidden="true" /><span><span className="cc-visually-hidden">Active team: </span>{teamName || 'No team selected'}</span>
+        {samplePreview && <span className="cc-mode-badge">Sample preview · not saved</span>}</div>
+      <div className="cc-account"><span className="cc-welcome" title={email}>Welcome, {email}</span>{onSignOut && <button type="button" className="cc-signout" onClick={onSignOut}><LogOut size={16} aria-hidden="true" /><span>Sign out</span></button>}{standalone && <span className="cc-badge">Local preview</span>}</div>
+    </header>
+    <main id="cc-main" className="cc-main" ref={main} tabIndex={-1}>{children}</main>
+    <footer className="cc-footer"><strong>Planned features</strong><span>Film review · unavailable</span><span>Roster &amp; attendance · unavailable</span><span>Player development · unavailable</span><span className="cc-footer-tag">Private beta</span></footer>
     <nav ref={nav} className="cc-bottom-nav" aria-label="Mobile navigation">{links(true)}</nav>
   </div>;
 }

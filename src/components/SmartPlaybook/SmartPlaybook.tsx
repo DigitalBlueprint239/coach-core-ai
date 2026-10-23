@@ -519,39 +519,35 @@ const SmartPlaybook = () => {
 
   return (
     <ErrorBoundary>
-      <div className="smart-playbook-app min-h-screen bg-gray-50">
+      <div className="smart-playbook-app eb-playbook">
       {user && currentTeam && currentTeam.ownerId === user.uid && <LegacyImport key={`${user.uid}:${currentTeam.id}`} uid={user.uid} teamId={currentTeam.id} teamName={currentTeam.name} onImported={() => {void persistence.reload();}} />}
         <EarlierDrafts scope={{uid:user!.uid,teamId:currentTeam!.id}} onOpen={record=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.open(record);}}/>
-        <p role="status" aria-label="Play save status">{playStatus}</p>
-        <DeviceRecovery scope={{uid:user!.uid,teamId:currentTeam!.id}} kind="plays" writer={persistence.writer} onResume={d=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.resume(d);}}/>
-        <button onClick={()=>{if(!persistence.hasWork||window.confirm('Start a new play? Export your current draft first if you need both.'))persistence.create({name:'',phase:'offense',type:'pass',players:[],routes:[]});}}>New play</button>
-        <button onClick={()=>download(playFields,'play-draft.json')}>Export draft</button>
-        <button onClick={()=>{void persistence.reload();}}>Refresh play library</button>
-        {persistence.error&&<p role="alert">{persistence.error}</p>}{persistence.listError&&<p role="alert">{persistence.listError}</p>}
-        {persistence.conflict&&<Recovery remote={persistence.conflict} fields={playFields} onReload={()=>persistence.open(persistence.conflict!)} onCopy={()=>{persistence.update(playFields);void persistence.save(true);}}/>}
-        {persistence.timestamps&&<p>Created {persistence.timestamps.createdAt}; last saved {persistence.timestamps.updatedAt}</p>}
         {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900">Smart Playbook</h1>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleDebugMode}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-              >
-                {debugMode ? 'Hide Debug' : 'Show Debug'}
-              </button>
-            </div>
+      <header className="eb-hero eb-playbook-hero">
+        <div>
+          <div className="eb-kicker-row">
+            <h1 className="eb-kicker">Smart Playbook</h1>
+            <p role="status" aria-label="Play save status" className="eb-status" data-state={playStatus}>{playStatus}</p>
           </div>
+          <p className="eb-title" aria-hidden="true">{currentPlayName.trim() || 'Untitled play'}</p>
+        </div>
+        <div className="eb-secondary-actions eb-playbook-actions">
+          <button className="eb-link" onClick={()=>{if(!persistence.hasWork||window.confirm('Start a new play? Export your current draft first if you need both.'))persistence.create({name:'',phase:'offense',type:'pass',players:[],routes:[]});}}>New play</button>
+          <button className="eb-link" onClick={()=>download(playFields,'play-draft.json')}>Export draft</button>
+          <button className="eb-link" onClick={()=>{void persistence.reload();}}>Refresh play library</button>
+          <DeviceRecovery scope={{uid:user!.uid,teamId:currentTeam!.id}} kind="plays" writer={persistence.writer} onResume={d=>{if(!persistence.hasWork||window.confirm('Export your current draft before recovering another. Continue?'))persistence.resume(d);}}/>
+          <button onClick={toggleDebugMode} className="eb-debug">
+            {debugMode ? 'Hide Debug' : 'Show Debug'}
+          </button>
         </div>
       </header>
+        {persistence.error&&<p role="alert">{persistence.error}</p>}{persistence.listError&&<p role="alert">{persistence.listError}</p>}
+        {persistence.conflict&&<Recovery remote={persistence.conflict} fields={playFields} onReload={()=>persistence.open(persistence.conflict!)} onCopy={()=>{persistence.update(playFields);void persistence.save(true);}}/>}
+        {persistence.timestamps&&<p className="eb-stamp">Created {persistence.timestamps.createdAt}; last saved {persistence.timestamps.updatedAt}</p>}
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Sidebar - Controls */}
-          <div className="lg:col-span-1 space-y-4">
-            {/* Toolbar */}
+      <div className="eb-playbook-grid">
+          {/* Left column - tools, formations, players */}
+          <div className="eb-col eb-col-left">
             <Toolbar
               mode={mode}
               onModeChange={setMode}
@@ -564,10 +560,8 @@ const SmartPlaybook = () => {
               onShowHelp={() => setShowOnboarding(true)}
             />
 
-            {/* Formation Templates */}
             <FormationTemplates onLoadFormation={loadFormation} />
 
-            {/* Player Controls */}
             <PlayerControls
               selectedPlayer={players.find(p => p.id === selectedPlayerId)}
               players={players}
@@ -586,33 +580,39 @@ const SmartPlaybook = () => {
                 }
               }}
             />
+          </div>
 
-            {/* Route Controls */}
-            <RouteControls
-              selectedPlayer={players.find(p => p.id === selectedPlayerId)}
-              isDrawingRoute={isDrawingRoute}
-              routeType={routeType}
-              routeColor={routeColor}
-              onStartDrawing={startRouteDrawing}
-              onFinishDrawing={finishRouteDrawing}
-              onCancelDrawing={cancelRouteDrawing}
-              onRouteTypeChange={setRouteType}
-              onRouteColorChange={setRouteColor}
-            />
+          {/* Centre column - field and play management */}
+          <div className="eb-col eb-col-centre">
+            <div className="eb-field">
+              <ErrorBoundary>
+                <CanvasArea
+                  canvasRef={canvasRef}
+                  players={players}
+                  routes={routes}
+                  onCanvasEvent={handleCanvasEvent}
+                  onPlayerDrag={handlePlayerDrag}
+                />
+              </ErrorBoundary>
 
-            {/* Route Editor */}
-            <ErrorBoundary>
-              <RouteEditor
-                selectedRoute={routes.find(r => r.id === selectedRouteId)}
-                players={players}
-                onUpdateRoute={handleRouteUpdate}
-                onDeleteRoute={handleRouteDelete}
-                onApplyPreset={handleApplyPreset}
-                onClearSelection={() => setSelectedRouteId(null)}
-              />
-            </ErrorBoundary>
+              {/* Route Drawing Overlay */}
+              {isDrawingRoute && routePoints.length > 0 && (
+                <div className="eb-drawing">
+                  <p>
+                    Drawing route... Click to add points, double-click to finish
+                  </p>
+                  <div className="eb-drawing-actions">
+                    <button onClick={finishRouteDrawing} className="eb-btn eb-btn-primary">
+                      Finish Route
+                    </button>
+                    <button onClick={cancelRouteDrawing} className="eb-btn">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
-            {/* Save/Load Panel */}
             <SaveLoadPanel
               currentPlayName={currentPlayName}
               currentPlayPhase={currentPlayPhase}
@@ -626,44 +626,31 @@ const SmartPlaybook = () => {
             />
           </div>
 
-          {/* Main Canvas Area */}
-          <div className="lg:col-span-2">
+          {/* Right column - routes and library */}
+          <div className="eb-col eb-col-right">
+            <RouteControls
+              selectedPlayer={players.find(p => p.id === selectedPlayerId)}
+              isDrawingRoute={isDrawingRoute}
+              routeType={routeType}
+              routeColor={routeColor}
+              onStartDrawing={startRouteDrawing}
+              onFinishDrawing={finishRouteDrawing}
+              onCancelDrawing={cancelRouteDrawing}
+              onRouteTypeChange={setRouteType}
+              onRouteColorChange={setRouteColor}
+            />
+
             <ErrorBoundary>
-              <CanvasArea
-                canvasRef={canvasRef}
+              <RouteEditor
+                selectedRoute={routes.find(r => r.id === selectedRouteId)}
                 players={players}
-                routes={routes}
-                onCanvasEvent={handleCanvasEvent}
-                onPlayerDrag={handlePlayerDrag}
+                onUpdateRoute={handleRouteUpdate}
+                onDeleteRoute={handleRouteDelete}
+                onApplyPreset={handleApplyPreset}
+                onClearSelection={() => setSelectedRouteId(null)}
               />
             </ErrorBoundary>
 
-            {/* Route Drawing Overlay */}
-            {isDrawingRoute && routePoints.length > 0 && (
-              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  Drawing route... Click to add points, double-click to finish
-                </p>
-                <div className="mt-2 flex gap-2">
-                  <button
-                    onClick={finishRouteDrawing}
-                    className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                  >
-                    Finish Route
-                  </button>
-                  <button
-                    onClick={cancelRouteDrawing}
-                    className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right Sidebar - Library */}
-          <div className="lg:col-span-1">
             {showLibrary && (
               <PlayLibrary
                 savedPlays={persistence.records.map(r => ({...r.fields,id:r.id,phase:r.fields.phase==='special_teams'?'special':r.fields.phase})) as unknown as SavedPlay[]}
@@ -673,7 +660,6 @@ const SmartPlaybook = () => {
               />
             )}
           </div>
-        </div>
       </div>
 
       <SavePlayDialog
