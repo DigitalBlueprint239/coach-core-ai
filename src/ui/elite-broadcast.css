@@ -342,3 +342,4 @@
   .eb-tour-body h3 {font-size:32px!important}
   .eb-tour-step {font-size:14px;letter-spacing:1px}
 }
+.eb-formation-name {margin:0;font:800 20px var(--eb-display);letter-spacing:1px;color:var(--eb-cyan);text-transform:uppercase}

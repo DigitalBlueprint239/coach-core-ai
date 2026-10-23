@@ -9,8 +9,8 @@ import React, { memo, useState } from 'react';
 import { User, Edit3, Trash2, Save, X, AlertTriangle } from 'lucide-react';
 
 const POSITIONS = {
-  OFFENSE: ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT'],
-  DEFENSE: ['DE', 'DT', 'NT', 'MLB', 'OLB', 'CB', 'FS', 'SS', 'NB', 'LB']
+  OFFENSE: ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT', 'X', 'Z', 'H', 'Y', 'TB'],
+  DEFENSE: ['DE', 'DT', 'NT', 'MLB', 'OLB', 'CB', 'FS', 'SS', 'NB', 'LB', 'W', 'M', 'S', 'ILB']
 };
 
 const PlayerControls = memo(({
@@ -35,6 +35,7 @@ const PlayerControls = memo(({
   const handleSave = () => {
     if (!selectedPlayer) return;
     
+    if(editNumber.trim()===''||!Number.isInteger(Number(editNumber))||Number(editNumber)<0||Number(editNumber)>99){alert('Player number must be a whole number from 0 to 99.');return;}
     const updates = {};
     let hasErrors = false;
     
