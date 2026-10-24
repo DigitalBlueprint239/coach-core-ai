@@ -1,6 +1,7 @@
 // src/components/OnboardingModal.tsx
 import React, { useState } from 'react';
 import { LoadingState } from './LoadingStates';
+import { useModalDialog } from './common/useModalDialog';
 
 const ONBOARDING_STEPS = [
   {
@@ -62,6 +63,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 }) => {
   const [step, setStep] = useState(0);
   const [loadingDemo, setLoadingDemo] = useState(false);
+  // Escape closes like the close button.
+  const dialog = useModalDialog(open, onClose);
 
   if (!open) return null;
 
@@ -92,10 +95,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
   return (
     <div className={`onboarding-modal-overlay ${className}`}>
-      <div className="onboarding-modal">
-        <div className="onboarding-illustration">{illustration}</div>
-        <h2 className="onboarding-title">{title}</h2>
-        <p className="onboarding-description">{description}</p>
+      <div ref={dialog.ref} onKeyDown={dialog.onKeyDown} className="onboarding-modal" role="dialog" aria-modal="true"
+        aria-labelledby="onboarding-title" aria-describedby="onboarding-description">
+        <div className="onboarding-illustration" aria-hidden="true">{illustration}</div>
+        <h2 id="onboarding-title" className="onboarding-title">{title}</h2>
+        <p id="onboarding-description" className="onboarding-description">{description}</p>
 
         <div className="onboarding-actions">
           {step === ONBOARDING_STEPS.length - 1 ? (
@@ -131,24 +135,33 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </button>
           )}
         </div>
-        <button className="onboarding-close" onClick={onClose} aria-label="Close onboarding">×</button>
+        <button type="button" className="onboarding-close" onClick={onClose} aria-label="Close onboarding">×</button>
       </div>
       <style>{`
+        /* Elite Broadcast surface. The overlay renders outside .cc-app, so it carries the
+           token values it needs (same values as src/ui/elite-broadcast.css). */
         .onboarding-modal-overlay {
+          --eb-text: #F4F7FB; --eb-secondary: #AEB8C6; --eb-line-3: #3A4866; --eb-panel-2: #0B0F17;
+          --eb-cyan: #19E3FF; --eb-ink: #04060A; --eb-amber: #FFC94D; --eb-amber-text: #FFD97A;
+          --eb-display: 'Big Shoulders Display', 'Arial Narrow', 'Roboto Condensed', Impact, sans-serif;
+          --eb-body: Archivo, 'Segoe UI', Arial, sans-serif;
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(0,0,0,0.5);
+          background: #04060ACC;
           z-index: 2000;
           display: flex;
           align-items: center;
           justify-content: center;
+          padding: 16px;
         }
         .onboarding-modal {
-          background: white;
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+          background: linear-gradient(160deg, #10182A 0%, #0A0F1A 70%);
+          border: 1px solid #2A3550;
+          box-shadow: 0 20px 60px #00000080;
+          color: var(--eb-text);
+          font: 15px/1.45 var(--eb-body);
           padding: 2rem 2.5rem;
-          max-width: 400px;
+          max-width: 440px;
           width: 100%;
           text-align: center;
           position: relative;
@@ -158,13 +171,14 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           margin-bottom: 1rem;
         }
         .onboarding-title {
-          font-size: 1.5rem;
-          font-weight: 700;
+          font: 900 30px/1.05 var(--eb-display);
+          letter-spacing: 1px;
+          text-transform: uppercase;
           margin-bottom: 0.5rem;
         }
         .onboarding-description {
           font-size: 1rem;
-          color: #555;
+          color: var(--eb-secondary);
           margin-bottom: 2rem;
         }
         .onboarding-actions {
@@ -174,46 +188,63 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           margin-bottom: 1rem;
         }
         .onboarding-btn {
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          border: none;
-          font-size: 1rem;
-          font-weight: 600;
+          min-height: 52px;
+          padding: 0 24px;
+          border: 1px solid var(--eb-line-3);
+          border-radius: 0;
+          background: transparent;
+          color: var(--eb-text);
+          font: 800 20px var(--eb-display);
+          letter-spacing: 1px;
+          text-transform: uppercase;
           cursor: pointer;
           transition: background 0.2s;
         }
         .onboarding-btn.primary {
-          background: linear-gradient(135deg, #0084ff, #00d4ff);
-          color: white;
+          border: 0;
+          background: var(--eb-cyan);
+          color: var(--eb-ink);
+          font-weight: 900;
+          clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
         }
-        .onboarding-btn.secondary {
-          background: #f3f4f6;
-          color: #374151;
+        .onboarding-btn.primary:hover {
+          background: #C2F7FF;
+        }
+        .onboarding-btn.secondary:hover {
+          background: var(--eb-panel-2);
         }
         .onboarding-btn.demo {
-          background: #fbbf24;
-          color: #111827;
+          border-color: var(--eb-amber);
+          background: #2A2208;
+          color: var(--eb-amber-text);
         }
         .onboarding-btn:disabled {
           opacity: 0.7;
           cursor: not-allowed;
         }
+        .onboarding-btn:focus-visible,
+        .onboarding-close:focus-visible {
+          outline: 3px solid var(--eb-cyan);
+          outline-offset: 3px;
+        }
         .onboarding-close {
           position: absolute;
-          top: 16px;
-          right: 16px;
+          top: 8px;
+          right: 8px;
+          min-width: 44px;
+          min-height: 44px;
           background: none;
           border: none;
           font-size: 1.5rem;
-          color: #aaa;
+          color: var(--eb-secondary);
           cursor: pointer;
         }
         .onboarding-close:hover {
-          color: #0084ff;
+          color: var(--eb-cyan);
         }
         @media (max-width: 480px) {
           .onboarding-modal {
-            padding: 1.25rem 0.5rem;
+            padding: 1.25rem 0.75rem;
             max-width: 95vw;
           }
         }

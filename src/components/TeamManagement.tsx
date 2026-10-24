@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useTeam } from '../contexts/TeamContext';
+import React, { useState, useEffect, useRef, useId } from 'react';
+import { useTeam, JOIN_UNAVAILABLE_MESSAGE, TEAM_CODE_LENGTH } from '../contexts/TeamContext';
 import { useToast } from './ToastManager';
+import { useModalDialog } from './common/useModalDialog';
 
 export const TeamSelector: React.FC = () => {
   const { currentTeam, userTeams, switchTeam, loading } = useTeam();
@@ -153,6 +154,8 @@ const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const mounted = useRef(true);
   const tracked = useRef<string | null>(null);
   const notified = useRef<string | null>(null);
+  const dialog = useModalDialog(isOpen, onClose);
+  const titleId = useId();
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const complete = (id: string) => {
     if (!mounted.current || notified.current === id) return;
@@ -201,12 +204,15 @@ const CreateTeamForm: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-200 ease-out">
+      <div ref={dialog.ref} onKeyDown={dialog.onKeyDown} role="dialog" aria-modal="true" aria-labelledby={titleId}
+        className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-200 ease-out">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Create New Team</h2>
+            <h2 id={titleId} className="text-xl font-semibold text-gray-900">Create New Team</h2>
             <button
+              type="button"
               onClick={onClose}
+              aria-label="Close"
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -279,6 +285,9 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
   const [isJoining, setIsJoining] = useState(false);
   const { joinTeam } = useTeam();
   const { showToast } = useToast();
+  const dialog = useModalDialog(isOpen, onClose);
+  const titleId = useId();
+  const noticeId = useId();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -301,12 +310,15 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-200 ease-out">
+      <div ref={dialog.ref} onKeyDown={dialog.onKeyDown} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={noticeId}
+        className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-200 ease-out">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Join Team</h2>
+            <h2 id={titleId} className="text-xl font-semibold text-gray-900">Join Team</h2>
             <button
+              type="button"
               onClick={onClose}
+              aria-label="Close"
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -314,7 +326,9 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
               </svg>
             </button>
           </div>
-          
+
+          {/* Private beta: joinTeam always refuses; say so before the coach types a code. */}
+          <p id={noticeId} className="mb-6 px-4 py-3 text-sm border bg-yellow-50 text-yellow-800">{JOIN_UNAVAILABLE_MESSAGE}</p>
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label htmlFor="team-code" className="block text-sm font-medium text-gray-700 mb-2">
@@ -326,13 +340,13 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
                 value={teamCode}
                 onChange={(e) => setTeamCode(e.target.value.toUpperCase())}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-xl font-mono tracking-widest transition-colors"
-                placeholder="ABC123"
-                maxLength={6}
+                placeholder="ABCD2345"
+                maxLength={TEAM_CODE_LENGTH}
                 required
                 autoFocus
               />
               <p className="text-xs text-gray-500 mt-2 text-center">
-                Enter the 6-character team code provided by your coach
+                Enter the {TEAM_CODE_LENGTH}-character team code provided by your coach
               </p>
             </div>
             
