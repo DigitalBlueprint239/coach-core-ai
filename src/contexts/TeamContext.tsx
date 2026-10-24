@@ -65,14 +65,19 @@ interface TeamProviderProps {
   children: ReactNode;
 }
 
+export const TEAM_CODE_LENGTH = 8;
+
 // Team display code. Private beta: owner-only teams, so the code is a label,
 // not an access credential (invites are disabled; see joinTeam).
 const generateTeamCode = (): string => {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const bytes = new Uint8Array(8);
+  const bytes = new Uint8Array(TEAM_CODE_LENGTH);
   crypto.getRandomValues(bytes);
   return Array.from(bytes, (b) => chars[b % chars.length]).join('');
 };
+
+// Shown by the Join dialog before submit and thrown by joinTeam, so both read the same.
+export const JOIN_UNAVAILABLE_MESSAGE = 'Joining teams is not available during the private beta.';
 
 export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
@@ -131,7 +136,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const joinTeam = async (code: string): Promise<void> => {
     // Private beta: teams are owner-only. Joining by code is disabled until a
     // server-side invite flow exists (Day 1 F-08); rules would deny it anyway.
-    const message = 'Joining teams is not available during the private beta.';
+    const message = JOIN_UNAVAILABLE_MESSAGE;
     setError(message);
     if (message) throw new Error(message);
     try {
