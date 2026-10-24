@@ -1,0 +1,70 @@
+/* Film review (F1 preview). Uses the Elite Broadcast tokens defined on .cc-app; loaded only with the Film chunk. */
+.fr {display:flex;flex-direction:column}
+.fr-badge {display:inline-flex;align-items:center;padding:4px 10px;border:1px solid var(--eb-amber);background:#2A2208;color:var(--eb-amber-text);font-size:12px;font-weight:700}
+.cc-app .fr-title {font-size:clamp(48px,7vw,104px)}
+.fr-intro {max-width:720px;margin:10px 0 0;color:var(--eb-secondary);font-size:15px}
+.fr-notice,.fr-restore {display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px;padding:10px 14px;border:1px solid var(--eb-line-3);background:var(--eb-panel);color:var(--eb-text);font-size:14px}
+.fr-restore {border-color:var(--eb-amber);background:#2A2208}
+.fr-restore p {margin:0;flex:1 1 280px}
+.fr-grid {display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-areas:"player form" "library form";gap:16px;align-items:start}
+.fr-player {grid-area:player}.fr-form {grid-area:form}.fr-library {grid-area:library}
+.fr-sample {display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:1.1px;color:var(--eb-secondary);text-transform:uppercase}
+.fr-sample select {min-height:40px;padding:0 10px}
+.fr-stage {position:relative;margin:14px 14px 0;background:#000;border:1px solid var(--eb-line-2);outline-offset:2px}
+.fr-stage:focus-visible {outline:3px solid var(--eb-cyan)}
+.fr-stage video {display:block;width:100%;aspect-ratio:16/9;background:#000}
+.fr-interval {position:absolute;bottom:0;height:6px;background:var(--eb-cyan);box-shadow:0 0 12px var(--eb-cyan);pointer-events:none}
+.fr-caption,.fr-media-error,.fr-keys,.fr-empty {margin:8px 14px 0;font-size:13px;color:var(--eb-secondary)}
+.fr-media-error {padding:8px 10px;border:1px solid var(--eb-red);background:#2A0E12;color:#FFC2C2}
+.fr-controls {display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px 0}
+.fr-controls .eb-btn {min-height:44px;padding:0 16px;font-size:17px}
+.fr-controls .eb-btn-primary {min-width:110px}
+.fr-speed {display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:1.1px;color:var(--eb-secondary);text-transform:uppercase}
+.fr-speed select {min-height:44px;padding:0 10px}
+.fr-seek {display:flex;flex-direction:column;gap:6px;padding:12px 14px 0;font-size:11px;font-weight:800;letter-spacing:1.1px;color:var(--eb-secondary);text-transform:uppercase}
+.fr-seek output {margin-left:8px;color:var(--eb-cyan);font:800 16px var(--eb-display);letter-spacing:1px}
+.fr-seek input {width:100%;min-height:32px;accent-color:var(--eb-cyan)}
+.fr-keys {padding-bottom:14px;font-size:12px;color:var(--eb-muted)}
+.fr-form-body {display:flex;flex-direction:column;gap:14px;padding:16px 18px 18px}
+.fr label {display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:800;letter-spacing:1.1px;color:var(--eb-secondary);text-transform:uppercase}
+.fr label small,.fr-field-label small {font-weight:600;letter-spacing:0;color:var(--eb-muted);text-transform:none}
+.fr :is(input[type=text],input[type=number],textarea,select) {min-height:44px;padding:8px 12px;background:var(--eb-ground);color:var(--eb-text);border:1px solid var(--eb-line-3);border-radius:0;font:600 15px var(--eb-body);letter-spacing:0;text-transform:none;color-scheme:dark}
+.fr textarea {resize:vertical}
+.fr-times {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
+.fr-times .eb-btn {min-height:44px;padding:0 14px;font-size:16px}
+.fr-rev {font:800 16px var(--eb-display);color:var(--eb-cyan);letter-spacing:1px;text-transform:uppercase}
+.fr-field-label {font-size:11px;font-weight:800;letter-spacing:1.1px;color:var(--eb-secondary);text-transform:uppercase}
+.fr-tags ul {list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;padding:0}
+.fr-tags li {display:inline-flex;align-items:center;gap:2px;padding-left:10px;background:#0C3A47;border:1px solid var(--eb-cyan);color:var(--eb-text);font-weight:700;font-size:14px}
+.fr-tags li button {min-width:36px;min-height:36px;border:0;background:transparent;color:var(--eb-cyan-soft);font-size:18px}
+.fr-tag-add {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.fr-tag-add .eb-btn {min-height:44px;padding:0 14px;font-size:16px}
+.fr-suggest {display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fr-suggest button {min-height:36px;padding:0 10px;border:1px dashed var(--eb-line-3);background:transparent;color:var(--eb-secondary);font-size:13px;font-weight:700}
+.fr-suggest button:hover:not(:disabled) {border-color:var(--eb-cyan);color:var(--eb-text)}
+.fr-validation {margin:0;padding:8px 10px;border:1px solid var(--eb-amber);background:#2A2208;color:var(--eb-amber-text);font-size:14px}
+.fr-actions {display:flex;flex-wrap:wrap;gap:8px}
+.fr-actions .eb-btn {min-height:48px;font-size:18px}
+.fr-danger {border-color:#7A2A33;color:var(--eb-red)}
+.fr-status {margin:0;padding:10px 12px;border:1px solid var(--eb-line-3);font-size:14px;font-weight:700}
+.fr-status-saved {border-color:var(--eb-cyan);background:#0C3A47;color:var(--eb-cyan-soft)}
+.fr-status-unsaved {border-color:var(--eb-amber);background:#2A2208;color:var(--eb-amber-text)}
+.fr-status-busy {color:var(--eb-secondary)}
+.fr-status-error {border-color:var(--eb-red);background:#2A0E12;color:#FFC2C2}
+.fr-conflict {padding:12px;border:1px solid var(--eb-amber);background:#2A2208;color:var(--eb-amber-text)}
+.fr-conflict p {margin:0 0 10px}
+.fr-library ul {list-style:none;margin:0;padding:0}
+.fr-library li {display:flex;flex-direction:column;gap:2px;padding:10px 16px;border-bottom:1px solid #151B27;color:var(--eb-muted);font-size:12px}
+.fr-library li.fr-current {border-left:4px solid var(--eb-cyan);background:linear-gradient(90deg,#0C3A4740,transparent)}
+.fr-library li button {align-self:flex-start;min-height:44px;padding:0;border:0;background:none;color:var(--eb-text);font:800 19px var(--eb-display);text-align:left;text-transform:uppercase;overflow-wrap:anywhere}
+.fr-library li button:hover {color:var(--eb-cyan)}
+.fr-library .fr-empty {padding-bottom:14px}
+@media(max-width:1099px){.fr-grid {grid-template-columns:minmax(0,1fr);grid-template-areas:"player" "form" "library"}}
+@media(max-width:767px){
+  .cc-app .fr-title {font-size:clamp(40px,12vw,56px)}
+  .fr-stage {margin:10px 10px 0}
+  .fr-controls,.fr-seek {padding-inline:10px}
+  .fr-controls .eb-btn {padding:0 12px;font-size:15px}
+  .fr-form-body {padding:12px}
+  .fr-times {grid-template-columns:minmax(0,1fr)}
+}
