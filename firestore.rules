@@ -211,6 +211,67 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // ---------- film annotations (coach-film-annotation.v1, F1 synthetic preview) ----------
+    // A coach's mark on an allowlisted SYNTHETIC sample, saved to the coach's own team. Owner-only,
+    // like plays and practice plans. The sample identity (id, duration, every encoding hash) is pinned
+    // here, so a mark cannot be stored against different media. Revision 1 on create, +1 on update.
+    function syntheticOutRouteV1() {
+      return {'kind': 'synthetic', 'sampleId': 'synthetic-out-route-v1', 'durationMs': 8000,
+              'sha256': ['a3b4285499e64d89f99b755cbf4d320ab60b3d142a53c115e4040e83f39404d2',
+                         'a74f85cb02aaefb6eb42ed05d143c261e595903e4b5a75a49736e787e88da381']};
+    }
+
+    function isAllowedTag(tags, i) {
+      return tags.size() <= i || isShortString(tags[i], 1, 24);
+    }
+
+    function validAnnotation(d, teamId) {
+      return d.keys().hasOnly(['schemaVersion', 'teamId', 'createdBy', 'source', 'startMs', 'endMs',
+                               'label', 'tags', 'notes', 'revision', 'createdAt', 'updatedAt'])
+        && d.keys().hasAll(['schemaVersion', 'teamId', 'createdBy', 'source', 'startMs', 'endMs',
+                            'label', 'tags', 'notes', 'revision', 'createdAt', 'updatedAt'])
+        && d.schemaVersion == 'coach-film-annotation.v1'
+        && d.teamId == teamId
+        && d.source == syntheticOutRouteV1()
+        && d.startMs is int && d.endMs is int
+        && d.startMs >= 0
+        && d.endMs <= d.source.durationMs
+        && d.endMs - d.startMs >= 100
+        && isShortString(d.label, 1, 80)
+        && isBoundedList(d.tags, 8)
+        && d.tags.toSet().size() == d.tags.size()
+        && isAllowedTag(d.tags, 0) && isAllowedTag(d.tags, 1) && isAllowedTag(d.tags, 2) && isAllowedTag(d.tags, 3)
+        && isAllowedTag(d.tags, 4) && isAllowedTag(d.tags, 5) && isAllowedTag(d.tags, 6) && isAllowedTag(d.tags, 7)
+        && d.notes is string && d.notes.size() <= 2000
+        && d.revision is int
+        && d.createdAt is timestamp && d.updatedAt is timestamp;
+    }
+
+    match /teams/{teamId}/filmAnnotations/{annotationId} {
+      allow get, list: if isBetaUser() && ownsTeam(teamId);
+      allow create: if isBetaUser()
+        && ownsTeam(teamId)
+        && validAnnotation(request.resource.data, teamId)
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.revision == 1
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if isBetaUser()
+        && ownsTeam(teamId)
+        && resource.data.createdBy == request.auth.uid
+        && validAnnotation(request.resource.data, teamId)
+        && unchanged('teamId')
+        && unchanged('createdBy')
+        && unchanged('createdAt')
+        && unchanged('source')
+        && unchanged('schemaVersion')
+        && request.resource.data.revision == resource.data.revision + 1
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isBetaUser()
+        && ownsTeam(teamId)
+        && resource.data.createdBy == request.auth.uid;
+    }
+
     // Everything else: no client access.
     match /{document=**} {
       allow read, write: if false;
