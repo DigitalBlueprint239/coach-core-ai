@@ -1,21 +1,22 @@
 // Shared-app dialog regressions (audit 2026-10-24: D2 Join code length and beta notice,
-// D3 Create/Join dialog keyboard and names, D4 welcome modal semantics).
+// D3 Create/Join dialog keyboard and names, D4 welcome modal semantics; Codex PR #94 F1/F2 focus recovery).
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor, act} from '@testing-library/react';
 import {CreateTeamModal, JoinTeamModal} from './TeamManagement';
 import {OnboardingModal} from './OnboardingModal';
 
 const mockJoin = jest.fn();
+const mockCreate = jest.fn();
 jest.mock('../contexts/TeamContext', () => ({
   JOIN_UNAVAILABLE_MESSAGE: 'Joining teams is not available during the private beta.',
   TEAM_CODE_LENGTH: 8,
   useTeam: () => ({
-    confirmedTeams: [], createTeam: jest.fn(), joinTeam: mockJoin, teamCreationAccount: 'A',
+    confirmedTeams: [], createTeam: mockCreate, joinTeam: mockJoin, teamCreationAccount: 'A',
     teamCreation: {operation: null, phase: 'idle', error: null},
   }),
 }));
 jest.mock('./ToastManager', () => ({useToast: () => ({showToast: jest.fn()})}));
-beforeEach(() => {mockJoin.mockReset(); mockJoin.mockRejectedValue(new Error('Joining teams is not available during the private beta.'));});
+beforeEach(() => {mockCreate.mockReset(); mockJoin.mockReset(); mockJoin.mockRejectedValue(new Error('Joining teams is not available during the private beta.'));});
 
 // jsdom does not move focus on Tab, so check the wrap at both ends (real Tab order is in e2e).
 const tabCycleStaysInside = (dialog: HTMLElement) => {
@@ -111,5 +112,50 @@ describe('D4 welcome modal', () => {
     const panel = /\.onboarding-modal\s*\{([^}]*)\}/.exec(css)?.[1] || '';
     expect(panel).not.toMatch(/background:\s*white/);
     expect(panel).toMatch(/var\(--eb-/);
+  });
+});
+
+describe('Codex PR #94 F1/F2: focus recovery inside an open dialog', () => {
+  test('F1: when saving disables the focused Create Team button, focus stays in the dialog and Escape closes', async () => {
+    mockCreate.mockReturnValue(new Promise(() => {}));
+    const close = jest.fn();
+    render(<CreateTeamModal isOpen onClose={close}/>);
+    const dialog = screen.getByRole('dialog', {name: 'Create New Team'});
+    fireEvent.change(screen.getByLabelText('Team Name'), {target: {value: 'Held Hawks'}});
+    const submit = screen.getByRole('button', {name: 'Create Team'});
+    submit.focus();
+    await act(async () => {fireEvent.submit(submit.closest('form')!);});
+    expect(screen.getByRole('button', {name: 'Creating...'})).toBeDisabled();
+    await waitFor(() => expect(dialog).toHaveFocus());
+    fireEvent.keyDown(dialog, {key: 'Tab', shiftKey: true});
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    expect(document.activeElement).not.toBe(dialog);
+    fireEvent.keyDown(document.activeElement as HTMLElement, {key: 'Escape'});
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  test('F2: when Back is removed on the first step, focus stays in the welcome dialog and Escape closes at once', async () => {
+    const close = jest.fn();
+    render(<OnboardingModal open onClose={close} onDemoMode={jest.fn()}/>);
+    fireEvent.click(screen.getByRole('button', {name: 'Next'}));
+    const back = screen.getByRole('button', {name: 'Back'});
+    back.focus();
+    fireEvent.click(back);
+    expect(screen.queryByRole('button', {name: 'Back'})).not.toBeInTheDocument();
+    const dialog = screen.getByRole('dialog', {name: 'Welcome to Coach Core AI!'});
+    await waitFor(() => expect(dialog).toHaveFocus());
+    fireEvent.keyDown(document.activeElement as HTMLElement, {key: 'Escape'});
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  test('a key that reaches the page after focus was lost still acts on the open dialog', () => {
+    const close = jest.fn();
+    render(<OnboardingModal open onClose={close} onDemoMode={jest.fn()}/>);
+    (document.activeElement as HTMLElement).blur();
+    fireEvent.keyDown(document.body, {key: 'Tab'});
+    expect(screen.getByRole('dialog')).toContainElement(document.activeElement as HTMLElement);
+    (document.activeElement as HTMLElement).blur();
+    fireEvent.keyDown(document.body, {key: 'Escape'});
+    expect(close).toHaveBeenCalledTimes(1);
   });
 });
