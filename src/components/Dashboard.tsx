@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react';
+import React,{Suspense,lazy,useEffect,useState} from 'react';
 import DraftSignOut from '../features/persistence/DraftSignOut';
 import {useAuth} from '../hooks/useAuth';
 import {useTeam} from '../contexts/TeamContext';
@@ -11,6 +11,12 @@ import {cloud} from '../features/persistence/gateway';
 import type {RecordData} from '../features/persistence/model';
 import AppShell,{Destination} from '../ui/AppShell';
 import WeekDashboard,{WeekEvent} from '../ui/WeekDashboard';
+// Film review preview (synthetic data only). The checks are inline so webpack folds them at build time:
+// .env.production defines both flags false, which removes the Film chunk from production bundles.
+const FilmReview=process.env.REACT_APP_FILM_PREVIEW==='true'&&process.env.REACT_APP_USE_FIREBASE_EMULATORS==='true'
+  ?lazy(()=>import('../features/film-analyzer/review/FilmReview')):null;
+// Runtime guard as well: never against a non-demo project.
+const FILM_PREVIEW=!!FilmReview&&(process.env.REACT_APP_FIREBASE_PROJECT_ID||'').startsWith('demo-');
 
 export function datedPlans(records: RecordData[]): WeekEvent[] {
   return records.flatMap(record => {
@@ -49,10 +55,10 @@ const Dashboard:React.FC<{demoMode?:boolean;onDemoChange?:(value:boolean)=>void}
   if(!user)return null;
   const live=library.scope===scope&&scope?library:null;
   const changePreview=(value:boolean)=>{setPreview(value);onDemoChange?.(value);};
-  return <AppShell active={active} onNavigate={setActive} teamName={currentTeam?.name} email={user.email||'Coach'} onSignOut={()=>{void logout();}} samplePreview={preview&&active==='overview'}>
+  return <AppShell active={active} onNavigate={setActive} teamName={currentTeam?.name} email={user.email||'Coach'} onSignOut={()=>{void logout();}} samplePreview={preview&&active==='overview'} filmPreview={FILM_PREVIEW}>
     <div className="cc-recovery"><DraftSignOut/></div>
     {active==='overview'&&<WeekDashboard key={scope||'no-team'} teamName={currentTeam?.name} events={live?.events||[]} loading={teamLoading||(!preview&&!!scope&&(!live||live.loading))} error={live?.error} preview={preview} onPreviewChange={changePreview} onNavigate={setActive}/>}
-    {active!=='overview'&&<div className="cc-feature-surface"><ErrorBoundary>{active==='teams'?<TeamManagement/>:active==='practice'?<PracticePlanner/>:<SmartPlaybook/>}</ErrorBoundary></div>}
+    {active!=='overview'&&<div className="cc-feature-surface"><ErrorBoundary>{active==='teams'?<TeamManagement/>:active==='practice'?<PracticePlanner/>:active==='film'&&FILM_PREVIEW&&FilmReview?<Suspense fallback={<p role="status">Loading Film review…</p>}><FilmReview/></Suspense>:<SmartPlaybook/>}</ErrorBoundary></div>}
   </AppShell>;
 };
 export default Dashboard;

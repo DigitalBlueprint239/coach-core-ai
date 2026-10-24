@@ -343,3 +343,12 @@
   .eb-tour-step {font-size:14px;letter-spacing:1px}
 }
 .eb-formation-name {margin:0;font:800 20px var(--eb-display);letter-spacing:1px;color:var(--eb-cyan);text-transform:uppercase}
+/* Five destinations when the Film review preview is enabled (preview builds only). */
+@media(max-width:767px){
+  .cc-bottom-nav:has(> button:nth-child(5)) {grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding-inline:4px}
+  .cc-bottom-nav:has(> button:nth-child(5)) button {font-size:14px;letter-spacing:.5px;padding:4px 2px}
+}
+@media(min-width:768px){
+  .cc-topbar:has(.cc-desktop-nav > button:nth-child(5)) .cc-desktop-nav button {padding:0 12px;font-size:18px}
+  .cc-topbar:has(.cc-desktop-nav > button:nth-child(5)) .cc-welcome {max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
