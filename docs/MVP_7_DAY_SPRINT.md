@@ -169,3 +169,7 @@ No aggregate enforcement implementation, merge/deployment or activation; MVP NO-
 ## 2026-10-19 — isolated combined closure candidate starts
 
 Codex combines accepted PR76 61448f0 +PR78 4f6b901 +PR77 bb157ba on a dedicated branch, preserving originals. Exact integration starting base4f6b901; isolated PR review target frozenefc9116; workflow/package unions retained, only additional PR target/static assertion. Candidate creation/validation protocol, owners, enforcement/release gaps and Kev audit boundary: docs/COMBINED_CLOSURE_CANDIDATE_2026-10-19.md. Full exact-candidate PR-event acceptance/evidence and independent review pending. No merge/deploy/production/protection/recovery/AI changes; MVP NO-GO.
+
+## 2026-10-23 — FILM-F1 synthetic team-saved review (Drew track)
+
+Branch `drew/film-analyzer` from checkpoint `0f0f913`. Synthetic sample → play/seek/speed → mark → label/tags/notes → team save → hard reload → exact reopen, behind a default-off preview flag (emulators + demo project). New contract `coach-film-annotation.v1`, owner-only `filmAnnotations` rules with pinned synthetic source and revisions, feature-folder persistence. Evidence: browser workflow Chromium 31/31 and Firefox 31/31; rules 96/96 (28 new); unit 1073/1074 (known CRLF failure); production exclusion 9/9. Next owner: Drew (playback/upload terms D2/D3/D7 before any real footage); Kev to confirm the shared navigation edit. [FILM_F1_PREVIEW.md](film/FILM_F1_PREVIEW.md). No merge, deployment or activation; MVP NO-GO.
