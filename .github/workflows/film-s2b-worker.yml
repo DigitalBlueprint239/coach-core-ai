@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker]
+    branches: [claude/film-s2b-worker, codex/film-private-runtime-setup-c8526787]
   workflow_dispatch:
 
 permissions:
@@ -36,6 +36,7 @@ concurrency:
 
 jobs:
   decoder:
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-runtime-setup-c8526787' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -68,6 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-runtime-setup-c8526787' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -135,6 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-runtime-setup-c8526787' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -182,3 +185,124 @@ jobs:
           "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout
           --test-reporter=./.github/scripts/annotate-reporter.mjs --test-reporter-destination=stdout
           tests/rules/film-worker.rules.test.mjs"
+
+  private-setup:
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-private-runtime-setup-c8526787' && !github.event.deleted }}
+    name: Private unchanged candidate / disposable pinned runtime setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    environment:
+      name: film-private-ci-c8526787
+      deployment: false
+    concurrency:
+      group: film-private-setup-${{ github.run_id }}
+      cancel-in-progress: false
+    steps:
+      - name: Require protected environment configuration
+        env:
+          ASSET_ID: ${{ vars.FILM_PRIVATE_ASSET_ID }}
+          COST_ASSET_ID: ${{ vars.FILM_COST_EVIDENCE_ASSET_ID }}
+          COST_SHA256: ${{ vars.FILM_COST_EVIDENCE_SHA256 }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = DigitalBlueprint239/coach-core-ai
+          [[ "$ASSET_ID" =~ ^[0-9]+$ ]]
+          [[ "$COST_ASSET_ID" =~ ^[0-9]+$ ]]
+          [[ "$COST_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          umask 077
+          mkdir -p "$RUNNER_TEMP/film-private-setup/evidence"
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts/film-private-setup.sh
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          # No cache: package/decoder/evidence stay on temporary runner disk.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Fetch private handoff with step-scoped credential
+        env:
+          GH_TOKEN: ${{ secrets.FILM_PRIVATE_TRANSFER_TOKEN }}
+          ASSET_ID: ${{ vars.FILM_PRIVATE_ASSET_ID }}
+          COST_ASSET_ID: ${{ vars.FILM_COST_EVIDENCE_ASSET_ID }}
+          COST_SHA256: ${{ vars.FILM_COST_EVIDENCE_SHA256 }}
+        run: |
+          set -euo pipefail
+          umask 077
+          test -n "$GH_TOKEN"
+          # Existing repository must still be private. Do not print its metadata.
+          gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook- --jq .private | grep -qx true
+          gh api -H 'Accept: application/octet-stream' \
+            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
+            > "$RUNNER_TEMP/film-private-setup/package.zip"
+          cd "$RUNNER_TEMP/film-private-setup"
+          echo 'bd9c0404ab0d9dfd7cbfbb2b5f49d7744c74fa28445cf90bf4cb970deca4a1b7  package.zip' | sha256sum -c -
+          mkdir package
+          unzip -q package.zip -d package
+          cd package
+          sha256sum -c SHA256SUMS.txt > ../evidence/package-verification.log
+          mkdir source
+          tar -xf candidate-source.tar -C source
+          gh api -H 'Accept: application/octet-stream' \
+            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$COST_ASSET_ID" \
+            > ../evidence/zero-spend-evidence.json
+          echo "$COST_SHA256  ../evidence/zero-spend-evidence.json" | sha256sum -c - > ../evidence/cost-hash-check.log
+          # Owner must check the actual account control BEFORE publishing this
+          # branch. This verifies its bound evidence; it cannot query billing.
+          node - <<'NODE'
+          const fs=require('fs');
+          const e=JSON.parse(fs.readFileSync('../evidence/zero-spend-evidence.json'));
+          const c=e.control||{};
+          if(e.account!=='DigitalBlueprint239'||c.product!=='Actions'||c.limitUSD!==0||
+             c.stopUsage!==true||c.existing!==true||c.scope!=='account'||c.allOwnedRepositories!==true||
+             c.coversRepository!=='DigitalBlueprint239/coach-core-ai'||
+             !/^[a-f0-9]{64}$/.test(e.redactedAccountEvidenceSha256||'')||
+             e.evidenceSource!=='direct_user_statement'||!e.verifiedBy||!Number.isFinite(Date.parse(e.recordedAt))||
+             Date.parse(e.recordedAt)>Date.now()){
+            throw Error('Owner cost-control evidence invalid; refuse execution');
+          }
+          NODE
+      - name: Disposable build prerequisites
+        run: |
+          set -euo pipefail
+          # Same existing accepted CI prerequisite, confined to this hosted VM.
+          E="$RUNNER_TEMP/film-private-setup/evidence"
+          set +e
+          sudo apt-get update -qq > "$E/apt-update.log" 2>&1
+          code=$?
+          printf 'sudo apt-get update -qq exit=%s\n' "$code" >> "$E/exits.txt"
+          if [[ "$code" != 0 ]]; then exit "$code"; fi
+          sudo apt-get install -y -qq nasm > "$E/apt-nasm.log" 2>&1
+          code=$?
+          printf 'sudo apt-get install -y -qq nasm exit=%s\n' "$code" >> "$E/exits.txt"
+          exit "$code"
+      - name: Set up exact source/dependencies and qualify bounded worker
+        run: bash .github/scripts/film-private-setup.sh
+      - name: Retain only private evidence (no Actions artifacts or caches)
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.FILM_PRIVATE_TRANSFER_TOKEN }}
+        run: |
+          set -euo pipefail
+          P="$RUNNER_TEMP/film-private-setup"
+          test -d "$P/evidence"
+          # The fixed private prerelease already exists from package staging.
+          gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook- --jq .private | grep -qx true
+          tar -czf "$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz" -C "$P" evidence
+          gh release upload film-private-setup-c8526787 \
+            "$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz" \
+            --repo DigitalBlueprint239/Coach-Core-Smart-Playbook-
+          echo 'Evidence retained privately. Fresh integrated journey remains UNRUN.'
+      - name: Remove only this job's private temporary directory
+        if: always()
+        run: |
+          set -euo pipefail
+          P="$RUNNER_TEMP/film-private-setup"
+          [[ "$P" = "$RUNNER_TEMP/film-private-setup" && "$P" != / ]]
+          rm -rf -- "$P"
