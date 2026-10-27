@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-package-r2-c8526787]
+    branches: [claude/film-s2b-worker, codex/film-decoder-repro-c8526787]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-package-r2-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-decoder-repro-c8526787' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-package-r2-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-decoder-repro-c8526787' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-package-r2-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-decoder-repro-c8526787' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-package-r2-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-decoder-repro-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private unchanged candidate / disposable pinned runtime setup
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo '4e6db3250b17cdafd2fa303fd5be6e5abd01fa0669647f2fc109ccee2f1b2334  '"$SCRIPT" | sha256sum -c -
+          echo 'cab494f12f6b91eb1da67d89a2cd50a90271f72a4eb3265abc1b5201a2594523  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -390,4 +390,9 @@ jobs:
           set -euo pipefail
           P="$RUNNER_TEMP/film-private-setup"
           [[ "$P" = "$RUNNER_TEMP/film-private-setup" && "$P" != / ]]
+          if [[ -f "$P/decoder-workdir-owned" ]]; then
+            W="$RUNNER_TEMP/ffwork"
+            [[ "$W" = /home/runner/work/_temp/ffwork ]]
+            rm -rf -- "$W"
+          fi
           rm -rf -- "$P"

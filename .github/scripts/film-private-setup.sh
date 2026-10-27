@@ -40,8 +40,31 @@ run npm-browser npm ci --prefix e2e --no-audit --no-fund
 run npm-rules npm ci --prefix tests/rules --no-audit --no-fund
 run browsers bash -c 'cd e2e && npx --no-install playwright install --with-deps chromium firefox'
 run firebase-version node e2e/node_modules/firebase-tools/lib/bin/firebase.js --version
-W="$P/decoder"
+W="$RUNNER_TEMP/ffwork"
+# The accepted binary configuration embeds this exact prefix and prefix-map argv.
+[[ "$W" == /home/runner/work/_temp/ffwork ]] || { echo 'Accepted decoder work root unavailable'; exit 2; }
+[[ ! -e "$W" ]] || { echo 'Accepted decoder work root already occupied'; exit 2; }
 mkdir -m 700 "$W"
+: > "$P/decoder-workdir-owned"
+printf '%s\n' "$W" > "$E/decoder-work-root.txt"
+retain_decoder_provenance() {
+  local code=$?
+  trap - EXIT
+  set +e
+  mkdir -p "$E/decoder-provenance"
+  local capture=$?
+  if [[ "$capture" == 0 && -d "$W/provenance" ]]; then
+    cp -a "$W/provenance/." "$E/decoder-provenance/"
+    capture=$?
+  elif [[ "$capture" == 0 ]]; then
+    capture=1
+  fi
+  printf 'decoder-provenance-retention exit=%s\n' "$capture" >> "$E/exits.txt"
+  if [[ "$code" == 0 && "$capture" != 0 ]]; then code=$capture; fi
+  exit "$code"
+}
+trap retain_decoder_provenance EXIT
+run toolchain bash -c 'set -euo pipefail; command -v gcc ld nasm make strip; gcc --version; ld --version; nasm -v; make --version; strip --version; printf "ImageOS=%s\nImageVersion=%s\nLANG=%s\nLC_ALL=%s\nTZ=%s\n" "${ImageOS:-unknown}" "${ImageVersion:-unknown}" "${LANG-}" "${LC_ALL-}" "${TZ-}"'
 run decoder-source bash tools/ffmpeg/verify-source.sh "$W"
 run decoder-build bash tools/ffmpeg/build.sh "$W"
 run decoder-provenance node tools/ffmpeg/provenance.mjs validate "$W"
