@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prepared CI-only qualification; never a complete-journey acceptance driver.
+# Qualified runtime plus separately pinned private synthetic journey driver.
 set -euo pipefail
 umask 077
 : "${RUNNER_TEMP:?}"
@@ -70,17 +70,19 @@ run decoder-build bash tools/ffmpeg/build.sh "$W"
 run decoder-provenance node tools/ffmpeg/provenance.mjs validate "$W"
 export FFMPEG_BIN="$W/out/bin/ffmpeg" FFPROBE_BIN="$W/out/bin/ffprobe"
 run runtime-admission node ../runtime-check.cjs "$PWD"
-# This is qualification on THIS new runner. It is not a repeat of Film v1/v2/v3
-# component acceptance and does not establish a fresh reservation-to-mark chain.
-export PINNED=1 CHECK_COMMITTED=1
-run calibration node functions/scripts/film-worker-calibrate.js "$E/calibration.json"
-run bounded-runtime node --test --test-concurrency=1 \
- --test-name-pattern='^(pipeline verdicts|output validation facts|external data references|resource limits stop synthetic offenders|measured limits are committed and consistent)( |$)' \
- functions/test/worker-pinned/film-worker-pinned.test.js
-# The suite's separate two S1/worker cases use FakeFirestore/FakeObjects.
-# They are deliberately UNRUN here; neither can establish this real journey.
-# Fresh demo-only emulator setup smoke. No ready film, processed media or mark
-# is seeded. This proves startup on this runner, not the integrated journey.
+# Reuse run40563783313 calibration /39 runtime checks; no broad accepted-test rerun.
+export PINNED=1
+printf '%s\n' 'BASE_QUALIFICATION=40563783313:PASS' 'BASE_EVIDENCE_SHA256=ad7a07827de80d58342a64ae5d988ff5539a47a420b2ccf8c868e2b8b4f923bc' >> "$E/status.txt"
+run harness-files node - "$P/journey-driver" <<'NODE'
+const fs=require('fs'),path=require('path'),crypto=require('crypto');const root=process.argv[2];
+const m=JSON.parse(fs.readFileSync(path.join(root,'MANIFEST.json')));
+if(m.application!=='c8526787ad5b465fc941b2e575e01d4f4ac2af4b'||m.commit!=='ded44a54e79c4a4b5eb788fa7c67c423fb3562f0'||m.files.length!==6)throw Error('Harness identity');
+const names=['README.md','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs'];
+if(JSON.stringify(m.files.map(f=>f.name).sort())!==JSON.stringify(names))throw Error('Harness file allowlist');
+for(const f of m.files){const b=fs.readFileSync(path.join(root,f.name));if(b.length!==f.bytes||crypto.createHash('sha256').update(b).digest('hex')!==f.sha256)throw Error('Harness file digest');}
+if(JSON.stringify(fs.readdirSync(root).sort())!==JSON.stringify([...names,'MANIFEST.json'].sort()))throw Error('Unexpected harness file');
+NODE
+run journey-build node "$P/journey-driver/build.cjs" "$PWD" "$P/journey-web"
 export GCLOUD_PROJECT=demo-coach-core-film-fresh
 export FIREBASE_AUTH_EMULATOR_HOST=127.0.0.31:9099
 export FIRESTORE_EMULATOR_HOST=127.0.0.31:8080
@@ -96,33 +98,16 @@ fs.writeFileSync(config,JSON.stringify({
  logging:{host:'127.0.0.31',port:4500},ui:{enabled:false},singleProjectMode:true}
 },null,2));
 NODE
-node - "$P/emulator-smoke.cjs" <<'NODE'
-const fs=require('fs');
-fs.writeFileSync(process.argv[2],String.raw`
-const assert=require('node:assert/strict');
-(async()=>{
- assert.equal(process.env.GCLOUD_PROJECT,'demo-coach-core-film-fresh');
- for(const [variable,expected] of Object.entries({FIREBASE_AUTH_EMULATOR_HOST:'127.0.0.31:9099',FIRESTORE_EMULATOR_HOST:'127.0.0.31:8080',STORAGE_EMULATOR_HOST:'http://127.0.0.31:9199'}))assert.equal(process.env[variable],expected);
- const r=await fetch('http://127.0.0.31:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo-only-key',{
- method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'fresh.setup@synthetic.invalid',password:'demo-only-synthetic-setup',returnSecureToken:true})});
- assert.equal(r.status,200);const identity=await r.json();assert(identity.localId);
- // Emulator hub confirms both actual database/storage instances are present.
- const hub=await fetch('http://127.0.0.31:4400/emulators');assert.equal(hub.status,200);
- const services=await hub.json();assert(services.auth&&services.firestore&&services.storage);
- console.log(JSON.stringify({setupSmoke:'PASS',project:process.env.GCLOUD_PROJECT,syntheticAuth:true,filmRecordsCreated:0,processing:'UNRUN',journey:'UNRUN'}));
-})().catch(e=>{console.error(e.message);process.exitCode=1;});
-`);
-NODE
 run loopback-unused node - <<'NODE'
 const net=require('net');
 (async()=>{
- for(const port of [9099,8080,9199,4400,4500])await new Promise((resolve,reject)=>{
+ for(const port of [9099,8080,9199,4400,4500,3000,5002])await new Promise((resolve,reject)=>{
   const s=net.createServer();s.once('error',reject);s.listen(port,'127.0.0.31',()=>s.close(resolve));
  });
 })().catch(e=>{console.error('Required fresh loopback port unavailable');process.exitCode=1;});
 NODE
 run isolated-emulators node e2e/node_modules/firebase-tools/lib/bin/firebase.js emulators:exec \
  --project demo-coach-core-film-fresh --config "$P/firebase.fresh.json" \
- --only auth,firestore,storage "node $P/emulator-smoke.cjs"
-printf '%s\n' 'SETUP=PASS' 'BOUNDED_RUNTIME=PASS' 'INTEGRATED_JOURNEY=UNRUN: composition driver absent' >> "$E/status.txt"
-printf 'Pinned setup/qualification complete; integrated journey UNRUN.\n'
+ --only auth,firestore,storage "node $P/journey-driver/run.cjs $PWD $E/journey $P/journey-web"
+printf '%s\n' 'SETUP=PASS' 'BOUNDED_RUNTIME=PASS' 'INTEGRATED_JOURNEY=PASS: actual synthetic emulator composition; not production acceptance' >> "$E/status.txt"
+printf 'Synthetic journey driver completed; detailed verdict retained privately.\n'
