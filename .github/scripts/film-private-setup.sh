@@ -20,7 +20,7 @@ run() {
   fi
 }
 printf '%s\n' 'candidate=c8526787ad5b465fc941b2e575e01d4f4ac2af4b' > "$E/source.txt"
-printf '%s\n' 'package_sha256=bd9c0404ab0d9dfd7cbfbb2b5f49d7744c74fa28445cf90bf4cb970deca4a1b7' >> "$E/source.txt"
+printf '%s\n' 'package_sha256=7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683' >> "$E/source.txt"
 printf '%s\n' 'COMPONENT_ACCEPTANCE=retained-independent-PASS' 'INTEGRATED_JOURNEY=UNRUN' 'CT5=UNTOUCHED' 'EXCLUDED_112=UNRUN' > "$E/status.txt"
 run source-check node ../verify-package.mjs "$PWD"
 run os uname -a

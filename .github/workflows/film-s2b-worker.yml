@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-private-diagnostic-c8526787]
+    branches: [claude/film-s2b-worker, codex/film-package-r2-c8526787]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-diagnostic-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-package-r2-c8526787' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-diagnostic-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-package-r2-c8526787' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-diagnostic-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-package-r2-c8526787' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-private-diagnostic-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-package-r2-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private unchanged candidate / disposable pinned runtime setup
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -202,7 +202,7 @@ jobs:
     steps:
       - name: Require protected environment configuration
         env:
-          ASSET_ID: ${{ vars.FILM_PRIVATE_ASSET_ID }}
+          ASSET_ID: '682470270'
           COST_ASSET_ID: ${{ vars.FILM_COST_EVIDENCE_ASSET_ID }}
           COST_SHA256: ${{ vars.FILM_COST_EVIDENCE_SHA256 }}
         run: |
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo '3391c3dbcb34908fd95a014f6fd442fe470748bebecb6039d362df64aa4565fe  '"$SCRIPT" | sha256sum -c -
+          echo '4e6db3250b17cdafd2fa303fd5be6e5abd01fa0669647f2fc109ccee2f1b2334  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -266,7 +266,7 @@ jobs:
             ['account','user',d=>d.login==='DigitalBlueprint239'],
             ['repository',repo,d=>d.private===true&&d.full_name==='DigitalBlueprint239/Coach-Core-Smart-Playbook-'],
             ['release',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'],
-            ['package-asset',repo+'/releases/assets/678838058',d=>d.id===678838058&&d.digest==='sha256:bd9c0404ab0d9dfd7cbfbb2b5f49d7744c74fa28445cf90bf4cb970deca4a1b7'],
+            ['package-asset',repo+'/releases/assets/682470270',d=>d.id===682470270&&d.digest==='sha256:7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683'],
             ['cost-asset',repo+'/releases/assets/678838152',d=>d.id===678838152&&d.digest==='sha256:6bf52693513c6a0f869f4f2a11cd87ed8335a1905952e93a0cfbafe7fa4145b3']
            ]) { if(!await check(label,path,validate)){process.exitCode=1;return;} }
           })().catch(()=>{report('diagnostic',0,'internal-diagnostic-error');process.exitCode=1;});
@@ -274,7 +274,7 @@ jobs:
       - name: Fetch private handoff with step-scoped credential
         env:
           GH_TOKEN: ${{ secrets.FILM_PRIVATE_TRANSFER_TOKEN }}
-          ASSET_ID: ${{ vars.FILM_PRIVATE_ASSET_ID }}
+          ASSET_ID: '682470270'
           COST_ASSET_ID: ${{ vars.FILM_COST_EVIDENCE_ASSET_ID }}
           COST_SHA256: ${{ vars.FILM_COST_EVIDENCE_SHA256 }}
         run: |
@@ -293,7 +293,7 @@ jobs:
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
             > "$RUNNER_TEMP/film-private-setup/package.zip"
           cd "$RUNNER_TEMP/film-private-setup"
-          echo 'bd9c0404ab0d9dfd7cbfbb2b5f49d7744c74fa28445cf90bf4cb970deca4a1b7  package.zip' | sha256sum -c -
+          echo '7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683  package.zip' | sha256sum -c -
           mkdir package
           unzip -q package.zip -d package
           cd package
