@@ -23,60 +23,25 @@ printf '%s\n' 'application_client_base=c8526787ad5b465fc941b2e575e01d4f4ac2af4b'
 printf '%s\n' 'package_sha256=7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683' >> "$E/source.txt"
 printf '%s\n' 'COMPONENT_ACCEPTANCE=retained-independent-PASS' 'INTEGRATED_JOURNEY=UNRUN' 'CT5=UNTOUCHED' 'EXCLUDED_112=UNRUN' > "$E/status.txt"
 run source-check node ../verify-package.mjs "$PWD"
-run rules-overlay node - "$PWD" "$P/rules-overlay" "$E" <<'NODE'
-// Public transport code only: private bytes and detailed results stay private.
+run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
-const [source,payload,evidence]=process.argv.slice(2);
-const candidate='c1f02559efae8e318893f7b98250aca9be1dd15f',manifestSha='2cabbc18d0fcc50e02bccbafb3593ecae52033fc56875ae1382511dea171d973';
-const base='c8526787ad5b465fc941b2e575e01d4f4ac2af4b';
-const names={
- 'firestore.rules':'firestore.rules',
- 'tests/rules/film-link-budget.rules.test.mjs':'film-link-budget.rules.test.mjs',
- 'tests/rules/fixtures/film-link-runtime.json':'film-link-runtime.json'
-};
-const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
-const blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const bytes=fs.readFileSync(path.join(payload,'MANIFEST.json'));
-assert.equal(hash(bytes),manifestSha,'Frozen overlay manifest');
-const m=JSON.parse(bytes),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.baseApplication,base);assert.equal(original.commit,base);
-assert.equal(m.candidate,candidate);assert.equal(m.parent,'b6f3aff70194f7e138612198a15a5c2220502108');
-assert.equal(m.files.length,3);assert.equal(original.files.length,334);
-assert.deepEqual(m.files.map(f=>f.path).sort(),Object.keys(names).sort());
-assert.deepEqual(fs.readdirSync(payload).sort(),['MANIFEST.json',...Object.values(names)].sort());
-const fileAt=p=>{
- const target=path.resolve(source,p);assert(target.startsWith(path.resolve(source)+path.sep));return target;
-};
-// Recheck all original source identities BEFORE changing the disposable replica.
-for(const f of original.files){const b=fs.readFileSync(fileAt(f.path));assert.equal(hash(b),f.sha256);assert.equal(blob(b),f.gitBlob);assert.equal(b.length,f.bytes);}
-for(const f of m.files){
- assert.equal(f.name,names[f.path]);assert.equal(f.mode,'100644');
- const sourceFile=fileAt(f.path),raw=fs.readFileSync(path.join(payload,f.name));
- assert.equal(raw.length,f.bytes);assert.equal(hash(raw),f.sha256);assert.equal(blob(raw),f.gitBlob);
- if(f.path==='firestore.rules'){
-  assert.equal(f.baseSha256,'965655ebf5e10d1ce96c0dbd7b5340eef3111470a1ceb9a4b71fe1ae3bd1eb1e');
-  assert.equal(hash(fs.readFileSync(sourceFile)),f.baseSha256);
- }else{assert.equal(f.baseSha256,null);assert(!fs.existsSync(sourceFile),'New test path must be absent');}
-}
-const out=path.join(evidence,'rules-overlay');fs.mkdirSync(out);
-fs.writeFileSync(path.join(out,'MANIFEST.json'),bytes);
-for(const f of m.files){
- const dest=fileAt(f.path),raw=fs.readFileSync(path.join(payload,f.name));
- fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,raw);
- fs.writeFileSync(path.join(out,f.name),raw);
-}
-// Recheck the effective candidate: every unchanged base file and every overlay.
-for(const f of original.files){
- const expected=m.files.find(x=>x.path===f.path)||f,b=fs.readFileSync(fileAt(f.path));
- assert.equal(hash(b),expected.sha256);assert.equal(blob(b),expected.gitBlob);assert.equal(b.length,expected.bytes);
-}
-for(const f of m.files){const b=fs.readFileSync(fileAt(f.path));assert.equal(hash(b),f.sha256);assert.equal(blob(b),f.gitBlob);}
-fs.writeFileSync(path.join(out,'EFFECTIVE-SOURCE.json'),JSON.stringify({baseApplication:base,effectiveCandidate:candidate,baseFilesVerified:334,newFiles:2,selectedSourceFilesVerified:336,clientAndWorkerUnchanged:true,manifestSha256:manifestSha},null,2)+'\n');
-console.log('Frozen rules overlay applied; 336 selected source identities verified.');
+const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'2ab1bbd5e789d74dbd8187744f5577fd205758c4f14cf445929745d50b81652f');
+const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'a007144e285772ebffcc0776e46cb1d6f0c42946');assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.equal(m.files.length,10);
+const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
+function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
+assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
+function verify(root,f){const b=fs.readFileSync(at(root,f.path));assert.equal(b.length,f.bytes);assert.equal(hash(b),f.sha256);assert.equal(blob(b),f.gitBlob);}
+for(const f of original.files)verify(source,f);
+for(const f of m.files){verify(payload,f);const dest=at(source,f.path);if(f.baseSha256){const base=original.files.find(x=>x.path===f.path);assert(base);assert.equal(base.sha256,f.baseSha256);assert.equal(hash(fs.readFileSync(dest)),f.baseSha256);}else assert(!fs.existsSync(dest));}
+for(const f of m.files){const dest=at(source,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(at(payload,f.path),dest);}
+const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,342);for(const f of effective)verify(source,f);
+fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,rules:m.acceptedRules,applicationCommits:['b28118f14e2c06cce1b0a43b7c2577712c983c4f','a007144e285772ebffcc0776e46cb1d6f0c42946'],harness:'426a81e67fc9508a695db78b9f351843e12020e5',candidate:m.candidate,verifiedFiles:342},null,2)+'\n');
+console.log('Exact full-app selected source verified.');
 
 NODE
-echo 'effective_rules_candidate=c1f02559efae8e318893f7b98250aca9be1dd15f' >> "$E/source.txt"
-echo 'rules_overlay_sha256=11dd05f85802f905ccb2311eb4c38303c0351a95e5432559c1bbb4549b98191c' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=a007144e285772ebffcc0776e46cb1d6f0c42946' 'harness_commit=426a81e67fc9508a695db78b9f351843e12020e5' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
@@ -127,53 +92,27 @@ run runtime-admission node ../runtime-check.cjs "$PWD"
 # Reuse run40563783313 calibration /39 runtime checks; no broad accepted-test rerun.
 export PINNED=1
 printf '%s\n' 'BASE_QUALIFICATION=40563783313:PASS' 'BASE_EVIDENCE_SHA256=ad7a07827de80d58342a64ae5d988ff5539a47a420b2ccf8c868e2b8b4f923bc' >> "$E/status.txt"
-run harness-files node - "$P/journey-driver" <<'NODE'
-const fs=require('fs'),path=require('path'),crypto=require('crypto');const root=process.argv[2];
-const m=JSON.parse(fs.readFileSync(path.join(root,'MANIFEST.json')));
-if(m.application!=='c8526787ad5b465fc941b2e575e01d4f4ac2af4b'||m.commit!=='dc5e616f316b2e2e40a4528b1050d8e3e31b7114'||m.files.length!==8)throw Error('Harness identity');
-const names=['README.md','bootstrap-probe.cjs','browser-host.cjs','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs'];
-if(JSON.stringify(m.files.map(f=>f.name).sort())!==JSON.stringify(names))throw Error('Harness file allowlist');
-for(const f of m.files){const b=fs.readFileSync(path.join(root,f.name));if(b.length!==f.bytes||crypto.createHash('sha256').update(b).digest('hex')!==f.sha256)throw Error('Harness file digest');}
-if(JSON.stringify(fs.readdirSync(root).sort())!==JSON.stringify([...names,'MANIFEST.json'].sort()))throw Error('Unexpected harness file');
-NODE
-run journey-build node "$P/journey-driver/build.cjs" "$PWD" "$P/journey-web"
-# Exact raw browser assets/manifest retained privately before any browser assertion.
-run host-assets node - "$P/journey-web" "$E/test-host-build" <<'NODE'
-const fs=require('fs'),path=require('path'),crypto=require('crypto');const [web,out]=process.argv.slice(2);
-const identity=JSON.parse(fs.readFileSync(path.join(web,'BUILD-IDENTITY.json')));
-fs.mkdirSync(out);
-for(const [name,fact] of Object.entries(identity.assets)){
- if(!/^(?:index\.html|[A-Za-z0-9_.-]+\.js)$/.test(name))throw Error('Asset name');
- const bytes=fs.readFileSync(path.join(web,name));if(crypto.createHash('sha256').update(bytes).digest('hex')!==fact.sha256||bytes.length!==fact.bytes)throw Error('Built asset changed');
- fs.writeFileSync(path.join(out,name),bytes);
-}
-fs.copyFileSync(path.join(web,'BUILD-IDENTITY.json'),path.join(out,'BUILD-IDENTITY.json'));
-NODE
-export GCLOUD_PROJECT=demo-coach-core-film-fresh
-export FIREBASE_AUTH_EMULATOR_HOST=127.0.0.31:9099
-export FIRESTORE_EMULATOR_HOST=127.0.0.31:8080
-export STORAGE_EMULATOR_HOST=http://127.0.0.31:9199
-node - "$P/firebase.fresh.json" "$PWD" <<'NODE'
-const fs=require('fs'),path=require('path');
-const [config,root]=process.argv.slice(2);
-fs.writeFileSync(config,JSON.stringify({
- firestore:{rules:path.join(root,'firestore.rules'),indexes:path.join(root,'firestore.indexes.json')},
- storage:{rules:path.join(root,'storage.rules')},
- emulators:{auth:{host:'127.0.0.31',port:9099},firestore:{host:'127.0.0.31',port:8080},
- storage:{host:'127.0.0.31',port:9199},hub:{host:'127.0.0.31',port:4400},
- logging:{host:'127.0.0.31',port:4500},ui:{enabled:false},singleProjectMode:true}
-},null,2));
+export REACT_APP_FILM_PREVIEW=true REACT_APP_USE_FIREBASE_EMULATORS=true REACT_APP_ENABLE_LEGACY_IMPORT=false
+export REACT_APP_FIREBASE_EMULATOR_HOST=127.0.0.33 REACT_APP_FIREBASE_PROJECT_ID=demo-coach-core-full-app
+export REACT_APP_FIREBASE_API_KEY=demo-full-app-web-key REACT_APP_FIREBASE_AUTH_DOMAIN=demo-coach-core-full-app.firebaseapp.com
+export REACT_APP_FIREBASE_STORAGE_BUCKET=demo-coach-core-full-app.appspot.com REACT_APP_FIREBASE_APP_ID=1:000000000000:web:fullapp
+export REACT_APP_FIREBASE_MESSAGING_SENDER_ID=0 REACT_APP_FIREBASE_MEASUREMENT_ID=''
+export GENERATE_SOURCEMAP=false BUILD_PATH="$P/full-app-web" CI=false
+run client-env node scripts/security/check-client-env.js
+run full-app-build node node_modules/react-scripts/scripts/build.js
+mkdir "$P/full-app-web/film-preview"
+cp src/features/film-analyzer/review/samples/out-route.{mp4,webm} "$P/full-app-web/film-preview/"
+# Retain the exact served full app privately, before browser readiness assertions.
+cp -a "$P/full-app-web" "$E/full-app-web"
+export GCLOUD_PROJECT=demo-coach-core-full-app FIREBASE_AUTH_EMULATOR_HOST=127.0.0.33:9099
+export FIRESTORE_EMULATOR_HOST=127.0.0.33:8080 STORAGE_EMULATOR_HOST=http://127.0.0.33:9199
+export CI=true FIREBASE_CLI_DISABLE_UPDATE_CHECK=true
+node - "$P/firebase.full-app.json" "$PWD" <<'NODE'
+const fs=require('fs'),path=require('path');const [config,root]=process.argv.slice(2);
+fs.writeFileSync(config,JSON.stringify({firestore:{rules:path.join(root,'firestore.rules'),indexes:path.join(root,'firestore.indexes.json')},storage:{rules:path.join(root,'storage.rules')},emulators:{auth:{host:'127.0.0.33',port:9099},firestore:{host:'127.0.0.33',port:8080},storage:{host:'127.0.0.33',port:9199},hub:{host:'127.0.0.33',port:4400},logging:{host:'127.0.0.33',port:4500},ui:{enabled:false},singleProjectMode:true}},null,2));
 NODE
 run loopback-unused node - <<'NODE'
-const net=require('net');
-(async()=>{
- for(const port of [9099,8080,9199,4400,4500,3000,5002])await new Promise((resolve,reject)=>{
-  const s=net.createServer();s.once('error',reject);s.listen(port,'127.0.0.31',()=>s.close(resolve));
- });
-})().catch(e=>{console.error('Required fresh loopback port unavailable');process.exitCode=1;});
+const net=require('net');(async()=>{for(const port of [9099,8080,9199,4400,4500,3000,5001,5002])await new Promise((r,j)=>{const s=net.createServer();s.once('error',j);s.listen(port,'127.0.0.33',()=>s.close(r));});})().catch(()=>{console.error('Fresh isolated port unavailable');process.exitCode=1;});
 NODE
-run isolated-emulators node e2e/node_modules/firebase-tools/lib/bin/firebase.js emulators:exec \
- --project demo-coach-core-film-fresh --config "$P/firebase.fresh.json" \
- --only auth,firestore,storage "node $P/journey-driver/run.cjs $PWD $E/journey $P/journey-web"
-printf '%s\n' 'SETUP=PASS' 'BOUNDED_RUNTIME=PASS' 'INTEGRATED_JOURNEY=PASS: actual synthetic emulator composition; not production acceptance' >> "$E/status.txt"
-printf 'Synthetic journey driver completed; detailed verdict retained privately.\n'
+run full-app-emulators node e2e/node_modules/firebase-tools/lib/bin/firebase.js emulators:exec --project demo-coach-core-full-app --config "$P/firebase.full-app.json" --only auth,firestore,storage "node tests/film-full-app/run.cjs $PWD $P/full-app-web $E/full-app"
+printf '%s\n' 'SETUP=PASS' 'INTEGRATED_FULL_APP=PASS: synthetic emulator composition only; independent review pending' >> "$E/status.txt"

@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-validator-budget-c8526787]
+    branches: [claude/film-s2b-worker, codex/film-full-app-a007144]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-validator-budget-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-full-app-a007144' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-validator-budget-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-full-app-a007144' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-validator-budget-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-full-app-a007144' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,8 +187,8 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-validator-budget-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
-    name: Private synthetic journey / unchanged application candidate
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-full-app-a007144' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    name: Private full-app synthetic acceptance / frozen candidate
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     permissions:
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo '15399f2ab9009d2fc854f789cf28771838a6d83a9955aae3b1b88300ac6394d6  '"$SCRIPT" | sha256sum -c -
+          echo '0d932b439c6b9f2023328e4f271bca10eef27de380561fcbf2ce861a994edc51  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -267,6 +267,7 @@ jobs:
             ['repository',repo,d=>d.private===true&&d.full_name==='DigitalBlueprint239/Coach-Core-Smart-Playbook-'],
             ['release',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'],
             ['package-asset',repo+'/releases/assets/682470270',d=>d.id===682470270&&d.digest==='sha256:7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683'],
+            ['full-app-overlay',repo+'/releases/assets/683234475',d=>d.id===683234475&&d.name==='FILM-FULL-APP-OVERLAY-a007144.zip'&&d.size===42770&&d.digest==='sha256:bb560185b050b9cf3fb243074b90ef9f927db9cc1b938afd7e5b6fcd93d8d1dc'],
             ['cost-asset',repo+'/releases/assets/678838152',d=>d.id===678838152&&d.digest==='sha256:6bf52693513c6a0f869f4f2a11cd87ed8335a1905952e93a0cfbafe7fa4145b3']
            ]) { if(!await check(label,path,validate)){process.exitCode=1;return;} }
           })().catch(()=>{report('diagnostic',0,'internal-diagnostic-error');process.exitCode=1;});
@@ -293,36 +294,22 @@ jobs:
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
             > "$RUNNER_TEMP/film-private-setup/package.zip"
           gh api -H 'Accept: application/octet-stream' \
-            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/682837144" \
-            > "$RUNNER_TEMP/film-private-setup/journey-driver.zip"
-          echo '29659654b7b6c2fc71542f1b104da1238c58e7ce6a52789cb673275305478280  '"$RUNNER_TEMP/film-private-setup/journey-driver.zip" | sha256sum -c -
-          python3 - "$RUNNER_TEMP/film-private-setup/journey-driver.zip" <<'PY'
-          import sys,zipfile,stat
+            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/683234475" \
+            > "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip"
+          echo 'bb560185b050b9cf3fb243074b90ef9f927db9cc1b938afd7e5b6fcd93d8d1dc  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
+          python3 - "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" "$RUNNER_TEMP/film-private-setup/full-app-overlay" <<'PY'
+          import sys,zipfile,stat,os
+          assert os.path.getsize(sys.argv[1])==42770
+          assert not os.path.exists(sys.argv[2])
           with zipfile.ZipFile(sys.argv[1]) as z:
               entries=z.infolist()
-              expected=['MANIFEST.json','README.md','bootstrap-probe.cjs','browser-host.cjs','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs']
-              assert len(entries)==9 and sorted(e.filename for e in entries)==expected
+              expected=["MANIFEST.json","firestore.rules","src/features/","src/features/film-analyzer/","src/features/film-analyzer/review/FilmImport.tsx","src/features/film-analyzer/review/FilmReview.tsx","src/features/film-analyzer/review/__tests__/filmImportTransport.test.ts","src/features/film-analyzer/review/filmImportTransport.ts","tests/film-full-app/README.md","tests/film-full-app/run.cjs","tests/film-full-app/runtime.cjs","tests/rules/film-link-budget.rules.test.mjs","tests/rules/fixtures/film-link-runtime.json"]
+              assert len(entries)==13 and sorted(e.filename for e in entries)==expected
               assert sum(e.file_size for e in entries)<1000000
-              assert all(not e.is_dir() and not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
+              assert all(not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
+              assert sorted(e.filename for e in entries if e.is_dir())==['src/features/','src/features/film-analyzer/']
+              z.extractall(sys.argv[2])
           PY
-          mkdir "$RUNNER_TEMP/film-private-setup/journey-driver"
-          unzip -q "$RUNNER_TEMP/film-private-setup/journey-driver.zip" -d "$RUNNER_TEMP/film-private-setup/journey-driver"
-          # A separate frozen rules overlay; source R2 and harness remain unchanged.
-          gh api -H 'Accept: application/octet-stream' \
-            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/683016418" \
-            > "$RUNNER_TEMP/film-private-setup/rules-overlay.zip"
-          echo '11dd05f85802f905ccb2311eb4c38303c0351a95e5432559c1bbb4549b98191c  '"$RUNNER_TEMP/film-private-setup/rules-overlay.zip" | sha256sum -c -
-          python3 - "$RUNNER_TEMP/film-private-setup/rules-overlay.zip" <<'PY'
-          import sys,zipfile,stat
-          with zipfile.ZipFile(sys.argv[1]) as z:
-              entries=z.infolist()
-              expected=['MANIFEST.json','film-link-budget.rules.test.mjs','film-link-runtime.json','firestore.rules']
-              assert len(entries)==4 and sorted(e.filename for e in entries)==expected
-              assert sum(e.file_size for e in entries)<1000000
-              assert all(not e.is_dir() and not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
-          PY
-          mkdir "$RUNNER_TEMP/film-private-setup/rules-overlay"
-          unzip -q "$RUNNER_TEMP/film-private-setup/rules-overlay.zip" -d "$RUNNER_TEMP/film-private-setup/rules-overlay"
           cd "$RUNNER_TEMP/film-private-setup"
           echo '7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683  package.zip' | sha256sum -c -
           mkdir package
