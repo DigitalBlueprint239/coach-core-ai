@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-private-runtime-setup-c8526787]
+    branches: [claude/film-s2b-worker, codex/film-private-diagnostic-c8526787]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-runtime-setup-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-diagnostic-c8526787' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-runtime-setup-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-diagnostic-c8526787' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-runtime-setup-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-private-diagnostic-c8526787' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-private-runtime-setup-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-private-diagnostic-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private unchanged candidate / disposable pinned runtime setup
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -233,6 +233,44 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - name: Sanitized protected access diagnostic (no private response output)
+        env:
+          GH_TOKEN: ${{ secrets.FILM_PRIVATE_TRANSFER_TOKEN }}
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const results = [];
+          const token = process.env.GH_TOKEN || '';
+          function save() { fs.writeFileSync(process.env.RUNNER_TEMP+'/film-private-setup/evidence/access-diagnostic.json',JSON.stringify(results,null,2)+'\n'); }
+          function report(endpoint,status,category) { const row={endpoint,status,category};results.push(row);save();console.log(JSON.stringify(row)); }
+          async function check(label,path,validate) {
+           let r,data;
+           try {
+            r=await fetch('https://api.github.com/'+path,{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'Film-bounded-diagnostic'},redirect:'error',signal:AbortSignal.timeout(30000)});
+            try {data=await r.json();} catch {report(label,r.status,'invalid-api-response');return false;}
+           } catch {report(label,0,'network-or-redirect-error');return false;}
+           let category='unexpected-http-status';
+           if(r.status===200)category=validate(data)?'ok':'identity-or-metadata-mismatch';
+           else if(r.status===401)category='authentication-rejected';
+           else if(r.status===404)category='resource-not-visible-to-credential';
+           else if(r.status===403) {
+            const m=typeof data.message==='string'?data.message:'';
+            category=/saml|sso/i.test(m)?'sso-policy-denied':r.headers.get('x-ratelimit-remaining')==='0'?'rate-limit-denied':'permission-or-access-policy-denied';
+           }
+           report(label,r.status,category);return category==='ok';
+          }
+          (async()=>{
+           if(!/^github_pat_[A-Za-z0-9_]+$/.test(token)){report('credential',0,token?'invalid-fine-grained-token-format':'missing-environment-secret');process.exitCode=1;return;}
+           const repo='repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-';
+           for(const [label,path,validate] of [
+            ['account','user',d=>d.login==='DigitalBlueprint239'],
+            ['repository',repo,d=>d.private===true&&d.full_name==='DigitalBlueprint239/Coach-Core-Smart-Playbook-'],
+            ['release',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'],
+            ['package-asset',repo+'/releases/assets/678838058',d=>d.id===678838058&&d.digest==='sha256:bd9c0404ab0d9dfd7cbfbb2b5f49d7744c74fa28445cf90bf4cb970deca4a1b7'],
+            ['cost-asset',repo+'/releases/assets/678838152',d=>d.id===678838152&&d.digest==='sha256:6bf52693513c6a0f869f4f2a11cd87ed8335a1905952e93a0cfbafe7fa4145b3']
+           ]) { if(!await check(label,path,validate)){process.exitCode=1;return;} }
+          })().catch(()=>{report('diagnostic',0,'internal-diagnostic-error');process.exitCode=1;});
+          NODE
       - name: Fetch private handoff with step-scoped credential
         env:
           GH_TOKEN: ${{ secrets.FILM_PRIVATE_TRANSFER_TOKEN }}
