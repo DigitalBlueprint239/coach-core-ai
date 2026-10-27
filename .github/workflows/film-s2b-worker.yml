@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-private-runtime-setup-c8526787' && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-private-runtime-setup-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private unchanged candidate / disposable pinned runtime setup
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -213,11 +213,18 @@ jobs:
           [[ "$COST_SHA256" =~ ^[a-f0-9]{64}$ ]]
           umask 077
           mkdir -p "$RUNNER_TEMP/film-private-setup/evidence"
-      - uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-          sparse-checkout: .github/scripts/film-private-setup.sh
-          sparse-checkout-cone-mode: false
+      - name: Fetch only the hash-pinned public setup script at this commit
+        run: |
+          set -euo pipefail
+          umask 077
+          [[ "$GITHUB_SHA" =~ ^[a-f0-9]{40}$ ]]
+          SCRIPT="$RUNNER_TEMP/film-private-setup/film-private-setup.sh"
+          curl --fail --silent --show-error --location \
+            --proto '=https' --proto-redir '=https' --tlsv1.2 \
+            --connect-timeout 10 --max-time 60 --retry 2 \
+            --output "$SCRIPT" \
+            "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
+          echo '3391c3dbcb34908fd95a014f6fd442fe470748bebecb6039d362df64aa4565fe  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -233,6 +240,12 @@ jobs:
           COST_ASSET_ID: ${{ vars.FILM_COST_EVIDENCE_ASSET_ID }}
           COST_SHA256: ${{ vars.FILM_COST_EVIDENCE_SHA256 }}
         run: |
+          set -euo pipefail
+          umask 077
+          E="$RUNNER_TEMP/film-private-setup/evidence"
+          test -d "$E"
+          trap 'code=$?; printf "private-transport exit=%s\n" "$code" >> "$E/exits.txt"; printf "private-transport: exit=%s (details private)\n" "$code"; exit "$code"' EXIT
+          (
           set -euo pipefail
           umask 077
           test -n "$GH_TOKEN"
@@ -268,6 +281,8 @@ jobs:
             throw Error('Owner cost-control evidence invalid; refuse execution');
           }
           NODE
+          ) > "$E/private-transport.log" 2>&1
+
       - name: Disposable build prerequisites
         run: |
           set -euo pipefail
@@ -283,22 +298,54 @@ jobs:
           printf 'sudo apt-get install -y -qq nasm exit=%s\n' "$code" >> "$E/exits.txt"
           exit "$code"
       - name: Set up exact source/dependencies and qualify bounded worker
-        run: bash .github/scripts/film-private-setup.sh
+        run: |
+          set -euo pipefail
+          umask 077
+          E="$RUNNER_TEMP/film-private-setup/evidence"
+          test -d "$E"
+          trap 'code=$?; printf "qualification exit=%s\n" "$code" >> "$E/exits.txt"; printf "qualification: exit=%s (details private)\n" "$code"; exit "$code"' EXIT
+          (
+          bash "$RUNNER_TEMP/film-private-setup/film-private-setup.sh"
+          ) > "$E/qualification.log" 2>&1
+
       - name: Retain only private evidence (no Actions artifacts or caches)
         if: always()
         env:
           GH_TOKEN: ${{ secrets.FILM_PRIVATE_TRANSFER_TOKEN }}
         run: |
           set -euo pipefail
+          umask 077
+          E="$RUNNER_TEMP/film-private-setup/evidence"
+          test -d "$E"
+          trap 'code=$?; printf "evidence-upload exit=%s\n" "$code" >> "$E/exits.txt"; printf "evidence-upload: exit=%s (details private)\n" "$code"; exit "$code"' EXIT
+          (
+          set -euo pipefail
           P="$RUNNER_TEMP/film-private-setup"
           test -d "$P/evidence"
           # The fixed private prerelease already exists from package staging.
           gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook- --jq .private | grep -qx true
           tar -czf "$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz" -C "$P" evidence
-          gh release upload film-private-setup-c8526787 \
-            "$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz" \
-            --repo DigitalBlueprint239/Coach-Core-Smart-Playbook-
-          echo 'Evidence retained privately. Fresh integrated journey remains UNRUN.'
+          ARCHIVE="$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz"
+          RECEIPT="$P/setup-receipt-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.txt"
+          set +e
+          gh release upload film-private-setup-c8526787 "$ARCHIVE" \
+            --repo DigitalBlueprint239/Coach-Core-Smart-Playbook- > "$P/archive-upload.log" 2>&1
+          archive_code=$?
+          set -e
+          sha256sum "$ARCHIVE" > "$RECEIPT"
+          printf 'archive-upload exit=%s\n' "$archive_code" >> "$RECEIPT"
+          cat "$P/archive-upload.log" >> "$RECEIPT"
+          # Receipt is attempted even after archive failure; neither failure is suppressed.
+          set +e
+          gh release upload film-private-setup-c8526787 "$RECEIPT" \
+            --repo DigitalBlueprint239/Coach-Core-Smart-Playbook- > "$P/receipt-upload.log" 2>&1
+          receipt_code=$?
+          set -e
+          if [[ "$archive_code" != 0 ]]; then exit "$archive_code"; fi
+          if [[ "$receipt_code" != 0 ]]; then exit "$receipt_code"; fi
+          echo 'Evidence and receipt retained privately. Fresh integrated journey remains UNRUN.'
+          ) > "$RUNNER_TEMP/film-private-setup/evidence-upload.log" 2>&1
+
       - name: Remove only this job's private temporary directory
         if: always()
         run: |
