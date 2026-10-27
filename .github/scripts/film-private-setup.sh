@@ -76,13 +76,25 @@ printf '%s\n' 'BASE_QUALIFICATION=40563783313:PASS' 'BASE_EVIDENCE_SHA256=ad7a07
 run harness-files node - "$P/journey-driver" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto');const root=process.argv[2];
 const m=JSON.parse(fs.readFileSync(path.join(root,'MANIFEST.json')));
-if(m.application!=='c8526787ad5b465fc941b2e575e01d4f4ac2af4b'||m.commit!=='ded44a54e79c4a4b5eb788fa7c67c423fb3562f0'||m.files.length!==6)throw Error('Harness identity');
-const names=['README.md','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs'];
+if(m.application!=='c8526787ad5b465fc941b2e575e01d4f4ac2af4b'||m.commit!=='dc5e616f316b2e2e40a4528b1050d8e3e31b7114'||m.files.length!==8)throw Error('Harness identity');
+const names=['README.md','bootstrap-probe.cjs','browser-host.cjs','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs'];
 if(JSON.stringify(m.files.map(f=>f.name).sort())!==JSON.stringify(names))throw Error('Harness file allowlist');
 for(const f of m.files){const b=fs.readFileSync(path.join(root,f.name));if(b.length!==f.bytes||crypto.createHash('sha256').update(b).digest('hex')!==f.sha256)throw Error('Harness file digest');}
 if(JSON.stringify(fs.readdirSync(root).sort())!==JSON.stringify([...names,'MANIFEST.json'].sort()))throw Error('Unexpected harness file');
 NODE
 run journey-build node "$P/journey-driver/build.cjs" "$PWD" "$P/journey-web"
+# Exact raw browser assets/manifest retained privately before any browser assertion.
+run host-assets node - "$P/journey-web" "$E/test-host-build" <<'NODE'
+const fs=require('fs'),path=require('path'),crypto=require('crypto');const [web,out]=process.argv.slice(2);
+const identity=JSON.parse(fs.readFileSync(path.join(web,'BUILD-IDENTITY.json')));
+fs.mkdirSync(out);
+for(const [name,fact] of Object.entries(identity.assets)){
+ if(!/^(?:index\.html|[A-Za-z0-9_.-]+\.js)$/.test(name))throw Error('Asset name');
+ const bytes=fs.readFileSync(path.join(web,name));if(crypto.createHash('sha256').update(bytes).digest('hex')!==fact.sha256||bytes.length!==fact.bytes)throw Error('Built asset changed');
+ fs.writeFileSync(path.join(out,name),bytes);
+}
+fs.copyFileSync(path.join(web,'BUILD-IDENTITY.json'),path.join(out,'BUILD-IDENTITY.json'));
+NODE
 export GCLOUD_PROJECT=demo-coach-core-film-fresh
 export FIREBASE_AUTH_EMULATOR_HOST=127.0.0.31:9099
 export FIRESTORE_EMULATOR_HOST=127.0.0.31:8080

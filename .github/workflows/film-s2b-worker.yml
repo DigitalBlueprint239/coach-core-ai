@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-fresh-journey-c8526787]
+    branches: [claude/film-s2b-worker, codex/film-host-bootstrap-c8526787]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-fresh-journey-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-host-bootstrap-c8526787' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-fresh-journey-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-host-bootstrap-c8526787' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-fresh-journey-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-host-bootstrap-c8526787' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-fresh-journey-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-host-bootstrap-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private synthetic journey / unchanged application candidate
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo '0570439e363d1dd2fa03616cff368518bf71eb41397e533844ebff9cf6f88ff5  '"$SCRIPT" | sha256sum -c -
+          echo 'deae717c83c000a98b33a439d50ba4618fd36899f4065c3d2d35300c8653b546  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -293,15 +293,15 @@ jobs:
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
             > "$RUNNER_TEMP/film-private-setup/package.zip"
           gh api -H 'Accept: application/octet-stream' \
-            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/682696215" \
+            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/682837144" \
             > "$RUNNER_TEMP/film-private-setup/journey-driver.zip"
-          echo 'b033ba8aeffb9efe4a49a4b25f19ad5b9c29b853ba4b807f5ad8027a40ec6468  '"$RUNNER_TEMP/film-private-setup/journey-driver.zip" | sha256sum -c -
+          echo '29659654b7b6c2fc71542f1b104da1238c58e7ce6a52789cb673275305478280  '"$RUNNER_TEMP/film-private-setup/journey-driver.zip" | sha256sum -c -
           python3 - "$RUNNER_TEMP/film-private-setup/journey-driver.zip" <<'PY'
           import sys,zipfile,stat
           with zipfile.ZipFile(sys.argv[1]) as z:
               entries=z.infolist()
-              expected=['MANIFEST.json','README.md','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs']
-              assert len(entries)==7 and sorted(e.filename for e in entries)==expected
+              expected=['MANIFEST.json','README.md','bootstrap-probe.cjs','browser-host.cjs','build.cjs','client.jsx','guard.cjs','guard.test.cjs','run.cjs']
+              assert len(entries)==9 and sorted(e.filename for e in entries)==expected
               assert sum(e.file_size for e in entries)<1000000
               assert all(not e.is_dir() and not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
           PY
