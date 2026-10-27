@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-host-bootstrap-c8526787]
+    branches: [claude/film-s2b-worker, codex/film-validator-budget-c8526787]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-host-bootstrap-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-validator-budget-c8526787' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-host-bootstrap-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-validator-budget-c8526787' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-host-bootstrap-c8526787' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-validator-budget-c8526787' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-host-bootstrap-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-validator-budget-c8526787' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private synthetic journey / unchanged application candidate
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo 'deae717c83c000a98b33a439d50ba4618fd36899f4065c3d2d35300c8653b546  '"$SCRIPT" | sha256sum -c -
+          echo '15399f2ab9009d2fc854f789cf28771838a6d83a9955aae3b1b88300ac6394d6  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -307,6 +307,22 @@ jobs:
           PY
           mkdir "$RUNNER_TEMP/film-private-setup/journey-driver"
           unzip -q "$RUNNER_TEMP/film-private-setup/journey-driver.zip" -d "$RUNNER_TEMP/film-private-setup/journey-driver"
+          # A separate frozen rules overlay; source R2 and harness remain unchanged.
+          gh api -H 'Accept: application/octet-stream' \
+            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/683016418" \
+            > "$RUNNER_TEMP/film-private-setup/rules-overlay.zip"
+          echo '11dd05f85802f905ccb2311eb4c38303c0351a95e5432559c1bbb4549b98191c  '"$RUNNER_TEMP/film-private-setup/rules-overlay.zip" | sha256sum -c -
+          python3 - "$RUNNER_TEMP/film-private-setup/rules-overlay.zip" <<'PY'
+          import sys,zipfile,stat
+          with zipfile.ZipFile(sys.argv[1]) as z:
+              entries=z.infolist()
+              expected=['MANIFEST.json','film-link-budget.rules.test.mjs','film-link-runtime.json','firestore.rules']
+              assert len(entries)==4 and sorted(e.filename for e in entries)==expected
+              assert sum(e.file_size for e in entries)<1000000
+              assert all(not e.is_dir() and not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
+          PY
+          mkdir "$RUNNER_TEMP/film-private-setup/rules-overlay"
+          unzip -q "$RUNNER_TEMP/film-private-setup/rules-overlay.zip" -d "$RUNNER_TEMP/film-private-setup/rules-overlay"
           cd "$RUNNER_TEMP/film-private-setup"
           echo '7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683  package.zip' | sha256sum -c -
           mkdir package
