@@ -26,9 +26,9 @@ run source-check node ../verify-package.mjs "$PWD"
 run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'bfa1e9535a496f528eba5b25473ec0ee5042ab2f91fba2236489eb624e3e1cbe');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'f491206f7d988c00501497749f1fd639a7b1e1eff32a8e516b5761092c2d56a2');
 const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'750c000b4464122998fda9df8a2a8ede338df8e9');assert.equal(m.application,'4a5fc091c10a871eefd6b1254b8614be1df76811');assert.equal(m.baseline,'463d1fda7ca72830ccbd0344b9d7e5046355c885');assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["4a5fc091c10a871eefd6b1254b8614be1df76811"]);assert.deepEqual(m.harnessCommits,["cdc4179f24f9da0a57380ad2e40a6f2fd3e91690"]);assert.equal(m.files.length,64);
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'55f5e0d145175535371093610d1ee3e4a9a5ca88');assert.equal(m.application,'4a5fc091c10a871eefd6b1254b8614be1df76811');assert.equal(m.baseline,'463d1fda7ca72830ccbd0344b9d7e5046355c885');assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["4a5fc091c10a871eefd6b1254b8614be1df76811"]);assert.deepEqual(m.harnessCommits,["55f5e0d145175535371093610d1ee3e4a9a5ca88"]);assert.equal(m.files.length,68);
 const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
 function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
 assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
@@ -36,12 +36,12 @@ function verify(root,f){const b=fs.readFileSync(at(root,f.path));assert.equal(b.
 for(const f of original.files)verify(source,f);
 for(const f of m.files){verify(payload,f);const dest=at(source,f.path);if(f.baseSha256){const base=original.files.find(x=>x.path===f.path);assert(base);assert.equal(base.sha256,f.baseSha256);assert.equal(hash(fs.readFileSync(dest)),f.baseSha256);}else assert(!fs.existsSync(dest));}
 for(const f of m.files){const dest=at(source,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(at(payload,f.path),dest);}
-const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,392);for(const f of effective)verify(source,f);
-fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,rules:m.acceptedRules,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:392},null,2)+'\n');
+const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,396);for(const f of effective)verify(source,f);
+fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,rules:m.acceptedRules,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:396},null,2)+'\n');
 console.log('Exact full-app selected source verified.');
 
 NODE
-printf '%s\n' 'integrated_candidate=750c000b4464122998fda9df8a2a8ede338df8e9' 'application_commit=4a5fc091c10a871eefd6b1254b8614be1df76811' 'harness_commit=cdc4179f24f9da0a57380ad2e40a6f2fd3e91690' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=55f5e0d145175535371093610d1ee3e4a9a5ca88' 'application_commit=4a5fc091c10a871eefd6b1254b8614be1df76811' 'harness_commit=55f5e0d145175535371093610d1ee3e4a9a5ca88' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
