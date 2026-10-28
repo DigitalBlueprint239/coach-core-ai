@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-stale-control-2a7f2c9]
+    branches: [claude/film-s2b-worker, codex/film-frame-mock-7eb226b]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-stale-control-2a7f2c9' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-frame-mock-7eb226b' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-stale-control-2a7f2c9' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-frame-mock-7eb226b' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-stale-control-2a7f2c9' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-frame-mock-7eb226b' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-stale-control-2a7f2c9' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-frame-mock-7eb226b' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private full-app synthetic acceptance / frozen candidate
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo 'ad1ab64f2383e4ef62a8bdfd6ee425fc55cbc31b76f5a237786690b0c13f363a  '"$SCRIPT" | sha256sum -c -
+          echo '8f991bf90c3e9f71642bcc4845f858622ad12e13777a0ed5601a48857e9ebf64  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -267,7 +267,7 @@ jobs:
             ['repository',repo,d=>d.private===true&&d.full_name==='DigitalBlueprint239/Coach-Core-Smart-Playbook-'],
             ['release',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'],
             ['package-asset',repo+'/releases/assets/682470270',d=>d.id===682470270&&d.digest==='sha256:7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683'],
-            ['full-app-overlay',repo+'/releases/assets/685229308',d=>d.id===685229308&&d.name==='FILM-STALE-CONTROL-2a7f2c9.zip'&&d.size===69861&&d.digest==='sha256:3479a7893de0abd9b47d110c2f1abc27b95a7241e4d1a0fe6174f7389fc7080a'],
+            ['full-app-overlay',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'&&d.assets.filter(a=>a.name==='FILM-FRAME-MOCK-7eb226b.zip'&&a.size===118287&&a.digest==='sha256:e4f30dba49ade888ffb6fda16c663a30f7a4a9619cd4efc644de77b93132b335').length===1],
             ['cost-asset',repo+'/releases/assets/678838152',d=>d.id===678838152&&d.digest==='sha256:6bf52693513c6a0f869f4f2a11cd87ed8335a1905952e93a0cfbafe7fa4145b3']
            ]) { if(!await check(label,path,validate)){process.exitCode=1;return;} }
           })().catch(()=>{report('diagnostic',0,'internal-diagnostic-error');process.exitCode=1;});
@@ -293,18 +293,24 @@ jobs:
           gh api -H 'Accept: application/octet-stream' \
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
             > "$RUNNER_TEMP/film-private-setup/package.zip"
+          OVERLAY_ID=$(gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/424529110 --jq '.assets[] | select(.name == "FILM-FRAME-MOCK-7eb226b.zip" and .size == 118287 and .digest == "sha256:e4f30dba49ade888ffb6fda16c663a30f7a4a9619cd4efc644de77b93132b335") | .id')
+          [[ "$OVERLAY_ID" =~ ^[0-9]+$ ]]
           gh api -H 'Accept: application/octet-stream' \
-            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/685229308" \
+            "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$OVERLAY_ID" \
             > "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip"
-          echo '3479a7893de0abd9b47d110c2f1abc27b95a7241e4d1a0fe6174f7389fc7080a  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
+          echo 'e4f30dba49ade888ffb6fda16c663a30f7a4a9619cd4efc644de77b93132b335  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
           python3 - "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" "$RUNNER_TEMP/film-private-setup/full-app-overlay" <<'PY'
-          import sys,zipfile,stat,os
-          assert os.path.getsize(sys.argv[1])==69861
+          import sys,zipfile,stat,os,json,hashlib
+          assert os.path.getsize(sys.argv[1])==118287
           assert not os.path.exists(sys.argv[2])
           with zipfile.ZipFile(sys.argv[1]) as z:
               entries=z.infolist()
-              expected=["MANIFEST.json","firestore.rules","src/features/film-analyzer/review/AnnotationLinks.tsx","src/features/film-analyzer/review/FilmImport.tsx","src/features/film-analyzer/review/FilmReview.tsx","src/features/film-analyzer/review/__tests__/AnnotationLinks.test.tsx","src/features/film-analyzer/review/__tests__/filmImportTransport.test.ts","src/features/film-analyzer/review/filmImportTransport.ts","tests/film-full-app/README.md","tests/film-full-app/run.cjs","tests/film-full-app/runtime.cjs","tests/film-practice/README.md","tests/film-practice/browser.cjs","tests/film-practice/practice-journey.cjs","tests/film-practice/run-imported.cjs","tests/film-practice/run-local.cjs","tests/rules/film-link-budget.rules.test.mjs","tests/rules/film-practice.rules.test.mjs","tests/rules/fixtures/film-link-runtime.json"]
-              assert len(entries)==19 and sorted(e.filename for e in entries)==expected
+              raw=z.read('MANIFEST.json')
+              assert hashlib.sha256(raw).hexdigest()=='3e519cb446c48147faf69d6ffa9c95ef5f5c8675bbce1edfe3dff9405a898a27'
+              manifest=json.loads(raw)
+              expected=sorted(['MANIFEST.json']+[f['path'] for f in manifest['files']])
+              assert all(not p.startswith('/') and '\\' not in p and '..' not in p.split('/') and ':' not in p for p in expected)
+              assert len(entries)==33 and sorted(e.filename for e in entries)==expected
               assert sum(e.file_size for e in entries)<1000000
               assert all(not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
               assert sorted(e.filename for e in entries if e.is_dir())==[]
