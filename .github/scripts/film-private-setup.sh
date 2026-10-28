@@ -26,9 +26,9 @@ run source-check node ../verify-package.mjs "$PWD"
 run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'5ab30148f209e4138854bbab0b1c709ba636449044437ef600ce6c3cd452e791');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'bfa1e9535a496f528eba5b25473ec0ee5042ab2f91fba2236489eb624e3e1cbe');
 const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'dd863aa2b8a9a05bbeeeb16c93ef4ae71765040a');assert.equal(m.application,'ced12df168cbe35ed5eb5e92efbaf8f2e0dab937');assert.equal(m.baseline,'7eb226b096d60a489e34ddeb7d35a96d5f4ebf18');assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["ced12df168cbe35ed5eb5e92efbaf8f2e0dab937"]);assert.deepEqual(m.harnessCommits,["dd863aa2b8a9a05bbeeeb16c93ef4ae71765040a"]);assert.equal(m.files.length,40);
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'750c000b4464122998fda9df8a2a8ede338df8e9');assert.equal(m.application,'4a5fc091c10a871eefd6b1254b8614be1df76811');assert.equal(m.baseline,'463d1fda7ca72830ccbd0344b9d7e5046355c885');assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["4a5fc091c10a871eefd6b1254b8614be1df76811"]);assert.deepEqual(m.harnessCommits,["cdc4179f24f9da0a57380ad2e40a6f2fd3e91690"]);assert.equal(m.files.length,64);
 const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
 function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
 assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
@@ -36,12 +36,12 @@ function verify(root,f){const b=fs.readFileSync(at(root,f.path));assert.equal(b.
 for(const f of original.files)verify(source,f);
 for(const f of m.files){verify(payload,f);const dest=at(source,f.path);if(f.baseSha256){const base=original.files.find(x=>x.path===f.path);assert(base);assert.equal(base.sha256,f.baseSha256);assert.equal(hash(fs.readFileSync(dest)),f.baseSha256);}else assert(!fs.existsSync(dest));}
 for(const f of m.files){const dest=at(source,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(at(payload,f.path),dest);}
-const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,368);for(const f of effective)verify(source,f);
-fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,rules:m.acceptedRules,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:368},null,2)+'\n');
+const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,392);for(const f of effective)verify(source,f);
+fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,rules:m.acceptedRules,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:392},null,2)+'\n');
 console.log('Exact full-app selected source verified.');
 
 NODE
-printf '%s\n' 'integrated_candidate=dd863aa2b8a9a05bbeeeb16c93ef4ae71765040a' 'application_commit=ced12df168cbe35ed5eb5e92efbaf8f2e0dab937' 'harness_commit=dd863aa2b8a9a05bbeeeb16c93ef4ae71765040a' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=750c000b4464122998fda9df8a2a8ede338df8e9' 'application_commit=4a5fc091c10a871eefd6b1254b8614be1df76811' 'harness_commit=cdc4179f24f9da0a57380ad2e40a6f2fd3e91690' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
@@ -92,7 +92,7 @@ run runtime-admission node ../runtime-check.cjs "$PWD"
 # Reuse run40563783313 calibration /39 runtime checks; no broad accepted-test rerun.
 export PINNED=1
 printf '%s\n' 'BASE_QUALIFICATION=40563783313:PASS' 'BASE_EVIDENCE_SHA256=ad7a07827de80d58342a64ae5d988ff5539a47a420b2ccf8c868e2b8b4f923bc' >> "$E/status.txt"
-export FILM_FRAME_STRESS=true FILM_FRAME_MOCK=true REACT_APP_FILM_FRAME_MOCK=true
+export FILM_DURABLE_MOCK=true FILM_FRAME_MOCK=true REACT_APP_FILM_FRAME_MOCK=false REACT_APP_FILM_DURABLE_MOCK=true
 export REACT_APP_FILM_PREVIEW=true REACT_APP_USE_FIREBASE_EMULATORS=true REACT_APP_ENABLE_LEGACY_IMPORT=false
 export REACT_APP_FIREBASE_EMULATOR_HOST=127.0.0.33 REACT_APP_FIREBASE_PROJECT_ID=demo-coach-core-full-app
 export REACT_APP_FIREBASE_API_KEY=demo-full-app-web-key REACT_APP_FIREBASE_AUTH_DOMAIN=demo-coach-core-full-app.firebaseapp.com
@@ -113,7 +113,7 @@ const fs=require('fs'),path=require('path');const [config,root]=process.argv.sli
 fs.writeFileSync(config,JSON.stringify({firestore:{rules:path.join(root,'firestore.rules'),indexes:path.join(root,'firestore.indexes.json')},storage:{rules:path.join(root,'storage.rules')},emulators:{auth:{host:'127.0.0.33',port:9099},firestore:{host:'127.0.0.33',port:8080},storage:{host:'127.0.0.33',port:9199},hub:{host:'127.0.0.33',port:4400},logging:{host:'127.0.0.33',port:4500},ui:{enabled:false},singleProjectMode:true}},null,2));
 NODE
 run loopback-unused node - <<'NODE'
-const net=require('net');(async()=>{for(const port of [9099,8080,9199,4400,4500,3000,5001,5002])await new Promise((r,j)=>{const s=net.createServer();s.once('error',j);s.listen(port,'127.0.0.33',()=>s.close(r));});})().catch(()=>{console.error('Fresh isolated port unavailable');process.exitCode=1;});
+const net=require('net');(async()=>{for(const port of [9099,8080,9199,4400,4500,3000,5001,5002,5003])await new Promise((r,j)=>{const s=net.createServer();s.once('error',j);s.listen(port,'127.0.0.33',()=>s.close(r));});})().catch(()=>{console.error('Fresh isolated port unavailable');process.exitCode=1;});
 NODE
-run full-app-emulators node e2e/node_modules/firebase-tools/lib/bin/firebase.js emulators:exec --project demo-coach-core-full-app --config "$P/firebase.full-app.json" --only auth,firestore,storage "node tests/film-frame/stress.cjs $PWD $P/full-app-web $E/full-app"
-printf '%s\n' 'SETUP=PASS' 'SELECTED_FRAME_STRESS=PASS: synthetic emulator composition only; independent review pending' >> "$E/status.txt"
+run full-app-emulators node e2e/node_modules/firebase-tools/lib/bin/firebase.js emulators:exec --project demo-coach-core-full-app --config "$P/firebase.full-app.json" --only auth,firestore,storage "node tests/film-frame/durable-journey.cjs $PWD $P/full-app-web $E/full-app"
+printf '%s\n' 'SETUP=PASS' 'SYNTHETIC_DURABLE_FRAME=PASS: synthetic emulator composition only; independent review pending' >> "$E/status.txt"
