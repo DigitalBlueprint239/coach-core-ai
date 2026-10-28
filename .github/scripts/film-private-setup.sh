@@ -26,9 +26,9 @@ run source-check node ../verify-package.mjs "$PWD"
 run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'bef9b3744889ec3cc5cf414cb3751d3d0f296cfdc700737874006246a3e86622');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'3f0dc9cebad99ee10c2a76576f6d5978dec86bf78a00aaa0ab20eaa0b04c93c2');
 const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'70b03cf1f71d83e89cf6d8603aa198fe52e0c3a8');assert.equal(m.acceptedFullApp,'a007144e285772ebffcc0776e46cb1d6f0c42946');assert.deepEqual(m.applicationCommits,["b28118f14e2c06cce1b0a43b7c2577712c983c4f","a007144e285772ebffcc0776e46cb1d6f0c42946","4f145c7b772e4d3574c923ce6ba7f59dbd8982f4","24f9a699c8b5471ebeb06342f1b847f40e7fefe4"]);assert.deepEqual(m.harnessCommits,["426a81e67fc9508a695db78b9f351843e12020e5","38034ee8ce27ce8abc6c02659d493e15c5085a30","70b03cf1f71d83e89cf6d8603aa198fe52e0c3a8"]);assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.equal(m.files.length,18);
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'2a7f2c9ee9ba31c6ac62bbe9350249d22df06b6b');assert.equal(m.acceptedFullApp,'a007144e285772ebffcc0776e46cb1d6f0c42946');assert.deepEqual(m.applicationCommits,["b28118f14e2c06cce1b0a43b7c2577712c983c4f","a007144e285772ebffcc0776e46cb1d6f0c42946","4f145c7b772e4d3574c923ce6ba7f59dbd8982f4","24f9a699c8b5471ebeb06342f1b847f40e7fefe4"]);assert.deepEqual(m.harnessCommits,["426a81e67fc9508a695db78b9f351843e12020e5","38034ee8ce27ce8abc6c02659d493e15c5085a30","70b03cf1f71d83e89cf6d8603aa198fe52e0c3a8","2a7f2c9ee9ba31c6ac62bbe9350249d22df06b6b"]);assert.equal(m.acceptedRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.equal(m.files.length,18);
 const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
 function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
 assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
@@ -41,7 +41,7 @@ fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(e
 console.log('Exact full-app selected source verified.');
 
 NODE
-printf '%s\n' 'integrated_candidate=70b03cf1f71d83e89cf6d8603aa198fe52e0c3a8' 'application_commit=24f9a699c8b5471ebeb06342f1b847f40e7fefe4' 'harness_commit=70b03cf1f71d83e89cf6d8603aa198fe52e0c3a8' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=2a7f2c9ee9ba31c6ac62bbe9350249d22df06b6b' 'application_commit=24f9a699c8b5471ebeb06342f1b847f40e7fefe4' 'harness_commit=2a7f2c9ee9ba31c6ac62bbe9350249d22df06b6b' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
