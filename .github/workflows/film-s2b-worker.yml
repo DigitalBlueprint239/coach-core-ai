@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-playback-dto-ec7945c]
+    branches: [claude/film-s2b-worker, codex/film-retention-8dedc38-r2]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-playback-dto-ec7945c' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-8dedc38-r2' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-playback-dto-ec7945c' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-8dedc38-r2' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-playback-dto-ec7945c' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-8dedc38-r2' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-playback-dto-ec7945c' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-retention-8dedc38-r2' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private full-app synthetic acceptance / frozen candidate
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo '3b91a472c39c70a99520d6ffbbef06d00f6ac108508b3bd6da3938870358c43c  '"$SCRIPT" | sha256sum -c -
+          echo '6ff234bd2155ced43a3c29c76305f34159cf34a73124e9ae55b7d84be4ae50a1  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -267,7 +267,7 @@ jobs:
             ['repository',repo,d=>d.private===true&&d.full_name==='DigitalBlueprint239/Coach-Core-Smart-Playbook-'],
             ['release',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'],
             ['package-asset',repo+'/releases/assets/682470270',d=>d.id===682470270&&d.digest==='sha256:7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683'],
-            ['full-app-overlay',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'&&d.assets.filter(a=>a.name==='FILM-FRAME-PLAYBACK-DTO-ec7945c.zip'&&a.size===236759&&a.digest==='sha256:dc29f8bd9e5c957b90d940906433b1130a9de15f338b9c07b003b8dcd4b2239e').length===1],
+            ['full-app-overlay',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'&&d.assets.filter(a=>a.name==='FILM-RETENTION-LINUX-8dedc38-R1.zip'&&a.size===477533&&a.digest==='sha256:191980279cb9eae5aae805b07f529fc200b66f2c8d455c151e11754cf0843301').length===1],
             ['cost-asset',repo+'/releases/assets/678838152',d=>d.id===678838152&&d.digest==='sha256:6bf52693513c6a0f869f4f2a11cd87ed8335a1905952e93a0cfbafe7fa4145b3']
            ]) { if(!await check(label,path,validate)){process.exitCode=1;return;} }
           })().catch(()=>{report('diagnostic',0,'internal-diagnostic-error');process.exitCode=1;});
@@ -293,25 +293,25 @@ jobs:
           gh api -H 'Accept: application/octet-stream' \
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
             > "$RUNNER_TEMP/film-private-setup/package.zip"
-          OVERLAY_ID=$(gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/424529110 --jq '.assets[] | select(.name == "FILM-FRAME-PLAYBACK-DTO-ec7945c.zip" and .size == 236759 and .digest == "sha256:dc29f8bd9e5c957b90d940906433b1130a9de15f338b9c07b003b8dcd4b2239e") | .id')
+          OVERLAY_ID=$(gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/424529110 --jq '.assets[] | select(.name == "FILM-RETENTION-LINUX-8dedc38-R1.zip" and .size == 477533 and .digest == "sha256:191980279cb9eae5aae805b07f529fc200b66f2c8d455c151e11754cf0843301") | .id')
           [[ "$OVERLAY_ID" =~ ^[0-9]+$ ]]
           gh api -H 'Accept: application/octet-stream' \
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$OVERLAY_ID" \
             > "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip"
-          echo 'dc29f8bd9e5c957b90d940906433b1130a9de15f338b9c07b003b8dcd4b2239e  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
+          echo '191980279cb9eae5aae805b07f529fc200b66f2c8d455c151e11754cf0843301  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
           python3 - "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" "$RUNNER_TEMP/film-private-setup/full-app-overlay" <<'PY'
           import sys,zipfile,stat,os,json,hashlib
-          assert os.path.getsize(sys.argv[1])==236759
+          assert os.path.getsize(sys.argv[1])==477533
           assert not os.path.exists(sys.argv[2])
           with zipfile.ZipFile(sys.argv[1]) as z:
               entries=z.infolist()
               raw=z.read('MANIFEST.json')
-              assert hashlib.sha256(raw).hexdigest()=='82a528c935aa0e3d597d68049b9e44407b964221386c530a4b767915d87a3c62'
+              assert hashlib.sha256(raw).hexdigest()=='962531e2ee1802faa7a8fdf2522dfc66cd91f5ff86cf2ab48fad7b4b4ab19c95'
               manifest=json.loads(raw)
               expected=sorted(['MANIFEST.json']+[f['path'] for f in manifest['files']])
               assert all(not p.startswith('/') and '\\' not in p and '..' not in p.split('/') and ':' not in p for p in expected)
-              assert len(entries)==71 and sorted(e.filename for e in entries)==expected
-              assert sum(e.file_size for e in entries)<1000000
+              assert len(entries)==141 and sorted(e.filename for e in entries)==expected
+              assert sum(e.file_size for e in entries)==1388659 and 1388659<1500000
               assert all(not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
               assert sorted(e.filename for e in entries if e.is_dir())==[]
               z.extractall(sys.argv[2])
@@ -386,6 +386,76 @@ jobs:
           test -d "$P/evidence"
           # The fixed private prerelease already exists from package staging.
           gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook- --jq .private | grep -qx true
+          # Redact transient auth material only; exact assets/source stay unchanged.
+          python3 - "$P/evidence" <<'FILM_REDACT'
+          """Redact transient authentication material from task logs, never exact assets/source."""
+          import hashlib
+          import json
+          import pathlib
+          import re
+          import sys
+          
+          WHOLE = [
+              ("jwt", re.compile(r"\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b")),
+              ("github-token", re.compile(r"\b(?:github_pat_[A-Za-z0-9_]+|gh[pousr]_[A-Za-z0-9]+)\b")),
+          ]
+          CONTEXT = [
+              ("oob-code", re.compile(r"([?&]oobCode=)([^&\s\"<>]+)")),
+              ("auth-json", re.compile(r"([\"'](?:idToken|refreshToken|accessToken|access_token|refresh_token)[\"']\s*:\s*[\"'])([^\"'\s]+)")),
+              ("auth-header", re.compile(r"(authorization\s*[:=]\s*[\"']?(?:Bearer|token|Basic)\s+)([A-Za-z0-9._~+/-]+=*)", re.I)),
+              ("auth-query", re.compile(r"((?:[?&]|\b)(?:refresh_token|access_token)=)([^&\s\"<>]+)")),
+              ("auth-print", re.compile(r"(\b(?:refreshToken|refresh_token|accessToken|access_token)\s*:\s*[\"']?)([A-Za-z0-9._~+/-]+=*)")),
+          ]
+          
+          def redact(text):
+              counts = {}
+              for name, pattern in WHOLE:
+                  text, count = pattern.subn("[redacted]", text)
+                  if count:
+                      counts[name] = count
+              for name, pattern in CONTEXT:
+                  count = 0
+                  def replace(match):
+                      nonlocal count
+                      if match.group(2) == "[redacted]":
+                          return match.group(0)
+                      count += 1
+                      return match.group(1) + "[redacted]"
+                  text = pattern.sub(replace, text)
+                  if count:
+                      counts[name] = count
+              return text, counts
+          
+          def main(directory):
+              root = pathlib.Path(directory).resolve(strict=True)
+              assert root.name == "evidence" and root.parent.name == "film-private-setup"
+              records = []
+              excluded = {"retention-web", "decoder-provenance", "full-app-source"}
+              for file in sorted(root.rglob("*")):
+                  assert not file.is_symlink(), "Evidence symlink refused"
+                  if not file.is_file():
+                      continue
+                  relative = file.relative_to(root)
+                  if relative.parts[0] in excluded or file.name == "SANITIZATION.json":
+                      continue
+                  if file.suffix not in {".log", ".ndjson", ".json", ".txt", ".html"}:
+                      continue
+                  assert file.stat().st_size <= 50 * 1024 * 1024, "Unexpected oversized text evidence"
+                  original = file.read_bytes()
+                  text = original.decode("utf-8")
+                  text, counts = redact(text)
+                  assert redact(text)[0] == text, "Redaction must be idempotent"
+                  redacted = text.encode("utf-8")
+                  if counts:
+                      file.write_bytes(redacted)
+                  records.append({"path": relative.as_posix(), "originalSha256": hashlib.sha256(original).hexdigest(),
+                                  "sha256": hashlib.sha256(redacted).hexdigest(), "redactions": counts})
+              (root / "SANITIZATION.json").write_text(json.dumps({"exactSourceAndAssetsUnchanged": True,
+                  "excludedExactDirectories": sorted(excluded), "records": records}, indent=2) + "\n", encoding="utf-8")
+          
+          if __name__ == "__main__":
+              main(sys.argv[1])
+          FILM_REDACT
           tar -czf "$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz" -C "$P" evidence
           ARCHIVE="$P/setup-evidence-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.tgz"
           RECEIPT="$P/setup-receipt-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.txt"
