@@ -26,9 +26,9 @@ run source-check node ../verify-package.mjs "$PWD"
 run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'962531e2ee1802faa7a8fdf2522dfc66cd91f5ff86cf2ab48fad7b4b4ab19c95');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'5412d3ff04dcc9a9010d8d7dc716a74716ca808d6f0ee7b40b69cb64294ddbe5');
 const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'8dedc38bff04bbae3855ccb4a16af22fa4eb1e46');assert.equal(m.application,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.baseline,'fdb88f2f23a61730cd84bc8e48e63c11953d7df5');assert.equal(m.historicalAcceptedLinkRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["52eef9404434277559fa3740e3e1ed5b3698ea20"]);assert.deepEqual(m.harnessCommits,["8dedc38bff04bbae3855ccb4a16af22fa4eb1e46"]);assert.equal(m.rulesSourceCommit,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.files.length,140);
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'b3b1e3c1b4b90567cd595635094f6601d76c5f78');assert.equal(m.application,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.baseline,'fdb88f2f23a61730cd84bc8e48e63c11953d7df5');assert.equal(m.historicalAcceptedLinkRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["52eef9404434277559fa3740e3e1ed5b3698ea20"]);assert.deepEqual(m.harnessCommits,["8dedc38bff04bbae3855ccb4a16af22fa4eb1e46","b3b1e3c1b4b90567cd595635094f6601d76c5f78"]);assert.equal(m.rulesSourceCommit,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.files.length,142);
 const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
 function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
 assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
@@ -36,12 +36,12 @@ function verify(root,f){const b=fs.readFileSync(at(root,f.path));assert.equal(b.
 for(const f of original.files)verify(source,f);
 for(const f of m.files){verify(payload,f);const dest=at(source,f.path);if(f.baseSha256){const base=original.files.find(x=>x.path===f.path);assert(base);assert.equal(base.sha256,f.baseSha256);assert.equal(hash(fs.readFileSync(dest)),f.baseSha256);}else assert(!fs.existsSync(dest));}
 for(const f of m.files){const dest=at(source,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(at(payload,f.path),dest);}
-const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,454);for(const f of effective)verify(source,f);
-fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,historicalLinkRules:m.historicalAcceptedLinkRules,rulesSourceCommit:m.rulesSourceCommit,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:454},null,2)+'\n');
+const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,456);for(const f of effective)verify(source,f);
+fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,historicalLinkRules:m.historicalAcceptedLinkRules,rulesSourceCommit:m.rulesSourceCommit,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:456},null,2)+'\n');
 console.log('Exact full-app selected source verified.');
 
 NODE
-printf '%s\n' 'integrated_candidate=8dedc38bff04bbae3855ccb4a16af22fa4eb1e46' 'application_commit=52eef9404434277559fa3740e3e1ed5b3698ea20' 'harness_commit=8dedc38bff04bbae3855ccb4a16af22fa4eb1e46' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=b3b1e3c1b4b90567cd595635094f6601d76c5f78' 'application_commit=52eef9404434277559fa3740e3e1ed5b3698ea20' 'harness_commit=b3b1e3c1b4b90567cd595635094f6601d76c5f78' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
