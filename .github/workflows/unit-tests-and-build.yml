@@ -1,0 +1,43 @@
+name: Unit tests and build
+
+# Runs the app's Jest suite (react-scripts) and a production build on every PR into the recovery branch,
+# so changes are verified on GitHub's machines rather than a developer laptop.
+on:
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unit-tests-and-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        # --legacy-peer-deps mirrors how the app installs today: React 19 with @testing-library/react 13 (peer React 18).
+        # Remove it once @testing-library/react is upgraded to a React 19 release.
+        run: npm ci --no-audit --no-fund --legacy-peer-deps
+
+      - name: Unit tests
+        run: npx react-scripts test --watchAll=false
+        env:
+          CI: 'true'
+
+      - name: Production build
+        # CI=false keeps existing lint warnings from failing the build; tighten once the warning backlog is cleared.
+        run: npm run build
+        env:
+          CI: 'false'

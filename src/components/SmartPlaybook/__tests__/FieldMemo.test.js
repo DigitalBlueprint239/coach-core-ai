@@ -7,7 +7,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 // Import the real Field component
-import Field from '../:components:SmartPlaybook:Field.js';
+import Field from '../Field.js';
 
 describe('Field memoization', () => {
   const basePlayers = [
