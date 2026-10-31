@@ -64,3 +64,7 @@ export interface TransitionMetric {
 }
 
 export const metrics: TransitionMetric[] = [];
+
+/** Latest on-screen tag boxes (CSS px, canvas-relative) and whether each is shown; written by Players3D. */
+export interface TagLayoutEntry { uid: string; x: number; y: number; w: number; h: number; shown: boolean }
+export const tagLayout: { compact: boolean; entries: TagLayoutEntry[] } = { compact: false, entries: [] };

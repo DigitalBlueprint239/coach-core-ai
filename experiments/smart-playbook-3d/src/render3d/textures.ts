@@ -93,22 +93,26 @@ export function makeDiscLabelTexture(label: string, ink: string): Texture {
 }
 
 /** Floating broadcast-style tag: position + stored jersey number. */
-export function makeTagTexture(label: string, number: number | undefined, accent: string): Texture {
-  const c = canvas(320, 128);
+/** Width/height (canvas px) of the full tag and of the compact (role-only) phone tag. */
+export const TAG_SIZE = { full: [320, 128], compact: [196, 128] } as const;
+
+export function makeTagTexture(label: string, number: number | undefined, accent: string, compact = false): Texture {
+  const [w, h] = compact ? TAG_SIZE.compact : TAG_SIZE.full;
+  const c = canvas(w, h);
   const ctx = c.getContext('2d')!;
   const slant = 18;
   ctx.beginPath();
-  ctx.moveTo(slant, 8); ctx.lineTo(312, 8); ctx.lineTo(312 - slant, 120); ctx.lineTo(8, 120); ctx.closePath();
+  ctx.moveTo(slant, 8); ctx.lineTo(w - 8, 8); ctx.lineTo(w - 8 - slant, h - 8); ctx.lineTo(8, h - 8); ctx.closePath();
   ctx.fillStyle = 'rgba(8,12,20,0.88)';
   ctx.fill();
   ctx.fillStyle = accent;
-  ctx.fillRect(slant + 2, 8, 10, 112);
+  ctx.fillRect(slant + 2, 8, 10, h - 16);
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#F4F7FB';
   ctx.font = `700 72px ${DISPLAY_FONT}`;
   ctx.textAlign = 'left';
   ctx.fillText(label, 56, 68);
-  if (number !== undefined) {
+  if (number !== undefined && !compact) {
     ctx.fillStyle = '#8E99A8';
     ctx.font = `600 50px ${DISPLAY_FONT}`;
     ctx.textAlign = 'right';

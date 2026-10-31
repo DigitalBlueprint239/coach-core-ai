@@ -14,7 +14,7 @@ import {
 import { Field2D } from './render2d/Field2D';
 import { describeYards, routePoints } from './render2d/paint2d';
 import { canCreateWebGL, Scene3D, type SceneHandle } from './render3d/Scene3D';
-import { metrics, writeLog } from './debug';
+import { metrics, tagLayout, writeLog } from './debug';
 
 const PRESETS: { id: CameraPreset; label: string; key: string }[] = [
   { id: 'tactical', label: 'Tactical', key: '1' },
@@ -205,6 +205,7 @@ export function App() {
       sceneStatus: () => result.status,
       scenePlayers: () => (scene ? scene.players.map(p => ({ uid: p.uid, id: p.id, xYd: p.xYd, yYd: p.yYd })) : []),
       metrics: () => metrics.slice(),
+      tagLayout: () => ({ compact: tagLayout.compact, entries: tagLayout.entries.slice() }),
       writes: () => writeLog.slice(),
       rendererInfo: () => {
         const gl = handle.gl;

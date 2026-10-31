@@ -262,6 +262,36 @@ test.describe('2D ⇄ 3D Smart Playbook transition', () => {
       expect(b.height).toBeGreaterThanOrEqual(44);
     }
   });
+
+  test('player tags: compact and non-overlapping on narrow stages, all shown on wide ones', async ({ page }) => {
+    interface Tag { uid: string; x: number; y: number; w: number; h: number; shown: boolean }
+    const layout = async () => {
+      await page.waitForFunction(() => !(window as Probe).__sp3d.animating(), null, { timeout: 5000 });
+      await page.waitForTimeout(500); // let tag fades settle
+      return probe<{ compact: boolean; entries: Tag[] }>(page, 'tagLayout');
+    };
+    await open(page);
+    await enter3d(page);
+    const canvasWidth = (await page.locator('[data-testid=layer-3d] canvas').boundingBox())!.width;
+    const l = await layout();
+    expect(l.entries).toHaveLength(22);
+    const shown = l.entries.filter(e => e.shown);
+    if (canvasWidth >= 640) {
+      expect(l.compact).toBe(false);
+      expect(shown).toHaveLength(22);
+      return;
+    }
+    expect(l.compact).toBe(true);
+    for (let i = 0; i < shown.length; i++) for (let j = i + 1; j < shown.length; j++) {
+      const a = shown[i], b = shown[j];
+      const overlap = Math.abs(a.x - b.x) * 2 < a.w + b.w && Math.abs(a.y - b.y) * 2 < a.h + b.h;
+      expect(overlap, `${a.uid} overlaps ${b.uid}`).toBe(false);
+    }
+    expect(shown.length).toBeGreaterThanOrEqual(8);
+    // A selected player always gets its tag, even inside the crowded line.
+    await page.getByRole('button', { name: 'C', exact: true }).click();
+    expect((await layout()).entries.find(e => e.uid === 'offense/off-C')!.shown).toBe(true);
+  });
 });
 
 test.describe('reduced motion', () => {

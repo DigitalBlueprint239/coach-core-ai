@@ -39,10 +39,10 @@ Tablet and phone are **emulated viewports on the same laptop**, not physical dev
 
 | Suite | Result |
 |---|---|
-| Unit (coordinates, legacy safety, immutability over 12 round trips, camera match, state machine) | 33 / 33 passed |
-| Browser · desktop 1440×900 | 17 passed, 1 skipped (touch-only test) |
-| Browser · tablet (iPad gen 7 landscape, emulated) | 15 passed, 3 skipped (mouse orbit / resize / pointer drag: desktop-only) |
-| Browser · phone (Pixel 7, emulated) | 15 passed, 3 skipped (same) |
+| Unit (coordinates, legacy safety, immutability over 12 round trips, camera match, state machine) | 38 / 38 passed |
+| Browser · desktop 1440×900 | 18 passed, 1 skipped (touch-only test) |
+| Browser · tablet (iPad gen 7 landscape, emulated) | 16 passed, 3 skipped (mouse orbit / resize / pointer drag: desktop-only) |
+| Browser · phone (Pixel 7, emulated) | 16 passed, 3 skipped (same) |
 
 Key measured properties (browser tests):
 
@@ -75,6 +75,14 @@ No video: Playwright's video capture needs a separate ffmpeg download, which was
 - An orbit drag that ended over a player selected it. 3D clicks now ignore presses that travel more than 6 px.
 - Re-choosing the current camera preset after orbiting did nothing. Every preset request now re-frames.
 
+## Phone tags
+
+On stages narrower than 640 CSS px, 3D tags show the role only (no jersey number) and any tag that would overlap a
+higher-priority one fades out: the selected player first, then the player nearest the camera (so offense wins from
+behind the offense, defense on the Defense preset). Hidden players keep their disc label and roster entry, tapping
+one shows its tag, and zooming in brings more back. Faded tags ignore taps. Desktop and tablet are unchanged.
+On the Pixel 7 viewport, Tactical shows 17 of 22 tags with no overlaps (browser-tested).
+
 ## Limitations (read before drawing conclusions)
 
 - **Prototype only**, not production-ready. Not integrated with the live editor, Firestore, or the persisted schema.
@@ -85,8 +93,8 @@ No video: Playwright's video capture needs a separate ffmpeg download, which was
 - Only the `cc-halffield-px-v1` profile is verified (from PR #91's loader and LOS). The legacy classification profile
   is hypothetical and test-only; real legacy plays without provenance get no 3D.
 - Ball spot / rules (HS/NCAA/NFL hashes) are view-only settings.
-- On phones the 3D player tags are small and crowded; routes are hairline-thin in the phone overhead (same width
-  as the 2D diagram).
+- On phones some interior linemen's tags are hidden to avoid overlap; routes are hairline-thin in the phone
+  overhead (same width as the 2D diagram).
 - After an orbit, the controls' damping momentum continues briefly past a preset, leaving it up to ~1° short.
 - Bundle is large (~1.2 MB JS, ~335 kB gzip) with no code-splitting.
 - Firefox, Safari and physical tablets/phones are untested. REA is not connected.
