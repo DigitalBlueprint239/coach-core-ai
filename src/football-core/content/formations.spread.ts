@@ -1,8 +1,8 @@
-// Spread formations (10/11 personnel) for the first content slice. Positions are candidates until
-// Task 9 verifies them against sources; change them only with sources.
-import type { Formation, FormationPlayer, OffenseRole, Verification } from '../types';
+// Spread formations (10/11 personnel) for the first content slice. Verified items cite their sources
+// (./sources); drafts wait in the owner's review queue. Change positions only with sources.
+import { GLAZIER_2X2, USAF_PRUITT_3X1, YFO_2X2_SPREAD, YFO_FLOOD_TRIPS } from './sources';
+import type { Formation, FormationPlayer, OffenseRole } from '../types';
 
-const AWAITING: Verification = { status: 'draft', sources: [], note: 'awaiting research (Task 9)' };
 
 const p = (role: OffenseRole, x: number, y: number, onLine = false): FormationPlayer => ({ role, at: { x, y }, onLine });
 
@@ -24,7 +24,7 @@ export const SPREAD_FORMATIONS: Formation[] = [
     strength: 'right',
     players: [...LINE, QB, RB_GUN, p('X', -19, -0.8, true), p('H', -13.5, -1.6), p('Y', 13.5, -1.6), p('Z', 19, -0.8, true)],
     levels: ['youth', 'jv', 'varsity'],
-    verification: AWAITING,
+    verification: { status: 'verified', sources: [GLAZIER_2X2, YFO_2X2_SPREAD] },
   },
   {
     id: 'trips-right',
@@ -33,7 +33,7 @@ export const SPREAD_FORMATIONS: Formation[] = [
     strength: 'right',
     players: [...LINE, QB, RB_GUN, p('X', -19, -0.8, true), p('Y', 8.5, -1.6), p('H', 13.5, -1.6), p('Z', 19, -0.8, true)],
     levels: ['jv', 'varsity'],
-    verification: AWAITING,
+    verification: { status: 'verified', sources: [USAF_PRUITT_3X1, YFO_FLOOD_TRIPS] },
   },
   {
     id: 'trey-right',
@@ -42,7 +42,7 @@ export const SPREAD_FORMATIONS: Formation[] = [
     strength: 'right',
     players: [...LINE, QB, RB_GUN, p('TE', 6.9, -0.5, true), p('H', 13.5, -1.6), p('Z', 19, -0.8, true), p('X', -19, -0.8, true)],
     levels: ['youth', 'jv', 'varsity'],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [], note: 'No reliable source found yet for the 3x1 set with an attached tight end as aligned here.' },
   },
   {
     id: 'empty',
@@ -51,6 +51,6 @@ export const SPREAD_FORMATIONS: Formation[] = [
     strength: 'right',
     players: [...LINE, QB, p('X', -19, -0.8, true), p('H', -13.5, -1.6), p('Y', 13.5, -1.6), p('Z', 19, -0.8, true), p('RB', 8.5, -1.6)],
     levels: ['varsity'],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [], note: 'No reliable source found yet for this 3x2 empty alignment with the detached running back.' },
   },
 ];

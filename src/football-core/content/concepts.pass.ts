@@ -1,8 +1,8 @@
-// Pass concepts for the first content slice. Assignments and reads are candidates until Task 9
-// verifies them against sources; change them only with sources.
-import type { Concept, Verification } from '../types';
+// Pass concepts for the first content slice. Verified items cite their sources (./sources); drafts
+// wait in the owner's review queue. Change assignments and reads only with sources.
+import { GLAZIER_SMASH, ITP_COVER_3, USAF_EAGLES_MESH, WWTP_MESH, WWTP_SMASH, YFO_BEAT_COVER_3, YFO_CURL_FLAT, YFO_FLOOD_TRIPS } from './sources';
+import type { Concept } from '../types';
 
-const AWAITING: Verification = { status: 'draft', sources: [], note: 'awaiting research (Task 9)' };
 
 export const PASS_CONCEPTS: Concept[] = [
   {
@@ -21,7 +21,7 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'H', text: 'He jumps the flat: throw the sail over him.' },
       { focus: 'Y', text: 'He sinks under the sail: hit the flat.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [YFO_FLOOD_TRIPS, YFO_BEAT_COVER_3], note: 'Routes and flat-defender read confirmed by one reliable publisher only; a second publisher is needed.' },
   },
   {
     id: 'curl-flat',
@@ -38,7 +38,7 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'curl', text: 'He widens to the flat: throw the curl.' },
       { focus: 'flat', text: 'He sits on the curl: throw the flat.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [YFO_CURL_FLAT], note: 'Confirmed by one reliable publisher only; the backside curl (no weak-side flat) is our simplification and is unconfirmed.' },
   },
   {
     id: 'four-verticals',
@@ -55,7 +55,7 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'FS', text: 'Read the middle safety.' },
       { focus: 'seam', text: 'Throw the seam away from where he leans.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [YFO_BEAT_COVER_3, ITP_COVER_3], note: 'Routes confirmed by two publishers, but the middle-safety read was only found in sources that do not qualify.' },
   },
   {
     id: 'smash',
@@ -73,7 +73,7 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'corner', text: 'He sits on the hitch: throw the corner.' },
       { focus: 'hitch', text: 'He drops with the corner: throw the hitch.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'verified', sources: [GLAZIER_SMASH, WWTP_SMASH] },
   },
   {
     id: 'stick',
@@ -91,7 +91,7 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'stick', text: 'He widens with the flat: throw the stick.' },
       { focus: 'flat', text: 'He sits on the stick: throw the flat.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [YFO_BEAT_COVER_3], note: 'Sources disagree on which receiver runs the stick and which the flat (USA Football/Pruitt has #2 flat, #3 stick); the owner should decide.' },
   },
   {
     id: 'snag',
@@ -108,7 +108,7 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'corner', text: 'He comes up: throw the corner behind him.' },
       { focus: 'snag', text: 'He widens with the swing: throw the snag.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [], note: 'Only blogs and fan sites found so far; no qualifying publisher yet.' },
   },
   {
     id: 'mesh',
@@ -125,6 +125,6 @@ export const PASS_CONCEPTS: Concept[] = [
       { focus: 'drags', text: 'The two drags cross under the linebackers.' },
       { focus: 'drag', text: 'Throw to the drag that comes free of his man.' },
     ],
-    verification: AWAITING,
+    verification: { status: 'draft', sources: [USAF_EAGLES_MESH, WWTP_MESH], note: 'Two publishers describe mesh, but with different route details than these assignments (corner and go outside).' },
   },
 ];

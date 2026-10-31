@@ -1,4 +1,4 @@
-import { applyConcept, fullLibrary, validateFormation } from '..';
+import { applyConcept, fullLibrary, isPublishable, publishedLibrary, validateFormation } from '..';
 import type { Source, Verification } from '..';
 
 const lib = fullLibrary();
@@ -43,5 +43,20 @@ describe('content slice', () => {
       expect(s.url.startsWith('https://')).toBe(true);
       expect(s.accessed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
+  });
+
+  it('publishes only items that really meet the verification bar', () => {
+    const pub = publishedLibrary();
+    for (const x of [...pub.formations, ...pub.concepts, ...pub.fronts, ...pub.coverages]) {
+      expect(isPublishable(x.verification, 'item')).toBe(true);
+    }
+    for (const m of pub.matchups) expect(isPublishable(m.verification, 'matchup')).toBe(true);
+  });
+
+  it('the slice is usable: at least one verified formation, coverage and matchup reach coaches', () => {
+    const pub = publishedLibrary();
+    const ready = pub.formations.length > 0 && pub.coverages.length > 0 && pub.matchups.length > 0;
+    if (!ready) throw new Error('Content slice is not ready to show coaches: no verified formation, coverage or matchup.');
+    expect(ready).toBe(true);
   });
 });
