@@ -23,8 +23,11 @@ export function recommend(
   opts: { level: Level; playbook?: string[]; limit?: number },
   lib: Library,
 ): Recommendation[] {
-  const coverages = new Set(lib.coverages.filter(c => isPublishable(c.verification, 'item')).map(c => c.id as string));
-  const usable = opp.coverages.filter(c => coverages.has(c.id) && c.share > 0);
+  // Every coverage the library knows sizes the score (even unverified ones), so a draft coverage can't inflate it;
+  // only publishable coverages can be beaten. Unknown ids are ignored.
+  const known = new Set<string>(lib.coverages.map(c => c.id));
+  const beatable = new Set<string>(lib.coverages.filter(c => isPublishable(c.verification, 'item')).map(c => c.id));
+  const usable = opp.coverages.filter(c => known.has(c.id) && c.share > 0);
   const total = usable.reduce((sum, c) => sum + c.share, 0);
   if (total <= 0) return [];
   const share = new Map<string, number>();
@@ -38,7 +41,7 @@ export function recommend(
     if (!isPublishable(concept.verification, 'item')) continue;
     if (LEVEL_ORDER.indexOf(concept.minLevel) > levelIndex) continue;
     const beaten = lib.matchups.filter(
-      m => m.concept === concept.id && share.has(m.beats) && isPublishable(m.verification, 'matchup'),
+      m => m.concept === concept.id && beatable.has(m.beats) && share.has(m.beats) && isPublishable(m.verification, 'matchup'),
     );
     if (!beaten.length) continue;
     const score = beaten.reduce((sum, m) => sum + (share.get(m.beats) ?? 0), 0);

@@ -53,6 +53,14 @@ describe('recommend', () => {
     expect(recommend({ coverages: [{ id: 'cover-3', share: 0 }] }, { level: 'jv' }, lib())).toEqual([]);
   });
 
+  it('counts unverified coverages the opponent plays when sizing a score', () => {
+    const l = lib();
+    l.coverages.push({ id: 'cover-1', name: 'cover-1', deepDefenders: 1, verification: { status: 'draft', sources: [], note: 'x' } });
+    const r = recommend({ coverages: [{ id: 'cover-1', share: 0.8 }, { id: 'cover-2', share: 0.2 }] }, { level: 'jv' }, l);
+    expect(r.map(x => x.concept.id)).toEqual(['Bravo']);
+    expect(r[0].score).toBeCloseTo(0.2, 9);
+  });
+
   it("respects the coach's level", () => {
     const opp = { coverages: [{ id: 'cover-3', share: 1 }] };
     expect(recommend(opp, { level: 'jv', limit: 10 }, lib()).map(x => x.concept.id)).not.toContain('Charlie');

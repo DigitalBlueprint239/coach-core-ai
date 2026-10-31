@@ -29,3 +29,20 @@ describe('labelFor', () => {
     expect(labelFor('SS', { SS: 'Rover' })).toBe('Rover');
   });
 });
+
+describe('older browsers', () => {
+  it('works where regex lookbehind is unsupported (iOS before Safari 16.4)', () => {
+    const Real = RegExp;
+    const NoLookbehind = function (this: unknown, pattern: string | RegExp, flags?: string) {
+      const src = typeof pattern === 'string' ? pattern : pattern.source;
+      if (src.includes('(?<=') || src.includes('(?<!')) throw new SyntaxError('Invalid regular expression: invalid group specifier name');
+      return new Real(pattern, flags);
+    } as unknown as RegExpConstructor;
+    (globalThis as { RegExp: RegExpConstructor }).RegExp = NoLookbehind;
+    try {
+      expect(applyTerminology('Throw H on the sail. Hit the hash.', { H: 'F' })).toBe('Throw F on the sail. Hit the hash.');
+    } finally {
+      (globalThis as { RegExp: RegExpConstructor }).RegExp = Real;
+    }
+  });
+});

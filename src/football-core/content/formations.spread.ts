@@ -40,7 +40,7 @@ export const SPREAD_FORMATIONS: Formation[] = [
     name: 'Trey Right',
     personnel: '11',
     strength: 'right',
-    players: [...LINE, QB, RB_GUN, p('TE', 6.9, -0.5, true), p('H', 13.5, -1.6), p('Z', 19, -0.8, true), p('X', -19, -0.8, true)],
+    players: [...LINE, QB, RB_GUN, p('TE', 6.9, -0.5, true), p('H', 13.5, -1.6), p('Z', 19, -1.6), p('X', -19, -0.8, true)],
     levels: ['youth', 'jv', 'varsity'],
     verification: { status: 'draft', sources: [], note: 'No reliable source found yet for the 3x1 set with an attached tight end as aligned here.' },
   },

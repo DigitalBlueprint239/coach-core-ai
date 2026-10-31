@@ -30,6 +30,19 @@ describe('content slice', () => {
     }
   });
 
+  it('never covers a receiver on the line (only the end man on each side is eligible)', () => {
+    const linemen = new Set(['LT', 'LG', 'C', 'RG', 'RT']);
+    for (const f of lib.formations) {
+      for (const side of [1, -1]) {
+        const onLine = f.players.filter(p => p.onLine && Math.sign(p.at.x) === side);
+        const outermost = Math.max(...onLine.map(p => Math.abs(p.at.x)));
+        for (const p of onLine) {
+          if (!linemen.has(p.role)) expect(`${f.id}:${p.role}:${Math.abs(p.at.x) === outermost ? 'end' : 'covered'}`).toBe(`${f.id}:${p.role}:end`);
+        }
+      }
+    }
+  });
+
   it('has only legal formations', () => {
     for (const f of lib.formations) expect(validateFormation(f)).toEqual([]);
   });

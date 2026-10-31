@@ -9,8 +9,9 @@ const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 export function applyTerminology(text: string, t: Terminology): string {
   const keys = Object.keys(t).filter(k => k.length > 0).sort((a, b) => b.length - a.length);
   if (!keys.length) return text;
-  const pattern = new RegExp(`(?<![A-Za-z0-9_])(?:${keys.map(escape).join('|')})(?![A-Za-z0-9_])`, 'g');
-  return text.replace(pattern, match => t[match] ?? match);
+  // A captured leading boundary instead of lookbehind, which iOS Safari before 16.4 cannot parse.
+  const pattern = new RegExp(`(^|[^A-Za-z0-9_])(${keys.map(escape).join('|')})(?![A-Za-z0-9_])`, 'g');
+  return text.replace(pattern, (_m, pre: string, term: string) => pre + (t[term] ?? term));
 }
 
 export function labelFor(role: OffenseRole | DefenderRole, t: Terminology): string {
