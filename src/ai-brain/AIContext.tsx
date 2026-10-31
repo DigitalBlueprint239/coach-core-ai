@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { AIService, useAIService, AIServiceConfig } from '../services/ai-service';
 import { AIProxyService, useAIProxy, AIProxyConfig } from '../services/ai-proxy';
+import { firebaseIdToken } from '../services/ai-auth';
 import {
   AISuggestion, AIConversation, AIInsight,
   TeamContext, GameContext, PlayerContext, User
@@ -77,11 +78,13 @@ export const useAI = () => {
 export const AIProvider: React.FC<AIProviderProps> = ({
   children,
   config = {},
-  useProxy = false
 }) => {
+  // Locked down: the browser never calls an AI provider directly or holds a provider key.
+  // All AI goes through the authenticated server proxy (which is off until REACT_APP_AI_ENABLED is set).
+  const useProxy = true;
   // Initialize AI service configuration
   const defaultConfig: AIServiceConfig = {
-    apiKey: process.env.REACT_APP_OPENAI_API_KEY || '',
+    apiKey: '',
     model: 'gpt-4',
     maxTokens: 2000,
     temperature: 0.7,
@@ -92,7 +95,8 @@ export const AIProvider: React.FC<AIProviderProps> = ({
   const proxyConfig: AIProxyConfig = {
     endpoint: process.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
     timeout: 30000,
-    retries: 3
+    retries: 3,
+    getIdToken: firebaseIdToken,
   };
 
   // Use appropriate service based on configuration

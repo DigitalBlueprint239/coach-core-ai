@@ -1,10 +1,15 @@
 // src/services/ai-proxy.ts
-// Server-side proxy for OpenAI API calls to prevent API key exposure
+// Client for the server-side AI proxy. The browser never holds a provider key or a shared token: each request
+// carries the signed-in coach's Firebase ID token, and nothing is sent while AI is switched off.
 
 export interface AIProxyConfig {
   endpoint: string;
   timeout?: number;
   retries?: number;
+  /** Live AI on/off. Defaults to REACT_APP_AI_ENABLED === 'true' (off at launch). */
+  enabled?: boolean;
+  /** The signed-in coach's Firebase ID token, or null when signed out. */
+  getIdToken?: () => Promise<string | null>;
 }
 
 export interface AIProxyRequest {
@@ -36,11 +41,16 @@ export class AIProxyService {
     this.config = {
       timeout: 30000,
       retries: 3,
+      enabled: process.env.REACT_APP_AI_ENABLED === 'true',
       ...config
     };
   }
 
   async makeRequest(request: AIProxyRequest): Promise<AIProxyResponse> {
+    if (!this.config.enabled) return { success: false, error: 'AI features are turned off.' };
+    const idToken = this.config.getIdToken ? await this.config.getIdToken() : null;
+    if (!idToken) return { success: false, error: 'Sign in to use AI features.' };
+
     const startTime = Date.now();
     let lastError: Error | null = null;
 
@@ -50,7 +60,7 @@ export class AIProxyService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_AI_PROXY_TOKEN || ''}`
+            'Authorization': `Bearer ${idToken}`
           },
           body: JSON.stringify(request),
           signal: AbortSignal.timeout(this.config.timeout!)
