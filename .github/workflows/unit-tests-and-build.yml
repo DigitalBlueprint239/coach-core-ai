@@ -27,7 +27,9 @@ jobs:
           cache: npm
 
       - name: Install
-        run: npm ci --no-audit --no-fund
+        # --legacy-peer-deps mirrors how the app installs today: React 19 with @testing-library/react 13 (peer React 18).
+        # Remove it once @testing-library/react is upgraded to a React 19 release.
+        run: npm ci --no-audit --no-fund --legacy-peer-deps
 
       - name: Unit tests
         run: npx react-scripts test --watchAll=false
