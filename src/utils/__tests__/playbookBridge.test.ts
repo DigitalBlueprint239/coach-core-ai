@@ -17,7 +17,7 @@ import {
   PX_PER_YARD_X,
   PX_PER_YARD_Y,
 } from '../playbookBridge';
-import type { Play, Player, Route, Point } from '../../services/firestore';
+import type { Play, Point } from '../../services/firestore';
 
 // ============================================
 // HELPERS
@@ -360,7 +360,8 @@ describe('no silent field drops', () => {
   it('preserves waypoint ordering after bridge', () => {
     const play = createFullyPopulatedPlay();
     const result = toEnginePlay(play);
-    const route = result.routes.find(r => r.id === 'r1')!;
+    const route = result.routes.find(r => r.id === 'r1');
+    expect(route).toBeDefined();
     // Original waypoints: (50,150) → (50,50) → (150,20)
     // After converting to yards, the order must be preserved
     // Verify by round-tripping: ordering should match original

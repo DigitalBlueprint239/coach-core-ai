@@ -26,8 +26,7 @@ import {
   redo,
   shotgunFormation,
   fourThreeFormation,
-  findPlayerAtPosition,
-  calculateDistance
+  findPlayerAtPosition
 } from './PlayController';
 
 // UI Components
@@ -131,7 +130,6 @@ const SmartPlaybook = () => {
 
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const lastTouchRef = useRef<TouchEvent | null>(null);
 
   // Load saved plays from localStorage on mount
   useEffect(() => {
@@ -336,12 +334,6 @@ const SmartPlaybook = () => {
     setPlayers(prev => updatePlayerPosition(prev, playerId, constrainedX, constrainedY));
   }, []);
 
-  // Handle player drag end (save to undo stack)
-  const handlePlayerDragEnd = useCallback((playerId: string) => {
-    saveToUndoStack('move_player');
-    addNotification('success', 'Player moved successfully');
-  }, [saveToUndoStack]);
-
   // Add notification helper
   const addNotification = useCallback((type: 'success' | 'error' | 'warning', message: string, duration = 3000) => {
     const id = Date.now() + Math.random();
@@ -351,12 +343,6 @@ const SmartPlaybook = () => {
   // Remove notification helper
   const removeNotification = useCallback((id: number) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  }, []);
-
-  // Handle route selection
-  const handleRouteSelect = useCallback((routeId: string) => {
-    setSelectedRouteId(routeId);
-    setSelectedPlayerId(null); // Deselect player when selecting route
   }, []);
 
   // Handle route update

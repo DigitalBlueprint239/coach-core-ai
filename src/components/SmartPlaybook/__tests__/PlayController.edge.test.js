@@ -9,10 +9,7 @@ import {
   createRoute,
   addPlayer,
   removePlayer,
-  selectPlayer,
   deselectAll,
-  updatePlayerPosition,
-  addRoute,
   removeRoute,
   savePlay,
   undo,
@@ -23,7 +20,6 @@ import {
   findPlayerAtPosition,
   hasDuplicateNumber,
   hasDuplicatePosition,
-  PLAYER_POSITIONS,
   ROUTE_TYPES,
   ROUTE_COLORS,
 } from '../PlayController';
@@ -67,6 +63,7 @@ describe('createPlayer — edge cases', () => {
     const p = createPlayer(100, 100, 'WR');
     expect(p.createdAt).toBeTruthy();
     expect(typeof p.createdAt).toBe('string');
+    expect(p.createdAt >= before).toBe(true);
   });
 });
 
@@ -243,7 +240,7 @@ describe('undo/redo — rapid changes', () => {
     const s2 = { id: 2 };
 
     // Undo from s2 to s1
-    const [, undoStack, redoStack] = undo([s0, s1], [], s2);
+    const [, , redoStack] = undo([s0, s1], [], s2);
     expect(redoStack).toHaveLength(1); // s2 is in redo
 
     // Simulate "new action clears redo" — this is done by SmartPlaybook

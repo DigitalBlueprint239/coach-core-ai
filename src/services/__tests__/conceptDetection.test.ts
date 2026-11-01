@@ -1,4 +1,4 @@
-import { classifyRoute, detectConcepts, RouteShape, DetectedConcept } from '../conceptDetection';
+import { classifyRoute, detectConcepts } from '../conceptDetection';
 import { Play, Route, Player, Point } from '../firestore';
 
 // ─── Helper Functions ────────────────────────────────────────────────────────
@@ -101,7 +101,6 @@ describe('classifyRoute', () => {
   // Players for testing: one on left side, one on right side
   const leftWR = buildPlayer('wr1', 'WR', 100, 150); // left side of field
   const rightWR = buildPlayer('wr2', 'WR', 500, 150); // right side of field
-  const centerPlayer = buildPlayer('wr3', 'WR', 300, 150); // center
 
   test('classifies a straight vertical route as go', () => {
     // Straight downfield 20 yards with no lateral movement

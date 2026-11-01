@@ -150,12 +150,6 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
     onDismiss?.();
   };
 
-  const handleShowPrompt = () => {
-    if (deferredPrompt && !isInstalled) {
-      setIsVisible(true);
-    }
-  };
-
   // ============================================
   // RENDERING
   // ============================================

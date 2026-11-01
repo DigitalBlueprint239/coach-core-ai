@@ -5,7 +5,7 @@
  * - Different styles for success, error, warning
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { CheckCircle, XCircle, AlertTriangle, X } from 'lucide-react';
 
 const NOTIFICATION_TYPES = {
@@ -45,6 +45,16 @@ const Notification = memo(({
   const config = NOTIFICATION_TYPES[type] || NOTIFICATION_TYPES.success;
   const Icon = config.icon;
 
+  // Stable as long as onDismiss and id are (SmartPlaybook passes a memoized onDismiss), so the auto-dismiss
+  // timer below is not restarted by unrelated re-renders.
+  const handleDismiss = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      onDismiss?.(id);
+    }, 300);
+  }, [onDismiss, id]);
+
   useEffect(() => {
     if (duration > 0) {
       const timer = setTimeout(() => {
@@ -53,15 +63,7 @@ const Notification = memo(({
 
       return () => clearTimeout(timer);
     }
-  }, [duration]);
-
-  const handleDismiss = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsVisible(false);
-      onDismiss?.(id);
-    }, 300);
-  };
+  }, [duration, handleDismiss]);
 
   if (!isVisible) return null;
 

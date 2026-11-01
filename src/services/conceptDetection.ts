@@ -132,9 +132,6 @@ export function classifyRoute(route: Route, player: Player): RouteShape {
   const movedInside =
     (playerSide === 'left' && lateralPx > 0) ||
     (playerSide === 'right' && lateralPx < 0);
-  const movedOutside =
-    (playerSide === 'left' && lateralPx < 0) ||
-    (playerSide === 'right' && lateralPx > 0);
 
   // Determine lateral movement after break
   let brokeInside = false;

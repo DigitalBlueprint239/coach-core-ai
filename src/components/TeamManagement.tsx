@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTeam } from '../contexts/TeamContext';
 import { useToast } from './ToastManager';
 
+// Moves focus into a dialog's first field when it opens (the WAI-ARIA dialog pattern). Replaces autoFocus,
+// which only fires on first mount and is flagged by jsx-a11y.
+function useFocusOnOpen(isOpen: boolean) {
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (isOpen) ref.current?.focus();
+  }, [isOpen]);
+  return ref;
+}
+
 export const TeamSelector: React.FC = () => {
   const { currentTeam, userTeams, switchTeam, loading } = useTeam();
-  const { showToast } = useToast();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -124,6 +133,8 @@ export const TeamSelector: React.FC = () => {
       {/* Click outside to close dropdown */}
       {showDropdown && (
         <div
+          role="presentation"
+          aria-hidden="true"
           className="fixed inset-0 z-40"
           onClick={() => setShowDropdown(false)}
         />
@@ -140,6 +151,7 @@ export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }>
   const [isCreating, setIsCreating] = useState(false);
   const { createTeam } = useTeam();
   const { showToast } = useToast();
+  const inputRef = useFocusOnOpen(isOpen);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -189,7 +201,7 @@ export const CreateTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }>
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 placeholder="Enter your team name"
                 required
-                autoFocus
+                ref={inputRef}
               />
             </div>
             
@@ -231,6 +243,7 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
   const [isJoining, setIsJoining] = useState(false);
   const { joinTeam } = useTeam();
   const { showToast } = useToast();
+  const inputRef = useFocusOnOpen(isOpen);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -281,7 +294,7 @@ export const JoinTeamModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
                 placeholder="ABC123"
                 maxLength={6}
                 required
-                autoFocus
+                ref={inputRef}
               />
               <p className="text-xs text-gray-500 mt-2 text-center">
                 Enter the 6-character team code provided by your coach

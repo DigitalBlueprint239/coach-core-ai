@@ -16,7 +16,6 @@ export interface SpacingViolation {
   suggestion: string;
 }
 
-const SKILL_POSITIONS = new Set(['WR', 'TE', 'RB', 'FB', 'HB', 'SE', 'FL']);
 const BACKFIELD_POSITIONS = new Set(['RB', 'FB', 'HB']);
 const RECEIVER_POSITIONS = new Set(['WR', 'SE', 'FL', 'TE']);
 
@@ -34,16 +33,8 @@ function distance(a: Point, b: Point): number {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 }
 
-function getSkillPlayers(play: Play): Player[] {
-  return play.players.filter((p) => SKILL_POSITIONS.has(p.position));
-}
-
 function getPlayerById(play: Play, id: string): Player | undefined {
   return play.players.find((p) => p.id === id);
-}
-
-function getRouteForPlayer(play: Play, playerId: string): Route | undefined {
-  return play.routes.find((r) => r.playerId === playerId);
 }
 
 /**

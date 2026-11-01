@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { AIService, useAIService, AIServiceConfig } from '../services/ai-service';
-import { AIProxyService, useAIProxy, AIProxyConfig } from '../services/ai-proxy';
+import { useAIService, AIServiceConfig } from '../services/ai-service';
+import { useAIProxy, AIProxyConfig } from '../services/ai-proxy';
 import { firebaseIdToken } from '../services/ai-auth';
 import {
   AISuggestion, AIConversation, AIInsight,
@@ -108,7 +108,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 
   // Local state
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
-  const [conversations, setConversations] = useState<AIConversation[]>([]);
+  const [conversations] = useState<AIConversation[]>([]);
   const [insights, setInsights] = useState<AIInsight[]>([]);
 
   // ============================================

@@ -5,8 +5,8 @@
  * - Apply preset routes to players
  */
 
-import React, { memo, useState } from 'react';
-import { Route, Trash2, Edit3, Palette, Save, X } from 'lucide-react';
+import React, { memo, useId, useState } from 'react';
+import { Route, Trash2, Edit3, Save, X } from 'lucide-react';
 
 const PRESET_ROUTES = [
   { id: 'slant', name: 'Slant', points: [{ x: 0, y: 0 }, { x: 30, y: -20 }] },
@@ -34,9 +34,9 @@ const RouteEditor = memo(({
   players,
   onUpdateRoute,
   onDeleteRoute,
-  onApplyPreset,
-  onClearSelection
+  onApplyPreset
 }) => {
+  const fieldId = useId();
   const [isEditing, setIsEditing] = useState(false);
   const [editType, setEditType] = useState('');
   const [editColor, setEditColor] = useState('');
@@ -129,10 +129,11 @@ const RouteEditor = memo(({
       {isEditing ? (
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
+            <label htmlFor={`${fieldId}-route-type`} className="block text-xs font-medium text-gray-700 mb-1">
               Route Type
             </label>
             <select
+              id={`${fieldId}-route-type`}
               value={editType}
               onChange={(e) => setEditType(e.target.value)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -149,12 +150,15 @@ const RouteEditor = memo(({
           </div>
           
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
+            <span className="block text-xs font-medium text-gray-700 mb-1">
               Route Color
-            </label>
+            </span>
             <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 rounded-lg border-2 border-gray-300 cursor-pointer"
+              <button
+                type="button"
+                aria-label="Choose route color"
+                aria-expanded={showColorPicker}
+                className="w-8 h-8 p-0 rounded-lg border-2 border-gray-300 cursor-pointer"
                 style={{ backgroundColor: editColor }}
                 onClick={() => setShowColorPicker(!showColorPicker)}
               />

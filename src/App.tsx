@@ -6,7 +6,6 @@ import ToastManager from './components/ToastManager';
 import LoadingSpinner from './components/LoadingSpinner';
 import { AuthProvider } from './components/AuthProvider';
 import { TeamProvider } from './contexts/TeamContext';
-import { TeamSelector } from './components/TeamManagement';
 import { MigrationBanner } from './components/MigrationBanner';
 import { OnboardingModal } from './components/OnboardingModal';
 import { PWAInstallPrompt, registerServiceWorker } from './components/PWAInstallPrompt';
@@ -16,11 +15,10 @@ const SmartPlaybook = React.lazy(() => import('./components/SmartPlaybook/SmartP
 const FirebaseTest = React.lazy(() => import('./components/FirebaseTest'));
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'playbook' | 'test'>('dashboard');
+  const [currentView] = useState<'dashboard' | 'playbook' | 'test'>('dashboard');
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showPWAInstall, setShowPWAInstall] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
-  const [demoMode, setDemoMode] = useState(false);
+  const [, setDemoMode] = useState(false);
 
   useEffect(() => {
     // Register service worker for PWA
