@@ -37,3 +37,33 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+  firestore-rules:
+    # Security rules tests against the Firestore emulator (needs Java). Never touches a live project:
+    # the demo-* project ID keeps the emulator fully offline.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Cache the Firestore emulator
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-${{ hashFiles('package-lock.json') }}
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Firestore rules tests
+        run: npm run test:rules
