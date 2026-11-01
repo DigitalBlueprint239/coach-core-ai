@@ -47,6 +47,14 @@ jobs:
           # Preview builds show work in progress: turn on the new Smart Playbook and the owner review screen.
           REACT_APP_ENABLE_PLAYBOOK_V2: 'true'
           REACT_APP_ENABLE_CONTENT_REVIEW: 'true'
+          # Crash reporting (off when the variable is unset). The DSN is public by design.
+          REACT_APP_SENTRY_DSN: ${{ vars.REACT_APP_SENTRY_DSN }}
+          REACT_APP_DEPLOY_ENV: preview
+          REACT_APP_RELEASE: ${{ github.event.pull_request.head.sha }}
+          # Source-map upload to Sentry; build-time only, never in the bundle. Skipped when the token is unset.
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
       - name: Deploy to a preview channel
         uses: FirebaseExtended/action-hosting-deploy@v0

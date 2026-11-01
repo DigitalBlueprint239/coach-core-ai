@@ -15,6 +15,9 @@ interface ImportMetaEnv {
   readonly REACT_APP_BUILD_NUMBER: string | undefined;
   readonly REACT_APP_ERROR_REPORTING_ENDPOINT: string | undefined;
   readonly REACT_APP_VAPID_PUBLIC_KEY: string | undefined;
+  readonly REACT_APP_SENTRY_DSN: string | undefined;
+  readonly REACT_APP_RELEASE: string | undefined;
+  readonly REACT_APP_DEPLOY_ENV: string | undefined;
 }
 
 interface ImportMeta {

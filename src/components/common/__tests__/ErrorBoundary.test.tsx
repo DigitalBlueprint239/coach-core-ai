@@ -7,6 +7,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ErrorBoundary from '../ErrorBoundary';
+import { captureError } from '../../../monitoring/sentry';
+
+vi.mock('../../../monitoring/sentry', () => ({ captureError: vi.fn() }));
 
 // Component that throws on render
 const ThrowingComponent: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow = true }) => {
@@ -33,6 +36,18 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
     expect(screen.getByText('Safe content')).toBeInTheDocument();
+  });
+
+  it('reports the crash to monitoring with the component stack', () => {
+    render(
+      <ErrorBoundary>
+        <ThrowingComponent />
+      </ErrorBoundary>
+    );
+    expect(captureError).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'Test render error' }),
+      expect.objectContaining({ componentStack: expect.any(String) }),
+    );
   });
 
   it('catches render errors and shows fallback UI', () => {

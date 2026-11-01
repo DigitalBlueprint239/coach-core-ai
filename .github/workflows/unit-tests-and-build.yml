@@ -36,6 +36,8 @@ jobs:
         run: npm run typecheck
 
       - name: Production build
+        # Deliberately built without Sentry settings: proves the app builds and runs with monitoring off
+        # (contributor PRs, local dev). Deployed builds get Sentry in firebase-preview / deploy-* workflows.
         run: npm run build
 
   firestore-rules:

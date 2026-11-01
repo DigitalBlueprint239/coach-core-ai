@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig, transformWithOxc, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // The Smart Playbook v1 files are .js files that contain JSX (CRA allowed that). Vite only parses JSX in
 // .jsx/.tsx, so compile those .js files as JSX before Vite's own transform sees them.
@@ -18,8 +19,24 @@ function jsxInJsFiles(): Plugin {
 
 // Vite replaced Create React App on 2026-11-01. Two things are kept on purpose so hosting and repo variables
 // keep working unchanged: the REACT_APP_ env prefix and the build/ output folder (firebase.json hosting.public).
+// Source maps go to Sentry only when CI provides the auth token (a GitHub secret, never in the bundle).
+// After upload they are deleted from build/ so they are not served publicly.
+function sentrySourceMaps(): Plugin[] {
+  const authToken = process.env.SENTRY_AUTH_TOKEN;
+  if (!authToken) return [];
+  return sentryVitePlugin({
+    authToken,
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    release: { name: process.env.REACT_APP_RELEASE },
+    sourcemaps: { filesToDeleteAfterUpload: ['build/**/*.map'] },
+    telemetry: false,
+  }) as Plugin[];
+}
+
 export default defineConfig({
-  plugins: [jsxInJsFiles(), react()],
+  // The Sentry plugin must come last.
+  plugins: [jsxInJsFiles(), react(), ...sentrySourceMaps()],
   envPrefix: 'REACT_APP_',
   build: {
     outDir: 'build',
