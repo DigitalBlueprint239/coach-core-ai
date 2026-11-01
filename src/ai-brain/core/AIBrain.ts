@@ -2,6 +2,7 @@
 // Implements 8 core football coaching intelligence methods using the AI proxy
 
 import { AIProxyService } from '../../services/ai-proxy';
+import { firebaseIdToken } from '../../services/ai-auth';
 
 // ============================================
 // HELPER: Safe JSON parse from AI responses
@@ -54,6 +55,7 @@ export class CoachCoreAIBrain {
       endpoint: process.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
       timeout: 45000,
       retries: 3,
+      getIdToken: firebaseIdToken,
     });
   }
 
