@@ -62,4 +62,6 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COACH_CORE_AI }}
           projectId: coach-core-ai
+          # Preview channels belong to the main site; the staging site is deployed by deploy-staging.yml.
+          target: production
           expires: 7d
