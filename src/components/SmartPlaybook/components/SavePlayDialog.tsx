@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 interface SavePlayDialogProps {
   show: boolean;
@@ -25,6 +25,7 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
   onCancel,
   canSave
 }) => {
+  const fieldId = useId();
   if (!show) return null;
 
   return (
@@ -33,8 +34,9 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
         <h3 className="text-lg font-semibold mb-4">Save Play</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Play Name</label>
+            <label htmlFor={`${fieldId}-play-name`} className="block text-sm font-medium text-gray-700 mb-1">Play Name</label>
             <input
+              id={`${fieldId}-play-name`}
               type="text"
               value={playName}
               onChange={(e) => onPlayNameChange(e.target.value)}
@@ -44,8 +46,9 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phase</label>
+              <label htmlFor={`${fieldId}-phase`} className="block text-sm font-medium text-gray-700 mb-1">Phase</label>
               <select
+                id={`${fieldId}-phase`}
                 value={playPhase}
                 onChange={(e) => onPlayPhaseChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -56,8 +59,9 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <label htmlFor={`${fieldId}-type`} className="block text-sm font-medium text-gray-700 mb-1">Type</label>
               <select
+                id={`${fieldId}-type`}
                 value={playType}
                 onChange={(e) => onPlayTypeChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

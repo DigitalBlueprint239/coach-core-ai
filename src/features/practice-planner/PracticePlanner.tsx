@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { useAI } from '../../ai-brain/AIContext';
 
 const defaultGoals = [
@@ -10,6 +10,7 @@ const defaultGoals = [
 
 const PracticePlanner: React.FC = () => {
   const ai = useAI();
+  const fieldId = useId();
   const [duration, setDuration] = useState(90);
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -51,8 +52,9 @@ const PracticePlanner: React.FC = () => {
     <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md mt-6">
       <h2 className="text-2xl font-bold mb-4 text-center">Practice Plan Generator (AI)</h2>
       <div className="mb-4">
-        <label className="block mb-1 font-medium">Duration (minutes)</label>
+        <label htmlFor={`${fieldId}-duration`} className="block mb-1 font-medium">Duration (minutes)</label>
         <input
+          id={`${fieldId}-duration`}
           type="number"
           min={30}
           max={180}
@@ -62,8 +64,8 @@ const PracticePlanner: React.FC = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block mb-1 font-medium">Goals</label>
-        <div className="flex flex-wrap gap-2">
+        <span id={`${fieldId}-goals`} className="block mb-1 font-medium">Goals</span>
+        <div role="group" aria-labelledby={`${fieldId}-goals`} className="flex flex-wrap gap-2">
           {defaultGoals.map(goal => (
             <button
               key={goal.value}

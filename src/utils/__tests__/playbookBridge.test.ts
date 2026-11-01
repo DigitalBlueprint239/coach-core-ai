@@ -3,6 +3,7 @@
  * Ensures pixel↔yard conversions are accurate and no data is silently dropped.
  */
 
+import { readFileSync } from 'fs';
 import {
   pixelToYard,
   yardToPixel,
@@ -16,7 +17,7 @@ import {
   PX_PER_YARD_X,
   PX_PER_YARD_Y,
 } from '../playbookBridge';
-import type { Play, Player, Route, Point } from '../../services/firestore';
+import type { Play, Point } from '../../services/firestore';
 
 // ============================================
 // HELPERS
@@ -359,7 +360,8 @@ describe('no silent field drops', () => {
   it('preserves waypoint ordering after bridge', () => {
     const play = createFullyPopulatedPlay();
     const result = toEnginePlay(play);
-    const route = result.routes.find(r => r.id === 'r1')!;
+    const route = result.routes.find(r => r.id === 'r1');
+    expect(route).toBeDefined();
     // Original waypoints: (50,150) → (50,50) → (150,20)
     // After converting to yards, the order must be preserved
     // Verify by round-tripping: ordering should match original
@@ -433,8 +435,7 @@ describe('pixelDistanceInYards', () => {
 
 describe('bridge source code correctness', () => {
   it('bridge does not use hardcoded 53 (uses FIELD_WIDTH_YARDS constant)', () => {
-    const fs = require('fs');
-    const source = fs.readFileSync('src/utils/playbookBridge.ts', 'utf8');
+    const source = readFileSync('src/utils/playbookBridge.ts', 'utf8');
     // Check there's no bare "53" that isn't part of "53.333"
     const bareMatches = source.match(/[^0-9.]53[^0-9.]/g) || [];
     // Filter out string '53.333'

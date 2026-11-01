@@ -7,6 +7,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ErrorBoundary from '../ErrorBoundary';
+import { captureError } from '../../../monitoring/sentry';
+
+vi.mock('../../../monitoring/sentry', () => ({ captureError: vi.fn() }));
 
 // Component that throws on render
 const ThrowingComponent: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow = true }) => {
@@ -19,7 +22,7 @@ const ThrowingComponent: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow = 
 // Suppress console.error for error boundary tests
 const originalConsoleError = console.error;
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 afterAll(() => {
   console.error = originalConsoleError;
@@ -33,6 +36,18 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
     expect(screen.getByText('Safe content')).toBeInTheDocument();
+  });
+
+  it('reports the crash to monitoring with the component stack', () => {
+    render(
+      <ErrorBoundary>
+        <ThrowingComponent />
+      </ErrorBoundary>
+    );
+    expect(captureError).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'Test render error' }),
+      expect.objectContaining({ componentStack: expect.any(String) }),
+    );
   });
 
   it('catches render errors and shows fallback UI', () => {
@@ -63,19 +78,19 @@ describe('ErrorBoundary', () => {
   });
 
   it('does not show error details in production', () => {
-    const originalEnv = process.env.NODE_ENV;
-    // NODE_ENV is 'test', not 'development', so details section should not render
+    // Vitest runs with import.meta.env.DEV = true; stub a production build so the details section must not render.
+    vi.stubEnv('DEV', false);
     render(
       <ErrorBoundary>
         <ThrowingComponent />
       </ErrorBoundary>
     );
-    // In test environment (not 'development'), error details should not be shown
     expect(screen.queryByText('Error Details (Development Only)')).not.toBeInTheDocument();
+    vi.unstubAllEnvs();
   });
 
   it('reload button calls window.location.reload', () => {
-    const mockReload = jest.fn();
+    const mockReload = vi.fn();
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { reload: mockReload },

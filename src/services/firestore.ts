@@ -1,5 +1,5 @@
-import { doc, collection, addDoc, getDocs, getDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, connectFirestoreEmulator, enableNetwork, disableNetwork } from 'firebase/firestore';
-import { connectAuthEmulator, onAuthStateChanged, type User } from 'firebase/auth';
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { db, auth } from "../firebase";
 
 // Types
@@ -72,7 +72,7 @@ export interface Player {
 }
 
 // Firebase Emulators (for local development)
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   // connectAuthEmulator(auth, 'http://localhost:9099');
   // connectFirestoreEmulator(db, 'localhost', 8080);
 }

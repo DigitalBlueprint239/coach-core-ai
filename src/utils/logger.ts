@@ -3,9 +3,7 @@
  * console.log only fires in development; warn/error always fire.
  */
 
-const isDev = typeof process !== 'undefined'
-  ? process.env.NODE_ENV === 'development'
-  : false;
+const isDev = import.meta.env.DEV;
 
 export const logger = {
   log: (...args: unknown[]) => {

@@ -1,6 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* The components were written for Tailwind 3, where a bare `border` was gray-200. Tailwind 4 changed the
+   default to currentColor (black lines everywhere); this is the compatibility rule from the v4 upgrade guide. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 body {
   margin: 0;

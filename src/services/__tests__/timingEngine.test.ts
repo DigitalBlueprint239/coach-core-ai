@@ -1,4 +1,4 @@
-import { checkTiming, suggestDrop, QBDrop } from '../timingEngine';
+import { checkTiming, suggestDrop } from '../timingEngine';
 import { PX_PER_YARD_Y } from '../spacingEngine';
 import { Play, Player, Route } from '../firestore';
 

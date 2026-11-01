@@ -6,7 +6,6 @@
 import {
   PLAYER_POSITIONS,
   ROUTE_TYPES,
-  ROUTE_COLORS,
   hasDuplicateNumber,
   hasDuplicatePosition,
   createPlayer,

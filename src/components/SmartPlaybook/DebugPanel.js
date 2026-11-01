@@ -87,7 +87,7 @@ const DebugPanel = memo(({
     }
   }, [onTogglePassed]);
 
-  const safeResults = Array.isArray(results) ? results : [];
+  const safeResults = useMemo(() => (Array.isArray(results) ? results : []), [results]);
 
   // Memoized filtered results
   const filteredResults = useMemo(() => {
@@ -170,7 +170,7 @@ const DebugPanel = memo(({
             {results.length === 0 ? 'No tests available.' : 'No results to display.'}
           </div>
         ) : (
-          <ul role="list" aria-label="Test results">
+          <ul aria-label="Test results">
             {filteredResults.map((result, index) => {
               // Validate result object
               if (!validateResult(result)) {
@@ -182,7 +182,6 @@ const DebugPanel = memo(({
                 <li 
                   key={result.id || index} 
                   className="flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-50 transition-colors duration-150"
-                  role="listitem"
                 >
                   {/* Status Icon */}
                   <div className="flex-shrink-0">

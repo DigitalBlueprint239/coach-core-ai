@@ -5,8 +5,8 @@
  * - Player information display
  */
 
-import React, { memo, useState } from 'react';
-import { User, Edit3, Trash2, Save, X, AlertTriangle } from 'lucide-react';
+import React, { memo, useId, useState } from 'react';
+import { User, Edit3, Trash2, Save, X } from 'lucide-react';
 
 const POSITIONS = {
   OFFENSE: ['QB', 'RB', 'WR', 'TE', 'FB', 'LT', 'LG', 'C', 'RG', 'RT'],
@@ -19,6 +19,7 @@ const PlayerControls = memo(({
   onUpdatePlayer,
   onDeletePlayer
 }) => {
+  const fieldId = useId();
   const [isEditing, setIsEditing] = useState(false);
   const [editPosition, setEditPosition] = useState('');
   const [editNumber, setEditNumber] = useState('');
@@ -113,10 +114,11 @@ const PlayerControls = memo(({
       {isEditing ? (
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
+            <label htmlFor={`${fieldId}-position`} className="block text-xs font-medium text-gray-700 mb-1">
               Position
             </label>
             <select
+              id={`${fieldId}-position`}
               value={editPosition}
               onChange={(e) => setEditPosition(e.target.value)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -136,10 +138,11 @@ const PlayerControls = memo(({
           </div>
           
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
+            <label htmlFor={`${fieldId}-number`} className="block text-xs font-medium text-gray-700 mb-1">
               Number
             </label>
             <input
+              id={`${fieldId}-number`}
               type="number"
               min="0"
               max="99"

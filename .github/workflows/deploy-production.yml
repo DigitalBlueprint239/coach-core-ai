@@ -1,0 +1,95 @@
+name: Deploy production
+
+# Replaces the live site (https://coach-core-ai.web.app) with a commit that is already on the recovery
+# branch (normally the one running on staging). Run by hand only; the `production` environment requires the
+# owner's approval before the job starts (owner action O3). Rollback steps: docs/RELEASING.md.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Full commit SHA on recovery/coach-core-mvp-2026 to release (the one on staging)'
+        required: true
+        type: string
+      confirm:
+        description: 'Type replace-live-site to confirm'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - name: Check the request
+        # Inputs are passed through env, never interpolated into the script.
+        env:
+          REF: ${{ inputs.ref }}
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          if [ "$CONFIRM" != "replace-live-site" ]; then
+            echo "::error::Type replace-live-site in the confirm box to deploy production."; exit 1
+          fi
+          if ! printf '%s' "$REF" | grep -Eq '^[0-9a-f]{40}$'; then
+            echo "::error::ref must be a full 40-character commit SHA."; exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Check the commit is on the recovery branch
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          git fetch --no-tags origin recovery/coach-core-mvp-2026
+          if ! git merge-base --is-ancestor "$REF" origin/recovery/coach-core-mvp-2026; then
+            echo "::error::$REF is not on recovery/coach-core-mvp-2026. Only merged, staged commits can go live."; exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          REACT_APP_FIREBASE_API_KEY: ${{ vars.REACT_APP_FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ vars.REACT_APP_FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ vars.REACT_APP_FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ vars.REACT_APP_FIREBASE_APP_ID }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ vars.REACT_APP_FIREBASE_MEASUREMENT_ID }}
+          # Work-in-progress flags (REACT_APP_ENABLE_PLAYBOOK_V2, REACT_APP_ENABLE_CONTENT_REVIEW) stay unset:
+          # off in production.
+          REACT_APP_SENTRY_DSN: ${{ vars.REACT_APP_SENTRY_DSN }}
+          REACT_APP_DEPLOY_ENV: production
+          REACT_APP_RELEASE: ${{ inputs.ref }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+
+      - name: Deploy to the live site
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COACH_CORE_AI }}
+          projectId: coach-core-ai
+          target: production
+          channelId: live

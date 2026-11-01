@@ -2,11 +2,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   savePracticePlan,
-  getPracticePlans,
   updatePracticePlan,
   deletePracticePlan,
   savePlay,
-  getPlays,
   updatePlay as firestoreUpdatePlay,
   deletePlay,
   subscribeToPracticePlans,

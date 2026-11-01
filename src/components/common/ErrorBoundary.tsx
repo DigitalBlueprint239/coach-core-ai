@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { captureError } from '../../monitoring/sentry';
 
 interface Props {
   children?: ReactNode;
@@ -23,6 +24,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+    captureError(error, { componentStack: errorInfo.componentStack ?? '' });
     
     this.setState({
       error,
@@ -75,7 +77,7 @@ class ErrorBoundary extends Component<Props, State> {
           </div>
 
           {/* Development error details */}
-          {process.env.NODE_ENV === 'development' && this.state.error && (
+          {import.meta.env.DEV && this.state.error && (
             <details className="mt-6 bg-red-100 rounded-lg p-4">
               <summary className="cursor-pointer font-medium text-red-800 mb-2">
                 Error Details (Development Only)

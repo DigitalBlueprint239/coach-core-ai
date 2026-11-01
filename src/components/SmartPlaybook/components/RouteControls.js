@@ -5,8 +5,8 @@
  * - Finish or cancel route drawing
  */
 
-import React, { memo, useState } from 'react';
-import { Route, Palette, Play, Square, X } from 'lucide-react';
+import React, { memo, useId, useState } from 'react';
+import { Route, Play, X } from 'lucide-react';
 
 const ROUTE_TYPES = [
   { id: 'custom', name: 'Custom', description: 'Draw your own route' },
@@ -41,6 +41,7 @@ const RouteControls = memo(({
   onRouteTypeChange,
   onRouteColorChange
 }) => {
+  const fieldId = useId();
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   if (!selectedPlayer) {
@@ -116,10 +117,11 @@ const RouteControls = memo(({
 
       {/* Route Type Selection */}
       <div className="mb-4">
-        <label className="block text-xs font-medium text-gray-700 mb-2">
+        <label htmlFor={`${fieldId}-route-type`} className="block text-xs font-medium text-gray-700 mb-2">
           Route Type
         </label>
         <select
+          id={`${fieldId}-route-type`}
           value={routeType}
           onChange={(e) => onRouteTypeChange(e.target.value)}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -134,12 +136,15 @@ const RouteControls = memo(({
 
       {/* Route Color Selection */}
       <div className="mb-4">
-        <label className="block text-xs font-medium text-gray-700 mb-2">
+        <span className="block text-xs font-medium text-gray-700 mb-2">
           Route Color
-        </label>
+        </span>
         <div className="flex items-center gap-2">
-          <div
-            className="w-8 h-8 rounded-lg border-2 border-gray-300 cursor-pointer"
+          <button
+            type="button"
+            aria-label="Choose route color"
+            aria-expanded={showColorPicker}
+            className="w-8 h-8 p-0 rounded-lg border-2 border-gray-300 cursor-pointer"
             style={{ backgroundColor: routeColor }}
             onClick={() => setShowColorPicker(!showColorPicker)}
           />

@@ -31,13 +31,11 @@ jobs:
           cache: npm
 
       - name: Install
-        # Same as unit-tests-and-build.yml until @testing-library/react is upgraded for React 19.
-        run: npm ci --no-audit --no-fund --legacy-peer-deps
+        run: npm ci --no-audit --no-fund
 
       - name: Build
         run: npm run build
         env:
-          CI: 'false'
           # Firebase web config is public by design (security rules protect the data); kept as repo variables.
           REACT_APP_FIREBASE_API_KEY: ${{ vars.REACT_APP_FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.REACT_APP_FIREBASE_AUTH_DOMAIN }}
@@ -49,6 +47,14 @@ jobs:
           # Preview builds show work in progress: turn on the new Smart Playbook and the owner review screen.
           REACT_APP_ENABLE_PLAYBOOK_V2: 'true'
           REACT_APP_ENABLE_CONTENT_REVIEW: 'true'
+          # Crash reporting (off when the variable is unset). The DSN is public by design.
+          REACT_APP_SENTRY_DSN: ${{ vars.REACT_APP_SENTRY_DSN }}
+          REACT_APP_DEPLOY_ENV: preview
+          REACT_APP_RELEASE: ${{ github.event.pull_request.head.sha }}
+          # Source-map upload to Sentry; build-time only, never in the bundle. Skipped when the token is unset.
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
       - name: Deploy to a preview channel
         uses: FirebaseExtended/action-hosting-deploy@v0
@@ -56,4 +62,6 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COACH_CORE_AI }}
           projectId: coach-core-ai
+          # Preview channels belong to the main site; the staging site is deployed by deploy-staging.yml.
+          target: production
           expires: 7d

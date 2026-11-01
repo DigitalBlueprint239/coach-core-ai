@@ -5,8 +5,8 @@
  * - Play information management
  */
 
-import React, { memo } from 'react';
-import { Save, FolderOpen, FileText, Tag } from 'lucide-react';
+import React, { memo, useId } from 'react';
+import { Save, FolderOpen, FileText } from 'lucide-react';
 
 const SaveLoadPanel = memo(({
   currentPlayName,
@@ -19,6 +19,7 @@ const SaveLoadPanel = memo(({
   onLoad,
   canSave = false
 }) => {
+  const fieldId = useId();
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
       <h3 className="font-semibold text-gray-800 text-sm mb-3">Play Management</h3>
@@ -32,10 +33,11 @@ const SaveLoadPanel = memo(({
         
         <div className="space-y-2">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
+            <label htmlFor={`${fieldId}-play-name`} className="block text-xs font-medium text-gray-600 mb-1">
               Play Name
             </label>
             <input
+              id={`${fieldId}-play-name`}
               type="text"
               value={currentPlayName}
               onChange={(e) => onPlayNameChange(e.target.value)}
@@ -46,10 +48,11 @@ const SaveLoadPanel = memo(({
           
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label htmlFor={`${fieldId}-phase`} className="block text-xs font-medium text-gray-600 mb-1">
                 Phase
               </label>
               <select
+                id={`${fieldId}-phase`}
                 value={currentPlayPhase}
                 onChange={(e) => onPlayPhaseChange(e.target.value)}
                 className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -61,10 +64,11 @@ const SaveLoadPanel = memo(({
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label htmlFor={`${fieldId}-type`} className="block text-xs font-medium text-gray-600 mb-1">
                 Type
               </label>
               <select
+                id={`${fieldId}-type`}
                 value={currentPlayType}
                 onChange={(e) => onPlayTypeChange(e.target.value)}
                 className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"

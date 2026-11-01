@@ -41,7 +41,7 @@ export class AIProxyService {
     this.config = {
       timeout: 30000,
       retries: 3,
-      enabled: process.env.REACT_APP_AI_ENABLED === 'true',
+      enabled: import.meta.env.REACT_APP_AI_ENABLED === 'true',
       ...config
     };
   }

@@ -6,10 +6,11 @@
 
 import { CoachCoreAIBrain } from '../core/AIBrain';
 import { AIProxyService } from '../../services/ai-proxy';
+import type { Mock, MockedClass } from 'vitest';
 
-jest.mock('../../services/ai-proxy');
+vi.mock('../../services/ai-proxy');
 
-const MockedAIProxyService = AIProxyService as jest.MockedClass<typeof AIProxyService>;
+const MockedAIProxyService = AIProxyService as MockedClass<typeof AIProxyService>;
 
 // Helper to create a mock proxy response
 function mockProxySuccess(data: any) {
@@ -26,17 +27,18 @@ function mockProxyFailure(error = 'Proxy unavailable') {
 
 describe('CoachCoreAIBrain', () => {
   let brain: CoachCoreAIBrain;
-  let mockMakeRequest: jest.Mock;
+  let mockMakeRequest: Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Reset singleton so fresh instance is created
     (CoachCoreAIBrain as any).instance = undefined;
 
-    mockMakeRequest = jest.fn();
-    MockedAIProxyService.mockImplementation(() => ({
-      makeRequest: mockMakeRequest,
-    } as any));
+    mockMakeRequest = vi.fn();
+    // Vitest calls the implementation with `new`, so it must be a function, not an arrow.
+    MockedAIProxyService.mockImplementation(function () {
+      return { makeRequest: mockMakeRequest } as any;
+    });
 
     brain = CoachCoreAIBrain.getInstance();
   });

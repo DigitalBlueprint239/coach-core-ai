@@ -1,6 +1,6 @@
 name: Unit tests and build
 
-# Runs the app's Jest suite (react-scripts) and a production build on every PR into the recovery branch,
+# Runs the app's Vitest suite, a typecheck and a production build on every PR into the recovery branch,
 # so changes are verified on GitHub's machines rather than a developer laptop.
 on:
   pull_request:
@@ -27,17 +27,48 @@ jobs:
           cache: npm
 
       - name: Install
-        # --legacy-peer-deps mirrors how the app installs today: React 19 with @testing-library/react 13 (peer React 18).
-        # Remove it once @testing-library/react is upgraded to a React 19 release.
-        run: npm ci --no-audit --no-fund --legacy-peer-deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
 
       - name: Unit tests
-        run: npx react-scripts test --watchAll=false
-        env:
-          CI: 'true'
+        run: npm test
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Production build
-        # CI=false keeps existing lint warnings from failing the build; tighten once the warning backlog is cleared.
+        # Deliberately built without Sentry settings: proves the app builds and runs with monitoring off
+        # (contributor PRs, local dev). Deployed builds get Sentry in firebase-preview / deploy-* workflows.
         run: npm run build
-        env:
-          CI: 'false'
+
+  firestore-rules:
+    # Security rules tests against the Firestore emulator (needs Java). Never touches a live project:
+    # the demo-* project ID keeps the emulator fully offline.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Cache the Firestore emulator
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-${{ hashFiles('package-lock.json') }}
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Firestore rules tests
+        run: npm run test:rules

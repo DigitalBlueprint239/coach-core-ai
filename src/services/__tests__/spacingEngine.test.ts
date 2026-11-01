@@ -7,8 +7,6 @@ import {
   FIELD_WIDTH_YARDS,
   FIELD_LENGTH_YARDS,
   PX_PER_YARD_X,
-  PX_PER_YARD_Y,
-  SpacingViolation,
 } from '../spacingEngine';
 import { Play, Player, Route, Point } from '../firestore';
 
@@ -215,7 +213,6 @@ describe('checkSpacing - vertical crowding', () => {
   });
 
   it('should not flag route endpoints that are far apart', () => {
-    const tenYardsPx = 10 * PX_PER_YARD_X;
     const play = makePlay({
       players: [
         makePlayer({ id: 'wr1', position: 'WR', number: 1, x: 100, y: 150 }),

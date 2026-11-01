@@ -97,7 +97,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.error('Error caught by boundary:', error, errorInfo);
     }
   }
@@ -125,9 +125,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           timestamp: Date.now()
         },
         appInfo: {
-          version: process.env.REACT_APP_VERSION || '1.0.0',
-          environment: process.env.NODE_ENV || 'development',
-          buildNumber: process.env.REACT_APP_BUILD_NUMBER
+          version: import.meta.env.REACT_APP_VERSION || '1.0.0',
+          environment: import.meta.env.MODE,
+          buildNumber: import.meta.env.REACT_APP_BUILD_NUMBER
         },
         context: {
           componentName: this.getComponentName(errorInfo.componentStack || ''),
@@ -436,7 +436,7 @@ class ErrorReportingService {
   private isProcessing: boolean = false;
 
   constructor() {
-    this.endpoint = process.env.REACT_APP_ERROR_REPORTING_ENDPOINT || '/api/errors';
+    this.endpoint = import.meta.env.REACT_APP_ERROR_REPORTING_ENDPOINT || '/api/errors';
   }
 
   async reportError(errorReport: ErrorReport): Promise<void> {

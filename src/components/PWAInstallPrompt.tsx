@@ -150,12 +150,6 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
     onDismiss?.();
   };
 
-  const handleShowPrompt = () => {
-    if (deferredPrompt && !isInstalled) {
-      setIsVisible(true);
-    }
-  };
-
   // ============================================
   // RENDERING
   // ============================================
@@ -474,30 +468,23 @@ export const usePWAInstall = () => {
 // PWA REGISTRATION UTILITY
 // ============================================
 
-export const registerServiceWorker = async () => {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service Worker registered successfully:', registration);
-      
-      // Check for updates
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        if (newWorker) {
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // New content is available
-              console.log('New content is available');
-            }
-          });
-        }
-      });
-
-      return registration;
-    } catch (error) {
-      console.error('Service Worker registration failed:', error);
-      return null;
+// The old cache-first offline worker precached files that no longer exist and could pin coaches to a stale
+// build. It is retired: this removes any worker a returning browser still has, and registers nothing.
+// (public/sw.js is a kill-switch for browsers that fetch the worker before this code runs.)
+// Offline mode returns later with a generated worker.
+export const registerServiceWorker = async (): Promise<void> => {
+  const container = typeof navigator !== 'undefined' ? navigator.serviceWorker : undefined;
+  if (!container || typeof container.getRegistrations !== 'function') return;
+  try {
+    const registrations = await container.getRegistrations();
+    await Promise.all(registrations.map((registration) => registration.unregister()));
+    // Unregistering does not clear Cache Storage, and the kill-switch worker may never get to activate once
+    // its registration is gone, so remove the old worker's caches here as well. The app itself uses none.
+    if (registrations.length > 0 && typeof caches !== 'undefined') {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
     }
+  } catch (error) {
+    console.warn('Could not remove the old service worker:', error);
   }
-  return null;
 }; 

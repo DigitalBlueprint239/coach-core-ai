@@ -52,7 +52,7 @@ export class CoachCoreAIBrain {
 
   private constructor() {
     this.proxy = new AIProxyService({
-      endpoint: process.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
+      endpoint: import.meta.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
       timeout: 45000,
       retries: 3,
       getIdToken: firebaseIdToken,
@@ -1045,7 +1045,7 @@ The tone should be authentic, not generic motivational poster material. Ground i
     };
   }
 
-  private fallbackCoverageRecommendation(situation: any): {
+  private fallbackCoverageRecommendation(_situation: any): {
     likelyCoverage: string;
     coverageDescription: string;
     routeCombinations: Array<{ name: string; routes: string[]; stressPoint: string; confidence: number }>;

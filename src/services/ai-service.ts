@@ -1,7 +1,7 @@
 // src/services/ai-service.ts
 import { 
-  User, Team, Player, PracticePlan, Play, 
-  AISuggestion, AIConversation, AIInsight,
+  User,
+  AISuggestion, AIConversation,
   GameContext, TeamContext, PlayerContext
 } from '../types/firestore-schema';
 
@@ -650,7 +650,7 @@ Format the response as a JSON object with the structure:
   // ============================================
 
   private async makeAIRequest(request: AIRequest): Promise<string> {
-    const { prompt, context, options } = request;
+    const { prompt, options } = request;
     
     const messages = [
       {
@@ -798,7 +798,7 @@ Format the response as a JSON object with the structure:
 // REACT HOOKS
 // ============================================
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 
 export const useAIService = (config: AIServiceConfig) => {
   const [service] = useState(() => new AIService(config));
