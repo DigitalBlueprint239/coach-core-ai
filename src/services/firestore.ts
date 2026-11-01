@@ -72,7 +72,7 @@ export interface Player {
 }
 
 // Firebase Emulators (for local development)
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   // connectAuthEmulator(auth, 'http://localhost:9099');
   // connectFirestoreEmulator(db, 'localhost', 8080);
 }

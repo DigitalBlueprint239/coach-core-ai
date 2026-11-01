@@ -31,13 +31,11 @@ jobs:
           cache: npm
 
       - name: Install
-        # Same as unit-tests-and-build.yml until @testing-library/react is upgraded for React 19.
-        run: npm ci --no-audit --no-fund --legacy-peer-deps
+        run: npm ci --no-audit --no-fund
 
       - name: Build
         run: npm run build
         env:
-          CI: 'false'
           # Firebase web config is public by design (security rules protect the data); kept as repo variables.
           REACT_APP_FIREBASE_API_KEY: ${{ vars.REACT_APP_FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.REACT_APP_FIREBASE_AUTH_DOMAIN }}

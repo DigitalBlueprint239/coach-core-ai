@@ -6,39 +6,39 @@
 describe('Firestore Service — offline queue edge cases', () => {
   let addToOfflineQueue: (op: any) => void;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     localStorage.clear();
-    jest.resetModules();
-    jest.mock('firebase/app', () => ({
-      initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
-      getApps: jest.fn(() => []),
-      getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+    vi.resetModules();
+    vi.doMock('firebase/app', () => ({
+      initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+      getApps: vi.fn(() => []),
+      getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
     }));
-    jest.mock('firebase/auth', () => ({
-      getAuth: jest.fn(() => ({ currentUser: null, app: {} })),
-      onAuthStateChanged: jest.fn((_auth: any, cb: (u: null) => void) => { cb(null); return jest.fn(); }),
+    vi.doMock('firebase/auth', () => ({
+      getAuth: vi.fn(() => ({ currentUser: null, app: {} })),
+      onAuthStateChanged: vi.fn((_auth: any, cb: (u: null) => void) => { cb(null); return vi.fn(); }),
     }));
-    jest.mock('firebase/firestore', () => ({
-      getFirestore: jest.fn(() => ({})),
-      collection: jest.fn(),
-      doc: jest.fn(),
-      addDoc: jest.fn(() => Promise.resolve({ id: 'mock-id' })),
-      getDocs: jest.fn(() => Promise.resolve({ docs: [] })),
-      getDoc: jest.fn(),
-      updateDoc: jest.fn(() => Promise.resolve()),
-      deleteDoc: jest.fn(() => Promise.resolve()),
-      query: jest.fn((...a: any[]) => a[0]),
-      where: jest.fn(),
-      orderBy: jest.fn(),
-      onSnapshot: jest.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return jest.fn(); }),
-      connectFirestoreEmulator: jest.fn(),
-      enableNetwork: jest.fn(() => Promise.resolve()),
-      disableNetwork: jest.fn(() => Promise.resolve()),
+    vi.doMock('firebase/firestore', () => ({
+      getFirestore: vi.fn(() => ({})),
+      collection: vi.fn(),
+      doc: vi.fn(),
+      addDoc: vi.fn(() => Promise.resolve({ id: 'mock-id' })),
+      getDocs: vi.fn(() => Promise.resolve({ docs: [] })),
+      getDoc: vi.fn(),
+      updateDoc: vi.fn(() => Promise.resolve()),
+      deleteDoc: vi.fn(() => Promise.resolve()),
+      query: vi.fn((...a: any[]) => a[0]),
+      where: vi.fn(),
+      orderBy: vi.fn(),
+      onSnapshot: vi.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return vi.fn(); }),
+      connectFirestoreEmulator: vi.fn(),
+      enableNetwork: vi.fn(() => Promise.resolve()),
+      disableNetwork: vi.fn(() => Promise.resolve()),
     }));
-    jest.mock('firebase/storage', () => ({ getStorage: jest.fn(() => ({})) }));
-    jest.mock('firebase/analytics', () => ({ getAnalytics: jest.fn(() => ({})) }));
+    vi.doMock('firebase/storage', () => ({ getStorage: vi.fn(() => ({})) }));
+    vi.doMock('firebase/analytics', () => ({ getAnalytics: vi.fn(() => ({})) }));
 
-    const mod = require('../firestore');
+    const mod = await import('../firestore');
     addToOfflineQueue = mod.addToOfflineQueue;
   });
 
@@ -94,38 +94,38 @@ describe('Firestore Service — auth edge cases', () => {
   let getCurrentUser: () => any;
   let waitForAuth: () => Promise<any>;
 
-  beforeEach(() => {
-    jest.resetModules();
-    jest.mock('firebase/app', () => ({
-      initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
-      getApps: jest.fn(() => []),
-      getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.doMock('firebase/app', () => ({
+      initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+      getApps: vi.fn(() => []),
+      getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
     }));
-    jest.mock('firebase/auth', () => ({
-      getAuth: jest.fn(() => ({ currentUser: null })),
-      onAuthStateChanged: jest.fn((_auth: any, cb: (u: null) => void) => { cb(null); return jest.fn(); }),
+    vi.doMock('firebase/auth', () => ({
+      getAuth: vi.fn(() => ({ currentUser: null })),
+      onAuthStateChanged: vi.fn((_auth: any, cb: (u: null) => void) => { cb(null); return vi.fn(); }),
     }));
-    jest.mock('firebase/firestore', () => ({
-      getFirestore: jest.fn(() => ({})),
-      collection: jest.fn(),
-      doc: jest.fn(),
-      addDoc: jest.fn(() => Promise.resolve({ id: 'id' })),
-      getDocs: jest.fn(() => Promise.resolve({ docs: [] })),
-      getDoc: jest.fn(),
-      updateDoc: jest.fn(() => Promise.resolve()),
-      deleteDoc: jest.fn(() => Promise.resolve()),
-      query: jest.fn((...a: any[]) => a[0]),
-      where: jest.fn(),
-      orderBy: jest.fn(),
-      onSnapshot: jest.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return jest.fn(); }),
-      connectFirestoreEmulator: jest.fn(),
-      enableNetwork: jest.fn(),
-      disableNetwork: jest.fn(),
+    vi.doMock('firebase/firestore', () => ({
+      getFirestore: vi.fn(() => ({})),
+      collection: vi.fn(),
+      doc: vi.fn(),
+      addDoc: vi.fn(() => Promise.resolve({ id: 'id' })),
+      getDocs: vi.fn(() => Promise.resolve({ docs: [] })),
+      getDoc: vi.fn(),
+      updateDoc: vi.fn(() => Promise.resolve()),
+      deleteDoc: vi.fn(() => Promise.resolve()),
+      query: vi.fn((...a: any[]) => a[0]),
+      where: vi.fn(),
+      orderBy: vi.fn(),
+      onSnapshot: vi.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return vi.fn(); }),
+      connectFirestoreEmulator: vi.fn(),
+      enableNetwork: vi.fn(),
+      disableNetwork: vi.fn(),
     }));
-    jest.mock('firebase/storage', () => ({ getStorage: jest.fn(() => ({})) }));
-    jest.mock('firebase/analytics', () => ({ getAnalytics: jest.fn(() => ({})) }));
+    vi.doMock('firebase/storage', () => ({ getStorage: vi.fn(() => ({})) }));
+    vi.doMock('firebase/analytics', () => ({ getAnalytics: vi.fn(() => ({})) }));
 
-    const mod = require('../firestore');
+    const mod = await import('../firestore');
     getCurrentUser = mod.getCurrentUser;
     waitForAuth = mod.waitForAuth;
   });
@@ -140,7 +140,7 @@ describe('Firestore Service — auth edge cases', () => {
   });
 
   it('CRUD functions require authentication', async () => {
-    const mod = require('../firestore');
+    const mod = await import('../firestore');
     await expect(mod.savePracticePlan('team1', {
       name: 'Test',
       date: '2024-01-01',
@@ -152,7 +152,7 @@ describe('Firestore Service — auth edge cases', () => {
   });
 
   it('getPlays rejects without auth', async () => {
-    const mod = require('../firestore');
+    const mod = await import('../firestore');
     await expect(mod.getPlays('team1')).rejects.toThrow('No authenticated user');
   });
 });
@@ -160,53 +160,53 @@ describe('Firestore Service — auth edge cases', () => {
 describe('Firestore Service — subscription functions', () => {
   let mod: any;
 
-  beforeEach(() => {
-    jest.resetModules();
-    jest.mock('firebase/app', () => ({
-      initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
-      getApps: jest.fn(() => []),
-      getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.doMock('firebase/app', () => ({
+      initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+      getApps: vi.fn(() => []),
+      getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
     }));
-    jest.mock('firebase/auth', () => ({
-      getAuth: jest.fn(() => ({ currentUser: null })),
-      onAuthStateChanged: jest.fn((_auth: any, cb: (u: null) => void) => { cb(null); return jest.fn(); }),
+    vi.doMock('firebase/auth', () => ({
+      getAuth: vi.fn(() => ({ currentUser: null })),
+      onAuthStateChanged: vi.fn((_auth: any, cb: (u: null) => void) => { cb(null); return vi.fn(); }),
     }));
-    jest.mock('firebase/firestore', () => {
-      const mockUnsub = jest.fn();
+    vi.doMock('firebase/firestore', () => {
+      const mockUnsub = vi.fn();
       return {
-        getFirestore: jest.fn(() => ({})),
-        collection: jest.fn((_db: any, name: string) => ({ name })),
-        doc: jest.fn(),
-        addDoc: jest.fn(() => Promise.resolve({ id: 'id' })),
-        getDocs: jest.fn(() => Promise.resolve({ docs: [] })),
-        getDoc: jest.fn(),
-        updateDoc: jest.fn(() => Promise.resolve()),
-        deleteDoc: jest.fn(() => Promise.resolve()),
-        query: jest.fn((...a: any[]) => a[0]),
-        where: jest.fn(),
-        orderBy: jest.fn(),
-        onSnapshot: jest.fn((_q: any, cb: (s: any) => void) => {
+        getFirestore: vi.fn(() => ({})),
+        collection: vi.fn((_db: any, name: string) => ({ name })),
+        doc: vi.fn(),
+        addDoc: vi.fn(() => Promise.resolve({ id: 'id' })),
+        getDocs: vi.fn(() => Promise.resolve({ docs: [] })),
+        getDoc: vi.fn(),
+        updateDoc: vi.fn(() => Promise.resolve()),
+        deleteDoc: vi.fn(() => Promise.resolve()),
+        query: vi.fn((...a: any[]) => a[0]),
+        where: vi.fn(),
+        orderBy: vi.fn(),
+        onSnapshot: vi.fn((_q: any, cb: (s: any) => void) => {
           cb({ docs: [{ id: 'doc1', data: () => ({ name: 'P1', teamId: 't1' }) }] });
           return mockUnsub;
         }),
-        connectFirestoreEmulator: jest.fn(),
-        enableNetwork: jest.fn(),
-        disableNetwork: jest.fn(),
+        connectFirestoreEmulator: vi.fn(),
+        enableNetwork: vi.fn(),
+        disableNetwork: vi.fn(),
       };
     });
-    jest.mock('firebase/storage', () => ({ getStorage: jest.fn(() => ({})) }));
-    jest.mock('firebase/analytics', () => ({ getAnalytics: jest.fn(() => ({})) }));
+    vi.doMock('firebase/storage', () => ({ getStorage: vi.fn(() => ({})) }));
+    vi.doMock('firebase/analytics', () => ({ getAnalytics: vi.fn(() => ({})) }));
 
-    mod = require('../firestore');
+    mod = await import('../firestore');
   });
 
   it('subscribeToPracticePlans returns an unsubscribe function', () => {
-    const unsub = mod.subscribeToPracticePlans('team1', jest.fn());
+    const unsub = mod.subscribeToPracticePlans('team1', vi.fn());
     expect(typeof unsub).toBe('function');
   });
 
   it('subscribeToPlays calls callback with initial data', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     mod.subscribeToPlays('team1', callback);
     expect(callback).toHaveBeenCalledTimes(1);
     expect(callback).toHaveBeenCalledWith(

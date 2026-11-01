@@ -6,13 +6,13 @@
 import { AIProxyService, AIProxyRequest } from '../ai-proxy';
 
 // Mock fetch globally
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // Mock AbortSignal.timeout (not available in JSDOM)
 if (!AbortSignal.timeout) {
   Object.defineProperty(AbortSignal, 'timeout', {
-    value: jest.fn((_ms: number) => new AbortController().signal),
+    value: vi.fn((_ms: number) => new AbortController().signal),
     writable: true,
   });
 }
@@ -185,15 +185,13 @@ describe('AIProxyService — locked-down path', () => {
   });
 
   it('is off unless REACT_APP_AI_ENABLED is "true"', async () => {
-    const before = process.env.REACT_APP_AI_ENABLED;
-    delete process.env.REACT_APP_AI_ENABLED;
+    vi.stubEnv('REACT_APP_AI_ENABLED', undefined);
     try {
       const r = await new AIProxyService({ ...ok, getIdToken: async () => 'id-token' }).makeRequest(request);
       expect(r.error).toBe('AI features are turned off.');
       expect(mockFetch).not.toHaveBeenCalled();
     } finally {
-      if (before === undefined) delete process.env.REACT_APP_AI_ENABLED;
-      else process.env.REACT_APP_AI_ENABLED = before;
+      vi.unstubAllEnvs();
     }
   });
 
@@ -205,14 +203,14 @@ describe('AIProxyService — locked-down path', () => {
   });
 
   it("sends the coach's Firebase ID token, never a shared static token", async () => {
-    process.env.REACT_APP_AI_PROXY_TOKEN = 'leaked-static-token';
+    vi.stubEnv('REACT_APP_AI_PROXY_TOKEN', 'leaked-static-token');
     try {
       mockFetch.mockResolvedValueOnce(createSuccessResponse({}));
       await new AIProxyService({ ...ok, enabled: true, getIdToken: async () => 'id-token-123' }).makeRequest(request);
       const headers = mockFetch.mock.calls[0][1].headers;
       expect(headers.Authorization).toBe('Bearer id-token-123');
     } finally {
-      delete process.env.REACT_APP_AI_PROXY_TOKEN;
+      vi.unstubAllEnvs();
     }
   });
 });

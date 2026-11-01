@@ -3,6 +3,7 @@
  * Ensures pixel↔yard conversions are accurate and no data is silently dropped.
  */
 
+import { readFileSync } from 'fs';
 import {
   pixelToYard,
   yardToPixel,
@@ -433,8 +434,7 @@ describe('pixelDistanceInYards', () => {
 
 describe('bridge source code correctness', () => {
   it('bridge does not use hardcoded 53 (uses FIELD_WIDTH_YARDS constant)', () => {
-    const fs = require('fs');
-    const source = fs.readFileSync('src/utils/playbookBridge.ts', 'utf8');
+    const source = readFileSync('src/utils/playbookBridge.ts', 'utf8');
     // Check there's no bare "53" that isn't part of "53.333"
     const bareMatches = source.match(/[^0-9.]53[^0-9.]/g) || [];
     // Filter out string '53.333'

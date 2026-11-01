@@ -19,7 +19,7 @@ const ThrowingComponent: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow = 
 // Suppress console.error for error boundary tests
 const originalConsoleError = console.error;
 beforeAll(() => {
-  console.error = jest.fn();
+  console.error = vi.fn();
 });
 afterAll(() => {
   console.error = originalConsoleError;
@@ -63,19 +63,19 @@ describe('ErrorBoundary', () => {
   });
 
   it('does not show error details in production', () => {
-    const originalEnv = process.env.NODE_ENV;
-    // NODE_ENV is 'test', not 'development', so details section should not render
+    // Vitest runs with import.meta.env.DEV = true; stub a production build so the details section must not render.
+    vi.stubEnv('DEV', false);
     render(
       <ErrorBoundary>
         <ThrowingComponent />
       </ErrorBoundary>
     );
-    // In test environment (not 'development'), error details should not be shown
     expect(screen.queryByText('Error Details (Development Only)')).not.toBeInTheDocument();
+    vi.unstubAllEnvs();
   });
 
   it('reload button calls window.location.reload', () => {
-    const mockReload = jest.fn();
+    const mockReload = vi.fn();
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { reload: mockReload },

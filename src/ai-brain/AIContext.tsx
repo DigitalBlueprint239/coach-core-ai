@@ -93,7 +93,7 @@ export const AIProvider: React.FC<AIProviderProps> = ({
 
   // Initialize proxy configuration
   const proxyConfig: AIProxyConfig = {
-    endpoint: process.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
+    endpoint: import.meta.env.REACT_APP_AI_PROXY_ENDPOINT || '/api/ai',
     timeout: 30000,
     retries: 3,
     getIdToken: firebaseIdToken,

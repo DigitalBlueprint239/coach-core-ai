@@ -56,7 +56,7 @@ describe('Field memoization', () => {
   });
 
   it('re-renders when players array changes', () => {
-    const drawSpy = jest.spyOn(HTMLCanvasElement.prototype, 'getContext');
+    const drawSpy = vi.spyOn(HTMLCanvasElement.prototype, 'getContext');
 
     const { rerender } = render(<Field {...baseProps} />);
     const callsBefore = drawSpy.mock.calls.length;

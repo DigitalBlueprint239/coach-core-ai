@@ -1,61 +1,62 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 
 // Mock firebase/app
-jest.mock('firebase/app', () => ({
-  initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
-  getApps: jest.fn(() => []),
-  getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+vi.mock('firebase/app', () => ({
+  initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+  getApps: vi.fn(() => []),
+  getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
 }));
 
 // Mock firebase/auth
-jest.mock('firebase/auth', () => ({
-  getAuth: jest.fn(() => ({ currentUser: null, app: {} })),
-  onAuthStateChanged: jest.fn((_auth: any, callback: (user: null) => void) => {
+vi.mock('firebase/auth', () => ({
+  getAuth: vi.fn(() => ({ currentUser: null, app: {} })),
+  onAuthStateChanged: vi.fn((_auth: any, callback: (user: null) => void) => {
     callback(null);
-    return jest.fn(); // unsubscribe
+    return vi.fn(); // unsubscribe
   }),
-  signInWithEmailAndPassword: jest.fn(),
-  createUserWithEmailAndPassword: jest.fn(),
-  signOut: jest.fn(),
-  connectAuthEmulator: jest.fn(),
-  GoogleAuthProvider: jest.fn(),
-  signInWithPopup: jest.fn(),
+  signInWithEmailAndPassword: vi.fn(),
+  createUserWithEmailAndPassword: vi.fn(),
+  signOut: vi.fn(),
+  connectAuthEmulator: vi.fn(),
+  GoogleAuthProvider: vi.fn(),
+  signInWithPopup: vi.fn(),
 }));
 
 // Mock firebase/firestore
-jest.mock('firebase/firestore', () => ({
-  getFirestore: jest.fn(() => ({})),
-  collection: jest.fn((_db: any, path: string) => ({ path })),
-  doc: jest.fn((_db: any, path: string, id: string) => ({ path, id })),
-  addDoc: jest.fn(() => Promise.resolve({ id: 'mock-doc-id' })),
-  getDocs: jest.fn(() => Promise.resolve({ docs: [], forEach: jest.fn() })),
-  getDoc: jest.fn(() => Promise.resolve({ exists: () => false, data: () => null, id: 'mock-id' })),
-  updateDoc: jest.fn(() => Promise.resolve()),
-  deleteDoc: jest.fn(() => Promise.resolve()),
-  query: jest.fn((...args: any[]) => args[0]),
-  where: jest.fn((_field: string, _op: string, _val: any) => ({})),
-  orderBy: jest.fn((_field: string) => ({})),
-  onSnapshot: jest.fn((_q: any, callback: (snap: any) => void) => {
+vi.mock('firebase/firestore', () => ({
+  getFirestore: vi.fn(() => ({})),
+  collection: vi.fn((_db: any, path: string) => ({ path })),
+  doc: vi.fn((_db: any, path: string, id: string) => ({ path, id })),
+  addDoc: vi.fn(() => Promise.resolve({ id: 'mock-doc-id' })),
+  getDocs: vi.fn(() => Promise.resolve({ docs: [], forEach: vi.fn() })),
+  getDoc: vi.fn(() => Promise.resolve({ exists: () => false, data: () => null, id: 'mock-id' })),
+  updateDoc: vi.fn(() => Promise.resolve()),
+  deleteDoc: vi.fn(() => Promise.resolve()),
+  query: vi.fn((...args: any[]) => args[0]),
+  where: vi.fn((_field: string, _op: string, _val: any) => ({})),
+  orderBy: vi.fn((_field: string) => ({})),
+  onSnapshot: vi.fn((_q: any, callback: (snap: any) => void) => {
     callback({ docs: [] });
-    return jest.fn(); // unsubscribe
+    return vi.fn(); // unsubscribe
   }),
-  connectFirestoreEmulator: jest.fn(),
-  enableNetwork: jest.fn(() => Promise.resolve()),
-  disableNetwork: jest.fn(() => Promise.resolve()),
+  connectFirestoreEmulator: vi.fn(),
+  enableNetwork: vi.fn(() => Promise.resolve()),
+  disableNetwork: vi.fn(() => Promise.resolve()),
 }));
 
 // Mock firebase/storage
-jest.mock('firebase/storage', () => ({
-  getStorage: jest.fn(() => ({})),
-  ref: jest.fn(),
-  uploadBytes: jest.fn(),
-  getDownloadURL: jest.fn(),
+vi.mock('firebase/storage', () => ({
+  getStorage: vi.fn(() => ({})),
+  ref: vi.fn(),
+  uploadBytes: vi.fn(),
+  getDownloadURL: vi.fn(),
 }));
 
 // Mock firebase/analytics
-jest.mock('firebase/analytics', () => ({
-  getAnalytics: jest.fn(() => ({})),
-  logEvent: jest.fn(),
+vi.mock('firebase/analytics', () => ({
+  getAnalytics: vi.fn(() => ({})),
+  logEvent: vi.fn(),
 }));
 
 // Mock navigator.onLine

@@ -8,42 +8,42 @@
 describe('Firestore Service — addToOfflineQueue', () => {
   let addToOfflineQueue: (op: any) => void;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Reset localStorage before each test
     localStorage.clear();
     // Re-import to get fresh module state
-    jest.resetModules();
+    vi.resetModules();
     // Re-apply firebase mocks after reset
-    jest.mock('firebase/app', () => ({
-      initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
-      getApps: jest.fn(() => []),
-      getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+    vi.doMock('firebase/app', () => ({
+      initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+      getApps: vi.fn(() => []),
+      getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
     }));
-    jest.mock('firebase/auth', () => ({
-      getAuth: jest.fn(() => ({ currentUser: null, app: {} })),
-      onAuthStateChanged: jest.fn((_auth: any, cb: (u: null) => void) => { cb(null); return jest.fn(); }),
+    vi.doMock('firebase/auth', () => ({
+      getAuth: vi.fn(() => ({ currentUser: null, app: {} })),
+      onAuthStateChanged: vi.fn((_auth: any, cb: (u: null) => void) => { cb(null); return vi.fn(); }),
     }));
-    jest.mock('firebase/firestore', () => ({
-      getFirestore: jest.fn(() => ({})),
-      collection: jest.fn(),
-      doc: jest.fn(),
-      addDoc: jest.fn(() => Promise.resolve({ id: 'mock-id' })),
-      getDocs: jest.fn(() => Promise.resolve({ docs: [] })),
-      getDoc: jest.fn(),
-      updateDoc: jest.fn(() => Promise.resolve()),
-      deleteDoc: jest.fn(() => Promise.resolve()),
-      query: jest.fn((...a: any[]) => a[0]),
-      where: jest.fn(),
-      orderBy: jest.fn(),
-      onSnapshot: jest.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return jest.fn(); }),
-      connectFirestoreEmulator: jest.fn(),
-      enableNetwork: jest.fn(() => Promise.resolve()),
-      disableNetwork: jest.fn(() => Promise.resolve()),
+    vi.doMock('firebase/firestore', () => ({
+      getFirestore: vi.fn(() => ({})),
+      collection: vi.fn(),
+      doc: vi.fn(),
+      addDoc: vi.fn(() => Promise.resolve({ id: 'mock-id' })),
+      getDocs: vi.fn(() => Promise.resolve({ docs: [] })),
+      getDoc: vi.fn(),
+      updateDoc: vi.fn(() => Promise.resolve()),
+      deleteDoc: vi.fn(() => Promise.resolve()),
+      query: vi.fn((...a: any[]) => a[0]),
+      where: vi.fn(),
+      orderBy: vi.fn(),
+      onSnapshot: vi.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return vi.fn(); }),
+      connectFirestoreEmulator: vi.fn(),
+      enableNetwork: vi.fn(() => Promise.resolve()),
+      disableNetwork: vi.fn(() => Promise.resolve()),
     }));
-    jest.mock('firebase/storage', () => ({ getStorage: jest.fn(() => ({})) }));
-    jest.mock('firebase/analytics', () => ({ getAnalytics: jest.fn(() => ({})) }));
+    vi.doMock('firebase/storage', () => ({ getStorage: vi.fn(() => ({})) }));
+    vi.doMock('firebase/analytics', () => ({ getAnalytics: vi.fn(() => ({})) }));
 
-    const mod = require('../firestore');
+    const mod = await import('../firestore');
     addToOfflineQueue = mod.addToOfflineQueue;
   });
 
@@ -88,42 +88,42 @@ describe('Firestore Service — addToOfflineQueue', () => {
 describe('Firestore Service — exports', () => {
   let mod: any;
 
-  beforeEach(() => {
-    jest.resetModules();
-    jest.mock('firebase/app', () => ({
-      initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
-      getApps: jest.fn(() => []),
-      getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.doMock('firebase/app', () => ({
+      initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+      getApps: vi.fn(() => []),
+      getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
     }));
-    jest.mock('firebase/auth', () => ({
-      getAuth: jest.fn(() => ({ currentUser: null })),
-      onAuthStateChanged: jest.fn((_auth: any, cb: (u: null) => void) => { cb(null); return jest.fn(); }),
+    vi.doMock('firebase/auth', () => ({
+      getAuth: vi.fn(() => ({ currentUser: null })),
+      onAuthStateChanged: vi.fn((_auth: any, cb: (u: null) => void) => { cb(null); return vi.fn(); }),
     }));
-    jest.mock('firebase/firestore', () => ({
-      getFirestore: jest.fn(() => ({})),
-      collection: jest.fn((_db: any, name: string) => ({ name })),
-      doc: jest.fn(),
-      addDoc: jest.fn(() => Promise.resolve({ id: 'new-doc-id' })),
-      getDocs: jest.fn(() => Promise.resolve({
+    vi.doMock('firebase/firestore', () => ({
+      getFirestore: vi.fn(() => ({})),
+      collection: vi.fn((_db: any, name: string) => ({ name })),
+      doc: vi.fn(),
+      addDoc: vi.fn(() => Promise.resolve({ id: 'new-doc-id' })),
+      getDocs: vi.fn(() => Promise.resolve({
         docs: [
           { id: 'doc1', data: () => ({ name: 'Test Plan', teamId: 'team1' }) },
         ]
       })),
-      getDoc: jest.fn(),
-      updateDoc: jest.fn(() => Promise.resolve()),
-      deleteDoc: jest.fn(() => Promise.resolve()),
-      query: jest.fn((...a: any[]) => a[0]),
-      where: jest.fn(),
-      orderBy: jest.fn(),
-      onSnapshot: jest.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return jest.fn(); }),
-      connectFirestoreEmulator: jest.fn(),
-      enableNetwork: jest.fn(),
-      disableNetwork: jest.fn(),
+      getDoc: vi.fn(),
+      updateDoc: vi.fn(() => Promise.resolve()),
+      deleteDoc: vi.fn(() => Promise.resolve()),
+      query: vi.fn((...a: any[]) => a[0]),
+      where: vi.fn(),
+      orderBy: vi.fn(),
+      onSnapshot: vi.fn((_q: any, cb: (s: any) => void) => { cb({ docs: [] }); return vi.fn(); }),
+      connectFirestoreEmulator: vi.fn(),
+      enableNetwork: vi.fn(),
+      disableNetwork: vi.fn(),
     }));
-    jest.mock('firebase/storage', () => ({ getStorage: jest.fn(() => ({})) }));
-    jest.mock('firebase/analytics', () => ({ getAnalytics: jest.fn(() => ({})) }));
+    vi.doMock('firebase/storage', () => ({ getStorage: vi.fn(() => ({})) }));
+    vi.doMock('firebase/analytics', () => ({ getAnalytics: vi.fn(() => ({})) }));
 
-    mod = require('../firestore');
+    mod = await import('../firestore');
   });
 
   it('exports savePracticePlan function', () => {
