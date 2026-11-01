@@ -1,0 +1,55 @@
+/* Smart Playbook v2 — "Sheet on the desk" (spec §3). Everything is scoped under .pb2 so the old app is untouched. */
+@import '@fontsource/saira-stencil-one/latin-400.css';
+@import '@fontsource/public-sans/latin-400.css';
+@import '@fontsource/public-sans/latin-500.css';
+@import '@fontsource/public-sans/latin-600.css';
+@import '@fontsource/public-sans/latin-700.css';
+@import '@fontsource/caveat/latin-600.css';
+
+.pb2 {
+  --pb-workspace: #f5f7fa;
+  --pb-surface: #ffffff;
+  --pb-border: #e3e8ee;
+  --pb-ink: #14202e;
+  --pb-ink-2: #536173;
+  --pb-sheet: #123b6d;
+  --pb-sheet-deep: #0e2f58;
+  --pb-line: rgba(220, 232, 250, 0.45);
+  --pb-line-soft: rgba(220, 232, 250, 0.18);
+  --pb-line-solid: #dce8fa;
+  --pb-signal: #ff8a3d;
+  --pb-on-signal: #1a0e05;
+  --pb-chalk: #f4d35e;
+  --pb-danger: #b42318;
+  --pb-warn-bg: #fff4e5;
+  --pb-warn-border: #f5c58a;
+  --pb-focus: #1f6feb;
+  --pb-radius: 10px;
+  --pb-font-display: 'Saira Stencil One', 'Arial Narrow', sans-serif;
+  --pb-font-ui: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --pb-font-hand: 'Caveat', 'Comic Sans MS', cursive;
+
+  font-family: var(--pb-font-ui);
+  color: var(--pb-ink);
+  background: var(--pb-workspace);
+  min-height: 70vh;
+  border-radius: var(--pb-radius);
+  overflow-x: hidden;
+}
+
+.pb2 *,
+.pb2 *::before,
+.pb2 *::after {
+  box-sizing: border-box;
+}
+
+.pb2-display {
+  font-family: var(--pb-font-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.pb2-hand {
+  font-family: var(--pb-font-hand);
+  font-weight: 600;
+}
