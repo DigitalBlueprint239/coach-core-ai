@@ -6,6 +6,7 @@ const original = Object.getOwnPropertyDescriptor(navigator, 'serviceWorker');
 afterEach(() => {
   if (original) Object.defineProperty(navigator, 'serviceWorker', original);
   else delete (navigator as any).serviceWorker;
+  delete (globalThis as any).caches;
 });
 
 describe('registerServiceWorker (retired offline worker)', () => {
@@ -32,5 +33,17 @@ describe('registerServiceWorker (retired offline worker)', () => {
       value: { getRegistrations: vi.fn().mockRejectedValue(new Error('SecurityError')), register: vi.fn() },
     });
     await expect(registerServiceWorker()).resolves.toBeUndefined();
+  });
+
+  it("deletes the old worker's caches too (unregistering alone leaves them on the device)", async () => {
+    Object.defineProperty(navigator, 'serviceWorker', {
+      configurable: true,
+      value: { getRegistrations: vi.fn().mockResolvedValue([{ unregister: vi.fn().mockResolvedValue(true) }]), register: vi.fn() },
+    });
+    const del = vi.fn().mockResolvedValue(true);
+    (globalThis as any).caches = { keys: vi.fn().mockResolvedValue(['coach-core-static-v1.0.0', 'coach-core-api-v1.0.0']), delete: del };
+    await registerServiceWorker();
+    expect(del).toHaveBeenCalledWith('coach-core-static-v1.0.0');
+    expect(del).toHaveBeenCalledWith('coach-core-api-v1.0.0');
   });
 });

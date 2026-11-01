@@ -11,6 +11,9 @@ const MESSAGES: Record<string, string> = {
   'auth/too-many-requests': 'Too many attempts. Wait a minute and try again.',
   'auth/network-request-failed': 'No connection. Check your internet and try again.',
   'auth/popup-blocked': 'Your browser blocked the sign-in window. Allow pop-ups for this site and try again.',
+  'auth/invalid-email': 'Enter a valid email address.',
+  'auth/missing-email': 'Enter your email address.',
+  'auth/missing-password': 'Enter your password.',
 };
 
 const FALLBACK = "Sign-in didn't work. Try again.";

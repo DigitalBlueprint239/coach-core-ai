@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   EmailAuthProvider,
@@ -47,6 +47,9 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  // Linking upgrades the same User object in place and fires no auth-state event (the uid is unchanged), so
+  // force a re-render to tell consumers that user.isAnonymous / user.email changed.
+  const [, userChanged] = useReducer((n: number) => n + 1, 0);
   const { showError } = useToast();
 
   useEffect(() => {
@@ -75,6 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (current?.isAnonymous) {
         try {
           await linkWithPopup(current, provider);
+          userChanged();
         } catch (error) {
           // This Google account already belongs to another Coach Core user: sign in to that account. The
           // anonymous session's data stays with the anonymous uid (nothing user-visible depends on it yet).
@@ -108,6 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         if (current?.isAnonymous) {
           await linkWithCredential(current, EmailAuthProvider.credential(email, password));
+          userChanged();
         } else {
           await createUserWithEmailAndPassword(auth, email, password);
         }
@@ -137,19 +142,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [showError]);
 
-  const value = useMemo<AuthContextType>(
-    () => ({
-      user,
-      loading,
-      isAuthenticated: !!user,
-      signInWithGoogle,
-      signInWithEmail,
-      signUpWithEmail,
-      sendPasswordReset,
-      signOut,
-    }),
-    [user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, signOut],
-  );
+  // Built fresh on every render (not memoized): when linking upgrades the user in place, the userChanged()
+  // re-render must hand consumers a new value so they re-read user.isAnonymous / user.email.
+  const value: AuthContextType = {
+    user,
+    loading,
+    isAuthenticated: !!user,
+    signInWithGoogle,
+    signInWithEmail,
+    signUpWithEmail,
+    sendPasswordReset,
+    signOut,
+  };
 
   if (loading) {
     return (

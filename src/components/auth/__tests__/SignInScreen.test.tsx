@@ -95,4 +95,14 @@ describe('SignInScreen', () => {
     expect(auth.sendPasswordReset).toHaveBeenCalled();
     expect(screen.queryByText('Check your email for a reset link.')).not.toBeInTheDocument();
   });
+
+  it('asks for the email and password before calling Firebase when either is empty', async () => {
+    render(<SignInScreen />);
+    await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+    expect(screen.getByText('Enter your email address.')).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText('Email'), 'coach@example.com');
+    await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+    expect(screen.getByText('Enter your password.')).toBeInTheDocument();
+    expect(auth.signInWithEmail).not.toHaveBeenCalled();
+  });
 });

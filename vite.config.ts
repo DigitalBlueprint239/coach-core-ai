@@ -40,7 +40,9 @@ export default defineConfig({
   envPrefix: 'REACT_APP_',
   build: {
     outDir: 'build',
-    sourcemap: true,
+    // Source maps only when they go to Sentry ('hidden': no sourceMappingURL in the bundle, and the files are
+    // deleted after upload). Without the token, no maps are built, so the original source is never served.
+    sourcemap: process.env.SENTRY_AUTH_TOKEN ? 'hidden' : false,
   },
   server: {
     port: 3000,

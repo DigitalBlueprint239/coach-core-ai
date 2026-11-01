@@ -9,7 +9,7 @@ import { TeamProvider } from './contexts/TeamContext';
 import { MigrationBanner } from './components/MigrationBanner';
 import { OnboardingModal } from './components/OnboardingModal';
 import { PWAInstallPrompt, registerServiceWorker } from './components/PWAInstallPrompt';
-import { requestNotificationPermission, subscribeUserToPush } from './services/push-notifications';
+import { setUpPushAfterOnboarding } from './services/push-notifications';
 const SmartPlaybook = React.lazy(() => import('./components/SmartPlaybook/SmartPlaybook'));
 
 const FirebaseTest = React.lazy(() => import('./components/FirebaseTest'));
@@ -32,12 +32,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (onboardingComplete) {
-      // Request push notification permission after onboarding
-      requestNotificationPermission().then((permission) => {
-        if (permission === 'granted') {
-          subscribeUserToPush();
-        }
-      });
+      // Ask for push permission after onboarding, only if push can actually work (VAPID key + worker).
+      void setUpPushAfterOnboarding();
     }
   }, [onboardingComplete]);
 

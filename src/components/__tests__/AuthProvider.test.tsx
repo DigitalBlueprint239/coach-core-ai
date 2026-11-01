@@ -27,6 +27,7 @@ function Probe() {
   return (
     <div>
       <p>user: {auth.user ? auth.user.uid : 'none'}</p>
+      <p>anonymous: {auth.user?.isAnonymous ? 'yes' : 'no'}</p>
       <button onClick={() => swallow(auth.signInWithGoogle())}>google</button>
       <button onClick={() => swallow(auth.signUpWithEmail('coach@example.com', 'password123'))}>signup</button>
     </div>
@@ -128,5 +129,26 @@ describe('AuthProvider — email accounts', () => {
     await userEvent.click(screen.getByText('signup'));
     expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(mockAuth, 'coach@example.com', 'password123');
     expect(linkWithCredential).not.toHaveBeenCalled();
+  });
+});
+
+describe('AuthProvider — after linking', () => {
+  it('re-renders when linking upgrades the anonymous user in place (no auth-state event fires)', async () => {
+    const anon = { uid: 'anon1', isAnonymous: true };
+    mockAuth.currentUser = anon;
+    vi.mocked(onAuthStateChanged).mockImplementation(((_a: unknown, cb: (u: unknown) => void) => {
+      cb(anon);
+      return vi.fn();
+    }) as any);
+    vi.mocked(EmailAuthProvider.credential).mockReturnValue({ providerId: 'password' } as any);
+    // Firebase mutates the same User object and does not call onAuthStateChanged (the uid is unchanged).
+    vi.mocked(linkWithCredential).mockImplementation(async () => {
+      anon.isAnonymous = false;
+      return { user: anon } as any;
+    });
+    renderProbe();
+    expect(screen.getByText('anonymous: yes')).toBeInTheDocument();
+    await userEvent.click(screen.getByText('signup'));
+    expect(await screen.findByText('anonymous: no')).toBeInTheDocument();
   });
 });

@@ -11,9 +11,31 @@ export const requestNotificationPermission = async (): Promise<NotificationPermi
   return await Notification.requestPermission();
 };
 
+// The app currently registers no service worker (the old offline worker was retired), so look the
+// registration up instead of awaiting the worker's `ready` promise, which would never resolve.
+const currentRegistration = async (): Promise<ServiceWorkerRegistration | undefined> => {
+  if (!isPushSupported()) return undefined;
+  try {
+    return await navigator.serviceWorker.getRegistration();
+  } catch {
+    return undefined;
+  }
+};
+
+/** Push needs a VAPID key and a registered service worker; neither exists today. */
+export const isPushAvailable = async (): Promise<boolean> =>
+  PUBLIC_VAPID_KEY !== '' && (await currentRegistration()) !== undefined;
+
+/** Asks for notification permission and subscribes, but only when push can actually work. */
+export const setUpPushAfterOnboarding = async (): Promise<void> => {
+  if (!(await isPushAvailable())) return;
+  const permission = await requestNotificationPermission();
+  if (permission === 'granted') await subscribeUserToPush();
+};
+
 export const subscribeUserToPush = async (): Promise<PushSubscription | null> => {
-  if (!isPushSupported()) return null;
-  const registration = await navigator.serviceWorker.ready;
+  const registration = await currentRegistration();
+  if (!registration) return null;
   try {
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
@@ -27,8 +49,8 @@ export const subscribeUserToPush = async (): Promise<PushSubscription | null> =>
 };
 
 export const unsubscribeUserFromPush = async (): Promise<boolean> => {
-  if (!isPushSupported()) return false;
-  const registration = await navigator.serviceWorker.ready;
+  const registration = await currentRegistration();
+  if (!registration) return false;
   const subscription = await registration.pushManager.getSubscription();
   if (subscription) {
     await subscription.unsubscribe();
@@ -38,8 +60,8 @@ export const unsubscribeUserFromPush = async (): Promise<boolean> => {
 };
 
 export const getPushSubscription = async (): Promise<PushSubscription | null> => {
-  if (!isPushSupported()) return null;
-  const registration = await navigator.serviceWorker.ready;
+  const registration = await currentRegistration();
+  if (!registration) return null;
   return await registration.pushManager.getSubscription();
 };
 

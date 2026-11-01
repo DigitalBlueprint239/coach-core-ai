@@ -19,7 +19,9 @@ const Dashboard: React.FC = () => {
     return <LoadingSpinner text="Loading your coaching dashboard..." />;
   }
 
-  if (!user) {
+  // A leftover anonymous session (from an older build) also gets the sign-in screen; signing in from there
+  // links the new account to it.
+  if (!user || user.isAnonymous) {
     return <SignInScreen />;
   }
 

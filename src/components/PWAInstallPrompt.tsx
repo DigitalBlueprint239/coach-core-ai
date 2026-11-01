@@ -478,6 +478,12 @@ export const registerServiceWorker = async (): Promise<void> => {
   try {
     const registrations = await container.getRegistrations();
     await Promise.all(registrations.map((registration) => registration.unregister()));
+    // Unregistering does not clear Cache Storage, and the kill-switch worker may never get to activate once
+    // its registration is gone, so remove the old worker's caches here as well. The app itself uses none.
+    if (registrations.length > 0 && typeof caches !== 'undefined') {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    }
   } catch (error) {
     console.warn('Could not remove the old service worker:', error);
   }

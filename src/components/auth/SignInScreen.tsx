@@ -41,6 +41,14 @@ export const SignInScreen: React.FC = () => {
     event.preventDefault();
     setProblem(null);
     setNotice(null);
+    if (!email.trim()) {
+      setProblem(authErrorMessage('auth/missing-email'));
+      return;
+    }
+    if (!password) {
+      setProblem(authErrorMessage('auth/missing-password'));
+      return;
+    }
     if (mode === 'signUp') {
       if (password.length < MIN_PASSWORD_LENGTH) {
         setProblem(authErrorMessage('auth/weak-password'));

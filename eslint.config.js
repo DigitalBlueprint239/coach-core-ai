@@ -24,7 +24,7 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
       parserOptions: { ecmaFeatures: { jsx: true } },
-      globals: { ...globals.browser, ...globals.node, ...globals.vitest },
+      globals: { ...globals.browser },
     },
     plugins: {
       'react-hooks': reactHooks,
@@ -34,6 +34,25 @@ export default [
       ...jsxA11y.flatConfigs.recommended.rules,
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      // Browser code runs without Node globals; Vite does not define `process`, so a stray
+      // process.env would throw at runtime. Env values come from import.meta.env.
+      'no-restricted-globals': [
+        'error',
+        { name: 'process', message: 'Use import.meta.env (Vite) in browser code.' },
+        { name: 'global', message: 'Use globalThis or window in browser code.' },
+        { name: 'require', message: 'Use import in browser code.' },
+        { name: '__dirname', message: 'Not available in the browser.' },
+      ],
+    },
+  },
+  {
+    // Tests run in Node (Vitest): Node globals are fine there.
+    files: ['src/**/__tests__/**', 'src/**/*.test.{js,jsx,ts,tsx}', 'src/setupTests.ts'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.vitest },
+    },
+    rules: {
+      'no-restricted-globals': 'off',
     },
   },
   {
