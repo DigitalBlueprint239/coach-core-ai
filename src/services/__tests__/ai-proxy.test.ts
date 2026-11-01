@@ -41,6 +41,8 @@ describe('AIProxyService', () => {
       endpoint: 'http://localhost:3001/api/ai',
       timeout: 5000,
       retries: 2,
+      enabled: true,
+      getIdToken: async () => 'test-id-token',
     });
   });
 
@@ -166,5 +168,51 @@ describe('AIProxyService', () => {
         expect(result.success).toBe(true);
       });
     });
+  });
+});
+
+describe('AIProxyService — locked-down path', () => {
+  const ok = { endpoint: '/api/ai', retries: 1 };
+  const request: AIProxyRequest = { type: 'play_suggestion', data: {} };
+
+  beforeEach(() => mockFetch.mockReset());
+
+  it('makes no network call when AI is switched off', async () => {
+    const svc = new AIProxyService({ ...ok, enabled: false, getIdToken: async () => 'id-token' });
+    const r = await svc.makeRequest(request);
+    expect(r).toEqual({ success: false, error: 'AI features are turned off.' });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('is off unless REACT_APP_AI_ENABLED is "true"', async () => {
+    const before = process.env.REACT_APP_AI_ENABLED;
+    delete process.env.REACT_APP_AI_ENABLED;
+    try {
+      const r = await new AIProxyService({ ...ok, getIdToken: async () => 'id-token' }).makeRequest(request);
+      expect(r.error).toBe('AI features are turned off.');
+      expect(mockFetch).not.toHaveBeenCalled();
+    } finally {
+      if (before === undefined) delete process.env.REACT_APP_AI_ENABLED;
+      else process.env.REACT_APP_AI_ENABLED = before;
+    }
+  });
+
+  it('refuses without a signed-in coach and makes no network call', async () => {
+    const svc = new AIProxyService({ ...ok, enabled: true, getIdToken: async () => null });
+    const r = await svc.makeRequest(request);
+    expect(r).toEqual({ success: false, error: 'Sign in to use AI features.' });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("sends the coach's Firebase ID token, never a shared static token", async () => {
+    process.env.REACT_APP_AI_PROXY_TOKEN = 'leaked-static-token';
+    try {
+      mockFetch.mockResolvedValueOnce(createSuccessResponse({}));
+      await new AIProxyService({ ...ok, enabled: true, getIdToken: async () => 'id-token-123' }).makeRequest(request);
+      const headers = mockFetch.mock.calls[0][1].headers;
+      expect(headers.Authorization).toBe('Bearer id-token-123');
+    } finally {
+      delete process.env.REACT_APP_AI_PROXY_TOKEN;
+    }
   });
 });

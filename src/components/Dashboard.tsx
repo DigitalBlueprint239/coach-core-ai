@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from './AuthProvider';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
 import { LoadingSpinner, useToast } from './index';
