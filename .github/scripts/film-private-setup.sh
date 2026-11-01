@@ -26,9 +26,9 @@ run source-check node ../verify-package.mjs "$PWD"
 run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'a41cdb5a827f67919ffc68340f94fafb9811d3202d2c74e8f28844cf8257fbd9');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'4f43d71ff38d6b296e66ceb306c4f6d1ad39dd7d044cad49a52c09d1b69a6bc0');
 const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'953dab4d07e292071446d4815be1333b9f2bf57f');assert.equal(m.application,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.baseline,'fdb88f2f23a61730cd84bc8e48e63c11953d7df5');assert.equal(m.historicalAcceptedLinkRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["52eef9404434277559fa3740e3e1ed5b3698ea20"]);assert.deepEqual(m.harnessCommits,["8dedc38bff04bbae3855ccb4a16af22fa4eb1e46","b3b1e3c1b4b90567cd595635094f6601d76c5f78","d4c4452037b7d5b727ff154b43bf818a1f29ba12","e40bdbf3c66a909b09c8bffb144641b4730ac670","953dab4d07e292071446d4815be1333b9f2bf57f"]);assert.equal(m.rulesSourceCommit,'eebc21ba74a4954b77e2611780585e98ff97f8f7');assert.equal(m.files.length,157);
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'6c0e392d9a79e304bec875220bc7d1d1b56142e5');assert.equal(m.application,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.baseline,'fdb88f2f23a61730cd84bc8e48e63c11953d7df5');assert.equal(m.historicalAcceptedLinkRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["52eef9404434277559fa3740e3e1ed5b3698ea20"]);assert.deepEqual(m.harnessCommits,["8dedc38bff04bbae3855ccb4a16af22fa4eb1e46","b3b1e3c1b4b90567cd595635094f6601d76c5f78","d4c4452037b7d5b727ff154b43bf818a1f29ba12","e40bdbf3c66a909b09c8bffb144641b4730ac670","953dab4d07e292071446d4815be1333b9f2bf57f","ec3f88a79d0e5d3c5ca58d0d129ea51febce1967","6c0e392d9a79e304bec875220bc7d1d1b56142e5"]);assert.equal(m.rulesSourceCommit,'eebc21ba74a4954b77e2611780585e98ff97f8f7');assert.equal(m.files.length,159);
 const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
 function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
 assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
@@ -36,12 +36,12 @@ function verify(root,f){const b=fs.readFileSync(at(root,f.path));assert.equal(b.
 for(const f of original.files)verify(source,f);
 for(const f of m.files){verify(payload,f);const dest=at(source,f.path);if(f.baseSha256){const base=original.files.find(x=>x.path===f.path);assert(base);assert.equal(base.sha256,f.baseSha256);assert.equal(hash(fs.readFileSync(dest)),f.baseSha256);}else assert(!fs.existsSync(dest));}
 for(const f of m.files){const dest=at(source,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(at(payload,f.path),dest);}
-const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,471);for(const f of effective)verify(source,f);
-fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,historicalLinkRules:m.historicalAcceptedLinkRules,rulesSourceCommit:m.rulesSourceCommit,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:471},null,2)+'\n');
+const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,473);for(const f of effective)verify(source,f);
+fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,historicalLinkRules:m.historicalAcceptedLinkRules,rulesSourceCommit:m.rulesSourceCommit,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:473},null,2)+'\n');
 console.log('Exact full-app selected source verified.');
 
 NODE
-printf '%s\n' 'integrated_candidate=953dab4d07e292071446d4815be1333b9f2bf57f' 'application_commit=52eef9404434277559fa3740e3e1ed5b3698ea20' 'harness_commit=953dab4d07e292071446d4815be1333b9f2bf57f' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=6c0e392d9a79e304bec875220bc7d1d1b56142e5' 'application_commit=52eef9404434277559fa3740e3e1ed5b3698ea20' 'harness_commit=6c0e392d9a79e304bec875220bc7d1d1b56142e5' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
@@ -88,6 +88,8 @@ COMPATIBILITY
 
 run browsers bash -c 'cd e2e && npx --no-install playwright install --with-deps chromium firefox'
 run browser-copy timeout --signal=TERM --kill-after=5s 60s node tests/film-retention/linux/browser-copy.test.cjs "$PWD/tests/film-retention/linux/browser.cjs" "$PWD/src/features/film-analyzer/review/FilmBoundReview.tsx" "$PWD" "$E/BROWSER-COPY-RESULT.json"
+run browser-links timeout --signal=TERM --kill-after=5s 60s node tests/film-retention/linux/browser-link-refresh.test.cjs "$PWD/tests/film-retention/linux/browser.cjs" "$PWD/src/features/film-analyzer/review/AnnotationLinks.tsx" "$PWD" "$E/BROWSER-LINK-REFRESH-RESULT.json"
+run browser-readiness timeout --signal=TERM --kill-after=5s 60s node tests/film-retention/linux/browser-readiness.test.cjs "$PWD/tests/film-retention/linux/browser.cjs" "$PWD/src/features/film-analyzer/review/FilmBoundReview.tsx" "$PWD/src/features/film-analyzer/review/FilmRetention.tsx" "$PWD" "$E/BROWSER-READINESS-RESULT.json"
 run firebase-version node e2e/node_modules/firebase-tools/lib/bin/firebase.js --version
 W="$RUNNER_TEMP/ffwork"
 # The accepted binary configuration embeds this exact prefix and prefix-map argv.
