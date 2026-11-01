@@ -113,7 +113,17 @@ retain_decoder_provenance() {
 }
 trap retain_decoder_provenance EXIT
 run toolchain bash -c 'set -euo pipefail; command -v gcc ld nasm make strip; gcc --version; ld --version; nasm -v; make --version; strip --version; printf "ImageOS=%s\nImageVersion=%s\nLANG=%s\nLC_ALL=%s\nTZ=%s\n" "${ImageOS:-unknown}" "${ImageVersion:-unknown}" "${LANG-}" "${LC_ALL-}" "${TZ-}"'
-run decoder-source bash tools/ffmpeg/verify-source.sh "$W"
+# Scope broader curl error retries to the official read-only source fetches only.
+# Existing retry count, delay, per-request deadline, TLS and provenance checks stay intact.
+run decoder-source bash -c '
+set -euo pipefail
+FILM_SOURCE_CURL="$(command -v curl)"
+[[ "$FILM_SOURCE_CURL" == /* && -x "$FILM_SOURCE_CURL" ]] || exit 2
+export FILM_SOURCE_CURL
+curl() { "$FILM_SOURCE_CURL" --retry-all-errors "$@"; }
+export -f curl
+exec bash tools/ffmpeg/verify-source.sh "$1"
+' _ "$W"
 run decoder-build bash tools/ffmpeg/build.sh "$W"
 run decoder-provenance node tools/ffmpeg/provenance.mjs validate "$W"
 export FFMPEG_BIN="$W/out/bin/ffmpeg" FFPROBE_BIN="$W/out/bin/ffprobe"
