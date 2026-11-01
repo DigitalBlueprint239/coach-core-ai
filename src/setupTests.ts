@@ -19,8 +19,15 @@ vi.mock('firebase/auth', () => ({
   createUserWithEmailAndPassword: vi.fn(),
   signOut: vi.fn(),
   connectAuthEmulator: vi.fn(),
-  GoogleAuthProvider: vi.fn(),
+  // A plain vi.fn() (no arrow implementation) so `new GoogleAuthProvider()` works.
+  GoogleAuthProvider: Object.assign(vi.fn(), { credentialFromError: vi.fn() }),
+  EmailAuthProvider: { credential: vi.fn() },
   signInWithPopup: vi.fn(),
+  signInWithCredential: vi.fn(),
+  linkWithPopup: vi.fn(),
+  linkWithCredential: vi.fn(),
+  sendPasswordResetEmail: vi.fn(),
+  signInAnonymously: vi.fn(),
 }));
 
 // Mock firebase/firestore

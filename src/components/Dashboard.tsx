@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useAuth } from './AuthProvider';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
-import { LoadingSpinner, useToast } from './index';
+import { LoadingSpinner } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
+import { SignInScreen } from './auth/SignInScreen';
 // TODO: Fix import path for AnalyticsDashboard if file exists
 // import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
 const Dashboard: React.FC = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { currentTeam } = useTeam();
-  const { showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
 
   if (authLoading) {
@@ -20,24 +20,7 @@ const Dashboard: React.FC = () => {
   }
 
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
-          <h1 className="text-3xl font-bold text-center text-gray-900 mb-6">
-            Coach Core AI
-          </h1>
-          <p className="text-gray-600 text-center mb-8">
-            The ultimate sports coaching platform. Sign in to get started.
-          </p>
-          <button
-            onClick={() => showSuccess('Authentication coming soon!')}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-    );
+    return <SignInScreen />;
   }
 
   const tabs = [
@@ -66,6 +49,13 @@ const Dashboard: React.FC = () => {
               <span className="text-sm text-gray-600">
                 Welcome, {user.email}
               </span>
+              <button
+                type="button"
+                onClick={() => void signOut()}
+                className="min-h-11 rounded-lg px-3 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              >
+                Sign out
+              </button>
             </div>
           </div>
         </div>

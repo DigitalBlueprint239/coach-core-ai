@@ -1,18 +1,38 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, signInAnonymously, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  GoogleAuthProvider,
+  linkWithCredential,
+  linkWithPopup,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithCredential,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut as firebaseSignOut,
+  type User,
+} from 'firebase/auth';
+import { auth } from '../firebase';
 import { LoadingSpinner, useToast } from './index';
+import { authErrorCode, authErrorMessage } from './auth/authErrors';
 
+// The one auth system for the app. Coaches sign in with Google or email + password. A browser that still has
+// an anonymous session from an older build keeps its uid: the new sign-in is linked to it, not swapped for it.
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: () => Promise<void>;
-  signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  signInWithGoogle(): Promise<void>;
+  signInWithEmail(email: string, password: string): Promise<void>;
+  signUpWithEmail(email: string, password: string): Promise<void>;
+  sendPasswordReset(email: string): Promise<void>;
+  signOut(): Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -27,61 +47,109 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const { showSuccess, showError } = useToast();
+  const { showError } = useToast();
 
   useEffect(() => {
-    let auth;
-    try {
-      auth = getAuth();
-    } catch {
-      setLoading(false);
-      return;
-    }
-    if (!auth) {
-      setLoading(false);
-      return;
-    }
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
     });
-
     return unsubscribe;
   }, []);
 
-  const signIn = async () => {
-    try {
-      setLoading(true);
-      const a = getAuth();
-      await signInAnonymously(a);
-      showSuccess('Signed in successfully!');
-    } catch (error: any) {
-      showError(error.message || 'Failed to sign in');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Show a friendly message (or nothing, for a deliberately closed popup), then rethrow so callers can stop
+  // their own spinners and skip success messages.
+  const reportAndRethrow = useCallback(
+    (error: unknown): never => {
+      const message = authErrorMessage(authErrorCode(error));
+      if (message) showError(message);
+      throw error;
+    },
+    [showError],
+  );
 
-  const handleSignOut = async () => {
+  const signInWithGoogle = useCallback(async () => {
+    const provider = new GoogleAuthProvider();
+    const current = auth.currentUser;
     try {
-      setLoading(true);
-      const a = getAuth();
-      await signOut(a);
-      showSuccess('Signed out successfully!');
-    } catch (error: any) {
-      showError(error.message || 'Failed to sign out');
-    } finally {
-      setLoading(false);
+      if (current?.isAnonymous) {
+        try {
+          await linkWithPopup(current, provider);
+        } catch (error) {
+          // This Google account already belongs to another Coach Core user: sign in to that account. The
+          // anonymous session's data stays with the anonymous uid (nothing user-visible depends on it yet).
+          if (authErrorCode(error) !== 'auth/credential-already-in-use') throw error;
+          const credential = GoogleAuthProvider.credentialFromError(error as never);
+          if (!credential) throw error;
+          await signInWithCredential(auth, credential);
+        }
+      } else {
+        await signInWithPopup(auth, provider);
+      }
+    } catch (error) {
+      reportAndRethrow(error);
     }
-  };
+  }, [reportAndRethrow]);
 
-  const value: AuthContextType = {
-    user,
-    loading,
-    signIn,
-    signOut: handleSignOut,
-    isAuthenticated: !!user
-  };
+  const signInWithEmail = useCallback(
+    async (email: string, password: string) => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        reportAndRethrow(error);
+      }
+    },
+    [reportAndRethrow],
+  );
+
+  const signUpWithEmail = useCallback(
+    async (email: string, password: string) => {
+      const current = auth.currentUser;
+      try {
+        if (current?.isAnonymous) {
+          await linkWithCredential(current, EmailAuthProvider.credential(email, password));
+        } else {
+          await createUserWithEmailAndPassword(auth, email, password);
+        }
+      } catch (error) {
+        reportAndRethrow(error);
+      }
+    },
+    [reportAndRethrow],
+  );
+
+  const sendPasswordReset = useCallback(
+    async (email: string) => {
+      try {
+        await sendPasswordResetEmail(auth, email);
+      } catch (error) {
+        reportAndRethrow(error);
+      }
+    },
+    [reportAndRethrow],
+  );
+
+  const signOut = useCallback(async () => {
+    try {
+      await firebaseSignOut(auth);
+    } catch {
+      showError("Couldn't sign out. Try again.");
+    }
+  }, [showError]);
+
+  const value = useMemo<AuthContextType>(
+    () => ({
+      user,
+      loading,
+      isAuthenticated: !!user,
+      signInWithGoogle,
+      signInWithEmail,
+      signUpWithEmail,
+      sendPasswordReset,
+      signOut,
+    }),
+    [user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, signOut],
+  );
 
   if (loading) {
     return (
@@ -91,9 +159,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
   }
 
+  // Keyed by uid so per-user state below (teams, the current team, open plays) starts fresh when a different
+  // coach signs in or out on the same browser, instead of showing the previous coach's data.
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      <React.Fragment key={user?.uid ?? 'signed-out'}>{children}</React.Fragment>
     </AuthContext.Provider>
   );
-}; 
+};
