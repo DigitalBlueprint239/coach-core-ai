@@ -26,9 +26,9 @@ run source-check node ../verify-package.mjs "$PWD"
 run full-app-overlay node - "$PWD" "$P/full-app-overlay" "$E" <<'NODE'
 const fs=require('fs'),path=require('path'),crypto=require('crypto'),assert=require('assert/strict');
 const [source,payload,evidence]=process.argv.slice(2),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from(`blob ${b.length}\0`)).update(b).digest('hex');
-const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'16a22171c41c1168ab37731c2c55f9ca4df3599daee7ac47b9d553922c2a9a4e');
+const raw=fs.readFileSync(path.join(payload,'MANIFEST.json'));assert.equal(hash(raw),'def01f92ee58f35aacacbe2fee13fbbbe34eb1554896c2e1cef43a940c0e2c96');
 const m=JSON.parse(raw),original=JSON.parse(fs.readFileSync(path.join(source,'../SOURCE-MANIFEST.json')));
-assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'d4c4452037b7d5b727ff154b43bf818a1f29ba12');assert.equal(m.application,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.baseline,'fdb88f2f23a61730cd84bc8e48e63c11953d7df5');assert.equal(m.historicalAcceptedLinkRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["52eef9404434277559fa3740e3e1ed5b3698ea20"]);assert.deepEqual(m.harnessCommits,["8dedc38bff04bbae3855ccb4a16af22fa4eb1e46","b3b1e3c1b4b90567cd595635094f6601d76c5f78","d4c4452037b7d5b727ff154b43bf818a1f29ba12"]);assert.equal(m.rulesSourceCommit,'eebc21ba74a4954b77e2611780585e98ff97f8f7');assert.equal(m.files.length,154);
+assert.equal(m.originalSource,'c8526787ad5b465fc941b2e575e01d4f4ac2af4b');assert.equal(original.commit,m.originalSource);assert.equal(original.files.length,334);assert.equal(m.candidate,'e40bdbf3c66a909b09c8bffb144641b4730ac670');assert.equal(m.application,'52eef9404434277559fa3740e3e1ed5b3698ea20');assert.equal(m.baseline,'fdb88f2f23a61730cd84bc8e48e63c11953d7df5');assert.equal(m.historicalAcceptedLinkRules,'c1f02559efae8e318893f7b98250aca9be1dd15f');assert.deepEqual(m.applicationCommits,["52eef9404434277559fa3740e3e1ed5b3698ea20"]);assert.deepEqual(m.harnessCommits,["8dedc38bff04bbae3855ccb4a16af22fa4eb1e46","b3b1e3c1b4b90567cd595635094f6601d76c5f78","d4c4452037b7d5b727ff154b43bf818a1f29ba12","e40bdbf3c66a909b09c8bffb144641b4730ac670"]);assert.equal(m.rulesSourceCommit,'eebc21ba74a4954b77e2611780585e98ff97f8f7');assert.equal(m.files.length,156);
 const at=(root,p)=>{assert(typeof p==='string'&&!p.includes('\\')&&!p.split('/').includes('..')&&!path.isAbsolute(p));const dest=path.resolve(root,p);assert(dest.startsWith(path.resolve(root)+path.sep));return dest;};
 function regularFiles(dir,rel=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{assert(!e.isSymbolicLink());const p=rel+e.name;if(e.isDirectory())return regularFiles(path.join(dir,e.name),p+'/');assert(e.isFile());return[p];});}
 assert.deepEqual(regularFiles(payload).sort(),['MANIFEST.json',...m.files.map(f=>f.path)].sort());
@@ -36,12 +36,12 @@ function verify(root,f){const b=fs.readFileSync(at(root,f.path));assert.equal(b.
 for(const f of original.files)verify(source,f);
 for(const f of m.files){verify(payload,f);const dest=at(source,f.path);if(f.baseSha256){const base=original.files.find(x=>x.path===f.path);assert(base);assert.equal(base.sha256,f.baseSha256);assert.equal(hash(fs.readFileSync(dest)),f.baseSha256);}else assert(!fs.existsSync(dest));}
 for(const f of m.files){const dest=at(source,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(at(payload,f.path),dest);}
-const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,468);for(const f of effective)verify(source,f);
-fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,historicalLinkRules:m.historicalAcceptedLinkRules,rulesSourceCommit:m.rulesSourceCommit,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:468},null,2)+'\n');
+const effective=[...original.files.filter(f=>!m.files.some(x=>x.path===f.path)),...m.files];assert.equal(effective.length,470);for(const f of effective)verify(source,f);
+fs.mkdirSync(path.join(evidence,'full-app-source'));fs.writeFileSync(path.join(evidence,'full-app-source/MANIFEST.json'),raw);fs.writeFileSync(path.join(evidence,'full-app-source/EFFECTIVE-SOURCE.json'),JSON.stringify({original:m.originalSource,historicalLinkRules:m.historicalAcceptedLinkRules,rulesSourceCommit:m.rulesSourceCommit,applicationCommits:m.applicationCommits,harnessCommits:m.harnessCommits,candidate:m.candidate,verifiedFiles:470},null,2)+'\n');
 console.log('Exact full-app selected source verified.');
 
 NODE
-printf '%s\n' 'integrated_candidate=d4c4452037b7d5b727ff154b43bf818a1f29ba12' 'application_commit=52eef9404434277559fa3740e3e1ed5b3698ea20' 'harness_commit=d4c4452037b7d5b727ff154b43bf818a1f29ba12' >> "$E/source.txt"
+printf '%s\n' 'integrated_candidate=e40bdbf3c66a909b09c8bffb144641b4730ac670' 'application_commit=52eef9404434277559fa3740e3e1ed5b3698ea20' 'harness_commit=e40bdbf3c66a909b09c8bffb144641b4730ac670' >> "$E/source.txt"
 run os uname -a
 run node node --version
 run npm npm --version
@@ -50,13 +50,14 @@ run prlimit prlimit --version
 [[ "$(uname -sm)" == 'Linux x86_64' ]]
 [[ "$(node -p 'process.versions.node.split(".")[0]')" == 22 ]]
 [[ "$(npm --version | cut -d. -f1)" == 10 ]]
-for tool in python3 gcc make nasm strip ld curl gpg tar xz; do command -v "$tool" >/dev/null; done
+for tool in python3 gcc make nasm strip ld curl gpg tar xz timeout; do command -v "$tool" >/dev/null; done
 # All installs are confined to this disposable hosted job. No production index
 # or emulator is started. No deploy/AI scripts are invoked.
 run npm-client npm ci --legacy-peer-deps --no-audit --no-fund
 run npm-functions npm ci --prefix functions --no-audit --no-fund
 run npm-browser npm ci --prefix e2e --no-audit --no-fund
 run npm-rules npm ci --prefix tests/rules --no-audit --no-fund
+run playback-http timeout --signal=TERM --kill-after=5s 60s node tests/film-retention/linux/playback-http.test.cjs "$PWD" "$PWD/tests/film-retention/linux/runtime.cjs" "$E/PLAYBACK-HTTP-RESULT.json"
 # Exact current-candidate Linux parser/schema compatibility; not native Windows CT-5.
 run compatibility-112 node - "$PWD" "$E" <<'COMPATIBILITY'
 const fs=require('node:fs'),p=require('node:path'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict');
