@@ -24,7 +24,7 @@ on:
       - 'tests/rules/film-worker.rules.test.mjs'
       - '.github/workflows/film-s2b-worker.yml'
   push:
-    branches: [claude/film-s2b-worker, codex/film-retention-e40bdbf-r7]
+    branches: [claude/film-s2b-worker, codex/film-retention-953dab4-r8]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   decoder:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-e40bdbf-r7' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-953dab4-r8' }}
     name: Rebuild pinned decoder (S2a recipe, digest-enforced)
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -69,7 +69,7 @@ jobs:
           retention-days: 3
 
   pinned:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-e40bdbf-r7' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-953dab4-r8' }}
     name: Calibration + pinned pipeline/limits suite
     needs: decoder
     runs-on: ubuntu-24.04
@@ -137,7 +137,7 @@ jobs:
           retention-days: 14
 
   emulator:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-e40bdbf-r7' }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/codex/film-retention-953dab4-r8' }}
     name: Cross-boundary (Firestore emulator) + rules deny tests
     needs: decoder
     runs-on: ubuntu-24.04
@@ -187,7 +187,7 @@ jobs:
           tests/rules/film-worker.rules.test.mjs"
 
   private-setup:
-    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-retention-e40bdbf-r7' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
+    if: ${{ github.repository == 'DigitalBlueprint239/coach-core-ai' && github.event_name == 'push' && github.ref == 'refs/heads/codex/film-retention-953dab4-r8' && github.actor == 'DigitalBlueprint239' && github.run_attempt == 1 && !github.event.deleted }}
     name: Private full-app synthetic acceptance / frozen candidate
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -224,7 +224,7 @@ jobs:
             --connect-timeout 10 --max-time 60 --retry 2 \
             --output "$SCRIPT" \
             "https://raw.githubusercontent.com/DigitalBlueprint239/coach-core-ai/$GITHUB_SHA/.github/scripts/film-private-setup.sh"
-          echo 'f86ede1dfccb25d95873c6dd2041e4b2af06db9a7750c774bbf015e77c1a4328  '"$SCRIPT" | sha256sum -c -
+          echo '40cdfd3cc87a005fbccb0979d7b5ca3e877a565917a1040e5d5097389200ee90  '"$SCRIPT" | sha256sum -c -
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -267,7 +267,7 @@ jobs:
             ['repository',repo,d=>d.private===true&&d.full_name==='DigitalBlueprint239/Coach-Core-Smart-Playbook-'],
             ['release',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'],
             ['package-asset',repo+'/releases/assets/682470270',d=>d.id===682470270&&d.digest==='sha256:7ae6153d24480a8be6c240f5bd9d90649b5a4434c3de18b03172b321642c3683'],
-            ['full-app-overlay',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'&&d.assets.filter(a=>a.name==='FILM-RETENTION-PLAYBACK-FRAMING-e40bdbf.zip'&&a.size===494487&&a.digest==='sha256:c68cb354bec82a3509ec8662d1832dc4786365dfe4b9894aac22b70acc19e28c').length===1],
+            ['full-app-overlay',repo+'/releases/424529110',d=>d.draft===true&&d.tag_name==='film-private-setup-c8526787'&&d.assets.filter(a=>a.name==='FILM-RETENTION-STATUS-COPY-953dab4-R8.zip'&&a.size===495949&&a.digest==='sha256:18273c603017cd6f9357a400b1254a5c1022c21f9404dd58dc9023cd9302fe28').length===1],
             ['cost-asset',repo+'/releases/assets/678838152',d=>d.id===678838152&&d.digest==='sha256:6bf52693513c6a0f869f4f2a11cd87ed8335a1905952e93a0cfbafe7fa4145b3']
            ]) { if(!await check(label,path,validate)){process.exitCode=1;return;} }
           })().catch(()=>{report('diagnostic',0,'internal-diagnostic-error');process.exitCode=1;});
@@ -293,25 +293,25 @@ jobs:
           gh api -H 'Accept: application/octet-stream' \
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$ASSET_ID" \
             > "$RUNNER_TEMP/film-private-setup/package.zip"
-          OVERLAY_ID=$(gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/424529110 --jq '.assets[] | select(.name == "FILM-RETENTION-PLAYBACK-FRAMING-e40bdbf.zip" and .size == 494487 and .digest == "sha256:c68cb354bec82a3509ec8662d1832dc4786365dfe4b9894aac22b70acc19e28c") | .id')
+          OVERLAY_ID=$(gh api repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/424529110 --jq '.assets[] | select(.name == "FILM-RETENTION-STATUS-COPY-953dab4-R8.zip" and .size == 495949 and .digest == "sha256:18273c603017cd6f9357a400b1254a5c1022c21f9404dd58dc9023cd9302fe28") | .id')
           [[ "$OVERLAY_ID" =~ ^[0-9]+$ ]]
           gh api -H 'Accept: application/octet-stream' \
             "repos/DigitalBlueprint239/Coach-Core-Smart-Playbook-/releases/assets/$OVERLAY_ID" \
             > "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip"
-          echo 'c68cb354bec82a3509ec8662d1832dc4786365dfe4b9894aac22b70acc19e28c  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
+          echo '18273c603017cd6f9357a400b1254a5c1022c21f9404dd58dc9023cd9302fe28  '"$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" | sha256sum -c -
           python3 - "$RUNNER_TEMP/film-private-setup/full-app-overlay.zip" "$RUNNER_TEMP/film-private-setup/full-app-overlay" <<'PY'
           import sys,zipfile,stat,os,json,hashlib
-          assert os.path.getsize(sys.argv[1])==494487
+          assert os.path.getsize(sys.argv[1])==495949
           assert not os.path.exists(sys.argv[2])
           with zipfile.ZipFile(sys.argv[1]) as z:
               entries=z.infolist()
               raw=z.read('MANIFEST.json')
-              assert hashlib.sha256(raw).hexdigest()=='def01f92ee58f35aacacbe2fee13fbbbe34eb1554896c2e1cef43a940c0e2c96'
+              assert hashlib.sha256(raw).hexdigest()=='a41cdb5a827f67919ffc68340f94fafb9811d3202d2c74e8f28844cf8257fbd9'
               manifest=json.loads(raw)
               expected=sorted(['MANIFEST.json']+[f['path'] for f in manifest['files']])
               assert all(not p.startswith('/') and '\\' not in p and '..' not in p.split('/') and ':' not in p for p in expected)
-              assert len(entries)==157 and sorted(e.filename for e in entries)==expected
-              assert sum(e.file_size for e in entries)==1424430 and 1424430<1500000
+              assert len(entries)==158 and sorted(e.filename for e in entries)==expected
+              assert sum(e.file_size for e in entries)==1427463 and 1427463<1500000
               assert all(not stat.S_ISLNK(e.external_attr >>16) and not(e.flag_bits &1) for e in entries)
               assert sorted(e.filename for e in entries if e.is_dir())==[]
               z.extractall(sys.argv[2])
