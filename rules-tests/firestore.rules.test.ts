@@ -10,7 +10,7 @@ import {
   initializeTestEnvironment,
   type RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
 let env: RulesTestEnvironment;
 
@@ -114,5 +114,30 @@ describe.each([
 
   it('reading a document that does not exist is denied, not a rules crash', async () => {
     await assertFails(getDoc(doc(alice(), path('missing'))));
+  });
+});
+
+// Smart Playbook v2 (phase 2) relies on these existing rules; it adds no rule changes.
+describe('Smart Playbook v2 access (no rule changes)', () => {
+  it("the coach can list their team's plays with where('teamId','==','t1')", async () => {
+    await assertSucceeds(getDocs(query(collection(alice(), 'plays'), where('teamId', '==', 't1'))));
+  });
+
+  it("another coach's list query for t1 is denied", async () => {
+    await assertFails(getDocs(query(collection(bob(), 'plays'), where('teamId', '==', 't1'))));
+  });
+
+  it('an unfiltered list of every play is denied', async () => {
+    await assertFails(getDocs(collection(alice(), 'plays')));
+  });
+
+  it('the owner can update teams/t1 with only a playbook field', async () => {
+    await assertSucceeds(
+      updateDoc(doc(alice(), 'teams/t1'), { playbook: { terminology: { H: 'F' }, level: 'jv', formations: [] } }),
+    );
+  });
+
+  it("another coach cannot write t1's playbook settings", async () => {
+    await assertFails(updateDoc(doc(bob(), 'teams/t1'), { playbook: { terminology: {}, level: 'jv', formations: [] } }));
   });
 });
