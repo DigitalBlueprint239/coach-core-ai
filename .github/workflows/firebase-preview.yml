@@ -1,0 +1,59 @@
+name: Firebase preview link
+
+# Builds every PR into the recovery branch and deploys it to a temporary Firebase Hosting preview channel
+# (expires after 7 days), then comments the link on the PR. The live site (the production channel) is never
+# touched by this workflow.
+on:
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: firebase-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    # Secrets are not available to PRs from forks; skip instead of failing.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        # Same as unit-tests-and-build.yml until @testing-library/react is upgraded for React 19.
+        run: npm ci --no-audit --no-fund --legacy-peer-deps
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: 'false'
+          # Firebase web config is public by design (security rules protect the data); kept as repo variables.
+          REACT_APP_FIREBASE_API_KEY: ${{ vars.REACT_APP_FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ vars.REACT_APP_FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ vars.REACT_APP_FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ vars.REACT_APP_FIREBASE_APP_ID }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ vars.REACT_APP_FIREBASE_MEASUREMENT_ID }}
+          # Preview builds show work in progress: turn on the new Smart Playbook and the owner review screen.
+          REACT_APP_ENABLE_PLAYBOOK_V2: 'true'
+          REACT_APP_ENABLE_CONTENT_REVIEW: 'true'
+
+      - name: Deploy to a preview channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COACH_CORE_AI }}
+          projectId: coach-core-ai
+          expires: 7d
