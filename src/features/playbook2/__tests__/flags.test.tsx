@@ -18,6 +18,9 @@ vi.mock('../../../components/TeamManagement', () => ({ TeamManagement: () => nul
 vi.mock('../../practice-planner/PracticePlanner', () => ({ default: () => null }));
 vi.mock('../../../components/SmartPlaybook/SmartPlaybook', () => ({ default: () => <div data-testid="old-playbook" /> }));
 vi.mock('../PlaybookScreen', () => ({ default: () => <div data-testid="playbook-v2" /> }));
+vi.mock('../review/ContentReview', () => ({
+  default: ({ reviewer }: { reviewer: string }) => <div data-testid="content-review">{reviewer}</div>,
+}));
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -60,5 +63,20 @@ describe("the Dashboard's Smart Playbook tab", () => {
     await userEvent.click(screen.getAllByRole('button', { name: /Smart Playbook/ })[0]);
     expect(await screen.findByTestId('playbook-v2')).toBeInTheDocument();
     expect(screen.queryByTestId('old-playbook')).not.toBeInTheDocument();
+  });
+});
+
+describe('the Content review tab', () => {
+  it('is absent when its flag is off', () => {
+    vi.stubEnv('REACT_APP_ENABLE_CONTENT_REVIEW', 'false');
+    render(<Dashboard />);
+    expect(screen.queryByRole('button', { name: /Content review/ })).not.toBeInTheDocument();
+  });
+
+  it('opens the review screen with the signed-in name as reviewer when its flag is on', async () => {
+    vi.stubEnv('REACT_APP_ENABLE_CONTENT_REVIEW', 'true');
+    render(<Dashboard />);
+    await userEvent.click(screen.getByRole('button', { name: /Content review/ }));
+    expect(await screen.findByTestId('content-review')).toHaveTextContent('Coach');
   });
 });

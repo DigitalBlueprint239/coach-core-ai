@@ -935,3 +935,44 @@
 .pb2-phone .pb2-step-item {
   scroll-snap-align: start;
 }
+
+/* ---- Content review ---- */
+.pb2-review {
+  padding: 1rem;
+}
+.pb2-review-log {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--pb-surface);
+  border: 1px solid var(--pb-border);
+  border-radius: var(--pb-radius);
+}
+.pb2-review-log ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.pb2-review-note {
+  margin: 0.375rem 0;
+  font-size: 0.9375rem;
+}
+.pb2-review-claim {
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--pb-workspace);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+}
+.pb2-review-sources {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+}
+.pb2-review-sources a {
+  color: var(--pb-sheet);
+  text-decoration: underline;
+}
+.pb2-review-reject {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
