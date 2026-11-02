@@ -95,6 +95,8 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   const reducedMotion = useReducedMotion();
 
   const [settings, setSettings] = useState<TeamPlaybookSettings>(DEFAULT_SETTINGS);
+  // Settings are written whole (teams/{id}.playbook), so nothing may write them before the stored ones load.
+  const [settingsState, setSettingsState] = useState<'loading' | 'ready' | 'failed'>('loading');
   const [plays, setPlays] = useState<PlayV2[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [editor, dispatch] = useReducer(editorReducer, undefined, () =>
@@ -110,11 +112,13 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   const [activeStep, setActiveStep] = useState(0);
   const [coverage, setCoverage] = useState<CoverageId | undefined>(undefined);
   const [sheetOpen, setSheetOpen] = useState(false);
-  /** The play being edited before "New formation", restored after the formation is saved or cancelled. */
-  const parked = useRef<PlayV2 | null>(null);
+  /** The play being edited before "New formation", restored (still unsaved if it was) after the formation. */
+  const parked = useRef<{ play: PlayV2; dirty: boolean } | null>(null);
 
-  const { restorable, discard } = useAutosave(`pb2:draft:${teamId}`, editor.play, editor.dirty);
+  const { restorable, discard, clear, offer } = useAutosave(`pb2:draft:${teamId}`, editor.play, editor.dirty);
   const { play, problems, dirty } = editor;
+  const currentPlay = useRef(play);
+  currentPlay.current = play;
   const terminology = settings.terminology;
 
   const refreshPlays = useCallback(async () => {
@@ -128,8 +132,16 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   useEffect(() => {
     let live = true;
     loadTeamSettings(teamId)
-      .then(s => live && setSettings(s))
-      .catch(e => live && setLoadError(isStoreError(e) ? e.message : "Couldn't load your playbook settings."));
+      .then(s => {
+        if (!live) return;
+        setSettings(s);
+        setSettingsState('ready');
+      })
+      .catch(e => {
+        if (!live) return;
+        setSettingsState('failed');
+        setLoadError(isStoreError(e) ? e.message : "Couldn't load your playbook settings.");
+      });
     void refreshPlays();
     return () => {
       live = false;
@@ -138,7 +150,18 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
 
   const formations = useMemo(() => [...settings.formations, ...LIBRARY.formations], [settings.formations]);
 
-  const confirmDiscard = () => !dirty || window.confirm('Leave this play? Its unsaved changes are kept as a draft you can restore.');
+  const SETTINGS_BLOCKED =
+    "Your playbook settings didn't load, so they can't be changed until they load. Reload the page to try again.";
+
+  /** Leaving a play with unsaved changes asks first, then keeps it as the draft offered back by Restore. */
+  const leaveCurrent = (): boolean => {
+    if (!dirty) return true;
+    if (!window.confirm('Leave this play? You can bring its unsaved changes back with Restore until you edit another one.')) {
+      return false;
+    }
+    offer(play);
+    return true;
+  };
 
   const openPlay = (next: PlayV2, nextMode: Mode = 'play', unsaved = false) => {
     dispatch({ type: 'load', play: next, dirty: unsaved });
@@ -170,8 +193,13 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   }, []);
 
   const save = async () => {
-    setSaving(true);
     setNotice(null);
+    if (mode === 'formation' && settingsState !== 'ready') {
+      setNotice({ kind: 'error', text: SETTINGS_BLOCKED });
+      return;
+    }
+    const sent = play;
+    setSaving(true);
     try {
       if (mode === 'formation') {
         const formation: Formation = { ...play.formation, name: play.name.trim() || 'New formation' };
@@ -182,15 +210,18 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
         };
         await saveTeamSettings(teamId, next);
         setSettings(next);
-        dispatch({ type: 'saved', id: formation.id });
+        dispatch({ type: 'saved', id: formation.id, play: sent });
+        if (currentPlay.current === sent) clear();
         const back = parked.current;
         parked.current = null;
-        if (back) openPlay(back);
+        if (back) openPlay(back.play, 'play', back.dirty);
         else openPlay(newBlankPlay(teamId, formation));
         setNotice({ kind: 'ok', text: `Saved ${formation.name} to your formations.` });
       } else {
-        const id = await savePlayV2(play, uid);
-        dispatch({ type: 'saved', id });
+        const id = await savePlayV2(sent, uid);
+        dispatch({ type: 'saved', id, play: sent });
+        // Clear the stored draft only if nothing changed while the save was in flight.
+        if (currentPlay.current === sent) clear();
         setNotice({ kind: 'ok', text: 'Saved.' });
         void refreshPlays();
       }
@@ -209,18 +240,18 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   const changePlay = (id: string) => {
     if (id === '__current') return;
     const next = plays.find(x => x.id === id);
-    if (next && confirmDiscard()) openPlay(structuredClone(next));
+    if (next && leaveCurrent()) openPlay(structuredClone(next));
   };
 
   const addFromAssistant = (conceptId: string) => {
     const concept = LIBRARY.concepts.find(c => c.id === conceptId);
-    if (!concept || !confirmDiscard()) return;
+    if (!concept || !leaveCurrent()) return;
     const runnable = [play.formation, ...formations].find(f => applyConcept(concept, f).ok) ?? LIBRARY.formations[0];
     openPlay(playFromConcept(teamId, concept, runnable));
   };
 
   const startFormation = (from: Formation, name: string) => {
-    if (mode === 'play') parked.current = play;
+    if (mode === 'play') parked.current = { play, dirty };
     const copy = formationCopy(from, name);
     openPlay({ ...newBlankPlay(teamId, copy), name, tags: [FORMATION_DRAFT_TAG] }, 'formation');
     setNewFormationOpen(false);
@@ -229,7 +260,8 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   const cancelFormation = () => {
     const back = parked.current;
     parked.current = null;
-    openPlay(back ?? playFromConcept(teamId, LIBRARY.concepts[0], LIBRARY.formations[0]));
+    if (back) openPlay(back.play, 'play', back.dirty);
+    else openPlay(playFromConcept(teamId, LIBRARY.concepts[0], LIBRARY.formations[0]));
   };
 
   const selected = play.formation.players.find(x => x.role === editor.selectedRole);
@@ -237,10 +269,10 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
     selected && dispatch({ type: 'movePlayer', role: selected.role, at: { x: selected.at.x + dx, y: selected.at.y + dy } });
 
   const menuItems: Array<{ label: string; run(): void; disabled?: boolean }> = [
-    { label: 'New play', run: () => confirmDiscard() && openPlay(newBlankPlay(teamId, play.formation)) },
+    { label: 'New play', run: () => leaveCurrent() && openPlay(newBlankPlay(teamId, play.formation)) },
     { label: 'New formation', run: () => setNewFormationOpen(true) },
     { label: 'Library', run: () => setView('library') },
-    { label: 'Terminology', run: () => setView('terminology') },
+    { label: 'Terminology', run: () => setView('terminology'), disabled: settingsState !== 'ready' },
     { label: 'Rename', run: () => setRenaming(true) },
     { label: 'Flip', run: () => dispatch({ type: 'flip' }) },
     { label: 'Undo', run: undo, disabled: editor.past.length === 0 },
@@ -263,6 +295,10 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   );
 
   const saveSettings = async (next: TeamPlaybookSettings) => {
+    if (settingsState !== 'ready') {
+      setNotice({ kind: 'error', text: SETTINGS_BLOCKED });
+      return;
+    }
     const previous = settings;
     setSettings(next);
     try {
@@ -328,7 +364,13 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
               <label className="pb2-sr" htmlFor={`${ids}-play`}>
                 Play
               </label>
-              <select id={`${ids}-play`} className="pb2-select pb2-display pb2-play-select" value={play.id ?? '__current'} onChange={e => changePlay(e.target.value)}>
+              <select
+                id={`${ids}-play`}
+                className="pb2-select pb2-display pb2-play-select"
+                value={play.id ?? '__current'}
+                disabled={saving}
+                onChange={e => changePlay(e.target.value)}
+              >
                 {!play.id && <option value="__current">{play.name.toUpperCase()}</option>}
                 {plays.map(x => (
                   <option key={x.id} value={x.id}>
@@ -386,9 +428,14 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
               type="button"
               className="pb2-btn"
               onClick={() => {
-                const asFormation = restorable.tags.includes(FORMATION_DRAFT_TAG);
-                openPlay(restorable, asFormation ? 'formation' : 'play', true);
-                discard();
+                const draft = restorable;
+                const wasDirty = dirty;
+                if (wasDirty && !window.confirm('Replace the play you are editing with the draft? Its unsaved changes become the draft instead.')) {
+                  return;
+                }
+                if (wasDirty) offer(play);
+                else discard();
+                openPlay(draft, draft.tags.includes(FORMATION_DRAFT_TAG) ? 'formation' : 'play', true);
               }}
             >
               Restore
@@ -409,7 +456,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
           settings={settings}
           teamId={teamId}
           onClose={() => setView('sheet')}
-          onUse={next => confirmDiscard() && openPlay(next)}
+          onUse={next => leaveCurrent() && openPlay(next)}
         />
       )}
       {view === 'terminology' && (

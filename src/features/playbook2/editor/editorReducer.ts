@@ -30,7 +30,8 @@ export type EditorAction =
   | { type: 'select'; role?: OffenseRole }
   | { type: 'undo' }
   | { type: 'redo' }
-  | { type: 'saved'; id: string };
+  /** `play` is the exact play object that was sent to the store. */
+  | { type: 'saved'; id: string; play: PlayV2 };
 
 /** Half-yard grid for dragging and nudging. */
 export const snap = (v: number) => Math.round(v * 2) / 2 || 0;
@@ -109,7 +110,13 @@ export function editorReducer(s: EditorState, a: EditorAction): EditorState {
         problems: validateFormation(next.formation),
       };
     }
-    case 'saved':
-      return { ...s, play: { ...s.play, id: a.id }, dirty: false };
+    case 'saved': {
+      // The editor may have moved on while the save was in flight.
+      if (s.play === a.play) return { ...s, play: { ...s.play, id: a.id }, dirty: false };
+      // Later edits of the same play: they keep the new id (so the next save updates it) and stay unsaved.
+      if (s.past.includes(a.play)) return { ...s, play: { ...s.play, id: a.id } };
+      // A different play was opened: leave it alone.
+      return s;
+    }
   }
 }

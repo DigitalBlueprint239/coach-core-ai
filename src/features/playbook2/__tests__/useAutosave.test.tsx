@@ -63,13 +63,22 @@ describe('useAutosave', () => {
     expect(localStorage.getItem(KEY)).toBeNull();
   });
 
-  it('clears the draft once the play is saved (dirty goes back to false)', () => {
+  it('loading another play (dirty goes back to false) keeps the draft; clear() removes it after a save', () => {
     const play = newBlankPlay('t1', doubles);
     const h = renderHook(({ d }: { d: boolean }) => useAutosave(KEY, play, d), { initialProps: { d: true } });
     act(() => vi.advanceTimersByTime(500));
-    expect(localStorage.getItem(KEY)).not.toBeNull();
     h.rerender({ d: false });
+    expect(localStorage.getItem(KEY)).not.toBeNull();
+    act(() => h.result.current.clear());
     expect(localStorage.getItem(KEY)).toBeNull();
+  });
+
+  it('offer() stores a play at once and offers it back without a remount', () => {
+    const { result } = renderHook(() => useAutosave(KEY, newBlankPlay('t1', doubles), false));
+    expect(result.current.restorable).toBeNull();
+    act(() => result.current.offer({ ...newBlankPlay('t1', doubles), name: 'Left behind' }));
+    expect(result.current.restorable?.name).toBe('Left behind');
+    expect(JSON.parse(localStorage.getItem(KEY)!).name).toBe('Left behind');
   });
 
   it('ignores a stored value that is not a version-2 play', () => {

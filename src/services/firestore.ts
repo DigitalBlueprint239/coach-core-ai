@@ -323,6 +323,10 @@ export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'team
   }
 }
 
+// Version-2 plays (src/features/playbook2) share the plays collection; version-1 readers never see them.
+const isPlayV2Doc = (data: unknown) =>
+  typeof data === 'object' && data !== null && (data as { schemaVersion?: unknown }).schemaVersion === 2;
+
 export async function getPlays(teamId: string): Promise<Play[]> {
   getCurrentUser(); // Ensure authenticated
   
@@ -334,10 +338,12 @@ export async function getPlays(teamId: string): Promise<Play[]> {
     );
     
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Play[];
+    return querySnapshot.docs
+      .filter(doc => !isPlayV2Doc(doc.data()))
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Play[];
   } catch (error) {
     console.error('Error fetching plays:', error);
     throw error;
@@ -411,10 +417,12 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
   );
 
   return onSnapshot(q, (snapshot) => {
-    const plays = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Play[];
+    const plays = snapshot.docs
+      .filter(doc => !isPlayV2Doc(doc.data()))
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Play[];
     callback(plays);
   });
 }

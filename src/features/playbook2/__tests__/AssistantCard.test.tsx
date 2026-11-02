@@ -78,4 +78,29 @@ describe('AssistantCard', () => {
     expect(screen.getByText('No verified play beats this defense at your level yet.')).toBeInTheDocument();
     expect(screen.queryByText(/Flood|Four verticals|Stick|Curl-flat/)).not.toBeInTheDocument();
   });
+
+  it('offers only published coverages, so no draft defense is ever drawn', () => {
+    render(<AssistantCard level="jv" playbookConceptIds={[]} terminology={{}} onAdd={vi.fn()} library={fullLibrary()} />);
+    expect(screen.getByRole('radiogroup', { name: 'Cover 2' })).toBeInTheDocument();
+    expect(screen.getByRole('radiogroup', { name: 'Cover 3' })).toBeInTheDocument();
+    for (const draft of ['Cover 0', 'Cover 1', 'Cover 4']) expect(screen.queryByRole('radiogroup', { name: draft })).not.toBeInTheDocument();
+  });
+
+  it('each alternative names the coverage it beats', async () => {
+    const lib = structuredClone(fullLibrary());
+    for (const id of ['flood']) {
+      const c = lib.concepts.find(x => x.id === id)!;
+      c.verification = { status: 'approved', reviewer: 'Owner', date: '2026-11-01', sources: [] };
+    }
+    const m = lib.matchups.find(x => x.concept === 'flood' && x.beats === 'cover-3')!;
+    m.verification = { status: 'approved', reviewer: 'Owner', date: '2026-11-01', sources: [] };
+    render(<AssistantCard level="varsity" playbookConceptIds={[]} terminology={{}} onAdd={vi.fn()} library={lib} />);
+    await setShare('Cover 2', 'Mostly');
+    await setShare('Cover 3', 'Sometimes');
+    expect(within(screen.getByRole('region', { name: 'Recommended play' })).getByText('Smash')).toBeInTheDocument();
+    const alt = screen.getByRole('listitem');
+    expect(alt).toHaveTextContent('Flood');
+    expect(alt).toHaveTextContent('beats Cover 3');
+    expect(screen.queryByText(/Also beats Cover 2/)).not.toBeInTheDocument();
+  });
 });

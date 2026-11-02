@@ -41,6 +41,12 @@ const LEVEL_NAME: Record<Level, string> = { youth: 'Youth', jv: 'JV', varsity: '
 export const TerminologyPanel: React.FC<TerminologyPanelProps> = ({ settings, onChange }) => {
   const ids = useId();
   const [draft, setDraft] = useState<Record<string, string>>(() => ({ ...settings.terminology }));
+  // Follow the stored terminology when it changes from outside (a late load, or a save rolled back on error).
+  const [seen, setSeen] = useState(settings.terminology);
+  if (seen !== settings.terminology) {
+    setSeen(settings.terminology);
+    setDraft({ ...settings.terminology });
+  }
 
   const cleaned = (d: Record<string, string>) => {
     const out: Record<string, string> = {};

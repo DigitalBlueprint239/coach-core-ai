@@ -35,22 +35,30 @@ function remove(key: string) {
   }
 }
 
-export function useAutosave(key: string, play: PlayV2, dirty: boolean): { restorable: PlayV2 | null; discard(): void } {
+export type Autosave = {
+  /** A draft left from an earlier session or from a play the coach switched away from. */
+  restorable: PlayV2 | null;
+  /** Forget the offered draft (and its stored copy). */
+  discard(): void;
+  /** Remove the stored draft after a successful save. */
+  clear(): void;
+  /** Keep a play the coach is leaving with unsaved changes, and offer it back right away. */
+  offer(play: PlayV2): void;
+};
+
+/**
+ * One draft slot per team: the latest unsaved play. Loading another play does not delete it; only a successful
+ * save (clear) or the coach (discard) does. Editing another play later overwrites the slot.
+ */
+export function useAutosave(key: string, play: PlayV2, dirty: boolean): Autosave {
   // Read once, before anything is written, so the previous session's draft can be offered back.
   const [restorable, setRestorable] = useState<PlayV2 | null>(() => read(key));
-  const wasDirty = useRef(false);
   // The latest unsaved play, written at once when the view unmounts or the tab closes before the debounce fires.
   const pending = useRef<PlayV2 | null>(null);
   pending.current = dirty ? play : null;
 
   useEffect(() => {
-    if (!dirty) {
-      // A save (dirty → clean) means the draft is no longer needed.
-      if (wasDirty.current) remove(key);
-      wasDirty.current = false;
-      return;
-    }
-    wasDirty.current = true;
+    if (!dirty) return;
     const timer = setTimeout(() => write(key, play), DEBOUNCE_MS);
     return () => clearTimeout(timer);
   }, [key, play, dirty]);
@@ -71,5 +79,15 @@ export function useAutosave(key: string, play: PlayV2, dirty: boolean): { restor
     setRestorable(null);
   }, [key]);
 
-  return { restorable, discard };
+  const clear = useCallback(() => remove(key), [key]);
+
+  const offer = useCallback(
+    (left: PlayV2) => {
+      write(key, left);
+      setRestorable(left);
+    },
+    [key],
+  );
+
+  return { restorable, discard, clear, offer };
 }

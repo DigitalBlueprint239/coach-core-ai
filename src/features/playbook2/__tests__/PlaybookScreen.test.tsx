@@ -213,4 +213,64 @@ describe('PlaybookScreen', () => {
     expect(within(rec).getByText(/run with the flag route behind him/)).toBeInTheDocument();
     expect(within(rec).getByText('Eagle')).toBeInTheDocument();
   });
+
+  const rename = async (name: string) => {
+    await openMore('Rename');
+    const input = screen.getByRole('textbox', { name: 'Play name' });
+    await userEvent.clear(input);
+    await userEvent.type(input, `${name}{Enter}`);
+  };
+
+  it('switching away from an unsaved play offers it back to restore', async () => {
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
+    await ready();
+    await rename('Draft A');
+    await openMore('New play');
+    expect(confirm).toHaveBeenCalled();
+    const offer = screen.getByRole('region', { name: 'Unsaved draft' });
+    expect(offer).toHaveTextContent('Draft A');
+    await userEvent.click(within(offer).getByRole('button', { name: 'Restore' }));
+    expect(screen.getByTestId('title-block')).toHaveTextContent('DRAFT A');
+    expect(screen.getByText('Unsaved')).toBeInTheDocument();
+    confirm.mockRestore();
+  });
+
+  it('Restore asks before replacing unsaved edits', async () => {
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    await ready();
+    await rename('Old idea');
+    await openMore('New play');
+    expect(screen.queryByRole('region', { name: 'Unsaved draft' })).not.toBeInTheDocument();
+    expect(screen.getByTestId('title-block')).toHaveTextContent('OLD IDEA');
+    confirm.mockReturnValue(true);
+    await openMore('New play');
+    await rename('Current work');
+    confirm.mockReturnValue(false);
+    await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved draft' })).getByRole('button', { name: 'Restore' }));
+    expect(screen.getByTestId('title-block')).toHaveTextContent('CURRENT WORK');
+    confirm.mockRestore();
+  });
+
+  it('a play parked for New formation comes back still unsaved', async () => {
+    await ready();
+    await rename('Parked');
+    await openMore('New formation');
+    await userEvent.click(screen.getByRole('button', { name: 'Start editing' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(screen.getByTestId('title-block')).toHaveTextContent('PARKED');
+    expect(screen.getByText('Unsaved')).toBeInTheDocument();
+  });
+
+  it('settings that failed to load are never overwritten with defaults', async () => {
+    vi.mocked(loadTeamSettings).mockRejectedValueOnce({ kind: 'network', message: "Couldn't load: check your connection and try again." });
+    render(<PlaybookScreen />);
+    expect(await screen.findByText("Couldn't load: check your connection and try again.")).toBeInTheDocument();
+    await openMore('New formation');
+    await userEvent.click(screen.getByRole('button', { name: 'Start editing' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save formation' }));
+    expect(screen.getByText(/can't be changed until they load/)).toBeInTheDocument();
+    expect(saveTeamSettings).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole('button', { name: 'More' }));
+    expect(screen.getByRole('menuitem', { name: 'Terminology' })).toBeDisabled();
+  });
 });

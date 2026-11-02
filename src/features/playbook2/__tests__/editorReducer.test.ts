@@ -50,7 +50,8 @@ describe('editorReducer', () => {
     const s = run(start(), { type: 'select', role: 'H' });
     expect(s.selectedRole).toBe('H');
     expect(s.past).toEqual([]);
-    const edited = run(s, { type: 'rename', name: 'x' }, { type: 'saved', id: 'p1' });
+    const renamed = run(s, { type: 'rename', name: 'x' });
+    const edited = editorReducer(renamed, { type: 'saved', id: 'p1', play: renamed.play });
     expect(edited.past).toHaveLength(1);
     expect(edited.play.id).toBe('p1');
     expect(edited.dirty).toBe(false);
@@ -97,5 +98,29 @@ describe('editorReducer', () => {
     const s = run(start(), { type: 'rename', name: 'x' });
     const loaded = editorReducer(s, { type: 'load', play: playFromConcept('t1', smash, doubles) });
     expect(loaded).toMatchObject({ past: [], future: [], dirty: false });
+  });
+
+  it('saved marks clean only the exact play that was sent', () => {
+    const sent = run(start(), { type: 'rename', name: 'A' });
+    const done = editorReducer(sent, { type: 'saved', id: 'p1', play: sent.play });
+    expect(done).toMatchObject({ dirty: false });
+    expect(done.play.id).toBe('p1');
+  });
+
+  it('edits made while a save was in flight stay unsaved but keep the new id', () => {
+    const sent = run(start(), { type: 'rename', name: 'A' });
+    const later = editorReducer(sent, { type: 'movePlayer', role: 'H', at: { x: 0, y: -8 } });
+    const done = editorReducer(later, { type: 'saved', id: 'p1', play: sent.play });
+    expect(done.dirty).toBe(true);
+    expect(done.play.id).toBe('p1');
+    expect(done.play.formation.players.find(p => p.role === 'H')!.at).toEqual({ x: 0, y: -8 });
+  });
+
+  it('a save that finishes after switching to another play does not touch the new play', () => {
+    const sent = run(start(), { type: 'rename', name: 'A' });
+    const other = editorReducer(sent, { type: 'load', play: playFromConcept('t1', smash, doubles) });
+    const done = editorReducer(other, { type: 'saved', id: 'p1', play: sent.play });
+    expect(done).toBe(other);
+    expect(done.play.id).toBeUndefined();
   });
 });

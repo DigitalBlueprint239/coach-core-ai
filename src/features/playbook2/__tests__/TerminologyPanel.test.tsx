@@ -67,4 +67,12 @@ describe('TerminologyPanel', () => {
     await userEvent.tab();
     expect(spy).not.toHaveBeenCalled();
   });
+
+  it('follows settings that change after it opened (a late load or a rolled-back save)', () => {
+    const { rerender } = render(<TerminologyPanel settings={base} onChange={vi.fn()} />);
+    const h = () => screen.getByRole('textbox', { name: 'Your word for H (slot receiver)' });
+    expect(h()).toHaveValue('');
+    rerender(<TerminologyPanel settings={{ ...base, terminology: { H: 'F' } }} onChange={vi.fn()} />);
+    expect(h()).toHaveValue('F');
+  });
 });

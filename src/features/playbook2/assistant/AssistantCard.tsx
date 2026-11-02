@@ -15,14 +15,6 @@ export type AssistantCardProps = {
   onTopCoverage?(coverage: CoverageId | undefined): void;
 };
 
-const COVERAGES: Array<{ id: CoverageId; name: string }> = [
-  { id: 'cover-0', name: 'Cover 0' },
-  { id: 'cover-1', name: 'Cover 1' },
-  { id: 'cover-2', name: 'Cover 2' },
-  { id: 'cover-3', name: 'Cover 3' },
-  { id: 'cover-4', name: 'Cover 4' },
-];
-
 type Frequency = 'mostly' | 'sometimes' | 'rarely' | 'none';
 const FREQUENCIES: Array<{ id: Frequency; label: string; share: number }> = [
   { id: 'mostly', label: 'Mostly', share: 0.6 },
@@ -39,14 +31,16 @@ export const AssistantCard: React.FC<AssistantCardProps> = ({
 }) => {
   const ids = useId();
   const lib = useMemo(() => publishedLibrary(library), [library]);
+  // Only published coverages can be picked, so the sheet never draws an unverified defense.
+  const coverages = lib.coverages;
   const [freq, setFreq] = useState<Partial<Record<CoverageId, Frequency>>>({});
   const t = (s: string) => applyTerminology(s, terminology);
 
   const profile = useMemo(
     () => ({
-      coverages: COVERAGES.map(c => ({ id: c.id, share: shareOf(freq[c.id] ?? 'none') })).filter(c => c.share > 0),
+      coverages: coverages.map(c => ({ id: c.id, share: shareOf(freq[c.id] ?? 'none') })).filter(c => c.share > 0),
     }),
-    [freq],
+    [freq, coverages],
   );
   const top = profile.coverages.reduce<{ id: CoverageId; share: number } | undefined>(
     (best, c) => (!best || c.share > best.share ? (c as { id: CoverageId; share: number }) : best),
@@ -62,7 +56,7 @@ export const AssistantCard: React.FC<AssistantCardProps> = ({
     [profile, level, playbookConceptIds, lib],
   );
   const [best, ...alternatives] = recs;
-  const nameOf = (id: CoverageId) => COVERAGES.find(c => c.id === id)?.name ?? id;
+  const nameOf = (id: CoverageId) => coverages.find(c => c.id === id)?.name ?? id;
 
   const summary = top
     ? `They play ${freq[top] === 'mostly' ? 'mostly ' : ''}${nameOf(top)}`
@@ -105,12 +99,15 @@ export const AssistantCard: React.FC<AssistantCardProps> = ({
 
       {alternatives.length > 0 && (
         <div className="pb2-alts">
-          <h3 className="pb2-alts-title">Also beats {nameOf(best.beats)}</h3>
+          <h3 className="pb2-alts-title">Also worth a look</h3>
           <ul>
             {alternatives.slice(0, 2).map(r => (
               <li key={r.concept.id} className="pb2-alt">
                 <span>
-                  <strong>{t(r.concept.name)}</strong> <span className="pb2-muted">· {LEVEL_TAG[r.concept.minLevel]}</span>
+                  <strong>{t(r.concept.name)}</strong>{' '}
+                  <span className="pb2-muted">
+                    · beats {nameOf(r.beats)} · {LEVEL_TAG[r.concept.minLevel]}
+                  </span>
                 </span>
                 {r.inPlaybook ? (
                   <span className="pb2-tag pb2-tag-ok">In your playbook</span>
@@ -132,7 +129,7 @@ export const AssistantCard: React.FC<AssistantCardProps> = ({
 
       <fieldset className="pb2-opponent">
         <legend>Their defense</legend>
-        {COVERAGES.map(c => (
+        {coverages.map(c => (
           <div key={c.id} className="pb2-opp-row" role="radiogroup" aria-label={c.name}>
             <span className="pb2-opp-name" aria-hidden="true">
               {c.name}
