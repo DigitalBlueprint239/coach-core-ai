@@ -16,7 +16,8 @@ export type EditorState = {
 };
 
 export type EditorAction =
-  | { type: 'load'; play: PlayV2 }
+  /** dirty: true when the loaded play is an unsaved draft (restored from autosave). */
+  | { type: 'load'; play: PlayV2; dirty?: boolean }
   | { type: 'movePlayer'; role: OffenseRole; at: Yards }
   | { type: 'setOnLine'; role: OffenseRole; onLine: boolean }
   | { type: 'setAssignment'; assignment: Assignment }
@@ -57,7 +58,7 @@ const withPlayers = (play: PlayV2, map: (p: Formation['players'][number]) => For
 export function editorReducer(s: EditorState, a: EditorAction): EditorState {
   switch (a.type) {
     case 'load':
-      return initEditor(a.play);
+      return { ...initEditor(a.play), dirty: a.dirty ?? false };
     case 'movePlayer':
       return edit(
         s,
