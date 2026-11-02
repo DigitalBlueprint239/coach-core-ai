@@ -285,7 +285,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
           <select id={`${ids}-side`} className="pb2-select" defaultValue="offense">
             <option value="offense">Offense</option>
             <option value="defense" disabled>
-              Defense (later update)
+              Defense (soon)
             </option>
           </select>
           <span className="pb2-path-sep" aria-hidden="true">

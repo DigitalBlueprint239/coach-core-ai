@@ -28,6 +28,21 @@ const KEY_MOVES: Record<string, Yards> = {
   ArrowDown: { x: 0, y: -NUDGE },
 };
 const tenth = (v: number) => Math.round(v * 10) / 10 || 0;
+const BADGE_GAP = 20;
+
+/** Badge spots in sheet units, nudged sideways so two steps that point at the same place stay readable. */
+function spreadBadges(spots: Array<Yards | null>): Array<{ x: number; y: number } | null> {
+  const placed: Array<{ x: number; y: number }> = [];
+  return spots.map(at => {
+    if (!at) return null;
+    const spot = { x: sx(at.x) + 12, y: sy(at.y) - 12 };
+    for (let tries = 0; tries < 6 && placed.some(o => Math.hypot(o.x - spot.x, o.y - spot.y) < BADGE_GAP); tries++) {
+      spot.x += spot.x > SHEET_W - 40 ? -BADGE_GAP : BADGE_GAP;
+    }
+    placed.push(spot);
+    return spot;
+  });
+}
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 export const FieldSheet: React.FC<FieldSheetProps> = ({
@@ -170,7 +185,8 @@ export const FieldSheet: React.FC<FieldSheetProps> = ({
               },
               onPointerDown: (e: React.PointerEvent) => {
                 if (!onMovePlayer) return;
-                svgRef.current?.setPointerCapture?.(e.pointerId);
+                // Capture on the player (not the svg): the click that follows a press then still reaches it.
+                (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
                 setDrag({ role: p.role, at: p.at, moved: false });
               },
             }
@@ -197,14 +213,14 @@ export const FieldSheet: React.FC<FieldSheetProps> = ({
       })}
 
       {/* Read badges ①②③ */}
-      {badges.map((at, i) =>
+      {spreadBadges(badges).map((at, i) =>
         at ? (
           <g
             key={i}
             data-testid="read-badge"
             data-step={String(i + 1)}
             data-active={highlightStep === i ? 'true' : undefined}
-            transform={`translate(${sx(at.x) + 12} ${sy(at.y) - 12})`}
+            transform={`translate(${at.x} ${at.y})`}
             aria-hidden="true"
           >
             <circle r="9" fill={highlightStep === i ? 'var(--pb-signal)' : 'var(--pb-line-solid)'} />
@@ -224,7 +240,7 @@ export const FieldSheet: React.FC<FieldSheetProps> = ({
 
       {/* Title block */}
       <g data-testid="title-block" transform={`translate(${SHEET_W - 196} ${SHEET_H - 66})`}>
-        <rect width="180" height="52" fill="none" stroke="var(--pb-line)" strokeWidth="1.2" />
+        <rect width="180" height="52" fill="var(--pb-sheet)" stroke="var(--pb-line)" strokeWidth="1.2" />
         <line x1="0" x2="180" y1="32" y2="32" stroke="var(--pb-line)" />
         <text className="pb2-title" x="10" y="24">{t(play.name).toUpperCase()}</text>
         <text className="pb2-title-sub" x="10" y="45">

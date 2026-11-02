@@ -519,7 +519,7 @@
   padding: 0.5rem 0.75rem;
 }
 .pb2-phone .pb2-main {
-  padding: 0.75rem 0.5rem 11rem;
+  padding: 0.75rem 0.5rem 14.5rem;
 }
 .pb2-phone .pb2-play-select,
 .pb2-phone .pb2-play-name {
@@ -531,7 +531,7 @@
   right: 0;
   bottom: 0;
   z-index: 40;
-  max-height: 10rem;
+  max-height: 13.5rem;
   overflow: hidden;
   background: var(--pb-surface);
   border-top: 1px solid var(--pb-border);
@@ -579,6 +579,7 @@
 }
 .pb2-library-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -874,6 +875,10 @@
   background: var(--pb-ink);
   color: #ffffff;
 }
+.pb2-chip input[value='none']:checked + span {
+  background: var(--pb-workspace);
+  color: var(--pb-ink-2);
+}
 .pb2-chip input:focus-visible + span {
   outline: 3px solid var(--pb-focus);
   outline-offset: -3px;
@@ -975,4 +980,30 @@
   display: grid;
   gap: 0.5rem;
   margin-top: 0.5rem;
+}
+
+/* Phone: the sheet renders at about 0.6 scale, so its labels grow to stay legible */
+.pb2-phone .pb2-player-label {
+  font-size: 15px;
+}
+.pb2-phone .pb2-def-label {
+  font-size: 14px;
+}
+.pb2-phone .pb2-title {
+  font-size: 22px;
+}
+.pb2-phone .pb2-yardnum text {
+  font-size: 26px;
+}
+.pb2-phone .pb2-select {
+  padding: 0 0.25rem;
+}
+.pb2-phone .pb2-assistant-title {
+  font-size: 0.9375rem;
+}
+.pb2-phone .pb2-rec {
+  padding: 0.625rem 0.75rem;
+}
+.pb2-phone .pb2-rec-reason {
+  font-size: 1.25rem;
 }

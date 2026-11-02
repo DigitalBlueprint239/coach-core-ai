@@ -37,6 +37,16 @@ describe('FieldSheet', () => {
     expect(badges).toEqual(['1', '2', '3']);
   });
 
+  it('read badges never sit on top of each other', () => {
+    const { container } = render(<FieldSheet play={play()} terminology={{}} defense="cover-2" />);
+    const at = [...container.querySelectorAll('[data-testid="read-badge"]')].map(b => {
+      const [, x, y] = /translate\(([-\d.]+) ([-\d.]+)\)/.exec(b.getAttribute('transform')!)!;
+      return { x: Number(x), y: Number(y) };
+    });
+    for (let i = 0; i < at.length; i++)
+      for (let j = i + 1; j < at.length; j++) expect(Math.hypot(at[i].x - at[j].x, at[i].y - at[j].y)).toBeGreaterThanOrEqual(18);
+  });
+
   it('marks the highlighted read step', () => {
     const { container } = render(<FieldSheet play={play()} terminology={{}} defense="cover-2" highlightStep={1} />);
     const active = container.querySelector('[data-testid="read-badge"][data-active="true"]');
@@ -82,6 +92,23 @@ describe('FieldSheet', () => {
     render(<FieldSheet play={play()} terminology={{}} />);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
     expect(screen.getByRole('img', { name: /^H, slot receiver/ })).toBeInTheDocument();
+  });
+
+  it('a drag captures the pointer on the player itself, so a plain click still selects it', () => {
+    const captured: Element[] = [];
+    const proto = Element.prototype as unknown as { setPointerCapture?: (id: number) => void };
+    const original = proto.setPointerCapture;
+    proto.setPointerCapture = function (this: Element) {
+      captured.push(this);
+    };
+    try {
+      render(<FieldSheet play={play()} terminology={{}} onMovePlayer={vi.fn()} onSelect={vi.fn()} />);
+      const h = screen.getByRole('button', { name: /^H, slot receiver/ });
+      fireEvent.pointerDown(h, { pointerId: 1 });
+      expect(captured).toEqual([h]);
+    } finally {
+      proto.setPointerCapture = original;
+    }
   });
 
   it('players are not movable without onMovePlayer', () => {
