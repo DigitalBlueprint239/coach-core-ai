@@ -60,21 +60,29 @@ interface TeamProviderProps {
   children: ReactNode;
 }
 
+// Unambiguous characters only (no 0/O or 1/I), so codes are easy to read aloud and type.
+const TEAM_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+export const TEAM_CODE_LENGTH = 8;
+
+/** A random team code from a cryptographic source. */
+export function generateTeamCode(): string {
+  const bytes = new Uint8Array(TEAM_CODE_LENGTH);
+  crypto.getRandomValues(bytes);
+  // 256 is a multiple of 32, so taking each byte modulo 32 is unbiased.
+  return Array.from(bytes, (b) => TEAM_CODE_ALPHABET[b % TEAM_CODE_ALPHABET.length]).join('');
+}
+
+/**
+ * Joining someone else's team by code is off: it needs to read and edit a team the user doesn't belong to,
+ * which the security rules (correctly) refuse. Sharing a team with assistant coaches returns with its own design.
+ */
+export const TEAM_JOIN_ENABLED = false;
+
 export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null);
   const [userTeams, setUserTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Generate a unique team code
-  const generateTeamCode = (): string => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < 6; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  };
 
   // Create a new team
   const createTeam = async (name: string): Promise<string> => {
@@ -83,14 +91,9 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       const user = auth.currentUser;
       if (!user) throw new Error('User must be authenticated');
 
-      // Generate unique team code
-      let code: string;
-      let isUnique = false;
-      do {
-        code = generateTeamCode();
-        const existingTeam = await getDocs(query(collection(db, 'teams'), where('code', '==', code)));
-        isUnique = existingTeam.empty;
-      } while (!isUnique);
+      // Security rules don't let a coach search other coaches' teams, so uniqueness isn't checked by query:
+      // 8 characters from a 32-character alphabet (about 1 in a trillion per pair) makes a clash negligible.
+      const code = generateTeamCode();
 
       const teamData = {
         name,
