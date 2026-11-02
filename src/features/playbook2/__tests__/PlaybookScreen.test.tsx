@@ -201,4 +201,16 @@ describe('PlaybookScreen', () => {
     expect(screen.getByTestId('title-block')).toHaveTextContent('SMASH');
     expect(document.querySelectorAll('[data-testid="route"]')).toHaveLength(4);
   });
+
+  it('team terminology reaches the read steps and the assistant reason', async () => {
+    vi.mocked(loadTeamSettings).mockResolvedValueOnce({ terminology: { corner: 'flag', Smash: 'Eagle' }, level: 'jv', formations: [] });
+    await ready();
+    await waitFor(() => expect(screen.getByTestId('title-block')).toHaveTextContent('EAGLE'));
+    expect(screen.getByText('He sits on the hitch: throw the flag.')).toBeInTheDocument();
+    const cover2 = screen.getByRole('radiogroup', { name: 'Cover 2' });
+    await userEvent.click(within(cover2).getByRole('radio', { name: 'Mostly' }));
+    const rec = screen.getByRole('region', { name: 'Recommended play' });
+    expect(within(rec).getByText(/run with the flag route behind him/)).toBeInTheDocument();
+    expect(within(rec).getByText('Eagle')).toBeInTheDocument();
+  });
 });
