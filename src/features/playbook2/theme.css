@@ -53,3 +53,96 @@
   font-family: var(--pb-font-hand);
   font-weight: 600;
 }
+
+/* ---- Blueprint sheet ---- */
+.pb2-sheet {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 600 / 480;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(20, 32, 46, 0.08), 0 12px 32px -12px rgba(18, 59, 109, 0.45);
+  touch-action: none;
+  user-select: none;
+}
+.pb2-yardnum text {
+  font-family: var(--pb-font-display);
+  font-size: 22px;
+  fill: var(--pb-line);
+  text-anchor: middle;
+}
+.pb2-player-label,
+.pb2-def-label {
+  font-family: var(--pb-font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  fill: var(--pb-line-solid);
+  text-anchor: middle;
+  pointer-events: none;
+}
+.pb2-def-label {
+  font-weight: 600;
+  font-size: 10px;
+  opacity: 0.85;
+}
+.pb2-badge-num {
+  font-family: var(--pb-font-ui);
+  font-weight: 700;
+  font-size: 11px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.pb2-note {
+  font-family: var(--pb-font-hand);
+  font-weight: 600;
+  font-size: 24px;
+  fill: var(--pb-chalk);
+}
+.pb2-title {
+  font-family: var(--pb-font-display);
+  font-size: 20px;
+  fill: var(--pb-line-solid);
+  letter-spacing: 0.04em;
+}
+.pb2-title-sub {
+  font-family: var(--pb-font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--pb-line-solid);
+  opacity: 0.8;
+}
+.pb2-player {
+  cursor: default;
+  outline: none;
+}
+.pb2-player[role='button'] {
+  cursor: pointer;
+}
+.pb2-player.pb2-movable {
+  cursor: grab;
+}
+.pb2-player:focus-visible .pb2-ring {
+  opacity: 1;
+  stroke: #ffffff;
+}
+.pb2-route-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: pb2-draw 700ms ease-out forwards;
+}
+@keyframes pb2-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pb2-route-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+.pb2-mini {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
