@@ -669,3 +669,64 @@
   padding: 2rem 0;
   text-align: center;
 }
+
+/* ---- Terminology ---- */
+.pb2-terminology {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: 64rem;
+}
+.pb2-term-preview {
+  padding: 0.75rem 1rem;
+  background: var(--pb-sheet);
+  color: var(--pb-line-solid);
+  border-radius: var(--pb-radius);
+}
+.pb2-term-preview .pb2-muted {
+  color: var(--pb-line-solid);
+  opacity: 0.8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.pb2-term-preview p {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+}
+.pb2-term-level {
+  max-width: 12rem;
+}
+.pb2-term-level .pb2-select {
+  border-color: var(--pb-border);
+  background: var(--pb-surface);
+}
+.pb2-term-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.pb2-term-group {
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--pb-surface);
+  border: 1px solid var(--pb-border);
+  border-radius: var(--pb-radius);
+}
+.pb2-term-group legend {
+  padding: 0 0.25rem;
+  font-weight: 700;
+}
+.pb2-term-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 8rem);
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.125rem 0;
+}
+.pb2-term-arrow {
+  color: var(--pb-ink-2);
+}
+.pb2-term-row .pb2-input {
+  width: 100%;
+}

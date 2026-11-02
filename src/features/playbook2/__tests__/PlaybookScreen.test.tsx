@@ -172,4 +172,21 @@ describe('PlaybookScreen', () => {
     expect(screen.getByTestId('title-block')).toHaveTextContent('UNSAVED IDEA');
     expect(screen.queryByRole('region', { name: 'Unsaved draft' })).not.toBeInTheDocument();
   });
+
+  it('team terminology reaches the field labels and library cards', async () => {
+    await ready();
+    await openMore('Terminology');
+    const h = screen.getByRole('textbox', { name: 'Your word for H (slot receiver)' });
+    await userEvent.type(h, 'F');
+    await userEvent.tab();
+    await waitFor(() => expect(saveTeamSettings).toHaveBeenCalledWith('t1', expect.objectContaining({ terminology: { H: 'F' } })));
+    const smash = screen.getByRole('textbox', { name: 'Your word for Smash (play)' });
+    await userEvent.type(smash, 'Eagle');
+    await userEvent.tab();
+    await userEvent.click(screen.getByRole('button', { name: 'Back to the play' }));
+    expect(screen.getByRole('button', { name: /^F, slot receiver/ })).toBeInTheDocument();
+    expect(screen.getByTestId('title-block')).toHaveTextContent('EAGLE');
+    await openMore('Library');
+    expect(screen.getByRole('heading', { name: 'Eagle' })).toBeInTheDocument();
+  });
 });
