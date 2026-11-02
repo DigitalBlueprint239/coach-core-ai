@@ -136,7 +136,13 @@ const SmartPlaybook = () => {
     try {
       const saved = localStorage.getItem('smartPlaybook_plays');
       if (saved) {
-        setSavedPlays(JSON.parse(saved));
+        // Version-2 plays belong to the new Smart Playbook (src/features/playbook2); this screen never lists them.
+        const parsed: unknown = JSON.parse(saved);
+        setSavedPlays(
+          Array.isArray(parsed)
+            ? (parsed as SavedPlay[]).filter(p => (p as { schemaVersion?: unknown }).schemaVersion !== 2)
+            : [],
+        );
       }
     } catch (error) {
       console.error('Error loading saved plays:', error);

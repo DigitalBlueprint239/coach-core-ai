@@ -57,3 +57,21 @@ Date/owner | GitHub branch & PR | Passed/failed/blocked tests + exact commands |
 **What remains:** owner actions O1 (sign-in providers + authorized domains), O2 (Sentry), O3 (`production` environment), create Hosting site `coach-core-ai-staging`; team rules decision; Google/email sign-in check on the PR preview (needs O1); add `firestore-rules` to required checks after merge.
 
 **Next owner:** repository owner (review, owner actions, rules decision); then the next plan (rebuild Smart Playbook phase 2 on the new trunk).
+
+## Report — 2026-11-02 — Claude — smart-playbook/phase2-screen
+**Branch / PR:** `smart-playbook/phase2-screen` → draft PR into `recovery/coach-core-mvp-2026` (plan: `docs/superpowers/plans/2026-10-31-smart-playbook-phase2-playbook-screen.md`).
+
+**Evidence (cloud session, Node 22.23.4, after `npm ci`):**
+- `npm run lint` → 0 problems; `npm run typecheck` → 0 errors
+- `npm test` → 50 files, 586 tests passed (branch base: 35 files, 466)
+- `npm run build` → OK; the new screen, review screen and fonts are lazy chunks (main bundle has no playbook v2 code)
+- `npm run test:rules` → 29 passed (24 existing + 5 new; **no rule changes**). The `where('teamId','==',…)` list query passes under the current rules.
+- Browser walkthrough (Auth + Firestore emulators with the real rules; `useAuth`/`useTeam` stubbed in an uncommitted harness because the trunk rules deny TeamContext's team queries): library → Use Smash from Doubles → drag → undo → rename H to F → Mostly Cover 2 → step 2 → save → reload → Content review approve, at 1440/768/390 px; no horizontal overflow, no console errors. Screenshots: `docs/evidence/smart-playbook-phase2/`.
+
+**Files changed:** new `src/features/playbook2/**`; `src/football-core/library.ts`, `index.ts`, `content/decisions.json`, `content/README.md`; `src/components/Dashboard.tsx` (flag-gated entry + Content review tab); `src/components/SmartPlaybook/SmartPlaybook.tsx` and `src/services/firestore.ts` (v1 reads skip v2 plays); `rules-tests/firestore.rules.test.ts` (tests only); `src/vite-env.d.ts`; `package.json` (3 `@fontsource` packages).
+
+**Security:** no rules, auth or AI changes; nothing calls the AI. Code review and security review run on the diff; code-review findings fixed (listed in the PR). Security review: no findings with confidence ≥ 8.
+
+**Remaining blockers:** the trunk blocker stands (rules deny TeamContext's team queries, so a real coach can't select a team until the owner decides the team-sharing model); the content-review screen shows drafts to any signed-in user of a build with `REACT_APP_ENABLE_CONTENT_REVIEW=true` (keep it to dev/preview builds); on a 390 px phone, players on the sheet are smaller than 44 px (the 44 px nudge buttons and the keyboard are the accessible path).
+
+**Next owner:** repository owner (review the draft PR, the rulings listed in it, and the flags), then phase 3 (level switch, one play every formation, whiteprint/print).

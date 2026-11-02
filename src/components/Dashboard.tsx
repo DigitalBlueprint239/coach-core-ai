@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { useAuth } from './AuthProvider';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
@@ -7,6 +7,12 @@ import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
 import { SignInScreen } from './auth/SignInScreen';
+import { isContentReviewEnabled, isPlaybookV2Enabled } from '../features/playbook2/flags';
+
+// The new Smart Playbook (behind REACT_APP_ENABLE_PLAYBOOK_V2) loads only when the flag is on.
+const PlaybookScreen = lazy(() => import('../features/playbook2/PlaybookScreen'));
+// The owner's content review queue (behind REACT_APP_ENABLE_CONTENT_REVIEW; dev and preview builds only).
+const ContentReview = lazy(() => import('../features/playbook2/review/ContentReview'));
 // TODO: Fix import path for AnalyticsDashboard if file exists
 // import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
@@ -31,6 +37,7 @@ const Dashboard: React.FC = () => {
     { id: 'practice', name: 'Practice Plans', icon: '📋' },
     { id: 'playbook', name: 'Smart Playbook', icon: '🏈' },
     { id: 'analytics', name: 'Analytics', icon: '📈' },
+    ...(isContentReviewEnabled() ? [{ id: 'review', name: 'Content review', icon: '🗂️' }] : []),
   ];
 
   return (
@@ -193,7 +200,20 @@ const Dashboard: React.FC = () => {
         {activeTab === 'practice' && <PracticePlanner />}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
-            <SmartPlaybook />
+            {isPlaybookV2Enabled() ? (
+              <Suspense fallback={<LoadingSpinner text="Loading your playbook..." />}>
+                <PlaybookScreen />
+              </Suspense>
+            ) : (
+              <SmartPlaybook />
+            )}
+          </ErrorBoundary>
+        )}
+        {activeTab === 'review' && isContentReviewEnabled() && (
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner text="Loading the review queue..." />}>
+              <ContentReview reviewer={user.displayName?.trim() || 'Owner'} />
+            </Suspense>
           </ErrorBoundary>
         )}
         {/* {activeTab === 'analytics' && <AnalyticsDashboard />} */}

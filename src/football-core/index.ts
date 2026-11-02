@@ -14,5 +14,5 @@ export { recommend } from './assistant';
 export type { OpponentProfile, Recommendation } from './assistant';
 export { applyTerminology, labelFor } from './terminology';
 export type { Terminology } from './terminology';
-export { draftQueue, fullLibrary, publishedLibrary } from './library';
-export type { DraftItem } from './library';
+export { applyDecisions, committedDecisions, draftQueue, fullLibrary, publishedLibrary } from './library';
+export type { ContentDecision, DraftItem } from './library';
