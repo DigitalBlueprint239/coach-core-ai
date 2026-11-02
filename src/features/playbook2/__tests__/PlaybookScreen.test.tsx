@@ -189,4 +189,16 @@ describe('PlaybookScreen', () => {
     await openMore('Library');
     expect(screen.getByRole('heading', { name: 'Eagle' })).toBeInTheDocument();
   });
+
+  it("the assistant draws the opponent's main coverage and Add opens the play to save", async () => {
+    await ready();
+    await openMore('New play');
+    expect(document.querySelectorAll('[data-testid="defender"]')).toHaveLength(0);
+    const cover2 = screen.getByRole('radiogroup', { name: 'Cover 2' });
+    await userEvent.click(within(cover2).getByRole('radio', { name: 'Mostly' }));
+    expect(document.querySelectorAll('[data-testid="defender"]')).toHaveLength(11);
+    await userEvent.click(screen.getByRole('button', { name: 'Add Smash to my playbook' }));
+    expect(screen.getByTestId('title-block')).toHaveTextContent('SMASH');
+    expect(document.querySelectorAll('[data-testid="route"]')).toHaveLength(4);
+  });
 });
