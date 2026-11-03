@@ -71,10 +71,11 @@ export function toV2Assignment(a: AssignmentV3): Assignment | null {
       return a.depth === undefined
         ? { slot: a.slot, kind: 'route', route: a.route }
         : { slot: a.slot, kind: 'route', route: a.route, depth: a.depth };
+    // v2 has no line positions: a lineman's assignment has no v2 form.
     case 'protect':
-      return a.rule === 'unspecified' ? { slot: a.slot, kind: 'protect' } : null;
+      return a.rule === 'unspecified' && !isLineSlot(a.slot) ? { slot: a.slot, kind: 'protect' } : null;
     case 'block':
-      return a.rule === 'unspecified' ? { slot: a.slot, kind: 'block' } : null;
+      return a.rule === 'unspecified' && !isLineSlot(a.slot) ? { slot: a.slot, kind: 'block' } : null;
     default:
       return null;
   }

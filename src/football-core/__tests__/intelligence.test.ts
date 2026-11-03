@@ -97,5 +97,6 @@ describe('v3 assignment model', () => {
   it('run assignments are expressible in the same structure (no v2 form, so no lossy downgrade)', () => {
     expect(toV2Assignment({ kind: 'run-track', slot: 'back', track: { aimingPoint: 'B-gap', side: 'strong' } })).toBeNull();
     expect(toV2Assignment({ kind: 'block', slot: 'back', rule: 'zone-playside' })).toBeNull();
+    expect(toV2Assignment({ kind: 'block', slot: 'RT', rule: 'unspecified' })).toBeNull(); // v2 has no line positions
   });
 });
