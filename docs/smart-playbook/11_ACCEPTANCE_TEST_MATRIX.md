@@ -18,7 +18,7 @@ walkthrough with evidence · **C** coach review (named reviewer) · **P** perfor
 | AT-10 | V11 | Power: down/kick-out/pull assignments; RB track | U+C | ☐ |
 | AT-11 | V04 | Coverage rules per role (Cover 3 sky: flat/curl/hook/deep third) | U+C | ☐ |
 | AT-12 | V04 | Run fits: every gap owned vs a given front | U+C | ☐ |
-| AT-13 | V12 | Rule profile API: default profile reproduces current legality messages exactly; unknown profile rejected; profile id is versioned | U | ✅ this PR (`rules.test.ts`) — CI |
+| AT-13 | V12 | Rule profile API: default profile reproduces current legality messages exactly; unknown profile rejected; profile id is versioned | U | ✅ `rules.test.ts` 6/6 (PR #106 CI) |
 | AT-14 | V12 | 8-/9-/6-player and 7v7 legality per sourced rules | U+C | ☐ |
 | AT-15 | V12 | NFL FLAG 5v5 constraints (rushers, no-run zones, no blocking, QB) | U+C | ☐ |
 | AT-20 | V02 | 2D pass concept → coverage → 3D → play → pause at progression → QB eye → change defense → replay | B+P | ☐ |

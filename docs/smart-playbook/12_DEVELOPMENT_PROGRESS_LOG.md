@@ -12,8 +12,9 @@ Newest first. Each entry: change · requirement/task · validation evidence · l
   player count and line minimum from the profile; default behaviour unchanged. Exported from `football-core`.
 - Tests: `src/football-core/__tests__/rules.test.ts` (AT-13).
 
-**Validation**: CI on the PR (lint, typecheck, unit, build, rules emulator, preview) — results recorded in the PR.
-Local runs not possible on this laptop (no installed dependencies; per machine policy builds run in CI/cloud).
+**Validation (PR #106, CI 2026-11-03)**: `test-and-build` ✅ — lint (0 warnings), typecheck, unit **52 files / 598 tests passed**
+(incl. `rules.test.ts` 6/6), production build; `firestore-rules` ✅ 39/39; `preview` ✅. Not run locally (machine policy:
+builds and tests run in CI/cloud on this laptop).
 
 **Corrections recorded**: competitor baseline missed GoArmy Edge Football's free 2D→3D playback (03).
 **Security finding**: standalone repo inlines `GEMINI_API_KEY` into its client bundle via Vite `define` (02 §5).

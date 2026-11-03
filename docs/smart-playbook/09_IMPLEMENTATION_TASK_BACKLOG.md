@@ -6,7 +6,7 @@ Format: `T-id · task · requirement · depends · acceptance`. Status: ☐ open
 
 | T | Task | Req | Depends | Acceptance |
 |---|---|---|---|---|
-| ◐ T-101 (PR, CI pending) | **Versioned rule profiles** in `football-core/rules`; `validateFormation(f, profile?)` default reproduces today exactly; `eleven-player@1` profile (draft until sourced) | V12 | — | AT-13 (this PR) |
+| ☑ T-101 (PR #106, CI ✅ 598/598) | **Versioned rule profiles** in `football-core/rules`; `validateFormation(f, profile?)` default reproduces today exactly; `eleven-player@1` profile (draft until sourced) | V12 | — | AT-13 (this PR) |
 | ☐ T-102 | Source rule profiles: 11-player (NFHS/NCAA), 8-, 9-, 6-player, 7v7, NFL FLAG 5v5 — each with registry sources; draft until sourced | V12, V20 | T-101, T-105 | AT-14, AT-15 |
 | ☐ T-103 | Canonical model v3 types: Assignment union (`run-track`, typed `block`, `protect`, `motion`, `ball`), Concept.family, Play v3 with overrides/revision/status | V03, V04 | ADR-001 approval | AT-05 |
 | ☐ T-104 | `migrateV2toV3` + version-dispatching reader; fixtures; round-trip tests; v1 untouched | V03 | T-103 | AT-07, AT-08 |
