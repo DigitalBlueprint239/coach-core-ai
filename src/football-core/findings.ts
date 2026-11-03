@@ -1,6 +1,7 @@
 // Explainable, deterministic results (Milestone 1). The engine reports football problems as structured findings —
 // what was found, about whom, under which rule-profile version, how authoritative that rule is, and what the coach
 // could change by hand — so no generative AI is needed to know a formation is illegal or a receiver ineligible.
+import type { LineSlot } from './model';
 import type { OffenseRole, Slot, Verification } from './types';
 
 export type FindingSeverity = 'error' | 'warning' | 'info';
@@ -19,7 +20,7 @@ export type Finding = {
   code: string;
   severity: FindingSeverity;
   message: string;
-  subject?: { role?: OffenseRole; slot?: Slot };
+  subject?: { role?: OffenseRole; slot?: Slot | LineSlot };
   basis?: RuleBasis;
   /** Manual changes the coach could make. The engine never applies them. */
   options: string[];

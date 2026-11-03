@@ -2,6 +2,20 @@
 
 Newest first. Each entry: change · requirement/task · validation evidence · limitations · next task.
 
+## 2026-11-03 (3) — #106 hardening, M1 persistence (#107), M2 Inside Zone engine (#108)
+
+- **#106 hardening** (`65e1921`): full advisory response validation; server-side auth gate (`authorizeAdvisoryAccess`);
+  eligibility edges (tied ends, empty line, unknown model); draft-profile wording; doc corrections (Verified bar, #39
+  vs #50, PR #104 note, AI provider policy reconciled, RD-10 opened). CI ✅.
+- **#107 persistence** (branch `m1/persistence-v3`): `playDocument.ts`, `playStoreV3.ts`, revision rules, v1 reader
+  skips all versioned plays. CI ✅. Rules **not deployed**.
+- **#108 Inside Zone** (branch `m2/inside-zone`): `runGame.ts` + `LineSlot` in the model. Convention-labelled, draft.
+
+**Not done yet (honest status):** Inside Zone is not wired into the playbook screen; no play card yet; no coach
+review; 3D untouched. M2's working demonstration is therefore **not** complete.
+**Next:** wire `resolveInsideZone` into the v2 screen (assignment inspector + unresolved findings), save through
+`playStoreV3`, basic play card; then Power.
+
 ## 2026-11-03 (2) — M0 reconcile + M1 intelligence contracts (branch `docs/smart-playbook-master-audit`, PR #106)
 
 **Owner directive recorded:** RD-01, RD-02, RD-03, RD-07 and product decisions 1-6 (01, 07, 10, ADR-001/002/004/005/006).

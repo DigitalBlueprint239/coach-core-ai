@@ -7,6 +7,11 @@ import type { Assignment, RouteId, Slot } from './types';
 
 export const MODEL_VERSION = 3 as const;
 
+/** Offensive line positions are fixed roles, not numbered slots. */
+export type LineSlot = 'LT' | 'LG' | 'C' | 'RG' | 'RT';
+export const LINE_SLOTS: readonly LineSlot[] = ['LT', 'LG', 'C', 'RG', 'RT'];
+export const isLineSlot = (s: string): s is LineSlot => (LINE_SLOTS as readonly string[]).includes(s);
+
 /** Run blocking rules by family; each lineman's target is resolved against a front by the engine (T-107). */
 export type BlockRule =
   | 'unspecified'
@@ -38,8 +43,8 @@ export type BallAction =
 export type AssignmentV3 =
   | { kind: 'route'; slot: Slot; route: RouteId; depth?: number }
   | { kind: 'run-track'; slot: Slot; track: RunTrack }
-  | { kind: 'block'; slot: Slot; rule: BlockRule }
-  | { kind: 'protect'; slot: Slot; rule: ProtectionRule }
+  | { kind: 'block'; slot: Slot | LineSlot; rule: BlockRule }
+  | { kind: 'protect'; slot: Slot | LineSlot; rule: ProtectionRule }
   | { kind: 'motion'; slot: Slot; motion: 'jet' | 'orbit' | 'across' | 'return'; endsAt?: Slot }
   | { kind: 'read'; slot: Slot; key: string; rule: string };
 

@@ -14,7 +14,7 @@ walkthrough with evidence · **C** coach review (named reviewer) · **P** perfor
 | AT-06 | V10 | Install one concept on Doubles/Trips/Bunch/Empty/Tight; conflicts reported, overrides kept | U | ☐ (`applyConcept` partial ✅ `concepts.test.ts`) |
 | AT-07 | V03 | v2→v3 migration preserves every field (fixtures) | U | ☐ |
 | AT-08 | V03 | v1 plays readable via coordinate profile, never rewritten | U | ☐ (v1/v2 reader filter ✅ `v1ReadFilter.test.ts`) |
-| AT-09 | V11 | Inside Zone OL rules vs 4-3 Over resolve every defender in the box | U+C | ☐ |
+| AT-09 | V11 | Inside Zone OL rules vs 4-3 Over resolve every lineman; unblocked defenders reported with reasons; weak-side gaps reported, not invented | U+C | ✅ U `runGame.test.ts` (PR #108); C pending (review group) |
 | AT-10 | V11 | Power: down/kick-out/pull assignments; RB track | U+C | ☐ |
 | AT-11 | V04 | Coverage rules per role (Cover 3 sky: flat/curl/hook/deep third) | U+C | ☐ |
 | AT-12 | V04 | Run fits: every gap owned vs a given front | U+C | ☐ |
@@ -30,7 +30,9 @@ walkthrough with evidence · **C** coach review (named reviewer) · **P** perfor
 | AT-21 | V02 | 2D↔3D position error ≤ 0.01 yd at sampled t | B | ☐ (prototype ✅ in #95) |
 | AT-22 | V02 | Selected player preserved across views | B | ☐ (prototype ✅ #95) |
 | AT-23 | V02 | Frame time p95 within budget on 4 device classes | P | ☐ |
-| AT-24 | V21 | Tier A playback: events (snap, handoff, pass) at correct t | U | ☐ |
+| AT-24 | V21 | Timing events ordered and labelled nominal (snap, first step, mesh, climb, handoff, press) | U | ✅ `runGame.test.ts` (PR #108); playback rendering pending (M4) |
+| AT-48a | V16 | v3 revisions: create at 1, update exactly +1, stale/skipped/downgrade denied (rules); transactional conflict with no write (client) | R+U | ✅ PR #107 |
+| AT-07a | V03 | v2 to v3 migration pure, lossless, deterministic; originals never rewritten; v1 unsupported | U | ✅ PR #107 |
 | AT-25 | V19 | Play card PDF from saved play with team terminology; legible print | U+B | ☐ |
 | AT-26..29 | V19 | Wristbands, call sheets, PPT, full playbook PDF | U+B | ☐ |
 | AT-30 | V07 | Recommendation from published content only | U | ✅ `assistant.test.ts` |
