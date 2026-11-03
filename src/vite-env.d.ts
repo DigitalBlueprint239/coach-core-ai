@@ -18,6 +18,8 @@ interface ImportMetaEnv {
   readonly REACT_APP_SENTRY_DSN: string | undefined;
   readonly REACT_APP_RELEASE: string | undefined;
   readonly REACT_APP_DEPLOY_ENV: string | undefined;
+  readonly REACT_APP_ENABLE_PLAYBOOK_V2: string | undefined;
+  readonly REACT_APP_ENABLE_CONTENT_REVIEW: string | undefined;
 }
 
 interface ImportMeta {

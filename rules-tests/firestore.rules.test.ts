@@ -219,3 +219,15 @@ describe('everything else is closed to the app', () => {
     await assertFails(setDoc(doc(alice(), 'games/g1'), { teamId: 't1', createdBy: 'alice' }));
   });
 });
+
+// Smart Playbook v2 (phase 2) relies on these existing rules; it adds no rule changes.
+// (Its list-query and playbook-settings cases are covered above, in the plays/practicePlans and teams blocks.)
+describe('Smart Playbook v2 access (no rule changes)', () => {
+  it('an unfiltered list of every play is denied', async () => {
+    await assertFails(getDocs(collection(alice(), 'plays')));
+  });
+
+  it("another coach cannot write t1's playbook settings", async () => {
+    await assertFails(updateDoc(doc(bob(), 'teams/t1'), { playbook: { terminology: {}, level: 'jv', formations: [] } }));
+  });
+});
