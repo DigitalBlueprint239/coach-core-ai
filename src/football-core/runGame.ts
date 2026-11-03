@@ -164,14 +164,17 @@ export function resolveInsideZone(formation: Formation, side: RunSide = 'strong'
   });
 
   const blockedRoles = new Set(blocks.flatMap(b => [b.target, b.climbTo].filter((r): r is DefenderRole => !!r)));
+  // The back-side end is the OUTERMOST first-level defender on the back side, not every back-side lineman.
+  const backsideEnd = firstLevel
+    .filter(d => playSide * d.at.x < 0)
+    .sort((a, b) => playSide * a.at.x - playSide * b.at.x)[0];
   const unblocked = defenders
     .filter(d => !blockedRoles.has(d.role))
     .map(d => {
       const inBox = Math.abs(d.at.x) < BOX_HALF_WIDTH && d.at.y <= SECOND_LEVEL_MAX_Y;
-      const backside = playSide * d.at.x < 0;
       const reason = !inBox
         ? 'Outside the box: not blocked by the line; perimeter blocking is not modelled yet.'
-        : d.at.y <= FIRST_LEVEL_MAX_Y && backside
+        : d.role === backsideEnd?.role
           ? 'Back-side end: inside zone leaves him unblocked by the line (he is commonly read by the quarterback or handled by a back-side block not modelled here).'
           : 'Not reached by any blocker under this convention.';
       return { defender: d.role, reason };

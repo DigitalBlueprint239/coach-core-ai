@@ -68,6 +68,8 @@ describe('what the engine refuses to guess', () => {
     expect(rt?.climbTo).toBeUndefined();
     expect(findings.some(f => f.code === 'run.unresolved-block' && f.subject?.slot === 'RT')).toBe(true);
     expect(findings.some(f => f.code === 'run.unblocked-box-defender' && f.message.includes('DT-S'))).toBe(true);
+    expect(value.unblocked.find(u => u.defender === 'DE-S')?.reason).toContain('Back-side end'); // only the outermost
+    expect(value.unblocked.find(u => u.defender === 'DT-S')?.reason).toContain('Not reached');
   });
 
   it('a tight end on the line is unsupported for now', () => {
