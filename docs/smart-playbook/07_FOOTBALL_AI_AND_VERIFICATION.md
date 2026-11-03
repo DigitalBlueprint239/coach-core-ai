@@ -89,3 +89,35 @@ material is reproduced without rights.
 
 **Compensation options (owner chooses):** per-item stipend; monthly retainer; advisor credit or equity; free team
 licenses and credit. Budget estimates on request; **no commitment without approval (RD-03b).**
+
+## 7. Costed review and acquisition proposal (estimates for owner approval; nothing committed)
+
+**Expertise needed for the first review gate (Inside Zone, line assignments, 4-3 Over, eligibility, youth/HS rules):**
+
+| Reviewer | Must have | Reviews |
+|---|---|---|
+| Offensive line coach (HS varsity, 5+ yrs) | Taught inside zone covered/uncovered rules | IZ convention, combos/climbs, unblocked-defender reasons |
+| Defensive coordinator (HS varsity) | Coached 4-3 / multiple fronts | 4-3 Over alignment, techniques, box definition |
+| Youth tackle head coach (5+ seasons) | Run-first youth system | Youth-coach wording, age-appropriateness |
+| Rules specialist (state-certified official or rules interpreter) | NFHS rules knowledge | Eligibility model, formation legality, profile text |
+
+Independence: each item gets two reviewers who did not author it; reviewers disclose vendor ties; rule claims cite
+the rule book.
+
+**Evidence recording:** reviewer id, date, item id/version, decision, rationale, sources checked — stored with the
+item (registry, T-105).
+
+**IP:** reviewer agreement licensing their written rationale to Coach Core; no third-party copyrighted text supplied.
+
+**Estimated costs (planning ranges, not quotes):**
+
+| Item | Estimate |
+|---|---|
+| 4 reviewers x first gate (about 3 h each at $50-$100/h) | $600-$1,200 |
+| Ongoing review (two reviewers per item, about 20-30 min per item) | $25-$100 per item |
+| NFHS football rules book + case book (current edition) | about $10-$30 |
+| Two respected scheme books for run game / zone (purchase, cite-only) | about $40-$80 |
+| Optional: state association or AFCA membership for clinic material | about $50-$150 per year |
+
+**Initial schedule (after approval):** week 1 recruit and sign; week 2 review the IZ + 4-3 Over + eligibility items;
+week 3 changes from review, then items move to Coach-reviewed (Verified only when three independent sources also exist).

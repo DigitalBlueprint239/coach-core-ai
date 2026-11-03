@@ -66,3 +66,21 @@ production data, only in the emulator.
 - **PR #104** (draft, Drew's lane) proposes the shared engineering contract; it is not modified by this lane. Its use
   of #39 as the handoff channel conflicts with #39's security purpose; proposed resolution for the owners: a dedicated
   cross-lane coordination issue, with #39 left for security.
+
+## Staging project plan (RD-05) — prepared, NOT executed; needs owner approval
+
+1. **Create** Firebase project `coach-core-ai-stg` (owner clicks Create; Spark/no-cost plan unless the owner approves
+   billing). Region matching production Firestore (`nam5`).
+2. **Auth:** enable Google + Email/Password; password policy min 8 (enforced); authorized domains = the staging Hosting
+   site and `localhost` only; reset-email sender "Coach Core (staging)".
+3. **Firestore:** create database; deploy the repo `firestore.rules` (same file as production) with
+   `firebase deploy --only firestore:rules --project coach-core-ai-stg`.
+4. **Hosting:** create the staging site; move `.firebaserc` target `staging` to the new project.
+5. **Variables:** add a GitHub environment `staging` holding the staging web config (`REACT_APP_FIREBASE_*`, public by
+   design); `deploy-staging.yml` and preview builds read it; a new service account with Hosting Admin on the staging
+   project only (owner sets its secret; agents never handle key values).
+6. **Smoke tests after first deploy:** sign up (email), sign in (Google), create a team, save a v2 play, save a v3 play,
+   force a revision conflict, confirm production data is untouched.
+7. **Rollback:** repoint the `staging` target back to `coach-core-ai` and redeploy; the new project can be deleted
+   without affecting production.
+Isolation result: separate Auth users, Firestore data, rules deploys and Hosting; production unaffected by staging tests.
