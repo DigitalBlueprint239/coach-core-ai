@@ -371,7 +371,8 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
                 disabled={saving}
                 onChange={e => changePlay(e.target.value)}
               >
-                {!play.id && <option value="__current">{play.name.toUpperCase()}</option>}
+                {/* The open play isn't saved yet: say so, so it can't be mistaken for a saved play of the same name. */}
+                {!play.id && <option value="__current">{`${play.name.toUpperCase()} (not saved)`}</option>}
                 {plays.map(x => (
                   <option key={x.id} value={x.id}>
                     {(x.id === play.id ? play.name : x.name).toUpperCase()}

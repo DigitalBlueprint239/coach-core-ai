@@ -14,6 +14,8 @@ const MESSAGES: Record<string, string> = {
   'auth/invalid-email': 'Enter a valid email address.',
   'auth/missing-email': 'Enter your email address.',
   'auth/missing-password': 'Enter your password.',
+  // The page's web address isn't on Firebase Auth's authorized-domains list (e.g. a PR preview link).
+  'auth/unauthorized-domain': "Sign-in isn't set up for this web address. Use the main site to sign in.",
 };
 
 const FALLBACK = "Sign-in didn't work. Try again.";

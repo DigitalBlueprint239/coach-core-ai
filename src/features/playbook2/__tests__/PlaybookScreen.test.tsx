@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PlaybookScreen from '../PlaybookScreen';
 import { listPlaysV2, loadTeamSettings, savePlayV2, saveTeamSettings } from '../playStore';
+import { playFromConcept } from '../playModel';
+import { publishedLibrary } from '../../../football-core';
 
 const env = vi.hoisted(() => ({
   user: { uid: 'coach1', isAnonymous: false, email: 'c@example.com', displayName: 'Coach' } as unknown,
@@ -220,6 +222,19 @@ describe('PlaybookScreen', () => {
     await userEvent.clear(input);
     await userEvent.type(input, `${name}{Enter}`);
   };
+
+  it('an unsaved play is labelled so it is not mistaken for a saved play with the same name', async () => {
+    const lib = publishedLibrary();
+    const smash = lib.concepts.find(c => c.name === 'Smash')!;
+    const saved = { ...playFromConcept('t1', smash, lib.formations[0]), id: 'p9', createdBy: 'coach1' };
+    vi.mocked(listPlaysV2).mockResolvedValue([saved]);
+    await ready();
+    const picker = await screen.findByRole('combobox', { name: 'Play' });
+    const names = within(picker).getAllByRole('option').map(o => o.textContent);
+    expect(names).toHaveLength(2);
+    expect(names[0]).toMatch(/ \(not saved\)$/);
+    expect(names[1]).toBe(saved.name.toUpperCase());
+  });
 
   it('switching away from an unsaved play offers it back to restore', async () => {
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
