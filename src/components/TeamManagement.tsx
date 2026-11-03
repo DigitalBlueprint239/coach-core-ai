@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTeam } from '../contexts/TeamContext';
+import { TEAM_JOIN_ENABLED, useTeam } from '../contexts/TeamContext';
 import { useToast } from './ToastManager';
 
 // Moves focus into a dialog's first field when it opens (the WAI-ARIA dialog pattern). Replaces autoFocus,
@@ -107,6 +107,7 @@ export const TeamSelector: React.FC = () => {
                   <span>Create New Team</span>
                 </div>
               </button>
+              {TEAM_JOIN_ENABLED && (
               <button
                 onClick={() => {
                   setShowJoinModal(true);
@@ -121,6 +122,7 @@ export const TeamSelector: React.FC = () => {
                   <span>Join Team</span>
                 </div>
               </button>
+              )}
             </div>
           </div>
         </div>
@@ -364,12 +366,14 @@ export const TeamManagement: React.FC = () => {
           >
             Create Team
           </button>
-          <button
-            onClick={() => setShowJoinModal(true)}
-            className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            Join Team
-          </button>
+          {TEAM_JOIN_ENABLED && (
+            <button
+              onClick={() => setShowJoinModal(true)}
+              className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              Join Team
+            </button>
+          )}
         </div>
       </div>
 

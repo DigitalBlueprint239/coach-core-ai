@@ -16,16 +16,32 @@ service cloud.firestore {
         get(/databases/$(database)/documents/teams/$(teamId)).data.ownerId == request.auth.uid;
     }
 
+    // Admins (waitlist and user-profile access). The email must be verified: anyone can create an
+    // email/password account with an unverified address, so an unverified email proves nothing.
+    function isAdmin() {
+      return isAuthenticated() &&
+        request.auth.token.email_verified == true &&
+        request.auth.token.email in [
+          'admin@coachcore.ai',
+          'jones@coachcore.ai',
+          'support@coachcore.ai',
+          'digitalblueprint239@gmail.com'
+        ];
+    }
+
     // Teams collection
     match /teams/{teamId} {
-      // Only the coach (owner) can read the team
+      // The owner and listed members can read the team. Checked on the team document itself (not with get())
+      // so the app's "my teams" query (memberIds array-contains uid) can be proven by the rules.
       // Denied: "Only the coach can access this team."
-      allow read: if isTeamOwner(teamId);
+      allow read: if isAuthenticated() &&
+        (resource.data.ownerId == request.auth.uid || request.auth.uid in resource.data.memberIds);
 
-      // Coaches can create teams; they become the owner
+      // Coaches can create teams; they become the owner and the only member
       // Denied: "Only authenticated coaches can create teams."
       allow create: if isAuthenticated() &&
-        request.resource.data.ownerId == request.auth.uid;
+        request.resource.data.ownerId == request.auth.uid &&
+        request.resource.data.memberIds == [request.auth.uid];
 
       // Only team owners can update team data, and ownership cannot be handed over by an update
       // Denied: "Only the coach can modify this team."
@@ -82,5 +98,67 @@ service cloud.firestore {
       // Denied: "Only the coach can delete plays."
       allow delete: if isTeamOwner(resource.data.teamId);
     }
+
+    // User profiles (written by the earlier app build): each user reads and writes only their own; admins read.
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Waitlist sign-ups from the landing page: anyone may add one valid entry; only admins read; nobody edits.
+    // Validation carried over unchanged from the rules live since Sep 2025 so existing sign-up forms keep working.
+    match /waitlist/{docId} {
+      allow create: if isValidWaitlistSubmission(request.resource.data);
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() > 3 &&
+        email.size() <= 200 &&
+        email.matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$');
+    }
+
+    function hasOnlyAllowedWaitlistKeys(data) {
+      return data.keys().hasOnly([
+        'email', 'source', 'createdAt', 'timestamp', 'status', 'name', 'role', 'referringCoach',
+        'coachingChallenge', 'ipAddress', 'userAgent', 'batchProcessed', 'batchTimestamp', 'metadata',
+        'immediateAccess', 'utmSource', 'utmMedium', 'utmCampaign', 'utmId', 'utmTerm', 'utmContent', 'notes'
+      ]);
+    }
+
+    function isValidWaitlistSubmission(data) {
+      let hasCreatedAt = 'createdAt' in data;
+      let hasTimestamp = 'timestamp' in data;
+
+      return hasOnlyAllowedWaitlistKeys(data) &&
+        isValidEmail(data.email) &&
+        (!('source' in data) || (data.source is string && data.source.size() <= 100)) &&
+        (hasCreatedAt || hasTimestamp) &&
+        (!hasCreatedAt || data.createdAt is timestamp) &&
+        (!hasTimestamp || data.timestamp is timestamp) &&
+        (!('status' in data) || data.status == null || (data.status is string && data.status.size() <= 50)) &&
+        (!('name' in data) || data.name == null || (data.name is string && data.name.size() <= 200)) &&
+        (!('role' in data) || data.role == null || (data.role is string && data.role.size() <= 100)) &&
+        (!('referringCoach' in data) || data.referringCoach == null || (data.referringCoach is string && data.referringCoach.size() <= 200)) &&
+        (!('coachingChallenge' in data) || data.coachingChallenge == null || (data.coachingChallenge is string && data.coachingChallenge.size() <= 1000)) &&
+        (!('ipAddress' in data) || data.ipAddress == null || (data.ipAddress is string && data.ipAddress.size() <= 100)) &&
+        (!('userAgent' in data) || data.userAgent == null || (data.userAgent is string && data.userAgent.size() <= 1024)) &&
+        (!('batchProcessed' in data) || data.batchProcessed is bool) &&
+        (!('batchTimestamp' in data) || data.batchTimestamp is timestamp) &&
+        (!('metadata' in data) || data.metadata == null || data.metadata is map) &&
+        (!('immediateAccess' in data) || data.immediateAccess is bool) &&
+        (!('utmSource' in data) || data.utmSource == null || (data.utmSource is string && data.utmSource.size() <= 100)) &&
+        (!('utmMedium' in data) || data.utmMedium == null || (data.utmMedium is string && data.utmMedium.size() <= 100)) &&
+        (!('utmCampaign' in data) || data.utmCampaign == null || (data.utmCampaign is string && data.utmCampaign.size() <= 150)) &&
+        (!('utmId' in data) || data.utmId == null || (data.utmId is string && data.utmId.size() <= 100)) &&
+        (!('utmTerm' in data) || data.utmTerm == null || (data.utmTerm is string && data.utmTerm.size() <= 100)) &&
+        (!('utmContent' in data) || data.utmContent == null || (data.utmContent is string && data.utmContent.size() <= 150)) &&
+        (!('notes' in data) || data.notes == null || (data.notes is string && data.notes.size() <= 1000));
+    }
+
+    // Everything else (cspViolations, waitlistMetadata, waitlist_drip_tasks, and any collection not listed
+    // above) is closed to the app. Server code using the Admin SDK is not subject to these rules.
   }
 }
