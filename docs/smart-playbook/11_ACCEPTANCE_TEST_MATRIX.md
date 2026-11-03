@@ -19,6 +19,11 @@ walkthrough with evidence · **C** coach review (named reviewer) · **P** perfor
 | AT-11 | V04 | Coverage rules per role (Cover 3 sky: flat/curl/hook/deep third) | U+C | ☐ |
 | AT-12 | V04 | Run fits: every gap owned vs a given front | U+C | ☐ |
 | AT-13 | V12 | Rule profile API: default profile reproduces current legality messages exactly; unknown profile rejected; profile id is versioned | U | ✅ `rules.test.ts` 6/6 (PR #106 CI) |
+| AT-13b | V12 | Eligibility under a profile: ends and backs eligible, interior linemen not, QB unsupported; covered receiver ineligible | U | ✅ `intelligence.test.ts` (PR #106) |
+| AT-06a | V10 | Install keeps every assignment; missing slot, ineligible receiver, QB route and illegal formation produce coded findings with manual options | U | ✅ `intelligence.test.ts` (PR #106) |
+| AT-05a | V03 | v3 assignment union expresses run and pass; v2 to v3 to v2 lossless for every library concept; unknown schemes stay "unspecified" | U | ✅ `intelligence.test.ts` (PR #106) |
+| AT-33a | V08 | AI only on explicit coach action; frozen context; responses cannot carry a patch; provider failure leaves play unchanged; AI-off returns deterministic facts | U | ✅ `advisory.test.ts` (PR #106) |
+| AT-33b | V08 | Playbook screen and engine import no AI client (no automatic AI on edit, open or view switch) | U | ✅ `advisory.test.ts` static guard (PR #106) |
 | AT-14 | V12 | 8-/9-/6-player and 7v7 legality per sourced rules | U+C | ☐ |
 | AT-15 | V12 | NFL FLAG 5v5 constraints (rushers, no-run zones, no blocking, QB) | U+C | ☐ |
 | AT-20 | V02 | 2D pass concept → coverage → 3D → play → pause at progression → QB eye → change defense → replay | B+P | ☐ |

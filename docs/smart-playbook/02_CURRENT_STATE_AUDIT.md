@@ -48,8 +48,10 @@ from recovery). AI: `src/ai-brain/` (TypeScript, 1,608 LOC) + server proxy contr
 **explicit, versioned coordinate profiles** → canonical yards scene → `Field2D` and `Scene3D`; presentation-only
 view state machine; camera "lift" from matched overhead. Evidence (on this i5-3230M/HD 4000 laptop): 3D players
 within **0.01 yd** of 2D positions; cold ready ≈ 0.7–0.83 s; warm enter p50 ≈ 31–35 ms ready, ≈ 1.1 s full
-transition; unit 38/38; browser desktop 18 pass / 1 skip, tablet & phone 16 pass / 3 skip (emulated).
-**Not measured:** frame rate / frame-time distribution, memory, real devices. **Not connected** to the
+transition; frame time ≈ 18–33 ms (≈ 30–57 FPS) desktop on HD 4000, ≈ 24 ms (≈ 41–42 FPS) emulated tablet/phone, and
+the README states it does not reliably reach 60 FPS on HD 4000 (correction 2026-11-03: an earlier version of this
+audit wrongly said frame rate was not measured); unit 38/38; browser desktop 18 pass / 1 skip, tablet & phone 16 pass /
+3 skip (emulated). **Not established:** production performance, memory ceilings, GPU stability, real devices. **Not connected** to the
 football-core model (it reads v1 pixel plays). Route-path animation only (Tier A at best).
 
 ## 5. Standalone repo `main` findings (verified against source, 2026-11-03)

@@ -2,7 +2,33 @@
 
 Format: `T-id · task · requirement · depends · acceptance`. Status: ☐ open · ◐ in progress · ☑ done (with evidence in 12).
 
-## Phase 1 — critical path
+## Milestone 1 status (2026-11-03)
+
+| T | Task | Status |
+|---|---|---|
+| T-101 | Versioned rule profiles (`rules.ts`), eligibility model field | ☑ PR #106 |
+| T-113 | Explainable findings + `Evaluation` (ok / unsupported) (`findings.ts`) | ☑ PR #106 (CI pending) |
+| T-114 | Receiver eligibility under a profile, QB reported unsupported (`eligibility.ts`) | ☑ PR #106 (CI pending) |
+| T-103a | Model v3 assignment union (route, run-track, block, protect, motion, read) + lossless v2 adapter (`model.ts`) | ☑ PR #106 (CI pending) |
+| T-106a | `installConcept` with structured conflicts; never drops assignments (`install.ts`) | ☑ PR #106 (CI pending) |
+| T-115 | Read-only advisory contract + disabled advisor + no-auto-AI guard (`advisory.ts`) | ☑ PR #106 (CI pending) |
+| T-104 | v3 Play document, version-dispatching reader, `migrateV2toV3`, originals preserved, round-trip fixtures | ☐ next |
+| T-109 | Revision concurrency (port #53 rule) + recoverable conflicts + account-scoped drafts | ☐ |
+| T-105 | Source registry + 5 categories + independence groups | ☐ |
+| T-112 | Re-check the 6 verified items against RD-01 (3 independent sources + expert review) | ☐ (needs sources/reviewers) |
+
+## Milestone 2 (run game) — prepared
+
+| T | Task | Acceptance |
+|---|---|---|
+| T-107a | Defensive front model: 4-3 Over with techniques and gaps (draft until sourced) | AT-12a |
+| T-107b | Inside Zone concept: OL `zone-playside`/`zone-backside`, RB `run-track` (aiming point), `handoff` ball action | AT-09 |
+| T-107c | Deterministic block-target resolution vs the modelled front; unsupported fronts return `unsupported` | AT-09 |
+| T-107d | Timing events (snap, mesh, handoff) as data for the timeline | AT-24 |
+| T-107e | Save/reopen through v3 reader; 2D rendering of block/track assignments; play card | AT-07, AT-25 |
+| T-107f | Power (gap scheme: down, pull-kick, pull-lead) to prove extensibility | AT-10 |
+
+## Phase 1 — critical path (original list)
 
 | T | Task | Req | Depends | Acceptance |
 |---|---|---|---|---|

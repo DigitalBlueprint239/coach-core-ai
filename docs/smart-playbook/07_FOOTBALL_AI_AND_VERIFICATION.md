@@ -15,9 +15,10 @@ Status: policy (verification rules are owner-mandated and non-negotiable); AI ar
 Coach review adds authority but is **never** counted as independent sources. Coaches' private plays never need
 citations. Only Coach Core's *published* claims and teaching content carry the strict bar.
 
-> Note on the bar: the approved design (2026-10-30) set **≥2 publishers per item, ≥3 per matchup**; the master
-> brief refers to a "three-source standard". Recorded as an open decision (RD-01) — until resolved, the stricter
-> reading (≥3 for any claim labelled Verified) applies to new content; existing 6 items are re-checked.
+> **Decided (RD-01, 2026-11-03):** Verified requires **three independent, reliable sources** (independent organizations
+> or origins, not copies of one claim) **plus qualified expert review**. Official, versioned governing rule books are
+> the primary authority for the rules they define; interpretations and tactics still need support. The 6 items
+> verified under the earlier 2/3 bar are re-checked against the new bar (T-112).
 
 ## 2. Source registry (SP-V20)
 
@@ -46,8 +47,11 @@ No unauthorized copies; no redistribution without a licence. Purchases/licences 
 - Server-side only (Firebase Functions + Genkit + Anthropic, per approved design); browser holds no keys (guard test
   exists). Auth via Firebase ID token; per-team quotas; request/response schema validation (zod) at the boundary;
   observability (Sentry + structured logs); live AI off at launch (owner decision 2026-10-30).
-- **Structured output only**: AI returns a draft canonical play/concept JSON → validated by football-core rules
-  (legality, eligibility, conflicts) → shown as "AI draft" → coach edits/approves. Prose-only outputs never alter plays.
+- **Read-only, on demand (owner decisions 2 and 3):** AI answers only explicit coach requests and never writes plays.
+  Contract in `src/football-core/advisory.ts`: coach-action trigger required; deep-frozen context; responses limited to
+  status/statements/suggestions (text); provider failure returns "unavailable" with the play unchanged; AI off returns
+  deterministic facts. Statements carry a basis: deterministic-fact, verified-knowledge, coach-provided, assumption,
+  interpretation, unknown. Any future write capability needs separate approval and a separate interface.
 - **Explanations** use a fixed contract: observed · rule/principle · why it may help · assumptions · evidence
   (registry ids) · confidence/verification state · trade-offs · possible counters. No unsupported percentages.
 - **Grounding**: retrieval only from the source registry + team's own data; citations must resolve to registry ids;
@@ -58,3 +62,26 @@ No unauthorized copies; no redistribution without a licence. Purchases/licences 
 
 Structured-output schema tests · invalid-play rejection · citation resolution · "no tendency without data" ·
 provider-failure fallback · approval gating · cross-team isolation.
+
+## 6. Qualified football review group: proposal (owner decision 5; nothing committed or paid)
+
+**Composition (5-7):** 2 youth tackle coaches (5+ seasons; at least one run-first system such as Wing-T or Double Wing),
+2 high school coaches (5+ varsity seasons; one offensive and one defensive coordinator background), 1 offensive-line
+specialist (run blocking), optionally 1-2 advanced specialists (college; coverage and pressure). Drew may serve but
+does not alone constitute the group.
+
+**Qualifications:** verifiable coaching history (school or league, years, role); references; willingness to sign
+reviewer and IP agreements; conflict disclosure (paid ties to playbook vendors; authored products under review).
+
+**Responsibilities:** review assigned items by family; approve or reject with written rationale; label each claim as
+official rule, coaching convention or tactical opinion; never review their own authored content.
+
+**Procedure:** item, then evidence check (registry; 3 independent sources for Verified), then two reviewers (matching
+the level where relevant), then the decision is recorded (reviewer id, date, rationale). Disagreement: a third
+reviewer decides; persistent disputes are shown as "coaching variation" with both views, never as Verified.
+
+**Rights:** reviewers' written explanations are licensed to Coach Core by agreement; no reviewer-supplied copyrighted
+material is reproduced without rights.
+
+**Compensation options (owner chooses):** per-item stipend; monthly retainer; advisor credit or equity; free team
+licenses and credit. Budget estimates on request; **no commitment without approval (RD-03b).**

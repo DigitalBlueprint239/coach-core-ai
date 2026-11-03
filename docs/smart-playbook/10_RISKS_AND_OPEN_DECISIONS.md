@@ -1,16 +1,22 @@
 # 10 — Risks and Open Decisions
 
+## Decided by owner (2026-11-03)
+
+- **RD-01:** Verified = 3 independent reliable sources + qualified expert review; governing rule books are primary
+  authority for their rules; coach review never substitutes for sources; private coach plays need no citations.
+- **RD-02:** ADR-001/002 approved in principle with data-safety safeguards.
+- **RD-03:** prepare acquisition and advisory-group proposal; **no spending** without separate authorization.
+- **RD-07:** React Three Fiber + three.js primary; Babylon.js fallback only on measured need.
+- Product decisions 1-6 recorded in 01.
+
 ## Open decisions (owner)
 
 | ID | Decision | Options | Recommendation |
 |---|---|---|---|
-| RD-01 | Verification bar wording: design says ≥2/item, ≥3/matchup; brief says "three-source standard" | (a) ≥3 for every Verified claim (b) keep 2/3 | (a) for new content; re-check existing 6 |
-| RD-02 | Approve ADR-001/002 (canonical model v3, yards + profiles) before T-103 | approve / amend | approve |
-| RD-03 | Content acquisition spend (books, rule books, advisory panel stipends, licences) | budget | panel + rule books first |
+| RD-03b | Spend approval for the acquisition/advisory proposal (07 sections 3 and 6) | approve items | rule books + 3 reviewers first |
 | RD-04 | Beta scope: Smart Playbook-only vs Film required (per #104 Film is MVP scope) | owners decide | — |
 | RD-05 | Separate staging Firebase project (staging currently shares prod data) | now / later | before player accounts (Phase 4) |
 | RD-06 | Youth privacy: COPPA/parental consent, retention for player accounts under 13 | policy | legal review before Phase 4 |
-| RD-07 | 3D stack approval (ADR-006: R3F + three) | approve / prototype Babylon | approve with perf gate |
 | RD-08 | Retire v1 Smart Playbook in production after v2 parity | when | after T-111 |
 | RD-09 | Who may publish Verified content: owner only / owner + named reviewers | — | owner + named reviewers recorded per item |
 
@@ -35,3 +41,17 @@
 - Standalone repo: depth of quiz-to-player workflow; whether AI recommendations assume tendencies (read pending).
 - Football Play Card "auto-aligned defenses" claim (app store only).
 - GoArmy Edge: current feature depth and adoption beyond listing/estimates.
+
+## Security check (2026-11-03)
+
+Standalone repo full-history scan: **no Google/Gemini key ever committed**; one OpenAI/Anthropic-pattern hit
+(`d925c6c`) is a false positive (prose); committed `.env.production` files hold only feature flags ("NO secrets").
+No rotation needed. The remaining risk is design-level: building that repo with a key set would inline it (ADR-000).
+
+## Staging isolation (current state, 2026-11-03)
+
+Staging (`coach-core-ai-staging`) is a second Hosting site in the **same** Firebase project as production: same
+Auth users and Firestore data (the test team and one play from the 2026-11-02 walkthrough live there).
+Plan (owner authorization needed to create a project, RD-05): create a separate staging project; staging and preview
+builds use its web config (repo variables); rules deployed to both; meanwhile no migration or permission testing on
+production data, only in the emulator.

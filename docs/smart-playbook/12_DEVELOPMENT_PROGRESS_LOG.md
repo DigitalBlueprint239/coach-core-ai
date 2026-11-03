@@ -2,6 +2,33 @@
 
 Newest first. Each entry: change · requirement/task · validation evidence · limitations · next task.
 
+## 2026-11-03 (2) — M0 reconcile + M1 intelligence contracts (branch `docs/smart-playbook-master-audit`, PR #106)
+
+**Owner directive recorded:** RD-01, RD-02, RD-03, RD-07 and product decisions 1-6 (01, 07, 10, ADR-001/002/004/005/006).
+**Corrections:** PR #95 did measure frame times (approx. 18-33 ms desktop / 24 ms emulated on HD 4000); audit and
+ADR-006 updated.
+**Security:** standalone repo history scanned; no real credentials committed; no rotation needed (10).
+**Staging:** confirmed shared with production; separation plan recorded (10, RD-05).
+
+**Code (football-core, no UI change, no AI enabled):**
+- `findings.ts` — explainable `Finding` (code, severity, subject, rule basis with profile version and authority,
+  manual options) and `Evaluation` (ok / unsupported).
+- `eligibility.ts` — receiver eligibility under a profile (`ends-and-backs`); QB returned as unsupported.
+- `model.ts` — v3 assignment union (route, run-track, block, protect, motion, read) + ball actions; lossless v2 adapter;
+  unknown schemes kept as `unspecified`.
+- `install.ts` — `installConcept(concept, formation, profile)`: every assignment kept; missing slot, ineligible
+  receiver, unsupported QB route and illegal formation reported as findings.
+- `advisory.ts` — read-only, coach-requested advisory contract; disabled advisor returns deterministic facts.
+- `rules.ts` — profile gains `eligibility` model field.
+- Tests: `intelligence.test.ts`, `advisory.test.ts` (incl. static guard: no AI imports in playbook screen or engine).
+
+**Validation:** CI on PR #106 (recorded in the PR once green). **Not football-reviewed yet** (no review group).
+
+**Limitations:** eligibility ignores jersey numbering and QB rules; profile is draft (unsourced); no run-scheme
+resolution yet; `installConcept` not yet wired into the editor UI.
+
+**Next:** T-104 v3 play document + migration → T-107 Inside Zone vs 4-3 Over → T-109 revision concurrency.
+
 ## 2026-11-03 — Phase 0 audit + T-101 rule profiles (branch `docs/smart-playbook-master-audit`)
 
 **Changes**

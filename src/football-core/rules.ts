@@ -11,6 +11,8 @@ export type RuleProfile = {
   playersPerSide: number;
   /** Minimum offensive players on the line of scrimmage at the snap. */
   minOnLine: number;
+  /** How receiver eligibility is decided (see eligibility.ts). New models get new values, never silent changes. */
+  eligibility: 'ends-and-backs';
   verification: Verification;
 };
 
@@ -19,6 +21,7 @@ const ELEVEN_PLAYER_V1: RuleProfile = {
   name: '11-player',
   playersPerSide: 11,
   minOnLine: 7,
+  eligibility: 'ends-and-backs',
   // The engine's long-standing default. Draft until the rules are cited from the NFHS and NCAA rule books (T-102).
   verification: {
     status: 'draft',

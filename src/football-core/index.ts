@@ -18,3 +18,15 @@ export { applyTerminology, labelFor } from './terminology';
 export type { Terminology } from './terminology';
 export { applyDecisions, committedDecisions, draftQueue, fullLibrary, publishedLibrary } from './library';
 export type { ContentDecision, DraftItem } from './library';
+export { hasErrors } from './findings';
+export type { Evaluation, Finding, FindingSeverity, RuleBasis } from './findings';
+export { receiverEligibility, ELIGIBILITY_RULE_TEXT } from './eligibility';
+export type { Eligibility } from './eligibility';
+export { MODEL_VERSION, fromV2Assignment, toV2Assignment } from './model';
+export type { AssignmentV3, BallAction, BlockRule, ConceptFamily, ProtectionRule, RunTrack } from './model';
+export { installConcept } from './install';
+export type { InstalledAssignment, Installation } from './install';
+export { createDisabledAdvisor, requestAdvice } from './advisory';
+export type {
+  AdvisoryCapability, AdvisoryRequest, AdvisoryResponse, AdvisoryStatement, Advisor, StatementBasis,
+} from './advisory';

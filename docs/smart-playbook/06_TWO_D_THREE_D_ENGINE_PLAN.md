@@ -52,8 +52,10 @@ Never presented as outcome prediction without a validated, calibrated model.
 Measure on: this i5-3230M/HD 4000 laptop (low bar), a mid iPad, a mid Android phone, a current desktop.
 Targets to validate: desktop 60 fps p95 frame ≤ 16.7 ms at 22 players; adaptive quality (DPR cap, shadows off,
 LOD) on low-end; view switch ≤ 300 ms ready (prototype measured 31–35 ms ready p50); 2D↔3D sync error
-≤ 0.01 yd (prototype measured); memory ceiling per device class. #95 measured readiness/transition but **not**
-frame times — first 3D task adds frame-time capture.
+≤ 0.01 yd (prototype measured); memory ceiling per device class. #95 measured readiness, transition and frame times
+(≈ 18–33 ms desktop on HD 4000, ≈ 24 ms emulated tablet/phone; not 60 FPS on HD 4000) on one limited machine — these
+do not establish production performance; memory, GPU stability and real-device playback under football workloads
+remain to be measured.
 
 ## 6. First 3D acceptance scenario (AT-20…AT-24)
 

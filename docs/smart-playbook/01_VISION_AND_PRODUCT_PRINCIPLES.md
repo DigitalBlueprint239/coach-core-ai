@@ -11,6 +11,24 @@ Smart Playbook does not just show a coach what a play looks like. It helps the c
 **understand** its football logic, **explore** how it interacts with defenses, **teach** every player's
 assignment, **visualize** its execution, **prepare** the team to run it, and **improve** the coaching process.
 
+## Owner decisions (final, 2026-11-03 "Intelligence-First Foundation" directive)
+
+1. **First audiences:** youth tackle and high school, treated as different coaching contexts (progressive
+   disclosure: simple by default, advanced on demand). Architecture extends to flag, 6/8/9-player, 7v7, college.
+   No league-compliance claim until that league's versioned rule profile is verified against its governing source.
+2. **AI strictly on demand:** no unsolicited recommendations, popups or background calls on edits. Deterministic
+   validation warnings are normal app behaviour, not AI.
+3. **AI never modifies plays:** it explains, analyses, identifies weaknesses, recommends and teaches; the coach makes
+   every change by hand. No AI write operations at this stage.
+4. **Run and pass both demonstrated** on one model: run-game slice first, then passing.
+5. **Qualified football review group** to be recruited (proposal in 07 section 6); no existing collaborator is
+   assumed to be the whole group; no spending without approval.
+6. **Coaches first;** players later receive only coach-approved material: no private analysis, unapproved AI output,
+   opponent information or open AI access for players.
+
+Three layers: **A** deterministic football engine (authoritative) / **B** read-only AI advisor (explains the engine
+and verified knowledge) / **C** presentation and teaching (2D, 3D, cards, quizzes). One football meaning, many views.
+
 ## Audiences
 
 | Persona | Needs first | Source |

@@ -1,5 +1,20 @@
 # 08 — Development Roadmap (dependency-ordered)
 
+> **Superseded ordering (owner directive 2026-11-03, "Intelligence-First Foundation"):** football intelligence is
+> built into the foundation. The phase table below is kept for history; the authoritative order is:
+>
+> | Milestone | Outcome | Gate |
+> |---|---|---|
+> | **M0** Reconcile and protect | Decisions recorded; trunk/PR state verified; staging and persistence risks documented; lane boundaries confirmed | Agreed source of truth, safe path |
+> | **M1** Intelligence contracts | Model v3 assignments, rule profiles, findings, eligibility, install with conflicts, read-only advisory contract, non-destructive migration infrastructure, knowledge/evidence metadata | Engine represents and validates meaningful assignments without AI |
+> | **M2** Run-game slice | Inside Zone vs a defined front: block rules resolved to defenders, mesh, RB track, timing events, save/reopen, 2D, play card; then Power | Engine understands run assignments, not arrows |
+> | **M3** Pass-game slice | Smash with eligibility, protection, coverage rules, QB drop and progression, timing; preserves read and assistant | Run and pass on one system |
+> | **M4** Shared timeline + 3D | Tier A playback in 2D and R3F 3D from one timeline; fidelity, determinism, perf measured | Same plays consistent in 2D and 3D; no view-caused mutation |
+> | **M5** Requested AI assistance | Server-side read-only advisor on the canonical model and evidence; AI-off fallback; no-write guarantee | Grounded answers; coach keeps control |
+> | **M6** Coaching utility | Play cards, wristbands, call sheets, limited coach-approved player sharing, basic study/quiz tracking | Create, teach, distribute approved material |
+>
+> Later: more football systems, advanced defense, film, collaboration, analytics, offline, Tier B/C simulation.
+
 Each phase ends in a **working, tested vertical slice** on staging. Estimates assume cloud sessions for builds
 and the current two-lane team; they are ranges, re-estimated at each phase gate. Production release of any phase
 is an owner decision. Film (SP-V15) runs in Drew's lane in parallel (issue #39).
