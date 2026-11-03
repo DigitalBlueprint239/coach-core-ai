@@ -22,7 +22,7 @@ ADR-006 updated.
 - `rules.ts` — profile gains `eligibility` model field.
 - Tests: `intelligence.test.ts`, `advisory.test.ts` (incl. static guard: no AI imports in playbook screen or engine).
 
-**Validation:** CI on PR #106 (recorded in the PR once green). **Not football-reviewed yet** (no review group).
+**Validation (CI run 41656510332, head 63ea6c0):** test-and-build ✅ lint 0 warnings, typecheck, unit 54 files / 614 tests (intelligence 10/10, advisory 6/6, rules 6/6), build; firestore-rules ✅ 39/39; preview ✅. **Not football-reviewed yet** (no review group).
 
 **Limitations:** eligibility ignores jersey numbering and QB rules; profile is draft (unsourced); no run-scheme
 resolution yet; `installConcept` not yet wired into the editor UI.

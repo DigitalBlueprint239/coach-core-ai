@@ -7,11 +7,11 @@ Format: `T-id · task · requirement · depends · acceptance`. Status: ☐ open
 | T | Task | Status |
 |---|---|---|
 | T-101 | Versioned rule profiles (`rules.ts`), eligibility model field | ☑ PR #106 |
-| T-113 | Explainable findings + `Evaluation` (ok / unsupported) (`findings.ts`) | ☑ PR #106 (CI pending) |
-| T-114 | Receiver eligibility under a profile, QB reported unsupported (`eligibility.ts`) | ☑ PR #106 (CI pending) |
-| T-103a | Model v3 assignment union (route, run-track, block, protect, motion, read) + lossless v2 adapter (`model.ts`) | ☑ PR #106 (CI pending) |
-| T-106a | `installConcept` with structured conflicts; never drops assignments (`install.ts`) | ☑ PR #106 (CI pending) |
-| T-115 | Read-only advisory contract + disabled advisor + no-auto-AI guard (`advisory.ts`) | ☑ PR #106 (CI pending) |
+| T-113 | Explainable findings + `Evaluation` (ok / unsupported) (`findings.ts`) | ☑ PR #106 (CI ✅ 614/614) |
+| T-114 | Receiver eligibility under a profile, QB reported unsupported (`eligibility.ts`) | ☑ PR #106 (CI ✅ 614/614) |
+| T-103a | Model v3 assignment union (route, run-track, block, protect, motion, read) + lossless v2 adapter (`model.ts`) | ☑ PR #106 (CI ✅ 614/614) |
+| T-106a | `installConcept` with structured conflicts; never drops assignments (`install.ts`) | ☑ PR #106 (CI ✅ 614/614) |
+| T-115 | Read-only advisory contract + disabled advisor + no-auto-AI guard (`advisory.ts`) | ☑ PR #106 (CI ✅ 614/614) |
 | T-104 | v3 Play document, version-dispatching reader, `migrateV2toV3`, originals preserved, round-trip fixtures | ☐ next |
 | T-109 | Revision concurrency (port #53 rule) + recoverable conflicts + account-scoped drafts | ☐ |
 | T-105 | Source registry + 5 categories + independence groups | ☐ |
