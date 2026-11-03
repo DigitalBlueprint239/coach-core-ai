@@ -6,6 +6,8 @@ export type {
 } from './types';
 export { isPublishable } from './verification';
 export { mirrorFormation, slotsFor, strengthOf, validateFormation } from './formations';
+export { DEFAULT_RULE_PROFILE, RULE_PROFILES, ruleProfile } from './rules';
+export type { RuleProfile } from './rules';
 export { ROUTES, routePath } from './routes';
 export { applyConcept } from './concepts';
 export type { AppliedConcept, ConceptRoute } from './concepts';

@@ -1,0 +1,6 @@
+# ADR-001 — One canonical, versioned play model
+Status: Proposed (needs owner approval, RD-02). Date: 2026-11-03.
+Context: v1 (pixels), v2 (PlayV2, yards) and the 3D prototype (pixel adapter) each represent plays; the vision requires 2D, 3D, AI, teaching and exports to share one model.
+Decision: extend football-core into a canonical model v3 (see 05): Concept (football meaning by slot/role) separate from Play (team installation with overrides, revision, status). Assignment becomes a discriminated union covering routes, run tracks, block schemes, protections, motions, ball events, reads. Every stored document has schemaVersion; pure migrations; v1 never rewritten.
+Alternatives: adopt the standalone Play schema (rejected: presentation-centric, no assignment semantics); per-feature models (rejected: contradicts the vision).
+Consequences: T-103/T-104 before any 3D integration or exports; migration fixtures mandatory.
