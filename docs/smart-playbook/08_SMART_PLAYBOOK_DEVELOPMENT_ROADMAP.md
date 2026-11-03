@@ -17,7 +17,7 @@
 
 Each phase ends in a **working, tested vertical slice** on staging. Estimates assume cloud sessions for builds
 and the current two-lane team; they are ranges, re-estimated at each phase gate. Production release of any phase
-is an owner decision. Film (SP-V15) runs in Drew's lane in parallel (issue #39).
+is an owner decision. Film (SP-V15) runs in Drew's lane in parallel (scope: issue #50; shared contract: PR #104).
 
 | Phase | Outcome (vertical slice) | Key requirements | Depends on | Est. |
 |---|---|---|---|---|

@@ -26,7 +26,10 @@ export { MODEL_VERSION, fromV2Assignment, toV2Assignment } from './model';
 export type { AssignmentV3, BallAction, BlockRule, ConceptFamily, ProtectionRule, RunTrack } from './model';
 export { installConcept } from './install';
 export type { InstalledAssignment, Installation } from './install';
-export { createDisabledAdvisor, requestAdvice } from './advisory';
+export {
+  ADVISORY_CAPABILITIES, RESPONSE_STATUSES, STATEMENT_BASES, authorizeAdvisoryAccess, createDisabledAdvisor, requestAdvice,
+  validateAdvisoryResponse,
+} from './advisory';
 export type {
   AdvisoryCapability, AdvisoryRequest, AdvisoryResponse, AdvisoryStatement, Advisor, StatementBasis,
 } from './advisory';

@@ -38,7 +38,7 @@ from recovery). AI: `src/ai-brain/` (TypeScript, 1,608 LOC) + server proxy contr
 | Practice planner | `src/features/practice-planner/` | — | not inspected in depth | Legacy; reachable from Dashboard. Status: implemented-unverified. |
 | Exports | — | — | — | **None on trunk.** |
 | Player access / quizzes | — | — | — | **None on trunk.** |
-| Film / scouting | — | — | — | **None on trunk.** Film is Drew's lane; CRA-era, not ported (issue #39). |
+| Film / scouting | — | — | — | **None on trunk.** Film is Drew's lane; CRA-era, not ported. Film MVP scope: issue #50. |
 | Offline | — | — | — | Service worker retired (kill switch); only a local autosave draft. |
 
 ## 4. 3D prototype (PR #95, not merged — "EXPERIMENT ONLY")
@@ -84,7 +84,7 @@ Drafts 19 (formations 2, concepts 6, defense 4, matchups 7). Run plays 0. `decis
 - Coordinate formats: v1 pixels, v2 yards, sp3d profiles — unify on yards with explicit profiles (ADR-002).
 - `src/ai-brain/` exists but has no grounded-evidence pipeline and is off.
 - Staging shares production Firebase project/data.
-- ~30 Drew-lane draft PRs (#68–#94) on the old toolchain; reconciliation via issue #39.
+- ~30 Drew-lane draft PRs (#68–#94) on the old toolchain; reconciliation under the shared contract (PR #104, draft).
 
 ## 8. Test & CI baseline (latest trunk runs)
 

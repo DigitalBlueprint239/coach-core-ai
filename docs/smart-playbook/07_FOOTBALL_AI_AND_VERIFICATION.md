@@ -6,7 +6,7 @@ Status: policy (verification rules are owner-mandated and non-negotiable); AI ar
 
 | Category | Meaning | Label shown | Who can publish |
 |---|---|---|---|
-| **Verified** | Each claim supported by **≥ 2 independent reliable publishers per item and ≥ 3 per matchup claim** (existing bar, unchanged) **and** applicable expert review | "Verified" | Owner/approved reviewer after evidence check |
+| **Verified** | Each claim supported by **three independent, reliable sources** (independent organizations or origins of evidence) **and** qualified expert review (RD-01). Governing rule books are the primary authority for the rules they define. | "Verified" | Owner/approved reviewer after evidence check |
 | **Expert-reviewed** | A named trusted coach approved the football explanation; source bar not (yet) met | "Coach-reviewed" | Owner-approved reviewer |
 | **Coach-authored** | The team's own content | (team name) | The team |
 | **Provisional AI** | Model-generated, not verified | "AI draft — not verified" | Never published as verified |
@@ -44,8 +44,12 @@ No unauthorized copies; no redistribution without a licence. Purchases/licences 
 
 ## 4. AI architecture (SP-V08)
 
-- Server-side only (Firebase Functions + Genkit + Anthropic, per approved design); browser holds no keys (guard test
-  exists). Auth via Firebase ID token; per-team quotas; request/response schema validation (zod) at the boundary;
+- Server-side only, behind **one gateway with provider adapters** (owner decision 2026-10-13, recorded in PR #47: new
+  OpenAI and Anthropic credentials only, no Gemini, no reuse of old keys). Film's tagging uses the OpenAI adapter
+  (issue #50). Which provider serves the Smart Playbook advisor is an **open owner decision (RD-10)**; Genkit is an
+  implementation option, not a vendor choice. The browser holds no keys (guard test exists). The coach-action trigger is
+  UI intent, **not authorization**: the gateway must verify the Firebase ID token with Admin credentials and check team
+  membership (`authorizeAdvisoryAccess`) before any provider call. Auth via Firebase ID token; per-team quotas; request/response schema validation (zod) at the boundary;
   observability (Sentry + structured logs); live AI off at launch (owner decision 2026-10-30).
 - **Read-only, on demand (owner decisions 2 and 3):** AI answers only explicit coach requests and never writes plays.
   Contract in `src/football-core/advisory.ts`: coach-action trigger required; deep-frozen context; responses limited to
