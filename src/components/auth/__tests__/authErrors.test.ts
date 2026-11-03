@@ -14,6 +14,7 @@ describe('authErrorMessage', () => {
     ['auth/invalid-email', 'Enter a valid email address.'],
     ['auth/missing-email', 'Enter your email address.'],
     ['auth/missing-password', 'Enter your password.'],
+    ['auth/unauthorized-domain', "Sign-in isn't set up for this web address. Use the main site to sign in."],
     ['auth/something-new', "Sign-in didn't work. Try again."],
     ['', "Sign-in didn't work. Try again."],
   ])('%s -> %s', (code, message) => {
