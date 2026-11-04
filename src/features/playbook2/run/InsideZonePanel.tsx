@@ -14,7 +14,7 @@ export type InsideZonePanelProps = {
 export const InsideZonePanel: React.FC<InsideZonePanelProps> = ({ formation, side, onSideChange }) => {
   const result = useMemo(() => resolveInsideZone(formation, side), [formation, side]);
   return (
-    <section className="pb2-inside-zone" role="region" aria-label="Inside Zone research preview">
+    <section className="pb2-inside-zone" aria-label="Inside Zone research preview">
       <h3>Inside Zone · research preview</h3>
       <p className="pb2-muted">
         Draft covered/uncovered coaching convention, not verified coaching advice, official legality,
