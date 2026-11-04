@@ -15,6 +15,9 @@ import { LibraryView } from './library/LibraryView';
 import { DEFAULT_SETTINGS, formationCopy, newBlankPlay, playFromConcept, type PlayV2, type TeamPlaybookSettings } from './playModel';
 import { isStoreError, listPlaysV2, loadTeamSettings, savePlayV2, saveTeamSettings } from './playStore';
 import { ReadSteps } from './read/ReadSteps';
+import { InsideZonePanel } from './run/InsideZonePanel';
+import { insideZoneSide, newInsideZoneDraft, withInsideZoneSide } from './run/insideZoneDraft';
+import './run/insideZonePanel.css';
 import { TerminologyPanel } from './terminology/TerminologyPanel';
 
 const PHONE_MAX = 767;
@@ -117,6 +120,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
 
   const { restorable, discard, clear, offer } = useAutosave(`pb2:draft:${teamId}`, editor.play, editor.dirty);
   const { play, problems, dirty } = editor;
+  const runSide = insideZoneSide(play.tags);
   const currentPlay = useRef(play);
   currentPlay.current = play;
   const terminology = settings.terminology;
@@ -270,6 +274,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
 
   const menuItems: Array<{ label: string; run(): void; disabled?: boolean }> = [
     { label: 'New play', run: () => leaveCurrent() && openPlay(newBlankPlay(teamId, play.formation)) },
+    { label: 'New Inside Zone (research)', run: () => leaveCurrent() && openPlay(newInsideZoneDraft(teamId, play.formation)) },
     { label: 'New formation', run: () => setNewFormationOpen(true) },
     { label: 'Library', run: () => setView('library') },
     { label: 'Terminology', run: () => setView('terminology'), disabled: settingsState !== 'ready' },
@@ -514,6 +519,9 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
                 </span>
                 {isLineman(selected.role) && <span className="pb2-muted">Linemen stay unlabelled on the sheet.</span>}
               </div>
+            )}
+            {mode === 'play' && runSide !== null && (
+              <InsideZonePanel formation={play.formation} side={runSide} onSideChange={side => dispatch({ type: 'setTags', tags: withInsideZoneSide(play.tags, side) })} />
             )}
             {mode === 'play' && play.read.length > 0 && (
               <ReadSteps steps={play.read} terminology={terminology} active={activeStep} onSelect={setActiveStep} />

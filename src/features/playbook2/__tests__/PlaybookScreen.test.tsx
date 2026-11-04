@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PlaybookScreen from '../PlaybookScreen';
 import { listPlaysV2, loadTeamSettings, savePlayV2, saveTeamSettings } from '../playStore';
 import { playFromConcept } from '../playModel';
+import { newInsideZoneDraft } from '../run/insideZoneDraft';
 import { publishedLibrary } from '../../../football-core';
 
 const env = vi.hoisted(() => ({
@@ -60,6 +61,32 @@ describe('PlaybookScreen', () => {
     env.team = null;
     render(<PlaybookScreen />);
     expect(screen.getByText('Pick a team to build its playbook.')).toBeInTheDocument();
+  });
+
+
+  it('opens the existing deterministic Inside Zone preview without rewriting a play', async () => {
+    await ready();
+    await openMore('New Inside Zone (research)');
+    const region = screen.getByRole('region', { name: 'Inside Zone research preview' });
+    expect(within(region).getByText(/not verified coaching advice/)).toBeInTheDocument();
+    expect(within(region).getByRole('button', { name: 'Strong side' })).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.click(within(region).getByRole('button', { name: 'Weak side' }));
+    expect(within(region).getByRole('button', { name: 'Weak side' })).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.click(screen.getByRole('button', { name: 'Save play' }));
+    await waitFor(() => expect(savePlayV2).toHaveBeenCalledWith(
+      expect.objectContaining({ teamId: 't1', schemaVersion: 2, tags: expect.arrayContaining(['research:inside-zone@1', 'run-side:weak']) }), 'coach1',
+    ));
+  });
+
+  it('reopens a saved v2 Inside Zone draft from its research tags', async () => {
+    const formation = publishedLibrary().formations[0];
+    const saved = { ...newInsideZoneDraft('t1', formation), id: 'p42', createdBy: 'coach1' };
+    vi.mocked(listPlaysV2).mockResolvedValue([saved]);
+    await ready();
+    const picker = await screen.findByRole('combobox', { name: 'Play' });
+    await userEvent.selectOptions(picker, 'p42');
+    expect(screen.getByRole('region', { name: 'Inside Zone research preview' })).toBeInTheDocument();
+    expect(screen.getByText(/Draft covered\/uncovered coaching convention/)).toBeInTheDocument();
   });
 
   it('Save is the only primary button', async () => {

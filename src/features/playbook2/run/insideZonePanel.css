@@ -1,0 +1,13 @@
+
+.pb2-inside-zone {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid currentColor;
+  border-radius: 0.75rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.pb2-inside-zone h3, .pb2-inside-zone h4 { margin: 0.5rem 0; }
+.pb2-inside-zone [role='group'] { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+.pb2-inside-zone li { margin-bottom: 0.4rem; }
+.pb2-inside-zone details { margin-top: 0.75rem; }
