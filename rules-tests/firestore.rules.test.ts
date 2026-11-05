@@ -190,6 +190,15 @@ describe('users', () => {
     await assertFails(setDoc(doc(bob(), 'users/alice'), { displayName: 'hacked' }));
   });
 
+  it('rejects user-created fake admin/approval entitlements while allowing ordinary profile fields', async () => {
+    await assertSucceeds(setDoc(doc(alice(), 'users/alice'), { displayName: 'Alice Profile', bio: 'OL coach' }));
+    await assertFails(setDoc(doc(alice(), 'users/alice'), { displayName: 'Alice', isAdmin: true }));
+    await assertFails(setDoc(doc(alice(), 'users/alice'), { displayName: 'Alice', role: 'administrator' }));
+    await assertFails(updateDoc(doc(alice(), 'users/alice'), { entitlements: ['premium'] }));
+    await assertFails(updateDoc(doc(alice(), 'users/alice'), { coachCoreVerified: true }));
+    await assertSucceeds(updateDoc(doc(alice(), 'users/alice'), { displayName: 'Coach Alice' }));
+  });
+
   it('an admin with a verified email can read profiles; the same email unverified cannot', async () => {
     await assertSucceeds(getDoc(doc(admin(true), 'users/alice')));
     await assertFails(getDoc(doc(admin(false), 'users/alice')));
@@ -209,6 +218,17 @@ describe('waitlist', () => {
     await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, email: 'not-an-email' }));
     const noTime = { email: entry.email, source: entry.source };
     await assertFails(addDoc(collection(anonymous(), 'waitlist'), noTime));
+  });
+
+  it('visitors cannot write admin-controlled waitlist access or processing fields', async () => {
+    await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, immediateAccess: true }));
+    await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, status: 'approved' }));
+    await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, batchProcessed: true }));
+    await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, metadata: { granted: true } }));
+    await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, ipAddress: '1.2.3.4' }));
+    await assertSucceeds(addDoc(collection(anonymous(), 'waitlist'), {
+      ...entry, name: 'Coach Test', utmCampaign: 'youth-2026',
+    }));
   });
 
   it('only a verified admin can read the waitlist; nobody can edit or delete it', async () => {
@@ -243,12 +263,22 @@ describe('Smart Playbook v2 access (no rule changes)', () => {
 
 // Canonical v3 plays: optimistic concurrency (T-109). Each save must move the revision forward by exactly one.
 describe('v3 play revisions', () => {
-  const v3 = (revision: number) => ({ schemaVersion: 3, name: 'IZ', teamId: 't1', createdBy: 'alice', revision });
+  const v3 = (revision: number) => ({ schemaVersion: 3, name: 'IZ', teamId: 't1', createdBy: 'alice', revision, status: 'draft' });
 
   beforeEach(async () => {
     await env.withSecurityRulesDisabled(async ctx => {
       await setDoc(doc(ctx.firestore(), 'plays/v3a'), v3(4));
     });
+  });
+
+  it('a coach cannot self-publish or forge a verified saved play in client writes', async () => {
+    await assertFails(setDoc(doc(alice(), 'plays/forged-published'), { ...v3(1), status: 'published' }));
+    await assertFails(updateDoc(doc(alice(), 'plays/v3a'), { status: 'published', revision: 5 }));
+    await env.withSecurityRulesDisabled(async ctx => {
+      await setDoc(doc(ctx.firestore(), 'plays/published-v3'), { ...v3(3), status: 'published' });
+    });
+    await assertFails(updateDoc(doc(alice(), 'plays/published-v3'), { name: 'tamper', revision: 4 }));
+    await assertSucceeds(getDoc(doc(alice(), 'plays/published-v3')));
   });
 
   it('a new v3 play must start at revision 1', async () => {
