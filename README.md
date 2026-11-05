@@ -1,187 +1,66 @@
 # Coach Core AI
 
-A comprehensive AI-powered coaching platform built with React, TypeScript, and Firebase. Coach Core AI provides intelligent practice planning, team management, and analytics for sports coaches.
+Coach Core AI is a coaching platform under active recovery development. The current development stack is **React 19 + TypeScript + Vite 8 + Vitest + Firebase**. React builds the interface; Vite runs and builds it.
 
-## 🚀 Features
+> **Branch notice (2026-11-04):** The default `master` branch still contains a legacy Create React App configuration. Work on `recovery/coach-core-mvp-2026` and task branches based on it. Do not copy the `react-scripts` scripts from `master`, merge into `master`, or deploy without owner authorization. [Architecture baseline](docs/ARCHITECTURE_REALITY_2026-11-04.md).
 
-### AI-Powered Practice Planning
-- **Smart Practice Generator**: AI-driven practice plan creation based on team performance data
-- **Drill Library**: Extensive collection of drills with difficulty ratings and skill focus
-- **Adaptive Planning**: Plans that adjust based on player progress and team needs
+## Current working scope
 
-### Team Management
-- **Roster Management**: Complete player database with performance tracking
-- **Attendance Tracking**: Automated check-in system with analytics
-- **Player Profiles**: Individual player statistics and progress monitoring
+- Firebase authentication and coach-owned team/plays/practice-plan model; the repository's rules are tested with the Firebase emulator. **Merging rules does not deploy them to Firebase.**
+- A feature-gated Smart Playbook v2 screen. Additional deterministic football-core, v3 persistence and Inside Zone work is in **draft PRs #106, #107 and #108**, not accepted product functionality.
+- Server-side, authenticated AI proxy; no OpenAI/Gemini provider secrets in the browser. AI is off unless explicitly enabled.
+- React-based UI, Vite builds, lint/typecheck/Vitest checks, Firestore emulator tests and controlled Firebase Hosting release workflows.
 
-### Smart Playbook
-- **Interactive Play Designer**: Visual play creation with drag-and-drop interface
-- **Formation Templates**: Pre-built formations for various sports
-- **Route Editor**: Custom route creation and editing tools
-- **Play Library**: Organized collection of plays with search and filtering
+This is not yet a public-beta launch claim. In particular, the team-sharing/join flow remains disabled pending an approved access model. Staging Hosting has historically shared the production Firebase project's data/accounts; preview and live release require owner review.
 
-### Analytics Dashboard
-- **Performance Metrics**: Real-time team and individual performance tracking
-- **Progress Analytics**: Visual charts and graphs for data analysis
-- **AI Insights**: Intelligent recommendations based on performance data
+## Local development
 
-### AI Assistant
-- **Natural Language Interface**: Chat with AI for coaching advice and insights
-- **Practice Suggestions**: AI-generated recommendations for drills and exercises
-- **Performance Analysis**: Automated analysis of team and player data
-
-## 🛠️ Tech Stack
-
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Firebase (Firestore, Authentication, Functions)
-- **AI/ML**: OpenAI GPT-4, Custom AI models
-- **Deployment**: Firebase Hosting, Vercel
-- **State Management**: React Context, Custom hooks
-- **UI Components**: Custom component library with Storybook
-
-## 📁 Project Structure
-
-```
-src/
-├── ai-brain/           # AI core functionality
-├── components/         # Reusable UI components
-├── contexts/          # React contexts
-├── features/          # Feature-specific components
-├── hooks/             # Custom React hooks
-├── services/          # API and external services
-├── types/             # TypeScript type definitions
-└── utils/             # Utility functions
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-- Firebase account
-- OpenAI API key
-## ⚠️ Important Setup Note
-This project requires internet access for initial dependency installation.
-The testing environment needs `react-scripts` and testing libraries to be installed.
-See [SETUP.md](SETUP.md) for detailed instructions.
-
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/coach-core-ai.git
-   cd coach-core-ai
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp env.production.example .env.local
-   ```
-   
-   Edit `.env.local` with your configuration:
-   ```env
-   VITE_FIREBASE_API_KEY=your_firebase_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_OPENAI_API_KEY=your_openai_api_key
-   ```
-
-4. **Set up Firebase**
-   ```bash
-   npm install -g firebase-tools
-   firebase login
-   firebase init
-   ```
-
-5. **Start the development server**
-   ```bash
-   npm start
-   ```
-
-## 🔧 Configuration
-
-### Firebase Setup
-
-1. Create a new Firebase project
-2. Enable Authentication, Firestore, and Functions
-3. Update `firebase.json` and `firestore.rules` as needed
-4. Deploy Firebase configuration:
-   ```bash
-   firebase deploy
-   ```
-
-### AI Configuration
-
-1. Set up OpenAI API key in environment variables
-2. Configure AI models in `src/ai-brain/core/AIBrain.ts`
-3. Test AI functionality with `npm run test:ai`
-
-## 📦 Available Scripts
-
-- `npm start` - Start development server
-- `npm build` - Build for production
-- `npm test` - Run tests
-- Ensure you've run `npm install` to install `react-scripts` and all other
-  testing dependencies before executing the test suite.
-- `npm run deploy` - Deploy to Firebase
-- `npm run storybook` - Start Storybook
-- `npm run test:ai` - Test AI functionality
-
-## 🚀 Deployment
-
-### Firebase Hosting
+Use **Node.js 22.12+** (Node 22 is the tested project development family) and npm. See [SETUP.md](SETUP.md) for fuller instructions.
 
 ```bash
-npm run build
-firebase deploy
+git clone https://github.com/DigitalBlueprint239/coach-core-ai.git
+cd coach-core-ai
+git fetch origin
+git switch -c my-task origin/recovery/coach-core-mvp-2026
+npm ci
+cp env.production.example .env.local
+# Fill in non-secret Firebase web configuration for the intended local/test project.
+npm run dev
 ```
 
-### Vercel
+Vite serves the local app on port 3000. `npm start` is also an alias for Vite.
 
-```bash
-npm run build
-vercel --prod
-```
+**Environment variables:** `vite.config.ts` deliberately uses `envPrefix: 'REACT_APP_'`, a compatibility choice from the earlier CRA migration. Do **not** rename them to `VITE_*` without a separate reviewed migration. Build artifacts deliberately go to `build/` for Firebase Hosting compatibility. Browser-visible configuration is not a safe place for API-provider secrets.
 
-## 🤝 Contributing
+Never put `OPENAI_API_KEY`, `GEMINI_API_KEY`, Firebase Admin credentials, service-account JSON or `SENTRY_AUTH_TOKEN` into `.env.local` or variables exposed to the frontend. Provider secrets belong on the backend in approved secret storage.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## Verified repository commands
 
-## 📄 License
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Local Vite server |
+| `npm run check:stack` | Detect wrong legacy build scripts and frontend env naming |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript checking |
+| `npm test` | Vitest non-interactive tests |
+| `npm run build` | Stack check, TypeScript, Vite build, Tailwind output check |
+| `npm run preview` | Local preview of built app |
+| `npm run test:rules` | Firebase Firestore emulator rules tests (Java + Firebase CLI dependencies required) |
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Run `npm ci` after pulling changes to `package-lock.json`. Do not install `react-scripts` to resolve errors; it is no longer part of the recovery stack.
 
-## 🆘 Support
+## Project structure
 
-For support, email support@coachcoreai.com or join our Slack channel.
+- `src/components`, `src/features` — React UI and product features
+- `src/football-core` — deterministic, source-status-aware football models
+- `src/ai-brain`, `src/services` — application and authenticated AI-proxy clients
+- `src/firebase.ts`, `firestore.rules`, `rules-tests` — Firebase client and security logic
+- `vite.config.ts`, `scripts/check-build.mjs` — Vite/asset build safeguards
+- `docs/COACH_CORE_SHARED_CONTEXT.md`, `docs/MVP_7_DAY_SPRINT.md` — historical and shared recovery context (confirm dated claims against latest merged PRs)
+- `docs/RELEASING.md` — staging/production process and owner approval controls
 
-## 🔮 Roadmap
+## Contribution and release safety
 
-- [ ] Mobile app development
-- [ ] Advanced AI analytics
-- [ ] Multi-sport support
-- [ ] Integration with wearable devices
-- [ ] Video analysis features
-- [ ] Social features for coaches
+Start task-specific branches from `recovery/coach-core-mvp-2026`. Do not overwrite other agents' owned files, change Firebase production rules, expose private Vault data, merge stacked Smart Playbook PRs, or deploy without owner approval. Passing code tests does not constitute football-expert verification, security authorization, or a production-release decision.
 
-## 🙏 Acknowledgments
-
-- OpenAI for GPT-4 integration
-- Firebase team for the excellent backend services
-- React team for the amazing framework
-- All contributors and beta testers
-
----
-
-**Coach Core AI** - Empowering coaches with intelligent tools for better team performance. 
+See [architecture status and next user-facing slice](docs/ARCHITECTURE_REALITY_2026-11-04.md) before making major technology changes.
