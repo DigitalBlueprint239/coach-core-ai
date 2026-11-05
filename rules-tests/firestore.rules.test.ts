@@ -115,6 +115,15 @@ describe('teams', () => {
     await assertFails(updateDoc(doc(alice(), 'teams/t1'), { ownerId: 'bob' }));
   });
 
+  it('the owner cannot accidentally remove themselves from the team member list', async () => {
+    await assertFails(updateDoc(doc(alice(), 'teams/t1'), { memberIds: ['carol'] }));
+    await assertSucceeds(updateDoc(doc(alice(), 'teams/t1'), { memberIds: ['alice'] }));
+  });
+
+  it('the owner cannot replace memberIds with a value of the wrong type', async () => {
+    await assertFails(updateDoc(doc(alice(), 'teams/t1'), { memberIds: 'alice' }));
+  });
+
   it("another coach cannot update or delete someone else's team", async () => {
     await assertFails(updateDoc(doc(bob(), 'teams/t1'), { name: 'Mine now' }));
     await assertFails(deleteDoc(doc(bob(), 'teams/t1')));
@@ -259,6 +268,33 @@ describe('v3 play revisions', () => {
 
   it('a v3 play cannot be downgraded to an older schema', async () => {
     await assertFails(updateDoc(doc(alice(), 'plays/v3a'), { schemaVersion: 2, revision: 5 }));
+  });
+
+  it('rejects overwriting a legacy v2 play as v3 at the same document ID', async () => {
+    await env.withSecurityRulesDisabled(async ctx => {
+      await setDoc(doc(ctx.firestore(), 'plays/old-v2'), {
+        schemaVersion: 2, teamId: 't1', createdBy: 'alice', name: 'Old v2',
+      });
+    });
+    await assertFails(updateDoc(doc(alice(), 'plays/old-v2'), { schemaVersion: 3, revision: 1 }));
+    // Ordinary edits to the original v2 are still possible without version promotion.
+    await assertSucceeds(updateDoc(doc(alice(), 'plays/old-v2'), { name: 'Renamed v2' }));
+  });
+
+  it('rejects promoting a legacy version-one play to v3 in place', async () => {
+    await assertFails(updateDoc(doc(alice(), 'plays/p1'), { schemaVersion: 3, revision: 1 }));
+  });
+
+  it('allows a new, separately identified v3 play to be created without overwriting the v2 source', async () => {
+    await env.withSecurityRulesDisabled(async ctx => {
+      await setDoc(doc(ctx.firestore(), 'plays/old-v2'), {
+        schemaVersion: 2, teamId: 't1', createdBy: 'alice', name: 'Source',
+      });
+    });
+    await assertSucceeds(setDoc(doc(alice(), 'plays/new-v3-copy'), {
+      ...v3(1), provenance: { origin: 'migrated', fromSchemaVersion: 2, sourceId: 'old-v2' },
+    }));
+    await assertSucceeds(getDoc(doc(alice(), 'plays/old-v2')));
   });
 
   it('older plays without a schema version keep their existing rules', async () => {

@@ -122,89 +122,44 @@ export function onAuthStateChange(listener: (user: User | null) => void): () => 
   };
 }
 
-// Offline Persistence (for Firestore)
-let isOnline = navigator.onLine;
-let offlineQueue: any[] = [];
+// Security: the previous global 'offline_operations' queue was plaintext, not tied to a
+// Firebase auth UID or team, and automatically replayed under whoever signed in next.
+// New code MUST NOT load, execute, or persist that queue; it is quarantined for an
+// explicit owner-authorized legacy-data decision rather than silently discarded.
+export const LEGACY_OFFLINE_QUEUE_KEY = 'offline_operations';
 
-window.addEventListener('online', () => {
-  isOnline = true;
-  syncOfflineQueue();
-});
-
-window.addEventListener('offline', () => {
-  isOnline = false;
-});
-
-function saveOfflineQueue() {
-  localStorage.setItem('offline_operations', JSON.stringify(offlineQueue));
-}
-
-// Exported for testing
-export function addToOfflineQueue(operation: any) {
-  offlineQueue.push(operation);
-  saveOfflineQueue();
-}
-
-function loadOfflineQueue() {
-  const storedQueue = localStorage.getItem('offline_operations');
-  if (storedQueue) {
-    offlineQueue = JSON.parse(storedQueue);
+export function hasQuarantinedLegacyOfflineOperations(): boolean {
+  try {
+    return typeof localStorage !== 'undefined' && localStorage.getItem(LEGACY_OFFLINE_QUEUE_KEY) !== null;
+  } catch {
+    return false;
   }
 }
 
-async function syncOfflineQueue() {
-  if (!isOnline || offlineQueue.length === 0) {
-    return;
-  }
+/** Data-destroying action: call only from an explicit user/owner-confirmed cleanup UI. */
+export function discardQuarantinedLegacyOfflineOperations(): void {
+  if (typeof localStorage !== 'undefined') localStorage.removeItem(LEGACY_OFFLINE_QUEUE_KEY);
+}
 
-  const queue = [...offlineQueue];
-  offlineQueue = [];
-  saveOfflineQueue();
+/** Old extension point kept to fail closed. Never queue sensitive writes for later replay. */
+export function addToOfflineQueue(_operation: unknown): never {
+  throw new Error('Unscoped offline queue disabled for privacy. Reconnect before saving.');
+}
 
-  for (const operation of queue) {
-    try {
-      await executeOperation(operation);
-    } catch (error: unknown) {
-      console.error('Failed to sync offline operation:', error);
-      // Only add back to queue if it's not a permanent error
-      if (!(error instanceof Error && error.message?.includes('permission-denied'))) {
-        offlineQueue.push(operation);
-      }
-    }
-  }
-
-  if (offlineQueue.length > 0) {
-    saveOfflineQueue();
+function requireOnlineWrite(): void {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    throw new Error('Offline changes cannot be safely saved. Reconnect before saving; no data was queued.');
   }
 }
 
-async function executeOperation(operation: any) {
-  const { type, collection: collectionName, data, docId } = operation;
-  
-  switch (type) {
-    case 'create':
-      if (docId) {
-        await updateDoc(doc(db, collectionName, docId), data);
-      } else {
-        await addDoc(collection(db, collectionName), data);
-      }
-      break;
-    case 'update':
-      await updateDoc(doc(db, collectionName, docId), data);
-      break;
-    case 'delete':
-      await deleteDoc(doc(db, collectionName, docId));
-      break;
-  }
-}
-
-// Initialize offline queue
-loadOfflineQueue();
+// Firestore SDK calls below still rely on authenticated server rules; an internet connection
+// hint does not prove connectivity. Do not show "cloud saved" until a write promise resolves.
+// A separately reviewed, account-scoped offline design can replace this conservative policy.
 
 // PRACTICE PLANS API
 export async function savePracticePlan(teamId: string, planData: Omit<PracticePlan, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
   const user = getCurrentUser();
-  
+  requireOnlineWrite();
   const plan = {
     ...planData,
     teamId,
@@ -212,23 +167,8 @@ export async function savePracticePlan(teamId: string, planData: Omit<PracticePl
     createdAt: new Date(),
     updatedAt: new Date()
   };
-
-  try {
-    const docRef = await addDoc(collection(db, 'practicePlans'), plan);
-    return docRef.id;
-  } catch (error) {
-    if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
-      addToOfflineQueue({
-        type: 'create',
-        collection: 'practicePlans',
-        data: plan,
-        tempId
-      });
-      return tempId;
-    }
-    throw error;
-  }
+  const docRef = await addDoc(collection(db, 'practicePlans'), plan);
+  return docRef.id;
 }
 
 export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> {
@@ -253,51 +193,24 @@ export async function getPracticePlans(teamId: string): Promise<PracticePlan[]> 
 }
 
 export async function updatePracticePlan(teamId: string, planId: string, updates: Partial<PracticePlan>): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  const data = {
-    ...updates,
-    updatedAt: new Date()
-  };
-
-  try {
-    await updateDoc(doc(db, 'practicePlans', planId), data);
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'practicePlans',
-        docId: planId,
-        data
-      });
-      return;
-    }
-    throw error;
-  }
+  getCurrentUser();
+  requireOnlineWrite();
+  // Team, creator and timestamps may not be changed by arbitrary caller payloads.
+  const { id: _id, teamId: _teamId, createdBy: _createdBy, createdAt: _createdAt, ...mutable } = updates;
+  void _id; void _teamId; void _createdBy; void _createdAt;
+  await updateDoc(doc(db, 'practicePlans', planId), { ...mutable, updatedAt: new Date() });
 }
 
 export async function deletePracticePlan(teamId: string, planId: string): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  try {
-    await deleteDoc(doc(db, 'practicePlans', planId));
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'delete',
-        collection: 'practicePlans',
-        docId: planId
-      });
-      return;
-    }
-    throw error;
-  }
+  getCurrentUser();
+  requireOnlineWrite();
+  await deleteDoc(doc(db, 'practicePlans', planId));
 }
 
 // SMART PLAYBOOK API
 export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'teamId' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<string> {
   const user = getCurrentUser();
-  
+  requireOnlineWrite();
   const play = {
     ...playData,
     teamId,
@@ -305,23 +218,8 @@ export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'team
     createdAt: new Date(),
     updatedAt: new Date()
   };
-
-  try {
-    const docRef = await addDoc(collection(db, 'plays'), play);
-    return docRef.id;
-  } catch (error) {
-    if (!isOnline) {
-      const tempId = `offline_${Date.now()}`;
-      addToOfflineQueue({
-        type: 'create',
-        collection: 'plays',
-        data: play,
-        tempId
-      });
-      return tempId;
-    }
-    throw error;
-  }
+  const docRef = await addDoc(collection(db, 'plays'), play);
+  return docRef.id;
 }
 
 // Versioned plays (v2 and the canonical v3, src/features/playbook2 and src/football-core) share the plays collection;
@@ -355,45 +253,17 @@ export async function getPlays(teamId: string): Promise<Play[]> {
 }
 
 export async function updatePlay(teamId: string, playId: string, updates: Partial<Play>): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  const data = {
-    ...updates,
-    updatedAt: new Date()
-  };
-
-  try {
-    await updateDoc(doc(db, 'plays', playId), data);
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'update',
-        collection: 'plays',
-        docId: playId,
-        data
-      });
-      return;
-    }
-    throw error;
-  }
+  getCurrentUser();
+  requireOnlineWrite();
+  const { id: _id, teamId: _teamId, createdBy: _createdBy, createdAt: _createdAt, ...mutable } = updates;
+  void _id; void _teamId; void _createdBy; void _createdAt;
+  await updateDoc(doc(db, 'plays', playId), { ...mutable, updatedAt: new Date() });
 }
 
 export async function deletePlay(teamId: string, playId: string): Promise<void> {
-  getCurrentUser(); // Ensure authenticated
-  
-  try {
-    await deleteDoc(doc(db, 'plays', playId));
-  } catch (error) {
-    if (!isOnline) {
-      addToOfflineQueue({
-        type: 'delete',
-        collection: 'plays',
-        docId: playId
-      });
-      return;
-    }
-    throw error;
-  }
+  getCurrentUser();
+  requireOnlineWrite();
+  await deleteDoc(doc(db, 'plays', playId));
 }
 
 // REAL-TIME SUBSCRIPTIONS
@@ -432,47 +302,11 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
 }
 
 export async function migrateFromLocalStorage(teamId: string): Promise<void> {
-  // Migrate any data from localStorage to Firestore
-  const localStorageKey = `coach-core-ai-${teamId}`;
-  const localData = localStorage.getItem(localStorageKey);
-  
-  if (localData) {
-    try {
-      const data = JSON.parse(localData);
-      // Migrate plays
-      if (data.plays && Array.isArray(data.plays)) {
-        for (const play of data.plays) {
-          await savePlay(teamId, {
-            name: play.name,
-            formation: play.formation,
-            description: play.description || '',
-            routes: play.routes || [],
-            players: play.players || [],
-            tags: play.tags || [],
-            difficulty: play.difficulty || 'beginner',
-            sport: play.sport || 'football'
-          });
-        }
-      }
-      // Migrate practice plans
-      if (data.plans && Array.isArray(data.plans)) {
-        for (const plan of data.plans) {
-          await savePracticePlan(teamId, {
-            name: plan.name,
-            date: plan.date,
-            duration: plan.duration,
-            periods: plan.periods || [],
-            goals: plan.goals || [],
-            notes: plan.notes || ''
-          });
-        }
-      }
-      // Clear localStorage after successful migration
-      localStorage.removeItem(localStorageKey);
-    } catch (error) {
-      console.error('Error migrating from localStorage:', error);
-    }
-  }
+  getCurrentUser();
+  if (!teamId) throw new Error('Select a team before reviewing legacy browser data.');
+  // Old browser records lack authenticated ownership provenance. Silently copying them
+  // into the current coach's Firestore team could cross a user boundary.
+  throw new Error('Legacy browser data migration is paused pending coach ownership verification.');
 }
 
 export { db, auth };
