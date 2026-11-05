@@ -18,7 +18,7 @@ const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'obj
 function safeAIOverview(raw: unknown): AIOverview {
   if (!isRecord(raw)) return { insights: [], periods: [] };
   const insights = Array.isArray(raw.insights) ? raw.insights.filter((x): x is string => typeof x === 'string') : [];
-  const plan = isRecord(raw.plan) ? raw.plan : {};
+  const plan: Record<string, unknown> = isRecord(raw.plan) ? raw.plan : {};
   const rawPeriods = Array.isArray(plan.periods) ? plan.periods : [];
   const periods = rawPeriods.filter(isRecord).map(period => ({
     name: typeof period.name === 'string' ? period.name : 'Practice period',
