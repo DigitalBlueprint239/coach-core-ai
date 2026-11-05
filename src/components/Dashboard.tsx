@@ -7,6 +7,7 @@ import { LoadingSpinner } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
+import { LegacyOfflineDataNotice } from './LegacyOfflineDataNotice';
 import { SignInScreen } from './auth/SignInScreen';
 import { isContentReviewEnabled, isPlaybookV2Enabled } from '../features/playbook2/flags';
 
@@ -96,6 +97,8 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </nav>
+
+      <LegacyOfflineDataNotice />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
