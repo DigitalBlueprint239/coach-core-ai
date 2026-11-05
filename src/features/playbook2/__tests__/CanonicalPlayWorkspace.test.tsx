@@ -51,13 +51,14 @@ describe('canonical v3 workspace', () => {
     const field = screen.getByRole('textbox', { name: 'Canonical play name' });
     await userEvent.clear(field);
     await userEvent.type(field, 'Updated');
+    vi.mocked(savePlayDocV3).mockResolvedValueOnce({ id: 'v3-17', revision: 5 });
     await userEvent.click(screen.getByRole('button', { name: 'Save v3 revision' }));
     await waitFor(() => expect(savePlayDocV3).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'Updated', revision: 4 }),
       'coach1',
       { id: 'v3-17', expectedRevision: 4 },
     ));
-    expect(screen.getByText(/Revision 1\./)).toBeInTheDocument();
+    expect(screen.getByText(/Revision 5\./)).toBeInTheDocument();
   });
   it('does not silently rewrite v2 documents selected from the library', async () => {
     vi.mocked(loadPlayDocsV3).mockResolvedValue({

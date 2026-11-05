@@ -13,7 +13,7 @@ export function makeCanonicalDraft(v2: PlayV2): PlayDocV3 {
     // Unpersisted v2 play is a new v3 play; a persisted v2 play records exact source provenance.
     provenance: v2.id ? migrated.provenance : { origin: 'created' },
     // A tagged research run draft is not a pass concept; no unsupported OL instructions are synthesized.
-    concept: runSide === null ? migrated.concept : { id: 'inside-zone', family: 'run' },
+    ...(runSide !== null ? { concept: { id: 'inside-zone', family: 'run' } as const } : {}),
     status: 'draft',
     revision: 1,
   };

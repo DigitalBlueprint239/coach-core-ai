@@ -12,6 +12,7 @@ describe('v2 to canonical v3 draft', () => {
     const v3 = makeCanonicalDraft(newPlay());
     expect(v3).toMatchObject({ schemaVersion: 3, teamId: 'team-a', revision: 1, status: 'draft', provenance: { origin: 'created' } });
     expect(v3.assignments).toEqual([]);
+    expect(Object.prototype.hasOwnProperty.call(v3, 'concept')).toBe(false);
   });
   it('retains the exact v2 source document ID and never mutates the original', () => {
     const source = { ...newPlay(), id: 'legacy-42', name: 'Old play' };
