@@ -46,7 +46,11 @@ service cloud.firestore {
       // Only team owners can update team data, and ownership cannot be handed over by an update
       // Denied: "Only the coach can modify this team."
       allow update: if isTeamOwner(teamId) &&
-        request.resource.data.ownerId == resource.data.ownerId;
+        request.resource.data.ownerId == resource.data.ownerId &&
+        // An owner must stay a member. Otherwise the app's memberIds query
+        // would hide the team even from its owner after a malformed update.
+        request.resource.data.memberIds is list &&
+        request.auth.uid in request.resource.data.memberIds;
 
       // Only team owners can delete teams
       // Denied: "Only the coach can delete this team."
@@ -95,11 +99,13 @@ service cloud.firestore {
       allow update: if isTeamOwner(resource.data.teamId) &&
         request.resource.data.teamId == resource.data.teamId &&
         request.resource.data.createdBy == resource.data.createdBy &&
-        // A v3 play stays v3 and each save moves its revision forward by exactly one, so a stale editor cannot
-        // overwrite a newer save. Older (v1/v2) documents keep their existing rules.
+        // A legacy v1/v2 play must never be silently rewritten as v3 in place.
+        // The editor creates a NEW document with provenance instead.
+        request.resource.data.get('schemaVersion', 0) == resource.data.get('schemaVersion', 0) &&
+        // v3 drafts must move exactly one revision forward. Older plays keep
+        // their existing update semantics without acquiring v3-only rules.
         (resource.data.get('schemaVersion', 0) != 3 ||
-          (request.resource.data.get('schemaVersion', 0) == 3 &&
-           request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1));
+          request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1);
 
       // Only the coach can delete plays
       // Denied: "Only the coach can delete plays."
