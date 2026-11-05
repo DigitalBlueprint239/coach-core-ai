@@ -86,13 +86,20 @@ service cloud.firestore {
       // Denied: "Only the coach can create plays."
       allow create: if isAuthenticated() &&
         isTeamOwner(request.resource.data.teamId) &&
-        request.resource.data.createdBy == request.auth.uid;
+        request.resource.data.createdBy == request.auth.uid &&
+        // Canonical v3 plays start at revision 1 (optimistic concurrency, T-109).
+        (request.resource.data.get('schemaVersion', 0) != 3 || request.resource.data.get('revision', 0) == 1);
 
       // Only the coach can update plays; a doc cannot be moved to another team or re-attributed
       // Denied: "Only the coach can modify plays."
       allow update: if isTeamOwner(resource.data.teamId) &&
         request.resource.data.teamId == resource.data.teamId &&
-        request.resource.data.createdBy == resource.data.createdBy;
+        request.resource.data.createdBy == resource.data.createdBy &&
+        // A v3 play stays v3 and each save moves its revision forward by exactly one, so a stale editor cannot
+        // overwrite a newer save. Older (v1/v2) documents keep their existing rules.
+        (resource.data.get('schemaVersion', 0) != 3 ||
+          (request.resource.data.get('schemaVersion', 0) == 3 &&
+           request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1));
 
       // Only the coach can delete plays
       // Denied: "Only the coach can delete plays."

@@ -33,3 +33,5 @@ export {
 export type {
   AdvisoryCapability, AdvisoryRequest, AdvisoryResponse, AdvisoryStatement, Advisor, StatementBasis,
 } from './advisory';
+export { PLAY_SCHEMA_VERSION, migratePlayV2toV3, readPlayDocument, validatePlayDocV3 } from './playDocument';
+export type { PlayDocV3, PlayProvenance, PlayV2Like } from './playDocument';
