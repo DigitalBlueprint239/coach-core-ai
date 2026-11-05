@@ -1,0 +1,413 @@
+{
+  "version": "1.1",
+  "status": "proposed reference presets; Coach Drew review pending",
+  "created": "2026-10-22",
+  "coordinates": {
+    "unit": "yards",
+    "origin": "ball at line of scrimmage, center of display",
+    "x": "positive right from offensive viewpoint",
+    "y": "positive toward defensive end zone (up diagram); negative offensive backfield",
+    "field_width_yards": 53.333333,
+    "display_y_range": [
+      -10,
+      16
+    ],
+    "render_note": "Player center anchors are illustrative teaching positions, not body extents or a rules-engine certification. Keep aspect ratio; glyphs must not alter stored coordinates."
+  },
+  "sources": [
+    {
+      "title": "Shotgun fundamentals / 2x2",
+      "url": "https://www.crucibletech.com/playbook/formations/shotgun/"
+    },
+    {
+      "title": "I-formation / Bob Davie, ESPN",
+      "url": "https://a.espncdn.com/ncf/columns/davie/1450473.html"
+    },
+    {
+      "title": "4-3 / base, Over and Under",
+      "url": "https://www.viqtorysports.com/the-different-looks-of-the-4-3-defense/"
+    },
+    {
+      "title": "3-4 / positions and front techniques",
+      "url": "https://www.coachboard.app/library/american-football/3-4-defense"
+    }
+  ],
+  "display_offsets": {
+    "under_center_qb_y_yards": -2,
+    "defensive_line_y_yards": 2,
+    "purpose": "Symbol separation only; canonical player coordinates unchanged."
+  },
+  "formations": [
+    {
+      "id": "shotgun-doubles",
+      "title": "SHOTGUN DOUBLES",
+      "subtitle": "10 personnel | 2x2 | offset RB left",
+      "side": "offense",
+      "players": [
+        {
+          "id": "LT",
+          "role": "LT",
+          "x_yards": -4,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "LG",
+          "role": "LG",
+          "x_yards": -2,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "C",
+          "role": "C",
+          "x_yards": 0,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "RG",
+          "role": "RG",
+          "x_yards": 2,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "RT",
+          "role": "RT",
+          "x_yards": 4,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "X",
+          "role": "X",
+          "x_yards": -18,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "Z",
+          "role": "Z",
+          "x_yards": 18,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "H",
+          "role": "H",
+          "x_yards": -11,
+          "y_yards": -2,
+          "on_line": false
+        },
+        {
+          "id": "Y",
+          "role": "Y",
+          "x_yards": 11,
+          "y_yards": -2,
+          "on_line": false
+        },
+        {
+          "id": "QB",
+          "role": "QB",
+          "x_yards": 0,
+          "y_yards": -5,
+          "on_line": false
+        },
+        {
+          "id": "RB",
+          "role": "RB",
+          "x_yards": -4,
+          "y_yards": -5.5,
+          "on_line": false
+        }
+      ],
+      "notes": [
+        "Five OL plus X and Z on the line; H and Y are off-line slot receivers.",
+        "QB: 5 yards deep. RB: offset left, slightly deeper. Four WR; no tight end.",
+        "Seven on-line / four backfield markers. X and Z are the eligible ends."
+      ],
+      "source": 0
+    },
+    {
+      "id": "i-right",
+      "title": "I RIGHT",
+      "subtitle": "21 personnel | TE right | QB under center",
+      "side": "offense",
+      "players": [
+        {
+          "id": "LT",
+          "role": "LT",
+          "x_yards": -4,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "LG",
+          "role": "LG",
+          "x_yards": -2,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "C",
+          "role": "C",
+          "x_yards": 0,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "RG",
+          "role": "RG",
+          "x_yards": 2,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "RT",
+          "role": "RT",
+          "x_yards": 4,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "X",
+          "role": "X",
+          "x_yards": -18,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "Y",
+          "role": "TE",
+          "x_yards": 6,
+          "y_yards": 0,
+          "on_line": true
+        },
+        {
+          "id": "Z",
+          "role": "Z",
+          "x_yards": 18,
+          "y_yards": -2,
+          "on_line": false
+        },
+        {
+          "id": "QB",
+          "role": "QB",
+          "x_yards": 0,
+          "y_yards": -0.8,
+          "on_line": false
+        },
+        {
+          "id": "FB",
+          "role": "FB",
+          "x_yards": 0,
+          "y_yards": -4,
+          "on_line": false
+        },
+        {
+          "id": "TB",
+          "role": "TB",
+          "x_yards": 0,
+          "y_yards": -7,
+          "on_line": false
+        }
+      ],
+      "notes": [
+        "Five OL, X and attached TE on the line. Z is off the line on the right.",
+        "QB, FB and TB share the center axis. FB: 4 yards; TB: 7 yards deep.",
+        "QB is directly beneath C. Marker spacing is schematic so labels remain readable."
+      ],
+      "source": 1
+    },
+    {
+      "id": "4-3-over",
+      "title": "4-3 OVER",
+      "subtitle": "Four DL / three LB / four DB | strength right",
+      "side": "defense",
+      "players": [
+        {
+          "id": "WE",
+          "role": "DE",
+          "x_yards": -5,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "5"
+        },
+        {
+          "id": "N",
+          "role": "NT",
+          "x_yards": -0.9,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "1 weak"
+        },
+        {
+          "id": "T",
+          "role": "DT",
+          "x_yards": 3,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "3 strong"
+        },
+        {
+          "id": "SE",
+          "role": "DE",
+          "x_yards": 7,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "9 outside TE"
+        },
+        {
+          "id": "W",
+          "role": "W",
+          "x_yards": -4,
+          "y_yards": 5,
+          "on_line": false
+        },
+        {
+          "id": "M",
+          "role": "M",
+          "x_yards": 0,
+          "y_yards": 5,
+          "on_line": false
+        },
+        {
+          "id": "S",
+          "role": "S",
+          "x_yards": 6,
+          "y_yards": 5,
+          "on_line": false
+        },
+        {
+          "id": "LC",
+          "role": "CB",
+          "x_yards": -18,
+          "y_yards": 6,
+          "on_line": false
+        },
+        {
+          "id": "RC",
+          "role": "CB",
+          "x_yards": 18,
+          "y_yards": 6,
+          "on_line": false
+        },
+        {
+          "id": "F",
+          "role": "FS",
+          "x_yards": -7,
+          "y_yards": 12,
+          "on_line": false
+        },
+        {
+          "id": "SS",
+          "role": "SS",
+          "x_yards": 7,
+          "y_yards": 12,
+          "on_line": false
+        }
+      ],
+      "notes": [
+        "Front: weak DE 5-tech, weak NT 1-tech, strong DT 3-tech, strong DE outside TE.",
+        "W / M / S = Will / Mike / Sam. Two-high safeties show pre-snap alignment only.",
+        "Faint I Right scout offense gives alignment context; it is not part of the 11 defenders."
+      ],
+      "source": 2
+    },
+    {
+      "id": "3-4-base",
+      "title": "3-4 BASE",
+      "subtitle": "Three DL / four LB / four DB | 5-0-5 front",
+      "side": "defense",
+      "players": [
+        {
+          "id": "WE",
+          "role": "DE",
+          "x_yards": -5,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "5"
+        },
+        {
+          "id": "N",
+          "role": "NT",
+          "x_yards": 0,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "0"
+        },
+        {
+          "id": "SE",
+          "role": "DE",
+          "x_yards": 5,
+          "y_yards": 1,
+          "on_line": false,
+          "technique": "5"
+        },
+        {
+          "id": "W",
+          "role": "OLB",
+          "x_yards": -8,
+          "y_yards": 2,
+          "on_line": false
+        },
+        {
+          "id": "S",
+          "role": "OLB",
+          "x_yards": 8,
+          "y_yards": 2,
+          "on_line": false
+        },
+        {
+          "id": "L",
+          "role": "ILB",
+          "x_yards": -2,
+          "y_yards": 5,
+          "on_line": false
+        },
+        {
+          "id": "R",
+          "role": "ILB",
+          "x_yards": 2,
+          "y_yards": 5,
+          "on_line": false
+        },
+        {
+          "id": "LC",
+          "role": "CB",
+          "x_yards": -18,
+          "y_yards": 6,
+          "on_line": false
+        },
+        {
+          "id": "RC",
+          "role": "CB",
+          "x_yards": 18,
+          "y_yards": 6,
+          "on_line": false
+        },
+        {
+          "id": "F",
+          "role": "FS",
+          "x_yards": -7,
+          "y_yards": 12,
+          "on_line": false
+        },
+        {
+          "id": "SS",
+          "role": "SS",
+          "x_yards": 7,
+          "y_yards": 12,
+          "on_line": false
+        }
+      ],
+      "notes": [
+        "NT heads the center; DEs outside the tackles. Two OLB align on the edges.",
+        "Two ILB stack behind the line. Four DB: two CB and two safeties.",
+        "Two-high shell is illustrative; no coverage, blitz or gap assignment is implied."
+      ],
+      "source": 3
+    }
+  ]
+}
