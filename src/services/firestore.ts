@@ -301,57 +301,11 @@ export function subscribeToPlays(teamId: string, callback: (plays: Play[]) => vo
 }
 
 export async function migrateFromLocalStorage(teamId: string): Promise<void> {
-  // Historical localStorage data has no authoritative owner UID; importing it under
-  // the currently signed-in user may disclose another coach's data across accounts.
-  // Preserve originals for explicit, reviewed migration; NEVER silently replay.
   getCurrentUser();
+  if (!teamId) throw new Error('Select a team before reviewing legacy browser data.');
+  // Old browser records lack authenticated ownership provenance. Silently copying them
+  // into the current coach's Firestore team could cross a user boundary.
   throw new Error('Legacy browser data migration is paused pending coach ownership verification.');
-  /* Historical migration logic retained for owner-reviewed recovery only; do not enable casually.
-
-  // Migrate any data from localStorage to Firestore
-  const localStorageKey = `coach-core-ai-${teamId}`;
-  const localData = localStorage.getItem(localStorageKey);
-  
-  if (localData) {
-    try {
-      const data = JSON.parse(localData);
-      // Migrate plays
-      if (data.plays && Array.isArray(data.plays)) {
-        for (const play of data.plays) {
-          await savePlay(teamId, {
-            name: play.name,
-            formation: play.formation,
-            description: play.description || '',
-            routes: play.routes || [],
-            players: play.players || [],
-            tags: play.tags || [],
-            difficulty: play.difficulty || 'beginner',
-            sport: play.sport || 'football'
-          });
-        }
-      }
-      // Migrate practice plans
-      if (data.plans && Array.isArray(data.plans)) {
-        for (const plan of data.plans) {
-          await savePracticePlan(teamId, {
-            name: plan.name,
-            date: plan.date,
-            duration: plan.duration,
-            periods: plan.periods || [],
-            goals: plan.goals || [],
-            notes: plan.notes || ''
-          });
-        }
-      }
-      // Clear localStorage after successful migration
-      localStorage.removeItem(localStorageKey);
-    } catch (error) {
-      console.error('Error migrating from localStorage:', error);
-    }
-  }
-}
-
-  */
 }
 
 export { db, auth };
