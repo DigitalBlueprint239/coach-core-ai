@@ -5,13 +5,14 @@ export type InsideZonePanelProps = {
   formation: Formation;
   side: RunSide;
   onSideChange(side: RunSide): void;
+  readOnly?: boolean;
 };
 
 /**
  * Read-only presentation of the existing deterministic research-stage run-game resolver.
  * Never changes a coach's formation, football assignments, or a production rule profile.
  */
-export const InsideZonePanel: React.FC<InsideZonePanelProps> = ({ formation, side, onSideChange }) => {
+export const InsideZonePanel: React.FC<InsideZonePanelProps> = ({ formation, side, onSideChange, readOnly = false }) => {
   const result = useMemo(() => resolveInsideZone(formation, side), [formation, side]);
   return (
     <section className="pb2-inside-zone" aria-label="Inside Zone research preview">
@@ -21,7 +22,7 @@ export const InsideZonePanel: React.FC<InsideZonePanelProps> = ({ formation, sid
         a prediction of yards, or a change to your saved player assignments.
       </p>
       <div role="group" aria-label="Run direction">
-        <button type="button" className="pb2-btn" aria-pressed={side === 'strong'} onClick={() => onSideChange('strong')}>Strong side</button>
+        <button type="button" className="pb2-btn" disabled={readOnly} aria-pressed={side === 'strong'} onClick={() => onSideChange('strong')}>Strong side</button>
         <button type="button" className="pb2-btn" aria-pressed={side === 'weak'} onClick={() => onSideChange('weak')}>Weak side</button>
       </div>
       {result.status === 'ok' ? (

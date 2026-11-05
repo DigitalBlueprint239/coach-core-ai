@@ -64,15 +64,30 @@ export async function savePlayDocV3(play: PlayDocV3, uid: string, target: SaveTa
   });
 }
 
-/** Loads a team's plays as v3 (v2 migrated in memory; v1/unknown skipped and counted). */
-export async function loadPlayDocsV3(teamId: string): Promise<{ plays: Array<PlayDocV3 & { id: string }>; skipped: number }> {
+/** Differentiates actual stored v3 from a v2 document migrated in memory.
+ * A migrated v2 document MUST be saved as a NEW v3 document; never update its original ID. */
+export type ListedPlayDocV3 = PlayDocV3 & { id: string; sourceSchemaVersion: 2 | 3 };
+
+/** Loads compatible plays, marking the source schema version so UI writes cannot overwrite legacy v2. */
+export async function loadPlayDocsV3(teamId: string): Promise<{ plays: ListedPlayDocV3[]; skipped: number }> {
+  if (!teamId) throw new Error('Select a team to open its playbook.');
   const snap = await getDocs(query(collection(db, 'plays'), where('teamId', '==', teamId)));
-  const plays: Array<PlayDocV3 & { id: string }> = [];
+  const plays: ListedPlayDocV3[] = [];
   let skipped = 0;
   for (const d of snap.docs) {
-    const r = readPlayDocument(d.data(), d.id);
-    if (r.status === 'ok') plays.push({ ...r.value, id: d.id });
-    else skipped++;
+    const raw: unknown = d.data();
+    const r = readPlayDocument(raw, d.id);
+    if (r.status === 'ok') {
+      const version = typeof raw === 'object' && raw !== null && 'schemaVersion' in raw
+        ? (raw as { schemaVersion: unknown }).schemaVersion : null;
+      if (version === 2 || version === 3) {
+        plays.push({ ...r.value, id: d.id, sourceSchemaVersion: version });
+      } else {
+        skipped++;
+      }
+    } else {
+      skipped++;
+    }
   }
   return { plays, skipped };
 }

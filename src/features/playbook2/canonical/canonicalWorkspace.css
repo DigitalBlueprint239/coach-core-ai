@@ -1,0 +1,14 @@
+.pb3 { display: grid; gap: 1rem; min-width: 0; padding: clamp(0.75rem, 2vw, 1.5rem); }
+.pb3-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.pb3-header h2 { margin: 0; }
+.pb3-library { border: 1px solid currentColor; border-radius: 0.75rem; padding: 0.75rem; }
+.pb3-library h3 { margin: 0 0 0.5rem; }
+.pb3-library ul { padding-left: 1.5rem; }
+.pb3-library li { margin: 0.4rem 0; overflow-wrap: anywhere; }
+.pb3-editor { min-width: 0; display: grid; gap: 0.8rem; }
+.pb3-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 0.75rem; }
+.pb3-form label { display: grid; gap: 0.4rem; }
+.pb3-form input, .pb3-form textarea { width: 100%; min-width: 0; box-sizing: border-box; }
+.pb3-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pb3 details { max-width: 100%; overflow-wrap: anywhere; }
+.pb3 .pb2-sheet { width: 100%; max-width: 100%; }
