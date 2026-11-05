@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PlaybookScreen from '../PlaybookScreen';
 import { listPlaysV2, loadTeamSettings, savePlayV2, saveTeamSettings } from '../playStore';
+import { savePlayDocV3 } from '../playStoreV3';
 import { playFromConcept } from '../playModel';
 import { newInsideZoneDraft } from '../run/insideZoneDraft';
 import { publishedLibrary } from '../../../football-core';
@@ -22,6 +23,12 @@ vi.mock('../playStore', () => ({
   savePlayV2: vi.fn(() => Promise.resolve('p1')),
   saveTeamSettings: vi.fn(() => Promise.resolve()),
   isStoreError: (e: unknown) => typeof e === 'object' && e !== null && 'kind' in e,
+}));
+
+vi.mock('../playStoreV3', () => ({
+  loadPlayDocsV3: vi.fn(async () => ({ plays: [], skipped: 0 })),
+  savePlayDocV3: vi.fn(async () => ({ id: 'new-v3-doc', revision: 1 })),
+  isPlayConflict: (e: unknown) => typeof e === 'object' && e !== null && 'kind' in e && (e as { kind: unknown }).kind === 'conflict',
 }));
 
 const realWidth = window.innerWidth;
@@ -87,6 +94,31 @@ describe('PlaybookScreen', () => {
     await userEvent.selectOptions(picker, 'p42');
     expect(screen.getByRole('region', { name: 'Inside Zone research preview' })).toBeInTheDocument();
     expect(screen.getByText(/Draft covered\/uncovered coaching convention/)).toBeInTheDocument();
+  });
+
+
+  it('opens the canonical v3 workspace from the existing editor and creates a new v3 copy', async () => {
+    await ready();
+    await openMore('Save as v3 draft');
+    expect(screen.getByRole('region', { name: 'Version 3 play workspace' })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Save new v3 copy' }));
+    await waitFor(() => expect(savePlayDocV3).toHaveBeenCalledWith(
+      expect.objectContaining({ schemaVersion: 3, teamId: 't1', provenance: { origin: 'created' } }),
+      'coach1',
+      {},
+    ));
+    expect(await screen.findByText(/Saved v3 draft/)).toBeInTheDocument();
+    expect(savePlayV2).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole('button', { name: 'Back to playbook' }));
+    expect(screen.getByRole('button', { name: 'Save play' })).toBeInTheDocument();
+  });
+
+  it('opens the versioned library without automatically writing a play', async () => {
+    await ready();
+    await openMore('Open v3 plays');
+    expect(screen.getByRole('region', { name: 'Version 3 play workspace' })).toBeInTheDocument();
+    expect(await screen.findByText('No compatible saved plays found yet.')).toBeInTheDocument();
+    expect(savePlayDocV3).not.toHaveBeenCalled();
   });
 
   it('Save is the only primary button', async () => {
