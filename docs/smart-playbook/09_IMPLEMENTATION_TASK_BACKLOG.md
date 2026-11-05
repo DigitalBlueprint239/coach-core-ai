@@ -12,8 +12,8 @@ Format: `T-id · task · requirement · depends · acceptance`. Status: ☐ open
 | T-103a | Model v3 assignment union (route, run-track, block, protect, motion, read) + lossless v2 adapter (`model.ts`) | ☑ PR #106 (CI ✅ 614/614) |
 | T-106a | `installConcept` with structured conflicts; never drops assignments (`install.ts`) | ☑ PR #106 (CI ✅ 614/614) |
 | T-115 | Read-only advisory contract + disabled advisor + no-auto-AI guard (`advisory.ts`) | ☑ PR #106 (CI ✅ 614/614) |
-| T-104 | v3 Play document, version-dispatching reader, `migrateV2toV3`, originals preserved, round-trip fixtures | ☐ next |
-| T-109 | Revision concurrency (port #53 rule) + recoverable conflicts + account-scoped drafts | ☐ |
+| T-104 | v3 Play document, version-dispatching reader, `migratePlayV2toV3`, originals preserved, round-trip fixtures | ☑ PR #107 |
+| T-109 | Revision concurrency (transaction + rules, exactly +1) + recoverable conflicts | ☑ PR #107 (rules not deployed) |
 | T-105 | Source registry + 5 categories + independence groups | ☐ |
 | T-112 | Re-check the 6 verified items against RD-01 (3 independent sources + expert review) | ☐ (needs sources/reviewers) |
 
@@ -21,10 +21,7 @@ Format: `T-id · task · requirement · depends · acceptance`. Status: ☐ open
 
 | T | Task | Acceptance |
 |---|---|---|
-| T-107a | Defensive front model: 4-3 Over with techniques and gaps (draft until sourced) | AT-12a |
-| T-107b | Inside Zone concept: OL `zone-playside`/`zone-backside`, RB `run-track` (aiming point), `handoff` ball action | AT-09 |
-| T-107c | Deterministic block-target resolution vs the modelled front; unsupported fronts return `unsupported` | AT-09 |
-| T-107d | Timing events (snap, mesh, handoff) as data for the timeline | AT-24 |
+| ☑ T-107a-d | Inside Zone vs 4-3 Over: first/second-level defenders, covered/uncovered convention, combos and climbs, unblocked defenders reported, exchange, runner track, nominal timing events, unsupported cases (`runGame.ts`, PR #108) | AT-09, AT-24 |
 | T-107e | Save/reopen through v3 reader; 2D rendering of block/track assignments; play card | AT-07, AT-25 |
 | T-107f | Power (gap scheme: down, pull-kick, pull-lead) to prove extensibility | AT-10 |
 

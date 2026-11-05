@@ -35,3 +35,7 @@ export type {
 } from './advisory';
 export { PLAY_SCHEMA_VERSION, migratePlayV2toV3, readPlayDocument, validatePlayDocV3 } from './playDocument';
 export type { PlayDocV3, PlayProvenance, PlayV2Like } from './playDocument';
+export { LINE_SLOTS, isLineSlot } from './model';
+export type { LineSlot } from './model';
+export { resolveInsideZone, INSIDE_ZONE_CONVENTION } from './runGame';
+export type { BlockAssignment, InsideZoneResolution, RunSide, TimelineEvent } from './runGame';

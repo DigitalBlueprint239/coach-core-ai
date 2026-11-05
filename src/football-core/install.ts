@@ -4,7 +4,7 @@
 import { receiverEligibility, ELIGIBILITY_RULE_TEXT } from './eligibility';
 import type { Finding, Evaluation } from './findings';
 import { slotsFor, validateFormation } from './formations';
-import { fromV2Assignment, type AssignmentV3 } from './model';
+import { fromV2Assignment, isLineSlot, type AssignmentV3 } from './model';
 import { DEFAULT_RULE_PROFILE, type RuleProfile } from './rules';
 import type { Concept, Formation, OffenseRole } from './types';
 
@@ -30,7 +30,9 @@ export function installConcept(
   const eligibility = receiverEligibility(formation, profile);
   const assignments: InstalledAssignment[] = concept.assignments.map(raw => {
     const assignment = fromV2Assignment(raw);
-    const player = slots.get(assignment.slot);
+    const player = isLineSlot(assignment.slot)
+      ? formation.players.find(p => p.role === assignment.slot)
+      : slots.get(assignment.slot);
     if (!player) {
       findings.push({
         code: 'install.missing-slot',

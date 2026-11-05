@@ -79,3 +79,18 @@ Rule: renderers and AI import from `football-core`; `football-core` imports noth
 
 One play can be created, saved, transformed to another formation, loaded, rendered in 2D and 3D, exported and
 taught with no contradictory assignments or data loss (AT-05…AT-08, AT-20).
+
+## 8. Integration contract v1 for other lanes (Film, exports, teaching) — proposed
+
+- **Version:** play documents carry `schemaVersion` (3); consumers must reject or ignore versions they do not know.
+- **Identity:** a play's stable id is its Firestore document id; never reused; migration creates a new id and records
+  `provenance.sourceId` of the original.
+- **Ownership:** `football-core` (Kev's lane) owns `PlayDocV3`, `AssignmentV3`, `RuleProfile`, findings and the run/pass
+  resolvers. Other lanes read through `readPlayDocument`; they never write play semantics. Film links reference
+  `{ playId, revision }` and keep their own collections (rules added by PR with emulator tests).
+- **Permissions:** team-scoped; a consumer must hold the team-owner (later: role-based) permission to read plays;
+  player-facing consumers receive only coach-published material.
+- **Backward compatibility:** additive changes only within a schema version; breaking changes create a new version with
+  a pure migration; v1/v2 originals are never rewritten.
+- **Writes:** only `savePlayDocV3` (revision-checked). No lane writes `plays` directly.
+This section is our proposal; Drew-owned files and PR #104 are not modified by this lane.
