@@ -23,6 +23,7 @@ export type EditorAction =
   | { type: 'setAssignment'; assignment: Assignment }
   | { type: 'removeAssignment'; slot: Slot }
   | { type: 'rename'; name: string }
+  | { type: 'setTags'; tags: string[] }
   | { type: 'flip' }
   | { type: 'setRead'; read: ReadStep[] }
   /** Swap the formation under the play (from the Formation dropdown); assignments stay, by slot. */
@@ -78,6 +79,8 @@ export function editorReducer(s: EditorState, a: EditorAction): EditorState {
       return edit(s, { ...s.play, assignments: s.play.assignments.filter(x => x.slot !== a.slot) });
     case 'rename':
       return edit(s, { ...s.play, name: a.name });
+    case 'setTags':
+      return edit(s, { ...s.play, tags: [...a.tags] });
     case 'flip':
       return edit(s, { ...s.play, formation: mirrorFormation(s.play.formation, s.play.formation.id, s.play.formation.name) });
     case 'setRead':

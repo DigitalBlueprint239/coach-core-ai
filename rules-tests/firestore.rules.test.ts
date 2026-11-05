@@ -231,3 +231,37 @@ describe('Smart Playbook v2 access (no rule changes)', () => {
     await assertFails(updateDoc(doc(bob(), 'teams/t1'), { playbook: { terminology: {}, level: 'jv', formations: [] } }));
   });
 });
+
+// Canonical v3 plays: optimistic concurrency (T-109). Each save must move the revision forward by exactly one.
+describe('v3 play revisions', () => {
+  const v3 = (revision: number) => ({ schemaVersion: 3, name: 'IZ', teamId: 't1', createdBy: 'alice', revision });
+
+  beforeEach(async () => {
+    await env.withSecurityRulesDisabled(async ctx => {
+      await setDoc(doc(ctx.firestore(), 'plays/v3a'), v3(4));
+    });
+  });
+
+  it('a new v3 play must start at revision 1', async () => {
+    await assertSucceeds(setDoc(doc(alice(), 'plays/v3new'), v3(1)));
+    await assertFails(setDoc(doc(alice(), 'plays/v3bad'), v3(2)));
+  });
+
+  it('an update must set revision to exactly the stored revision + 1', async () => {
+    await assertSucceeds(updateDoc(doc(alice(), 'plays/v3a'), { name: 'IZ 2', revision: 5 }));
+  });
+
+  it('a stale editor (same revision) or a skipped revision is denied', async () => {
+    await assertFails(updateDoc(doc(alice(), 'plays/v3a'), { name: 'stale', revision: 4 }));
+    await assertFails(updateDoc(doc(alice(), 'plays/v3a'), { name: 'skip', revision: 6 }));
+    await assertFails(updateDoc(doc(alice(), 'plays/v3a'), { name: 'no revision' }));
+  });
+
+  it('a v3 play cannot be downgraded to an older schema', async () => {
+    await assertFails(updateDoc(doc(alice(), 'plays/v3a'), { schemaVersion: 2, revision: 5 }));
+  });
+
+  it('older plays without a schema version keep their existing rules', async () => {
+    await assertSucceeds(updateDoc(doc(alice(), 'plays/p1'), { name: 'renamed again' }));
+  });
+});

@@ -323,9 +323,12 @@ export async function savePlay(teamId: string, playData: Omit<Play, 'id' | 'team
   }
 }
 
-// Version-2 plays (src/features/playbook2) share the plays collection; version-1 readers never see them.
-const isPlayV2Doc = (data: unknown) =>
-  typeof data === 'object' && data !== null && (data as { schemaVersion?: unknown }).schemaVersion === 2;
+// Versioned plays (v2 and the canonical v3, src/features/playbook2 and src/football-core) share the plays collection;
+// version-1 readers never see any of them.
+const isPlayV2Doc = (data: unknown) => {
+  const version = typeof data === 'object' && data !== null ? (data as { schemaVersion?: unknown }).schemaVersion : undefined;
+  return typeof version === 'number' && version >= 2;
+};
 
 export async function getPlays(teamId: string): Promise<Play[]> {
   getCurrentUser(); // Ensure authenticated

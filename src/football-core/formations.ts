@@ -1,8 +1,8 @@
+import { DEFAULT_RULE_PROFILE, type RuleProfile } from './rules';
 import type { Formation, FormationPlayer, OffenseRole, Slot } from './types';
 
 const LINEMEN: readonly OffenseRole[] = ['LT', 'LG', 'C', 'RG', 'RT'];
 const BACK_ORDER: readonly OffenseRole[] = ['RB', 'FB', 'F'];
-const MIN_ON_LINE = 7;
 
 const isBack = (p: FormationPlayer) => Math.abs(p.at.x) <= 4 && p.at.y <= -3;
 
@@ -62,12 +62,17 @@ export function mirrorFormation(f: Formation, id: string, name: string): Formati
   };
 }
 
-/** Plain-language problems that make a formation illegal; empty when legal. */
-export function validateFormation(f: Formation): string[] {
+/**
+ * Plain-language problems that make a formation illegal under a rule profile; empty when legal.
+ * Without a profile, the default 11-player profile applies (same results as before profiles existed).
+ */
+export function validateFormation(f: Formation, profile: RuleProfile = DEFAULT_RULE_PROFILE): string[] {
   const problems: string[] = [];
-  if (f.players.length !== 11) problems.push(`Needs 11 players (has ${f.players.length}).`);
+  if (f.players.length !== profile.playersPerSide) {
+    problems.push(`Needs ${profile.playersPerSide} players (has ${f.players.length}).`);
+  }
   const onLine = f.players.filter(p => p.onLine).length;
-  if (onLine < MIN_ON_LINE) problems.push(`Needs at least ${MIN_ON_LINE} players on the line (has ${onLine}).`);
+  if (onLine < profile.minOnLine) problems.push(`Needs at least ${profile.minOnLine} players on the line (has ${onLine}).`);
   const seen = new Set<OffenseRole>();
   const reported = new Set<OffenseRole>();
   for (const p of f.players) {

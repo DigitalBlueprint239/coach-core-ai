@@ -1,0 +1,4 @@
+# ADR-002 — Yards as canonical coordinates; explicit coordinate profiles
+Status: **Accepted in principle** by owner 2026-11-03 (RD-02), with safeguards: preserve coach data, explicit schema versions, pure tested migrations, originals preserved, no destructive automatic conversion, round-trip tests, rollback/recovery, yards canonical, explicit versioned profiles for legacy pixels, never guess geometry provenance. Date: 2026-11-03.
+Decision: canonical geometry is yards from the ball on the LOS (+x offense right, +y downfield), as football-core already uses. Pixel data (v1 plays) is read only through explicit, versioned coordinate profiles; a missing profile means 'unverified geometry' and 3D is withheld (pattern proven and tested in PR #95).
+Consequences: renderers convert at the edge; no renderer writes football data.
