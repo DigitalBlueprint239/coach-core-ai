@@ -12,9 +12,13 @@ import { useAutosave } from './editor/useAutosave';
 import { FieldSheet } from './field/FieldSheet';
 import { isLineman, playerName } from './field/geometry';
 import { LibraryView } from './library/LibraryView';
+import { CanonicalPlayWorkspace } from './canonical/CanonicalPlayWorkspace';
 import { DEFAULT_SETTINGS, formationCopy, newBlankPlay, playFromConcept, type PlayV2, type TeamPlaybookSettings } from './playModel';
 import { isStoreError, listPlaysV2, loadTeamSettings, savePlayV2, saveTeamSettings } from './playStore';
 import { ReadSteps } from './read/ReadSteps';
+import { InsideZonePanel } from './run/InsideZonePanel';
+import { insideZoneSide, newInsideZoneDraft, withInsideZoneSide } from './run/insideZoneDraft';
+import './run/insideZonePanel.css';
 import { TerminologyPanel } from './terminology/TerminologyPanel';
 
 const PHONE_MAX = 767;
@@ -84,7 +88,7 @@ const PlaybookScreen: React.FC = () => {
   return <PlaybookWorkspace key={currentTeam.id} teamId={currentTeam.id} uid={user.uid} />;
 };
 
-type View = 'sheet' | 'library' | 'terminology';
+type View = 'sheet' | 'library' | 'terminology' | 'canonical';
 type Mode = 'play' | 'formation';
 type Notice = { kind: 'error' | 'ok'; text: string } | null;
 
@@ -104,6 +108,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
   );
   const [mode, setMode] = useState<Mode>('play');
   const [view, setView] = useState<View>('sheet');
+  const [canonicalSeed, setCanonicalSeed] = useState<PlayV2 | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [newFormationOpen, setNewFormationOpen] = useState(false);
@@ -117,6 +122,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
 
   const { restorable, discard, clear, offer } = useAutosave(`pb2:draft:${teamId}`, editor.play, editor.dirty);
   const { play, problems, dirty } = editor;
+  const runSide = insideZoneSide(play.tags);
   const currentPlay = useRef(play);
   currentPlay.current = play;
   const terminology = settings.terminology;
@@ -270,6 +276,14 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
 
   const menuItems: Array<{ label: string; run(): void; disabled?: boolean }> = [
     { label: 'New play', run: () => leaveCurrent() && openPlay(newBlankPlay(teamId, play.formation)) },
+    { label: 'New Inside Zone (research)', run: () => leaveCurrent() && openPlay(newInsideZoneDraft(teamId, play.formation)) },
+    { label: 'Save as v3 draft', disabled: mode === 'formation', run: () => {
+      const seed = structuredClone(play);
+      if (leaveCurrent()) { setCanonicalSeed(seed); setView('canonical'); }
+    } },
+    { label: 'Open v3 plays', run: () => {
+      if (leaveCurrent()) { setCanonicalSeed(null); setView('canonical'); }
+    } },
     { label: 'New formation', run: () => setNewFormationOpen(true) },
     { label: 'Library', run: () => setView('library') },
     { label: 'Terminology', run: () => setView('terminology'), disabled: settingsState !== 'ready' },
@@ -452,6 +466,15 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
         <NewFormationDialog formations={[play.formation, ...formations]} onStart={startFormation} onCancel={() => setNewFormationOpen(false)} />
       )}
 
+      {view === 'canonical' && (
+        <CanonicalPlayWorkspace
+          teamId={teamId}
+          uid={uid}
+          terminology={terminology}
+          seed={canonicalSeed}
+          onClose={() => { setCanonicalSeed(null); setView('sheet'); }}
+        />
+      )}
       {view === 'library' && (
         <LibraryView
           settings={settings}
@@ -514,6 +537,9 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
                 </span>
                 {isLineman(selected.role) && <span className="pb2-muted">Linemen stay unlabelled on the sheet.</span>}
               </div>
+            )}
+            {mode === 'play' && runSide !== null && (
+              <InsideZonePanel formation={play.formation} side={runSide} onSideChange={side => dispatch({ type: 'setTags', tags: withInsideZoneSide(play.tags, side) })} />
             )}
             {mode === 'play' && play.read.length > 0 && (
               <ReadSteps steps={play.read} terminology={terminology} active={activeStep} onSelect={setActiveStep} />
