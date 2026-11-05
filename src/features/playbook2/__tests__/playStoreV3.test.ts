@@ -110,6 +110,8 @@ describe('loadPlayDocsV3', () => {
     expect(plays.map(p => p.id).sort()).toEqual([id, 'v2doc'].sort());
     expect(plays.find(p => p.id === 'v2doc')?.provenance).toEqual({ origin: 'migrated', fromSchemaVersion: 2, sourceId: 'v2doc' });
     expect(skipped).toBe(1);
+    expect(plays.find(p => p.id === id)?.sourceSchemaVersion).toBe(3);
+    expect(plays.find(p => p.id === 'v2doc')?.sourceSchemaVersion).toBe(2);
     expect(store.writes).toBe(writes);
   });
 });

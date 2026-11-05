@@ -253,7 +253,7 @@ export const CanonicalPlayWorkspace: React.FC<CanonicalPlayWorkspaceProps> = ({ 
             </ul>
           </details>
           {runSide !== null && (
-            <InsideZonePanel formation={session.doc.formation} side={runSide}
+            <InsideZonePanel formation={session.doc.formation} side={runSide} readOnly={Boolean(isReadonly || saving)}
               onSideChange={(side: RunSide) => update(doc => ({ ...doc, tags: withInsideZoneSide(doc.tags, side) }))} />
           )}
           <div className="pb3-actions">
