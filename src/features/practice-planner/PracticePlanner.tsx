@@ -1,5 +1,6 @@
 // Team-scoped, coach-authored practice workflow. AI suggestions are strictly optional and do not auto-save.
 import React, { useId, useState } from 'react';
+import { focusBelongsToTeam, type PracticePlayFocus } from '../../coach-workflow/practiceFocus';
 import { useAuth } from '../../components/AuthProvider';
 import { useTeam } from '../../contexts/TeamContext';
 import { usePracticePlans } from '../../hooks/useFirestore';
@@ -34,14 +35,15 @@ const dateToday = (): string => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 };
 
-const TeamPracticePlanner: React.FC<{ teamId: string }> = ({ teamId }) => {
+export type PracticePlannerProps = { focusPlay?: PracticePlayFocus | null; onOpenPlaybook?: () => void };
+const TeamPracticePlanner: React.FC<{ teamId: string } & PracticePlannerProps> = ({ teamId, focusPlay, onOpenPlaybook }) => {
   const ai = useAI();
   const { plans, loading: plansLoading, error: listError, createPlan } = usePracticePlans(teamId);
   const fieldId = useId();
-  const [name, setName] = useState('New practice plan');
+  const [name, setName] = useState(focusPlay ? `Practice: ${focusPlay.playName}` : 'New practice plan');
   const [date, setDate] = useState(dateToday);
   const [duration, setDuration] = useState(90);
-  const [periodName, setPeriodName] = useState('Team teaching period');
+  const [periodName, setPeriodName] = useState(focusPlay ? `Rehearse ${focusPlay.playName}` : 'Team teaching period');
   const [notes, setNotes] = useState('');
   const [goals, setGoals] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -70,6 +72,7 @@ const TeamPracticePlanner: React.FC<{ teamId: string }> = ({ teamId }) => {
         duration,
         goals: [...goals],
         notes,
+        ...(focusPlay ? { focusPlay: { playId: focusPlay.playId, playName: focusPlay.playName, schemaVersion: 3 as const } } : {}),
         periods: [{ id: 'period-1', name: periodName.trim(), duration, intensity: 3, drills: [] }],
       });
       // The existing Firestore service can queue writes while offline. Avoid claiming cloud confirmation.
@@ -103,6 +106,12 @@ const TeamPracticePlanner: React.FC<{ teamId: string }> = ({ teamId }) => {
       <p className="text-sm text-gray-700 mb-4">
         Build and save a coach-approved practice plan for your selected team. AI suggestions are optional, never saved automatically.
       </p>
+      {focusPlay && (
+        <div role="status" className="border border-green-300 bg-green-50 rounded p-3">
+          Playbook focus: <strong>{focusPlay.playName}</strong> (saved v3 play)
+          {onOpenPlaybook && <button type="button" className="ml-3 underline" onClick={onOpenPlaybook}>Return to Playbook</button>}
+        </div>
+      )}
       <div className="grid gap-3">
         <label htmlFor={`${fieldId}-name`} className="grid gap-1">
           Practice name
@@ -166,6 +175,10 @@ const TeamPracticePlanner: React.FC<{ teamId: string }> = ({ teamId }) => {
             <p>{opened.date} · {opened.duration} minutes</p>
             <p>Goals: {opened.goals.join(', ') || 'None specified'}</p>
             <p>Notes: {opened.notes || 'None'}</p>
+            {opened.focusPlay && <p>Linked saved play: {opened.focusPlay.playName} (v3)</p>}
+            {opened.focusPlay && onOpenPlaybook && (
+              <button type="button" className="border rounded px-3 py-2" onClick={onOpenPlaybook}>Open Smart Playbook</button>
+            )}
             <ul>{opened.periods.map(period => <li key={period.id}>{period.name} · {period.duration} minutes</li>)}</ul>
             <button type="button" className="border rounded px-3 py-2 mt-2" onClick={() => setOpenPlanId(null)}>Close saved plan</button>
           </article>
@@ -191,13 +204,15 @@ const TeamPracticePlanner: React.FC<{ teamId: string }> = ({ teamId }) => {
   );
 };
 
-const PracticePlanner: React.FC = () => {
+const PracticePlanner: React.FC<PracticePlannerProps> = ({ focusPlay, onOpenPlaybook }) => {
   const { user } = useAuth();
   const { currentTeam } = useTeam();
   if (!user || user.isAnonymous) return <p>Sign in to manage practice plans.</p>;
   if (!currentTeam) return <p>Select a team to create or open practice plans.</p>;
   // Team-scoped key discards one team's unsaved form and AI result when switching teams.
-  return <TeamPracticePlanner key={currentTeam.id} teamId={currentTeam.id} />;
+  return <TeamPracticePlanner key={currentTeam.id} teamId={currentTeam.id}
+    focusPlay={focusBelongsToTeam(focusPlay, currentTeam.id) ? focusPlay : null}
+    onOpenPlaybook={onOpenPlaybook} />;
 };
 
 export default PracticePlanner;

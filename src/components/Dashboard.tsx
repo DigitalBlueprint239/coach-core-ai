@@ -1,4 +1,5 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { focusBelongsToTeam, type PracticePlayFocus } from '../coach-workflow/practiceFocus';
 import { useAuth } from './AuthProvider';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
@@ -20,6 +21,10 @@ const Dashboard: React.FC = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const { currentTeam } = useTeam();
   const [activeTab, setActiveTab] = useState('overview');
+  const [practiceFocus, setPracticeFocus] = useState<PracticePlayFocus | null>(null);
+  // Do not carry an old team's play reference to a newly selected team.
+  useEffect(() => { setPracticeFocus(null); }, [currentTeam?.id]);
+  const focusForCurrentTeam = focusBelongsToTeam(practiceFocus, currentTeam?.id) ? practiceFocus : null;
 
   if (authLoading) {
     return <LoadingSpinner text="Loading your coaching dashboard..." />;
@@ -197,12 +202,16 @@ const Dashboard: React.FC = () => {
         )}
 
         {activeTab === 'teams' && <TeamManagement />}
-        {activeTab === 'practice' && <PracticePlanner />}
+        {activeTab === 'practice' && <PracticePlanner focusPlay={focusForCurrentTeam} onOpenPlaybook={() => setActiveTab('playbook')} />}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
             {isPlaybookV2Enabled() ? (
               <Suspense fallback={<LoadingSpinner text="Loading your playbook..." />}>
-                <PlaybookScreen />
+                <PlaybookScreen onPlanPractice={focus => {
+                  if (!focusBelongsToTeam(focus, currentTeam?.id)) return;
+                  setPracticeFocus(focus);
+                  setActiveTab('practice');
+                }} />
               </Suspense>
             ) : (
               <SmartPlaybook />
