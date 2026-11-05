@@ -42,7 +42,7 @@ describe('canonical v3 workspace', () => {
       'coach1',
       {},
     ));
-    expect(screen.getByText(/Saved v3 draft/)).toBeInTheDocument();
+    expect(await screen.findByText(/Saved v3 draft/)).toBeInTheDocument();
   });
   it('opens and updates a real v3 record with its exact optimistic revision', async () => {
     vi.mocked(loadPlayDocsV3).mockResolvedValue({ plays: [document('v3-17', 4)], skipped: 0 });
@@ -58,7 +58,7 @@ describe('canonical v3 workspace', () => {
       'coach1',
       { id: 'v3-17', expectedRevision: 4 },
     ));
-    expect(screen.getByText(/Revision 5\./)).toBeInTheDocument();
+    expect(await screen.findByText(/Revision 5\./)).toBeInTheDocument();
   });
   it('does not silently rewrite v2 documents selected from the library', async () => {
     vi.mocked(loadPlayDocsV3).mockResolvedValue({

@@ -61,7 +61,7 @@ export const CanonicalPlayWorkspace: React.FC<CanonicalPlayWorkspaceProps> = ({ 
       if (!live()) return;
       setRows(result.plays.filter(p => p.teamId === teamId));
       setSkipped(result.skipped);
-      setNotice(n => n?.kind === 'error' ? n : null);
+      // Refreshing the list must not erase the coach's save confirmation.
     } catch (error) {
       if (live()) setNotice({ kind: 'error', text: userMessage(error) });
     } finally {
