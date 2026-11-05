@@ -1,6 +1,7 @@
 // Canonical v3 coach workspace. The v3 document is the only editable source of truth.
 // FieldSheet is used as a visualization, never as a lossy v3 persistence adapter.
 import React, { useEffect, useState } from 'react';
+import type { PracticePlayFocus } from '../../../coach-workflow/practiceFocus';
 import { validatePlayDocV3, type OffenseRole, type PlayDocV3, type Terminology, type RunSide } from '../../../football-core';
 import { FieldSheet } from '../field/FieldSheet';
 import type { PlayV2 } from '../playModel';
@@ -42,10 +43,11 @@ export type CanonicalPlayWorkspaceProps = {
   uid: string;
   terminology: Terminology;
   seed?: PlayV2 | null;
+  onPlanPractice?: (focus: PracticePlayFocus) => void;
   onClose(): void;
 };
 
-export const CanonicalPlayWorkspace: React.FC<CanonicalPlayWorkspaceProps> = ({ teamId, uid, terminology, seed, onClose }) => {
+export const CanonicalPlayWorkspace: React.FC<CanonicalPlayWorkspaceProps> = ({ teamId, uid, terminology, seed, onPlanPractice, onClose }) => {
   const [rows, setRows] = useState<ListedPlayDocV3[]>([]);
   const [loading, setLoading] = useState(true);
   const [skipped, setSkipped] = useState(0);
@@ -261,6 +263,14 @@ export const CanonicalPlayWorkspace: React.FC<CanonicalPlayWorkspaceProps> = ({ 
               onClick={() => void save()}>
               {saving ? 'Saving…' : session.source === 'v3-stored' ? 'Save v3 revision' : 'Save new v3 copy'}
             </button>
+            {onPlanPractice && session.source === 'v3-stored' && session.id && !session.dirty && (
+              <button type="button" className="pb2-btn" disabled={saving}
+                onClick={() => onPlanPractice({
+                  teamId, playId: session.id!, playName: session.doc.name, schemaVersion: 3,
+                })}>
+                Plan practice with this saved play
+              </button>
+            )}
             {(hasConflict || isReadonly) && (
               <button type="button" className="pb2-btn" disabled={saving} onClick={duplicate}>
                 Save as separate draft instead

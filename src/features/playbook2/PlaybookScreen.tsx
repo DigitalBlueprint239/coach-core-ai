@@ -1,5 +1,6 @@
 // Smart Playbook v2: "Sheet on the desk" (spec §3). The sheet is the one bold element; everything else steps back.
 // Behind REACT_APP_ENABLE_PLAYBOOK_V2 (see flags.ts and Dashboard.tsx).
+import type { PracticePlayFocus } from '../../coach-workflow/practiceFocus';
 import React, { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from 'react';
 import './theme.css';
 import { useAuth } from '../../components/AuthProvider';
@@ -66,7 +67,8 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-const PlaybookScreen: React.FC = () => {
+export type PlaybookScreenProps = { onPlanPractice?: (focus: PracticePlayFocus) => void };
+const PlaybookScreen: React.FC<PlaybookScreenProps> = ({ onPlanPractice }) => {
   const { user } = useAuth();
   const { currentTeam } = useTeam();
 
@@ -85,14 +87,14 @@ const PlaybookScreen: React.FC = () => {
       </div>
     );
   }
-  return <PlaybookWorkspace key={currentTeam.id} teamId={currentTeam.id} uid={user.uid} />;
+  return <PlaybookWorkspace key={currentTeam.id} teamId={currentTeam.id} uid={user.uid} onPlanPractice={onPlanPractice} />;
 };
 
 type View = 'sheet' | 'library' | 'terminology' | 'canonical';
 type Mode = 'play' | 'formation';
 type Notice = { kind: 'error' | 'ok'; text: string } | null;
 
-const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, uid }) => {
+const PlaybookWorkspace: React.FC<{ teamId: string; uid: string; onPlanPractice?: (focus: PracticePlayFocus) => void }> = ({ teamId, uid, onPlanPractice }) => {
   const ids = useId();
   const width = useViewportWidth();
   const phone = width <= PHONE_MAX;
@@ -472,6 +474,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string }> = ({ teamId, 
           uid={uid}
           terminology={terminology}
           seed={canonicalSeed}
+          onPlanPractice={onPlanPractice}
           onClose={() => { setCanonicalSeed(null); setView('sheet'); }}
         />
       )}

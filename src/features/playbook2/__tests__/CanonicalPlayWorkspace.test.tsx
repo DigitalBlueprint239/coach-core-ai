@@ -33,6 +33,19 @@ beforeEach(() => {
 });
 
 describe('canonical v3 workspace', () => {
+  it('hands off only a saved unchanged v3 play to practice, never an unsaved draft', async () => {
+    const onPlanPractice = vi.fn();
+    vi.mocked(loadPlayDocsV3).mockResolvedValue({ plays: [document('v3-focus', 2)], skipped: 0 });
+    render(<CanonicalPlayWorkspace teamId="t1" uid="coach1" terminology={{}} onClose={vi.fn()} onPlanPractice={onPlanPractice} />);
+    expect(screen.queryByRole('button', { name: 'Plan practice with this saved play' })).not.toBeInTheDocument();
+    await userEvent.click(await screen.findByRole('button', { name: 'Open Stored Play' }));
+    const planButton = screen.getByRole('button', { name: 'Plan practice with this saved play' });
+    await userEvent.click(planButton);
+    expect(onPlanPractice).toHaveBeenCalledWith({ teamId: 't1', playId: 'v3-focus', playName: 'Stored Play', schemaVersion: 3 });
+    await userEvent.type(screen.getByRole('textbox', { name: 'Canonical coaching notes' }), ' more');
+    expect(screen.queryByRole('button', { name: 'Plan practice with this saved play' })).not.toBeInTheDocument();
+  });
+
   it('saves an existing v2 play as a NEW canonical document with its source ID', async () => {
     mount(seed('old-v2'));
     expect(screen.getByText(/Original v2 is read-only/)).toBeInTheDocument();

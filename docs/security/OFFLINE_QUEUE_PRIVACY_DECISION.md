@@ -19,3 +19,7 @@ The legacy `src/services/firestore.ts` wrote coach practice/plays into `localSto
 5. Maintain reversible, owner-approved migration/rollback notes before any historical-data purge.
 
 **Status:** controls for new writes and replay implemented in isolated PR; residual historical browser data pending manual/owner cleanup.
+
+## Explicit browser cleanup UX
+
+The dashboard now displays a **non-disclosing warning** when the old unscoped queue exists. It does **not** show historical contents or automatically replay/purge them. A user can explicitly confirm permanent discard after seeing a warning that unsynced work cannot be recovered. Cancel preserves the quarantine. This is the safe default on a shared browser; more capable owner-verifiable recovery requires a separately reviewed migration process.

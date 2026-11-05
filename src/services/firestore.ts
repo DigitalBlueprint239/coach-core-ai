@@ -12,6 +12,7 @@ export interface PracticePlan {
   periods: PracticePeriod[];
   goals: string[];
   notes: string;
+  focusPlay?: import('../coach-workflow/practiceFocus').StoredPracticePlayFocus;
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;

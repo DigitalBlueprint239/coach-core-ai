@@ -40,6 +40,30 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllEnvs(); });
 
 describe('PracticePlanner team-scoped workflow', () => {
+  it('prefills and stores a link to the current team’s saved v3 play', async () => {
+    const focusPlay = { teamId: 'team-a', playId: 'play-21', playName: 'Inside Zone', schemaVersion: 3 as const };
+    const back = vi.fn();
+    render(<PracticePlanner focusPlay={focusPlay} onOpenPlaybook={back} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Playbook focus:');
+    expect(screen.getByRole('textbox', { name: 'Practice name' })).toHaveValue('Practice: Inside Zone');
+    await userEvent.click(screen.getByRole('button', { name: 'Game Prep' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save practice plan' }));
+    await waitFor(() => expect(mock.createPlan).toHaveBeenCalledWith(
+      expect.objectContaining({ focusPlay: { playId: 'play-21', playName: 'Inside Zone', schemaVersion: 3 } }),
+    ));
+    await userEvent.click(screen.getByRole('button', { name: 'Return to Playbook' }));
+    expect(back).toHaveBeenCalledTimes(1);
+  });
+  it('ignores a play reference from another team', async () => {
+    render(<PracticePlanner focusPlay={{ teamId: 'other-team', playId: 'secret', playName: 'Private', schemaVersion: 3 }} />);
+    expect(screen.queryByText(/Playbook focus:/)).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Game Prep' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save practice plan' }));
+    await waitFor(() => expect(mock.createPlan).toHaveBeenCalledWith(
+      expect.not.objectContaining({ focusPlay: expect.anything() }),
+    ));
+  });
+
   it('requires sign-in before exposing the planner', () => {
     mock.user = null;
     render(<PracticePlanner />);

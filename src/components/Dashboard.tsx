@@ -1,4 +1,5 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { focusBelongsToTeam, type PracticePlayFocus } from '../coach-workflow/practiceFocus';
 import { useAuth } from './AuthProvider';
 import { useTeam } from '../contexts/TeamContext';
 import { TeamManagement } from './TeamManagement';
@@ -6,6 +7,7 @@ import { LoadingSpinner } from './index';
 import PracticePlanner from '../features/practice-planner/PracticePlanner';
 import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
+import { LegacyOfflineDataNotice } from './LegacyOfflineDataNotice';
 import { SignInScreen } from './auth/SignInScreen';
 import { isContentReviewEnabled, isPlaybookV2Enabled } from '../features/playbook2/flags';
 
@@ -20,6 +22,10 @@ const Dashboard: React.FC = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const { currentTeam } = useTeam();
   const [activeTab, setActiveTab] = useState('overview');
+  const [practiceFocus, setPracticeFocus] = useState<PracticePlayFocus | null>(null);
+  // Do not carry an old team's play reference to a newly selected team.
+  useEffect(() => { setPracticeFocus(null); }, [currentTeam?.id]);
+  const focusForCurrentTeam = focusBelongsToTeam(practiceFocus, currentTeam?.id) ? practiceFocus : null;
 
   if (authLoading) {
     return <LoadingSpinner text="Loading your coaching dashboard..." />;
@@ -91,6 +97,8 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </nav>
+
+      <LegacyOfflineDataNotice />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -197,12 +205,16 @@ const Dashboard: React.FC = () => {
         )}
 
         {activeTab === 'teams' && <TeamManagement />}
-        {activeTab === 'practice' && <PracticePlanner />}
+        {activeTab === 'practice' && <PracticePlanner focusPlay={focusForCurrentTeam} onOpenPlaybook={() => setActiveTab('playbook')} />}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
             {isPlaybookV2Enabled() ? (
               <Suspense fallback={<LoadingSpinner text="Loading your playbook..." />}>
-                <PlaybookScreen />
+                <PlaybookScreen onPlanPractice={focus => {
+                  if (!focusBelongsToTeam(focus, currentTeam?.id)) return;
+                  setPracticeFocus(focus);
+                  setActiveTab('practice');
+                }} />
               </Suspense>
             ) : (
               <SmartPlaybook />
