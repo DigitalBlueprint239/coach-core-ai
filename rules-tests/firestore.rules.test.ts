@@ -281,6 +281,17 @@ describe('v3 play revisions', () => {
     await assertSucceeds(getDoc(doc(alice(), 'plays/published-v3')));
   });
 
+  it('a published v3 play cannot be deleted from the client, while a draft can', async () => {
+    await env.withSecurityRulesDisabled(async ctx => {
+      await setDoc(doc(ctx.firestore(), 'plays/published-immutable'), {
+        ...v3(3), status: 'published',
+      });
+    });
+    await assertFails(deleteDoc(doc(alice(), 'plays/published-immutable')));
+    await assertFails(deleteDoc(doc(bob(), 'plays/published-immutable')));
+    await assertSucceeds(deleteDoc(doc(alice(), 'plays/v3a')));
+  });
+
   it('a new v3 play must start at revision 1', async () => {
     await assertSucceeds(setDoc(doc(alice(), 'plays/v3new'), v3(1)));
     await assertFails(setDoc(doc(alice(), 'plays/v3bad'), v3(2)));
