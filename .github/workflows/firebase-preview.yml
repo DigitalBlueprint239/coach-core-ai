@@ -1,20 +1,21 @@
-name: Firebase preview (PAUSED — isolated Firebase project pending)
+name: Firebase preview link
 
-# SECURITY HOLD 2026-11-06: The old preview channel deploys into Firebase project
-# coach-core-ai (production). Its preview URLs can use the production backend.
-# No pull_request trigger, cloud credential, Hosting action, or Firebase deploy
-# command remains. PR #125 will replace this ONLY AFTER staging is provisioned.
+# SECURITY HOLD 2026-11-06: Do NOT deploy PR preview channels to the production
+# Firebase project. Retain the required "preview" CI job so branch-protection
+# checks can pass safely. The job has no Firebase credentials or deploy commands.
+# PR #125 will replace this only AFTER the isolated staging project is ready.
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
 
 permissions:
   contents: read
 
 jobs:
-  preview-paused:
+  preview:
     runs-on: ubuntu-latest
     steps:
-      - name: State the safety hold
+      - name: Confirm legacy preview deploy is disabled
         run: |
-          echo "Legacy Firebase Hosting previews are disabled."
-          echo "Use an isolated Firebase project for all future previews."
+          echo "Preview deployment intentionally suspended for security."
+          echo "A pull request status check is provided; no Hosting deploy occurs."
