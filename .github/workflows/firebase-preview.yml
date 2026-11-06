@@ -1,27 +1,42 @@
-name: Firebase preview link
+name: Firebase isolated preview
 
-# Builds every PR into the recovery branch and deploys it to a temporary Firebase Hosting preview channel
-# (expires after 7 days), then comments the link on the PR. The live site (the production channel) is never
-# touched by this workflow.
+# Pull-request previews live in the isolated staging Firebase PROJECT, not production.
 on:
   pull_request:
     branches: [recovery/coach-core-mvp-2026]
 
 permissions:
   contents: read
-  pull-requests: write
-  checks: write
+  id-token: write
 
 concurrency:
-  group: firebase-preview-${{ github.event.pull_request.number }}
+  group: firebase-isolated-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   preview:
-    # Secrets are not available to PRs from forks; skip instead of failing.
+    # Never mint staging cloud credentials for pull requests from forks.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment: firebase-staging
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      STAGING_FIREBASE_PROJECT_ID: ${{ vars.STAGING_FIREBASE_PROJECT_ID }}
+      STAGING_WIF_PROVIDER: ${{ vars.STAGING_WIF_PROVIDER }}
+      STAGING_DEPLOY_SERVICE_ACCOUNT: ${{ vars.STAGING_DEPLOY_SERVICE_ACCOUNT }}
+      REACT_APP_FIREBASE_API_KEY: ${{ vars.STAGING_FIREBASE_API_KEY }}
+      REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.STAGING_FIREBASE_AUTH_DOMAIN }}
+      REACT_APP_FIREBASE_PROJECT_ID: ${{ vars.STAGING_FIREBASE_PROJECT_ID }}
+      REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ vars.STAGING_FIREBASE_STORAGE_BUCKET }}
+      REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.STAGING_FIREBASE_MESSAGING_SENDER_ID }}
+      REACT_APP_FIREBASE_APP_ID: ${{ vars.STAGING_FIREBASE_APP_ID }}
+      REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ vars.STAGING_FIREBASE_MEASUREMENT_ID }}
+      REACT_APP_DEPLOY_ENV: preview
+      REACT_APP_AI_ENABLED: 'false'
+      REACT_APP_ENABLE_PLAYBOOK_V2: 'true'
+      REACT_APP_ENABLE_CONTENT_REVIEW: 'true'
+      REACT_APP_RELEASE: ${{ github.event.pull_request.head.sha }}
     steps:
       - uses: actions/checkout@v4
 
@@ -30,38 +45,25 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Verify isolated preview configuration BEFORE credentials or build
+        run: node scripts/assert-firebase-deploy-env.mjs preview
+
       - name: Install
         run: npm ci --no-audit --no-fund
 
-      - name: Build
+      - name: Build preview app
         run: npm run build
-        env:
-          # Firebase web config is public by design (security rules protect the data); kept as repo variables.
-          REACT_APP_FIREBASE_API_KEY: ${{ vars.REACT_APP_FIREBASE_API_KEY }}
-          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.REACT_APP_FIREBASE_AUTH_DOMAIN }}
-          REACT_APP_FIREBASE_PROJECT_ID: ${{ vars.REACT_APP_FIREBASE_PROJECT_ID }}
-          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ vars.REACT_APP_FIREBASE_STORAGE_BUCKET }}
-          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
-          REACT_APP_FIREBASE_APP_ID: ${{ vars.REACT_APP_FIREBASE_APP_ID }}
-          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ vars.REACT_APP_FIREBASE_MEASUREMENT_ID }}
-          # Preview builds show work in progress: turn on the new Smart Playbook and the owner review screen.
-          REACT_APP_ENABLE_PLAYBOOK_V2: 'true'
-          REACT_APP_ENABLE_CONTENT_REVIEW: 'true'
-          # Crash reporting (off when the variable is unset). The DSN is public by design.
-          REACT_APP_SENTRY_DSN: ${{ vars.REACT_APP_SENTRY_DSN }}
-          REACT_APP_DEPLOY_ENV: preview
-          REACT_APP_RELEASE: ${{ github.event.pull_request.head.sha }}
-          # Source-map upload to Sentry; build-time only, never in the bundle. Skipped when the token is unset.
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
-      - name: Deploy to a preview channel
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Prepare staging-only Hosting config
+        run: node scripts/prepare-staging-hosting-config.mjs
+
+      - name: Authenticate with staging-only keyless identity
+        uses: google-github-actions/auth@v3
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COACH_CORE_AI }}
-          projectId: coach-core-ai
-          # Preview channels belong to the main site; the staging site is deployed by deploy-staging.yml.
-          target: production
-          expires: 7d
+          project_id: ${{ vars.STAGING_FIREBASE_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.STAGING_WIF_PROVIDER }}
+          service_account: ${{ vars.STAGING_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Deploy temporary Hosting preview into staging project
+        run: |
+          npx --no-install firebase hosting:channel:deploy "pr-$PR_NUMBER" --project "$STAGING_FIREBASE_PROJECT_ID" --config .firebase.staging.generated.json --expires 7d --non-interactive

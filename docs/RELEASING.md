@@ -1,66 +1,22 @@
 # Releasing Coach Core AI
 
-One path from a change to the live site. Nothing reaches production without the owner's approval.
+**Isolation rollout in progress (2026-11-06):** Do not use old staging Hosting or PR preview links for security testing until the new isolated Firebase project is provisioned and verified. See `docs/security/FIREBASE_STAGING_ISOLATION_RUNBOOK_2026-11-06.md`.
 
 ```
-PR ──► preview link ──► merge into recovery ──► staging ──► "Deploy production" ──► owner approves ──► live
+PR → preview (isolated staging project) → recovery branch → staging (same isolated staging project)
+     → verified release SHA → owner-approved production deploy (production project)
 ```
 
-## 1. Pull request → preview link
+- **Production Firebase project:** `coach-core-ai`. No implicit default project alias remains.
+- **Staging/preview Firebase project:** independently provisioned project, explicitly set via GitHub `firebase-staging` environment variables. Not the old production-project staging Hosting site.
+- **Credentials:** stage-only GitHub OIDC / Google Workload Identity Federation; no production service-account secrets.
+- **Security rules:** not deployed by Hosting workflows; require their own isolated staging rollout, tests and separate production approval.
 
-Every PR into `recovery/coach-core-mvp-2026` runs:
+## Production deployment
+The `Deploy production` workflow is still manually dispatched from a commit on `recovery/coach-core-mvp-2026` with `confirm=replace-live-site` and the owner-protected `production` GitHub environment. A new preflight refuses any production Firebase project ID other than `coach-core-ai`.
 
-- **test-and-build**: lint, unit tests, typecheck, production build (fails if Tailwind styles are missing).
-- **firestore-rules**: security rules tests on the Firestore emulator.
-- **preview**: builds the PR and deploys it to a temporary Firebase Hosting preview channel on the main
-  site (expires after 7 days). The link is posted as a PR comment.
+## Staging activation and rollback
+Follow the staging isolation runbook before enabling staging deployment. The new staging workflow must fail closed until its required variables and Workload Identity Federation are configured. Review Firebase Hosting's staging-project release history for rollback; the old `coach-core-ai-staging` site inside production is no longer the staging destination and should be retired only after checking whether it serves active traffic.
 
-## 2. Merge → staging
-
-Merging into `recovery/coach-core-mvp-2026` runs **Deploy staging** (`.github/workflows/deploy-staging.yml`),
-which tests, builds and deploys to **https://coach-core-ai-staging.web.app**. Check the change there.
-
-> Staging is a second Hosting site in the **same** Firebase project as production. It uses the same
-> Firestore data and the same accounts. A separate staging project (owner action O4) removes that risk.
-
-## 3. Staging → production (owner approval)
-
-1. Find the commit SHA running on staging: Actions → **Deploy staging** → the latest successful run → the
-   commit it ran on (full 40-character SHA).
-2. Actions → **Deploy production** → **Run workflow**:
-   - `ref`: that SHA
-   - `confirm`: `replace-live-site`
-3. The job waits for the owner's approval (GitHub environment `production`, required reviewer: owner).
-   Approve it to continue.
-4. The workflow refuses to run unless the SHA is already on `recovery/coach-core-mvp-2026`. It tests, builds
-   with production settings (work-in-progress flags off) and deploys to **https://coach-core-ai.web.app**.
-
-> **First production run:** it replaces the old build currently live on `coach-core-ai.web.app`. The
-> owner decides when that happens. Returning visitors' old offline worker removes itself on first load
-> (`public/sw.js`), and HTML is served `no-cache`, so nobody stays stuck on the old version.
-
-## Rollback
-
-Either is fine; the first is instant.
-
-- **Firebase console** → Hosting → site `coach-core-ai` → Release history → ⋮ next to the previous
-  release → **Rollback**.
-- Or run **Deploy production** again with the previous good SHA.
-
-Staging rolls back the same way (site `coach-core-ai-staging`).
-
-## Not covered by these workflows
-
-- **Firestore security rules** are not deployed by any workflow. Deploying them to a live project is the
-  owner's call: `firebase deploy --only firestore:rules --project <project>`.
-- Functions and Storage rules are not deployed here either.
-
-## Setup the owner does once
-
-| | What | Where |
-|---|---|---|
-| O1 | Enable Email/Password and Google sign-in; authorized domains include `coach-core-ai.web.app`, `coach-core-ai.firebaseapp.com`, `coach-core-ai-staging.web.app` | Firebase console → Authentication |
-| O2 | Sentry project (React). Repo variable `REACT_APP_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`; secret `SENTRY_AUTH_TOKEN` | Sentry, then GitHub → Settings → Secrets and variables |
-| O3 | Environment `production` with required reviewer: owner | GitHub → Settings → Environments |
-| — | Hosting site `coach-core-ai-staging` exists in project `coach-core-ai` | Firebase console → Hosting → Add another site |
-| O4 | Separate Firebase project for staging/previews (later) | Firebase console |
+## Explicit exclusions
+These workflows deploy Hosting only; Firestore and Storage rule deployment, Functions, project creation, IAM, billing, real-user data migration, and staging integration tests are separate approval gates.
