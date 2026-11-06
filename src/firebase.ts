@@ -21,7 +21,7 @@ if (deployEnv === 'staging' || deployEnv === 'preview') {
   if (!firebaseConfig.projectId || firebaseConfig.projectId === 'coach-core-ai' ||
       firebaseConfig.authDomain !== firebaseConfig.projectId + '.firebaseapp.com' ||
       ![firebaseConfig.projectId + '.firebasestorage.app',
-         firebaseConfig.projectId + '.appspot.com'].includes(firebaseConfig.storageBucket)) {
+         firebaseConfig.projectId + '.appspot.com'].includes(String(firebaseConfig.storageBucket || ''))) {
     throw new Error('Refusing to initialize an unisolated staging or preview Firebase client.');
   }
 } else if (deployEnv === 'production' && firebaseConfig.projectId !== 'coach-core-ai') {
