@@ -9,9 +9,9 @@ if (!project || project === 'coach-core-ai') {
   console.error('Staging project ID is missing or refers to production.');
   process.exit(1);
 }
-const source = JSON.parse(readFileSync(resolve(root, 'firebase.json'), 'utf8'));
-const staging = Array.isArray(source.hosting) && source.hosting.find((entry) => entry.target === 'staging');
-if (!staging || staging.public !== 'build') {
+const source = JSON.parse(readFileSync(resolve(root, 'firebase.staging.template.json'), 'utf8'));
+const staging = source.hosting;
+if (!staging || Array.isArray(staging) || staging.public !== 'build' || staging.target || staging.site || Object.keys(source).some((key) => key !== 'hosting')) {
   console.error('Could not find the approved staging Hosting configuration.');
   process.exit(1);
 }
