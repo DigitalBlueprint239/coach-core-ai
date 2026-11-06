@@ -29,6 +29,9 @@ jobs:
       - name: Install
         run: npm ci --no-audit --no-fund
 
+      - name: Firebase environment isolation static regression tests
+        run: node --test scripts/tests/firebase-isolation.test.mjs
+
       - name: Lint
         run: npm run lint
 
