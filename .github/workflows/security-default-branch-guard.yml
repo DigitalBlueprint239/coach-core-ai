@@ -18,6 +18,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          # Legacy master has a malformed gitlink unrelated to these safety checks.
+          # Limit checkout to the relevant paths, without touching legacy submodules.
+          sparse-checkout: |
+            .firebaserc
+            .github/workflows
+            scripts
+            src/components/SmartPlaybook/scripts
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
