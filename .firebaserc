@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "coach-core-ai"
+    "production": "coach-core-ai"
   }
 }
