@@ -220,6 +220,16 @@ describe('waitlist', () => {
     await assertFails(addDoc(collection(anonymous(), 'waitlist'), noTime));
   });
 
+  it('accepts the legacy public sign-up status only when it is pending', async () => {
+    // Live landing page compatibility: a signed-out visitor sends status='pending'.
+    // Clients cannot choose approved, invited, or processing states.
+    await assertSucceeds(addDoc(collection(anonymous(), 'waitlist'), { ...entry, status: 'pending' }));
+    for (const status of ['approved', 'invited', 'processed', 'rejected', '']) {
+      await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, status }));
+    }
+    await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, status: null }));
+  });
+
   it('visitors cannot write admin-controlled waitlist access or processing fields', async () => {
     await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, immediateAccess: true }));
     await assertFails(addDoc(collection(anonymous(), 'waitlist'), { ...entry, status: 'approved' }));
