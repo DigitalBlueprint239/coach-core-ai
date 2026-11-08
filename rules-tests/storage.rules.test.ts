@@ -34,8 +34,8 @@ beforeEach(async () => {
     const db = context.firestore();
     await setDoc(doc(db, 'teams/t1'), { ownerId: 'alice', memberIds: ['alice', 'carol'] });
     await setDoc(doc(db, 'teams/t2'), { ownerId: 'bob', memberIds: ['bob'] });
-    await setDoc(doc(db, 'plays/p1'), { teamId: 't1', createdBy: 'alice', schemaVersion: 3, revision: 1 });
-    await setDoc(doc(db, 'plays/p2'), { teamId: 't2', createdBy: 'bob', schemaVersion: 3, revision: 1 });
+    await setDoc(doc(db, 'plays/p1'), { teamId: 't1', createdBy: 'alice', schemaVersion: 3, revision: 1, status: 'draft' });
+    await setDoc(doc(db, 'plays/p2'), { teamId: 't2', createdBy: 'bob', schemaVersion: 3, revision: 1, status: 'draft' });
     await setDoc(doc(db, 'practicePlans/pp1'), { teamId: 't1', createdBy: 'alice' });
     await setDoc(doc(db, 'practicePlans/pp2'), { teamId: 't2', createdBy: 'bob' });
   });
@@ -93,6 +93,21 @@ describe('Storage owner-scoped authorization', () => {
     await assertFails(upload(alice(), 'plays/p1/media/malware.svg', 'image/svg+xml'));
     await assertFails(upload(alice(), 'plays/p1/media/clip.mp4', 'video/mp4'));
     await assertFails(upload(bob(), 'plays/missing/media/secret.png'));
+  });
+
+  it('keeps published v3 play media readable but prevents owner overwrite and deletion', async () => {
+    const file = 'plays/p1/media/signed-off.png';
+    await assertSucceeds(upload(alice(), file));
+    await env.withSecurityRulesDisabled(async context => {
+      await setDoc(doc(context.firestore(), 'plays/p1'), {
+        teamId: 't1', createdBy: 'alice', schemaVersion: 3, revision: 4, status: 'published',
+      });
+    });
+    await assertSucceeds(getMetadata(ref(alice(), file)));
+    await assertFails(upload(alice(), file));
+    await assertFails(upload(alice(), 'plays/p1/media/new.png'));
+    await assertFails(deleteObject(ref(alice(), file)));
+    await assertFails(getMetadata(ref(bob(), file)));
   });
 
   it('does not allow folder enumeration or unrecognized path operations', async () => {
