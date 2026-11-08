@@ -15,17 +15,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          # Legacy master has a malformed gitlink unrelated to these safety checks.
-          # Limit checkout to the relevant paths, without touching legacy submodules.
-          sparse-checkout: |
-            .firebaserc
-            .github/workflows
-            scripts
-            src/components/SmartPlaybook/scripts
-          sparse-checkout-cone-mode: false
+      - name: Fetch only audited source via read-only GitHub Contents API
+        # The historical default branch has a malformed gitlink which prevents
+        # a normal git checkout. Do not grant deploy credentials to bypass it.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          for file in \
+            .firebaserc \
+            .github/workflows/model-optimization.yml \
+            scripts/deploy.sh \
+            scripts/rollback.sh \
+            scripts/tests/legacy-deploy-disabled.test.mjs \
+            src/components/SmartPlaybook/scripts/deploy.sh
+          do
+            mkdir -p "$(dirname "$file")"
+            gh api -H "Accept: application/vnd.github.raw+json" \
+              "repos/$GITHUB_REPOSITORY/contents/$file?ref=$REVISION" > "$file"
+          done
       - uses: actions/setup-node@v4
         with:
           node-version: 22
