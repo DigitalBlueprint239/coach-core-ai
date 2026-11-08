@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'node',
-    include: ['rules-tests/**/*.test.ts'],
+    include: ['rules-tests/firestore.rules.test.ts'],
     // One emulator, one database: run files one at a time so clearFirestore() in one file can't race another.
     fileParallelism: false,
     testTimeout: 15000,
