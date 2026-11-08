@@ -165,7 +165,11 @@ service cloud.firestore {
         // Visitor-writable marketing fields only. Administrative approval, processing,
         // IP attribution and access states must be recorded by trusted server code.
         'email', 'source', 'createdAt', 'timestamp', 'name', 'role', 'referringCoach',
-        'coachingChallenge', 'utmSource', 'utmMedium', 'utmCampaign', 'utmId', 'utmTerm', 'utmContent'
+        'coachingChallenge', 'utmSource', 'utmMedium', 'utmCampaign', 'utmId', 'utmTerm', 'utmContent',
+        // Temporary legacy compatibility: the live sign-up form reportedly sends
+        // status='pending'. Only this non-privileged value may come from a client.
+        // Migrate to server-assigned status before removing this exception.
+        'status'
       ]);
     }
 
@@ -179,7 +183,7 @@ service cloud.firestore {
         (hasCreatedAt || hasTimestamp) &&
         (!hasCreatedAt || data.createdAt is timestamp) &&
         (!hasTimestamp || data.timestamp is timestamp) &&
-        (!('status' in data) || data.status == null || (data.status is string && data.status.size() <= 50)) &&
+        (!('status' in data) || data.status == 'pending') &&
         (!('name' in data) || data.name == null || (data.name is string && data.name.size() <= 200)) &&
         (!('role' in data) || data.role == null || (data.role is string && data.role.size() <= 100)) &&
         (!('referringCoach' in data) || data.referringCoach == null || (data.referringCoach is string && data.referringCoach.size() <= 200)) &&
