@@ -26,6 +26,16 @@ service firebase.storage {
         ownsTeam(firestore.get(/databases/(default)/documents/practicePlans/$(planId)).data.teamId);
     }
 
+    // Published canonical plays are immutable in Firestore. Their associated
+    // Storage media must not remain owner-editable, or the published play could
+    // be silently tampered with through an authorized file overwrite/delete.
+    // This performs exactly two distinct cross-service reads (play + team).
+    function canModifyPlayMedia(playId) {
+      let play = firestore.get(/databases/(default)/documents/plays/$(playId)).data;
+      return signedIn() && ownsTeam(play.teamId) &&
+        (play.get('schemaVersion', 0) != 3 || play.get('status', '') == 'draft');
+    }
+
     // These are maximum accepted metadata sizes and declared MIME types, not malware/content
     // scanning. SVG (active/script-capable), video, executable files and archives are not enabled.
     function safeImage(maxBytes) {
@@ -69,8 +79,8 @@ service firebase.storage {
     // Play diagrams / static media. Film-video sharing needs its own reviewed model.
     match /plays/{playId}/media/{fileName} {
       allow get: if ownsPlay(playId);
-      allow create, update: if ownsPlay(playId) && safeImage(10 * 1024 * 1024);
-      allow delete: if ownsPlay(playId);
+      allow create, update: if canModifyPlayMedia(playId) && safeImage(10 * 1024 * 1024);
+      allow delete: if canModifyPlayMedia(playId);
     }
 
     // Deny everything else by default, including unknown folders, broad lists,
