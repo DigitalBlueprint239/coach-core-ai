@@ -44,6 +44,15 @@ if (mode === 'production') {
 if (get('GITHUB_REPOSITORY') && get('GITHUB_REPOSITORY') !== 'DigitalBlueprint239/coach-core-ai') {
   problems.push('GitHub repository identity mismatch.');
 }
+// A staging deployment may only originate from the protected recovery branch.
+// The WIF provider MUST independently enforce the same repository ID, owner ID,
+// ref, event, workflow, and environment claims: client-side checks alone are not IAM.
+if (mode === 'staging' && get('GITHUB_ACTIONS') === 'true') {
+  if (get('GITHUB_REPOSITORY_ID') !== '1018633922') problems.push('Unexpected GitHub repository ID.');
+  if (get('GITHUB_REPOSITORY_OWNER_ID') !== '206572958') problems.push('Unexpected GitHub owner ID.');
+  if (get('GITHUB_REF') !== 'refs/heads/recovery/coach-core-mvp-2026') problems.push('Staging deploys require the protected recovery branch.');
+  if (!['push', 'workflow_dispatch'].includes(get('GITHUB_EVENT_NAME'))) problems.push('Staging deploy event is not allowed.');
+}
 if (problems.length) {
   for (const problem of problems) console.error('firebase-isolation: ' + problem);
   process.exit(1);
