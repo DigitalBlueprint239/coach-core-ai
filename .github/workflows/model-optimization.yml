@@ -137,39 +137,13 @@ jobs:
           model_registry/configs/
         retention-days: 30
         
-    - name: Update Firestore schema version
-      if: steps.validation.outcome == 'success'
-      run: |
-        echo "Updating Firestore schema version..."
-        python -c "
-        import firebase_admin
-        from firebase_admin import credentials, firestore
-        import json
-        from datetime import datetime
-        
-        # Initialize Firebase (you'll need to set up credentials)
-        try:
-            cred = credentials.Certificate('firebase-credentials.json')
-            firebase_admin.initialize_app(cred)
-        except:
-            print('Firebase credentials not available - skipping schema update')
-            exit(0)
-            
-        db = firestore.client()
-        
-        # Update model version and schema
-        config_ref = db.collection('config').document('model_version')
-        config_ref.set({
-            'current_model_tag': 'v1.4',
-            'schema_version': '3.1',
-            'last_updated': datetime.now().isoformat(),
-            'optimization_run_id': '${{ github.run_id }}',
-            'performance_improvement': '${{ steps.validation.outputs.avg_improvement }}%'
-        })
-        
-        print('✅ Firestore schema updated')
-        "
-        
+    # SECURITY HOLD 2026-11-06: Never automatically write to Firestore from
+    # model optimization. Reintroduce only after explicit project scoping,
+    # staging-only credentials, and separate review.
+    - name: Update Firestore schema version (PAUSED)
+      if: ${{ false }}
+      run: echo "Automatic Firestore mutation disabled pending environment isolation."
+
     - name: Generate benchmark report
       if: steps.validation.outcome == 'success'
       run: |
