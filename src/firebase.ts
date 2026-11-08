@@ -15,8 +15,25 @@ const firebaseConfig = {
   measurementId: import.meta.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+// Additional runtime protection if a build or deployment bypasses CI safeguards.
+const deployEnv = import.meta.env.REACT_APP_DEPLOY_ENV;
+if (deployEnv === 'staging' || deployEnv === 'preview') {
+  if (!firebaseConfig.projectId || firebaseConfig.projectId === 'coach-core-ai' ||
+      firebaseConfig.authDomain !== firebaseConfig.projectId + '.firebaseapp.com' ||
+      ![firebaseConfig.projectId + '.firebasestorage.app',
+         firebaseConfig.projectId + '.appspot.com'].includes(String(firebaseConfig.storageBucket || ''))) {
+    throw new Error('Refusing to initialize an unisolated staging or preview Firebase client.');
+  }
+} else if (deployEnv === 'production' && firebaseConfig.projectId !== 'coach-core-ai') {
+  throw new Error('Refusing to initialize production with an unexpected Firebase project.');
+}
+
+// Initialize Firebase (and refuse to reuse an app initialized for a different project).
+const existingApp = getApps().length ? getApp() : null;
+if (existingApp && existingApp.options.projectId !== firebaseConfig.projectId) {
+  throw new Error('Existing Firebase app does not belong to the configured Firebase project.');
+}
+const app = existingApp ?? initializeApp(firebaseConfig);
 
 // Initialize Firebase services
 const auth: Auth = getAuth(app);
