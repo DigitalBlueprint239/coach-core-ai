@@ -1,0 +1,41 @@
+{
+  "project": "phone",
+  "emulated": true,
+  "viewport": {
+    "width": 412,
+    "height": 839
+  },
+  "dpr": 2.625,
+  "renderer": {
+    "geometries": 18,
+    "textures": 51,
+    "programs": 9,
+    "renderer": "ANGLE (Intel, Intel(R) HD Graphics 4000 (0x00000166) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webgl2": true,
+    "pixelRatio": 2
+  },
+  "machine": "Intel i5-3230M, Intel HD Graphics 4000, 6 GB RAM, Windows 10; Google Chrome (Playwright channel=chrome)",
+  "cold": {
+    "readyMs": 828.6999999880791,
+    "totalMs": 1919.4000000357628
+  },
+  "warmEnter": {
+    "n": 10,
+    "readyP50": 34.89999997615814,
+    "readyP95": 42.60000002384186,
+    "totalP50": 1104.5999999642372,
+    "totalP95": 1122.3999999761581
+  },
+  "exit": {
+    "n": 10,
+    "p50": 888.5,
+    "p95": 899.1999999880791
+  },
+  "orbit": {
+    "frames": 168,
+    "meanFps": 42.34618002167722,
+    "frameMsP50": 24.200000000000728,
+    "frameMsP95": 25.900000000001455,
+    "frameMsMax": 29.799999999999272
+  }
+}

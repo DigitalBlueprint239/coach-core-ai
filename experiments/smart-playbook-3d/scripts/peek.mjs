@@ -1,0 +1,22 @@
+// Quick visual check: captures 2D, matched overhead (held), and tactical 3D.
+import { chromium } from '@playwright/test';
+const out = process.argv[2];
+const browser = await chromium.launch({ channel: 'chrome', args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=d3d11'] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const logs = [];
+page.on('console', m => logs.push(`${m.type()}: ${m.text()}`));
+page.on('pageerror', e => logs.push(`pageerror: ${e.message}`));
+await page.goto('http://127.0.0.1:5179/?hold=1');
+await page.waitForTimeout(1500);
+await page.screenshot({ path: `${out}/peek-2d.png` });
+await page.click('[data-testid=btn-3d]');
+await page.waitForFunction(() => window.__sp3d.phase() === 'handoff-in', null, { timeout: 15000 });
+await page.waitForTimeout(500);
+await page.screenshot({ path: `${out}/peek-matched.png` });
+await page.evaluate(() => window.__sp3d.release());
+await page.waitForFunction(() => window.__sp3d.phase() === '3d', null, { timeout: 15000 });
+await page.waitForTimeout(400);
+await page.screenshot({ path: `${out}/peek-3d.png` });
+console.log(JSON.stringify(await page.evaluate(() => ({ info: window.__sp3d.rendererInfo(), metrics: window.__sp3d.metrics() })), null, 1));
+console.log(logs.slice(0, 20).join('\n'));
+await browser.close();
