@@ -1,0 +1,7 @@
+{
+  "mesh": { "mustDetect": ["mesh"], "minIssueCount": 1 },
+  "smash": { "mustDetect": ["smash"] },
+  "flood": { "mustDetect": ["flood"] },
+  "verts": { "mustDetect": ["verts"] },
+  "stick": { "mustDetect": ["stick"] }
+}
