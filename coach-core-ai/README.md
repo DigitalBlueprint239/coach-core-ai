@@ -1,3 +1,5 @@
+> **Note:** This document was created during an earlier planning phase and may not reflect the current state of the project. See the root `README.md` for the authoritative project status.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

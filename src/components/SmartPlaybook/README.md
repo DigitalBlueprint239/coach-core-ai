@@ -1,3 +1,5 @@
+> **Note:** This document was created during an earlier planning phase and may not reflect the current state of the project. See the root `README.md` for the authoritative project status.
+
 # Smart Playbook - Phase 1 Implementation
 
 A complete, touch-friendly football playbook system with interactive field canvas, player management, route drawing, and formation templates.
