@@ -32,6 +32,8 @@ interface RouteEditorProps {
   onDeleteRoute: (routeId: string) => void;
   onApplyPreset: (routeId: string, preset: PresetRoute) => void;
   onClearSelection: () => void;
+  onRouteHover?: (preset: PresetRoute) => void;
+  onRouteLeave?: () => void;
 }
 
 declare const RouteEditor: React.FC<RouteEditorProps>;

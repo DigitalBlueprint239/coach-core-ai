@@ -225,6 +225,46 @@ const drawRoutes = (ctx, routes = [], selectedRouteId = null) => {
   });
 };
 
+// Draw ghost preview route from selected player
+const drawGhostRoute = (ctx, previewRoute, players, selectedPlayerId) => {
+  if (!ctx || !previewRoute || !selectedPlayerId) return;
+
+  const player = players.find(p => p.id === selectedPlayerId);
+  if (!player || !previewRoute.points || previewRoute.points.length < 2) return;
+
+  const absPoints = previewRoute.points.map(pt => ({
+    x: player.x + pt.x,
+    y: player.y + pt.y
+  }));
+
+  ctx.save();
+  ctx.globalAlpha = 0.4;
+  ctx.strokeStyle = '#00D4FF';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(absPoints[0].x, absPoints[0].y);
+  absPoints.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Arrowhead
+  const last = absPoints[absPoints.length - 1];
+  const prev = absPoints[absPoints.length - 2];
+  const angle = Math.atan2(last.y - prev.y, last.x - prev.x);
+  ctx.translate(last.x, last.y);
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(-ROUTE_STYLES.arrowSize, -7);
+  ctx.lineTo(-ROUTE_STYLES.arrowSize, 7);
+  ctx.closePath();
+  ctx.fillStyle = '#00D4FF';
+  ctx.fill();
+
+  ctx.restore();
+};
+
 // Utility: Draw field with error handling
 const drawField = (ctx, width, height) => {
   if (!ctx || typeof width !== 'number' || typeof height !== 'number') {
@@ -291,7 +331,9 @@ function fieldPropsAreEqual(prev, next) {
     prev.width === next.width &&
     prev.height === next.height &&
     prev.mode === next.mode &&
-    prev.debug === next.debug
+    prev.debug === next.debug &&
+    prev.previewRoute === next.previewRoute &&
+    prev.selectedPlayerId === next.selectedPlayerId
   );
 }
 
@@ -302,6 +344,8 @@ const Field = memo(forwardRef(({
   onPlayerDrag = () => {},
   onRouteSelect = () => {},
   selectedRouteId = null,
+  previewRoute = null,
+  selectedPlayerId = null,
   width = 600,
   height = 300,
   mode = 'view',
@@ -460,6 +504,7 @@ const Field = memo(forwardRef(({
 
     drawField(ctx, width, height);
     drawRoutes(ctx, routes, selectedRouteId);
+    drawGhostRoute(ctx, previewRoute, players, selectedPlayerId);
     drawPlayers(ctx, players);
 
     // Draw dragging feedback
@@ -480,7 +525,7 @@ const Field = memo(forwardRef(({
     if (debug) {
       drawDebugInfo(ctx, mode, width, height);
     }
-  }, [players, routes, width, height, mode, debug, isDragging, draggedPlayerId, selectedRouteId]);
+  }, [players, routes, width, height, mode, debug, isDragging, draggedPlayerId, selectedRouteId, previewRoute, selectedPlayerId]);
 
   // Effect to redraw canvas when dependencies change
   useEffect(() => {

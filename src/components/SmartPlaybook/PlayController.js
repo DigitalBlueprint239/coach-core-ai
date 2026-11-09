@@ -404,7 +404,7 @@ export function redo(undoStack, redoStack, currentState) {
   }
   
   const next = redoStack[0];
-  const newUndoStack = [currentState, ...undoStack];
+  const newUndoStack = [...undoStack, currentState];
   const newRedoStack = redoStack.slice(1);
   
   return [next, newUndoStack, newRedoStack];
