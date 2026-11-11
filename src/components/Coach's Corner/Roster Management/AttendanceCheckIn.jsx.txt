@@ -1,0 +1,25 @@
+import React from "react";
+
+// For athlete/parent self-check-in (can extend with QR/barcode later)
+const AttendanceCheckIn = ({ players, onCheckIn, userRole, userId }) => {
+  // Show only for parents/athletes
+  if (userRole === "coach") return null;
+  // Find player's own record
+  const player =
+    players.find((p) => p.id === userId || p.parentId === userId) || {};
+
+  if (!player.id) return null;
+
+  return (
+    <div className="mb-4">
+      <button
+        className="bg-green-600 text-white px-4 py-2 rounded-xl"
+        onClick={() => onCheckIn(player.id)}
+      >
+        Check In for Practice
+      </button>
+    </div>
+  );
+};
+
+export default AttendanceCheckIn;

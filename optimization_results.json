@@ -1,0 +1,375 @@
+{
+  "study_name": "coach_core_optimization",
+  "best_value": 0.7221224785949438,
+  "best_params": {
+    "learning_rate": 0.0007942154094484859,
+    "batch_size": 32,
+    "hidden_layers": 3,
+    "hidden_size": 256,
+    "dropout_rate": 0.214684322572977
+  },
+  "n_trials": 30,
+  "timestamp": "2025-07-12T18:11:47.269865",
+  "trials": [
+    {
+      "number": 0,
+      "value": 0.5175654416777481,
+      "params": {
+        "learning_rate": 2.0947477512981533e-05,
+        "batch_size": 64,
+        "hidden_layers": 3,
+        "hidden_size": 256,
+        "dropout_rate": 0.4891051449264726
+      },
+      "datetime_start": "2025-07-12T18:05:04.366358"
+    },
+    {
+      "number": 1,
+      "value": 0.47714479689299816,
+      "params": {
+        "learning_rate": 7.67486862585951e-05,
+        "batch_size": 16,
+        "hidden_layers": 4,
+        "hidden_size": 512,
+        "dropout_rate": 0.46562267981837613
+      },
+      "datetime_start": "2025-07-12T18:05:04.381754"
+    },
+    {
+      "number": 2,
+      "value": 0.588273650117493,
+      "params": {
+        "learning_rate": 0.00027089416198405766,
+        "batch_size": 32,
+        "hidden_layers": 2,
+        "hidden_size": 256,
+        "dropout_rate": 0.33443156852073647
+      },
+      "datetime_start": "2025-07-12T18:05:04.503051"
+    },
+    {
+      "number": 3,
+      "value": 0.46520297271115696,
+      "params": {
+        "learning_rate": 0.005615222000360872,
+        "batch_size": 128,
+        "hidden_layers": 4,
+        "hidden_size": 1024,
+        "dropout_rate": 0.27883955858479725
+      },
+      "datetime_start": "2025-07-12T18:05:04.533557"
+    },
+    {
+      "number": 4,
+      "value": 0.4202773971516432,
+      "params": {
+        "learning_rate": 0.0025115789287374,
+        "batch_size": 32,
+        "hidden_layers": 6,
+        "hidden_size": 1024,
+        "dropout_rate": 0.46552397931734446
+      },
+      "datetime_start": "2025-07-12T18:05:04.546753"
+    },
+    {
+      "number": 5,
+      "value": 0.5663795306919016,
+      "params": {
+        "learning_rate": 0.0001071170181727766,
+        "batch_size": 128,
+        "hidden_layers": 5,
+        "hidden_size": 1024,
+        "dropout_rate": 0.3343495814443215
+      },
+      "datetime_start": "2025-07-12T18:05:04.609350"
+    },
+    {
+      "number": 6,
+      "value": 0.4842381230153879,
+      "params": {
+        "learning_rate": 0.002425318705217059,
+        "batch_size": 16,
+        "hidden_layers": 3,
+        "hidden_size": 512,
+        "dropout_rate": 0.2685363472771005
+      },
+      "datetime_start": "2025-07-12T18:05:04.631068"
+    },
+    {
+      "number": 7,
+      "value": 0.47960603824863374,
+      "params": {
+        "learning_rate": 0.00880780858480256,
+        "batch_size": 32,
+        "hidden_layers": 5,
+        "hidden_size": 128,
+        "dropout_rate": 0.44240075082061003
+      },
+      "datetime_start": "2025-07-12T18:05:04.668050"
+    },
+    {
+      "number": 8,
+      "value": 0.5514066653028764,
+      "params": {
+        "learning_rate": 0.00024211313561913614,
+        "batch_size": 32,
+        "hidden_layers": 2,
+        "hidden_size": 256,
+        "dropout_rate": 0.401828084706909
+      },
+      "datetime_start": "2025-07-12T18:05:04.679621"
+    },
+    {
+      "number": 9,
+      "value": 0.3466280613233652,
+      "params": {
+        "learning_rate": 6.045496525016001e-05,
+        "batch_size": 128,
+        "hidden_layers": 6,
+        "hidden_size": 1024,
+        "dropout_rate": 0.47103740978759345
+      },
+      "datetime_start": "2025-07-12T18:05:04.735305"
+    },
+    {
+      "number": 10,
+      "value": 0.5730757939609715,
+      "params": {
+        "learning_rate": 0.0008007458705693711,
+        "batch_size": 64,
+        "hidden_layers": 2,
+        "hidden_size": 256,
+        "dropout_rate": 0.1311333675787514
+      },
+      "datetime_start": "2025-07-12T18:05:04.775924"
+    },
+    {
+      "number": 11,
+      "value": 0.55048866954661,
+      "params": {
+        "learning_rate": 0.0007172353473288617,
+        "batch_size": 64,
+        "hidden_layers": 2,
+        "hidden_size": 256,
+        "dropout_rate": 0.10933322546449534
+      },
+      "datetime_start": "2025-07-12T18:05:05.012357"
+    },
+    {
+      "number": 12,
+      "value": 0.5689082903007391,
+      "params": {
+        "learning_rate": 0.0005556316035880706,
+        "batch_size": 64,
+        "hidden_layers": 2,
+        "hidden_size": 256,
+        "dropout_rate": 0.15678640895721252
+      },
+      "datetime_start": "2025-07-12T18:05:05.386137"
+    },
+    {
+      "number": 13,
+      "value": 0.7221224785949438,
+      "params": {
+        "learning_rate": 0.0007942154094484859,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 256,
+        "dropout_rate": 0.214684322572977
+      },
+      "datetime_start": "2025-07-12T18:05:05.714491"
+    },
+    {
+      "number": 14,
+      "value": 0.6673430469270273,
+      "params": {
+        "learning_rate": 0.0002616373494695085,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 128,
+        "dropout_rate": 0.2110451323592483
+      },
+      "datetime_start": "2025-07-12T18:05:05.999957"
+    },
+    {
+      "number": 15,
+      "value": 0.5386740145498345,
+      "params": {
+        "learning_rate": 0.0014563705168326858,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 128,
+        "dropout_rate": 0.20447859885773195
+      },
+      "datetime_start": "2025-07-12T18:05:06.182281"
+    },
+    {
+      "number": 16,
+      "value": 0.5105203285155104,
+      "params": {
+        "learning_rate": 1.6001444875667034e-05,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 128,
+        "dropout_rate": 0.1998518517961364
+      },
+      "datetime_start": "2025-07-12T18:05:06.419960"
+    },
+    {
+      "number": 17,
+      "value": 0.6190971324120481,
+      "params": {
+        "learning_rate": 0.00015933156779668328,
+        "batch_size": 32,
+        "hidden_layers": 4,
+        "hidden_size": 128,
+        "dropout_rate": 0.2271176147109678
+      },
+      "datetime_start": "2025-07-12T18:05:06.568289"
+    },
+    {
+      "number": 18,
+      "value": 0.4769102712298928,
+      "params": {
+        "learning_rate": 4.7976009750469335e-05,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 128,
+        "dropout_rate": 0.17011965765384124
+      },
+      "datetime_start": "2025-07-12T18:05:06.774767"
+    },
+    {
+      "number": 19,
+      "value": 0.5823348713668275,
+      "params": {
+        "learning_rate": 0.0005087206119675855,
+        "batch_size": 16,
+        "hidden_layers": 5,
+        "hidden_size": 512,
+        "dropout_rate": 0.2376999119490256
+      },
+      "datetime_start": "2025-07-12T18:05:07.081781"
+    },
+    {
+      "number": 20,
+      "value": 0.46618857480555115,
+      "params": {
+        "learning_rate": 0.0013257348778685219,
+        "batch_size": 32,
+        "hidden_layers": 4,
+        "hidden_size": 128,
+        "dropout_rate": 0.3169759482658956
+      },
+      "datetime_start": "2025-07-12T18:05:07.424740"
+    },
+    {
+      "number": 21,
+      "value": 0.6330937617102925,
+      "params": {
+        "learning_rate": 0.0001585570357304985,
+        "batch_size": 32,
+        "hidden_layers": 4,
+        "hidden_size": 128,
+        "dropout_rate": 0.22590250144959487
+      },
+      "datetime_start": "2025-07-12T18:05:07.783090"
+    },
+    {
+      "number": 22,
+      "value": 0.6294040950753139,
+      "params": {
+        "learning_rate": 0.00021276258049163896,
+        "batch_size": 32,
+        "hidden_layers": 4,
+        "hidden_size": 128,
+        "dropout_rate": 0.2429943098030689
+      },
+      "datetime_start": "2025-07-12T18:05:08.051931"
+    },
+    {
+      "number": 23,
+      "value": 0.594084404064211,
+      "params": {
+        "learning_rate": 0.0003396734347806867,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 128,
+        "dropout_rate": 0.17569215526111015
+      },
+      "datetime_start": "2025-07-12T18:05:08.158883"
+    },
+    {
+      "number": 24,
+      "value": 0.5015459183733249,
+      "params": {
+        "learning_rate": 3.2989385081797896e-05,
+        "batch_size": 32,
+        "hidden_layers": 3,
+        "hidden_size": 128,
+        "dropout_rate": 0.28365103225125
+      },
+      "datetime_start": "2025-07-12T18:05:08.534810"
+    },
+    {
+      "number": 25,
+      "value": 0.6342833842629864,
+      "params": {
+        "learning_rate": 0.00013546557347928552,
+        "batch_size": 32,
+        "hidden_layers": 5,
+        "hidden_size": 128,
+        "dropout_rate": 0.2103791903404173
+      },
+      "datetime_start": "2025-07-12T18:05:08.909316"
+    },
+    {
+      "number": 26,
+      "value": 0.7074879839206931,
+      "params": {
+        "learning_rate": 0.00010531148013797775,
+        "batch_size": 32,
+        "hidden_layers": 5,
+        "hidden_size": 256,
+        "dropout_rate": 0.38115057898330934
+      },
+      "datetime_start": "2025-07-12T18:05:09.083693"
+    },
+    {
+      "number": 27,
+      "value": 0.5439312372571692,
+      "params": {
+        "learning_rate": 0.00044434711078394847,
+        "batch_size": 16,
+        "hidden_layers": 6,
+        "hidden_size": 256,
+        "dropout_rate": 0.37850724993132606
+      },
+      "datetime_start": "2025-07-12T18:05:09.373935"
+    },
+    {
+      "number": 28,
+      "value": 0.46987194858467024,
+      "params": {
+        "learning_rate": 0.0011140409283574761,
+        "batch_size": 128,
+        "hidden_layers": 5,
+        "hidden_size": 256,
+        "dropout_rate": 0.3712715925413333
+      },
+      "datetime_start": "2025-07-12T18:05:09.728614"
+    },
+    {
+      "number": 29,
+      "value": 0.5328733765510639,
+      "params": {
+        "learning_rate": 2.876674313118249e-05,
+        "batch_size": 64,
+        "hidden_layers": 3,
+        "hidden_size": 256,
+        "dropout_rate": 0.3632783121517833
+      },
+      "datetime_start": "2025-07-12T18:05:10.024470"
+    }
+  ]
+}

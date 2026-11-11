@@ -1,0 +1,27 @@
+{
+  "signInOptions": [
+    {
+      "provider": "google.com",
+      "scopes": ["email", "profile"]
+    },
+    {
+      "provider": "email",
+      "requireDisplayName": false
+    },
+    {
+      "provider": "password",
+      "requireDisplayName": false
+    }
+  ],
+  "allowDuplicateEmails": false,
+  "disableSignUp": false,
+  "displayName": "Coach Core AI",
+  "emailVerificationRequired": true,
+  "passwordPolicy": {
+    "minLength": 8,
+    "requireUppercase": true,
+    "requireLowercase": true,
+    "requireNumbers": true,
+    "requireSpecialCharacters": true
+  }
+} 

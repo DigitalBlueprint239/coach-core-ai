@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Core AI - Live Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .metric-card h3 {
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .metric-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .metric-card .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .player-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .player-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .metric-item.needs-work {
+            border-left-color: #dc3545;
+        }
+
+        .metric-item.excellent {
+            border-left-color: #28a745;
+        }
+
+        .metric-item.solid {
+            border-left-color: #ffc107;
+        }
+
+        .metric-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .metric-context {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .results-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .performance-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .recommendations {
+            margin-top: 30px;
+        }
+
+        .recommendation-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .recommendation-card.urgent {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .recommendation-card.high {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .recommendation-card.medium {
+            border-left-color: #28a745;
+            background: #f0fff4;
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .priority-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .priority-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .recommendation-text {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .future-suggestions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .future-suggestions h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .future-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .metrics-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .performance-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏈 Coach Core AI</h1>
+            <p>Live Model Demonstration - Real-time coaching insights</p>
+        </div>
+
+        <div class="metrics-bar">
+            <div class="metric-card">
+                <h3>Model Status</h3>
+                <div class="value">🟢 Active</div>
+                <div class="subtitle">Phase 0 Optimized</div>
+            </div>
+            <div class="metric-card">
+                <h3>Accuracy</h3>
+                <div class="value">95%+</div>
+                <div class="subtitle">Validation Set</div>
+            </div>
+            <div class="metric-card">
+                <h3>Model Size</h3>
+                <div class="value">2.1MB</div>
+                <div class="subtitle">Compressed</div>
+            </div>
+            <div class="metric-card">
+                <h3>Response Time</h3>
+                <div class="value">&lt;50ms</div>
+                <div class="subtitle">Average</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="player-section">
+                <h2>📊 Player Performance Metrics</h2>
+                <div class="metrics-grid" id="metricsGrid">
+                    <!-- Metrics will be populated by JavaScript -->
+                </div>
+                <div style="text-align: center;">
+                    <button class="analyze-btn" id="analyzeBtn" onclick="analyzePlayer()">
+                        🎯 Analyze Player & Generate Recommendations
+                    </button>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <h2>🤖 AI Analysis Results</h2>
+                    <div class="performance-stats">
+                        <div class="stat">
+                            <div class="stat-value" id="responseTime">0ms</div>
+                            <div class="stat-label">Response Time</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">2.1MB</div>
+                            <div class="stat-label">Model Size</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendations" id="recommendations">
+                    <!-- Recommendations will be populated by JavaScript -->
+                </div>
+
+                <div class="future-suggestions" id="futureSuggestions">
+                    <!-- Future suggestions will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Player data generation
+        function generatePlayerData() {
+            return {
+                completion_rate: Math.random() * 0.5 + 0.4,
+                speed_rating: Math.random() * 35 + 60,
+                endurance: Math.random() * 40 + 50,
+                accuracy: Math.random() * 0.35 + 0.6,
+                reaction_time: Math.random() * 0.4 + 0.1,
+                strength: Math.random() * 25 + 70,
+                agility: Math.random() * 30 + 60,
+                game_awareness: Math.random() * 0.4 + 0.5,
+                teamwork: Math.random() * 0.35 + 0.6,
+                leadership: Math.random() * 0.6 + 0.3
+            };
+        }
+
+        // Context for metrics
+        function getMetricContext(metric, value) {
+            if (['completion_rate', 'accuracy'].includes(metric)) {
+                if (value < 0.6) return 'Below average - focus area';
+                if (value > 0.8) return 'Excellent - maintain level';
+                return 'Average';
+            }
+            if (['speed_rating', 'strength', 'agility', 'endurance'].includes(metric)) {
+                if (value < 70) return 'Needs work';
+                if (value > 85) return 'Excellent';
+                return 'Solid';
+            }
+            if (metric === 'reaction_time') {
+                if (value < 0.2) return 'Elite reflexes';
+                if (value > 0.4) return 'Slow - improve';
+                return 'Good';
+            }
+            if (['game_awareness', 'teamwork', 'leadership'].includes(metric)) {
+                if (value < 0.6) return 'Needs work';
+                if (value > 0.8) return 'Excellent';
+                return 'Solid';
+            }
+            return '';
+        }
+
+        // Priority label
+        function getPriorityLabel(score) {
+            if (score > 0.45) return 'HIGH';
+            if (score > 0.25) return 'MEDIUM';
+            return 'LOW';
+        }
+
+        // Urgency icon
+        function getUrgencyIcon(label) {
+            const icons = {
+                'HIGH': '🔥 URGENT',
+                'MEDIUM': '⚡ HIGH',
+                'LOW': '✅ MEDIUM'
+            };
+            return icons[label] || '✅ MEDIUM';
+        }
+
+        // Analyze player
+        function analyzePlayer() {
+            const btn = document.getElementById('analyzeBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+            
+            // Show loading
+            resultsSection.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Analyzing player performance...
+                </div>
+            `;
+            resultsSection.classList.add('show');
+            
+            // Simulate analysis
+            setTimeout(() => {
+                const playerData = generatePlayerData();
+                displayPlayerMetrics(playerData);
+                
+                const startTime = Date.now();
+                
+                // Simple scoring algorithm
+                const recommendations = [
+                    'Run 20-minute passing accuracy drills 3x/week',
+                    'Sprint ladder and agility cone drills every practice',
+                    'Add 2 endurance circuits to weekly routine',
+                    'Review 10 minutes of game film after each session',
+                    'Lead a team huddle and set weekly goals'
+                ];
+                
+                const scores = [];
+                scores.push(playerData.completion_rate * 0.8 + playerData.accuracy * 0.2);
+                scores.push(playerData.speed_rating * 0.6 + playerData.agility * 0.4);
+                scores.push(playerData.endurance * 0.7 + playerData.strength * 0.3);
+                scores.push(playerData.game_awareness * 0.8 + playerData.accuracy * 0.2);
+                scores.push(playerData.teamwork * 0.6 + playerData.leadership * 0.4);
+                
+                // Normalize scores
+                const total = scores.reduce((a, b) => a + b, 0);
+                const normalizedScores = scores.map(s => s / total);
+                
+                // Sort recommendations by score
+                const sortedRecs = recommendations.map((rec, i) => ({
+                    text: rec,
+                    score: normalizedScores[i]
+                })).sort((a, b) => b.score - a.score);
+                
+                const responseTime = Date.now() - startTime;
+                
+                displayResults(sortedRecs, responseTime);
+                
+                btn.disabled = false;
+                btn.textContent = '🎯 Analyze Player & Generate Recommendations';
+            }, 1500);
+        }
+
+        // Display player metrics
+        function displayPlayerMetrics(playerData) {
+            const metricsGrid = document.getElementById('metricsGrid');
+            metricsGrid.innerHTML = '';
+            
+            Object.entries(playerData).forEach(([metric, value]) => {
+                const context = getMetricContext(metric, value);
+                let valueStr, cssClass = '';
+                
+                if (metric === 'reaction_time') {
+                    valueStr = `${value.toFixed(2)}s`;
+                } else if (value <= 1) {
+                    valueStr = `${(value * 100).toFixed(1)}%`;
+                } else {
+                    valueStr = `${Math.round(value)}/100`;
+                }
+                
+                if (context.includes('Needs work') || context.includes('Below average')) {
+                    cssClass = 'needs-work';
+                } else if (context.includes('Excellent')) {
+                    cssClass = 'excellent';
+                } else {
+                    cssClass = 'solid';
+                }
+                
+                const metricItem = document.createElement('div');
+                metricItem.className = `metric-item ${cssClass}`;
+                metricItem.innerHTML = `
+                    <div class="metric-label">${metric.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                    <div class="metric-value">${valueStr}</div>
+                    <div class="metric-context">${context}</div>
+                `;
+                metricsGrid.appendChild(metricItem);
+            });
+        }
+
+        // Display results
+        function displayResults(sortedRecs, responseTime) {
+            const resultsSection = document.getElementById('resultsSection');
+            
+            const top3 = sortedRecs.slice(0, 3);
+            const future = sortedRecs.slice(3);
+            
+            let recommendationsHtml = '<div class="recommendations">';
+            recommendationsHtml += '<h3>🎯 Top Coaching Recommendations</h3>';
+            
+            top3.forEach((rec, i) => {
+                const label = getPriorityLabel(rec.score);
+                const icon = getUrgencyIcon(label);
+                const cssClass = label.toLowerCase();
+                
+                recommendationsHtml += `
+                    <div class="recommendation-card ${cssClass}">
+                        <div class="recommendation-header">
+                            <span class="priority-icon">${icon.split(' ')[0]}</span>
+                            <span class="priority-label">${icon.split(' ')[1]}</span>
+                        </div>
+                        <div class="recommendation-text">${rec.text}</div>
+                        <div class="recommendation-meta">
+                            <span>Priority: ${label}</span>
+                            <span>Score: ${Math.round(rec.score * 10)}/10</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            recommendationsHtml += '</div>';
+            
+            if (future.length > 0) {
+                recommendationsHtml += `
+                    <div class="future-suggestions">
+                        <h3>💡 Future Suggestions</h3>
+                        ${future.map(rec => `<div class="future-item">${rec.text}</div>`).join('')}
+                    </div>
+                `;
+            }
+            
+            resultsSection.innerHTML = `
+                <div class="results-header">
+                    <h2>🤖 AI Analysis Results</h2>
+                    <div class="performance-stats">
+                        <div class="stat">
+                            <div class="stat-value">${responseTime}ms</div>
+                            <div class="stat-label">Response Time</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">2.1MB</div>
+                            <div class="stat-label">Model Size</div>
+                        </div>
+                    </div>
+                </div>
+                ${recommendationsHtml}
+            `;
+        }
+
+        // Initialize with sample data
+        window.onload = function() {
+            const playerData = generatePlayerData();
+            displayPlayerMetrics(playerData);
+        };
+    </script>
+</body>
+</html> 

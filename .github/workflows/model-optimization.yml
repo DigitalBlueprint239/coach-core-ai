@@ -1,0 +1,257 @@
+name: Model Optimization Pipeline
+
+on:
+  push:
+    paths:
+      - 'models/**'
+      - 'model_registry/**'
+      - '.github/workflows/model-optimization.yml'
+  pull_request:
+    paths:
+      - 'models/**'
+      - 'model_registry/**'
+
+jobs:
+  model-optimization:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: Install dependencies
+      run: |
+        pip install torch torchvision numpy pandas pyyaml streamlit plotly
+        pip install firebase-admin google-cloud-firestore
+        
+    - name: Setup model optimization environment
+      run: |
+        chmod +x setup_model_optimization.sh
+        ./setup_model_optimization.sh
+        
+    - name: Load baseline metrics
+      id: baseline
+      run: |
+        echo "Loading baseline performance metrics..."
+        if [ -f "model_registry/baseline_metrics.json" ]; then
+          echo "baseline_exists=true" >> $GITHUB_OUTPUT
+          echo "Baseline metrics found"
+        else
+          echo "baseline_exists=false" >> $GITHUB_OUTPUT
+          echo "No baseline metrics found - will create from first run"
+        fi
+        
+    - name: Run model optimization
+      id: optimization
+      run: |
+        echo "Starting model optimization..."
+        python quick_start_optimization.py
+        
+        # Capture optimization results
+        if [ -f "model_registry/optimization_results.json" ]; then
+          echo "optimization_success=true" >> $GITHUB_OUTPUT
+          echo "Optimization completed successfully"
+        else
+          echo "optimization_success=false" >> $GITHUB_OUTPUT
+          echo "Optimization failed"
+          exit 1
+        fi
+        
+    - name: Validate model performance
+      id: validation
+      run: |
+        echo "Validating model performance against baseline..."
+        
+        # Load optimization results
+        python -c "
+        import json
+        import sys
+        
+        try:
+            with open('model_registry/optimization_results.json', 'r') as f:
+                results = json.load(f)
+            
+            # Extract performance metrics
+            avg_improvement = results.get('average_improvement', 0)
+            avg_compression = results.get('average_compression', 1)
+            
+            print(f'Average improvement: {avg_improvement:.1f}%')
+            print(f'Average compression: {avg_compression:.1f}x')
+            
+            # Check against baseline if it exists
+            if '${{ steps.baseline.outputs.baseline_exists }}' == 'true':
+                with open('model_registry/baseline_metrics.json', 'r') as f:
+                    baseline = json.load(f)
+                
+                baseline_accuracy = baseline.get('accuracy', 0.5)
+                baseline_size = baseline.get('model_size_mb', 10)
+                
+                # Fail if performance is worse than baseline
+                if avg_improvement < 0:
+                    print('❌ Performance regression detected!')
+                    sys.exit(1)
+                
+                if avg_compression < 1.5:
+                    print('❌ Insufficient model compression!')
+                    sys.exit(1)
+                    
+                print('✅ Performance validation passed')
+            else:
+                # Create baseline from current results
+                baseline_data = {
+                    'accuracy': 0.5 + (avg_improvement / 100),
+                    'model_size_mb': 10 / avg_compression,
+                    'created_at': '$(date -u +"%Y-%m-%dT%H:%M:%SZ")'
+                }
+                
+                with open('model_registry/baseline_metrics.json', 'w') as f:
+                    json.dump(baseline_data, f, indent=2)
+                    
+                print('✅ Baseline metrics created')
+                
+        except Exception as e:
+            print(f'❌ Validation failed: {e}')
+            sys.exit(1)
+        "
+        
+    - name: Archive optimized models
+      uses: actions/upload-artifact@v3
+      with:
+        name: optimized-models
+        path: |
+          model_registry/models/*_optimized.pt
+          model_registry/reports/
+          model_registry/configs/
+        retention-days: 30
+        
+    - name: Update Firestore schema version
+      if: steps.validation.outcome == 'success'
+      run: |
+        echo "Updating Firestore schema version..."
+        python -c "
+        import firebase_admin
+        from firebase_admin import credentials, firestore
+        import json
+        from datetime import datetime
+        
+        # Initialize Firebase (you'll need to set up credentials)
+        try:
+            cred = credentials.Certificate('firebase-credentials.json')
+            firebase_admin.initialize_app(cred)
+        except:
+            print('Firebase credentials not available - skipping schema update')
+            exit(0)
+            
+        db = firestore.client()
+        
+        # Update model version and schema
+        config_ref = db.collection('config').document('model_version')
+        config_ref.set({
+            'current_model_tag': 'v1.4',
+            'schema_version': '3.1',
+            'last_updated': datetime.now().isoformat(),
+            'optimization_run_id': '${{ github.run_id }}',
+            'performance_improvement': '${{ steps.validation.outputs.avg_improvement }}%'
+        })
+        
+        print('✅ Firestore schema updated')
+        "
+        
+    - name: Generate benchmark report
+      if: steps.validation.outcome == 'success'
+      run: |
+        echo "Generating benchmark report..."
+        python -c "
+        import pandas as pd
+        from datetime import datetime
+        
+        # Create benchmark data
+        benchmark_data = {
+            'timestamp': [datetime.now().isoformat()],
+            'run_id': ['${{ github.run_id }}'],
+            'avg_improvement': ['${{ steps.validation.outputs.avg_improvement }}%'],
+            'avg_compression': ['${{ steps.validation.outputs.avg_compression }}x'],
+            'models_optimized': ['${{ steps.optimization.outputs.models_count }}'],
+            'status': ['success']
+        }
+        
+        df = pd.DataFrame(benchmark_data)
+        
+        # Append to existing benchmarks or create new file
+        try:
+            existing_df = pd.read_csv('reports/benchmarks.csv')
+            updated_df = pd.concat([existing_df, df], ignore_index=True)
+        except FileNotFoundError:
+            updated_df = df
+            
+        updated_df.to_csv('reports/benchmarks.csv', index=False)
+        print('✅ Benchmark report generated')
+        "
+        
+    - name: Notify on significant improvement
+      if: steps.validation.outcome == 'success'
+      run: |
+        echo "Checking for significant improvements..."
+        python -c "
+        import json
+        
+        with open('model_registry/optimization_results.json', 'r') as f:
+            results = json.load(f)
+            
+        avg_improvement = results.get('average_improvement', 0)
+        
+        if avg_improvement > 2.0:
+            print('🚀 Significant improvement detected!')
+            print(f'Performance improvement: {avg_improvement:.1f}%')
+            # Here you could add Slack/Discord notifications
+        else:
+            print('Improvement within expected range')
+        "
+        
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          
+          let comment = '## 🤖 Model Optimization Results\n\n';
+          
+          try {
+            const results = JSON.parse(fs.readFileSync('model_registry/optimization_results.json', 'utf8'));
+            
+            comment += `- ✅ **Optimization Status**: Success\n`;
+            comment += `- 📈 **Average Improvement**: ${results.average_improvement?.toFixed(1)}%\n`;
+            comment += `- 💾 **Average Compression**: ${results.average_compression?.toFixed(1)}x\n`;
+            comment += `- 🔧 **Models Optimized**: ${results.models_optimized || 'N/A'}\n\n`;
+            
+            if (results.average_improvement > 2.0) {
+              comment += '🚀 **Significant improvement detected!**\n\n';
+            }
+            
+            comment += '📊 [View detailed dashboard](https://your-dashboard-url.com)\n';
+            
+          } catch (error) {
+            comment += '❌ **Optimization failed**\n\n';
+            comment += 'Check the logs for details.';
+          }
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          }); 

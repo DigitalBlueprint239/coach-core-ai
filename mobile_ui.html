@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Core AI - Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F9FAFB;
+            color: #1F2937;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: #6B7280;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #1E3A8A;
+        }
+
+        .nav-item i {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #F97316;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+            z-index: 999;
+        }
+
+        /* Screen Container */
+        .screen {
+            display: none;
+            padding: 16px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        /* Dashboard Widgets */
+        .widget-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .widget-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1E3A8A;
+            margin-bottom: 4px;
+        }
+
+        .widget-label {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Schedule */
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .schedule-time {
+            background: #1E3A8A;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 12px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .schedule-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .schedule-details p {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .player-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #6B7280;
+        }
+
+        .player-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .player-position {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #1E3A8A;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #1E40AF;
+        }
+
+        .btn-secondary {
+            background: #F3F4F6;
+            color: #1F2937;
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-item {
+            background: white;
+            border-radius: 8px;
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .action-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-item i {
+            font-size: 24px;
+            color: #1E3A8A;
+            margin-bottom: 8px;
+        }
+
+        .action-label {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        /* Future Features */
+        .feature-showcase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .feature-progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            height: 8px;
+            margin-bottom: 12px;
+        }
+
+        .feature-progress-bar {
+            background: #10B981;
+            height: 100%;
+            border-radius: 4px;
+            width: 75%;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .widget-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen.active {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Dashboard Screen -->
+    <div id="dashboard" class="screen active">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div class="notification-badge">
+                <i class="fas fa-bell" style="font-size: 20px; color: #6B7280;"></i>
+                <div class="badge">3</div>
+            </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Today's Schedule</h3>
+                <i class="fas fa-calendar" style="color: #1E3A8A;"></i>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-time">3:00 PM</div>
+                <div class="schedule-details">
+                    <h4>Team Practice</h4>
+                    <p>Field 2 - Passing Drills</p>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-time">5:30 PM</div>
+                <div class="schedule-details">
+                    <h4>Strategy Meeting</h4>
+                    <p>Conference Room A</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Snapshot -->
+        <div class="widget-grid">
+            <div class="widget">
+                <div class="widget-value">85%</div>
+                <div class="widget-label">Attendance</div>
+            </div>
+            <div class="widget">
+                <div class="widget-value">12-3</div>
+                <div class="widget-label">Record</div>
+            </div>
+            <div class="widget">
+                <div class="widget-value">92%</div>
+                <div class="widget-label">Completion</div>
+            </div>
+            <div class="widget">
+                <div class="widget-value">4.2</div>
+                <div class="widget-label">Avg Rating</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-item" onclick="showScreen('team')">
+                <i class="fas fa-users"></i>
+                <div class="action-label">Team</div>
+            </div>
+            <div class="action-item" onclick="showScreen('planning')">
+                <i class="fas fa-clipboard-list"></i>
+                <div class="action-label">Plan</div>
+            </div>
+            <div class="action-item" onclick="showScreen('schedule')">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="action-label">Schedule</div>
+            </div>
+            <div class="action-item" onclick="showScreen('analytics')">
+                <i class="fas fa-chart-line"></i>
+                <div class="action-label">Analytics</div>
+            </div>
+        </div>
+
+        <!-- Future Features Showcase -->
+        <div class="feature-showcase">
+            <div class="feature-title">🚀 What's Next</div>
+            <div class="feature-description">AI Drill Customizer - Coming Soon</div>
+            <div class="feature-progress">
+                <div class="feature-progress-bar"></div>
+            </div>
+            <div style="font-size: 12px; opacity: 0.8;">75% Complete</div>
+        </div>
+
+        <!-- Weather Widget -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Weather</h3>
+                <i class="fas fa-sun" style="color: #F97316;"></i>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 32px; font-weight: bold; color: #1E3A8A;">72°F</div>
+                <div style="color: #6B7280;">Partly Cloudy - Perfect for practice!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Management Screen -->
+    <div id="team" class="screen">
+        <div class="header">
+            <h1>Team Management</h1>
+            <i class="fas fa-plus" style="font-size: 20px; color: #1E3A8A;"></i>
+        </div>
+
+        <div class="team-grid">
+            <div class="player-card">
+                <div class="player-avatar">JD</div>
+                <div class="player-name">John Doe</div>
+                <div class="player-position">QB</div>
+            </div>
+            <div class="player-card">
+                <div class="player-avatar">MS</div>
+                <div class="player-name">Mike Smith</div>
+                <div class="player-position">RB</div>
+            </div>
+            <div class="player-card">
+                <div class="player-avatar">AJ</div>
+                <div class="player-name">Alex Johnson</div>
+                <div class="player-position">WR</div>
+            </div>
+            <div class="player-card">
+                <div class="player-avatar">TW</div>
+                <div class="player-name">Tom Wilson</div>
+                <div class="player-position">LB</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Planning Screen -->
+    <div id="planning" class="screen">
+        <div class="header">
+            <h1>Session Planning</h1>
+            <i class="fas fa-save" style="font-size: 20px; color: #1E3A8A;"></i>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Today's Session</h3>
+                <span style="background: #10B981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">Active</span>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Passing Drills</div>
+                <div style="color: #6B7280; margin-bottom: 12px;">Focus on accuracy and timing</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #1E3A8A; font-weight: 600;">45 min remaining</span>
+                    <button class="btn">End Session</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Drill Library</h3>
+                <i class="fas fa-search" style="color: #6B7280;"></i>
+            </div>
+            <div style="display: grid; gap: 12px;">
+                <div style="padding: 12px; background: #F3F4F6; border-radius: 6px;">
+                    <div style="font-weight: 600; margin-bottom: 4px;">Route Running</div>
+                    <div style="font-size: 14px; color: #6B7280;">15 min • Intermediate</div>
+                </div>
+                <div style="padding: 12px; background: #F3F4F6; border-radius: 6px;">
+                    <div style="font-weight: 600; margin-bottom: 4px;">Tackling Practice</div>
+                    <div style="font-size: 14px; color: #6B7280;">20 min • Advanced</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Screen -->
+    <div id="schedule" class="screen">
+        <div class="header">
+            <h1>Schedule</h1>
+            <i class="fas fa-plus" style="font-size: 20px; color: #1E3A8A;"></i>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">This Week</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-secondary" style="padding: 8px 12px; font-size: 14px;">Week</button>
+                    <button class="btn" style="padding: 8px 12px; font-size: 14px;">Month</button>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-time">Mon</div>
+                <div class="schedule-details">
+                    <h4>Team Practice</h4>
+                    <p>3:00 PM - 5:00 PM</p>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-time">Wed</div>
+                <div class="schedule-details">
+                    <h4>Game vs Eagles</h4>
+                    <p>7:00 PM - Away</p>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-time">Fri</div>
+                <div class="schedule-details">
+                    <h4>Film Review</h4>
+                    <p>4:00 PM - Conference Room</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Screen -->
+    <div id="analytics" class="screen">
+        <div class="header">
+            <h1>Analytics</h1>
+            <i class="fas fa-download" style="font-size: 20px; color: #1E3A8A;"></i>
+        </div>
+
+        <div class="widget-grid">
+            <div class="widget">
+                <div class="widget-value">+12%</div>
+                <div class="widget-label">Win Rate</div>
+            </div>
+            <div class="widget">
+                <div class="widget-value">89%</div>
+                <div class="widget-label">Pass Accuracy</div>
+            </div>
+            <div class="widget">
+                <div class="widget-value">-5%</div>
+                <div class="widget-label">Injuries</div>
+            </div>
+            <div class="widget">
+                <div class="widget-value">95%</div>
+                <div class="widget-label">Attendance</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Top Performers</h3>
+            </div>
+            <div style="display: grid; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                    <div>
+                        <div style="font-weight: 600;">John Doe</div>
+                        <div style="font-size: 14px; color: #6B7280;">QB</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; color: #10B981;">4.8</div>
+                        <div style="font-size: 14px; color: #6B7280;">Rating</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                    <div>
+                        <div style="font-weight: 600;">Mike Smith</div>
+                        <div style="font-size: 14px; color: #6B7280;">RB</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; color: #10B981;">4.6</div>
+                        <div style="font-size: 14px; color: #6B7280;">Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showScreen('dashboard')">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showScreen('team')">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showScreen('planning')">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Plan</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showScreen('schedule')">
+            <i class="fas fa-calendar"></i>
+            <span>Schedule</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showScreen('analytics')">
+            <i class="fas fa-chart-line"></i>
+            <span>More</span>
+        </a>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="floating-action" onclick="startSession()">
+        <i class="fas fa-play"></i>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate corresponding nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            const screenMap = {
+                'dashboard': 0,
+                'team': 1,
+                'planning': 2,
+                'schedule': 3,
+                'analytics': 4
+            };
+            
+            if (screenMap[screenId] !== undefined) {
+                navItems[screenMap[screenId]].classList.add('active');
+            }
+        }
+
+        function startSession() {
+            showScreen('planning');
+            // Add session start logic here
+        }
+
+        // Add touch gestures for swipe navigation
+        let startX = 0;
+        let endX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = startX - endX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                const currentScreen = document.querySelector('.screen.active').id;
+                const screens = ['dashboard', 'team', 'planning', 'schedule', 'analytics'];
+                const currentIndex = screens.indexOf(currentScreen);
+                
+                if (diff > 0 && currentIndex < screens.length - 1) {
+                    // Swipe left - next screen
+                    showScreen(screens[currentIndex + 1]);
+                } else if (diff < 0 && currentIndex > 0) {
+                    // Swipe right - previous screen
+                    showScreen(screens[currentIndex - 1]);
+                }
+            }
+        }
+
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate real-time updates
+            setInterval(() => {
+                const widgets = document.querySelectorAll('.widget-value');
+                widgets.forEach(widget => {
+                    if (widget.textContent.includes('%')) {
+                        const currentValue = parseInt(widget.textContent);
+                        const newValue = Math.max(70, Math.min(100, currentValue + (Math.random() - 0.5) * 2));
+                        widget.textContent = Math.round(newValue) + '%';
+                    }
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html> 
