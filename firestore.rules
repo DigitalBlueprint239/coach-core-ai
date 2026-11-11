@@ -92,7 +92,11 @@ service cloud.firestore {
         isTeamOwner(request.resource.data.teamId) &&
         request.resource.data.createdBy == request.auth.uid &&
         // Canonical v3 plays start at revision 1 (optimistic concurrency, T-109).
-        (request.resource.data.get('schemaVersion', 0) != 3 || request.resource.data.get('revision', 0) == 1) &&
+        // Client-side writes can only create draft v3 plays. Publication requires
+        // a separate reviewed server-side process, not a coach-editable JSON flag.
+        (request.resource.data.get('schemaVersion', 0) != 3 ||
+          (request.resource.data.get('revision', 0) == 1 &&
+           request.resource.data.get('status', '') == 'draft')) &&
         // Canonical v4 plays start at revision 1, are well formed, and are written together with revision copy 1.
         (request.resource.data.get('schemaVersion', 0) != 4 ||
           (request.resource.data.revision == 1 && isWellFormedPlayV4(request.resource.data) &&
@@ -109,7 +113,11 @@ service cloud.firestore {
         // v3 drafts must move exactly one revision forward. Older plays keep
         // their existing update semantics without acquiring v3-only rules.
         (resource.data.get('schemaVersion', 0) != 3 ||
-          request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1) &&
+          // A published record cannot be changed by a browser client. Only a
+          // reviewed backend authorizing process may publish; drafts stay drafts.
+          (resource.data.get('status', '') == 'draft' &&
+           request.resource.data.get('status', '') == 'draft' &&
+           request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1)) &&
         // v4 plays move exactly one revision forward, stay well formed, keep their provenance, and every saved
         // revision is written together with its immutable copy.
         (resource.data.get('schemaVersion', 0) != 4 ||
@@ -118,9 +126,12 @@ service cloud.firestore {
             isWellFormedPlayV4(request.resource.data) &&
             hasRevisionCopy(playId, request.resource.data)));
 
-      // Only the coach can delete plays
-      // Denied: "Only the coach can delete plays."
-      allow delete: if isTeamOwner(resource.data.teamId);
+      // Draft and legacy plays can be deleted by their team owner, but published
+      // v3 records are immutable to browser clients (including deletion).
+      // Publication/retirement requires a separately reviewed server-side workflow.
+      allow delete: if isTeamOwner(resource.data.teamId) &&
+        (resource.data.get('schemaVersion', 0) != 3 ||
+         resource.data.get('status', '') != 'published');
 
       // Revision history of a v4 play: one immutable copy per saved revision, coach only.
       match /revisions/{revisionId} {
@@ -132,6 +143,7 @@ service cloud.firestore {
           request.resource.data.savedBy == request.auth.uid &&
           request.resource.data.revision is int &&
           revisionId == string(request.resource.data.revision) &&
+          request.resource.data.keys().hasOnly(['teamId', 'playId', 'revision', 'savedBy', 'savedAt', 'play']) &&
           copiesPlay(request.resource.data, getAfter(/databases/$(database)/documents/plays/$(playId)).data);
 
         // History is never edited. The coach may remove copies (pruning old ones, or deleting the play).
@@ -153,6 +165,7 @@ service cloud.firestore {
         request.resource.data.playId is string &&
         request.resource.data.revision is int &&
         snapshotId == request.resource.data.playId + '_r' + string(request.resource.data.revision) &&
+        request.resource.data.keys().hasOnly(['schemaVersion', 'kind', 'teamId', 'playId', 'revision', 'publishedBy', 'publishedAt', 'play']) &&
         get(/databases/$(database)/documents/plays/$(request.resource.data.playId)).data.schemaVersion == 4 &&
         copiesPlay(request.resource.data, get(/databases/$(database)/documents/plays/$(request.resource.data.playId)).data);
 
@@ -189,24 +202,40 @@ service cloud.firestore {
         getAfter(/databases/$(database)/documents/plays/$(playId)/revisions/$(string(play.revision))).data, play);
     }
 
-    // A revision copy or published snapshot must be a faithful copy of the play revision it names.
+    // A revision copy or published snapshot must hold the COMPLETE play revision it names: every field of the
+    // stored play (name, notes, tags, read, ball, profiles, formation, players, assignments, defense, concept,
+    // provenance, unresolved, level, identity and anything added later) must be present and equal. The only
+    // difference allowed is `updatedAt`, a bookkeeping timestamp on the play document that is not part of the play.
+    // Map.diff reports added, removed and changed keys, so this is whole-document equality in one expression with
+    // no extra document reads.
     function copiesPlay(copy, play) {
       return copy.teamId == play.teamId &&
         copy.revision == play.revision &&
-        copy.play.schemaVersion == 4 &&
-        copy.play.teamId == play.teamId &&
-        copy.play.revision == play.revision &&
-        copy.play.name == play.name &&
-        copy.play.players == play.players &&
-        copy.play.assignments == play.assignments &&
-        copy.play.formation == play.formation &&
-        copy.play.get('defense', null) == play.get('defense', null);
+        copy.play is map &&
+        !('updatedAt' in copy.play) &&
+        play.diff(copy.play).affectedKeys().hasOnly(['updatedAt']);
     }
 
     // User profiles (written by the earlier app build): each user reads and writes only their own; admins read.
+    // Client-managed profile fields are NOT an authority for admin/verified roles,
+    // subscription entitlements or billing. Authoritative state is server-assigned.
+    function reservedProfileKeys() {
+      return [
+        'admin', 'isAdmin', 'adminRole', 'claims', 'customClaims',
+        'permissions', 'roles', 'role', 'accessLevel', 'entitlements',
+        'coachCoreVerified', 'verified', 'approved', 'subscriptionTier',
+        'billing', 'paymentStatus'
+      ];
+    }
+
     match /users/{userId} {
       allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated() && request.auth.uid == userId &&
+        !request.resource.data.keys().hasAny(reservedProfileKeys());
+      allow update: if isAuthenticated() && request.auth.uid == userId &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(reservedProfileKeys());
+      // A profile deletion never deletes Firebase Auth or legally required audit data.
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
     }
 
     // Waitlist sign-ups from the landing page: anyone may add one valid entry; only admins read; nobody edits.
@@ -226,9 +255,14 @@ service cloud.firestore {
 
     function hasOnlyAllowedWaitlistKeys(data) {
       return data.keys().hasOnly([
-        'email', 'source', 'createdAt', 'timestamp', 'status', 'name', 'role', 'referringCoach',
-        'coachingChallenge', 'ipAddress', 'userAgent', 'batchProcessed', 'batchTimestamp', 'metadata',
-        'immediateAccess', 'utmSource', 'utmMedium', 'utmCampaign', 'utmId', 'utmTerm', 'utmContent', 'notes'
+        // Visitor-writable marketing fields only. Administrative approval, processing,
+        // IP attribution and access states must be recorded by trusted server code.
+        'email', 'source', 'createdAt', 'timestamp', 'name', 'role', 'referringCoach',
+        'coachingChallenge', 'utmSource', 'utmMedium', 'utmCampaign', 'utmId', 'utmTerm', 'utmContent',
+        // Temporary legacy compatibility: the live sign-up form reportedly sends
+        // status='pending'. Only this non-privileged value may come from a client.
+        // Migrate to server-assigned status before removing this exception.
+        'status'
       ]);
     }
 
@@ -242,7 +276,7 @@ service cloud.firestore {
         (hasCreatedAt || hasTimestamp) &&
         (!hasCreatedAt || data.createdAt is timestamp) &&
         (!hasTimestamp || data.timestamp is timestamp) &&
-        (!('status' in data) || data.status == null || (data.status is string && data.status.size() <= 50)) &&
+        (!('status' in data) || data.status == 'pending') &&
         (!('name' in data) || data.name == null || (data.name is string && data.name.size() <= 200)) &&
         (!('role' in data) || data.role == null || (data.role is string && data.role.size() <= 100)) &&
         (!('referringCoach' in data) || data.referringCoach == null || (data.referringCoach is string && data.referringCoach.size() <= 200)) &&

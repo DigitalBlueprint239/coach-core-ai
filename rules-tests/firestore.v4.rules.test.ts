@@ -260,3 +260,108 @@ describe('published play snapshots', () => {
     await assertSucceeds(getDoc(doc(alice(), 'publishedPlays/v4a_r2')));
   });
 });
+
+// Every authoritative field of a play. A copy that differs in any one of them must be refused.
+const ALTERATIONS: Array<[string, Record<string, unknown>]> = [
+  ['name', { name: 'Renamed in the copy' }],
+  ['notes', { notes: 'A note the coach never wrote' }],
+  ['tags', { tags: ['goal line'] }],
+  ['read progression', { read: [{ focus: 'corner', text: 'Throw it every time' }] }],
+  ['ball location', { ball: { hash: 'left' } }],
+  ['rule profile', { ruleProfileId: 'eight-player@1' }],
+  ['field profile', { fieldProfileId: 'other-field@1' }],
+  ['coordinate profile', { coordinateProfile: 'pixels' }],
+  ['level', { level: 'varsity' }],
+  ['formation', { formation: { name: 'Trips', personnel: '10', strength: 'left' } }],
+  ['player position', { players: [{ id: 'p1', role: 'QB', at: { x: 0, y: -5 }, onLine: false }, { id: 'p2', role: 'X', at: { x: -17, y: 0 }, onLine: true }] }],
+  ['player role', { players: [{ id: 'p1', role: 'QB', at: { x: 0, y: -5 }, onLine: false }, { id: 'p2', role: 'Z', at: { x: -18, y: 0 }, onLine: true }] }],
+  ['player sequence', { playerSeq: 3 }],
+  ['route geometry', { assignments: [{ kind: 'route', playerId: 'p2', points: [{ x: 0, y: 5 }, { x: 1, y: 4 }] }] }],
+  ['route template', { assignments: [{ kind: 'route', playerId: 'p2', points: [{ x: 0, y: 5 }, { x: 0, y: 4 }], template: { routeId: 'hitch', side: 'left', interpretation: 'cc-interp@1' } }] }],
+  ['concept', { concept: { id: 'flood', family: 'pass' } }],
+  ['defensive look', { defense: { coverageId: 'cover-3', alignedBy: 'cc-align@1', defenders: [{ id: 'd1', role: 'FS', at: { x: 4, y: 13 }, deep: true }] } }],
+  ['provenance', { provenance: { origin: 'duplicated', sourceId: 'x', sourceRevision: 1 } }],
+  ['unresolved', { unresolved: [{ source: { slot: 'weak-3' }, reason: 'forged' }] }],
+  ['creator', { createdBy: 'bob' }],
+  ['unknown extra field', { coachOnlySecret: 'smuggled' }],
+  ['bookkeeping timestamp inside the copy', { updatedAt: new Date() }],
+];
+const REMOVALS = ['notes', 'tags', 'read', 'ball', 'provenance', 'unresolved', 'level', 'createdBy', 'concept', 'defense'] as const;
+const without = (play: Play, key: string): Play => {
+  const copy: Record<string, unknown> = { ...play };
+  delete copy[key];
+  return copy as Play;
+};
+/** A stored play as the app writes it: with optional parts and the bookkeeping timestamp. */
+const fullPlay = (revision: number) => playV4(revision, {
+  updatedAt: new Date(), notes: 'Vs cover 3', tags: ['red zone'], read: [{ focus: 'corner', text: 'High to low' }],
+  concept: { id: 'smash', family: 'pass' },
+  defense: { coverageId: 'cover-3', alignedBy: 'cc-align@1', defenders: [{ id: 'd1', role: 'FS', at: { x: 0, y: 13 }, deep: true }] },
+});
+/** The copy the app writes for a stored play: everything except the bookkeeping timestamp. */
+const faithful = (play: Play): Play => without(play, 'updatedAt');
+
+describe('a revision copy must equal the complete play', () => {
+  it('the app-shaped save (play with updatedAt, copy without) succeeds', async () => {
+    const play = fullPlay(1);
+    await assertSucceeds(saveV4(alice(), 'full1', play, copyOf('full1', faithful(play))));
+    const next = fullPlay(4);
+    await assertSucceeds(saveV4(alice(), 'v4a', next, copyOf('v4a', faithful(next))));
+  });
+
+  for (const [what, over] of ALTERATIONS) {
+    it(`refuses a copy with an altered ${what}`, async () => {
+      const play = fullPlay(1);
+      await assertFails(saveV4(alice(), 'alt', play, copyOf('alt', { ...faithful(play), ...over } as Play)));
+      const next = fullPlay(4);
+      await assertFails(saveV4(alice(), 'v4a', next, copyOf('v4a', { ...faithful(next), ...over } as Play)));
+    });
+  }
+
+  for (const key of REMOVALS) {
+    it(`refuses a copy that drops ${key}`, async () => {
+      const play = fullPlay(1);
+      await assertFails(saveV4(alice(), 'drop', play, copyOf('drop', without(faithful(play), key))));
+    });
+  }
+
+  it('refuses a copy envelope with unknown fields or a non-map play', async () => {
+    const play = fullPlay(1);
+    await assertFails(saveV4(alice(), 'env1', play, copyOf('env1', faithful(play), { note: 'extra' })));
+    await assertFails(saveV4(alice(), 'env2', play, copyOf('env2', faithful(play), { play: 'not a play' })));
+    await assertFails(saveV4(alice(), 'env3', play, copyOf('env3', faithful(play), { play: null })));
+  });
+});
+
+describe('a published snapshot must equal the complete stored revision', () => {
+  beforeEach(async () => {
+    await env.withSecurityRulesDisabled(async ctx => {
+      await setDoc(doc(ctx.firestore(), 'plays/full'), fullPlay(5));
+    });
+  });
+
+  it('a faithful snapshot of an app-shaped play succeeds', async () => {
+    await assertSucceeds(setDoc(doc(alice(), 'publishedPlays/full_r5'), snapshot('full', faithful(fullPlay(5)))));
+  });
+
+  for (const [what, over] of ALTERATIONS) {
+    it(`refuses a snapshot with an altered ${what}`, async () => {
+      // Seed and snapshot must share one timestamp-free base so only the alteration differs.
+      const base = faithful(fullPlay(5));
+      await env.withSecurityRulesDisabled(async ctx => { await setDoc(doc(ctx.firestore(), 'plays/full'), base); });
+      await assertFails(setDoc(doc(alice(), 'publishedPlays/full_r5'), snapshot('full', { ...base, ...over } as Play)));
+    });
+  }
+
+  for (const key of REMOVALS) {
+    it(`refuses a snapshot that drops ${key}`, async () => {
+      const base = faithful(fullPlay(5));
+      await env.withSecurityRulesDisabled(async ctx => { await setDoc(doc(ctx.firestore(), 'plays/full'), base); });
+      await assertFails(setDoc(doc(alice(), 'publishedPlays/full_r5'), snapshot('full', without(base, key))));
+    });
+  }
+
+  it('refuses a snapshot envelope with unknown fields', async () => {
+    await assertFails(setDoc(doc(alice(), 'publishedPlays/full_r5'), snapshot('full', faithful(fullPlay(5)), { audience: 'public' })));
+  });
+});

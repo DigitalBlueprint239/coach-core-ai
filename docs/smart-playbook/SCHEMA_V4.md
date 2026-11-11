@@ -73,7 +73,9 @@ alone. The 2D sheet, print card, playback and any future 3D view must consume th
 ## 3. Persistence contract
 
 - **Atomic history.** Every save commits the play and `revisions/{n}` together. The rules refuse a v4 play write
-  whose matching copy is not in the same commit, and refuse a copy that differs from the play.
+  whose matching copy is not in the same commit. A copy must equal the **complete** play: the rules compare the
+  whole document with `Map.diff` and allow only the play's `updatedAt` bookkeeping timestamp to differ, so a new
+  field is protected automatically. Copy and snapshot envelopes accept only their known keys.
 - **Optimistic concurrency.** An update must carry `revision = stored + 1`. The store checks in a transaction and
   throws `PlayConflict` without writing; the rules enforce the same thing for any client.
 - **Immutable history.** Revision copies cannot be updated. The coach can delete them (pruning, play deletion).
@@ -98,7 +100,7 @@ alone. The 2D sheet, print card, playback and any future 3D view must consume th
 | 300-play playbook with full history | about 30 MB |
 | Firestore document limit | 1 MiB (a revision copy or snapshot holds one play, so at most ~64 KB) |
 | Writes per save | 2, or 3 when pruning (transaction limit is 500) |
-| Rule document reads per save | 3 (limit 20 for a multi-document commit) |
+| Rule document reads per save | 3 distinct documents: team, play, revision copy (limit 20 for a multi-document commit; 10 for a single write). Publishing reads 2. Whole-play equality adds none. |
 
 On the free plan (1 GiB) that is room for roughly 30 full playbooks with maximum history. If that becomes a
 constraint, lower `REVISION_RETENTION`; published snapshots are unaffected.
@@ -163,7 +165,7 @@ migration, history, deletion and publishing against an in-memory store.
 | Package 5 timeline and 2D playback | `resolveGeometry` | Not started. |
 | Package 5 advisory | Must send a v4 play, never mutate one | Not started. |
 | 3D experiment (#95) | Must be ported to `resolveGeometry`; its own pixel model is not canonical | Not started. |
-| Security PRs #123 / #128 | Also edit `firestore.rules` (plays `status` guard). v4 has no `status`, so the changes are compatible but will conflict textually; whichever merges second needs a rebase and a rules-test run. | Open. |
+| Security PRs #122 / #123 / #128 | Merged into this branch (2026-11-11): owner-scoped Storage rules, v3 draft-only publishing guard, profile and waitlist hardening. This PR now supersedes #128 for the combined ruleset. | Integrated; both emulator suites run on this PR. |
 | Production | No v4 write reaches production until the rules in this branch are released through the approved rules gate. | Blocked on owner approval. |
 
 ## 7. Not in this change
