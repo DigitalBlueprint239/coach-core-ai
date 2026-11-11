@@ -1,57 +1,90 @@
 rules_version = '2';
+
+// Coach Core Storage baseline: team-private content belongs to its actual owner.
+// Do not broaden to "any signed-in account". Team/player/student media is private.
+// Storage rules reference Cloud Firestore's DEFAULT database to check document ownership.
+// Enabling cross-product rules requires the Firebase Rules Firestore service agent IAM grant.
+// No client-visible public link / shared video authorization is granted by these rules.
 service firebase.storage {
   match /b/{bucket}/o {
-    // Helper function to check if user is authenticated
-    function isAuthenticated() {
+    function signedIn() {
       return request.auth != null;
     }
-    
-    // Helper function to check file size (max 10MB)
-    function isValidFileSize() {
-      return request.resource.size < 10 * 1024 * 1024;
+
+    function ownsTeam(teamId) {
+      return signedIn() &&
+        firestore.get(/databases/(default)/documents/teams/$(teamId)).data.ownerId == request.auth.uid;
     }
-    
-    // Helper function to check file type
-    function isValidFileType() {
-      return request.resource.contentType.matches('image/.*') ||
-             request.resource.contentType.matches('application/pdf') ||
-             request.resource.contentType.matches('text/.*');
+
+    function ownsPlay(playId) {
+      return signedIn() &&
+        ownsTeam(firestore.get(/databases/(default)/documents/plays/$(playId)).data.teamId);
     }
-    
-    // User profile images
+
+    function ownsPracticePlan(planId) {
+      return signedIn() &&
+        ownsTeam(firestore.get(/databases/(default)/documents/practicePlans/$(planId)).data.teamId);
+    }
+
+    // Published canonical plays are immutable in Firestore. Their associated
+    // Storage media must not remain owner-editable, or the published play could
+    // be silently tampered with through an authorized file overwrite/delete.
+    // This performs exactly two distinct cross-service reads (play + team).
+    function canModifyPlayMedia(playId) {
+      let play = firestore.get(/databases/(default)/documents/plays/$(playId)).data;
+      return signedIn() && ownsTeam(play.teamId) &&
+        (play.get('schemaVersion', 0) != 3 || play.get('status', '') == 'draft');
+    }
+
+    // These are maximum accepted metadata sizes and declared MIME types, not malware/content
+    // scanning. SVG (active/script-capable), video, executable files and archives are not enabled.
+    function safeImage(maxBytes) {
+      return request.resource != null &&
+        request.resource.size > 0 &&
+        request.resource.size <= maxBytes &&
+        request.resource.contentType.matches('image/(jpeg|png|webp)');
+    }
+
+    function safeDocument(maxBytes) {
+      return request.resource != null &&
+        request.resource.size > 0 &&
+        request.resource.size <= maxBytes &&
+        request.resource.contentType.matches('(image/(jpeg|png|webp)|application/pdf|text/plain)');
+    }
+
+    // Profile images: exact owner only. No global authenticated read of another user.
     match /users/{userId}/profile/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   request.auth.uid == userId &&
-                   isValidFileSize() &&
-                   isValidFileType();
+      allow get: if signedIn() && request.auth.uid == userId;
+      allow create, update: if signedIn() && request.auth.uid == userId &&
+        safeImage(5 * 1024 * 1024);
+      allow delete: if signedIn() && request.auth.uid == userId;
+      // No list: knowledge of a folder name is not permission to enumerate its files.
     }
-    
-    // Team documents
+
+    // Team-owned documents. Membership alone is not edit authorization.
     match /teams/{teamId}/documents/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   isValidFileSize() &&
-                   isValidFileType();
+      allow get: if ownsTeam(teamId);
+      allow create, update: if ownsTeam(teamId) && safeDocument(10 * 1024 * 1024);
+      allow delete: if ownsTeam(teamId);
     }
-    
-    // Practice plan attachments
+
+    // Check BOTH associated practice plan and its owning team. Two Firestore document
+    // accesses at most per request, within the Storage rules limit.
     match /practice-plans/{planId}/attachments/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   isValidFileSize() &&
-                   isValidFileType();
+      allow get: if ownsPracticePlan(planId);
+      allow create, update: if ownsPracticePlan(planId) && safeDocument(10 * 1024 * 1024);
+      allow delete: if ownsPracticePlan(planId);
     }
-    
-    // Play diagrams and media
+
+    // Play diagrams / static media. Film-video sharing needs its own reviewed model.
     match /plays/{playId}/media/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-                   isValidFileSize() &&
-                   isValidFileType();
+      allow get: if ownsPlay(playId);
+      allow create, update: if canModifyPlayMedia(playId) && safeImage(10 * 1024 * 1024);
+      allow delete: if canModifyPlayMedia(playId);
     }
-    
-    // Default deny all other access
+
+    // Deny everything else by default, including unknown folders, broad lists,
+    // and any legacy paths not covered by explicitly reviewed ownership checks.
     match /{allPaths=**} {
       allow read, write: if false;
     }
