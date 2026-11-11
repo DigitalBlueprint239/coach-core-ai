@@ -39,3 +39,13 @@ export { LINE_SLOTS, isLineSlot } from './model';
 export type { LineSlot } from './model';
 export { resolveInsideZone, INSIDE_ZONE_CONVENTION } from './runGame';
 export type { BlockAssignment, InsideZoneResolution, RunSide, TimelineEvent } from './runGame';
+export {
+  COORDINATE_PROFILE, DEFAULT_FIELD_PROFILE_ID, FIELD_PROFILES, LIMITS as PLAY_LIMITS_V4, MIGRATION_ID, PLAY_SCHEMA_VERSION_V4,
+  createPlayDocV4, duplicatePlayDocV4, formationOf, migratePlayToV4, playBytes, readPlayDocumentV4, resolveGeometry,
+  validatePlayDocV4,
+} from './playDocumentV4';
+export type {
+  AssignmentV4, DefenderV4, FieldProfile, PlayDocV4, PlayPlayerV4, PlayerId, ProvenanceV4, ReadPlayV4, ResolvedGeometry,
+  ResolvedRoute, RouteTemplateRef, UnresolvedAssignment,
+} from './playDocumentV4';
+export { INTERPRETATION_V1 } from './interpretations/v1';

@@ -92,7 +92,11 @@ service cloud.firestore {
         isTeamOwner(request.resource.data.teamId) &&
         request.resource.data.createdBy == request.auth.uid &&
         // Canonical v3 plays start at revision 1 (optimistic concurrency, T-109).
-        (request.resource.data.get('schemaVersion', 0) != 3 || request.resource.data.get('revision', 0) == 1);
+        (request.resource.data.get('schemaVersion', 0) != 3 || request.resource.data.get('revision', 0) == 1) &&
+        // Canonical v4 plays start at revision 1, are well formed, and are written together with revision copy 1.
+        (request.resource.data.get('schemaVersion', 0) != 4 ||
+          (request.resource.data.revision == 1 && isWellFormedPlayV4(request.resource.data) &&
+            hasRevisionCopy(playId, request.resource.data)));
 
       // Only the coach can update plays; a doc cannot be moved to another team or re-attributed
       // Denied: "Only the coach can modify plays."
@@ -105,11 +109,98 @@ service cloud.firestore {
         // v3 drafts must move exactly one revision forward. Older plays keep
         // their existing update semantics without acquiring v3-only rules.
         (resource.data.get('schemaVersion', 0) != 3 ||
-          request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1);
+          request.resource.data.get('revision', 0) == resource.data.get('revision', 0) + 1) &&
+        // v4 plays move exactly one revision forward, stay well formed, keep their provenance, and every saved
+        // revision is written together with its immutable copy.
+        (resource.data.get('schemaVersion', 0) != 4 ||
+          (request.resource.data.revision == resource.data.revision + 1 &&
+            request.resource.data.provenance == resource.data.provenance &&
+            isWellFormedPlayV4(request.resource.data) &&
+            hasRevisionCopy(playId, request.resource.data)));
 
       // Only the coach can delete plays
       // Denied: "Only the coach can delete plays."
       allow delete: if isTeamOwner(resource.data.teamId);
+
+      // Revision history of a v4 play: one immutable copy per saved revision, coach only.
+      match /revisions/{revisionId} {
+        allow read: if isTeamOwner(resource.data.teamId);
+
+        // A copy can only be written in the same commit as the play revision it copies, and must match it.
+        allow create: if isTeamOwner(request.resource.data.teamId) &&
+          request.resource.data.playId == playId &&
+          request.resource.data.savedBy == request.auth.uid &&
+          request.resource.data.revision is int &&
+          revisionId == string(request.resource.data.revision) &&
+          copiesPlay(request.resource.data, getAfter(/databases/$(database)/documents/plays/$(playId)).data);
+
+        // History is never edited. The coach may remove copies (pruning old ones, or deleting the play).
+        allow update: if false;
+        allow delete: if isTeamOwner(resource.data.teamId);
+      }
+    }
+
+    // Published play snapshots: an immutable copy of one saved revision of a v4 play.
+    // Coach only for now: no member, player or public access until the access model has been reviewed.
+    match /publishedPlays/{snapshotId} {
+      allow read: if isTeamOwner(resource.data.teamId);
+
+      // The id is derived from the play and revision, so a revision can be published once and never replaced.
+      allow create: if isTeamOwner(request.resource.data.teamId) &&
+        request.resource.data.publishedBy == request.auth.uid &&
+        request.resource.data.schemaVersion == 4 &&
+        request.resource.data.kind == 'published-play' &&
+        request.resource.data.playId is string &&
+        request.resource.data.revision is int &&
+        snapshotId == request.resource.data.playId + '_r' + string(request.resource.data.revision) &&
+        get(/databases/$(database)/documents/plays/$(request.resource.data.playId)).data.schemaVersion == 4 &&
+        copiesPlay(request.resource.data, get(/databases/$(database)/documents/plays/$(request.resource.data.playId)).data);
+
+      allow update: if false;
+      allow delete: if isTeamOwner(resource.data.teamId);
+    }
+
+    // Structural checks for a v4 play. The app validates the full document (football-core validatePlayDocV4);
+    // these rules hold the properties that must be true even for a hostile client.
+    function isWellFormedPlayV4(data) {
+      return data.schemaVersion == 4 &&
+        data.revision is int &&
+        data.coordinateProfile == 'cc-yards-v1' &&
+        data.fieldProfileId is string && data.fieldProfileId.size() <= 40 &&
+        data.ruleProfileId is string && data.ruleProfileId.size() <= 40 &&
+        data.name is string && data.name.size() <= 120 &&
+        data.notes is string && data.notes.size() <= 5000 &&
+        data.players is list && data.players.size() >= 1 && data.players.size() <= 22 &&
+        data.playerSeq is int && data.playerSeq >= data.players.size() &&
+        data.assignments is list && data.assignments.size() <= 44 &&
+        data.unresolved is list && data.unresolved.size() <= 44 &&
+        data.read is list && data.read.size() <= 12 &&
+        data.tags is list && data.tags.size() <= 20 &&
+        data.provenance is map &&
+        data.ball is map &&
+        data.formation is map &&
+        // Publishing is a separate snapshot; a play cannot declare itself published.
+        !('status' in data);
+    }
+
+    // True when this write is committed together with the immutable copy of the revision it creates.
+    function hasRevisionCopy(playId, play) {
+      return copiesPlay(
+        getAfter(/databases/$(database)/documents/plays/$(playId)/revisions/$(string(play.revision))).data, play);
+    }
+
+    // A revision copy or published snapshot must be a faithful copy of the play revision it names.
+    function copiesPlay(copy, play) {
+      return copy.teamId == play.teamId &&
+        copy.revision == play.revision &&
+        copy.play.schemaVersion == 4 &&
+        copy.play.teamId == play.teamId &&
+        copy.play.revision == play.revision &&
+        copy.play.name == play.name &&
+        copy.play.players == play.players &&
+        copy.play.assignments == play.assignments &&
+        copy.play.formation == play.formation &&
+        copy.play.get('defense', null) == play.get('defense', null);
     }
 
     // User profiles (written by the earlier app build): each user reads and writes only their own; admins read.
