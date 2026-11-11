@@ -49,3 +49,9 @@ export type {
   ResolvedRoute, RouteTemplateRef, UnresolvedAssignment,
 } from './playDocumentV4';
 export { INTERPRETATION_V1 } from './interpretations/v1';
+export {
+  DEFENSE_ALIGNMENT_VERSION, ROUTE_LIBRARY_VERSION, addRoutePoint, assignRoute, clearPlayer, describeAssignment, flipPlay, jobOf,
+  motionOf, movePlayer, moveRoutePoint, outsideOf, playFromConceptV4, removeJob, removeRoutePoint, renamePlay, routeOf, setBall,
+  setBlock, setDefense, setLabel, setMotion, setNotes, setOnLine, setProtect, setRole, setRouteDepth, setRoutePoints, setTags,
+  snapYd, templatePoints,
+} from './playEditsV4';

@@ -9,10 +9,11 @@ import SmartPlaybook from './SmartPlaybook/SmartPlaybook';
 import ErrorBoundary from './common/ErrorBoundary';
 import { LegacyOfflineDataNotice } from './LegacyOfflineDataNotice';
 import { SignInScreen } from './auth/SignInScreen';
-import { isContentReviewEnabled, isPlaybookV2Enabled } from '../features/playbook2/flags';
+import { isContentReviewEnabled, isPlaybookV2Enabled, isPlaybookV4Enabled } from '../features/playbook2/flags';
 
 // The new Smart Playbook (behind REACT_APP_ENABLE_PLAYBOOK_V2) loads only when the flag is on.
 const PlaybookScreen = lazy(() => import('../features/playbook2/PlaybookScreen'));
+const PlaybookV4Screen = lazy(() => import('../features/playbook2/v4/PlaybookV4Screen'));
 // The owner's content review queue (behind REACT_APP_ENABLE_CONTENT_REVIEW; dev and preview builds only).
 const ContentReview = lazy(() => import('../features/playbook2/review/ContentReview'));
 // TODO: Fix import path for AnalyticsDashboard if file exists
@@ -208,7 +209,11 @@ const Dashboard: React.FC = () => {
         {activeTab === 'practice' && <PracticePlanner focusPlay={focusForCurrentTeam} onOpenPlaybook={() => setActiveTab('playbook')} />}
         {activeTab === 'playbook' && (
           <ErrorBoundary>
-            {isPlaybookV2Enabled() ? (
+            {isPlaybookV4Enabled() ? (
+              <Suspense fallback={<LoadingSpinner text="Loading your playbook..." />}>
+                <PlaybookV4Screen />
+              </Suspense>
+            ) : isPlaybookV2Enabled() ? (
               <Suspense fallback={<LoadingSpinner text="Loading your playbook..." />}>
                 <PlaybookScreen onPlanPractice={focus => {
                   if (!focusBelongsToTeam(focus, currentTeam?.id)) return;
