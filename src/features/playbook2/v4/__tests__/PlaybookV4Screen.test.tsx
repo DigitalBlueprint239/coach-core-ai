@@ -387,9 +387,10 @@ describe('saving and reopening', () => {
     expect(JSON.stringify(stored('legacy-1'))).toBe(original);
     expect(stored('play-1')!.play.provenance).toMatchObject({ origin: 'migrated', sourceId: 'legacy-1', fromSchemaVersion: 2 });
     expect(routes().map(r => r.getAttribute('d'))).toEqual(drawn);
-    // Older plays cannot be deleted from here.
+    // Both are listed. Only the new v4 copy can be deleted from here; the older original cannot.
     await userEvent.click(button('All plays'));
-    expect(screen.queryByRole('button', { name: 'Delete Old Smash' })).not.toBeInTheDocument();
+    expect(await screen.findAllByRole('button', { name: 'Open Old Smash' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: 'Delete Old Smash' })).toHaveLength(1);
   });
 });
 
