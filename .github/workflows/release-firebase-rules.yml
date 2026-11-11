@@ -1,0 +1,19 @@
+name: Release Firebase security rules
+
+# INERT STUB. The real workflow lives on recovery/coach-core-mvp-2026. GitHub only offers "Run workflow" for
+# files that exist on the default branch, so this file exists to make the real one startable: choose
+# "Run workflow", then select the branch recovery/coach-core-mvp-2026. Run from any other branch, this does
+# nothing. It has no environment, no secrets and no cloud identity. Do not add any.
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  not-here:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse to run from this branch
+        run: |
+          echo "::error::Start this workflow from the branch recovery/coach-core-mvp-2026. This copy does nothing."
+          exit 1
