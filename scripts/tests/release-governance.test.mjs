@@ -126,6 +126,11 @@ test('rules release workflow is manual, keyless, tested first and never touches 
   assert.ok(rules.includes("inputs.target == 'production' && 'production' || 'firebase-staging'"));
   assert.ok(rules.includes('persist-credentials: false'));
   assert.ok(rules.indexOf('assert-rules-release.mjs') < rules.indexOf('google-github-actions/auth@v3'));
+  // Each surface runs its own emulator suite, before sign-in and before the release command.
+  assert.match(rules, /'firestore:rules'\) npm run test:rules ;;/);
+  assert.match(rules, /'storage'\) npm run test:storage ;;/);
+  assert.match(rules, /\*\) .*exit 1 ;;/);
+  assert.ok(rules.indexOf('npm run test:storage') < rules.indexOf('google-github-actions/auth@v3'));
   assert.ok(rules.indexOf('npm run test:rules') < rules.indexOf('firebase deploy'));
   assert.ok(rules.includes('firebase deploy --only "$SURFACE" --project "$RULES_PROJECT_ID"'));
   assert.ok(!rules.includes('secrets.'));
@@ -148,4 +153,15 @@ test('the stored production key is confined to the manual, owner-gated productio
   assert.deepEqual(users, ['deploy-production.yml']);
   assert.equal(production.split('FIREBASE_SERVICE_ACCOUNT_COACH_CORE_AI').length - 1, 1);
   assert.ok(production.includes("if: ${{ vars.PROD_WIF_PROVIDER == '' }}"));
+});
+
+test('manual release workflows fail closed when started from any branch but recovery', () => {
+  // GitHub only offers "Run workflow" for files that exist on the default branch (master today). The strategy in
+  // docs/security/PRODUCTION_RELEASE_GOVERNANCE_2026-11-10.md section 5 puts inert stubs with these names on
+  // master; the real jobs must therefore refuse to do anything unless GITHUB_REF is the protected branch.
+  for (const ref of ['refs/heads/master', 'refs/heads/main', 'refs/heads/feature/x', 'refs/tags/v1']) {
+    assert.notEqual(prodPreflight({ GITHUB_REF: ref }).status, 0, ref);
+    assert.notEqual(rulesPreflight({ GITHUB_REF: ref }).status, 0, ref);
+  }
+  assert.ok(production.indexOf('assert-firebase-deploy-env.mjs production') < production.indexOf('google-github-actions/auth@v3'));
 });

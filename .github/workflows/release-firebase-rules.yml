@@ -76,8 +76,20 @@ jobs:
       - name: Install
         run: npm ci --no-audit --no-fund
 
-      - name: Run the rules tests for this exact commit against the emulator
-        run: npm run test:rules
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # The suite that covers the surface being released, at this exact commit. A commit that has no suite for the
+      # selected surface cannot be released: the script lookup fails and the job stops before sign-in.
+      - name: Run the emulator tests for the selected surface
+        run: |
+          case "$SURFACE" in
+            'firestore:rules') npm run test:rules ;;
+            'storage') npm run test:storage ;;
+            *) echo "::error::No emulator suite is defined for surface $SURFACE."; exit 1 ;;
+          esac
 
       - name: Record the release request
         run: |

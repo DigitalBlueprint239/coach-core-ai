@@ -96,3 +96,38 @@ Each batch is a separate decision. Exact resources are restated before any actio
 
 Not proposed: any Functions deploy. The deployed waitlist and e-mail functions come from the old `main`
 branch; deploying `functions/` from recovery would delete them.
+
+## 5. Starting a manual release while `master` is the default branch
+
+GitHub lists a manually started workflow, and accepts a request to start it, only when a workflow file with
+that path exists on the default branch. `deploy-production.yml` and `release-firebase-rules.yml` live on
+`recovery/coach-core-mvp-2026`; `master` is the default branch, so today neither can be started at all.
+
+Options considered:
+
+| Option | Assessment |
+|---|---|
+| Make the recovery branch (or a renamed `main`) the default branch | The correct long-term fix. It is a repository-wide change (PR targets, Netlify, clone default) and needs its own approval. |
+| Copy the real workflows to `master` | Rejected. `master` is unprotected; the copy could be edited to deploy anything. |
+| **Inert stubs on `master`** | Recommended now. |
+
+The stub strategy: `master` gets two files with the same paths and names whose only job prints "start this from
+recovery/coach-core-mvp-2026" and fails. They reference no environment, secret or cloud identity. Once they
+exist, the owner chooses **Run workflow**, selects the branch `recovery/coach-core-mvp-2026`, and GitHub runs the
+workflow file from that branch. Protection does not depend on the stubs:
+
+- the `production` environment only admits the recovery branch and waits for the owner's approval;
+- both preflights refuse any `GITHUB_REF` other than the recovery branch (tested);
+- keyless identities are to be bound to the recovery ref, the workflow path and the environment, so a run of
+  anything else cannot obtain a token;
+- editing a stub on `master` gains nothing, because a `master` run fails all three checks above.
+
+The stubs are prepared as a separate draft PR into `master`. Merging it is an owner decision and deploys
+nothing.
+
+## 6. Rules-release tests
+
+`release-firebase-rules.yml` runs the emulator suite for the surface being released, at the commit being
+released: `npm run test:rules` for `firestore:rules`, `npm run test:storage` for `storage`. The Storage suite is
+introduced by the combined rules work (PR #132, which now contains #128); a commit without it cannot release
+Storage rules.
