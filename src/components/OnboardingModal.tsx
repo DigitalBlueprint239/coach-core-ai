@@ -1,46 +1,37 @@
 // src/components/OnboardingModal.tsx
 import React, { useState } from 'react';
-import { LoadingState } from './LoadingStates';
 
+// Every step describes something that works today. Features that are not built are named once, as not built.
+// src/components/__tests__/OnboardingModal.test.tsx fails if this copy starts promising them again.
 const ONBOARDING_STEPS = [
   {
-    title: 'Welcome to Coach Core AI!',
-    description: 'Your all-in-one sports coaching platform. Let’s get you started with a quick walkthrough.',
+    title: 'Welcome to Coach Core AI',
+    description: 'This is an early version of a football coaching tool. Here is what you can do with it today.',
     illustration: '🏆'
   },
   {
-    title: 'Team Management',
-    description: 'Create or join a team to collaborate with coaches and players. Manage rosters, attendance, and more.',
+    title: 'Your team',
+    description: 'Create a team to hold your plays and practice plans. A team is private to the coach who creates it.',
     illustration: '👥'
   },
   {
     title: 'Practice Planner',
-    description: 'Use the AI-powered planner to generate, customize, and save practice plans for your team.',
+    description: 'Write a practice plan for your team and save it.',
     illustration: '📋'
   },
   {
     title: 'Smart Playbook',
-    description: 'Design plays with drag-and-drop, get AI suggestions, and share with your team. Touch-optimized for mobile!',
+    description: 'Lay out formations and plays on a football field and save them to your team’s playbook.',
     illustration: '🏈'
   },
   {
-    title: 'Analytics & Feedback',
-    description: 'Track player progress, attendance, and get actionable insights from your data.',
-    illustration: '📈'
+    title: 'Not available yet',
+    description: 'AI advice, analytics, sharing plays with other coaches or players, and offline use are not built yet. They will be announced here when they are.',
+    illustration: '🚧'
   },
   {
-    title: 'AI Assistant',
-    description: 'Ask the AI for coaching advice, practice ideas, or game strategy. Get instant, personalized suggestions.',
-    illustration: '🤖'
-  },
-  {
-    title: 'Offline & PWA',
-    description: 'Install the app for offline access, push notifications, and a native-like experience on any device.',
-    illustration: '📱'
-  },
-  {
-    title: 'Ready to Get Started?',
-    description: 'You can start with your own team or try Demo Mode to explore all features with sample data.',
+    title: 'Ready to get started?',
+    description: 'Start by creating your team.',
     illustration: '🚀'
   }
 ];
@@ -48,7 +39,8 @@ const ONBOARDING_STEPS = [
 interface OnboardingModalProps {
   open: boolean;
   onClose: () => void;
-  onDemoMode: () => void;
+  /** Accepted for compatibility; there is no demo mode, so nothing offers it. */
+  onDemoMode?: () => void;
   onComplete?: () => void;
   className?: string;
 }
@@ -56,12 +48,10 @@ interface OnboardingModalProps {
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   open,
   onClose,
-  onDemoMode,
   onComplete,
   className = ''
 }) => {
   const [step, setStep] = useState(0);
-  const [loadingDemo, setLoadingDemo] = useState(false);
 
   if (!open) return null;
 
@@ -78,16 +68,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     if (step > 0) setStep(step - 1);
   };
 
-  const handleDemo = async () => {
-    setLoadingDemo(true);
-    try {
-      await onDemoMode();
-      onClose();
-    } finally {
-      setLoadingDemo(false);
-    }
-  };
-
   const { title, description, illustration } = ONBOARDING_STEPS[step];
 
   return (
@@ -98,30 +78,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         <p className="onboarding-description">{description}</p>
 
         <div className="onboarding-actions">
-          {step === ONBOARDING_STEPS.length - 1 ? (
-            <>
-              <button
-                className="onboarding-btn demo"
-                onClick={handleDemo}
-                disabled={loadingDemo}
-              >
-                {loadingDemo ? <LoadingState type="spinner" size="small" text="Loading Demo..." /> : 'Try Demo Mode'}
-              </button>
-              <button
-                className="onboarding-btn primary"
-                onClick={handleNext}
-              >
-                Start Using Coach Core
-              </button>
-            </>
-          ) : (
-            <button
-              className="onboarding-btn primary"
-              onClick={handleNext}
-            >
-              {step === ONBOARDING_STEPS.length - 2 ? 'Finish' : 'Next'}
-            </button>
-          )}
+          <button
+            className="onboarding-btn primary"
+            onClick={handleNext}
+          >
+            {step === ONBOARDING_STEPS.length - 1 ? 'Start using Coach Core' : 'Next'}
+          </button>
           {step > 0 && (
             <button
               className="onboarding-btn secondary"
@@ -189,14 +151,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         .onboarding-btn.secondary {
           background: #f3f4f6;
           color: #374151;
-        }
-        .onboarding-btn.demo {
-          background: #fbbf24;
-          color: #111827;
-        }
-        .onboarding-btn:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
         }
         .onboarding-close {
           position: absolute;
