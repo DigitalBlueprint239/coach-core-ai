@@ -1,0 +1,194 @@
+/* Smart Playbook v4 editor. Extends the approved "Sheet on the desk" theme (theme.css); scoped under .pb4. */
+
+/* Touch: the page can still scroll over the sheet; only players and route handles capture the finger. */
+.pb4 .pb4-sheet {
+  touch-action: pan-y;
+}
+.pb4 .pb4-touch {
+  touch-action: none;
+  cursor: grab;
+}
+.pb4 .pb4-static .pb4-touch {
+  cursor: default;
+}
+.pb4 .pb4-handle:focus-visible rect {
+  stroke-width: 4;
+}
+
+.pb4-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--pb-surface);
+  border-bottom: 1px solid var(--pb-border);
+}
+.pb4-toolbar .pb4-name {
+  flex: 1 1 14rem;
+  min-width: 10rem;
+}
+.pb4-spacer {
+  flex: 1 1 auto;
+}
+.pb4-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--pb-surface);
+  border: 1px solid var(--pb-border);
+  border-radius: var(--pb-radius, 10px);
+}
+.pb4-panel + .pb4-panel {
+  margin-top: 1rem;
+}
+.pb4-panel h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.pb4-row {
+  display: grid;
+  gap: 0.25rem;
+}
+.pb4-row label,
+.pb4-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.pb4-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.pb4-check {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 44px;
+}
+.pb4-check input {
+  width: 22px;
+  height: 22px;
+}
+.pb4-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+.pb4-list button {
+  width: 100%;
+  text-align: left;
+}
+.pb4-danger {
+  color: var(--pb-danger, #b42318);
+  border-color: var(--pb-danger, #b42318);
+}
+.pb4-library {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+.pb4-library-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: end;
+}
+.pb4-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pb4-playcard {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--pb-surface);
+  border: 1px solid var(--pb-border);
+  border-radius: var(--pb-radius, 10px);
+}
+.pb4-playcard h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.pb4-print {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .pb4 .pb2-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Printing: only the play card, on white, at page width. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .pb4-print,
+  .pb4-print * {
+    visibility: visible;
+  }
+  .pb4-print {
+    display: block;
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    padding: 0;
+    background: #ffffff;
+    color: #000000;
+    --pb-sheet: #ffffff;
+    --pb-line: #9aa4b2;
+    --pb-line-soft: #d5dbe3;
+    --pb-line-solid: #111827;
+    --pb-signal: #111827;
+  }
+  .pb4-card-title {
+    margin: 0;
+    font-size: 20pt;
+  }
+  .pb4-card-meta {
+    margin: 2pt 0 8pt;
+    font-size: 10pt;
+  }
+  .pb4-print .pb2-sheet {
+    width: 100%;
+    max-height: 55vh;
+  }
+  .pb4-card-table {
+    width: 100%;
+    margin-top: 8pt;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+  .pb4-card-table caption {
+    text-align: left;
+    font-weight: 700;
+  }
+  .pb4-card-table th,
+  .pb4-card-table td {
+    padding: 3pt 6pt;
+    text-align: left;
+    border-bottom: 0.5pt solid #9aa4b2;
+  }
+  .pb4-card-sub {
+    margin: 8pt 0 2pt;
+    font-size: 11pt;
+  }
+  .pb4-card-notes,
+  .pb4-card-read {
+    margin: 0;
+    font-size: 10pt;
+  }
+  @page {
+    margin: 12mm;
+  }
+}

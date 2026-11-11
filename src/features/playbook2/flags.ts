@@ -10,3 +10,12 @@ export function isPlaybookV2Enabled(): boolean {
 export function isContentReviewEnabled(): boolean {
   return import.meta.env.REACT_APP_ENABLE_CONTENT_REVIEW === 'true';
 }
+
+/**
+ * The editor built on the canonical v4 play (stable player ids, stored geometry, revision history). It takes the
+ * Smart Playbook tab when on. Needs the v4 Firestore rules to be live in the same project, so it stays off in
+ * production until those rules are released.
+ */
+export function isPlaybookV4Enabled(): boolean {
+  return import.meta.env.REACT_APP_ENABLE_PLAYBOOK_V4 === 'true';
+}
