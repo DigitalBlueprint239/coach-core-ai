@@ -27,6 +27,16 @@ if (projectId && ![projectId + '.firebasestorage.app', projectId + '.appspot.com
 }
 if (mode === 'production') {
   if (projectId !== productionProject) problems.push('Production must use the explicitly approved production project.');
+  // Keyless production deploys are optional until provisioned, but a half-configured or foreign identity fails closed.
+  const prodProvider = get('PROD_WIF_PROVIDER');
+  const prodAccount = get('PROD_DEPLOY_SERVICE_ACCOUNT');
+  if (Boolean(prodProvider) !== Boolean(prodAccount)) problems.push('PROD_WIF_PROVIDER and PROD_DEPLOY_SERVICE_ACCOUNT must be set together.');
+  if (prodProvider && !/^projects\/[0-9]+\/locations\/global\/workloadIdentityPools\/[^/]+\/providers\/[^/]+$/.test(prodProvider)) {
+    problems.push('Invalid production WIF provider resource name.');
+  }
+  if (prodAccount && !prodAccount.endsWith('@' + productionProject + '.iam.gserviceaccount.com')) {
+    problems.push('Production deployment identity must be a service account in the production project.');
+  }
 } else {
   const stagingId = required('STAGING_FIREBASE_PROJECT_ID');
   if (projectId === productionProject || stagingId === productionProject) problems.push('Staging and previews must never use production.');
@@ -52,6 +62,13 @@ if (mode === 'staging' && get('GITHUB_ACTIONS') === 'true') {
   if (get('GITHUB_REPOSITORY_OWNER_ID') !== '206572958') problems.push('Unexpected GitHub owner ID.');
   if (get('GITHUB_REF') !== 'refs/heads/recovery/coach-core-mvp-2026') problems.push('Staging deploys require the protected recovery branch.');
   if (!['push', 'workflow_dispatch'].includes(get('GITHUB_EVENT_NAME'))) problems.push('Staging deploy event is not allowed.');
+}
+// A production release is a manual run of the protected recovery branch in this exact repository.
+if (mode === 'production' && get('GITHUB_ACTIONS') === 'true') {
+  if (get('GITHUB_REPOSITORY_ID') !== '1018633922') problems.push('Unexpected GitHub repository ID.');
+  if (get('GITHUB_REPOSITORY_OWNER_ID') !== '206572958') problems.push('Unexpected GitHub owner ID.');
+  if (get('GITHUB_REF') !== 'refs/heads/recovery/coach-core-mvp-2026') problems.push('Production releases must be started from the protected recovery branch.');
+  if (get('GITHUB_EVENT_NAME') !== 'workflow_dispatch') problems.push('Production releases are manual only.');
 }
 if (problems.length) {
   for (const problem of problems) console.error('firebase-isolation: ' + problem);

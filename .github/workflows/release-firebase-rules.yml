@@ -1,0 +1,100 @@
+name: Release Firebase security rules
+
+# Releases ONE rules surface to ONE Firebase project, by hand, from a commit already on the recovery branch.
+# It never deploys Hosting, Functions or indexes, and it has no stored key: it only works after the owner
+# provisions a keyless rules identity for the chosen target (see
+# docs/security/PRODUCTION_RELEASE_GOVERNANCE_2026-11-10.md). Until then every run stops at the preflight.
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Firebase project to release to'
+        required: true
+        type: choice
+        options: [staging, production]
+      surface:
+        description: 'Rules surface (one per run)'
+        required: true
+        type: choice
+        options: ['firestore:rules', 'storage']
+      ref:
+        description: 'Full commit SHA on recovery/coach-core-mvp-2026'
+        required: true
+        type: string
+      confirm:
+        description: 'Type release-rules-to-<target> (for example release-rules-to-staging)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release-firebase-rules-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  release-rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # `production` requires the owner's approval before the job starts.
+    environment: ${{ inputs.target == 'production' && 'production' || 'firebase-staging' }}
+    env:
+      TARGET: ${{ inputs.target }}
+      SURFACE: ${{ inputs.surface }}
+      REF: ${{ inputs.ref }}
+      CONFIRM: ${{ inputs.confirm }}
+      RULES_PROJECT_ID: ${{ inputs.target == 'production' && 'coach-core-ai' || vars.STAGING_FIREBASE_PROJECT_ID }}
+      RULES_WIF_PROVIDER: ${{ inputs.target == 'production' && vars.PROD_WIF_PROVIDER || vars.STAGING_WIF_PROVIDER }}
+      RULES_SERVICE_ACCOUNT: ${{ inputs.target == 'production' && vars.PROD_RULES_SERVICE_ACCOUNT || vars.STAGING_RULES_SERVICE_ACCOUNT }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check the commit is on the recovery branch
+        run: |
+          if ! printf '%s' "$REF" | grep -Eq '^[0-9a-f]{40}$'; then
+            echo "::error::ref must be a full 40-character commit SHA."; exit 1
+          fi
+          git fetch --no-tags origin recovery/coach-core-mvp-2026
+          if ! git merge-base --is-ancestor "$REF" origin/recovery/coach-core-mvp-2026; then
+            echo "::error::$REF is not on recovery/coach-core-mvp-2026. Only merged rules can be released."; exit 1
+          fi
+
+      - name: Verify the request BEFORE credentials
+        run: node scripts/assert-rules-release.mjs
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Run the rules tests for this exact commit against the emulator
+        run: npm run test:rules
+
+      - name: Record the release request
+        run: |
+          {
+            echo "### Firebase rules release"
+            echo "- Target: $TARGET ($RULES_PROJECT_ID)"
+            echo "- Surface: $SURFACE"
+            echo "- Commit: \`$REF\`"
+            echo "- Requested by: $GITHUB_ACTOR (run $GITHUB_RUN_ID, attempt $GITHUB_RUN_ATTEMPT)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Sign in to Google Cloud without a stored key
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ env.RULES_PROJECT_ID }}
+          workload_identity_provider: ${{ env.RULES_WIF_PROVIDER }}
+          service_account: ${{ env.RULES_SERVICE_ACCOUNT }}
+
+      - name: Release the selected rules surface only
+        run: npx --no-install firebase deploy --only "$SURFACE" --project "$RULES_PROJECT_ID" --non-interactive

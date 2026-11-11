@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # keyless sign-in to Google Cloud; only usable once the production WIF provider trusts this job
 
 concurrency:
   group: deploy-production
@@ -27,6 +28,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: production
+    env:
+      # Set on the `production` environment once keyless deploys are provisioned (owner-approved step).
+      # While they are empty the job uses the legacy JSON key below; nothing here creates or moves credentials.
+      PROD_WIF_PROVIDER: ${{ vars.PROD_WIF_PROVIDER }}
+      PROD_DEPLOY_SERVICE_ACCOUNT: ${{ vars.PROD_DEPLOY_SERVICE_ACCOUNT }}
     steps:
       - name: Check the request
         # Inputs are passed through env, never interpolated into the script.
@@ -45,6 +51,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Check the commit is on the recovery branch
         env:
@@ -96,7 +103,35 @@ jobs:
           SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
-      - name: Deploy to the live site
+      - name: Record the release request
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          {
+            echo "### Production Hosting release"
+            echo "- Commit: \`$REF\`"
+            echo "- Requested by: $GITHUB_ACTOR (run $GITHUB_RUN_ID, attempt $GITHUB_RUN_ATTEMPT)"
+            echo "- Sign-in: $([ -n "$PROD_WIF_PROVIDER" ] && echo keyless || echo 'legacy JSON key (transitional)')"
+            echo "- Scope: Hosting only. Rules, indexes and Functions are never deployed by this workflow."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Keyless path: used as soon as the production environment defines PROD_WIF_PROVIDER.
+      - name: Sign in to Google Cloud without a stored key
+        if: ${{ vars.PROD_WIF_PROVIDER != '' }}
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: coach-core-ai
+          workload_identity_provider: ${{ vars.PROD_WIF_PROVIDER }}
+          service_account: ${{ vars.PROD_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Deploy Hosting only to the live site (keyless)
+        if: ${{ vars.PROD_WIF_PROVIDER != '' }}
+        run: npx --no-install firebase deploy --only hosting:production --project coach-core-ai --non-interactive
+
+      # Transitional path: the JSON key that exists today. Remove this step, then revoke the key, only after a
+      # keyless release has succeeded (docs/security/PRODUCTION_RELEASE_GOVERNANCE_2026-11-10.md, batch C).
+      - name: Deploy Hosting only to the live site (legacy key)
+        if: ${{ vars.PROD_WIF_PROVIDER == '' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
