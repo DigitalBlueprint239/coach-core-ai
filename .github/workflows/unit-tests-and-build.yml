@@ -32,6 +32,12 @@ jobs:
       - name: Ensure legacy cloud deploy scripts remain disabled
         run: node --test scripts/tests/legacy-deploy-disabled.test.mjs
 
+      - name: Verify Firebase project isolation preflight
+        run: node --test scripts/tests/firebase-isolation.test.mjs
+
+      - name: Verify release governance (manual, owner-gated, single-surface deploys)
+        run: node --test scripts/tests/release-governance.test.mjs
+
       - name: Lint
         run: npm run lint
 
