@@ -26,12 +26,20 @@ vi.mock('firebase/firestore', () => {
     collection: (_db: unknown, ...segments: string[]) => ({ path: segments.join('/') }),
     doc: (first: unknown, ...segments: string[]) =>
       segments.length ? ref(segments.join('/')) : ref(`${(first as { path: string }).path}/auto-${store.nextId++}`),
-    where: (field: string, _op: string, value: unknown) => ({ field, value }),
-    query: (c: { path: string }, filter: { field: string; value: unknown }) => ({ ...c, filter }),
-    getDocs: async (q: { path: string; filter?: { field: string; value: unknown } }) => ({
+    where: (field: string, _op: string, value: unknown) => ({ filter: { field, value } }),
+    documentId: () => '__name__',
+    orderBy: (field: string) => ({ order: field }),
+    startAfter: (after: string) => ({ after }),
+    limit: (max: number) => ({ max }),
+    query: (c: { path: string }, ...parts: object[]) => Object.assign({}, c, ...parts),
+    getDoc: async (r: Ref) => snap(r),
+    getDocs: async (q: { path: string; filter?: { field: string; value: unknown }; order?: string; after?: string; max?: number }) => ({
       docs: [...store.docs]
         .filter(([path, data]) => path.startsWith(`${q.path}/`) && !path.slice(q.path.length + 1).includes('/') && (!q.filter || data[q.filter.field] === q.filter.value))
-        .map(([path]) => snap(ref(path))),
+        .map(([path]) => snap(ref(path)))
+        .sort((a, b) => (q.order ? (a.id < b.id ? -1 : 1) : 0))
+        .filter(d => q.after === undefined || d.id > q.after)
+        .slice(0, q.max ?? Infinity),
     }),
     deleteDoc: async (r: Ref) => apply([{ kind: 'delete', ref: r }]),
     writeBatch: () => {
@@ -60,7 +68,7 @@ vi.mock('firebase/firestore', () => {
 });
 
 import {
-  REVISION_RETENTION, deletePlayV4, isPlayConflict, loadPlayDocsV4, loadPlayRevisions, loadPublishedPlays, publishPlayV4,
+  PLAY_PAGE_SIZE, REVISION_RETENTION, deletePlayV4, isPlayConflict, loadPlayDocV4, loadPlayDocsV4, loadPlayRevisions, loadPublishedPlays, publishPlayV4,
   publishedSnapshotId, savePlayDocV4, unpublishPlayV4,
 } from '../playStoreV4';
 
@@ -214,6 +222,31 @@ describe('loadPlayDocsV4', () => {
     expect(saved.id).not.toBe('v2doc');
     expect(stored('plays/v2doc')).toEqual(v2);
     expect(stored(`plays/${saved.id}`)).toMatchObject({ schemaVersion: 4, provenance: { origin: 'migrated', sourceId: 'v2doc' } });
+  });
+
+  it('reads in bounded pages that together cover every play exactly once', async () => {
+    const total = PLAY_PAGE_SIZE * 2 + 7;
+    for (let i = 0; i < total; i++) store.docs.set(`plays/p${String(i).padStart(4, '0')}`, { ...play(`Play ${i}`) });
+    const seen: string[] = [];
+    let cursor: string | null = null;
+    let pages = 0;
+    do {
+      const result: Awaited<ReturnType<typeof loadPlayDocsV4>> = await loadPlayDocsV4('t1', cursor);
+      expect(result.plays.length).toBeLessThanOrEqual(PLAY_PAGE_SIZE);
+      seen.push(...result.plays.map(p => p.id));
+      cursor = result.nextCursor;
+      pages++;
+    } while (cursor);
+    expect(pages).toBe(3);
+    expect(seen).toHaveLength(total);
+    expect(new Set(seen).size).toBe(total);
+  });
+
+  it('an exactly full page has no next page; one play can be read by id', async () => {
+    for (let i = 0; i < PLAY_PAGE_SIZE; i++) store.docs.set(`plays/p${String(i).padStart(4, '0')}`, { ...play() });
+    expect((await loadPlayDocsV4('t1')).nextCursor).toBeNull();
+    expect(await loadPlayDocV4('p0003')).toMatchObject({ id: 'p0003', sourceSchemaVersion: 4 });
+    expect(await loadPlayDocV4('missing')).toBeNull();
   });
 
   it('needs a team', async () => {

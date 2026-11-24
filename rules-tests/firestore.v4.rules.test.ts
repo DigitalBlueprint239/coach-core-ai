@@ -11,7 +11,7 @@ import {
   initializeTestEnvironment,
   type RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { collection, deleteDoc, doc, documentId, getDoc, getDocs, limit, orderBy, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 
 let env: RulesTestEnvironment;
 
@@ -101,6 +101,14 @@ describe('v4 plays and their revision history', () => {
   it('a v4 play cannot be created without its revision copy, or a copy without its play', async () => {
     await assertFails(saveV4(alice(), 'new2', playV4(1), null));
     await assertFails(setDoc(doc(alice(), 'plays/ghost/revisions/1'), copyOf('ghost', playV4(1))));
+  });
+
+  it("the app's paged play query is allowed for the owner only", async () => {
+    const paged = (db: Db) => getDocs(query(collection(db, 'plays'), where('teamId', '==', 't1'), orderBy(documentId()), limit(101)));
+    await assertSucceeds(paged(alice()));
+    await assertFails(paged(bob()));
+    await assertFails(paged(carol()));
+    await assertFails(paged(anonymous()));
   });
 
   it('a new v4 play must start at revision 1', async () => {

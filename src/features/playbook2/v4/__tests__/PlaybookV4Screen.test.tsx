@@ -36,7 +36,12 @@ vi.mock('../../playStoreV4', () => {
     loadPlayDocsV4: vi.fn(async () => ({
       plays: [...db.plays].map(([id, v]) => ({ ...structuredClone(v.play as object), id, sourceSchemaVersion: v.version })),
       skipped: db.skipped,
+      nextCursor: null,
     })),
+    loadPlayDocV4: vi.fn(async (id: string) => {
+      const v = db.plays.get(id);
+      return v ? { ...structuredClone(v.play as object), id, sourceSchemaVersion: v.version } : null;
+    }),
     savePlayDocV4: vi.fn(async (play: { revision: number }, uid: string, target: { id?: string; expectedRevision?: number } = {}) => {
       if (db.fail === 'offline') throw new Error('unavailable');
       if (!target.id) {
@@ -422,6 +427,24 @@ describe('organising plays', () => {
     expect(names()).toEqual(['Four Verts', 'Smash']);
     await select('Tag', '');
     expect(names()).toHaveLength(3);
+  });
+
+  it('loads further pages on request, without duplicates, and says what search covers', async () => {
+    vi.mocked(loadPlayDocsV4)
+      .mockResolvedValueOnce({ plays: [{ ...basePlay('Mesh'), id: 'a', sourceSchemaVersion: 4 }], skipped: 1, nextCursor: 'a' })
+      .mockResolvedValueOnce({
+        plays: [{ ...basePlay('Mesh'), id: 'a', sourceSchemaVersion: 4 }, { ...basePlay('Smash'), id: 'b', sourceSchemaVersion: 4 }],
+        skipped: 1,
+        nextCursor: null,
+      });
+    await openLibrary();
+    expect(screen.getByText('Search and tags cover the 1 plays loaded so far.')).toBeInTheDocument();
+    await userEvent.click(button('Load more plays'));
+    expect(await screen.findByRole('heading', { level: 3, name: 'Smash' })).toBeInTheDocument();
+    expect(loadPlayDocsV4).toHaveBeenLastCalledWith('t1', 'a');
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2);
+    expect(screen.queryByRole('button', { name: 'Load more plays' })).not.toBeInTheDocument();
+    expect(screen.getByText(/2 older plays were drawn/)).toBeInTheDocument();
   });
 
   it('renames a play and edits its tags', async () => {

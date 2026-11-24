@@ -13,7 +13,7 @@ import {
 } from '../../../football-core';
 import type { BlockRule, CoverageId, PlayDocV4, PlayerId, ProtectionRule, RouteId } from '../../../football-core';
 import { isLineman } from '../field/geometry';
-import { deletePlayV4, isPlayConflict, loadPlayDocsV4, savePlayDocV4, type ListedPlayDocV4 } from '../playStoreV4';
+import { deletePlayV4, isPlayConflict, loadPlayDocV4, loadPlayDocsV4, savePlayDocV4, type ListedPlayDocV4 } from '../playStoreV4';
 import { editorReducerV4, initEditorV4, type EditorSource } from './editorReducerV4';
 import { FieldSheetV4 } from './FieldSheetV4';
 import { PlayCard } from './PlayCard';
@@ -65,6 +65,8 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
   const ids = useId();
   const [plays, setPlays] = useState<ListedPlayDocV4[]>([]);
   const [skipped, setSkipped] = useState(0);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [view, setView] = useState<'library' | 'editor'>('library');
@@ -91,10 +93,9 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
       const result = await loadPlayDocsV4(teamId);
       setPlays(result.plays);
       setSkipped(result.skipped);
-      return result.plays;
+      setNextCursor(result.nextCursor);
     } catch {
       setLoadError("Couldn't load your plays. Check your connection and try again.");
-      return null;
     } finally {
       setLoading(false);
     }
@@ -102,6 +103,21 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
   useEffect(() => {
     void reload();
   }, [reload]);
+
+  const loadMore = async () => {
+    if (!nextCursor) return;
+    setLoadingMore(true);
+    try {
+      const result = await loadPlayDocsV4(teamId, nextCursor);
+      setPlays(list => [...list, ...result.plays.filter(p => !list.some(known => known.id === p.id))]);
+      setSkipped(count => count + result.skipped);
+      setNextCursor(result.nextCursor);
+    } catch {
+      setBanner({ kind: 'error', text: "Couldn't load more plays. The ones shown are still here." });
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const edit = useCallback((apply: (p: PlayDocV4) => PlayDocV4) => dispatch({ type: 'edit', apply }), []);
 
@@ -161,8 +177,13 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
 
   const loadSavedVersion = async () => {
     if (source.kind !== 'stored') return;
-    const fresh = await reload();
-    const stored = fresh?.find(p => p.id === source.id);
+    let stored: ListedPlayDocV4 | null;
+    try {
+      stored = await loadPlayDocV4(source.id);
+    } catch {
+      setBanner({ kind: 'error', text: "Couldn't load the saved version. Your changes are still here." });
+      return;
+    }
     if (!stored) {
       setBanner({ kind: 'error', text: 'That play no longer exists. Your version is still here; save it as a new play to keep it.' });
       return;
@@ -171,6 +192,7 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
     offer({ play, source });
     dispatch({ type: 'open', play: toPlay(stored), source: sourceOf(stored) });
     setConflict(null);
+    void reload();
   };
 
   const duplicate = (from: PlayDocV4, fromId: string) => {
@@ -298,6 +320,14 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
               </li>
             ))}
           </ul>
+          {nextCursor && (
+            <div className="pb4-inline">
+              <button type="button" className="pb2-btn" onClick={() => void loadMore()} disabled={loadingMore}>
+                {loadingMore ? 'Loading…' : 'Load more plays'}
+              </button>
+              <span className="pb2-muted">Search and tags cover the {plays.length} plays loaded so far.</span>
+            </div>
+          )}
         </section>
       </div>
     );

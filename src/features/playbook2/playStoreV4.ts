@@ -8,7 +8,9 @@
 // - A v2 or v3 play is never rewritten. Saving a converted play creates a new v4 document whose provenance points
 //   at the original.
 // - Publishing writes a separate create-only snapshot. The play document itself has no "published" switch.
-import { collection, deleteDoc, doc, getDocs, query, runTransaction, where, writeBatch } from 'firebase/firestore';
+import {
+  collection, deleteDoc, doc, documentId, getDoc, getDocs, limit, orderBy, query, runTransaction, startAfter, where, writeBatch,
+} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { readPlayDocumentV4, validatePlayDocV4, type PlayDocV4 } from '../../football-core';
 
@@ -99,24 +101,48 @@ export async function savePlayDocV4(play: PlayDocV4, uid: string, target: SaveTa
   });
 }
 
+/** Plays read per request. Bounds cost and memory for any team, however many plays it has. */
+export const PLAY_PAGE_SIZE = 100;
+
 export type ListedPlayDocV4 = PlayDocV4 & { id: string; sourceSchemaVersion: 2 | 3 | 4 };
 
 /**
  * Loads a team's plays. v4 plays are returned as stored; v2 and v3 plays are converted in memory (nothing is
  * written) and flagged by `sourceSchemaVersion` so the editor saves them as NEW v4 plays. Version-1 and damaged
  * plays are counted in `skipped`, never guessed at.
+ * Reads one page, ordered by document id (stable while plays are being edited). Pass `nextCursor` back for the next
+ * page; `null` means there are no more.
  */
-export async function loadPlayDocsV4(teamId: string): Promise<{ plays: ListedPlayDocV4[]; skipped: number }> {
+export async function loadPlayDocsV4(
+  teamId: string,
+  cursor: string | null = null,
+): Promise<{ plays: ListedPlayDocV4[]; skipped: number; nextCursor: string | null }> {
   if (!teamId) throw new Error('Select a team to open its playbook.');
-  const snap = await getDocs(query(collection(db, 'plays'), where('teamId', '==', teamId)));
+  // One extra document tells us whether another page exists.
+  const snap = await getDocs(query(
+    collection(db, 'plays'),
+    where('teamId', '==', teamId),
+    orderBy(documentId()),
+    ...(cursor ? [startAfter(cursor)] : []),
+    limit(PLAY_PAGE_SIZE + 1),
+  ));
+  const page = snap.docs.slice(0, PLAY_PAGE_SIZE);
   const plays: ListedPlayDocV4[] = [];
   let skipped = 0;
-  for (const d of snap.docs) {
+  for (const d of page) {
     const r = readPlayDocumentV4(playFields(d.data()), d.id);
     if (r.status === 'ok' && r.sourceSchemaVersion) plays.push({ ...r.value, id: d.id, sourceSchemaVersion: r.sourceSchemaVersion });
     else skipped++;
   }
-  return { plays, skipped };
+  return { plays, skipped, nextCursor: snap.docs.length > PLAY_PAGE_SIZE ? page[page.length - 1].id : null };
+}
+
+/** Reads one stored play by id, or null when it no longer exists or cannot be read as football. */
+export async function loadPlayDocV4(playId: string): Promise<ListedPlayDocV4 | null> {
+  const snap = await getDoc(playRef(playId));
+  if (!snap.exists()) return null;
+  const r = readPlayDocumentV4(playFields(snap.data()), playId);
+  return r.status === 'ok' && r.sourceSchemaVersion ? { ...r.value, id: playId, sourceSchemaVersion: r.sourceSchemaVersion } : null;
 }
 
 /** The saved history of one play, newest first. */
