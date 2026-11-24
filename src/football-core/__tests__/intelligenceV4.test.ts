@@ -69,9 +69,13 @@ describe('checkPlayV4', () => {
     const play = fresh();
     const p = skill(play)[0];
     const wide = movePlayer(play, p.id, { x: 22, y: -1 });
-    expect(codes(wide)).not.toContain('field.player-out-of-bounds');
-    expect(codes({ ...wide, ball: { hash: 'right' } })).toContain('field.player-out-of-bounds');
-    expect(codes({ ...wide, ball: { hash: 'left' } })).not.toContain('field.player-out-of-bounds');
+    const out = (hash: 'left' | 'middle' | 'right') =>
+      checkPlayV4({ ...wide, ball: { hash } }).filter(f => f.code === 'field.player-out-of-bounds').flatMap(f => f.playerIds);
+    expect(out('middle')).toEqual([]);
+    expect(out('right')).toContain(p.id);
+    expect(out('left')).not.toContain(p.id);
+    // From the left hash a receiver split 19 yards to the left really is off the field.
+    expect(out('left')).toEqual(wide.players.filter(pl => pl.at.x < -(53.33 / 2 - 8.89)).map(pl => pl.id));
     expect(codes(setRoutePoints(wide, p.id, [{ x: 10, y: 5 }]))).toContain('field.route-out-of-bounds');
   });
 
