@@ -315,3 +315,7 @@ dmypy.json
 # Backup files from build fixes
 *.bak
 *.v3-backup
+
+# Generated isolated staging configuration and short-lived Google Actions credentials
+.firebase.staging.generated.json
+gha-creds-*.json

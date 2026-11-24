@@ -1,20 +1,71 @@
-name: Deploy staging (PAUSED — isolated Firebase project pending)
+name: Deploy isolated staging
 
-# SECURITY HOLD 2026-11-06: Old staging Hosting site belongs to production Firebase
-# project coach-core-ai. Do not deploy to it. Restore staging only through reviewed
-# PR #125, after separate staging project and identity are configured.
-# No push trigger, cloud credential, Hosting action, or Firebase deploy remains.
+# Staging deploys to a DIFFERENT Firebase project. Fail closed if not provisioned.
 on:
+  push:
+    branches: [recovery/coach-core-mvp-2026]
   workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-isolated-staging
+  cancel-in-progress: false
 
 jobs:
-  staging-paused:
+  deploy-staging:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: firebase-staging
+    env:
+      STAGING_FIREBASE_PROJECT_ID: ${{ vars.STAGING_FIREBASE_PROJECT_ID }}
+      STAGING_WIF_PROVIDER: ${{ vars.STAGING_WIF_PROVIDER }}
+      STAGING_DEPLOY_SERVICE_ACCOUNT: ${{ vars.STAGING_DEPLOY_SERVICE_ACCOUNT }}
+      REACT_APP_FIREBASE_API_KEY: ${{ vars.STAGING_FIREBASE_API_KEY }}
+      REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.STAGING_FIREBASE_AUTH_DOMAIN }}
+      REACT_APP_FIREBASE_PROJECT_ID: ${{ vars.STAGING_FIREBASE_PROJECT_ID }}
+      REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ vars.STAGING_FIREBASE_STORAGE_BUCKET }}
+      REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.STAGING_FIREBASE_MESSAGING_SENDER_ID }}
+      REACT_APP_FIREBASE_APP_ID: ${{ vars.STAGING_FIREBASE_APP_ID }}
+      REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ vars.STAGING_FIREBASE_MEASUREMENT_ID }}
+      REACT_APP_DEPLOY_ENV: staging
+      REACT_APP_AI_ENABLED: 'false'
+      REACT_APP_ENABLE_PLAYBOOK_V2: 'true'
+      REACT_APP_ENABLE_CONTENT_REVIEW: 'true'
+      REACT_APP_RELEASE: ${{ github.sha }}
     steps:
-      - name: State the safety hold
-        run: |
-          echo "Legacy staging deployments disabled: shared production Firebase backend."
-          echo "Provision a separate staging project before re-enabling deployments."
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Verify isolated staging configuration BEFORE credentials or build
+        run: node scripts/assert-firebase-deploy-env.mjs staging
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build staging app
+        run: npm run build
+
+      - name: Prepare staging-only Hosting config
+        run: node scripts/prepare-staging-hosting-config.mjs
+
+      - name: Authenticate with staging-only keyless identity
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.STAGING_FIREBASE_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.STAGING_WIF_PROVIDER }}
+          service_account: ${{ vars.STAGING_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Deploy Hosting only to the staging Firebase project
+        run: npx --no-install firebase deploy --only hosting --project "$STAGING_FIREBASE_PROJECT_ID" --config .firebase.staging.generated.json --non-interactive

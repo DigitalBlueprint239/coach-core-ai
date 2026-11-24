@@ -1,15 +1,12 @@
 {
   "projects": {
-    "default": "coach-core-ai"
+    "production": "coach-core-ai"
   },
   "targets": {
     "coach-core-ai": {
       "hosting": {
         "production": [
           "coach-core-ai"
-        ],
-        "staging": [
-          "coach-core-ai-staging"
         ]
       }
     }
