@@ -1,0 +1,40 @@
+name: Firebase Storage and Firestore Security Checks
+on:
+  push:
+    branches: [security/firebase-owner-scoped-storage-v1]
+  pull_request:
+    branches: [recovery/coach-core-mvp-2026]
+permissions:
+  contents: read
+concurrency:
+  group: firebase-storage-security-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  storage-and-firestore-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v4.7.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Locked install
+        run: npm ci
+      - name: Storage authorization emulator tests
+        run: npm run test:storage
+      - name: Firestore authorization emulator tests
+        run: npm run test:rules
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: App tests
+        run: npm test
+      - name: Vite build (no deploy)
+        run: npm run build

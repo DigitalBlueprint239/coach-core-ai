@@ -15,7 +15,8 @@
     "test:rules": "firebase emulators:exec --only firestore --project demo-coach-core \"vitest run -c vitest.rules.config.ts\"",
     "lint": "eslint src --max-warnings 0",
     "check:stack": "node scripts/check-stack-consistency.mjs",
-    "prebuild": "node scripts/check-stack-consistency.mjs"
+    "prebuild": "node scripts/check-stack-consistency.mjs",
+    "test:storage": "firebase emulators:exec --only firestore,storage --project demo-coach-core \"vitest run -c vitest.storage.config.ts\""
   },
   "dependencies": {
     "@chakra-ui/react": "^3.22.0",
