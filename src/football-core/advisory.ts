@@ -13,6 +13,7 @@
 //   when a rule comes from a draft profile that is not yet verified against its rule book.
 // The provider is chosen behind a server-side gateway (owner decision of 2026-10-13: new OpenAI and Anthropic keys,
 // one gateway, provider adapters); nothing here selects a vendor, and nothing in the editor calls an advisor.
+import type { AdvisoryPlay } from './advisoryV4';
 import type { Finding } from './findings';
 import type { Installation } from './install';
 
@@ -52,7 +53,9 @@ export type AdvisoryRequest = {
   trigger: { kind: 'coach-action'; action: string };
   teamId: string;
   context: {
-    installation: Installation;
+    installation?: Installation;
+    /** A v4 play reduced to its football (advisoryV4.ts). */
+    play?: AdvisoryPlay;
     findings: Finding[];
     question?: string;
     /** Ids of approved registry sources the advisor may cite. Empty means no verified-knowledge citations allowed. */

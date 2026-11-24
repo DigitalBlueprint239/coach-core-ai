@@ -39,3 +39,25 @@ export { LINE_SLOTS, isLineSlot } from './model';
 export type { LineSlot } from './model';
 export { resolveInsideZone, INSIDE_ZONE_CONVENTION } from './runGame';
 export type { BlockAssignment, InsideZoneResolution, RunSide, TimelineEvent } from './runGame';
+export {
+  COORDINATE_PROFILE, DEFAULT_FIELD_PROFILE_ID, FIELD_PROFILES, LIMITS as PLAY_LIMITS_V4, MIGRATION_ID, PLAY_SCHEMA_VERSION_V4,
+  createPlayDocV4, duplicatePlayDocV4, formationOf, migratePlayToV4, playBytes, readPlayDocumentV4, resolveGeometry,
+  validatePlayDocV4,
+} from './playDocumentV4';
+export type {
+  AssignmentV4, DefenderV4, FieldProfile, PlayDocV4, PlayPlayerV4, PlayerId, ProvenanceV4, ReadPlayV4, ResolvedGeometry,
+  ResolvedRoute, RouteTemplateRef, UnresolvedAssignment,
+} from './playDocumentV4';
+export { INTERPRETATION_V1 } from './interpretations/v1';
+export {
+  DEFENSE_ALIGNMENT_VERSION, ROUTE_LIBRARY_VERSION, addRoutePoint, assignRoute, clearPlayer, describeAssignment, flipPlay, jobOf,
+  motionOf, movePlayer, moveRoutePoint, outsideOf, playFromConceptV4, removeJob, removeRoutePoint, renamePlay, routeOf, setBall,
+  setBlock, setDefense, setLabel, setMotion, setNotes, setOnLine, setProtect, setRole, setRouteDepth, setRoutePoints, setTags,
+  snapYd, templatePoints,
+} from './playEditsV4';
+export { CROWDED_FINISH_YD, checkPlayV4 } from './checksV4';
+export type { PlayFinding } from './checksV4';
+export { NOMINAL_SPEED_YD_PER_S, TIMELINE_VERSION, buildTimeline, positionOnTrack, positionsAt } from './timelineV4';
+export type { PlayTimeline, TimelineTrack } from './timelineV4';
+export { authorizePlayAdvice, buildPlayAdviceRequest, toAdvisoryPlay } from './advisoryV4';
+export type { AdvisoryPlay } from './advisoryV4';
