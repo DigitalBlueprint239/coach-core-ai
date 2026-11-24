@@ -169,7 +169,7 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
           </div>
           <div className="pwa-install-text">
             <h3>Install Coach Core AI</h3>
-            <p>Get the full app experience with offline access and notifications</p>
+            <p>Add Coach Core to your home screen. It still needs an internet connection.</p>
           </div>
         </div>
         
@@ -177,18 +177,6 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
           <div className="feature">
             <span className="feature-icon">📱</span>
             <span>App-like experience</span>
-          </div>
-          <div className="feature">
-            <span className="feature-icon">⚡</span>
-            <span>Faster loading</span>
-          </div>
-          <div className="feature">
-            <span className="feature-icon">🔔</span>
-            <span>Push notifications</span>
-          </div>
-          <div className="feature">
-            <span className="feature-icon">📴</span>
-            <span>Offline access</span>
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -48,5 +49,14 @@ describe('OnboardingModal', () => {
   it('renders nothing when closed', () => {
     const { container } = render(<OnboardingModal open={false} onClose={vi.fn()} />);
     expect(container).toBeEmptyDOMElement();
+  });
+});
+
+describe('install prompt and web manifest', () => {
+  it('do not promise features that are not built', () => {
+    const manifest = readFileSync('public/manifest.json', 'utf8');
+    const prompt = readFileSync('src/components/PWAInstallPrompt.tsx', 'utf8').split('<style>')[0];
+    for (const claim of [/AI-powered/i, /AI assistant/i, /analytics/i]) expect(manifest).not.toMatch(claim);
+    for (const claim of [/>Push notifications</i, />Offline access</i, /with offline access/i, />Faster loading</i]) expect(prompt).not.toMatch(claim);
   });
 });
