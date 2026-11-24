@@ -21,7 +21,7 @@ vi.mock('../playStore', () => ({
   listPlaysV2: vi.fn(() => Promise.resolve([])),
   loadTeamSettings: vi.fn(() => Promise.resolve({ terminology: {}, level: 'jv', formations: [] })),
   savePlayV2: vi.fn(() => Promise.resolve('p1')),
-  saveTeamSettings: vi.fn(() => Promise.resolve()),
+  saveTeamSettings: vi.fn((_teamId: string, next: unknown) => Promise.resolve(next)),
   isStoreError: (e: unknown) => typeof e === 'object' && e !== null && 'kind' in e,
 }));
 
@@ -240,7 +240,7 @@ describe('PlaybookScreen', () => {
     const h = screen.getByRole('textbox', { name: 'Your word for H (slot receiver)' });
     await userEvent.type(h, 'F');
     await userEvent.tab();
-    await waitFor(() => expect(saveTeamSettings).toHaveBeenCalledWith('t1', expect.objectContaining({ terminology: { H: 'F' } })));
+    await waitFor(() => expect(saveTeamSettings).toHaveBeenCalledWith('t1', expect.objectContaining({ terminology: { H: 'F' } }), expect.objectContaining({ terminology: {} })));
     const smash = screen.getByRole('textbox', { name: 'Your word for Smash (play)' });
     await userEvent.type(smash, 'Eagle');
     await userEvent.tab();

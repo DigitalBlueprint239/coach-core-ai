@@ -1,12 +1,13 @@
 // Firestore reads and writes for version-2 plays and team playbook settings. Uses only what the existing
 // firestore.rules already allow (tested in rules-tests): the team owner reads/writes `plays` of their team and
 // updates their team document. Updates never send teamId or createdBy (the rules deny changing them).
-import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, query, runTransaction, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { LEVEL_ORDER, type Level } from '../../football-core';
 import { DEFAULT_SETTINGS, isPlayV2, type PlayV2, type TeamPlaybookSettings } from './playModel';
+import { mergeTeamSettings } from './settingsMerge';
 
-export type StoreError = { kind: 'signed-out' | 'no-team' | 'permission' | 'network'; message: string };
+export type StoreError = { kind: 'signed-out' | 'no-team' | 'permission' | 'network' | 'conflict'; message: string };
 
 type Action = 'load' | 'save' | 'settings';
 
@@ -25,6 +26,11 @@ const MESSAGES: Record<StoreError['kind'], Record<Action, string>> = {
     load: "Couldn't load: only the team's coach can see its plays.",
     save: "Couldn't save: only the team's coach can edit plays.",
     settings: "Couldn't save: only the team's coach can change the playbook settings.",
+  },
+  conflict: {
+    load: "Couldn't load: reload the page and try again.",
+    save: "Couldn't save: this was changed somewhere else. Reload to see the latest version.",
+    settings: "Couldn't save: someone else changed the same formation. Reload to see their version before saving yours.",
   },
   network: {
     load: "Couldn't load: check your connection and try again.",
@@ -122,28 +128,45 @@ export async function savePlayV2(play: PlayV2, uid: string): Promise<string> {
 
 const isLevel = (v: unknown): v is Level => typeof v === 'string' && (LEVEL_ORDER as readonly string[]).includes(v);
 
+function readSettings(stored: unknown): TeamPlaybookSettings {
+  if (typeof stored !== 'object' || stored === null) return plain(DEFAULT_SETTINGS);
+  const s = stored as Partial<TeamPlaybookSettings>;
+  const terminology: Record<string, string> = {};
+  if (typeof s.terminology === 'object' && s.terminology !== null) {
+    for (const [k, v] of Object.entries(s.terminology)) if (typeof v === 'string' && v.trim()) terminology[k] = v;
+  }
+  return {
+    terminology,
+    level: isLevel(s.level) ? s.level : DEFAULT_SETTINGS.level,
+    formations: Array.isArray(s.formations) ? s.formations : [],
+  };
+}
+
 export async function loadTeamSettings(teamId: string): Promise<TeamPlaybookSettings> {
   if (!teamId) throw storeError('no-team', 'load');
   return guarded('load', async () => {
     const snap = await getDoc(doc(db, 'teams', teamId));
-    const stored: unknown = snap.exists() ? (snap.data() as Record<string, unknown> | undefined)?.playbook : undefined;
-    if (typeof stored !== 'object' || stored === null) return plain(DEFAULT_SETTINGS);
-    const s = stored as Partial<TeamPlaybookSettings>;
-    const terminology: Record<string, string> = {};
-    if (typeof s.terminology === 'object' && s.terminology !== null) {
-      for (const [k, v] of Object.entries(s.terminology)) if (typeof v === 'string' && v.trim()) terminology[k] = v;
-    }
-    return {
-      terminology,
-      level: isLevel(s.level) ? s.level : DEFAULT_SETTINGS.level,
-      formations: Array.isArray(s.formations) ? s.formations : [],
-    };
+    return readSettings(snap.exists() ? (snap.data() as Record<string, unknown> | undefined)?.playbook : undefined);
   });
 }
 
-export async function saveTeamSettings(teamId: string, s: TeamPlaybookSettings): Promise<void> {
+/**
+ * Saves the coach's change to the team settings. `base` is what this device last loaded or saved; only the
+ * difference between `base` and `next` is applied to what is stored now, in a transaction, so a save from another
+ * device is kept. Resolves to the merged settings. Two different edits to the same formation are a conflict and
+ * nothing is written.
+ */
+export async function saveTeamSettings(teamId: string, next: TeamPlaybookSettings, base: TeamPlaybookSettings): Promise<TeamPlaybookSettings> {
   if (!teamId) throw storeError('no-team', 'settings');
-  return guarded('settings', async () => {
-    await updateDoc(doc(db, 'teams', teamId), { playbook: plain(s) });
-  });
+  return guarded('settings', () =>
+    runTransaction(db, async tx => {
+      const ref = doc(db, 'teams', teamId);
+      const snap = await tx.get(ref);
+      const stored = readSettings(snap.exists() ? (snap.data() as Record<string, unknown> | undefined)?.playbook : undefined);
+      const { merged, conflicts } = mergeTeamSettings(base, next, stored);
+      if (conflicts.length) throw storeError('conflict', 'settings');
+      tx.update(ref, { playbook: plain(merged) });
+      return merged;
+    }),
+  );
 }

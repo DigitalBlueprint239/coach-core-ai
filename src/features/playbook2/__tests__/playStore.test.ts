@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { addDoc, getDoc, getDocs, updateDoc, where } from 'firebase/firestore';
+import { addDoc, getDoc, getDocs, runTransaction, updateDoc, where } from 'firebase/firestore';
 import { fullLibrary } from '../../../football-core';
-import { newBlankPlay } from '../playModel';
+import { newBlankPlay, type TeamPlaybookSettings } from '../playModel';
 import { listPlaysV2, loadTeamSettings, savePlayV2, saveTeamSettings, type StoreError } from '../playStore';
 
 const doubles = fullLibrary().formations.find(f => f.id === 'doubles')!;
@@ -75,6 +75,51 @@ describe('savePlayV2', () => {
   });
 });
 
+/** Runs saveTeamSettings' transaction against one stored value and records what it writes. */
+function storedSettings(playbook: unknown) {
+  const written: unknown[] = [];
+  vi.mocked(runTransaction).mockImplementationOnce((async (_db: unknown, fn: (tx: unknown) => Promise<unknown>) =>
+    fn({
+      get: async () => ({ exists: () => true, data: () => ({ name: 'Eagles', playbook }) }),
+      update: (_ref: unknown, patch: unknown) => { written.push(patch); },
+    })) as never);
+  return written;
+}
+const own = (id: string, name: string) => ({ ...doubles, id: `team:${id}`, name });
+const settings = (over: Partial<TeamPlaybookSettings> = {}): TeamPlaybookSettings => ({ terminology: {}, level: 'jv', formations: [], ...over });
+
+describe('team settings from two devices', () => {
+  it('keeps both devices’ terms, level and formations', async () => {
+    const base = settings({ terminology: { H: 'F', Z: 'Zebra' }, formations: [own('a', 'A')] });
+    const written = storedSettings(settings({ terminology: { H: 'F', Z: 'Zebra', X: 'Xray' }, level: 'varsity', formations: [own('a', 'A'), own('b', 'B')] }));
+    const merged = await saveTeamSettings('t1', { ...base, terminology: { H: 'Fox' }, formations: [own('a', 'A'), own('c', 'C')] }, base);
+    expect(merged).toEqual({ terminology: { H: 'Fox', X: 'Xray' }, level: 'varsity', formations: [own('a', 'A'), own('b', 'B'), own('c', 'C')] });
+    expect(written).toEqual([{ playbook: JSON.parse(JSON.stringify(merged)) }]);
+  });
+
+  it('two different edits of one formation are a conflict and nothing is written', async () => {
+    const base = settings({ formations: [own('a', 'A')] });
+    const written = storedSettings(settings({ formations: [own('a', 'A tablet')] }));
+    await expect(saveTeamSettings('t1', { ...base, formations: [own('a', 'A phone')] }, base)).rejects.toMatchObject({ kind: 'conflict' });
+    expect(written).toEqual([]);
+  });
+
+  it('deleting a formation someone else edited is a conflict; deleting an unchanged one is not', async () => {
+    const base = settings({ formations: [own('a', 'A')] });
+    storedSettings(settings({ formations: [own('a', 'A tablet')] }));
+    await expect(saveTeamSettings('t1', settings(), base)).rejects.toMatchObject({ kind: 'conflict' });
+    storedSettings(base);
+    expect((await saveTeamSettings('t1', settings(), base)).formations).toEqual([]);
+  });
+
+  it('a different key order in the database is not a difference', async () => {
+    const base = settings({ formations: [own('a', 'A')] });
+    const reordered = Object.fromEntries(Object.entries(own('a', 'A')).reverse());
+    storedSettings({ ...settings(), formations: [reordered] });
+    expect((await saveTeamSettings('t1', { ...base, formations: [own('a', 'A2')] }, base)).formations).toEqual([own('a', 'A2')]);
+  });
+});
+
 describe('team settings', () => {
   it('loadTeamSettings defaults when the team has no playbook field', async () => {
     vi.mocked(getDoc).mockResolvedValueOnce({ exists: () => true, data: () => ({ name: 'Eagles' }) } as never);
@@ -91,13 +136,14 @@ describe('team settings', () => {
 
   it('saveTeamSettings writes only the playbook field', async () => {
     const s = { terminology: { H: 'F' }, level: 'jv' as const, formations: [] };
-    await saveTeamSettings('t1', s);
-    expect(vi.mocked(updateDoc).mock.calls[0][1]).toEqual({ playbook: s });
+    const written = storedSettings(undefined);
+    await saveTeamSettings('t1', s, { terminology: {}, level: 'jv', formations: [] });
+    expect(written).toEqual([{ playbook: s }]);
   });
 
   it('a permission error on settings is plain language too', async () => {
-    vi.mocked(updateDoc).mockRejectedValueOnce(firebaseError('permission-denied'));
-    await expect(saveTeamSettings('t1', { terminology: {}, level: 'jv', formations: [] })).rejects.toMatchObject({
+    vi.mocked(runTransaction).mockRejectedValueOnce(firebaseError('permission-denied'));
+    await expect(saveTeamSettings('t1', settings(), settings())).rejects.toMatchObject({
       kind: 'permission',
     });
   });

@@ -216,8 +216,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string; onPlanPractice?
           ...settings,
           formations: exists ? settings.formations.map(f => (f.id === formation.id ? formation : f)) : [...settings.formations, formation],
         };
-        await saveTeamSettings(teamId, next);
-        setSettings(next);
+        setSettings(await saveTeamSettings(teamId, next, settings));
         dispatch({ type: 'saved', id: formation.id, play: sent });
         if (currentPlay.current === sent) clear();
         const back = parked.current;
@@ -318,7 +317,7 @@ const PlaybookWorkspace: React.FC<{ teamId: string; uid: string; onPlanPractice?
     const previous = settings;
     setSettings(next);
     try {
-      await saveTeamSettings(teamId, next);
+      setSettings(await saveTeamSettings(teamId, next, previous));
     } catch (e) {
       setSettings(previous);
       setNotice({ kind: 'error', text: isStoreError(e) ? e.message : "Couldn't save your settings." });

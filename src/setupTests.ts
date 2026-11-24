@@ -40,6 +40,7 @@ vi.mock('firebase/firestore', () => ({
   getDoc: vi.fn(() => Promise.resolve({ exists: () => false, data: () => null, id: 'mock-id' })),
   updateDoc: vi.fn(() => Promise.resolve()),
   deleteDoc: vi.fn(() => Promise.resolve()),
+  runTransaction: vi.fn(),
   query: vi.fn((...args: any[]) => args[0]),
   where: vi.fn((_field: string, _op: string, _val: any) => ({})),
   orderBy: vi.fn((_field: string) => ({})),
