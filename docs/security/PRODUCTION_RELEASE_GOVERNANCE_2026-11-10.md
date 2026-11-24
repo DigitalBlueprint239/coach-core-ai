@@ -131,3 +131,34 @@ nothing.
 released: `npm run test:rules` for `firestore:rules`, `npm run test:storage` for `storage`. The Storage suite is
 introduced by the combined rules work (PR #132, which now contains #128); a commit without it cannot release
 Storage rules.
+
+## 7. Staging identity (batch A, owner-authorised 2026-11-11)
+
+Remaining inspection items, read before any change to `coach-core-mvp-staging-239`:
+
+| Item | Result |
+|---|---|
+| OAuth | Consent screen not configured; no OAuth clients, so no redirect URIs. |
+| API key | One auto-created Firebase browser key, restricted to 25 APIs (14 Jul 2026). No application (referrer) restriction was confirmed. |
+| Audit activity, 180 days | 54 admin entries on 14 Jul and 12 Oct 2026. Principals: the owner and two Google-managed service agents. No production dependency or unknown integration. |
+
+Created (staging project number 792889984377):
+
+| Resource | Setting |
+|---|---|
+| Service account | `github-staging-hosting@coach-core-mvp-staging-239.iam.gserviceaccount.com`; only role Firebase Hosting Admin; no keys |
+| Pool / provider | `github-actions` / `coach-core-ai-staging`, issuer `https://token.actions.githubusercontent.com`; maps `google.subject`, `attribute.repository_id` |
+| Trust condition | repository ID 1018633922, owner ID 206572958, recovery ref, environment `firebase-staging`, and exactly `deploy-staging.yml` at that ref |
+| Binding | Workload Identity User for `attribute.repository_id/1018633922` on that account only |
+| APIs enabled | IAM Service Account Credentials, Security Token Service (free) |
+| GitHub `firebase-staging` | Owner approval required; recovery branch only; seven variables; no secrets |
+
+Not set, on purpose: `STAGING_FIREBASE_API_KEY`. Until the owner sets it, the preflight fails closed.
+
+Not verified: a real token exchange or deploy. Both need #131 merged and the owner's confirmation of the exact
+target. The Firebase CLI may need a further viewer role; add one only if the first run names it.
+
+`release-firebase-rules.yml` cannot use this identity: the trust condition admits `deploy-staging.yml` only, and
+the account has no rules permission. A separate rules identity is a separate approval.
+
+Rollback: delete the pool and the service account, disable the two APIs, clear the environment variables.
