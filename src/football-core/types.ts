@@ -39,7 +39,8 @@ export type Formation = {
 
 export type RouteId =
   | 'go' | 'seam' | 'sail' | 'flat' | 'arrow' | 'curl' | 'hitch'
-  | 'corner' | 'stick' | 'snag' | 'drag' | 'out' | 'dig' | 'swing';
+  | 'corner' | 'stick' | 'snag' | 'drag' | 'out' | 'dig' | 'swing'
+  | 'slant' | 'post' | 'wheel' | 'comeback';
 
 export type Assignment =
   | { slot: Slot; kind: 'route'; route: RouteId; depth?: number }

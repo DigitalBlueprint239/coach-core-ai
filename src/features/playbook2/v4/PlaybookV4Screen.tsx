@@ -7,8 +7,8 @@ import './playbook4.css';
 import { useAuth } from '../../../components/AuthProvider';
 import { useTeam } from '../../../contexts/TeamContext';
 import {
-  ROUTES, addRoutePoint, assignRoute, createPlayDocV4, describeAssignment, duplicatePlayDocV4, flipPlay, jobOf, motionOf,
-  movePlayer, moveRoutePoint, playFromConceptV4, publishedLibrary, removeJob, removeRoutePoint, renamePlay, routeOf, setBlock,
+  ROUTES, addRoutePoint, assignRoute, buildTimeline, checkPlayV4, createPlayDocV4, describeAssignment, duplicatePlayDocV4, flipPlay, jobOf, motionOf,
+  movePlayer, moveRoutePoint, playFromConceptV4, positionsAt, publishedLibrary, removeJob, removeRoutePoint, renamePlay, routeOf, setBlock,
   setDefense, setLabel, setMotion, setNotes, setOnLine, setProtect, setRouteDepth, setTags,
 } from '../../../football-core';
 import type { BlockRule, CoverageId, PlayDocV4, PlayerId, ProtectionRule, RouteId } from '../../../football-core';
@@ -16,6 +16,7 @@ import { isLineman } from '../field/geometry';
 import { deletePlayV4, isPlayConflict, loadPlayDocV4, loadPlayDocsV4, savePlayDocV4, type ListedPlayDocV4 } from '../playStoreV4';
 import { editorReducerV4, initEditorV4, type EditorSource } from './editorReducerV4';
 import { FieldSheetV4 } from './FieldSheetV4';
+import { PlaybackBar } from './PlaybackBar';
 import { PlayCard } from './PlayCard';
 import { draftKey, useDraftV4 } from './useDraftV4';
 
@@ -82,7 +83,12 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
   const [state, dispatch] = useReducer(editorReducerV4, undefined, () =>
     initEditorV4(createPlayDocV4(teamId, LIBRARY.formations[0]), { kind: 'new' }),
   );
-  const { play, source, dirty, selected, problems, invalid, past, future } = state;
+  const { play, source, dirty, selected, invalid, past, future } = state;
+  const findings = useMemo(() => checkPlayV4(play), [play]);
+  const timeline = useMemo(() => buildTimeline(play), [play]);
+  const [time, setTime] = useState<number | null>(null);
+  // Any change to the play ends playback, so what is on screen is always the play being edited.
+  useEffect(() => setTime(null), [play]);
   const draft = useMemo(() => ({ play, source }), [play, source]);
   const { restorable, discard, clear, offer } = useDraftV4(draftKey(uid, teamId), draft, dirty && view === 'editor');
 
@@ -402,14 +408,22 @@ const Workspace: React.FC<{ uid: string; teamId: string; teamName: string }> = (
         <div className="pb2-desk">
           <FieldSheetV4
             play={play}
-            selected={selected}
+            selected={time === null ? selected : undefined}
+            positions={time === null ? undefined : positionsAt(timeline, time)}
+            readOnly={time !== null}
             onSelect={id => dispatch({ type: 'select', id })}
             onMovePlayer={(id, at) => edit(p => movePlayer(p, id, at))}
             onMoveRoutePoint={(id, index, offset) => edit(p => moveRoutePoint(p, id, index, offset))}
           />
-          {problems.length > 0 && (
-            <ul className="pb2-problems" aria-label="Formation problems">
-              {problems.map(text => <li key={text}>{text}</li>)}
+          <PlaybackBar timeline={timeline} time={time} onTime={setTime} />
+          {findings.length > 0 && (
+            <ul className="pb2-problems" aria-label="Play checks">
+              {findings.map(f => (
+                <li key={`${f.code}:${f.playerIds.join()}:${f.message}`}>
+                  {f.message}
+                  {f.provisional ? ' (Coaching suggestion, not yet reviewed.)' : f.basis && f.basis.authority !== 'verified' ? ' (Draft rule, not yet checked against the rule book.)' : ''}
+                </li>
+              ))}
             </ul>
           )}
         </div>

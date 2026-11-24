@@ -10,7 +10,7 @@ import { ROUTES } from './routes';
 import type { Concept, CoverageId, Formation, OffenseRole, RouteId, Yards } from './types';
 
 /** Version of the live route library a template was applied from. Bump when a route's shape changes. */
-export const ROUTE_LIBRARY_VERSION = 'cc-routes@1';
+export const ROUTE_LIBRARY_VERSION = 'cc-routes@2';
 /** Version of the defensive alignment logic a stored look was resolved by. */
 export const DEFENSE_ALIGNMENT_VERSION = 'cc-align@1';
 

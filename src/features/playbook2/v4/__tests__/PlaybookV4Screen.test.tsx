@@ -509,6 +509,38 @@ describe('organising plays', () => {
   });
 });
 
+describe('playback and checks', () => {
+  it('scrubs players along their saved routes without editing the play', async () => {
+    seed('b', basePlay('Smash'));
+    await openStored('Smash');
+    const start = playerEl(A).getAttribute('transform');
+    const drawn = routeD(A);
+    const slider = screen.getByLabelText('Playback position');
+    fireEvent.change(slider, { target: { value: slider.getAttribute('max') } });
+    expect(playerEl(A).getAttribute('transform')).not.toBe(start);
+    expect(playerEl(B).getAttribute('transform')).toMatch(/^translate/);
+    expect(routeD(A)).toBe(drawn);
+    expect(playerEl(A)).not.toHaveAttribute('role', 'button'); // not editable during playback
+    expect(screen.queryByText('Unsaved')).not.toBeInTheDocument();
+    expect(button('Undo')).toBeDisabled();
+    await userEvent.click(button('Back to editing'));
+    expect(playerEl(A).getAttribute('transform')).toBe(start);
+    fireEvent.change(slider, { target: { value: '0.5' } });
+    await userEvent.click(button('Flip')); // an edit ends playback
+    expect(screen.queryByRole('button', { name: 'Back to editing' })).not.toBeInTheDocument();
+  });
+
+  it('offers no playback until someone has a route, and labels unreviewed advice', async () => {
+    await newPlay();
+    expect(screen.queryByRole('group', { name: 'Playback' })).not.toBeInTheDocument();
+    await userEvent.click(playerEl(LINEMAN));
+    await select('Assignment', 'route');
+    expect(screen.getByRole('group', { name: 'Playback' })).toBeInTheDocument();
+    const checks = screen.getByRole('list', { name: 'Play checks' });
+    expect(checks.textContent).toMatch(/not an eligible receiver.*Draft rule, not yet checked/);
+  });
+});
+
 describe('printing', () => {
   it('prints a play card built from the same stored play', async () => {
     const print = vi.fn();

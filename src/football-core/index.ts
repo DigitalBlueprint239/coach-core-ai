@@ -55,3 +55,9 @@ export {
   setBlock, setDefense, setLabel, setMotion, setNotes, setOnLine, setProtect, setRole, setRouteDepth, setRoutePoints, setTags,
   snapYd, templatePoints,
 } from './playEditsV4';
+export { CROWDED_FINISH_YD, checkPlayV4 } from './checksV4';
+export type { PlayFinding } from './checksV4';
+export { NOMINAL_SPEED_YD_PER_S, TIMELINE_VERSION, buildTimeline, positionOnTrack, positionsAt } from './timelineV4';
+export type { PlayTimeline, TimelineTrack } from './timelineV4';
+export { authorizePlayAdvice, buildPlayAdviceRequest, toAdvisoryPlay } from './advisoryV4';
+export type { AdvisoryPlay } from './advisoryV4';

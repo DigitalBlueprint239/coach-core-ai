@@ -16,6 +16,8 @@ export type FieldSheetV4Props = {
   onMovePlayer?(id: PlayerId, at: Yards): void;
   /** `offset` is in yards from the player's alignment. */
   onMoveRoutePoint?(id: PlayerId, index: number, offset: Yards): void;
+  /** Playback: where moving players are drawn right now. Routes stay where they were saved. */
+  positions?: Record<PlayerId, Yards>;
   /** Static rendering for thumbnails and the print card. */
   readOnly?: boolean;
 };
@@ -34,7 +36,7 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 type DragStart = { kind: 'player'; id: PlayerId; at: Yards } | { kind: 'point'; id: PlayerId; index: number; at: Yards };
 type Drag = DragStart & { startX: number; startY: number; moved: boolean };
 
-export const FieldSheetV4: React.FC<FieldSheetV4Props> = ({ play, selected, onSelect, onMovePlayer, onMoveRoutePoint, readOnly }) => {
+export const FieldSheetV4: React.FC<FieldSheetV4Props> = ({ play, selected, onSelect, onMovePlayer, onMoveRoutePoint, positions, readOnly }) => {
   const uid = useId().replace(/:/g, '');
   const svgRef = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<Drag | null>(null);
@@ -151,6 +153,7 @@ export const FieldSheetV4: React.FC<FieldSheetV4Props> = ({ play, selected, onSe
       {geometry.players.map(p => {
         const stored = shown.players.find(sp => sp.id === p.id);
         const label = stored?.label ?? p.role;
+        const drawnAt = positions?.[p.id] ?? p.at;
         const job = jobOf(shown, p.id);
         const isSelected = selected === p.id;
         const lineman = isLineman(p.role);
@@ -182,7 +185,7 @@ export const FieldSheetV4: React.FC<FieldSheetV4Props> = ({ play, selected, onSe
             data-testid="offense-player"
             data-player={p.id}
             className={`pb2-player pb4-touch${onMovePlayer && interactive ? ' pb2-movable' : ''}`}
-            transform={`translate(${sx(p.at.x)} ${sy(p.at.y)})`}
+            transform={`translate(${sx(drawnAt.x)} ${sy(drawnAt.y)})`}
             aria-label={name}
             {...handlers}
           >
