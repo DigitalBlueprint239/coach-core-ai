@@ -1,7 +1,7 @@
 {
   "name": "Coach Core AI",
   "short_name": "Coach Core",
-  "description": "The ultimate sports coaching platform with AI-powered practice planning and play design",
+  "description": "Plan practices and draw football plays for your team.",
   "version": "1.0.0",
   "start_url": "/",
   "display": "standalone",
@@ -11,7 +11,11 @@
   "scope": "/",
   "lang": "en",
   "dir": "ltr",
-  "categories": ["sports", "education", "productivity"],
+  "categories": [
+    "sports",
+    "education",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -86,30 +90,6 @@
           "sizes": "96x96"
         }
       ]
-    },
-    {
-      "name": "Team Analytics",
-      "short_name": "Analytics",
-      "description": "View team performance analytics",
-      "url": "/analytics",
-      "icons": [
-        {
-          "src": "/icons/shortcut-analytics.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "AI Assistant",
-      "short_name": "AI Help",
-      "description": "Get AI-powered coaching advice",
-      "url": "/ai-assistant",
-      "icons": [
-        {
-          "src": "/icons/shortcut-ai.png",
-          "sizes": "96x96"
-        }
-      ]
     }
   ],
   "screenshots": [
@@ -161,9 +141,18 @@
     {
       "action": "/upload",
       "accept": {
-        "image/*": [".png", ".jpg", ".jpeg", ".gif"],
-        "application/pdf": [".pdf"],
-        "text/csv": [".csv"]
+        "image/*": [
+          ".png",
+          ".jpg",
+          ".jpeg",
+          ".gif"
+        ],
+        "application/pdf": [
+          ".pdf"
+        ],
+        "text/csv": [
+          ".csv"
+        ]
       }
     }
   ],
@@ -178,7 +167,11 @@
       "files": [
         {
           "name": "files",
-          "accept": ["image/*", "application/pdf", "text/csv"]
+          "accept": [
+            "image/*",
+            "application/pdf",
+            "text/csv"
+          ]
         }
       ]
     }
@@ -192,8 +185,12 @@
     "service_worker": "/sw.js",
     "type": "module"
   },
-  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "window-controls-overlay"
+  ],
   "window_controls_overlay": {
     "title_bar_area": "0,0,0,40"
   }
-} 
+}

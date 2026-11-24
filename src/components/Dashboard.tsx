@@ -15,8 +15,6 @@ import { isContentReviewEnabled, isPlaybookV2Enabled } from '../features/playboo
 const PlaybookScreen = lazy(() => import('../features/playbook2/PlaybookScreen'));
 // The owner's content review queue (behind REACT_APP_ENABLE_CONTENT_REVIEW; dev and preview builds only).
 const ContentReview = lazy(() => import('../features/playbook2/review/ContentReview'));
-// TODO: Fix import path for AnalyticsDashboard if file exists
-// import AnalyticsDashboard from '../features/analytics/AnalyticsDashboard';
 
 const Dashboard: React.FC = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -42,7 +40,6 @@ const Dashboard: React.FC = () => {
     { id: 'teams', name: 'Teams', icon: '👥' },
     { id: 'practice', name: 'Practice Plans', icon: '📋' },
     { id: 'playbook', name: 'Smart Playbook', icon: '🏈' },
-    { id: 'analytics', name: 'Analytics', icon: '📈' },
     ...(isContentReviewEnabled() ? [{ id: 'review', name: 'Content review', icon: '🗂️' }] : []),
   ];
 
@@ -105,7 +102,7 @@ const Dashboard: React.FC = () => {
         {activeTab === 'overview' && (
           <div className="px-4 sm:px-0">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Quick Stats */}
+              {/* Current team. Plan and play counts were hardcoded zeros and were removed until they are real. */}
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="p-5">
                   <div className="flex items-center">
@@ -117,10 +114,10 @@ const Dashboard: React.FC = () => {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Active Teams
+                          Current team
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
-                          {currentTeam ? '1' : '0'}
+                          {currentTeam ? currentTeam.name : 'None yet'}
                         </dd>
                       </dl>
                     </div>
@@ -128,45 +125,6 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                        <span className="text-white text-sm">📋</span>
-                      </div>
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">
-                          Practice Plans
-                        </dt>
-                        <dd className="text-lg font-medium text-gray-900">0</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                        <span className="text-white text-sm">🏈</span>
-                      </div>
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">
-                          Plays Created
-                        </dt>
-                        <dd className="text-lg font-medium text-gray-900">0</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Quick Actions */}
@@ -179,7 +137,7 @@ const Dashboard: React.FC = () => {
                 >
                   <div className="text-2xl mb-2">👥</div>
                   <div className="font-medium">Manage Teams</div>
-                  <div className="text-sm opacity-90">Create or join teams</div>
+                  <div className="text-sm opacity-90">Create your team</div>
                 </button>
 
                 <button
@@ -188,7 +146,7 @@ const Dashboard: React.FC = () => {
                 >
                   <div className="text-2xl mb-2">📋</div>
                   <div className="font-medium">Create Practice Plan</div>
-                  <div className="text-sm opacity-90">AI-powered planning</div>
+                  <div className="text-sm opacity-90">Plan and save practices</div>
                 </button>
 
                 <button
@@ -228,7 +186,6 @@ const Dashboard: React.FC = () => {
             </Suspense>
           </ErrorBoundary>
         )}
-        {/* {activeTab === 'analytics' && <AnalyticsDashboard />} */}
       </main>
     </div>
   );
