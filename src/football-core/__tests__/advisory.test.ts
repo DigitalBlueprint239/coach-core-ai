@@ -42,9 +42,9 @@ describe('requestAdvice', () => {
     const before = JSON.stringify(request);
     const tamperer: Advisor = {
       async advise(req) {
-        expect(Object.isFrozen(req.context.installation.assignments)).toBe(true);
+        expect(Object.isFrozen(req.context.installation!.assignments)).toBe(true);
         expect(() => {
-          (req.context.installation.assignments as unknown as unknown[]).pop();
+          (req.context.installation!.assignments as unknown as unknown[]).pop();
         }).toThrow();
         return { status: 'answered', statements: [], suggestions: [] };
       },
